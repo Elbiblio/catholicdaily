@@ -473,6 +473,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Theme'),
+        contentPadding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -517,6 +518,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Theme Style'),
+        contentPadding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -554,24 +556,59 @@ class _SettingsScreenState extends State<SettingsScreen> {
     required VoidCallback onTap,
   }) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isLight = Theme.of(context).brightness == Brightness.light;
+    final selectedBackground = isLight
+        ? colorScheme.primary.withValues(alpha: 0.10)
+        : colorScheme.primaryContainer.withValues(alpha: 0.5);
+    final unselectedBackground = isLight
+        ? colorScheme.surface
+        : colorScheme.surfaceContainer;
+    final selectedBorder = isLight
+        ? colorScheme.primary.withValues(alpha: 0.55)
+        : colorScheme.primary.withValues(alpha: 0.35);
+    final titleColor = selected ? colorScheme.onSurface : colorScheme.onSurface;
+    final subtitleColor = selected
+        ? colorScheme.onSurface.withValues(alpha: 0.82)
+        : colorScheme.onSurfaceVariant;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
         color: selected
-            ? colorScheme.primaryContainer.withValues(alpha: 0.55)
-            : colorScheme.surfaceContainer,
+            ? selectedBackground
+            : unselectedBackground,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: selected
-              ? colorScheme.primary.withValues(alpha: 0.35)
-              : colorScheme.outline.withValues(alpha: 0.14),
+              ? selectedBorder
+              : colorScheme.outline.withValues(alpha: isLight ? 0.18 : 0.14),
         ),
+        boxShadow: isLight
+            ? [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.03),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ]
+            : null,
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        title: Text(title),
-        subtitle: Text(subtitle),
+        title: Text(
+          title,
+          style: TextStyle(
+            color: titleColor,
+            fontWeight: selected ? FontWeight.w700 : FontWeight.w600,
+          ),
+        ),
+        subtitle: Text(
+          subtitle,
+          style: TextStyle(
+            color: subtitleColor,
+            height: 1.35,
+          ),
+        ),
         trailing: selected
             ? Icon(Icons.check_circle, color: colorScheme.primary)
             : Icon(Icons.circle_outlined, color: colorScheme.onSurfaceVariant),

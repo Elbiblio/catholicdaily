@@ -94,6 +94,7 @@ class _GospelAcclamationAuditor {
     final aliases = await _getBookAliases();
     final issues = <Map<String, dynamic>>[];
     final issueCounts = <String, int>{};
+    final severityCounts = <String, int>{};
     var datesScanned = 0;
     var readingSetsScanned = 0;
     var readingsScanned = 0;
@@ -121,7 +122,9 @@ class _GospelAcclamationAuditor {
             _addIssue(
               issues,
               issueCounts,
+              severityCounts,
               type: 'missing_gospel_reading',
+              severity: 'P1',
               date: day,
               readingSetLabel: set.label,
               celebrationId: set.celebrationId,
@@ -140,6 +143,7 @@ class _GospelAcclamationAuditor {
             final resolvedText = mapped.text.trim();
             final decodedStored = await _decodeStoredAcclamation(storedAcclamation);
             final decodedMappedReference = await _decodeReferenceIfNeeded(mapped.reference);
+            final isCelebrationReading = set.celebrationId != null;
 
             final issueTypes = <String>{};
             if (storedAcclamation == null || storedAcclamation.isEmpty) {
@@ -181,10 +185,16 @@ class _GospelAcclamationAuditor {
             }
 
             for (final type in issueTypes) {
+              final severity = _severityForIssue(
+                type: type,
+                isCelebrationReading: isCelebrationReading,
+              );
               _addIssue(
                 issues,
                 issueCounts,
+                severityCounts,
                 type: type,
+                severity: severity,
                 date: day,
                 readingSetLabel: set.label,
                 celebrationId: set.celebrationId,
@@ -248,6 +258,7 @@ class _GospelAcclamationAuditor {
         'unique_stored_acclamations': uniqueStoredReferences.length,
         'unique_mapped_references_seen': uniqueMappedReferences.length,
         'total_issues': issues.length,
+        'severity_counts': severityCounts,
         'issue_counts': issueCounts,
       },
       'issues': issues,
@@ -261,6 +272,32 @@ class _GospelAcclamationAuditor {
       },
       'book_alias_count': aliases.length,
     };
+  }
+
+  String _severityForIssue({
+    required String type,
+    required bool isCelebrationReading,
+  }) {
+    switch (type) {
+      case 'stored_reference_would_leak_long_text':
+        return isCelebrationReading ? 'P2' : 'P1';
+      case 'stored_reference_differs_from_mapped_reference':
+        return isCelebrationReading ? 'P3' : 'P1';
+      case 'missing_stored_acclamation':
+        return isCelebrationReading ? 'P3' : 'P2';
+      case 'mapped_text_suspiciously_long':
+        return 'P3';
+      case 'mapped_text_empty':
+      case 'mapped_text_unavailable':
+      case 'mapped_text_still_reference':
+      case 'mapped_text_contains_problematic_content':
+      case 'missing_gospel_reading':
+        return 'P1';
+      case 'mapped_reference_decodes_to_longer_full_verse':
+        return 'info';
+      default:
+        return 'P3';
+    }
   }
 
   Future<List<DailyReading>> _loadReadingsForDate(DateTime date) async {
@@ -448,8 +485,10 @@ class _GospelAcclamationAuditor {
 
   void _addIssue(
     List<Map<String, dynamic>> issues,
-    Map<String, int> issueCounts, {
+    Map<String, int> issueCounts,
+    Map<String, int> severityCounts, {
     required String type,
+    required String severity,
     required DateTime date,
     required String readingSetLabel,
     required Map<String, dynamic> details,
@@ -457,7 +496,9 @@ class _GospelAcclamationAuditor {
     String? gospelReference,
   }) {
     issueCounts.update(type, (value) => value + 1, ifAbsent: () => 1);
+    severityCounts.update(severity, (value) => value + 1, ifAbsent: () => 1);
     issues.add({
+      'severity': severity,
       'type': type,
       'date': date.toIso8601String().split('T').first,
       'reading_set_label': readingSetLabel,
@@ -540,23 +581,6 @@ class _GospelAcclamationAuditor {
   String _positionLabel(int? position, String reading, int totalRows) {
     if (position == null) {
       return 'Reading';
-    }
-    final normalized = reading.trim().toLowerCase();
-    final isGospel = normalized.startsWith('matt ') ||
-        normalized.startsWith('mark ') ||
-        normalized.startsWith('luke ') ||
-        normalized.startsWith('john ');
-    if (isGospel) {
-      return 'Gospel';
-    }
-    final isPsalmLike = normalized.startsWith('ps ') ||
-        normalized.startsWith('psalm ') ||
-        normalized.startsWith('isa 12') ||
-        normalized.startsWith('exod 15') ||
-        normalized.startsWith('1 sam 2') ||
-        normalized.startsWith('luke 1:');
-    if (isPsalmLike) {
-      return 'Responsorial Psalm';
     }
     switch (position) {
       case 1:

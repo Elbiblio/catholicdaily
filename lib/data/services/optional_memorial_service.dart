@@ -349,7 +349,7 @@ class OptionalMemorialService {
     'most_holy_name_of_jesus': const ProperReadingSet(
       firstReading: 'Phil 2:1-11', psalm: 'Ps 8:4-9',
       psalmResponse: 'O Lord, our God, how wonderful your name in all the earth!',
-      gospel: 'Luke 2:21-24', gospelAcclamation: 'Phil 2:10-11',
+      gospel: 'Luke 2:21-24', gospelAcclamation: 'At the name of Jesus every knee should bend, in heaven and on earth and under the earth, and every tongue confess that Jesus Christ is Lord, to the glory of God the Father.',
     ),
     'joseph_the_worker': const ProperReadingSet(
       firstReading: 'Gen 1:26—2:3', psalm: 'Ps 90:2-4, 12-14, 16',
@@ -408,7 +408,7 @@ class OptionalMemorialService {
     'teresa_of_calcutta': const ProperReadingSet(
       firstReading: '1 John 4:7-16', psalm: 'Ps 23:1-6',
       psalmResponse: 'The Lord is my shepherd; there is nothing I shall want.',
-      gospel: 'Matt 25:31-40', gospelAcclamation: 'Jn 13:34',
+      gospel: 'Matt 25:31-40', gospelAcclamation: 'I give you a new commandment: love one another as I have loved you.',
     ),
     'john_paul_ii_pope': const ProperReadingSet(
       firstReading: 'Isa 52:7-10', psalm: 'Ps 16:1-2, 5, 7-8, 11',
@@ -423,17 +423,17 @@ class OptionalMemorialService {
     'faustina_kowalska': const ProperReadingSet(
       firstReading: '1 Cor 1:26-31', psalm: 'Ps 103:1-4, 8, 10',
       psalmResponse: 'The Lord is kind and merciful.',
-      gospel: 'Luke 12:35-40', gospelAcclamation: 'Lk 12:37',
+      gospel: 'Luke 12:35-40', gospelAcclamation: 'Blessed are those servants whom the master finds vigilant on his arrival.',
     ),
     'martin_de_porres': const ProperReadingSet(
       firstReading: 'Phil 4:4-9', psalm: 'Ps 131:1-3',
       psalmResponse: 'In you, Lord, I have found my peace.',
-      gospel: 'John 15:9-17', gospelAcclamation: 'Jn 13:34',
+      gospel: 'John 15:9-17', gospelAcclamation: 'I give you a new commandment: love one another as I have loved you.',
     ),
     'rose_of_lima': const ProperReadingSet(
       firstReading: '2 Cor 10:17—11:2', psalm: 'Ps 31:3-4, 6, 8',
       psalmResponse: 'Into your hands, O Lord, I commend my spirit.',
-      gospel: 'Matt 13:44-46', gospelAcclamation: 'Mt 11:25',
+      gospel: 'Matt 13:44-46', gospelAcclamation: 'Blessed are you, Father, Lord of heaven and earth; you have revealed to little ones the mysteries of the Kingdom.',
     ),
     'thomas_becket': const ProperReadingSet(
       firstReading: '2 Tim 2:8-13; 3:10-12', psalm: 'Ps 34:2-9',

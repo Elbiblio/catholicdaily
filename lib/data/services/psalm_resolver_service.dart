@@ -10,7 +10,6 @@ import 'readings_service.dart';
 import 'gospel_acclamation_service.dart';
 import 'ultimate_gospel_acclamation_mapper.dart';
 import 'responsorial_psalm_mapper.dart';
-import 'reading_introduction_service.dart';
 
 /// On-demand psalm response resolver that fetches from USCCB when missing
 class PsalmResolverService {
@@ -25,9 +24,7 @@ class PsalmResolverService {
       GospelAcclamationService();
   final UltimateGospelAcclamationMapper _mapper = UltimateGospelAcclamationMapper.instance;
   final ResponsorialPsalmMapper _psalmMapper = ResponsorialPsalmMapper.instance;
-  final ReadingIntroductionService _introductionService = ReadingIntroductionService();
   final Map<String, bool> _columnSupportCache = {};
-  bool _referenceMigrationDone = false;
 
   Future<Database> get _database async {
     _db ??= await _openAssetDatabase('readings.db');
@@ -55,26 +52,6 @@ class PsalmResolverService {
     }
     
     return await openDatabase(path);
-  }
-
-  /// Open a writable handle to the same asset DB path (for migrations/updates only)
-  Future<Database> _openWritableDatabase(String assetPath) async {
-    String path;
-    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-      final directory = await getApplicationDocumentsDirectory();
-      path = join(directory.path, assetPath);
-    } else {
-      final databasesPath = await getDatabasesPath();
-      path = join(databasesPath, assetPath);
-    }
-    return openDatabase(path, readOnly: false);
-  }
-
-  /// Ensure reference columns exist and backfill them for existing rows.
-  /// DISABLED: We now decode psalm responses at read time in ReadingsBackendIo
-  Future<void> _ensureReferenceColumnsAndBackfill() async {
-    _referenceMigrationDone = true;
-    return;
   }
 
   Future<bool> _supportsColumn(Database db, String column) async {
@@ -164,8 +141,6 @@ class PsalmResolverService {
     required DateTime date,
     required List<DailyReading> readings,
   }) async {
-    // One-time migration to ensure reference columns exist and are backfilled
-    await _ensureReferenceColumnsAndBackfill();
     final enriched = <DailyReading>[];
 
     for (final reading in readings) {
@@ -360,15 +335,6 @@ class PsalmResolverService {
     
     _cache[cacheKey] = completeAcclamation;
     return completeAcclamation;
-  
-    // Fallback: generate seasonal intro
-    final seasonalIntro = _generateSeasonalIntro(date);
-    if (seasonalIntro != null) {
-      _cache[cacheKey] = seasonalIntro;
-      return seasonalIntro;
-    }
-
-    return null;
   }
 
   /// Decode verse reference if needed, otherwise return as-is

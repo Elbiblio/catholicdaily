@@ -44,6 +44,25 @@ class _ReadingScreenState extends State<ReadingScreen> {
   String _currentContent = '';
   bool _isReloading = false;
 
+  String get _readingLabel {
+    final position = widget.readingData?.position?.trim();
+    if (position != null && position.isNotEmpty) {
+      return position;
+    }
+
+    final reference = widget.reference.toLowerCase();
+    if (reference.startsWith('ps ') || reference.startsWith('psalm ')) {
+      return 'Responsorial Psalm';
+    }
+    if (reference.startsWith('matt ') ||
+        reference.startsWith('mark ') ||
+        reference.startsWith('luke ') ||
+        reference.startsWith('john ')) {
+      return 'Gospel';
+    }
+    return 'Reading';
+  }
+
   String get _insightContextLabel {
     final position = widget.readingData?.position?.trim();
     if (position != null && position.isNotEmpty) {
@@ -349,25 +368,51 @@ class _ReadingScreenState extends State<ReadingScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final isLight = theme.brightness == Brightness.light;
+    final ordoColor = widget.liturgicalDay?.colorValue ?? colorScheme.primary;
+    final onOrdoColor = ThemeData.estimateBrightnessForColor(ordoColor) == Brightness.dark
+        ? Colors.white
+        : colorScheme.onSurface;
+    final scaffoldColor = Color.alphaBlend(
+      (isLight ? Colors.white : colorScheme.surface).withValues(alpha: isLight ? 0.97 : 0.9),
+      ordoColor.withValues(alpha: isLight ? 0.08 : 0.18),
+    );
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
+      backgroundColor: scaffoldColor,
       body: ParchmentBackground(
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: [
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color.alphaBlend(
+                  (isLight ? Colors.white : colorScheme.surface).withValues(alpha: isLight ? 0.88 : 0.22),
+                  ordoColor.withValues(alpha: isLight ? 0.10 : 0.18),
+                ),
+                scaffoldColor,
+              ],
+            ),
+          ),
+          child: CustomScrollView(
+            controller: _scrollController,
+            slivers: [
             SliverAppBar(
               expandedHeight: widget.liturgicalDay != null ? 156 : 0,
               pinned: true,
-              backgroundColor: colorScheme.surface.withValues(alpha: 0.96),
+              backgroundColor: Color.alphaBlend(
+                (isLight ? Colors.white : colorScheme.surface).withValues(alpha: isLight ? 0.94 : 0.84),
+                ordoColor.withValues(alpha: isLight ? 0.08 : 0.18),
+              ),
               surfaceTintColor: Colors.transparent,
-              foregroundColor: colorScheme.onSurface,
+              foregroundColor: onOrdoColor,
               flexibleSpace: widget.liturgicalDay != null
                   ? FlexibleSpaceBar(
                       background: Container(
                         color: Color.alphaBlend(
-                          colorScheme.surface.withValues(alpha: 0.30),
-                          widget.liturgicalDay!.colorValue,
+                          colorScheme.surface.withValues(alpha: isLight ? 0.82 : 0.3),
+                          widget.liturgicalDay!.colorValue.withValues(alpha: isLight ? 0.16 : 1),
                         ),
                         child: Padding(
                           padding: EdgeInsets.fromLTRB(
@@ -383,7 +428,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
                               Text(
                                 widget.liturgicalDay!.fullDescription,
                                 style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: colorScheme.onSurface,
+                                  color: onOrdoColor,
                                   fontWeight: FontWeight.w600,
                                 ),
                                 maxLines: 2,
@@ -393,7 +438,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
                               Text(
                                 widget.liturgicalDay!.weekDescription,
                                 style: theme.textTheme.bodySmall?.copyWith(
-                                  color: colorScheme.onSurface.withValues(alpha: 0.76),
+                                  color: onOrdoColor.withValues(alpha: 0.82),
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -405,8 +450,11 @@ class _ReadingScreenState extends State<ReadingScreen> {
                     )
                   : null,
               title: Text(
-                widget.reference,
-                style: theme.textTheme.titleLarge?.copyWith(fontSize: 20),
+                _readingLabel,
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
               actions: [
               // Text size controls
@@ -534,6 +582,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
           ),
         ],
       ),
+        ),
       ),
       // Floating liturgical info button
       floatingActionButton: widget.liturgicalDay != null
@@ -550,6 +599,11 @@ class _ReadingScreenState extends State<ReadingScreen> {
 
   Widget _buildNavigation(ThemeData theme) {
     if (!widget.hasPrev && !widget.hasNext) return const SizedBox.shrink();
+    final isLight = theme.brightness == Brightness.light;
+    final ordoColor = widget.liturgicalDay?.colorValue ?? theme.colorScheme.primary;
+    final buttonForeground = ThemeData.estimateBrightnessForColor(ordoColor) == Brightness.dark
+        ? Colors.white
+        : theme.colorScheme.onSurface;
     
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -561,6 +615,10 @@ class _ReadingScreenState extends State<ReadingScreen> {
             label: const Text('Previous'),
             style: TextButton.styleFrom(
               foregroundColor: theme.colorScheme.primary,
+              backgroundColor: Color.alphaBlend(
+                (isLight ? Colors.white : theme.colorScheme.surface).withValues(alpha: isLight ? 0.94 : 0.24),
+                ordoColor.withValues(alpha: isLight ? 0.08 : 0.14),
+              ),
             ),
           )
         else
@@ -572,8 +630,11 @@ class _ReadingScreenState extends State<ReadingScreen> {
             icon: const Icon(Icons.arrow_forward),
             label: const Text('Next Reading'),
             style: FilledButton.styleFrom(
-              backgroundColor: theme.colorScheme.primaryContainer,
-              foregroundColor: theme.colorScheme.onPrimaryContainer,
+              backgroundColor: Color.alphaBlend(
+                theme.colorScheme.primary.withValues(alpha: isLight ? 0.82 : 0.7),
+                ordoColor.withValues(alpha: isLight ? 0.18 : 0.24),
+              ),
+              foregroundColor: buttonForeground,
             ),
           )
         else
@@ -583,29 +644,39 @@ class _ReadingScreenState extends State<ReadingScreen> {
   }
 
   Widget _buildHeader(ThemeData theme) {
+    final brandColor = theme.colorScheme.primary;
     final readingTitle = ReadingTitleFormatter.build(
       reference: widget.reference,
+      position: widget.readingData?.position,
     );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          readingTitle,
+          _readingLabel,
           style: theme.textTheme.labelLarge?.copyWith(
-            color: theme.colorScheme.onSurfaceVariant,
+            color: brandColor,
             fontWeight: FontWeight.w700,
             letterSpacing: 0.3,
           ),
         ),
         const SizedBox(height: 12),
         Text(
+          readingTitle,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.84),
+            fontWeight: FontWeight.w600,
+            height: 1.45,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Text(
           widget.reference,
           style: theme.textTheme.headlineMedium?.copyWith(
-            fontFamily: 'Canterbury',
-            fontWeight: FontWeight.bold,
-            letterSpacing: 0.5,
-            height: 1.3,
+            fontWeight: FontWeight.w800,
+            letterSpacing: -0.1,
+            height: 1.2,
           ),
         ),
         const SizedBox(height: 8),
@@ -613,7 +684,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
           width: 60,
           height: 3,
           decoration: BoxDecoration(
-            color: theme.primaryColor,
+            color: brandColor,
             borderRadius: BorderRadius.circular(2),
           ),
         ),
@@ -623,11 +694,12 @@ class _ReadingScreenState extends State<ReadingScreen> {
 
   Widget _buildContent(ThemeData theme) {
     if (_isReloading) {
+      final ordoColor = widget.liturgicalDay?.colorValue ?? theme.colorScheme.primary;
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(32),
           child: CircularProgressIndicator(
-            color: theme.colorScheme.primary,
+            color: ordoColor,
           ),
         ),
       );
@@ -646,6 +718,16 @@ class _ReadingScreenState extends State<ReadingScreen> {
   Widget _buildRegularContent(ThemeData theme) {
     // Parse verses and build styled content
     final verses = _parseVerses(_currentContent);
+    final isLight = theme.brightness == Brightness.light;
+    final ordoColor = widget.liturgicalDay?.colorValue ?? theme.colorScheme.primary;
+    final containerColor = Color.alphaBlend(
+      (isLight ? Colors.white : theme.colorScheme.surfaceContainer).withValues(alpha: isLight ? 0.92 : 0.52),
+      ordoColor.withValues(alpha: isLight ? 0.06 : 0.16),
+    );
+    final borderColor = Color.alphaBlend(
+      theme.colorScheme.outlineVariant.withValues(alpha: isLight ? 0.32 : 0.28),
+      ordoColor.withValues(alpha: isLight ? 0.08 : 0.16),
+    );
 
     return Center(
       child: ConstrainedBox(
@@ -653,10 +735,10 @@ class _ReadingScreenState extends State<ReadingScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 20),
           decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainer.withValues(alpha: 0.35),
+            color: containerColor,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: theme.colorScheme.outlineVariant.withValues(alpha: 0.35),
+              color: borderColor,
             ),
           ),
           child: Column(
@@ -673,8 +755,8 @@ class _ReadingScreenState extends State<ReadingScreen> {
                         '${verse.number}',
                         style: theme.textTheme.labelMedium?.copyWith(
                           fontWeight: FontWeight.w700,
-                          color: theme.colorScheme.primary.withValues(
-                            alpha: 0.9,
+                          color: ordoColor.withValues(
+                            alpha: 0.75,
                           ),
                           fontSize: 13 * _textScale,
                         ),
@@ -747,6 +829,16 @@ class _ReadingScreenState extends State<ReadingScreen> {
         .where((stanza) => stanza.isNotEmpty)
         .toList();
     final response = widget.readingData?.psalmResponse?.trim();
+    final isLight = theme.brightness == Brightness.light;
+    final ordoColor = widget.liturgicalDay?.colorValue ?? theme.colorScheme.primary;
+    final containerColor = Color.alphaBlend(
+      (isLight ? Colors.white : theme.colorScheme.surfaceContainer).withValues(alpha: isLight ? 0.92 : 0.52),
+      ordoColor.withValues(alpha: isLight ? 0.06 : 0.16),
+    );
+    final borderColor = Color.alphaBlend(
+      theme.colorScheme.outlineVariant.withValues(alpha: isLight ? 0.32 : 0.28),
+      ordoColor.withValues(alpha: isLight ? 0.08 : 0.16),
+    );
 
     return Center(
       child: ConstrainedBox(
@@ -754,10 +846,10 @@ class _ReadingScreenState extends State<ReadingScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 20),
           decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainer.withValues(alpha: 0.35),
+            color: containerColor,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: theme.colorScheme.outlineVariant.withValues(alpha: 0.35),
+              color: borderColor,
             ),
           ),
           child: Column(
@@ -784,7 +876,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
                               '${index + 1}.',
                               style: theme.textTheme.labelLarge?.copyWith(
                                 fontWeight: FontWeight.w700,
-                                color: theme.colorScheme.primary,
+                                color: ordoColor.withValues(alpha: 0.75),
                                 fontSize: 16 * _textScale,
                               ),
                             ),
@@ -867,7 +959,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
                           style: theme.textTheme.bodyLarge?.copyWith(
                             fontStyle: FontStyle.italic,
                             fontWeight: FontWeight.w600,
-                            color: theme.colorScheme.primary,
+                            color: ordoColor.withValues(alpha: 0.82),
                           ),
                         ),
                       ),
@@ -992,6 +1084,7 @@ class _InsightActionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final accentColor = theme.colorScheme.primary;
     return Material(
       color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
       borderRadius: BorderRadius.circular(16),
@@ -1003,7 +1096,7 @@ class _InsightActionTile extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(icon, color: theme.colorScheme.primary),
+              Icon(icon, color: accentColor),
               const SizedBox(width: 14),
               Expanded(
                 child: Column(
@@ -1064,6 +1157,7 @@ class _ReadingInsightSheetState extends State<_ReadingInsightSheet> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final accentColor = theme.colorScheme.primary;
     return FractionallySizedBox(
       heightFactor: 0.92,
       child: Container(
@@ -1121,7 +1215,7 @@ class _ReadingInsightSheetState extends State<_ReadingInsightSheet> {
                           Text(
                             widget.reference,
                             style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.colorScheme.primary,
+                              color: accentColor,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -1132,7 +1226,7 @@ class _ReadingInsightSheetState extends State<_ReadingInsightSheet> {
                               color: theme.colorScheme.primaryContainer.withValues(alpha: 0.45),
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(
-                                color: theme.colorScheme.primary.withValues(alpha: 0.15),
+                                color: accentColor.withValues(alpha: 0.15),
                               ),
                             ),
                             child: Text(

@@ -244,11 +244,11 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
           icon: const Icon(Icons.calendar_month_rounded),
           tooltip: 'Choose Date',
         ),
-        IconButton(
-          onPressed: _goToToday,
-          icon: const Icon(Icons.today_rounded),
-          tooltip: 'Go to Today',
-        ),
+        // IconButton(
+        //   onPressed: _goToToday,
+        //   icon: const Icon(Icons.today_rounded),
+        //   tooltip: 'Go to Today',
+        // ),
       ],
     );
   }
@@ -256,6 +256,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
   Widget _buildLiturgicalHeader(ThemeData theme) {
     final headerColor = _resolveHeaderColor(theme);
     final headerForeground = _resolveHeaderForeground(theme, headerColor);
+    final isLight = theme.brightness == Brightness.light;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -279,7 +280,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
           child: Padding(
             padding: EdgeInsets.fromLTRB(
               20,
-              MediaQuery.of(context).padding.top + kToolbarHeight + 20,
+              MediaQuery.of(context).padding.top + kToolbarHeight,
               20,
               20,
             ),
@@ -322,6 +323,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                           : _liturgicalDay!.seasonName,
                       style: theme.textTheme.headlineSmall?.copyWith(
                         color: headerForeground,
+                        fontFamily: 'Canterbury',
                         fontWeight: FontWeight.w700,
                         height: 1.15,
                       ),
@@ -334,7 +336,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                     Text(
                       _liturgicalDay!.weekDescription,
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: headerForeground.withValues(alpha: 0.9),
+                        color: headerForeground.withValues(alpha: isLight ? 0.98 : 0.9),
                         fontWeight: FontWeight.w500,
                       ),
                       maxLines: 2,
@@ -598,14 +600,24 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
   }
 
   Widget _buildDateNavigation(ThemeData theme) {
+    final ordoColor = _liturgicalDay?.colorValue ?? theme.colorScheme.primary;
+    final isLight = theme.brightness == Brightness.light;
+    final containerColor = isLight
+        ? Color.alphaBlend(Colors.white.withValues(alpha: 0.82), ordoColor.withValues(alpha: 0.22))
+        : theme.colorScheme.surfaceContainer;
+    final buttonColor = isLight
+        ? Color.alphaBlend(Colors.white.withValues(alpha: 0.92), ordoColor.withValues(alpha: 0.18))
+        : theme.colorScheme.surface;
+    final foregroundColor = _resolveHeaderForeground(theme, buttonColor);
+
     return Container(
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainer,
+        color: containerColor,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: theme.colorScheme.outline.withValues(alpha: 0.2),
+          color: (isLight ? foregroundColor : theme.colorScheme.outline).withValues(alpha: 0.18),
         ),
       ),
       child: Row(
@@ -616,8 +628,8 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
               onPressed: _previousDay,
               icon: const Icon(Icons.chevron_left_rounded),
               style: IconButton.styleFrom(
-                backgroundColor: theme.colorScheme.surface,
-                foregroundColor: theme.colorScheme.onSurface,
+                backgroundColor: buttonColor,
+                foregroundColor: foregroundColor,
               ),
             ),
           ),
@@ -632,7 +644,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                 textAlign: TextAlign.center,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: theme.colorScheme.onSurface,
+                  color: foregroundColor,
                 ),
               ),
             ),
@@ -644,8 +656,8 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
               onPressed: _nextDay,
               icon: const Icon(Icons.chevron_right_rounded),
               style: IconButton.styleFrom(
-                backgroundColor: theme.colorScheme.surface,
-                foregroundColor: theme.colorScheme.onSurface,
+                backgroundColor: buttonColor,
+                foregroundColor: foregroundColor,
               ),
             ),
           ),
@@ -669,18 +681,25 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
   }
 
   Widget _buildLiturgicalSummaryRow(ThemeData theme, Color foregroundColor) {
+    final isLight = theme.brightness == Brightness.light;
+    final chipForeground = isLight ? theme.colorScheme.onSurface : foregroundColor;
     final countdown = _buildCountdownLabel();
     final chips = <Widget>[
-      _buildDetailChip(theme, 'Season', _liturgicalDay!.seasonName, foregroundColor),
+      _buildDetailChip(
+        theme,
+        'Season',
+        _liturgicalDay!.seasonName,
+        chipForeground,
+      ),
       if (_liturgicalDay!.weekNumber > 0)
-        _buildDetailChip(theme, 'Week', '${_liturgicalDay!.weekNumber}', foregroundColor),
-      _buildDetailChip(theme, 'Day', _liturgicalDay!.dayName, foregroundColor),
+        _buildDetailChip(theme, 'Week', '${_liturgicalDay!.weekNumber}', chipForeground),
+      _buildDetailChip(theme, 'Day', _liturgicalDay!.dayName, chipForeground),
       if (_ordoYearVariables != null)
-        _buildDetailChip(theme, 'Sunday', _ordoYearVariables!.sundayCycle, foregroundColor),
+        _buildDetailChip(theme, 'Sunday', _ordoYearVariables!.sundayCycle, chipForeground),
       if (_ordoYearVariables != null)
-        _buildDetailChip(theme, 'Year', _ordoYearVariables!.weekdayCycle, foregroundColor),
+        _buildDetailChip(theme, 'Year', _ordoYearVariables!.weekdayCycle, chipForeground),
       if (countdown != null)
-        _buildDetailChip(theme, countdown.$1, countdown.$2, foregroundColor),
+        _buildDetailChip(theme, countdown.$1, countdown.$2, chipForeground),
     ];
 
     return SingleChildScrollView(
@@ -696,15 +715,38 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
     );
   }
 
-  Widget _buildDetailChip(ThemeData theme, String label, String value, Color foregroundColor) {
+  Widget _buildDetailChip(
+    ThemeData theme,
+    String label,
+    String value,
+    Color foregroundColor,
+  ) {
+    final isLight = theme.brightness == Brightness.light;
+    final liturgicalColor = _liturgicalDay?.colorValue ?? theme.colorScheme.primary;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface.withValues(alpha: 0.72),
+        color: isLight
+            ? Color.alphaBlend(
+                Colors.white.withValues(alpha: 0.94),
+                liturgicalColor.withValues(alpha: 0.08),
+              )
+            : theme.colorScheme.surface.withValues(alpha: 0.72),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: foregroundColor.withValues(alpha: 0.12),
+          color: isLight
+              ? liturgicalColor.withValues(alpha: 0.24)
+              : foregroundColor.withValues(alpha: 0.12),
         ),
+        boxShadow: isLight
+            ? [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ]
+            : null,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -712,7 +754,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
           Text(
             label,
             style: theme.textTheme.labelSmall?.copyWith(
-              color: foregroundColor.withValues(alpha: 0.72),
+              color: foregroundColor.withValues(alpha: isLight ? 0.72 : 0.72),
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -802,7 +844,8 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
 
   Color _resolveHeaderColor(ThemeData theme) {
     final seasonal = _liturgicalDay?.colorValue ?? theme.colorScheme.primary;
-    return Color.lerp(seasonal, theme.colorScheme.primary, 0.6) ?? theme.colorScheme.primary;
+    final blendAmount = theme.brightness == Brightness.light ? 0.18 : 0.42;
+    return Color.lerp(seasonal, theme.colorScheme.primary, blendAmount) ?? theme.colorScheme.primary;
   }
 
   Color _resolveHeaderForeground(ThemeData theme, Color backgroundColor) {
@@ -1086,6 +1129,13 @@ class _PremiumReadingCardState extends State<_PremiumReadingCard>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final color = _getReadingTypeColor(widget.reading.position, context);
+    final isLight = theme.brightness == Brightness.light;
+    final cardBaseColor = widget.liturgicalColor != null
+        ? Color.alphaBlend(
+            Colors.white.withValues(alpha: isLight ? 0.94 : 0.08),
+            widget.liturgicalColor!.withValues(alpha: isLight ? 0.14 : 1),
+          )
+        : theme.colorScheme.surface;
 
     return AnimatedBuilder(
       animation: _controller,
@@ -1101,7 +1151,7 @@ class _PremiumReadingCardState extends State<_PremiumReadingCard>
               duration: const Duration(milliseconds: 200),
               margin: const EdgeInsets.symmetric(vertical: 6),
               decoration: BoxDecoration(
-                color: theme.colorScheme.surface,
+                color: cardBaseColor,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                   color: color.withValues(alpha: 0.3),
@@ -1123,8 +1173,11 @@ class _PremiumReadingCardState extends State<_PremiumReadingCard>
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      theme.colorScheme.surface,
-                      theme.colorScheme.surface.withValues(alpha: 0.8),
+                      cardBaseColor,
+                      Color.alphaBlend(
+                        Colors.white.withValues(alpha: isLight ? 0.08 : 0.04),
+                        cardBaseColor,
+                      ),
                     ],
                   ),
                 ),

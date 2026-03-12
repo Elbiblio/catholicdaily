@@ -51,19 +51,28 @@ class _GospelAcclamationWidgetState extends State<GospelAcclamationWidget> {
     try {
       final existing = widget.reading.gospelAcclamation?.trim();
       String? acclamation;
+      final hasProperCelebrationAcclamation =
+          widget.reading.feast?.trim().isNotEmpty == true;
 
       if (existing != null &&
           existing.isNotEmpty &&
           _acclamationService.shouldResolveReference(existing)) {
-        final resolved = await _resolver.resolveGospelAcclamation(
+        if (hasProperCelebrationAcclamation) {
+          final decoded = await _acclamationService.getAcclamationText(existing);
+          if (decoded.trim().isNotEmpty &&
+              !decoded.startsWith('Reading text unavailable')) {
+            acclamation = decoded;
+          }
+        }
+
+        acclamation ??= await _resolver.resolveGospelAcclamation(
           date: widget.date,
           gospelReference: widget.reading.reading,
         );
-        if (resolved != null &&
-            resolved.trim().isNotEmpty &&
-            !resolved.startsWith('Reading text unavailable')) {
-          acclamation = resolved;
-        } else {
+
+        if (acclamation == null ||
+            acclamation.trim().isEmpty ||
+            acclamation.startsWith('Reading text unavailable')) {
           final decoded = await _acclamationService.getAcclamationText(existing);
           if (decoded.trim().isNotEmpty &&
               !decoded.startsWith('Reading text unavailable')) {

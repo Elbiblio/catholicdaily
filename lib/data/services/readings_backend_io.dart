@@ -53,7 +53,6 @@ class ReadingsBackendIo implements ReadingsBackend {
       case BibleVersionType.nabre:
         return _nabreDatabase;
       case BibleVersionType.rsvce:
-      default:
         return _rsvceDatabase;
     }
   }
@@ -188,47 +187,6 @@ class ReadingsBackendIo implements ReadingsBackend {
     // Must be short and start with Ps/Psalm followed by chapter:verse
     return trimmed.length < 30 && 
            RegExp(r'^(?:Ps|Psalm)\s*\.?\s*\d+:\d+', caseSensitive: false).hasMatch(trimmed);
-  }
-
-  /// Check if a string looks like a biblical verse reference
-  bool _looksLikeVerseReference(String text) {
-    final trimmed = text.trim();
-    
-    // If it's too long, it's likely full text, not a reference
-    if (trimmed.length > 100) return false;
-    
-    // Must match book:verse pattern at the START of the string
-    // Examples: "John 11:25a.26", "Ps 145:8", "See John 6:68c"
-    // NOT: "My sheep hear my voice, says the Lord; I know them..."
-    final refPattern = RegExp(
-      r'^(?:See\s+|Cf\.?\s+)?([1-3]\s)?[A-Za-z]+\s+\d+:\d+',
-      caseSensitive: false,
-    );
-    
-    if (!refPattern.hasMatch(trimmed)) return false;
-    
-    // Additional check: if it contains common sentence patterns, it's likely text
-    final textIndicators = [
-      'says the Lord',
-      'says the LORD',
-      'I am',
-      'you are',
-      'we are',
-      'they are',
-      'he is',
-      'she is',
-      'will be',
-      'shall be',
-    ];
-    
-    final lowerText = trimmed.toLowerCase();
-    for (final indicator in textIndicators) {
-      if (lowerText.contains(indicator.toLowerCase())) {
-        return false; // It's text, not a reference
-      }
-    }
-    
-    return true;
   }
 
   @override
@@ -820,42 +778,6 @@ class ReadingsBackendIo implements ReadingsBackend {
     return 'Reading ${position.toString()}';
   }
   
-  /// Check if a reading is from an Epistle (NT letter)
-  bool _isEpistleReading(String normalizedReading) {
-    // Pauline Epistles
-    if (normalizedReading.startsWith('rom ') ||
-        normalizedReading.startsWith('1 cor ') ||
-        normalizedReading.startsWith('2 cor ') ||
-        normalizedReading.startsWith('gal ') ||
-        normalizedReading.startsWith('eph ') ||
-        normalizedReading.startsWith('phil ') ||
-        normalizedReading.startsWith('col ') ||
-        normalizedReading.startsWith('1 thess ') ||
-        normalizedReading.startsWith('2 thess ') ||
-        normalizedReading.startsWith('1 tim ') ||
-        normalizedReading.startsWith('2 tim ') ||
-        normalizedReading.startsWith('titus ') ||
-        normalizedReading.startsWith('phlm ') ||
-        normalizedReading.startsWith('philem ')) {
-      return true;
-    }
-    
-    // Catholic Epistles
-    if (normalizedReading.startsWith('heb ') ||
-        normalizedReading.startsWith('jas ') ||
-        normalizedReading.startsWith('james ') ||
-        normalizedReading.startsWith('1 pet ') ||
-        normalizedReading.startsWith('2 pet ') ||
-        normalizedReading.startsWith('1 john ') ||
-        normalizedReading.startsWith('2 john ') ||
-        normalizedReading.startsWith('3 john ') ||
-        normalizedReading.startsWith('jude ')) {
-      return true;
-    }
-    
-    return false;
-  }
-
   /// Remove redundant words that appear in both the incipit and the start of the text
   /// E.g., "In those days:" + "Then Azariah..." -> "In those days:" + "Azariah..."
   String _removeRedundantIncipitWords(String text, String incipit) {
