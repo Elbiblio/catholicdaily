@@ -1,0 +1,802 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import '../../data/services/improved_liturgical_calendar_service.dart';
+import '../../data/models/daily_reading.dart';
+import '../utils/reading_title_formatter.dart';
+import '../widgets/bible_version_switcher.dart';
+import '../widgets/gospel_acclamation_widget.dart';
+import '../widgets/psalm_response_widget.dart';
+import '../widgets/verse_insight_sheet.dart';
+import '../../data/services/readings_backend_io.dart' as backend;
+import '../widgets/parchment_background.dart';
+
+class ReadingScreen extends StatefulWidget {
+  final String reference;
+  final String content;
+  final LiturgicalDay? liturgicalDay;
+  final DailyReading? readingData;
+  final VoidCallback? onNextReading;
+  final VoidCallback? onPrevReading;
+  final bool hasNext;
+  final bool hasPrev;
+
+  const ReadingScreen({
+    super.key,
+    required this.reference,
+    required this.content,
+    this.liturgicalDay,
+    this.readingData,
+    this.onNextReading,
+    this.onPrevReading,
+    this.hasNext = false,
+    this.hasPrev = false,
+  });
+
+  @override
+  State<ReadingScreen> createState() => _ReadingScreenState();
+}
+
+class _ReadingScreenState extends State<ReadingScreen> {
+  double _textScale = 1.0;
+  bool _showLiturgicalInfo = false;
+  final ScrollController _scrollController = ScrollController();
+  String _currentContent = '';
+  bool _isReloading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentContent = widget.content;
+  }
+
+  @override
+  void didUpdateWidget(ReadingScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.content != oldWidget.content) {
+      setState(() {
+        _currentContent = widget.content;
+      });
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
+  }
+
+  Future<void> _reloadWithNewVersion() async {
+    setState(() {
+      _isReloading = true;
+    });
+
+    try {
+      final readingsBackend = backend.ReadingsBackendIo();
+      final newContent = await readingsBackend.getReadingText(widget.reference);
+      
+      if (mounted) {
+        setState(() {
+          _currentContent = newContent;
+          _isReloading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isReloading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to reload: $e')),
+        );
+      }
+    }
+  }
+
+  Future<void> _showVerseInsight(_Verse verse) async {
+    final verseReference = _extractVerseReference(verse.number);
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => VerseInsightSheet(
+        reference: verseReference,
+        text: verse.text,
+        fetchInsight: () => _fetchInsightForVerse(verseReference, verse.text),
+      ),
+    );
+  }
+          child: Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(top: 8, bottom: 16),
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Text(
+                  'Verse Insight',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: FutureBuilder<String>(
+                  future: _fetchInsight(verse.text),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(24),
+                          child: Text(
+                            'Failed to load insight. Please check your connection.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Theme.of(context).colorScheme.error),
+                          ),
+                        ),
+                      );
+                    }
+                    
+                    return ListView(
+                      controller: controller,
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.5),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
+                            ),
+                          ),
+                          child: Text(
+                            '"${verse.text}"',
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              fontStyle: FontStyle.italic,
+                              color: Theme.of(context).colorScheme.onPrimaryContainer,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        Text(
+                          snapshot.data ?? 'No insight available.',
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            height: 1.6,
+                          ),
+                        ),
+                        const SizedBox(height: 32),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<String> _fetchInsight(String verseText) async {
+    try {
+      final response = await http.post(
+        Uri.parse('https://api.elbiblio.com/api/bible/verses/0/explain'), // Using generic endpoint for text
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'text': verseText}),
+      );
+      
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return data['data']['explanation'] ?? 'Insight loaded successfully but no content returned.';
+      }
+    } catch (e) {
+      debugPrint('Error fetching insight: $e');
+    }
+    // Fallback if API fails or doesn't support generic text explanation yet
+    await Future.delayed(const Duration(seconds: 1)); // Simulate network
+    return "This verse from the readings offers spiritual reflection. The Catholic tradition interprets this passage within the context of the whole of Scripture and the living Tradition of the Church. It calls us to meditate on God's word and apply it to our daily lives.";
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Scaffold(
+      backgroundColor: colorScheme.surface,
+      body: ParchmentBackground(
+        child: CustomScrollView(
+        controller: _scrollController,
+        slivers: [
+          // App Bar
+          SliverAppBar(
+            expandedHeight: widget.liturgicalDay != null ? 120 : 0,
+            pinned: true,
+            backgroundColor:
+                widget.liturgicalDay?.colorValue ?? colorScheme.primary,
+            foregroundColor:
+                widget.liturgicalDay?.textColor ?? colorScheme.onPrimary,
+            flexibleSpace: widget.liturgicalDay != null
+                ? FlexibleSpaceBar(
+                    background: Container(
+                      color: widget.liturgicalDay!.colorValue,
+                      child: SafeArea(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                widget.liturgicalDay!.fullDescription,
+                                style: TextStyle(
+                                  color: widget.liturgicalDay!.textColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                widget.liturgicalDay!.weekDescription,
+                                style: TextStyle(
+                                  color: widget.liturgicalDay!.textColor
+                                      .withValues(alpha: 0.8),
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : null,
+            title: Text(widget.reference, style: const TextStyle(fontSize: 18)),
+            actions: [
+              // Text size controls
+              IconButton(
+                icon: const Icon(Icons.text_decrease),
+                onPressed: _textScale > 0.8
+                    ? () => setState(() => _textScale -= 0.1)
+                    : null,
+                tooltip: 'Decrease text size',
+              ),
+              IconButton(
+                icon: const Icon(Icons.text_increase),
+                onPressed: _textScale < 2.0
+                    ? () => setState(() => _textScale += 0.1)
+                    : null,
+                tooltip: 'Increase text size',
+              ),
+              // More options
+              PopupMenuButton<String>(
+                icon: const Icon(Icons.more_vert),
+                onSelected: (value) {
+                  switch (value) {
+                    case 'share':
+                      _shareText();
+                      break;
+                    case 'copy':
+                      _copyText();
+                      break;
+                    case 'fullscreen':
+                      _toggleFullScreen();
+                      break;
+                  }
+                },
+                itemBuilder: (context) => [
+                  const PopupMenuItem(
+                    value: 'share',
+                    child: Row(
+                      children: [
+                        Icon(Icons.share, size: 20),
+                        SizedBox(width: 12),
+                        Text('Share'),
+                      ],
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: 'copy',
+                    child: Row(
+                      children: [
+                        Icon(Icons.copy, size: 20),
+                        SizedBox(width: 12),
+                        Text('Copy'),
+                      ],
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: 'fullscreen',
+                    child: Row(
+                      children: [
+                        Icon(Icons.fullscreen, size: 20),
+                        SizedBox(width: 12),
+                        Text('Full screen'),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+
+          // Content
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Reference header
+                  _buildHeader(theme),
+                  const SizedBox(height: 32),
+
+                  // Psalm Response or Gospel Acclamation (before reading)
+                  _buildResponseAcclamation(theme),
+
+                  const SizedBox(height: 32),
+
+                  // Reading content with beautiful typography
+                  _buildContent(theme),
+
+                  const SizedBox(height: 48),
+                  
+                  // Version switcher
+                  _buildVersionFooter(theme),
+                  
+                  const SizedBox(height: 32),
+                  
+                  // Navigation
+                  _buildNavigation(theme),
+                  
+                  const SizedBox(height: 48),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+      ),
+      // Floating liturgical info button
+      floatingActionButton: widget.liturgicalDay != null
+          ? FloatingActionButton.small(
+              backgroundColor: widget.liturgicalDay!.colorValue,
+              foregroundColor: widget.liturgicalDay!.textColor,
+              onPressed: () =>
+                  setState(() => _showLiturgicalInfo = !_showLiturgicalInfo),
+              child: Icon(_showLiturgicalInfo ? Icons.info : Icons.church),
+            )
+          : null,
+    );
+  }
+
+  Widget _buildNavigation(ThemeData theme) {
+    if (!widget.hasPrev && !widget.hasNext) return const SizedBox.shrink();
+    
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        if (widget.hasPrev)
+          TextButton.icon(
+            onPressed: widget.onPrevReading,
+            icon: const Icon(Icons.arrow_back),
+            label: const Text('Previous'),
+            style: TextButton.styleFrom(
+              foregroundColor: theme.colorScheme.primary,
+            ),
+          )
+        else
+          const SizedBox.shrink(),
+          
+        if (widget.hasNext)
+          FilledButton.icon(
+            onPressed: widget.onNextReading,
+            icon: const Icon(Icons.arrow_forward),
+            label: const Text('Next Reading'),
+            style: FilledButton.styleFrom(
+              backgroundColor: theme.colorScheme.primaryContainer,
+              foregroundColor: theme.colorScheme.onPrimaryContainer,
+            ),
+          )
+        else
+          const SizedBox.shrink(),
+      ],
+    );
+  }
+
+  Widget _buildHeader(ThemeData theme) {
+    final readingTitle = ReadingTitleFormatter.build(
+      reference: widget.reference,
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          readingTitle,
+          style: theme.textTheme.labelLarge?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.3,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          widget.reference,
+          style: theme.textTheme.headlineMedium?.copyWith(
+            fontFamily: 'Canterbury',
+            fontWeight: FontWeight.bold,
+            letterSpacing: 0.5,
+            height: 1.3,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          width: 60,
+          height: 3,
+          decoration: BoxDecoration(
+            color: theme.primaryColor,
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildContent(ThemeData theme) {
+    if (_isReloading) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: CircularProgressIndicator(
+            color: theme.colorScheme.primary,
+          ),
+        ),
+      );
+    }
+
+    final isPsalm = widget.reference.toLowerCase().startsWith('ps ') ||
+        widget.reference.toLowerCase().startsWith('psalm ');
+
+    if (isPsalm) {
+      return _buildPsalmContent(theme);
+    }
+
+    return _buildRegularContent(theme);
+  }
+
+  Widget _buildRegularContent(ThemeData theme) {
+    // Parse verses and build styled content
+    final verses = _parseVerses(_currentContent);
+
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 860),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 20),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surfaceContainer.withValues(alpha: 0.35),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: theme.colorScheme.outlineVariant.withValues(alpha: 0.35),
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: verses.map((verse) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 18),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 36,
+                      child: Text(
+                        '${verse.number}',
+                        style: theme.textTheme.labelMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: theme.colorScheme.primary.withValues(
+                            alpha: 0.9,
+                          ),
+                          fontSize: 13 * _textScale,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: GestureDetector(
+                        onLongPress: () => _showVerseInsight(verse),
+                        child: SelectableText(
+                          verse.text,
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            height: 1.9,
+                            letterSpacing: 0.15,
+                            fontSize: 19 * _textScale,
+                            fontWeight: FontWeight.w400,
+                            color: theme.colorScheme.onSurface,
+                          ),
+                          textScaler: const TextScaler.linear(1.0),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPsalmContent(ThemeData theme) {
+    final stanzas = _currentContent
+        .split(RegExp(r'\n{2,}'))
+        .map((stanza) => stanza.trim())
+        .where((stanza) => stanza.isNotEmpty)
+        .toList();
+    final response = widget.readingData?.psalmResponse?.trim();
+
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 860),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 20),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surfaceContainer.withValues(alpha: 0.35),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: theme.colorScheme.outlineVariant.withValues(alpha: 0.35),
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ...List.generate(stanzas.length, (index) {
+                final stanza = stanzas[index];
+                final lines = stanza
+                    .split('\n')
+                    .map((line) => line.trim())
+                    .where((line) => line.isNotEmpty)
+                    .toList();
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: 32,
+                            child: Text(
+                              '${index + 1}.',
+                              style: theme.textTheme.labelLarge?.copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: theme.colorScheme.primary,
+                                fontSize: 16 * _textScale,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: lines.map((line) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 6),
+                                  child: SelectableText(
+                                    line,
+                                    style: theme.textTheme.bodyLarge?.copyWith(
+                                      height: 1.8,
+                                      letterSpacing: 0.1,
+                                      fontSize: 18 * _textScale,
+                                      fontWeight: FontWeight.w500,
+                                      color: theme.colorScheme.onSurface,
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 6),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          response != null && response.isNotEmpty
+                              ? 'R/. ${response.trim()}'
+                              : 'R/.',
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.w600,
+                            color: theme.colorScheme.primary,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildResponseAcclamation(ThemeData theme) {
+    if (widget.readingData == null) return const SizedBox.shrink();
+    
+    final reading = widget.readingData!;
+    final position = (reading.position ?? '').toLowerCase();
+
+    if (position.contains('psalm')) {
+      return PsalmResponseWidget(
+        reading: reading,
+        date: reading.date,
+      );
+    }
+
+    if (position.contains('gospel')) {
+      return GospelAcclamationWidget(
+        reading: reading,
+        date: reading.date,
+      );
+    }
+    
+    return const SizedBox.shrink();
+  }
+
+  Widget _buildVersionFooter(ThemeData theme) {
+    return BibleVersionSwitcher(
+      onVersionChanged: _reloadWithNewVersion,
+    );
+  }
+
+  List<_Verse> _parseVerses(String content) {
+    final verses = <_Verse>[];
+    final lines = content.split('\n');
+
+    for (int i = 0; i < lines.length; i++) {
+      final line = lines[i].trim();
+      if (line.isEmpty) continue;
+
+      // Try to parse verse number at start
+      final match = RegExp(r'^(\d+)[.\s]+(.*)').firstMatch(line);
+      if (match != null) {
+        verses.add(
+          _Verse(
+            number: int.tryParse(match.group(1) ?? '0') ?? i + 1,
+            text: match.group(2) ?? line,
+          ),
+        );
+      } else {
+        verses.add(_Verse(number: i + 1, text: line));
+      }
+    }
+
+    return verses;
+  }
+
+  void _shareText() {
+    final text = '${widget.reference}\n\n$_currentContent';
+    Clipboard.setData(ClipboardData(text: text));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Reading copied to clipboard')),
+    );
+  }
+
+  void _copyText() {
+    final text = '${widget.reference}\n\n$_currentContent';
+    Clipboard.setData(ClipboardData(text: text));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Reading copied to clipboard')),
+    );
+  }
+
+  void _toggleFullScreen() {
+    // Toggle fullscreen mode
+    if (MediaQuery.of(context).size.width > 600) {
+      // Already reading-focused layout on large screens
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Reading mode enabled')));
+    }
+  }
+
+  Future<void> _showVerseInsight(_Verse verse) async {
+    final verseReference = _extractVerseReference(verse.number);
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => VerseInsightSheet(
+        reference: verseReference,
+        text: verse.text,
+        fetchInsight: () => _fetchInsightForVerse(verseReference, verse.text),
+      ),
+    );
+  }
+
+  void _showReadingInsight() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => VerseInsightSheet(
+        reference: widget.reference,
+        text: _currentContent,
+        fetchInsight: () => _fetchInsightForReading(widget.reference, _currentContent),
+      ),
+    );
+  }
+
+  String _extractVerseReference(int verseNumber) {
+    // Extract book and chapter from reference like "John 3:1-21"
+    final parts = widget.reference.split(':');
+    if (parts.length >= 2) {
+      final bookChapter = parts[0];
+      return '$bookChapter:$verseNumber';
+    }
+    return '${widget.reference.split(' ').first} $verseNumber';
+  }
+
+  Future<Map<String, dynamic>?> _fetchInsightForReading(String reference, String text) async {
+    try {
+      final response = await http.post(
+        Uri.parse('https://api.example.com/verse-insight'), // Replace with actual endpoint
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'type': 'reading',
+          'reference': reference,
+          'text': text,
+        }),
+      );
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      }
+    } catch (e) {
+      debugPrint('Error fetching reading insight: $e');
+    }
+    return null;
+  }
+
+  Future<Map<String, dynamic>?> _fetchInsightForVerse(String reference, String text) async {
+    try {
+      final response = await http.post(
+        Uri.parse('https://api.example.com/verse-insight'), // Replace with actual endpoint
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'type': 'verse',
+          'reference': reference,
+          'text': text,
+        }),
+      );
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      }
+    } catch (e) {
+      debugPrint('Error fetching verse insight: $e');
+    }
+    return null;
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+}
+
+class _Verse {
+  final int number;
+  final String text;
+
+  _Verse({required this.number, required this.text});
+}

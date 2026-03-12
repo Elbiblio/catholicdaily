@@ -1,0 +1,32 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Deep Burgundy/Crimson Background (Traditional Missal Color) -->
+  <rect width="512" height="512" fill="#8C1D2F"/>
+  
+  <!-- Subtle Radiant Light (Word of God) -->
+  <path d="M256 60L266 180L386 170L306 250L406 330L286 310L256 430L226 310L106 330L206 250L126 170L246 180L256 60Z" fill="#D4AF37" opacity="0.1"/>
+  
+  <!-- Open Missal Pages -->
+  <path d="M256 380C170 380 110 410 110 410V210C110 210 170 170 256 210C342 170 402 210 402 210V410C402 410 342 380 256 380Z" fill="#FDFCF0"/>
+  <path d="M110 210C170 170 256 210 256 210V380C170 380 110 410 110 410V210Z" fill="#FFFFFF"/>
+  
+  <!-- Page Crease/Binding -->
+  <path d="M256 210V380" stroke="#EAE6D8" stroke-width="6"/>
+  
+  <!-- Central Gold Cross -->
+  <rect x="244" y="90" width="24" height="210" rx="6" fill="#D4AF37"/>
+  <rect x="196" y="140" width="120" height="24" rx="6" fill="#D4AF37"/>
+  
+  <!-- Traditional Bookmark Ribbon hanging down -->
+  <path d="M244 380H268V470L256 450L244 470V380Z" fill="#D4AF37"/>
+  
+  <!-- Symbolic Text Lines on Pages -->
+  <rect x="140" y="240" width="90" height="6" rx="3" fill="#EAE6D8"/>
+  <rect x="140" y="265" width="70" height="6" rx="3" fill="#EAE6D8"/>
+  <rect x="140" y="290" width="85" height="6" rx="3" fill="#EAE6D8"/>
+  <rect x="140" y="315" width="60" height="6" rx="3" fill="#EAE6D8"/>
+  
+  <rect x="282" y="240" width="85" height="6" rx="3" fill="#EAE6D8"/>
+  <rect x="282" y="265" width="90" height="6" rx="3" fill="#EAE6D8"/>
+  <rect x="282" y="290" width="65" height="6" rx="3" fill="#EAE6D8"/>
+  <rect x="282" y="315" width="80" height="6" rx="3" fill="#EAE6D8"/>
+</svg>
