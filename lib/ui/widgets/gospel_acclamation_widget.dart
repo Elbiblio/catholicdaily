@@ -133,6 +133,7 @@ class _GospelAcclamationWidgetState extends State<GospelAcclamationWidget> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final isLent = _isDuringLent(widget.date);
+    final acclamationResponse = _buildAcclamationResponse(widget.date);
     
     // Check if this is just the intro or a complete acclamation
     final isCompleteAcclamation = _isCompleteAcclamation(acclamation);
@@ -255,16 +256,25 @@ class _GospelAcclamationWidgetState extends State<GospelAcclamationWidget> {
           if (isFromVerseReference && isCompleteAcclamation) ...[
             const SizedBox(height: 8),
             Text(
-              'Decoded from verse reference',
+              acclamationResponse,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: Colors.blue.shade600,
                 fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],
         ],
       ),
     );
+  }
+
+  String _buildAcclamationResponse(DateTime date) {
+    if (_isDuringLent(date)) {
+      return 'Glory and praise to you, Lord Jesus Christ.';
+    }
+
+    return 'Alleluia, alleluia.';
   }
 
   /// Check if acclamation contains the full verse text or just the intro

@@ -90,28 +90,37 @@ class ReadingsBackendIo implements ReadingsBackend {
     );
 
     final totalRows = rows.length;
+    final orderedReferences = rows
+        .map((row) => row['reading'] as String)
+        .toList(growable: false);
 
-    final readings = rows
-        .map(
-          (row) => DailyReading(
-            id: null,
-            reading: row['reading'] as String,
-            position: _positionLabel(
-              row['position'] as int?,
-              row['reading'] as String,
-              totalRows,
-            ),
-            date: date,
-            feast: null,
-            psalmResponse: hasPsalmResponse
-                ? row['psalm_response'] as String?
-                : null,
-            gospelAcclamation: hasGospelAcclamation
-                ? row['gospel_acclamation'] as String?
-                : null,
-          ),
-        )
-        .toList();
+    final readings = rows.asMap().entries.map((entry) {
+      final row = entry.value;
+      final readingReference = row['reading'] as String;
+      final normalizedReference = readingReference.trim().toLowerCase();
+      final isPsalmLike = _isPsalmLikeReference(normalizedReference);
+      final isGospelLike = _isGospelReference(normalizedReference);
+
+      return DailyReading(
+        id: null,
+        reading: readingReference,
+        position: _positionLabel(
+          row['position'] as int?,
+          readingReference,
+          totalRows,
+          orderedReferences,
+          orderedIndex: entry.key,
+        ),
+        date: date,
+        feast: null,
+        psalmResponse: hasPsalmResponse && isPsalmLike
+            ? row['psalm_response'] as String?
+            : null,
+        gospelAcclamation: hasGospelAcclamation && isGospelLike
+            ? row['gospel_acclamation'] as String?
+            : null,
+      );
+    }).toList();
 
     // Decode psalm responses that are verse references into actual text.
     // Preserve gospel acclamation values as stored so higher-level date-aware
@@ -225,6 +234,10 @@ class ReadingsBackendIo implements ReadingsBackend {
     }
 
     final fullText = lines.join('\n');
+
+    if (_isPsalmLikeReference(reference)) {
+      return fullText;
+    }
     
     // Get the incipit for this reading and prepend it
     final incipit = _incipitService.getOfficialIncipit(reference);
@@ -685,7 +698,31 @@ class ReadingsBackendIo implements ReadingsBackend {
       );
     }
 
-    return openDatabase(path, readOnly: readOnly);
+    var db = await openDatabase(path, readOnly: readOnly);
+    if (!await _hasExpectedSchema(db, dbName)) {
+      await db.close();
+      final data = await rootBundle.load('assets/$dbName');
+      await file.writeAsBytes(
+        data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
+        flush: true,
+      );
+      db = await openDatabase(path, readOnly: readOnly);
+    }
+
+    return db;
+  }
+
+  Future<bool> _hasExpectedSchema(Database db, String dbName) async {
+    try {
+      final tableName = dbName == 'readings.db' ? 'readings' : 'books';
+      final rows = await db.rawQuery(
+        "SELECT name FROM sqlite_master WHERE type = 'table' AND name = ?",
+        [tableName],
+      );
+      return rows.isNotEmpty;
+    } catch (_) {
+      return false;
+    }
   }
 
   Future<bool> _supportsPsalmResponse(Database db) async {
@@ -706,7 +743,13 @@ class ReadingsBackendIo implements ReadingsBackend {
     return hasColumn;
   }
 
-  String _positionLabel(int? position, String reading, int totalRows) {
+  String _positionLabel(
+    int? position,
+    String reading,
+    int totalRows,
+    List<String> orderedReferences,
+    {required int orderedIndex}
+  ) {
     if (position == null) {
       return 'Reading';
     }
@@ -735,6 +778,14 @@ class ReadingsBackendIo implements ReadingsBackend {
     
     // Only label as Responsorial Psalm if it's actually a Psalm
     // Daniel 3 is a First Reading, not a Psalm, even though it has Psalm-like elements
+    if (totalRows > 4) {
+      final orderedLabels = _buildComplexLayoutLabels(orderedReferences);
+      final index = orderedIndex;
+      if (index >= 0 && index < orderedLabels.length) {
+        return orderedLabels[index];
+      }
+    }
+
     if (isPsalmLike && !normalized.startsWith('dan 3')) {
       return 'Responsorial Psalm';
     }
@@ -776,6 +827,75 @@ class ReadingsBackendIo implements ReadingsBackend {
     }
 
     return 'Reading ${position.toString()}';
+  }
+
+  List<String> _buildComplexLayoutLabels(List<String> orderedReferences) {
+    final labels = <String>[];
+    var readingCount = 0;
+    var psalmCount = 0;
+
+    for (var index = 0; index < orderedReferences.length; index++) {
+      final reference = orderedReferences[index];
+      final normalized = reference.trim().toLowerCase();
+
+      if (_isGospelReference(normalized)) {
+        labels.add('Gospel');
+        continue;
+      }
+
+      if (_isPsalmLikeReference(normalized) && !normalized.startsWith('dan 3')) {
+        psalmCount += 1;
+        if (psalmCount == orderedReferences.where((item) => _isPsalmLikeReference(item) && !item.trim().toLowerCase().startsWith('dan 3')).length &&
+            normalized.startsWith('ps 118')) {
+          labels.add('Alleluia Psalm');
+          continue;
+        }
+
+        labels.add('Responsorial Psalm');
+        continue;
+      }
+
+      readingCount += 1;
+      if (readingCount == 1) {
+        labels.add('First Reading');
+      } else if (readingCount == 2) {
+        labels.add('Second Reading');
+      } else if (readingCount == 3) {
+        labels.add('Third Reading');
+      } else if (readingCount == 4) {
+        labels.add('Fourth Reading');
+      } else if (readingCount == 5) {
+        labels.add('Fifth Reading');
+      } else if (readingCount == 6) {
+        labels.add('Sixth Reading');
+      } else if (readingCount == 7) {
+        labels.add('Seventh Reading');
+      } else if (readingCount == 8) {
+        labels.add('Epistle');
+      } else {
+        labels.add('Reading $readingCount');
+      }
+    }
+
+    return labels;
+  }
+
+  bool _isPsalmLikeReference(String reference) {
+    final normalized = reference.trim().toLowerCase();
+    return normalized.startsWith('ps ') ||
+        normalized.startsWith('psalm ') ||
+        normalized.startsWith('isa 12') ||
+        normalized.startsWith('exod 15') ||
+        normalized.startsWith('1 sam 2') ||
+        normalized.startsWith('luke 1:');
+  }
+
+  bool _isGospelReference(String reference) {
+    final normalized = reference.trim().toLowerCase();
+    return normalized.startsWith('matt ') ||
+        normalized.startsWith('mark ') ||
+        normalized.startsWith('luke ') ||
+        normalized.startsWith('john ');
   }
   
   /// Remove redundant words that appear in both the incipit and the start of the text

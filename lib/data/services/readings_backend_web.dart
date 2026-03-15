@@ -35,19 +35,31 @@ class ReadingsBackendWeb implements ReadingsBackend {
         1000;
 
     final rows = _readingsByTimestamp[timestamp] ?? const [];
-    return rows
-        .map(
-          (row) => DailyReading(
-            id: null,
-            reading: row.reference,
-            position: _positionLabel(row.position),
-            date: date,
-            feast: null,
-            psalmResponse: row.psalmResponse,
-            gospelAcclamation: row.gospelAcclamation,
-          ),
-        )
-        .toList();
+    final orderedReferences = rows
+        .map((row) => row.reference)
+        .toList(growable: false);
+    return rows.asMap().entries.map((entry) {
+      final row = entry.value;
+      final normalizedReference = row.reference.trim().toLowerCase();
+      final isPsalmLike = _isPsalmLikeReference(normalizedReference);
+      final isGospelLike = _isGospelReference(normalizedReference);
+
+      return DailyReading(
+        id: null,
+        reading: row.reference,
+        position: _positionLabel(
+          row.position,
+          row.reference,
+          rows.length,
+          orderedReferences,
+          orderedIndex: entry.key,
+        ),
+        date: date,
+        feast: null,
+        psalmResponse: isPsalmLike ? row.psalmResponse : null,
+        gospelAcclamation: isGospelLike ? row.gospelAcclamation : null,
+      );
+    }).toList();
   }
 
   @override
@@ -80,6 +92,10 @@ class ReadingsBackendWeb implements ReadingsBackend {
     }
 
     final fullText = lines.join('\n');
+
+    if (_isPsalmLikeReference(reference)) {
+      return fullText;
+    }
     
     // Get the incipit for this reading and prepend it
     final incipit = _incipitService.getOfficialIncipit(reference);
@@ -213,19 +229,141 @@ class ReadingsBackendWeb implements ReadingsBackend {
     return lines;
   }
 
-  String _positionLabel(int? position) {
-    switch (position) {
-      case 1:
-        return 'First Reading';
-      case 2:
-        return 'Responsorial Psalm';
-      case 3:
-        return 'Second Reading';
-      case 4:
-        return 'Gospel';
-      default:
-        return 'Reading';
+  String _positionLabel(
+    int? position,
+    String reading,
+    int totalRows,
+    List<String> orderedReferences,
+    {required int orderedIndex}
+  ) {
+    if (position == null) {
+      return 'Reading';
     }
+
+    final normalized = reading.trim().toLowerCase();
+
+    if (_isGospelReference(normalized)) {
+      return 'Gospel';
+    }
+
+    if (totalRows > 4) {
+      final orderedLabels = _buildComplexLayoutLabels(orderedReferences);
+      final index = orderedIndex;
+      if (index >= 0 && index < orderedLabels.length) {
+        return orderedLabels[index];
+      }
+    }
+
+    if (_isPsalmLikeReference(normalized) && !normalized.startsWith('dan 3')) {
+      return 'Responsorial Psalm';
+    }
+
+    if (totalRows <= 4) {
+      switch (position) {
+        case 1:
+          return 'First Reading';
+        case 2:
+          return _isPsalmLikeReference(normalized)
+              ? 'Responsorial Psalm'
+              : 'Second Reading';
+        case 3:
+          return _isPsalmLikeReference(normalized)
+              ? 'Responsorial Psalm'
+              : 'Second Reading';
+        case 4:
+          return 'Gospel';
+        default:
+          return 'Reading';
+      }
+    }
+
+    if (position == totalRows) {
+      return 'Gospel';
+    }
+
+    if (position == totalRows - 1 && !_isPsalmLikeReference(normalized)) {
+      return 'Second Reading';
+    }
+
+    if (position == 1) {
+      return 'First Reading';
+    }
+
+    return 'Reading $position';
+  }
+
+  List<String> _buildComplexLayoutLabels(List<String> orderedReferences) {
+    final labels = <String>[];
+    var readingCount = 0;
+    var psalmCount = 0;
+    final totalPsalms = orderedReferences
+        .where(
+          (item) =>
+              _isPsalmLikeReference(item) &&
+              !item.trim().toLowerCase().startsWith('dan 3'),
+        )
+        .length;
+
+    for (final reference in orderedReferences) {
+      final normalized = reference.trim().toLowerCase();
+
+      if (_isGospelReference(normalized)) {
+        labels.add('Gospel');
+        continue;
+      }
+
+      if (_isPsalmLikeReference(normalized) && !normalized.startsWith('dan 3')) {
+        psalmCount += 1;
+        if (psalmCount == totalPsalms && normalized.startsWith('ps 118')) {
+          labels.add('Alleluia Psalm');
+          continue;
+        }
+
+        labels.add('Responsorial Psalm');
+        continue;
+      }
+
+      readingCount += 1;
+      if (readingCount == 1) {
+        labels.add('First Reading');
+      } else if (readingCount == 2) {
+        labels.add('Second Reading');
+      } else if (readingCount == 3) {
+        labels.add('Third Reading');
+      } else if (readingCount == 4) {
+        labels.add('Fourth Reading');
+      } else if (readingCount == 5) {
+        labels.add('Fifth Reading');
+      } else if (readingCount == 6) {
+        labels.add('Sixth Reading');
+      } else if (readingCount == 7) {
+        labels.add('Seventh Reading');
+      } else if (readingCount == 8) {
+        labels.add('Epistle');
+      } else {
+        labels.add('Reading $readingCount');
+      }
+    }
+
+    return labels;
+  }
+
+  bool _isPsalmLikeReference(String reference) {
+    final normalized = reference.trim().toLowerCase();
+    return normalized.startsWith('ps ') ||
+        normalized.startsWith('psalm ') ||
+        normalized.startsWith('isa 12') ||
+        normalized.startsWith('exod 15') ||
+        normalized.startsWith('1 sam 2') ||
+        normalized.startsWith('luke 1:');
+  }
+
+  bool _isGospelReference(String reference) {
+    final normalized = reference.trim().toLowerCase();
+    return normalized.startsWith('matt ') ||
+        normalized.startsWith('mark ') ||
+        normalized.startsWith('luke ') ||
+        normalized.startsWith('john ');
   }
 
   String _stripBom(String value) {

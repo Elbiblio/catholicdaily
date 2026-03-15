@@ -257,9 +257,6 @@ class ResponsorialPsalmMapper {
     'Ps 81:6c-8a,8bc-9,10-11ab,14+17': 'I am the Lord your God: hear my voice.',
     'Ps 81:6': 'I have removed the burden from their shoulders; their hands are freed from the task.',
     
-    // Psalm 147 - Alternate
-    'Ps 147:12-13,15-16,19-20': 'Praise the Lord, Jerusalem.',
-    
     // Daniel 3 - Trinity Sunday and other feast days
     'Dan 3:25,34-43': 'Glory and praise to you, Lord Jesus Christ.',
     'Dan 3:52-56': 'Glory and praise to you, Lord Jesus Christ.',
@@ -282,7 +279,6 @@ class ResponsorialPsalmMapper {
     'Ps 84:5': 'Blessed are those who dwell in your house! They shall never cease to praise you.',
     'Ps 51:12a,14a': 'Create a clean heart in me, O God; Do not cast me from your presence.',
     'Ps 95:8': 'If today you hear his voice, harden not your hearts.',
-    'Ps 84:5': 'Blessed are those who dwell in your house! They shall never cease to praise you.',
   };
 
   /// Sunday cycle psalm responses (Year A, B, C)

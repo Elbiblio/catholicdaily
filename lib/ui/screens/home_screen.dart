@@ -270,6 +270,44 @@ class _HomeScreenState extends State<HomeScreen> {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
+    final navBackgroundColor = isDark
+        ? Color.alphaBlend(
+            colorScheme.surface.withValues(alpha: 0.88),
+            colorScheme.primary.withValues(alpha: 0.10),
+          )
+        : null;
+    final navIndicatorColor = isDark
+        ? Color.alphaBlend(
+            colorScheme.primary.withValues(alpha: 0.34),
+            colorScheme.surfaceContainerHighest.withValues(alpha: 0.72),
+          )
+        : null;
+    final navIconTheme = WidgetStateProperty.resolveWith<IconThemeData>((states) {
+      final selected = states.contains(WidgetState.selected);
+      return IconThemeData(
+        color: selected
+            ? (isDark ? Colors.white : colorScheme.primary)
+            : (isDark ? colorScheme.onSurfaceVariant.withValues(alpha: 0.92) : null),
+      );
+    });
+    final navLabelTextStyle = WidgetStateProperty.resolveWith<TextStyle>((states) {
+      final selected = states.contains(WidgetState.selected);
+      return theme.textTheme.labelMedium?.copyWith(
+            color: selected
+                ? (isDark ? Colors.white : colorScheme.primary)
+                : (isDark ? colorScheme.onSurfaceVariant.withValues(alpha: 0.92) : colorScheme.onSurfaceVariant),
+            fontWeight: selected ? FontWeight.w700 : FontWeight.w600,
+          ) ??
+          TextStyle(
+            color: selected
+                ? (isDark ? Colors.white : colorScheme.primary)
+                : (isDark ? colorScheme.onSurfaceVariant.withValues(alpha: 0.92) : colorScheme.onSurfaceVariant),
+          );
+    });
+
     final screens = [
       PremiumBrowseScreen(onReadingSelected: _onReadingSelected),
       SearchScreen(onReadingSelected: _onReadingSelected),
@@ -284,31 +322,40 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       body: IndexedStack(index: _currentIndex, children: screens),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _currentIndex,
-        onDestinationSelected: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-          _persistTab(index);
-        },
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.book_outlined),
-            selectedIcon: Icon(Icons.book),
-            label: 'Daily',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.search_outlined),
-            selectedIcon: Icon(Icons.search),
-            label: 'Search',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.settings_outlined),
-            selectedIcon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
+      bottomNavigationBar: NavigationBarTheme(
+        data: NavigationBarThemeData(
+          backgroundColor: navBackgroundColor,
+          indicatorColor: navIndicatorColor,
+          iconTheme: navIconTheme,
+          labelTextStyle: navLabelTextStyle,
+          overlayColor: WidgetStateProperty.all(Colors.transparent),
+        ),
+        child: NavigationBar(
+          selectedIndex: _currentIndex,
+          onDestinationSelected: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+            _persistTab(index);
+          },
+          destinations: const [
+            NavigationDestination(
+              icon: Icon(Icons.book_outlined),
+              selectedIcon: Icon(Icons.book),
+              label: 'Daily',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.search_outlined),
+              selectedIcon: Icon(Icons.search),
+              label: 'Search',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.settings_outlined),
+              selectedIcon: Icon(Icons.settings),
+              label: 'Settings',
+            ),
+          ],
+        ),
       ),
     );
   }

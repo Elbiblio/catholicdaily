@@ -160,7 +160,7 @@ class ReadingIntroductionService {
       '2 Kgs': '2 Kings', '2 Ki': '2 Kings',
       '1 Chr': '1 Chronicles', '1 Ch': '1 Chronicles',
       '2 Chr': '2 Chronicles', '2 Ch': '2 Chronicles',
-      'Ezra': 'Ezra', 'Ez': 'Ezra',
+      'Ezra': 'Ezra', 'Ezr': 'Ezra',
       'Neh': 'Nehemiah', 'Ne': 'Nehemiah',
       'Esth': 'Esther', 'Est': 'Esther',
       'Tob': 'Tobit', 'Tb': 'Tobit',

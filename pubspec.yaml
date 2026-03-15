@@ -91,6 +91,7 @@ flutter:
     - assets/data/books_rows.json
     - assets/data/readings_rows.json
     - assets/data/verses_rows.json
+    - lectionary_psalms.csv
 
   fonts:
     - family: Canterbury

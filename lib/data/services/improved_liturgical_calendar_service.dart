@@ -30,7 +30,7 @@ class ImprovedLiturgicalCalendarService {
     // For Advent 2025-2026, Easter is in 2026
     final easterSunday = _calculateEasterSunday(adventYear + 1);
     final christmasStart = DateTime(adventYear, 12, 25);
-    final epiphany = _calculateEpiphany(adventYear + 1);
+    final baptismOfTheLord = _calculateBaptismOfTheLord(adventYear + 1);
     final lentStart = easterSunday.subtract(const Duration(days: 46));
     final pentecostSunday = easterSunday.add(const Duration(days: 49));
     
@@ -43,14 +43,17 @@ class ImprovedLiturgicalCalendarService {
       // Advent season
       season = LiturgicalSeason.advent;
       weekNumber = _calculateAdventWeek(adventStart, date);
-    } else if (date.isBefore(epiphany)) {
+    } else if (!date.isAfter(baptismOfTheLord)) {
       // Christmas season
       season = LiturgicalSeason.christmas;
       weekNumber = _calculateChristmasWeek(christmasStart, date);
     } else if (date.isBefore(lentStart)) {
       // Ordinary Time I
       season = LiturgicalSeason.ordinaryTime;
-      weekNumber = _calculateOrdinaryTimeWeek(epiphany, date);
+      weekNumber = _calculateOrdinaryTimeWeek(
+        baptismOfTheLord.add(const Duration(days: 1)),
+        date,
+      );
     } else if (date.isBefore(easterSunday)) {
       // Lenten season
       season = LiturgicalSeason.lent;
@@ -119,9 +122,9 @@ class ImprovedLiturgicalCalendarService {
   /// Calculate Advent start (4th Sunday before Christmas)
   DateTime _calculateAdventStart(int year) {
     final christmas = DateTime(year, 12, 25);
-    // Find the Sunday before Christmas (Christmas weekday - 1 = days to previous Sunday)
-    int daysToPreviousSunday = (christmas.weekday + 6) % 7; // Sunday=0, Monday=1, ..., Saturday=6
-    return christmas.subtract(Duration(days: daysToPreviousSunday + 21)); // 21 days = 3 weeks before that Sunday
+    final daysUntilSunday = (DateTime.sunday - christmas.weekday + 7) % 7;
+    final sundayOnOrAfterChristmas = christmas.add(Duration(days: daysUntilSunday));
+    return sundayOnOrAfterChristmas.subtract(const Duration(days: 28));
   }
 
   /// Calculate Epiphany (Sunday between January 2-8, or January 6 if that's a Sunday)
@@ -135,6 +138,15 @@ class ImprovedLiturgicalCalendarService {
     final jan2 = DateTime(year, 1, 2);
     final daysToNextSunday = (7 - jan2.weekday) % 7;
     return jan2.add(Duration(days: daysToNextSunday));
+  }
+
+  DateTime _calculateBaptismOfTheLord(int year) {
+    final epiphany = _calculateEpiphany(year);
+    if (epiphany.month == 1 && epiphany.day == 7) {
+      return epiphany.add(const Duration(days: 1));
+    }
+
+    return epiphany.add(Duration(days: DateTime.sunday - epiphany.weekday + 7));
   }
 
   int _calculateAdventWeek(DateTime adventStart, DateTime date) {

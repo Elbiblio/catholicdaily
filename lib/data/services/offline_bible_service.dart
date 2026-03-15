@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer' as developer;
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -30,7 +31,7 @@ class OfflineBibleService {
         return versions;
       }
     } catch (e) {
-      print('Error fetching Bible versions: $e');
+      developer.log('Error fetching Bible versions', error: e, name: 'OfflineBibleService');
     }
     return [];
   }
@@ -83,7 +84,7 @@ class OfflineBibleService {
 
       await sink.close();
     } catch (e) {
-      print('Error downloading Bible version: $e');
+      developer.log('Error downloading Bible version', error: e, name: 'OfflineBibleService');
       throw Exception('Failed to download ${version.name}');
     }
   }
@@ -96,7 +97,7 @@ class OfflineBibleService {
         await file.delete();
       }
     } catch (e) {
-      print('Error deleting Bible version: $e');
+      developer.log('Error deleting Bible version', error: e, name: 'OfflineBibleService');
       throw Exception('Failed to delete version');
     }
   }

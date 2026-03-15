@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
 import '../models/daily_reading.dart';
+import 'lectionary_psalm_catalog_service.dart';
 import 'readings_service.dart';
 import 'gospel_acclamation_service.dart';
 import 'ultimate_gospel_acclamation_mapper.dart';
@@ -24,6 +25,8 @@ class PsalmResolverService {
       GospelAcclamationService();
   final UltimateGospelAcclamationMapper _mapper = UltimateGospelAcclamationMapper.instance;
   final ResponsorialPsalmMapper _psalmMapper = ResponsorialPsalmMapper.instance;
+  final LectionaryPsalmCatalogService _catalogService =
+      LectionaryPsalmCatalogService.instance;
   final Map<String, bool> _columnSupportCache = {};
 
   Future<Database> get _database async {
@@ -50,8 +53,28 @@ class PsalmResolverService {
       final bytes = data.buffer.asUint8List();
       await File(path).writeAsBytes(bytes);
     }
-    
-    return await openDatabase(path);
+
+    var db = await openDatabase(path);
+    if (!await _hasExpectedSchema(db)) {
+      await db.close();
+      final data = await rootBundle.load('assets/$assetPath');
+      final bytes = data.buffer.asUint8List();
+      await File(path).writeAsBytes(bytes, flush: true);
+      db = await openDatabase(path);
+    }
+
+    return db;
+  }
+
+  Future<bool> _hasExpectedSchema(Database db) async {
+    try {
+      final rows = await db.rawQuery(
+        "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'readings'",
+      );
+      return rows.isNotEmpty;
+    } catch (_) {
+      return false;
+    }
   }
 
   Future<bool> _supportsColumn(Database db, String column) async {
@@ -70,12 +93,25 @@ class PsalmResolverService {
     required DateTime date,
     required String psalmReference,
     String? positionLabel,
+    int? psalmSequence,
   }) async {
     final cacheKey = '${date.toIso8601String().split('T')[0]}|psalm|$psalmReference';
     
     // Check memory cache first
     if (_cache.containsKey(cacheKey)) {
       return _cache[cacheKey];
+    }
+
+    final catalogEntries = await _catalogService.getEntriesForDate(date);
+    final catalogResponse = _catalogService.resolvePsalmResponseFromEntries(
+      entries: catalogEntries,
+      psalmReference: psalmReference,
+      positionLabel: positionLabel,
+      psalmSequence: psalmSequence,
+    );
+    if (catalogResponse != null && catalogResponse.trim().isNotEmpty) {
+      _cache[cacheKey] = catalogResponse;
+      return catalogResponse;
     }
 
     // Check database
@@ -142,6 +178,8 @@ class PsalmResolverService {
     required List<DailyReading> readings,
   }) async {
     final enriched = <DailyReading>[];
+    final catalogEntries = await _catalogService.getEntriesForDate(date);
+    var psalmOrdinal = 0;
 
     for (final reading in readings) {
       final position = (reading.position ?? '').toLowerCase();
@@ -149,14 +187,37 @@ class PsalmResolverService {
       String? gospelAcclamation = reading.gospelAcclamation;
 
       if (position.contains('psalm') && (psalmResponse == null || psalmResponse.trim().isEmpty)) {
+        psalmOrdinal += 1;
+        final catalogResponse = _catalogService.resolvePsalmResponseFromEntries(
+          entries: catalogEntries,
+          psalmReference: reading.reading,
+          positionLabel: reading.position,
+          psalmSequence: psalmOrdinal,
+        );
+        if (catalogResponse != null && catalogResponse.trim().isNotEmpty) {
+          psalmResponse = catalogResponse;
+        }
+
         psalmResponse = await resolvePsalmResponse(
           date: date,
           psalmReference: reading.reading,
           positionLabel: reading.position,
+          psalmSequence: psalmOrdinal,
         );
+      } else if (position.contains('psalm')) {
+        psalmOrdinal += 1;
       }
 
       if (position.contains('gospel') && (gospelAcclamation == null || gospelAcclamation.trim().isEmpty)) {
+        final catalogAcclamation = _catalogService.resolveGospelAcclamationFromEntries(
+          entries: catalogEntries,
+          gospelReference: reading.reading,
+          positionLabel: reading.position,
+        );
+        if (catalogAcclamation != null && catalogAcclamation.trim().isNotEmpty) {
+          gospelAcclamation = catalogAcclamation;
+        }
+
         gospelAcclamation = await resolveGospelAcclamation(
           date: date,
           gospelReference: reading.reading,
@@ -322,6 +383,17 @@ class PsalmResolverService {
     // Check memory cache first
     if (_cache.containsKey(cacheKey)) {
       return _cache[cacheKey];
+    }
+
+    final catalogEntries = await _catalogService.getEntriesForDate(date);
+    final catalogAcclamation = _catalogService.resolveGospelAcclamationFromEntries(
+      entries: catalogEntries,
+      gospelReference: gospelReference,
+      positionLabel: positionLabel,
+    );
+    if (catalogAcclamation != null && catalogAcclamation.trim().isNotEmpty) {
+      _cache[cacheKey] = catalogAcclamation;
+      return catalogAcclamation;
     }
 
     // Use mapping algorithm for reliable offline coverage

@@ -216,8 +216,11 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
   }
 
   Widget _buildPremiumAppBar(ThemeData theme, DateFormat dateFormat) {
+    final isLight = theme.brightness == Brightness.light;
     return SliverAppBar(
-      expandedHeight: _showLiturgicalDetails ? 360 : 240,
+      expandedHeight: _showLiturgicalDetails
+          ? (isLight ? 360 : 320)
+          : (isLight ? 240 : 210),
       pinned: true,
       backgroundColor: theme.colorScheme.surface.withValues(alpha: 0.96),
       surfaceTintColor: Colors.transparent,
@@ -238,17 +241,18 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
           ),
         ),
       ),
+      titleSpacing: 0,
       actions: [
+        IconButton(
+          onPressed: _goToToday,
+          icon: const Icon(Icons.today_rounded),
+          tooltip: 'Go to Today',
+        ),
         IconButton(
           onPressed: _showDatePicker,
           icon: const Icon(Icons.calendar_month_rounded),
           tooltip: 'Choose Date',
         ),
-        // IconButton(
-        //   onPressed: _goToToday,
-        //   icon: const Icon(Icons.today_rounded),
-        //   tooltip: 'Go to Today',
-        // ),
       ],
     );
   }
@@ -280,18 +284,16 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
           child: Padding(
             padding: EdgeInsets.fromLTRB(
               20,
-              MediaQuery.of(context).padding.top + kToolbarHeight,
+              MediaQuery.of(context).padding.top + kToolbarHeight + (isLight ? 0 : 8),
               20,
-              20,
+              isLight ? 20 : 14,
             ),
             child: SingleChildScrollView(
               physics: const ClampingScrollPhysics(),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraints.maxHeight - 40),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
                     if (_liturgicalDay!.rank != null)
                       Container(
                         padding: const EdgeInsets.symmetric(
@@ -336,7 +338,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                     Text(
                       _liturgicalDay!.weekDescription,
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: headerForeground.withValues(alpha: isLight ? 0.98 : 0.9),
+                        color: headerForeground.withValues(alpha: isLight ? 0.98 : 0.94),
                         fontWeight: FontWeight.w500,
                       ),
                       maxLines: 2,
@@ -384,7 +386,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                           ? Container(
                               margin: const EdgeInsets.only(top: 12),
                               width: double.infinity,
-                              height: constraints.maxHeight * 0.4,
+                              height: constraints.maxHeight * (isLight ? 0.4 : 0.34),
                               padding: const EdgeInsets.all(14),
                               decoration: BoxDecoration(
                                 color: theme.colorScheme.surface.withValues(alpha: 0.78),
@@ -405,8 +407,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                             )
                           : const SizedBox.shrink(),
                     ),
-                  ],
-                ),
+                ],
               ),
             ),
           ),
@@ -602,12 +603,13 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
   Widget _buildDateNavigation(ThemeData theme) {
     final ordoColor = _liturgicalDay?.colorValue ?? theme.colorScheme.primary;
     final isLight = theme.brightness == Brightness.light;
+    final navAccent = _resolveNavigationAccent(theme, ordoColor);
     final containerColor = isLight
-        ? Color.alphaBlend(Colors.white.withValues(alpha: 0.82), ordoColor.withValues(alpha: 0.22))
-        : theme.colorScheme.surfaceContainer;
+        ? Color.alphaBlend(Colors.white.withValues(alpha: 0.72), navAccent.withValues(alpha: 0.42))
+        : Color.alphaBlend(theme.colorScheme.surfaceContainer.withValues(alpha: 0.8), navAccent.withValues(alpha: 0.36));
     final buttonColor = isLight
-        ? Color.alphaBlend(Colors.white.withValues(alpha: 0.92), ordoColor.withValues(alpha: 0.18))
-        : theme.colorScheme.surface;
+        ? Color.alphaBlend(Colors.white.withValues(alpha: 0.84), navAccent.withValues(alpha: 0.34))
+        : Color.alphaBlend(theme.colorScheme.surface.withValues(alpha: 0.88), navAccent.withValues(alpha: 0.28));
     final foregroundColor = _resolveHeaderForeground(theme, buttonColor);
 
     return Container(
@@ -617,7 +619,9 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
         color: containerColor,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: (isLight ? foregroundColor : theme.colorScheme.outline).withValues(alpha: 0.18),
+          color: isLight
+              ? navAccent.withValues(alpha: 0.28)
+              : navAccent.withValues(alpha: 0.24),
         ),
       ),
       child: Row(
@@ -684,6 +688,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
     final isLight = theme.brightness == Brightness.light;
     final chipForeground = isLight ? theme.colorScheme.onSurface : foregroundColor;
     final countdown = _buildCountdownLabel();
+    final isSunday = _selectedDate.weekday == DateTime.sunday;
     final chips = <Widget>[
       _buildDetailChip(
         theme,
@@ -693,10 +698,9 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
       ),
       if (_liturgicalDay!.weekNumber > 0)
         _buildDetailChip(theme, 'Week', '${_liturgicalDay!.weekNumber}', chipForeground),
-      _buildDetailChip(theme, 'Day', _liturgicalDay!.dayName, chipForeground),
-      if (_ordoYearVariables != null)
+      if (_ordoYearVariables != null && isSunday)
         _buildDetailChip(theme, 'Sunday', _ordoYearVariables!.sundayCycle, chipForeground),
-      if (_ordoYearVariables != null)
+      if (_ordoYearVariables != null && !isSunday)
         _buildDetailChip(theme, 'Year', _ordoYearVariables!.weekdayCycle, chipForeground),
       if (countdown != null)
         _buildDetailChip(theme, countdown.$1, countdown.$2, chipForeground),
@@ -848,7 +852,19 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
     return Color.lerp(seasonal, theme.colorScheme.primary, blendAmount) ?? theme.colorScheme.primary;
   }
 
+  Color _resolveNavigationAccent(ThemeData theme, Color ordoColor) {
+    if (theme.brightness == Brightness.dark) {
+      return Color.lerp(ordoColor, Colors.white, 0.12) ?? ordoColor;
+    }
+
+    return Color.lerp(ordoColor, theme.colorScheme.primary, 0.18) ?? ordoColor;
+  }
+
   Color _resolveHeaderForeground(ThemeData theme, Color backgroundColor) {
+    if (theme.brightness == Brightness.dark) {
+      return Colors.white.withValues(alpha: 0.96);
+    }
+
     final brightness = ThemeData.estimateBrightnessForColor(backgroundColor);
     return brightness == Brightness.dark ? Colors.white : theme.colorScheme.onSurface;
   }
@@ -1130,10 +1146,23 @@ class _PremiumReadingCardState extends State<_PremiumReadingCard>
     final theme = Theme.of(context);
     final color = _getReadingTypeColor(widget.reading.position, context);
     final isLight = theme.brightness == Brightness.light;
+    final badgeBackground = isLight
+        ? null
+        : Color.alphaBlend(
+            theme.colorScheme.surface.withValues(alpha: 0.86),
+            color.withValues(alpha: 0.18),
+          );
+    final badgeForeground = isLight
+        ? color
+        : (ThemeData.estimateBrightnessForColor(badgeBackground!) == Brightness.dark
+              ? Colors.white.withValues(alpha: 0.94)
+              : theme.colorScheme.onSurface);
     final cardBaseColor = widget.liturgicalColor != null
         ? Color.alphaBlend(
-            Colors.white.withValues(alpha: isLight ? 0.94 : 0.08),
-            widget.liturgicalColor!.withValues(alpha: isLight ? 0.14 : 1),
+            isLight
+                ? Colors.white.withValues(alpha: 0.94)
+                : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.92),
+            widget.liturgicalColor!.withValues(alpha: isLight ? 0.14 : 0.24),
           )
         : theme.colorScheme.surface;
 
@@ -1191,19 +1220,26 @@ class _PremiumReadingCardState extends State<_PremiumReadingCard>
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            color.withValues(alpha: 0.2),
-                            color.withValues(alpha: 0.1),
-                          ],
-                        ),
+                        color: badgeBackground,
+                        gradient: isLight
+                            ? LinearGradient(
+                                colors: [
+                                  color.withValues(alpha: 0.2),
+                                  color.withValues(alpha: 0.1),
+                                ],
+                              )
+                            : null,
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: color.withValues(alpha: 0.3)),
+                        border: Border.all(
+                          color: isLight
+                              ? color.withValues(alpha: 0.3)
+                              : color.withValues(alpha: 0.42),
+                        ),
                       ),
                       child: Text(
                         widget.reading.position ?? 'Reading',
                         style: theme.textTheme.labelSmall?.copyWith(
-                          color: color,
+                          color: badgeForeground,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 0.5,
                         ),

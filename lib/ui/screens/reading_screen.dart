@@ -411,8 +411,8 @@ class _ReadingScreenState extends State<ReadingScreen> {
                   ? FlexibleSpaceBar(
                       background: Container(
                         color: Color.alphaBlend(
-                          colorScheme.surface.withValues(alpha: isLight ? 0.82 : 0.3),
-                          widget.liturgicalDay!.colorValue.withValues(alpha: isLight ? 0.16 : 1),
+                          colorScheme.surface.withValues(alpha: isLight ? 0.42 : 0.3),
+                          widget.liturgicalDay!.colorValue.withValues(alpha: isLight ? 0.96 : 1),
                         ),
                         child: Padding(
                           padding: EdgeInsets.fromLTRB(
@@ -644,7 +644,8 @@ class _ReadingScreenState extends State<ReadingScreen> {
   }
 
   Widget _buildHeader(ThemeData theme) {
-    final brandColor = theme.colorScheme.primary;
+    final ordoColor = widget.liturgicalDay?.colorValue ?? theme.colorScheme.primary;
+    final headerAccent = _resolveHeaderAccent(theme, ordoColor);
     final readingTitle = ReadingTitleFormatter.build(
       reference: widget.reference,
       position: widget.readingData?.position,
@@ -656,7 +657,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
         Text(
           _readingLabel,
           style: theme.textTheme.labelLarge?.copyWith(
-            color: brandColor,
+            color: headerAccent,
             fontWeight: FontWeight.w700,
             letterSpacing: 0.3,
           ),
@@ -684,12 +685,28 @@ class _ReadingScreenState extends State<ReadingScreen> {
           width: 60,
           height: 3,
           decoration: BoxDecoration(
-            color: brandColor,
+            color: headerAccent,
             borderRadius: BorderRadius.circular(2),
           ),
         ),
       ],
     );
+  }
+
+  Color _resolveHeaderAccent(ThemeData theme, Color ordoColor) {
+    if (theme.brightness == Brightness.dark) {
+      return Color.lerp(ordoColor, Colors.white, 0.12) ?? ordoColor;
+    }
+
+    final contrastWithSurface = ThemeData.estimateBrightnessForColor(
+      Color.alphaBlend(Colors.white.withValues(alpha: 0.9), ordoColor.withValues(alpha: 0.2)),
+    );
+
+    if (contrastWithSurface == Brightness.light) {
+      return Color.lerp(ordoColor, Colors.black, 0.32) ?? ordoColor;
+    }
+
+    return Color.lerp(ordoColor, theme.colorScheme.primary, 0.16) ?? ordoColor;
   }
 
   Widget _buildContent(ThemeData theme) {
