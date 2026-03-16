@@ -181,13 +181,24 @@ class _HomeScreenState extends State<HomeScreen> {
           content: content,
           liturgicalDay: liturgicalDay,
           readingData: readingData,
+          sessionReadings: _readingSession.readings,
+          currentReadingIndex: _readingSession.currentIndex,
           hasNext: _readingSession.hasNext,
           hasPrev: _readingSession.hasPrev,
           onNextReading: _goToNextReading,
           onPrevReading: _goToPrevReading,
+          onSelectReadingIndex: _goToReadingAtIndex,
         ),
       ),
     );
+  }
+
+  void _goToReadingAtIndex(int index) {
+    if (index < 0 || index >= _readingSession.readings.length) {
+      return;
+    }
+    _readingSession = _readingSession.copyWith(currentIndex: index);
+    _openCurrentReadingFromNavigation();
   }
 
   void _goToNextReading() {

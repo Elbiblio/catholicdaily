@@ -37,30 +37,11 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     db_path = Path(args.db).resolve()
-    if not db_path.exists():
-        print(f"DB not found: {db_path}", file=sys.stderr)
-        return 1
-
-    years = [int(y.strip()) for y in args.years.split(",") if y.strip()]
-    conn = sqlite3.connect(str(db_path))
-    conn.row_factory = sqlite3.Row
-    ensure_schema(conn)
-
-    rows = load_rows(conn, years)
-    groups: dict[CacheKey, list[int]] = {}
-    for row in rows:
-        ts = int(row["timestamp"])
-        date = dt.datetime.fromtimestamp(ts, tz=dt.UTC).date()
-        ref = str(row["reading"]).strip()
-        if not ref:
-            continue
-        key = CacheKey(
-            gospel_ref=ref,
-            year=date.year,
-            sunday_cycle=sunday_cycle_for_date(date),
-            weekday_cycle=weekday_cycle_for_date(date),
-        )
-        groups.setdefault(key, []).append(ts)
+    print(
+        "This legacy cycle gospel acclamation backfill script is retired. "
+        f"Do not update {db_path.name}; maintain acclamation coverage in the CSV catalogs instead."
+    )
+    return 1
 
     print(f"Target rows: {len(rows)}")
     print(f"Gospel year/cycle groups: {len(groups)}")

@@ -30,106 +30,11 @@ def main() -> int:
     args = parse_args()
     db_path = Path(args.db).resolve()
     out_path = Path(args.out).resolve()
-    conn = sqlite3.connect(str(db_path))
-    conn.row_factory = sqlite3.Row
-
-    # Missing refs and their seed dates.
-    rows = conn.execute(
-        """
-        SELECT reading, MIN(timestamp) AS seed_ts, COUNT(*) AS missing_count
-        FROM readings
-        WHERE position = 2
-          AND (psalm_response IS NULL OR TRIM(psalm_response) = '')
-        GROUP BY reading
-        ORDER BY missing_count DESC
-        """
-    ).fetchall()
-    if args.max_refs > 0:
-        rows = rows[: args.max_refs]
-
-    # Refs that already have a known response somewhere in DB.
-    known_rows = conn.execute(
-        """
-        SELECT reading, COUNT(DISTINCT psalm_response) AS c, MIN(psalm_response) AS v
-        FROM readings
-        WHERE position = 2
-          AND psalm_response IS NOT NULL
-          AND TRIM(psalm_response) <> ''
-        GROUP BY reading
-        """
-    ).fetchall()
-    known_map = {
-        str(r["reading"]): str(r["v"]).strip()
-        for r in known_rows
-        if int(r["c"]) == 1 and str(r["v"]).strip()
-    }
-
-    diagnostics: list[dict] = []
-    category_counter: Counter[str] = Counter()
-
-    for row in rows:
-        ref = str(row["reading"])
-        seed_ts = int(row["seed_ts"])
-        missing_count = int(row["missing_count"])
-        seed_date = dt.datetime.fromtimestamp(seed_ts, tz=dt.UTC).date()
-
-        if ref in known_map:
-            category = "can_fill_from_existing_reference_mapping"
-            diagnostics.append(
-                {
-                    "reference": ref,
-                    "missing_count": missing_count,
-                    "seed_date": seed_date.isoformat(),
-                    "category": category,
-                    "known_response": known_map[ref],
-                }
-            )
-            category_counter[category] += 1
-            continue
-
-        url = build_usccb_url(seed_date)
-        page = fetch(url)
-        if not page:
-            category = "source_not_found_404_or_empty"
-            diagnostics.append(
-                {
-                    "reference": ref,
-                    "missing_count": missing_count,
-                    "seed_date": seed_date.isoformat(),
-                    "category": category,
-                    "source_url": url,
-                }
-            )
-            category_counter[category] += 1
-            continue
-
-        parse = diagnose_page(page)
-        category = parse["category"]
-        diagnostics.append(
-            {
-                "reference": ref,
-                "missing_count": missing_count,
-                "seed_date": seed_date.isoformat(),
-                "category": category,
-                "source_url": url,
-                "details": parse.get("details"),
-            }
-        )
-        category_counter[category] += 1
-
-    conn.close()
-
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    payload = {
-        "generated_at_utc": dt.datetime.now(dt.UTC).isoformat(),
-        "total_missing_refs_analyzed": len(diagnostics),
-        "category_counts": dict(category_counter),
-        "diagnostics": diagnostics,
-    }
-    out_path.write_text(json.dumps(payload, ensure_ascii=True, indent=2), encoding="utf-8")
-    print(f"Wrote diagnostics: {out_path}")
-    print("Category counts:", dict(category_counter))
-    return 0
+    print(
+        "This legacy missing-psalm diagnostics script is retired. "
+        f"Do not inspect {db_path.name} for gaps; build diagnostics from the CSV catalogs instead of {out_path.name}."
+    )
+    return 1
 
 
 def build_usccb_url(target_date: dt.date) -> str:

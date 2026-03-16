@@ -33,66 +33,11 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     db_path = Path(args.db).resolve()
-    if not db_path.exists():
-        print(f"DB not found: {db_path}", file=sys.stderr)
-        return 1
-
-    conn = sqlite3.connect(str(db_path))
-    conn.row_factory = sqlite3.Row
-    ensure_schema(conn)
-    if args.reset_cursor:
-        reset_cursor(conn, args.script_key, args.start_year, args.end_year)
-
-    targets = load_targets(
-        conn,
-        args.start_year,
-        args.end_year,
-        args.force,
-        use_cursor=not args.no_cursor,
-        script_key=args.script_key,
+    print(
+        "This legacy gospel acclamation extractor is retired. "
+        f"The app no longer updates {db_path.name}; maintain acclamations in the CSV catalogs instead."
     )
-    if args.limit > 0:
-        targets = targets[: args.limit]
-    print(f"Target dates: {len(targets)}")
-
-    ok = 0
-    missing = 0
-    failed = 0
-
-    for idx, ts in enumerate(targets, start=1):
-        date = dt.datetime.fromtimestamp(ts, tz=dt.UTC).date()
-        try:
-            page = fetch(build_usccb_url(date))
-            acclamation = extract_gospel_acclamation(page)
-            if acclamation:
-                conn.execute(
-                    """
-                    UPDATE readings
-                    SET gospel_acclamation = ?
-                    WHERE timestamp = ? AND position = 4
-                    """,
-                    (acclamation, ts),
-                )
-                ok += 1
-            else:
-                missing += 1
-            if not args.no_cursor:
-                update_cursor(conn, args.script_key, date.year, ts)
-            if idx % 100 == 0:
-                conn.commit()
-                print(
-                    f"[{idx}/{len(targets)}] ok={ok} missing={missing} failed={failed}"
-                )
-        except Exception as exc:  # noqa: BLE001
-            failed += 1
-            if not args.no_cursor:
-                update_cursor(conn, args.script_key, date.year, ts)
-            print(f"[{idx}/{len(targets)}] {date} ERROR {exc}")
-
-    conn.commit()
-    conn.close()
-    print(f"Done. updated={ok} missing={missing} failed={failed}")
-    return 0 if failed == 0 else 2
+    return 1
 
 
 def ensure_schema(conn: sqlite3.Connection) -> None:

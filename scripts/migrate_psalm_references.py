@@ -204,86 +204,11 @@ class PsalmReferenceMigrator:
         return filtered
 
 def main():
-    """Main entry point."""
-    import argparse
-    
-    parser = argparse.ArgumentParser(description="Migrate psalm references in database")
-    parser.add_argument("--mapping", default="psalm_resolutions.json", help="Path to mappings JSON file")
-    parser.add_argument("--db", default="assets/readings.db", help="Path to readings.db")
-    parser.add_argument("--backup", action="store_true", default=True, help="Create backup before migration")
-    parser.add_argument("--no-backup", dest="backup", action="store_false", help="Skip backup creation")
-    parser.add_argument("--dry-run", action="store_true", help="Show changes without applying them")
-    parser.add_argument("--verify", action="store_true", help="Verify migrations after applying")
-    parser.add_argument("--start-year", type=int, help="Only migrate entries from this year onwards")
-    parser.add_argument("--confidence", type=float, help="Minimum confidence threshold")
-    
-    args = parser.parse_args()
-    
-    # Validate inputs
-    if not Path(args.mapping).exists():
-        print(f"Error: Mapping file not found: {args.mapping}")
-        return 1
-    
-    if not Path(args.db).exists():
-        print(f"Error: Database not found: {args.db}")
-        return 1
-    
-    migrator = PsalmReferenceMigrator(args.db, args.mapping)
-    
-    # Create backup
-    if args.backup and not args.dry_run:
-        backup_path = migrator.create_backup()
-        print(f"Backup created: {backup_path}")
-    
-    # Load mappings
-    mappings = migrator.load_mappings()
-    
-    # Filter by confidence if specified
-    if args.confidence is not None:
-        original_count = len(mappings)
-        mappings = [m for m in mappings if m['confidence'] >= args.confidence]
-        print(f"Filtered by confidence >= {args.confidence}: {len(mappings)} entries (was {original_count})")
-    
-    # Filter by date if specified
-    if args.start_year is not None:
-        mappings = migrator.filter_by_date(mappings, args.start_year)
-    
-    if not mappings:
-        print("No mappings to apply after filtering")
-        return 0
-    
-    print(f"\n{'DRY RUN: ' if args.dry_run else ''}Applying {len(mappings)} migrations...")
-    
-    # Apply migrations
-    results = migrator.apply_migrations(mappings, dry_run=args.dry_run)
-    
-    print(f"\nResults:")
-    print(f"  Total: {results['total']}")
-    print(f"  Applied: {results['applied']}")
-    print(f"  Skipped: {results['skipped']}")
-    print(f"  Errors: {results['errors']}")
-    
-    if results['errors'] > 0 or results['skipped'] > 0:
-        print(f"\nDetails:")
-        for detail in results['details']:
-            if 'error' in detail.lower() or 'skipped' in detail.lower() or 'not found' in detail.lower():
-                print(f"  {detail}")
-    
-    # Verify if requested
-    if args.verify and not args.dry_run and results['applied'] > 0:
-        print(f"\nVerifying {results['applied']} applied migrations...")
-        verify_results = migrator.verify_migrations(mappings)
-        
-        print(f"Verification Results:")
-        print(f"  Verified: {verify_results['verified']}")
-        print(f"  Failed: {verify_results['failed']}")
-        
-        if verify_results['failed'] > 0:
-            print(f"\nVerification Failures:")
-            for detail in verify_results['details']:
-                print(f"  {detail}")
-    
-    return 0
+    print(
+        "This legacy psalm reference migrator is retired. "
+        "Migrate psalm references in the CSV catalogs instead of readings.db."
+    )
+    return 1
 
 if __name__ == '__main__':
     exit(main())

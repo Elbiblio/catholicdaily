@@ -1,23 +1,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
-import 'package:flutter/services.dart' show rootBundle;
 import '../models/daily_reading.dart';
 import 'lectionary_psalm_catalog_service.dart';
 import 'readings_service.dart';
 import 'gospel_acclamation_service.dart';
 import 'ultimate_gospel_acclamation_mapper.dart';
 import 'responsorial_psalm_mapper.dart';
+import 'base_service.dart';
 
 /// On-demand psalm response resolver that fetches from USCCB when missing
-class PsalmResolverService {
-  static final PsalmResolverService instance = PsalmResolverService._();
+class PsalmResolverService extends BaseService<PsalmResolverService> {
+  static PsalmResolverService get instance => BaseService.init(() => PsalmResolverService._());
+  
   PsalmResolverService._();
 
-  Database? _db;
   final Map<String, String> _cache = {};
   final Set<String> _pendingFetches = {};
   final ReadingsService _readingsService = ReadingsService.instance;
@@ -27,65 +23,6 @@ class PsalmResolverService {
   final ResponsorialPsalmMapper _psalmMapper = ResponsorialPsalmMapper.instance;
   final LectionaryPsalmCatalogService _catalogService =
       LectionaryPsalmCatalogService.instance;
-  final Map<String, bool> _columnSupportCache = {};
-
-  Future<Database> get _database async {
-    _db ??= await _openAssetDatabase('readings.db');
-    return _db!;
-  }
-
-  Future<Database> _openAssetDatabase(String assetPath) async {
-    String path;
-    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-      final directory = await getApplicationDocumentsDirectory();
-      path = join(directory.path, assetPath);
-    } else {
-      final databasesPath = await getDatabasesPath();
-      path = join(databasesPath, assetPath);
-    }
-    
-    // Check if the database exists
-    final exists = await databaseExists(path);
-    
-    if (!exists) {
-      // Copy from assets
-      final data = await rootBundle.load('assets/$assetPath');
-      final bytes = data.buffer.asUint8List();
-      await File(path).writeAsBytes(bytes);
-    }
-
-    var db = await openDatabase(path);
-    if (!await _hasExpectedSchema(db)) {
-      await db.close();
-      final data = await rootBundle.load('assets/$assetPath');
-      final bytes = data.buffer.asUint8List();
-      await File(path).writeAsBytes(bytes, flush: true);
-      db = await openDatabase(path);
-    }
-
-    return db;
-  }
-
-  Future<bool> _hasExpectedSchema(Database db) async {
-    try {
-      final rows = await db.rawQuery(
-        "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'readings'",
-      );
-      return rows.isNotEmpty;
-    } catch (_) {
-      return false;
-    }
-  }
-
-  Future<bool> _supportsColumn(Database db, String column) async {
-    if (_columnSupportCache.containsKey(column)) {
-      return _columnSupportCache[column]!;
-    }
-    final rows = await db.rawQuery('PRAGMA table_info(readings)');
-    final hasColumn = rows.any((row) => row['name'] == column);
-    _columnSupportCache[column] = hasColumn;
-    return hasColumn;
-  }
 
   /// Resolve psalm response for a given date and psalm reference
   /// Returns cached value if available, otherwise fetches from USCCB
@@ -114,46 +51,6 @@ class PsalmResolverService {
       return catalogResponse;
     }
 
-    // Check database
-    final db = await _database;
-    final timestamp = DateTime.utc(date.year, date.month, date.day, 8, 0, 0)
-        .millisecondsSinceEpoch ~/
-        1000;
-
-    final hasPsalmResponse = await _supportsColumn(db, 'psalm_response');
-    final hasPsalmResponseRef = await _supportsColumn(db, 'psalm_response_ref');
-    if (hasPsalmResponseRef) {
-      final refRows = await db.rawQuery(
-        'SELECT psalm_response_ref FROM readings WHERE timestamp = ? AND reading = ? ORDER BY position LIMIT 1',
-        [timestamp, psalmReference],
-      );
-      if (refRows.isNotEmpty && refRows.first['psalm_response_ref'] != null) {
-        final ref = refRows.first['psalm_response_ref'] as String;
-        if (ref.trim().isNotEmpty) {
-          // Decode reference to full refrain text
-          final text = await _decodeAcclamationVerse(ref);
-          if (text != null && text.trim().isNotEmpty) {
-            _cache[cacheKey] = text;
-            return text;
-          }
-        }
-      }
-    }
-    if (hasPsalmResponse) {
-      final rows = await db.rawQuery(
-        'SELECT psalm_response FROM readings WHERE timestamp = ? AND reading = ? ORDER BY position LIMIT 1',
-        [timestamp, psalmReference],
-      );
-
-      if (rows.isNotEmpty && rows.first['psalm_response'] != null) {
-        final response = rows.first['psalm_response'] as String;
-        if (response.trim().isNotEmpty) {
-          _cache[cacheKey] = response;
-          return response;
-        }
-      }
-    }
-
     final offlineFallback = _resolvePsalmResponseOffline(
       date: date,
       psalmReference: psalmReference,
@@ -167,7 +64,7 @@ class PsalmResolverService {
     // Fetch from USCCB if not in database and not already pending
     if (!_pendingFetches.contains(cacheKey)) {
       _pendingFetches.add(cacheKey);
-      _fetchAndUpdatePsalmResponse(date, psalmReference, timestamp, cacheKey);
+      _fetchAndUpdatePsalmResponse(date, psalmReference, cacheKey);
     }
 
     return null;
@@ -186,7 +83,7 @@ class PsalmResolverService {
       String? psalmResponse = reading.psalmResponse;
       String? gospelAcclamation = reading.gospelAcclamation;
 
-      if (position.contains('psalm') && (psalmResponse == null || psalmResponse.trim().isEmpty)) {
+      if (position.contains('psalm')) {
         psalmOrdinal += 1;
         final catalogResponse = _catalogService.resolvePsalmResponseFromEntries(
           entries: catalogEntries,
@@ -194,35 +91,35 @@ class PsalmResolverService {
           positionLabel: reading.position,
           psalmSequence: psalmOrdinal,
         );
-        if (catalogResponse != null && catalogResponse.trim().isNotEmpty) {
-          psalmResponse = catalogResponse;
-        }
 
-        psalmResponse = await resolvePsalmResponse(
-          date: date,
-          psalmReference: reading.reading,
-          positionLabel: reading.position,
-          psalmSequence: psalmOrdinal,
-        );
-      } else if (position.contains('psalm')) {
-        psalmOrdinal += 1;
+        if (catalogResponse != null && catalogResponse.trim().isNotEmpty) {
+          psalmResponse = catalogResponse.trim();
+        } else if (psalmResponse == null || psalmResponse.trim().isEmpty) {
+          psalmResponse = await resolvePsalmResponse(
+            date: date,
+            psalmReference: reading.reading,
+            positionLabel: reading.position,
+            psalmSequence: psalmOrdinal,
+          );
+        }
       }
 
-      if (position.contains('gospel') && (gospelAcclamation == null || gospelAcclamation.trim().isEmpty)) {
+      if (position.contains('gospel')) {
         final catalogAcclamation = _catalogService.resolveGospelAcclamationFromEntries(
           entries: catalogEntries,
           gospelReference: reading.reading,
           positionLabel: reading.position,
         );
-        if (catalogAcclamation != null && catalogAcclamation.trim().isNotEmpty) {
-          gospelAcclamation = catalogAcclamation;
-        }
 
-        gospelAcclamation = await resolveGospelAcclamation(
-          date: date,
-          gospelReference: reading.reading,
-          positionLabel: reading.position,
-        );
+        if (catalogAcclamation != null && catalogAcclamation.trim().isNotEmpty) {
+          gospelAcclamation = catalogAcclamation.trim();
+        } else if (gospelAcclamation == null || gospelAcclamation.trim().isEmpty) {
+          gospelAcclamation = await resolveGospelAcclamation(
+            date: date,
+            gospelReference: reading.reading,
+            positionLabel: reading.position,
+          );
+        }
       } else if (position.contains('gospel') && gospelAcclamation != null) {
         final trimmedAcclamation = gospelAcclamation.trim();
         if (trimmedAcclamation.startsWith('Reading text unavailable')) {
@@ -272,7 +169,6 @@ class PsalmResolverService {
   Future<void> _fetchAndUpdatePsalmResponse(
     DateTime date,
     String psalmReference,
-    int timestamp,
     String cacheKey,
   ) async {
     try {
@@ -582,58 +478,30 @@ class PsalmResolverService {
     final today = DateTime.now();
     for (var i = 0; i < days; i++) {
       final date = today.add(Duration(days: i));
-      final db = await _database;
-      final timestamp = DateTime.utc(date.year, date.month, date.day, 8, 0, 0)
-          .millisecondsSinceEpoch ~/
-          1000;
-
-      // Check psalm response
-      final psalmRows = await db.rawQuery(
-        '''
-        SELECT reading, psalm_response 
-        FROM readings 
-        WHERE timestamp = ? AND position = 2
-        ''',
-        [timestamp],
-      );
-
-      if (psalmRows.isNotEmpty) {
-        final psalmResponse = psalmRows.first['psalm_response'] as String?;
-        final psalmRef = psalmRows.first['reading'] as String;
-        
-        if (psalmResponse == null || psalmResponse.trim().isEmpty) {
-          // Fetch in background
-          resolvePsalmResponse(date: date, psalmReference: psalmRef);
+      final readings = await _readingsService.getReadingsForDate(date);
+      for (final reading in readings) {
+        final position = (reading.position ?? '').toLowerCase();
+        if (position.contains('psalm') &&
+            (reading.psalmResponse == null || reading.psalmResponse!.trim().isEmpty)) {
+          resolvePsalmResponse(
+            date: date,
+            psalmReference: reading.reading,
+            positionLabel: reading.position,
+          );
         }
-      }
-
-      // Check gospel acclamation
-      final gospelRows = await db.rawQuery(
-        '''
-        SELECT reading, gospel_acclamation 
-        FROM readings 
-        WHERE timestamp = ? AND position = 4
-        ''',
-        [timestamp],
-      );
-
-      if (gospelRows.isNotEmpty) {
-        final acclamation = gospelRows.first['gospel_acclamation'] as String?;
-        final gospelRef = gospelRows.first['reading'] as String;
-        
-        if (acclamation == null || acclamation.trim().isEmpty) {
-          // Generate or fetch in background
-          resolveGospelAcclamation(date: date, gospelReference: gospelRef);
+        if (position.contains('gospel') &&
+            (reading.gospelAcclamation == null || reading.gospelAcclamation!.trim().isEmpty)) {
+          resolveGospelAcclamation(
+            date: date,
+            gospelReference: reading.reading,
+            positionLabel: reading.position,
+          );
         }
       }
     }
   }
 
   Future<void> close() async {
-    if (_db != null) {
-      await _db!.close();
-      _db = null;
-    }
     _cache.clear();
     _pendingFetches.clear();
   }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import 'improved_liturgical_calendar_service.dart';
@@ -12,6 +13,7 @@ class OrdoResolverService {
   static const _baseUrl = 'https://calapi.inadiutorium.cz/api/v0/en';
   String _calendarId = 'default';
   bool _preferOffline = true;
+  static const List<String> _sundayCycleOrder = ['A', 'B', 'C'];
 
   final Map<String, LiturgicalDay> _dayCache = {};
   final Map<int, OrdoYearVariables> _yearVarCache = {};
@@ -68,7 +70,7 @@ class OrdoResolverService {
     String? sundayCycle;
     String? weekdayCycle;
     try {
-      final setup = await _fetchYearSetup(liturgicalYear - 1);
+      final setup = await _fetchYearSetup(liturgicalYear);
       sundayCycle = setup['lectionary'] as String?;
       weekdayCycle = _toRoman(setup['ferial_lectionary'] as int?);
     } catch (_) {
@@ -199,8 +201,9 @@ class OrdoResolverService {
 
   DateTime _calculateAdventStart(int year) {
     final christmas = DateTime(year, 12, 25);
-    final daysToPreviousSunday = (christmas.weekday + 6) % 7;
-    return christmas.subtract(Duration(days: daysToPreviousSunday + 21));
+    final daysUntilSunday = (DateTime.sunday - christmas.weekday + 7) % 7;
+    final sundayOnOrAfterChristmas = christmas.add(Duration(days: daysUntilSunday));
+    return sundayOnOrAfterChristmas.subtract(const Duration(days: 28));
   }
 
   LiturgicalSeason _seasonFromApi(String? value) {
@@ -315,9 +318,13 @@ class OrdoResolverService {
     return _toRoman(epact).toLowerCase();
   }
 
+  @visibleForTesting
+  static String calculateSundayCycle(int liturgicalYear) {
+    return _sundayCycleOrder[(liturgicalYear + 2) % 3];
+  }
+
   String _fallbackSundayCycle(int liturgicalYear) {
-    const cycles = ['A', 'B', 'C'];
-    return cycles[(liturgicalYear + 1) % 3];
+    return calculateSundayCycle(liturgicalYear);
   }
 
   String _fallbackWeekdayCycle(int liturgicalYear) {

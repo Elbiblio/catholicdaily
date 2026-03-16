@@ -4,9 +4,11 @@ import 'package:flutter/services.dart' show rootBundle;
 
 import '../models/bible_book.dart';
 import '../models/daily_reading.dart';
+import 'csv_readings_resolver_service.dart';
 import 'official_lectionary_incipit_service.dart';
 import 'reading_reference_parser.dart';
 import 'readings_backend.dart';
+import 'shared_service_utils.dart';
 
 ReadingsBackend createReadingsBackend() => ReadingsBackendWeb();
 
@@ -14,56 +16,22 @@ class ReadingsBackendWeb implements ReadingsBackend {
   bool _isLoaded = false;
   List<Book> _books = const [];
   Map<String, String> _aliases = const {};
-  Map<int, List<_ReadingRow>> _readingsByTimestamp = const {};
   Map<String, Map<int, Map<int, String>>> _versesByBook = const {};
   
   final OfficialLectionaryIncipitService _incipitService = OfficialLectionaryIncipitService();
+  final CsvReadingsResolverService _csvResolver = CsvReadingsResolverService.instance;
 
   @override
   Future<List<DailyReading>> getReadingsForDate(DateTime date) async {
-    await _ensureLoaded();
-
-    final timestamp =
-        DateTime.utc(
-          date.year,
-          date.month,
-          date.day,
-          8,
-          0,
-          0,
-        ).millisecondsSinceEpoch ~/
-        1000;
-
-    final rows = _readingsByTimestamp[timestamp] ?? const [];
-    final orderedReferences = rows
-        .map((row) => row.reference)
-        .toList(growable: false);
-    return rows.asMap().entries.map((entry) {
-      final row = entry.value;
-      final normalizedReference = row.reference.trim().toLowerCase();
-      final isPsalmLike = _isPsalmLikeReference(normalizedReference);
-      final isGospelLike = _isGospelReference(normalizedReference);
-
-      return DailyReading(
-        id: null,
-        reading: row.reference,
-        position: _positionLabel(
-          row.position,
-          row.reference,
-          rows.length,
-          orderedReferences,
-          orderedIndex: entry.key,
-        ),
-        date: date,
-        feast: null,
-        psalmResponse: isPsalmLike ? row.psalmResponse : null,
-        gospelAcclamation: isGospelLike ? row.gospelAcclamation : null,
-      );
-    }).toList();
+    return _csvResolver.resolve(date);
   }
 
   @override
-  Future<String> getReadingText(String reference, {String? psalmResponse}) async {
+  Future<String> getReadingText(
+    String reference, {
+    String? psalmResponse,
+    String? incipit,
+  }) async {
     await _ensureLoaded();
 
     final ranges = ReadingReferenceParser.parse(reference);
@@ -93,19 +61,48 @@ class ReadingsBackendWeb implements ReadingsBackend {
 
     final fullText = lines.join('\n');
 
-    if (_isPsalmLikeReference(reference)) {
+    if (SharedServiceUtils.isPsalmLikeReference(reference)) {
       return fullText;
     }
-    
-    // Get the incipit for this reading and prepend it
-    final incipit = _incipitService.getOfficialIncipit(reference);
-    if (incipit != null && incipit.isNotEmpty) {
-      // Ensure proper formatting: incipit with colon and space, then reading text
-      final formattedIncipit = incipit.endsWith(':') ? incipit : '$incipit:';
-      return '$formattedIncipit $fullText';
+
+    final processed = _incipitService.processReading(reference, fullText);
+    if (incipit != null && incipit.trim().isNotEmpty) {
+      return _replaceFirstNonEmptyLine(processed.correctedText, incipit.trim());
     }
 
-    return fullText;
+    final derivedIncipit = processed.incipit;
+    if (derivedIncipit == null || derivedIncipit.trim().isEmpty) {
+      return processed.correctedText;
+    }
+
+    final cleanIncipit = derivedIncipit
+        .trim()
+        .replaceAll(RegExp(r'[,:;]\s*$'), '');
+    return '$cleanIncipit: ${processed.correctedText}';
+  }
+
+  String _replaceFirstNonEmptyLine(String text, String replacementLine) {
+    final lines = text.split('\n');
+    for (var i = 0; i < lines.length; i++) {
+      if (lines[i].trim().isEmpty) {
+        continue;
+      }
+
+      final originalLine = lines[i].trim();
+      final hasOwnVerseNumber = RegExp(r'^\d+[a-z]?[.\s]+').hasMatch(replacementLine);
+      if (!hasOwnVerseNumber) {
+        final versePrefix = RegExp(r'^(\d+[a-z]?)').firstMatch(originalLine)?.group(1);
+        if (versePrefix != null && versePrefix.isNotEmpty) {
+          lines[i] = '$versePrefix. $replacementLine';
+          return lines.join('\n');
+        }
+      }
+
+      lines[i] = replacementLine;
+      return lines.join('\n');
+    }
+
+    return replacementLine;
   }
 
   @override
@@ -145,15 +142,11 @@ class ReadingsBackendWeb implements ReadingsBackend {
     final booksJson = await rootBundle.loadString(
       'assets/data/books_rows.json',
     );
-    final readingsJson = await rootBundle.loadString(
-      'assets/data/readings_rows.json',
-    );
     final versesJson = await rootBundle.loadString(
       'assets/data/verses_rows.json',
     );
 
     final booksRows = jsonDecode(_stripBom(booksJson)) as List<dynamic>;
-    final readingsRows = jsonDecode(_stripBom(readingsJson)) as List<dynamic>;
     final versesRows = jsonDecode(_stripBom(versesJson)) as List<dynamic>;
 
     _books = booksRows.map((raw) {
@@ -167,22 +160,6 @@ class ReadingsBackendWeb implements ReadingsBackend {
     }).toList();
 
     _aliases = ReadingReferenceParser.buildBookAliasMap(_books);
-
-    final readingsByTimestamp = <int, List<_ReadingRow>>{};
-    for (final raw in readingsRows) {
-      final row = raw as Map<String, dynamic>;
-      final timestamp = row['timestamp'] as int;
-      final readingRow = _ReadingRow(
-        position: row['position'] as int,
-        reference: row['reading'] as String,
-        psalmResponse: row['psalm_response'] as String?,
-        gospelAcclamation: row['gospel_acclamation'] as String?,
-      );
-      readingsByTimestamp
-          .putIfAbsent(timestamp, () => <_ReadingRow>[])
-          .add(readingRow);
-    }
-    _readingsByTimestamp = readingsByTimestamp;
 
     final versesByBook = <String, Map<int, Map<int, String>>>{};
     for (final raw in versesRows) {
@@ -229,161 +206,10 @@ class ReadingsBackendWeb implements ReadingsBackend {
     return lines;
   }
 
-  String _positionLabel(
-    int? position,
-    String reading,
-    int totalRows,
-    List<String> orderedReferences,
-    {required int orderedIndex}
-  ) {
-    if (position == null) {
-      return 'Reading';
-    }
-
-    final normalized = reading.trim().toLowerCase();
-
-    if (_isGospelReference(normalized)) {
-      return 'Gospel';
-    }
-
-    if (totalRows > 4) {
-      final orderedLabels = _buildComplexLayoutLabels(orderedReferences);
-      final index = orderedIndex;
-      if (index >= 0 && index < orderedLabels.length) {
-        return orderedLabels[index];
-      }
-    }
-
-    if (_isPsalmLikeReference(normalized) && !normalized.startsWith('dan 3')) {
-      return 'Responsorial Psalm';
-    }
-
-    if (totalRows <= 4) {
-      switch (position) {
-        case 1:
-          return 'First Reading';
-        case 2:
-          return _isPsalmLikeReference(normalized)
-              ? 'Responsorial Psalm'
-              : 'Second Reading';
-        case 3:
-          return _isPsalmLikeReference(normalized)
-              ? 'Responsorial Psalm'
-              : 'Second Reading';
-        case 4:
-          return 'Gospel';
-        default:
-          return 'Reading';
-      }
-    }
-
-    if (position == totalRows) {
-      return 'Gospel';
-    }
-
-    if (position == totalRows - 1 && !_isPsalmLikeReference(normalized)) {
-      return 'Second Reading';
-    }
-
-    if (position == 1) {
-      return 'First Reading';
-    }
-
-    return 'Reading $position';
-  }
-
-  List<String> _buildComplexLayoutLabels(List<String> orderedReferences) {
-    final labels = <String>[];
-    var readingCount = 0;
-    var psalmCount = 0;
-    final totalPsalms = orderedReferences
-        .where(
-          (item) =>
-              _isPsalmLikeReference(item) &&
-              !item.trim().toLowerCase().startsWith('dan 3'),
-        )
-        .length;
-
-    for (final reference in orderedReferences) {
-      final normalized = reference.trim().toLowerCase();
-
-      if (_isGospelReference(normalized)) {
-        labels.add('Gospel');
-        continue;
-      }
-
-      if (_isPsalmLikeReference(normalized) && !normalized.startsWith('dan 3')) {
-        psalmCount += 1;
-        if (psalmCount == totalPsalms && normalized.startsWith('ps 118')) {
-          labels.add('Alleluia Psalm');
-          continue;
-        }
-
-        labels.add('Responsorial Psalm');
-        continue;
-      }
-
-      readingCount += 1;
-      if (readingCount == 1) {
-        labels.add('First Reading');
-      } else if (readingCount == 2) {
-        labels.add('Second Reading');
-      } else if (readingCount == 3) {
-        labels.add('Third Reading');
-      } else if (readingCount == 4) {
-        labels.add('Fourth Reading');
-      } else if (readingCount == 5) {
-        labels.add('Fifth Reading');
-      } else if (readingCount == 6) {
-        labels.add('Sixth Reading');
-      } else if (readingCount == 7) {
-        labels.add('Seventh Reading');
-      } else if (readingCount == 8) {
-        labels.add('Epistle');
-      } else {
-        labels.add('Reading $readingCount');
-      }
-    }
-
-    return labels;
-  }
-
-  bool _isPsalmLikeReference(String reference) {
-    final normalized = reference.trim().toLowerCase();
-    return normalized.startsWith('ps ') ||
-        normalized.startsWith('psalm ') ||
-        normalized.startsWith('isa 12') ||
-        normalized.startsWith('exod 15') ||
-        normalized.startsWith('1 sam 2') ||
-        normalized.startsWith('luke 1:');
-  }
-
-  bool _isGospelReference(String reference) {
-    final normalized = reference.trim().toLowerCase();
-    return normalized.startsWith('matt ') ||
-        normalized.startsWith('mark ') ||
-        normalized.startsWith('luke ') ||
-        normalized.startsWith('john ');
-  }
-
   String _stripBom(String value) {
     if (value.isNotEmpty && value.codeUnitAt(0) == 0xFEFF) {
       return value.substring(1);
     }
     return value;
   }
-}
-
-class _ReadingRow {
-  final int position;
-  final String reference;
-  final String? psalmResponse;
-  final String? gospelAcclamation;
-
-  const _ReadingRow({
-    required this.position,
-    required this.reference,
-    this.psalmResponse,
-    this.gospelAcclamation,
-  });
 }

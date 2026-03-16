@@ -28,6 +28,7 @@ class OfflineOrdoLookupService {
 
     final annunciation = _transferAnnunciation(day.year, easter);
     final joseph = _transferStJoseph(day.year, easter);
+    final holyFamily = _calculateHolyFamilySunday(day.year);
 
     final movable = <DateTime, _Celebration>{
       DateTime(day.year, 1, 1): _solemnity(
@@ -83,6 +84,10 @@ class OfflineOrdoLookupService {
       ),
       christTheKing: _solemnity(
         'Our Lord Jesus Christ, King of the Universe',
+        LiturgicalColor.white,
+      ),
+      holyFamily: _feast(
+        'The Holy Family of Jesus, Mary, and Joseph',
         LiturgicalColor.white,
       ),
       DateTime(day.year, 6, 24): _solemnity(
@@ -272,7 +277,11 @@ class OfflineOrdoLookupService {
     }
 
     if (!day.isBefore(ashWednesday) && day.isBefore(easter)) {
-      final week = ((day.difference(ashWednesday).inDays) ~/ 7) + 1;
+      final firstLentSunday = ashWednesday.add(const Duration(days: 4));
+      if (day.isBefore(firstLentSunday)) {
+        return const _SeasonData(LiturgicalSeason.lent, 0);
+      }
+      final week = ((day.difference(firstLentSunday).inDays) ~/ 7) + 1;
       return _SeasonData(LiturgicalSeason.lent, week.clamp(1, 6));
     }
 
@@ -377,8 +386,9 @@ class OfflineOrdoLookupService {
 
   DateTime _calculateAdventStart(int year) {
     final christmas = DateTime(year, 12, 25);
-    final daysToPreviousSunday = (christmas.weekday + 6) % 7;
-    return christmas.subtract(Duration(days: daysToPreviousSunday + 21));
+    final daysUntilSunday = (DateTime.sunday - christmas.weekday + 7) % 7;
+    final sundayOnOrAfterChristmas = christmas.add(Duration(days: daysUntilSunday));
+    return sundayOnOrAfterChristmas.subtract(const Duration(days: 28));
   }
 
   DateTime _calculateEpiphany(int year) {
@@ -404,6 +414,17 @@ class OfflineOrdoLookupService {
       return easter.add(const Duration(days: 8));
     }
     return base;
+  }
+
+  DateTime _calculateHolyFamilySunday(int year) {
+    // Holy Family is the Sunday within the Octave of Christmas (Dec 26-31).
+    // If there is no Sunday in that range (i.e., Christmas falls on Sunday),
+    // then Holy Family is celebrated on December 30.
+    for (var day = 26; day <= 31; day++) {
+      final date = DateTime(year, 12, day);
+      if (date.weekday == DateTime.sunday) return date;
+    }
+    return DateTime(year, 12, 30);
   }
 
   DateTime _transferStJoseph(int year, DateTime easter) {

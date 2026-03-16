@@ -7,6 +7,7 @@ class DailyReading {
   final String? feast;
   final String? psalmResponse;
   final String? gospelAcclamation;
+  final String? incipit;
 
   DailyReading({
     this.id,
@@ -16,6 +17,7 @@ class DailyReading {
     this.feast,
     this.psalmResponse,
     this.gospelAcclamation,
+    this.incipit,
   });
 
   DailyReading copyWith({
@@ -26,6 +28,7 @@ class DailyReading {
     String? feast,
     String? psalmResponse,
     String? gospelAcclamation,
+    String? incipit,
   }) {
     return DailyReading(
       id: id ?? this.id,
@@ -35,6 +38,7 @@ class DailyReading {
       feast: feast ?? this.feast,
       psalmResponse: psalmResponse ?? this.psalmResponse,
       gospelAcclamation: gospelAcclamation ?? this.gospelAcclamation,
+      incipit: incipit ?? this.incipit,
     );
   }
 
@@ -47,6 +51,7 @@ class DailyReading {
       'feast': feast,
       'psalm_response': psalmResponse,
       'gospel_acclamation': gospelAcclamation,
+      'incipit': incipit,
     };
   }
 
@@ -59,6 +64,7 @@ class DailyReading {
       feast: map['feast'] as String?,
       psalmResponse: map['psalm_response'] as String?,
       gospelAcclamation: map['gospel_acclamation'] as String?,
+      incipit: map['incipit'] as String?,
     );
   }
 

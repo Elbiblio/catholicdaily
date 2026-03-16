@@ -146,23 +146,11 @@ def apply_fixes_to_database(db_path: str, resolutions_file: str, output_path: st
 
 def main():
     """Main entry point."""
-    db_path = "assets/readings.db"
-    resolutions_file = "psalm_resolutions.json"
-    
-    # Check inputs
-    if not Path(db_path).exists():
-        print(f"Error: Database not found at {db_path}")
-        return 1
-    
-    if not Path(resolutions_file).exists():
-        print(f"Error: Resolutions file not found at {resolutions_file}")
-        print("Run 'python scripts/resolve_psalm_references.py' first")
-        return 1
-    
-    # Apply fixes
-    apply_fixes_to_database(db_path, resolutions_file)
-    
-    return 0
+    print(
+        "This legacy psalm DB fix applicator is retired. "
+        "Apply psalm fixes to the CSV catalogs instead of producing a patched readings.db."
+    )
+    return 1
 
 if __name__ == '__main__':
     exit(main())

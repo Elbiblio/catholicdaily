@@ -1,7 +1,7 @@
-import 'package:flutter/services.dart' show rootBundle;
-
-import 'improved_liturgical_calendar_service.dart';
+import 'base_service.dart';
 import 'ordo_resolver_service.dart';
+import 'improved_liturgical_calendar_service.dart';
+import 'reading_catalog_service.dart';
 
 class LectionaryPsalmCatalogEntry {
   final String season;
@@ -29,15 +29,15 @@ class LectionaryPsalmCatalogEntry {
   });
 }
 
-class LectionaryPsalmCatalogService {
-  static final LectionaryPsalmCatalogService instance =
-      LectionaryPsalmCatalogService._();
+class LectionaryPsalmCatalogService extends BaseService<LectionaryPsalmCatalogService> {
+  static LectionaryPsalmCatalogService get instance => BaseService.init(() => LectionaryPsalmCatalogService._());
 
   LectionaryPsalmCatalogService._();
 
   final ImprovedLiturgicalCalendarService _calendarService =
       ImprovedLiturgicalCalendarService.instance;
   final OrdoResolverService _ordoResolver = OrdoResolverService.instance;
+  final ReadingCatalogService _readingCatalogService = ReadingCatalogService.instance;
 
   List<LectionaryPsalmCatalogEntry>? _entries;
   final Map<String, List<LectionaryPsalmCatalogEntry>> _dateCache = {};
@@ -112,34 +112,23 @@ class LectionaryPsalmCatalogService {
       return _entries!;
     }
 
-    final rawCsv = await rootBundle.loadString('lectionary_psalms.csv');
-    final lines = rawCsv
-        .split(RegExp(r'\r?\n'))
-        .where((line) => line.trim().isNotEmpty)
-        .toList();
-
-    final parsed = <LectionaryPsalmCatalogEntry>[];
-    for (var i = 1; i < lines.length; i++) {
-      final columns = _parseCsvLine(lines[i]);
-      if (columns.length < 10) {
-        continue;
-      }
-
-      parsed.add(
-        LectionaryPsalmCatalogEntry(
-          season: columns[0].trim(),
-          week: columns[1].trim(),
-          day: columns[2].trim(),
-          weekdayCycle: columns[3].trim(),
-          sundayCycle: columns[4].trim(),
-          fullReference: columns[5].trim(),
-          refrainText: columns[6].trim(),
-          acclamationRef: columns[7].trim(),
-          acclamationText: columns[8].trim(),
-          lectionaryNumber: columns[9].trim(),
-        ),
+    final standardEntries = await _readingCatalogService.loadStandardEntries();
+    final parsed = standardEntries.map((entry) {
+      return LectionaryPsalmCatalogEntry(
+        season: entry.season,
+        week: entry.week,
+        day: entry.day,
+        weekdayCycle: entry.weekdayCycle,
+        sundayCycle: entry.sundayCycle,
+        fullReference: entry.psalmReference,
+        refrainText: entry.psalmResponse,
+        acclamationRef: entry.acclamationRef,
+        acclamationText: entry.acclamationText,
+        lectionaryNumber: entry.lectionaryNumber,
       );
-    }
+    }).where((entry) {
+      return entry.fullReference.trim().isNotEmpty || entry.acclamationText.trim().isNotEmpty;
+    }).toList();
 
     _entries = parsed;
     return parsed;
@@ -338,36 +327,6 @@ class LectionaryPsalmCatalogService {
     }
 
     return entries.first;
-  }
-
-  List<String> _parseCsvLine(String line) {
-    final values = <String>[];
-    final buffer = StringBuffer();
-    var inQuotes = false;
-
-    for (var i = 0; i < line.length; i++) {
-      final char = line[i];
-      if (char == '"') {
-        if (inQuotes && i + 1 < line.length && line[i + 1] == '"') {
-          buffer.write('"');
-          i++;
-        } else {
-          inQuotes = !inQuotes;
-        }
-        continue;
-      }
-
-      if (char == ',' && !inQuotes) {
-        values.add(buffer.toString());
-        buffer.clear();
-        continue;
-      }
-
-      buffer.write(char);
-    }
-
-    values.add(buffer.toString());
-    return values;
   }
 
   String _normalizeReference(String value) {

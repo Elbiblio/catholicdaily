@@ -50,10 +50,12 @@ class LectionaryPsalmFormatter {
   static List<List<_VerseGroup>> _parseStanzaGroups(String reference) {
     final stanzas = <List<_VerseGroup>>[];
 
-    final colonIndex = reference.indexOf(':');
-    if (colonIndex < 0) return stanzas;
+    final separatorMatch = RegExp(r'(?:Ps|Psalm)\s+\d+([:\.])', caseSensitive: false).firstMatch(reference);
+    if (separatorMatch == null) return stanzas;
 
-    var versePart = reference.substring(colonIndex + 1);
+    final separatorIndex = separatorMatch.start + separatorMatch.group(0)!.length - 1;
+
+    var versePart = reference.substring(separatorIndex + 1);
     versePart = versePart.replaceAll(RegExp(r'\s*\(R\.\s*[^)]+\)'), '').trim();
 
     final segments = versePart.split(',');
@@ -77,8 +79,8 @@ class LectionaryPsalmFormatter {
   static List<_VerseGroup> _parseCombinedSegment(String segment) {
     final groups = <_VerseGroup>[];
 
-    // Replace '+' with ' and ' for unified handling
-    final normalized = segment.replaceAll('+', ' and ');
+    // Replace '+' and '&' with ' and ' for unified handling
+    final normalized = segment.replaceAll('+', ' and ').replaceAll('&', ' and ');
     final parts = normalized.split(RegExp(r'\band\b'));
 
     if (parts.length > 1) {

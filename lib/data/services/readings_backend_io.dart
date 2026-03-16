@@ -1,12 +1,10 @@
 import 'dart:io';
 
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import '../models/bible_book.dart';
 import '../models/daily_reading.dart';
+import 'csv_readings_resolver_service.dart';
 import 'daniel_verse_mapper.dart' show DeuterocanonicalVerseMapper;
 import 'official_lectionary_incipit_service.dart';
 import 'reading_reference_parser.dart';
@@ -14,6 +12,7 @@ import 'readings_backend.dart';
 import 'lectionary_psalm_formatter.dart';
 import 'psalm_verse_splitter.dart';
 import 'bible_version_preference.dart';
+import 'shared_service_utils.dart';
 
 ReadingsBackend createReadingsBackend() => ReadingsBackendIo();
 
@@ -26,13 +25,12 @@ class ReadingsBackendIo implements ReadingsBackend {
   }
 
   final OfficialLectionaryIncipitService _incipitService = OfficialLectionaryIncipitService();
+  final CsvReadingsResolverService _csvResolver = CsvReadingsResolverService.instance;
 
   Database? _rsvceDb;
   Database? _nabreDb;
-  Database? _readingsDb;
   List<Book>? _booksCache;
   Map<String, String>? _aliasesCache;
-  final Map<String, bool> _columnSupportCache = {};
   BibleVersionPreference? _versionPreference;
 
   Future<Database> get _rsvceDatabase async {
@@ -57,70 +55,9 @@ class ReadingsBackendIo implements ReadingsBackend {
     }
   }
 
-  Future<Database> get _readingsDatabase async {
-    _readingsDb ??= await _openAssetDatabase('readings.db');
-    return _readingsDb!;
-  }
-
   @override
   Future<List<DailyReading>> getReadingsForDate(DateTime date) async {
-    final timestamp =
-        DateTime.utc(
-          date.year,
-          date.month,
-          date.day,
-          8,
-          0,
-          0,
-        ).millisecondsSinceEpoch ~/
-        1000;
-
-    final db = await _readingsDatabase;
-    final hasPsalmResponse = await _supportsPsalmResponse(db);
-    final hasGospelAcclamation = await _supportsGospelAcclamation(db);
-    final columns = <String>[
-      'reading',
-      'position',
-      if (hasPsalmResponse) 'psalm_response',
-      if (hasGospelAcclamation) 'gospel_acclamation',
-    ];
-    final rows = await db.rawQuery(
-      'SELECT ${columns.join(', ')} FROM readings WHERE timestamp = ? ORDER BY position',
-      [timestamp],
-    );
-
-    final totalRows = rows.length;
-    final orderedReferences = rows
-        .map((row) => row['reading'] as String)
-        .toList(growable: false);
-
-    final readings = rows.asMap().entries.map((entry) {
-      final row = entry.value;
-      final readingReference = row['reading'] as String;
-      final normalizedReference = readingReference.trim().toLowerCase();
-      final isPsalmLike = _isPsalmLikeReference(normalizedReference);
-      final isGospelLike = _isGospelReference(normalizedReference);
-
-      return DailyReading(
-        id: null,
-        reading: readingReference,
-        position: _positionLabel(
-          row['position'] as int?,
-          readingReference,
-          totalRows,
-          orderedReferences,
-          orderedIndex: entry.key,
-        ),
-        date: date,
-        feast: null,
-        psalmResponse: hasPsalmResponse && isPsalmLike
-            ? row['psalm_response'] as String?
-            : null,
-        gospelAcclamation: hasGospelAcclamation && isGospelLike
-            ? row['gospel_acclamation'] as String?
-            : null,
-      );
-    }).toList();
+    final readings = await _csvResolver.resolve(date);
 
     // Decode psalm responses that are verse references into actual text.
     // Preserve gospel acclamation values as stored so higher-level date-aware
@@ -134,15 +71,7 @@ class ReadingsBackendIo implements ReadingsBackend {
       }
 
       if (decodedPsalm != r.psalmResponse) {
-        readings[i] = DailyReading(
-          id: r.id,
-          reading: r.reading,
-          position: r.position,
-          date: r.date,
-          feast: r.feast,
-          psalmResponse: decodedPsalm,
-          gospelAcclamation: r.gospelAcclamation,
-        );
+        readings[i] = r.copyWith(psalmResponse: decodedPsalm);
       }
     }
 
@@ -199,7 +128,11 @@ class ReadingsBackendIo implements ReadingsBackend {
   }
 
   @override
-  Future<String> getReadingText(String reference, {String? psalmResponse}) async {
+  Future<String> getReadingText(
+    String reference, {
+    String? psalmResponse,
+    String? incipit,
+  }) async {
     // Check if this is a responsorial psalm that needs special formatting
     if (_isResponsorialPsalm(reference)) {
       return await _getResponsorialPsalmText(reference, psalmResponse: psalmResponse);
@@ -235,35 +168,24 @@ class ReadingsBackendIo implements ReadingsBackend {
 
     final fullText = lines.join('\n');
 
-    if (_isPsalmLikeReference(reference)) {
+    if (SharedServiceUtils.isPsalmLikeReference(reference)) {
       return fullText;
     }
-    
-    // Get the incipit for this reading and prepend it
-    final incipit = _incipitService.getOfficialIncipit(reference);
-    if (incipit != null && incipit.isNotEmpty) {
-      // Clean up incipit punctuation and ensure proper formatting
-      var cleanIncipit = incipit.trim();
-      cleanIncipit = cleanIncipit.replaceAll(RegExp(r'[,:;]\s*$'), '');
-      final formattedIncipit = '$cleanIncipit:';
-      
-      // Check if text already starts with the incipit phrase (case-insensitive)
-      final textLower = fullText.toLowerCase().trim();
-      final incipitLower = cleanIncipit.toLowerCase();
-      
-      if (textLower.startsWith(incipitLower)) {
-        // Text already has the incipit, don't duplicate it
-        return fullText;
-      }
-      
-      // Clean up the reading text to avoid duplicate words
-      // E.g., "In those days: Then Azariah..." -> "In those days: Azariah..."
-      final cleanedText = _removeRedundantIncipitWords(fullText, formattedIncipit);
-      
-      return '$formattedIncipit $cleanedText';
+
+    final processed = _incipitService.processReading(reference, fullText);
+    if (incipit != null && incipit.trim().isNotEmpty) {
+      return _replaceFirstNonEmptyLine(processed.correctedText, incipit.trim());
     }
 
-    return fullText;
+    final derivedIncipit = processed.incipit;
+    if (derivedIncipit == null || derivedIncipit.trim().isEmpty) {
+      return processed.correctedText;
+    }
+
+    final cleanIncipit = derivedIncipit
+        .trim()
+        .replaceAll(RegExp(r'[,:;]\s*$'), '');
+    return '$cleanIncipit: ${processed.correctedText}';
   }
   
   /// Check if a reference is a responsorial psalm with complex notation
@@ -298,7 +220,7 @@ class ReadingsBackendIo implements ReadingsBackend {
       final chapter = int.parse(chapterMatch.group(1)!);
       
       // Extract verse range to know which verses to fetch
-      final verseMatch = RegExp(r':(.+?)(?:\(|$)').firstMatch(reference);
+      final verseMatch = RegExp(r'[:\.](.+?)(?:\(|$)').firstMatch(reference);
       if (verseMatch == null) {
         return 'Psalm text unavailable for $reference.';
       }
@@ -462,10 +384,28 @@ class ReadingsBackendIo implements ReadingsBackend {
   /// Extract verse numbers from a single segment
   Set<int> _extractVerseNumbersFromSegment(String segment) {
     final verses = <int>{};
+
+    final normalizedSegment = segment.replaceAll('&', ' and ');
+
+    if (normalizedSegment.contains(' and ')) {
+      final andParts = normalizedSegment.split(' and ');
+      for (final part in andParts) {
+        verses.addAll(_extractVerseNumbersFromSegment(part.trim()));
+      }
+      return verses;
+    }
+
+    if (normalizedSegment.contains('+')) {
+      final plusParts = normalizedSegment.split('+');
+      for (final part in plusParts) {
+        verses.addAll(_extractVerseNumbersFromSegment(part.trim()));
+      }
+      return verses;
+    }
     
     // Handle range (e.g., "4bc-5ab" or "8-9")
-    if (segment.contains('-')) {
-      final parts = segment.split('-');
+    if (normalizedSegment.contains('-')) {
+      final parts = normalizedSegment.split('-');
       if (parts.length == 2) {
         final startMatch = RegExp(r'(\d+)').firstMatch(parts[0]);
         final endMatch = RegExp(r'(\d+)').firstMatch(parts[1]);
@@ -481,7 +421,7 @@ class ReadingsBackendIo implements ReadingsBackend {
       }
     } else {
       // Single verse
-      final match = RegExp(r'(\d+)').firstMatch(segment);
+      final match = RegExp(r'(\d+)').firstMatch(normalizedSegment);
       if (match != null) {
         verses.add(int.parse(match.group(1)!));
       }
@@ -548,9 +488,9 @@ class ReadingsBackendIo implements ReadingsBackend {
       await _rsvceDb!.close();
       _rsvceDb = null;
     }
-    if (_readingsDb != null) {
-      await _readingsDb!.close();
-      _readingsDb = null;
+    if (_nabreDb != null) {
+      await _nabreDb!.close();
+      _nabreDb = null;
     }
   }
 
@@ -686,248 +626,30 @@ class ReadingsBackendIo implements ReadingsBackend {
   }
 
   Future<Database> _openAssetDatabase(String dbName, {bool readOnly = false}) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final path = join(directory.path, dbName);
-
-    final file = File(path);
-    if (!await file.exists()) {
-      final data = await rootBundle.load('assets/$dbName');
-      await file.writeAsBytes(
-        data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
-        flush: true,
-      );
-    }
-
-    var db = await openDatabase(path, readOnly: readOnly);
-    if (!await _hasExpectedSchema(db, dbName)) {
-      await db.close();
-      final data = await rootBundle.load('assets/$dbName');
-      await file.writeAsBytes(
-        data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
-        flush: true,
-      );
-      db = await openDatabase(path, readOnly: readOnly);
-    }
-
-    return db;
+    return await SharedServiceUtils.openValidatedAssetDatabase(dbName, readOnly: readOnly);
   }
 
-  Future<bool> _hasExpectedSchema(Database db, String dbName) async {
-    try {
-      final tableName = dbName == 'readings.db' ? 'readings' : 'books';
-      final rows = await db.rawQuery(
-        "SELECT name FROM sqlite_master WHERE type = 'table' AND name = ?",
-        [tableName],
-      );
-      return rows.isNotEmpty;
-    } catch (_) {
-      return false;
-    }
-  }
-
-  Future<bool> _supportsPsalmResponse(Database db) async {
-    return _supportsColumn(db, 'psalm_response');
-  }
-
-  Future<bool> _supportsGospelAcclamation(Database db) async {
-    return _supportsColumn(db, 'gospel_acclamation');
-  }
-
-  Future<bool> _supportsColumn(Database db, String column) async {
-    if (_columnSupportCache.containsKey(column)) {
-      return _columnSupportCache[column]!;
-    }
-    final rows = await db.rawQuery('PRAGMA table_info(readings)');
-    final hasColumn = rows.any((row) => row['name'] == column);
-    _columnSupportCache[column] = hasColumn;
-    return hasColumn;
-  }
-
-  String _positionLabel(
-    int? position,
-    String reading,
-    int totalRows,
-    List<String> orderedReferences,
-    {required int orderedIndex}
-  ) {
-    if (position == null) {
-      return 'Reading';
-    }
-
-    final normalized = reading.trim().toLowerCase();
-    
-    // Check for Gospel readings (always labeled as Gospel)
-    final isGospel =
-        normalized.startsWith('matt ') ||
-        normalized.startsWith('mark ') ||
-        normalized.startsWith('luke ') ||
-        normalized.startsWith('john ');
-    
-    if (isGospel) {
-      return 'Gospel';
-    }
-    
-    // Check for actual Psalm readings (not just Psalm-like texts)
-    final isPsalmLike =
-        normalized.startsWith('ps ') ||
-        normalized.startsWith('psalm ') ||
-        normalized.startsWith('isa 12') ||
-        normalized.startsWith('exod 15') ||
-        normalized.startsWith('1 sam 2') ||
-        normalized.startsWith('luke 1:');
-    
-    // Only label as Responsorial Psalm if it's actually a Psalm
-    // Daniel 3 is a First Reading, not a Psalm, even though it has Psalm-like elements
-    if (totalRows > 4) {
-      final orderedLabels = _buildComplexLayoutLabels(orderedReferences);
-      final index = orderedIndex;
-      if (index >= 0 && index < orderedLabels.length) {
-        return orderedLabels[index];
-      }
-    }
-
-    if (isPsalmLike && !normalized.startsWith('dan 3')) {
-      return 'Responsorial Psalm';
-    }
-    
-    if (totalRows <= 4) {
-      switch (position) {
-        case 1:
-          return 'First Reading';
-        case 2:
-          // Don't assume position 2 is always a Psalm - check the actual reading
-          if (isPsalmLike) {
-            return 'Responsorial Psalm';
-          }
-          return 'Second Reading';
-        case 3:
-          // Position 3 could be Psalm or Second Reading depending on the reading
-          if (isPsalmLike) {
-            return 'Responsorial Psalm';
-          }
-          return 'Second Reading';
-        case 4:
-          return 'Gospel';
-        default:
-          return 'Reading';
-      }
-    }
-
-    // For non-standard layouts, use smart detection
-    if (position == totalRows) {
-      return 'Gospel';
-    }
-
-    if (position == totalRows - 1 && !isPsalmLike) {
-      return 'Second Reading';
-    }
-
-    if (position == 1) {
-      return 'First Reading';
-    }
-
-    return 'Reading ${position.toString()}';
-  }
-
-  List<String> _buildComplexLayoutLabels(List<String> orderedReferences) {
-    final labels = <String>[];
-    var readingCount = 0;
-    var psalmCount = 0;
-
-    for (var index = 0; index < orderedReferences.length; index++) {
-      final reference = orderedReferences[index];
-      final normalized = reference.trim().toLowerCase();
-
-      if (_isGospelReference(normalized)) {
-        labels.add('Gospel');
+  String _replaceFirstNonEmptyLine(String text, String replacementLine) {
+    final lines = text.split('\n');
+    for (var i = 0; i < lines.length; i++) {
+      if (lines[i].trim().isEmpty) {
         continue;
       }
 
-      if (_isPsalmLikeReference(normalized) && !normalized.startsWith('dan 3')) {
-        psalmCount += 1;
-        if (psalmCount == orderedReferences.where((item) => _isPsalmLikeReference(item) && !item.trim().toLowerCase().startsWith('dan 3')).length &&
-            normalized.startsWith('ps 118')) {
-          labels.add('Alleluia Psalm');
-          continue;
+      final originalLine = lines[i].trim();
+      final hasOwnVerseNumber = RegExp(r'^\d+[a-z]?[.\s]+').hasMatch(replacementLine);
+      if (!hasOwnVerseNumber) {
+        final versePrefix = RegExp(r'^(\d+[a-z]?)').firstMatch(originalLine)?.group(1);
+        if (versePrefix != null && versePrefix.isNotEmpty) {
+          lines[i] = '$versePrefix. $replacementLine';
+          return lines.join('\n');
         }
-
-        labels.add('Responsorial Psalm');
-        continue;
       }
 
-      readingCount += 1;
-      if (readingCount == 1) {
-        labels.add('First Reading');
-      } else if (readingCount == 2) {
-        labels.add('Second Reading');
-      } else if (readingCount == 3) {
-        labels.add('Third Reading');
-      } else if (readingCount == 4) {
-        labels.add('Fourth Reading');
-      } else if (readingCount == 5) {
-        labels.add('Fifth Reading');
-      } else if (readingCount == 6) {
-        labels.add('Sixth Reading');
-      } else if (readingCount == 7) {
-        labels.add('Seventh Reading');
-      } else if (readingCount == 8) {
-        labels.add('Epistle');
-      } else {
-        labels.add('Reading $readingCount');
-      }
+      lines[i] = replacementLine;
+      return lines.join('\n');
     }
 
-    return labels;
+    return replacementLine;
   }
-
-  bool _isPsalmLikeReference(String reference) {
-    final normalized = reference.trim().toLowerCase();
-    return normalized.startsWith('ps ') ||
-        normalized.startsWith('psalm ') ||
-        normalized.startsWith('isa 12') ||
-        normalized.startsWith('exod 15') ||
-        normalized.startsWith('1 sam 2') ||
-        normalized.startsWith('luke 1:');
-  }
-
-  bool _isGospelReference(String reference) {
-    final normalized = reference.trim().toLowerCase();
-    return normalized.startsWith('matt ') ||
-        normalized.startsWith('mark ') ||
-        normalized.startsWith('luke ') ||
-        normalized.startsWith('john ');
-  }
-  
-  /// Remove redundant words that appear in both the incipit and the start of the text
-  /// E.g., "In those days:" + "Then Azariah..." -> "In those days:" + "Azariah..."
-  String _removeRedundantIncipitWords(String text, String incipit) {
-    // Common redundant transition words that appear after incipits
-    final redundantWords = [
-      'Then ',
-      'And ',
-      'Now ',
-      'So ',
-      'But ',
-      'For ',
-      'When ',
-      'After ',
-    ];
-    
-    // Remove verse numbers at the start (e.g., "2. Then" -> "Then")
-    var cleanedText = text.replaceFirst(RegExp(r'^\d+\.\s*'), '');
-    
-    // Check if the text starts with any redundant word
-    for (final word in redundantWords) {
-      if (cleanedText.startsWith(word)) {
-        // Remove the redundant word
-        cleanedText = cleanedText.substring(word.length);
-        // Also remove the verse number from the cleaned text if it appears again
-        cleanedText = cleanedText.replaceFirst(RegExp(r'^\d+\.\s*'), '');
-        break;
-      }
-    }
-    
-    return cleanedText;
-  }
-
 }

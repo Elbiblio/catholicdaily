@@ -201,6 +201,7 @@ class OfficialLectionaryIncipitService {
       'the lord god says',
       'the lord god said',
       'the lord god declares',
+      'the lord god',
       'thus says the lord god',
       'thus says the lord almighty',
       'thus says the lord of hosts',

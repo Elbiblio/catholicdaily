@@ -18,56 +18,12 @@ def main() -> int:
     args = parse_args()
     db_path = Path(args.db).resolve()
     out_path = Path(args.out).resolve()
-
-    if not db_path.exists():
-        print(f"DB not found: {db_path}")
-        return 1
-
-    conn = sqlite3.connect(str(db_path))
-    conn.row_factory = sqlite3.Row
-
-    has_psalm_response = any(
-        row["name"] == "psalm_response"
-        for row in conn.execute("PRAGMA table_info(readings)").fetchall()
+    print(
+        "This legacy export is retired. "
+        f"The app no longer uses {db_path.name} or {out_path.name}; "
+        "use standard_lectionary_complete.csv and memorial_feasts.csv instead."
     )
-    has_gospel_acclamation = any(
-        row["name"] == "gospel_acclamation"
-        for row in conn.execute("PRAGMA table_info(readings)").fetchall()
-    )
-    sql = (
-        "SELECT timestamp, position, reading, "
-        + ("psalm_response, " if has_psalm_response else "NULL AS psalm_response, ")
-        + (
-            "gospel_acclamation "
-            if has_gospel_acclamation
-            else "NULL AS gospel_acclamation "
-        )
-        + "FROM readings ORDER BY timestamp, position"
-    )
-    if not has_psalm_response and not has_gospel_acclamation:
-      sql = (
-        "SELECT timestamp, position, reading, "
-        "NULL AS psalm_response, NULL AS gospel_acclamation "
-        "FROM readings ORDER BY timestamp, position"
-      )
-    rows = conn.execute(sql).fetchall()
-    conn.close()
-
-    payload = [
-        {
-            "timestamp": int(row["timestamp"]),
-            "position": int(row["position"]),
-            "reading": row["reading"],
-            "psalm_response": row["psalm_response"],
-            "gospel_acclamation": row["gospel_acclamation"],
-        }
-        for row in rows
-    ]
-
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(json.dumps(payload, ensure_ascii=True), encoding="utf-8")
-    print(f"Wrote {len(payload)} rows to {out_path}")
-    return 0
+    return 1
 
 
 if __name__ == "__main__":

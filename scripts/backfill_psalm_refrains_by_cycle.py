@@ -50,26 +50,11 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     db_path = Path(args.db).resolve()
-    if not db_path.exists():
-        print(f"DB not found: {db_path}", file=sys.stderr)
-        return 1
-
-    years = [int(y.strip()) for y in args.years.split(",") if y.strip()]
-    conn = sqlite3.connect(str(db_path))
-    conn.row_factory = sqlite3.Row
-    ensure_schema(conn)
-    if args.reset_cursor and not args.no_cursor:
-        for year in years:
-            reset_cursor(conn, args.script_key, year)
-        conn.commit()
-
-    rows = load_target_rows(
-        conn,
-        years,
-        use_cursor=not args.no_cursor,
-        script_key=args.script_key,
-        limit=args.limit,
+    print(
+        "This legacy cycle psalm refrain backfill script is retired. "
+        f"Do not update {db_path.name}; maintain refrain coverage in the CSV catalogs instead."
     )
+    return 1
     groups: dict[CacheKey, list[int]] = {}
     by_ts_ref: dict[int, str] = {}
     for row in rows:

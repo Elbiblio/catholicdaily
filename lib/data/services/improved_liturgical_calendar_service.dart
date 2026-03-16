@@ -165,8 +165,12 @@ class ImprovedLiturgicalCalendarService {
   }
 
   int _calculateLentenWeek(DateTime lentStart, DateTime date) {
-    final daysSinceLentStart = date.difference(lentStart).inDays;
-    return (daysSinceLentStart ~/ 7) + 1;
+    final firstLentSunday = lentStart.add(const Duration(days: 4));
+    if (date.isBefore(firstLentSunday)) {
+      return 0;
+    }
+    final daysSinceFirstSunday = date.difference(firstLentSunday).inDays;
+    return (daysSinceFirstSunday ~/ 7) + 1;
   }
 
   int _calculateEasterWeek(DateTime easterStart, DateTime date) {

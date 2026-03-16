@@ -53,60 +53,12 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     db_path = Path(args.db).resolve()
-    if not db_path.exists():
-        print(f"DB not found: {db_path}", file=sys.stderr)
-        return 1
-
-    conn = sqlite3.connect(str(db_path))
-    conn.row_factory = sqlite3.Row
-
-    targets = build_targets(
-      conn=conn,
-      start_year=args.start_year,
-      end_year=args.end_year,
-      force_all=args.force_all,
+    print(
+        "This legacy backfill script is retired. "
+        f"The app no longer updates {db_path.name}; "
+        "backfill the CSV catalogs instead."
     )
-    print(f"Target dates: {len(targets)}")
-    if not targets:
-        conn.close()
-        return 0
-
-    ok = 0
-    failed = 0
-    skipped = 0
-    last_commit = time.time()
-
-    with futures.ThreadPoolExecutor(max_workers=max(1, args.workers)) as ex:
-        jobs = {
-            ex.submit(fetch_and_parse_day, date, args.retries): date for date in targets
-        }
-        for idx, job in enumerate(futures.as_completed(jobs), start=1):
-            result = job.result()
-            if result.references is None:
-                failed += 1
-                print(f"[{idx}/{len(jobs)}] {result.date} ERROR {result.error}")
-                continue
-
-            if not result.references:
-                skipped += 1
-                print(f"[{idx}/{len(jobs)}] {result.date} SKIP no references")
-                continue
-
-            upsert_day(conn, result.date, result.references)
-            ok += 1
-            if idx % 50 == 0:
-                print(f"[{idx}/{len(jobs)}] progress ok={ok} failed={failed} skipped={skipped}")
-            if time.time() - last_commit > 5:
-                conn.commit()
-                last_commit = time.time()
-
-            if args.sleep_ms > 0:
-                time.sleep(args.sleep_ms / 1000.0)
-
-    conn.commit()
-    conn.close()
-    print(f"Done. updated={ok} failed={failed} skipped={skipped}")
-    return 0 if failed == 0 else 2
+    return 1
 
 
 def build_targets(

@@ -22,9 +22,17 @@ class ReadingsService {
     }
   }
 
-  Future<String> getReadingText(String reference, {String? psalmResponse}) async {
+  Future<String> getReadingText(
+    String reference, {
+    String? psalmResponse,
+    String? incipit,
+  }) async {
     try {
-      return await _backend.getReadingText(reference, psalmResponse: psalmResponse);
+      return await _backend.getReadingText(
+        reference,
+        psalmResponse: psalmResponse,
+        incipit: incipit,
+      );
     } catch (e) {
       debugPrint('Error getting reading text: $e');
       return 'Reading text unavailable for $reference.';

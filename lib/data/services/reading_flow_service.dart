@@ -3,6 +3,7 @@ import '../models/reading_session.dart';
 import '../../ui/utils/reading_title_formatter.dart';
 import 'psalm_resolver_service.dart';
 import 'readings_service.dart';
+import 'base_service.dart';
 
 class HydratedReadingSet {
   final List<DailyReading> readings;
@@ -18,8 +19,9 @@ class HydratedReadingSet {
   });
 }
 
-class ReadingFlowService {
-  static final ReadingFlowService instance = ReadingFlowService._();
+class ReadingFlowService extends BaseService<ReadingFlowService> {
+  static ReadingFlowService get instance => BaseService.init(() => ReadingFlowService._());
+  
   ReadingFlowService._();
 
   final PsalmResolverService _psalmResolver = PsalmResolverService.instance;
@@ -43,6 +45,7 @@ class ReadingFlowService {
         final text = await _readingsService.getReadingText(
           reading.reading,
           psalmResponse: reading.psalmResponse,
+          incipit: reading.incipit,
         );
         titles[reading.reading] = ReadingTitleFormatter.build(
           reference: reading.reading,
@@ -65,6 +68,7 @@ class ReadingFlowService {
     return _readingsService.getReadingText(
       reading.reading,
       psalmResponse: reading.psalmResponse,
+      incipit: reading.incipit,
     );
   }
 

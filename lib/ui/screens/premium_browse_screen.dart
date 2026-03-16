@@ -155,6 +155,42 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
     _loadReadings();
   }
 
+  Future<void> _jumpToDate(DateTime date, {bool openFirstReading = false}) async {
+    final normalizedDate = DateTime(date.year, date.month, date.day);
+    HapticFeedback.mediumImpact();
+    setState(() => _selectedDate = normalizedDate);
+    await _loadReadings();
+
+    if (!mounted || !openFirstReading || _readings.isEmpty) {
+      return;
+    }
+
+    await _openReadingAtIndex(0);
+  }
+
+  Future<void> _openReadingAtIndex(int index) async {
+    if (index < 0 || index >= _readings.length) {
+      return;
+    }
+
+    final reading = _readings[index];
+    final reference = reading.reading;
+    final text =
+        _readingTexts[reference] ?? await _readingFlow.getReadingText(reading);
+    if (!mounted) {
+      return;
+    }
+
+    widget.onReadingSelected(
+      reference,
+      text,
+      _liturgicalDay,
+      reading,
+      _readings,
+      index,
+    );
+  }
+
   void _showDatePicker() async {
     HapticFeedback.lightImpact();
     final DateTime? picked = await showDatePicker(
@@ -577,18 +613,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                     liturgicalColor: _liturgicalDay?.colorValue,
                     onTap: () async {
                       HapticFeedback.lightImpact();
-                      final reference = _readings[index].reading;
-                      final text =
-                          _readingTexts[reference] ??
-                          await _readingFlow.getReadingText(_readings[index]);
-                      widget.onReadingSelected(
-                        reference,
-                        text,
-                        _liturgicalDay,
-                        _readings[index],
-                        _readings,
-                        index,
-                      );
+                      await _openReadingAtIndex(index);
                     },
                   ),
                 );
@@ -703,7 +728,13 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
       if (_ordoYearVariables != null && !isSunday)
         _buildDetailChip(theme, 'Year', _ordoYearVariables!.weekdayCycle, chipForeground),
       if (countdown != null)
-        _buildDetailChip(theme, countdown.$1, countdown.$2, chipForeground),
+        _buildDetailChip(
+          theme,
+          countdown.$1,
+          countdown.$2,
+          chipForeground,
+          onTap: () => _jumpToDate(countdown.$3, openFirstReading: true),
+        ),
     ];
 
     return SingleChildScrollView(
@@ -724,10 +755,11 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
     String label,
     String value,
     Color foregroundColor,
+    {VoidCallback? onTap}
   ) {
     final isLight = theme.brightness == Brightness.light;
     final liturgicalColor = _liturgicalDay?.colorValue ?? theme.colorScheme.primary;
-    return Container(
+    final chip = Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         color: isLight
@@ -773,9 +805,22 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
         ],
       ),
     );
+
+    if (onTap == null) {
+      return chip;
+    }
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: chip,
+      ),
+    );
   }
 
-  (String, String)? _buildCountdownLabel() {
+  (String, String, DateTime)? _buildCountdownLabel() {
     final nextFeast = _nextMovableFeast();
     if (nextFeast == null) {
       return null;
@@ -789,10 +834,10 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
     ).difference(DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day)).inDays;
 
     if (difference <= 0) {
-      return ('Today', nextFeast.$1);
+      return ('Today', nextFeast.$1, feastDate);
     }
 
-    return ('To ${nextFeast.$1}', '$difference days');
+    return ('To ${nextFeast.$1}', '$difference days', feastDate);
   }
 
   (String, DateTime)? _nextMovableFeast() {
@@ -842,8 +887,9 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
 
   DateTime _calculateAdventStart(int year) {
     final christmas = DateTime(year, 12, 25);
-    final daysToPreviousSunday = (christmas.weekday + 6) % 7;
-    return christmas.subtract(Duration(days: daysToPreviousSunday + 21));
+    final daysUntilSunday = (DateTime.sunday - christmas.weekday + 7) % 7;
+    final sundayOnOrAfterChristmas = christmas.add(Duration(days: daysUntilSunday));
+    return sundayOnOrAfterChristmas.subtract(const Duration(days: 28));
   }
 
   Color _resolveHeaderColor(ThemeData theme) {

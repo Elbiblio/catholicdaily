@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../../data/services/improved_liturgical_calendar_service.dart';
 import '../../data/models/daily_reading.dart';
+import '../../data/services/reading_tts_service.dart';
 import '../utils/reading_title_formatter.dart';
 import '../widgets/bible_version_switcher.dart';
 import '../widgets/gospel_acclamation_widget.dart';
@@ -16,8 +17,11 @@ class ReadingScreen extends StatefulWidget {
   final String content;
   final LiturgicalDay? liturgicalDay;
   final DailyReading? readingData;
+  final List<DailyReading> sessionReadings;
+  final int currentReadingIndex;
   final VoidCallback? onNextReading;
   final VoidCallback? onPrevReading;
+  final ValueChanged<int>? onSelectReadingIndex;
   final bool hasNext;
   final bool hasPrev;
 
@@ -27,8 +31,11 @@ class ReadingScreen extends StatefulWidget {
     required this.content,
     this.liturgicalDay,
     this.readingData,
+    this.sessionReadings = const [],
+    this.currentReadingIndex = -1,
     this.onNextReading,
     this.onPrevReading,
+    this.onSelectReadingIndex,
     this.hasNext = false,
     this.hasPrev = false,
   });
@@ -43,6 +50,8 @@ class _ReadingScreenState extends State<ReadingScreen> {
   final ScrollController _scrollController = ScrollController();
   String _currentContent = '';
   bool _isReloading = false;
+  bool _isSpeaking = false;
+  final ReadingTtsService _ttsService = ReadingTtsService.instance;
 
   String get _readingLabel {
     final position = widget.readingData?.position?.trim();
@@ -61,6 +70,157 @@ class _ReadingScreenState extends State<ReadingScreen> {
       return 'Gospel';
     }
     return 'Reading';
+  }
+
+  String get _baseReadingSlot => _basePosition(widget.readingData?.position);
+
+  List<DailyReading> get _variantOptions {
+    final current = widget.readingData;
+    if (current == null || widget.sessionReadings.isEmpty) {
+      return const [];
+    }
+    final baseSlot = _basePosition(current.position);
+    return widget.sessionReadings
+        .where((reading) => _basePosition(reading.position) == baseSlot)
+        .toList();
+  }
+
+  bool get _hasVariants => _variantOptions.length > 1;
+
+  String _basePosition(String? position) {
+    final normalized = (position ?? '').trim();
+    if (normalized.isEmpty) {
+      return '';
+    }
+    return normalized
+        .replaceFirst(RegExp(r'\s*\(alternative(?:\s+\d+)?\)$', caseSensitive: false), '')
+        .trim();
+  }
+
+  String _variantLabel(DailyReading reading) {
+    final position = (reading.position ?? '').trim();
+    if (position.isEmpty) {
+      return reading.reading;
+    }
+    if (position == _baseReadingSlot) {
+      return 'Primary';
+    }
+    final match = RegExp(r'\(alternative(?:\s+(\d+))?\)$', caseSensitive: false)
+        .firstMatch(position);
+    if (match == null) {
+      return position;
+    }
+    final number = match.group(1);
+    return number == null ? 'Alternative' : 'Alternative $number';
+  }
+
+  Future<void> _showTtsControls() async {
+    await _ttsService.initialize();
+    if (!mounted) {
+      return;
+    }
+
+    var sliderValue = _ttsService.speechRate;
+    await showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (context) {
+        final theme = Theme.of(context);
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Read aloud',
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Adjust playback speed and start or stop reading.',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: FilledButton.icon(
+                            onPressed: () async {
+                              if (_isSpeaking) {
+                                await _stopTts();
+                              } else {
+                                await _toggleTts();
+                              }
+                              if (!mounted) {
+                                return;
+                              }
+                              setModalState(() {});
+                              setState(() {});
+                            },
+                            icon: Icon(_isSpeaking ? Icons.stop_circle_outlined : Icons.play_arrow_rounded),
+                            label: Text(_isSpeaking ? 'Stop' : 'Play'),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Speed',
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Text(
+                          '${sliderValue.toStringAsFixed(2)}x',
+                          style: theme.textTheme.labelLarge?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Slider(
+                      value: sliderValue,
+                      min: 0.3,
+                      max: 0.7,
+                      divisions: 8,
+                      label: sliderValue.toStringAsFixed(2),
+                      onChanged: (value) async {
+                        setModalState(() {
+                          sliderValue = value;
+                        });
+                        await _ttsService.setSpeechRate(value);
+                        if (mounted) {
+                          setState(() {});
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _selectVariant(DailyReading reading) {
+    final index = widget.sessionReadings.indexOf(reading);
+    if (index < 0) {
+      return;
+    }
+    widget.onSelectReadingIndex?.call(index);
   }
 
   String get _insightContextLabel {
@@ -99,7 +259,11 @@ class _ReadingScreenState extends State<ReadingScreen> {
 
     try {
       final readingsBackend = backend.ReadingsBackendIo();
-      final newContent = await readingsBackend.getReadingText(widget.reference);
+      final newContent = await readingsBackend.getReadingText(
+        widget.reference,
+        psalmResponse: widget.readingData?.psalmResponse,
+        incipit: widget.readingData?.incipit,
+      );
       
       if (mounted) {
         setState(() {
@@ -117,6 +281,44 @@ class _ReadingScreenState extends State<ReadingScreen> {
         );
       }
     }
+  }
+
+  Future<void> _toggleTts() async {
+    if (_isSpeaking) {
+      await _stopTts();
+      return;
+    }
+
+    final didStart = await _ttsService.speak(
+      title: _readingLabel,
+      reference: widget.reference,
+      content: _currentContent,
+    );
+
+    if (!mounted) {
+      return;
+    }
+
+    if (didStart) {
+      setState(() {
+        _isSpeaking = true;
+      });
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Text-to-speech is unavailable right now')),
+    );
+  }
+
+  Future<void> _stopTts() async {
+    await _ttsService.stop();
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _isSpeaking = false;
+    });
   }
 
   Future<void> _showVerseActions({
@@ -459,6 +661,11 @@ class _ReadingScreenState extends State<ReadingScreen> {
               actions: [
               // Text size controls
               IconButton(
+                icon: Icon(_isSpeaking ? Icons.stop_circle_outlined : Icons.volume_up_outlined),
+                onPressed: _showTtsControls,
+                tooltip: _isSpeaking ? 'Reading aloud controls' : 'Read aloud controls',
+              ),
+              IconButton(
                 icon: const Icon(Icons.text_decrease),
                 onPressed: _textScale > 0.8
                     ? () => setState(() => _textScale -= 0.1)
@@ -482,6 +689,9 @@ class _ReadingScreenState extends State<ReadingScreen> {
                       break;
                     case 'copy':
                       _copyText();
+                      break;
+                    case 'tts':
+                      _showTtsControls();
                       break;
                     case 'insight_full':
                       _showInsightSheet(
@@ -521,6 +731,16 @@ class _ReadingScreenState extends State<ReadingScreen> {
                       ],
                     ),
                   ),
+                  PopupMenuItem(
+                    value: 'tts',
+                    child: Row(
+                      children: [
+                        Icon(_isSpeaking ? Icons.stop_circle_outlined : Icons.volume_up_outlined, size: 20),
+                        const SizedBox(width: 12),
+                        Text(_isSpeaking ? 'Stop read aloud' : 'Read aloud'),
+                      ],
+                    ),
+                  ),
                   const PopupMenuItem(
                     value: 'insight_full',
                     child: Row(
@@ -555,6 +775,10 @@ class _ReadingScreenState extends State<ReadingScreen> {
                 children: [
                   // Reference header
                   _buildHeader(theme),
+                  if (_hasVariants) ...[
+                    const SizedBox(height: 20),
+                    _buildVariantSwitcher(theme),
+                  ],
                   const SizedBox(height: 32),
 
                   // Psalm Response or Gospel Acclamation (before reading)
@@ -688,6 +912,46 @@ class _ReadingScreenState extends State<ReadingScreen> {
             color: headerAccent,
             borderRadius: BorderRadius.circular(2),
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildVariantSwitcher(ThemeData theme) {
+    final color = widget.liturgicalDay?.colorValue ?? theme.colorScheme.primary;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Available options',
+          style: theme.textTheme.labelLarge?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: _variantOptions.map((reading) {
+            final isSelected = identical(reading, widget.readingData) ||
+                reading.reading == widget.readingData?.reading;
+            return ChoiceChip(
+              label: Text(_variantLabel(reading)),
+              selected: isSelected,
+              onSelected: (_) => _selectVariant(reading),
+              selectedColor: color.withValues(alpha: 0.18),
+              side: BorderSide(
+                color: isSelected
+                    ? color.withValues(alpha: 0.55)
+                    : theme.colorScheme.outlineVariant,
+              ),
+              labelStyle: theme.textTheme.labelLarge?.copyWith(
+                color: isSelected ? color : theme.colorScheme.onSurface,
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+              ),
+            );
+          }).toList(),
         ),
       ],
     );
@@ -1073,6 +1337,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
 
   @override
   void dispose() {
+    _ttsService.stop();
     _scrollController.dispose();
     super.dispose();
   }

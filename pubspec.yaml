@@ -1,5 +1,5 @@
 name: catholic_daily
-description: "A new Flutter project."
+description: "Complete offline catholic daily readings/missal using the liturgical calendar."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -42,6 +42,7 @@ dependencies:
   url_launcher: ^6.3.2
   in_app_review: ^2.0.11
   archive: ^4.0.9
+  flutter_tts: ^4.2.2
 
 dev_dependencies:
   flutter_test:
@@ -87,11 +88,11 @@ flutter:
   assets:
     - assets/rsvce.db
     - assets/nabre.db
-    - assets/readings.db
     - assets/data/books_rows.json
     - assets/data/readings_rows.json
     - assets/data/verses_rows.json
-    - lectionary_psalms.csv
+    - standard_lectionary_complete.csv
+    - memorial_feasts.csv
 
   fonts:
     - family: Canterbury
