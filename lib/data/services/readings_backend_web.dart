@@ -78,7 +78,8 @@ class ReadingsBackendWeb implements ReadingsBackend {
     final cleanIncipit = derivedIncipit
         .trim()
         .replaceAll(RegExp(r'[,:;]\s*$'), '');
-    return '$cleanIncipit: ${processed.correctedText}';
+    final cleanedText = _cleanFirstLineForIncipit(processed.correctedText, cleanIncipit);
+    return '$cleanIncipit: $cleanedText';
   }
 
   String _replaceFirstNonEmptyLine(String text, String replacementLine) {
@@ -90,7 +91,14 @@ class ReadingsBackendWeb implements ReadingsBackend {
 
       final originalLine = lines[i].trim();
       final hasOwnVerseNumber = RegExp(r'^\d+[a-z]?[.\s]+').hasMatch(replacementLine);
-      if (!hasOwnVerseNumber) {
+
+      // Check if the replacement is a lectionary-style incipit that should
+      // NOT get a verse number prepended. These start with known incipit
+      // prefixes (e.g., "At that time,", "Thus says the LORD:", "Brethren:")
+      // or are capitalized prose that clearly isn't a raw verse.
+      final isIncipitReplacement = _looksLikeIncipitText(replacementLine);
+
+      if (!hasOwnVerseNumber && !isIncipitReplacement) {
         final versePrefix = RegExp(r'^(\d+[a-z]?)').firstMatch(originalLine)?.group(1);
         if (versePrefix != null && versePrefix.isNotEmpty) {
           lines[i] = '$versePrefix. $replacementLine';
@@ -98,11 +106,155 @@ class ReadingsBackendWeb implements ReadingsBackend {
         }
       }
 
-      lines[i] = replacementLine;
+      // Apply conjunction cleaning for incipit replacements
+      if (isIncipitReplacement) {
+        lines[i] = _cleanCsvIncipit(replacementLine);
+      } else {
+        lines[i] = replacementLine;
+      }
       return lines.join('\n');
     }
 
     return replacementLine;
+  }
+
+  /// Clean a CSV incipit value before using it to replace the first verse line.
+  ///
+  /// CSV incipits often contain embedded verse numbers and lectionary-style
+  /// formatting that should not appear in the rendered text:
+  ///   "At that time: 1. An account of..."  →  "At that time: An account of..."
+  ///   "In those days: 1. Now the time..." → "In those days: The time..."
+  String _cleanCsvIncipit(String text) {
+    var cleaned = text.trim();
+    
+    // Remove verse number after incipit prefix: "In those days: 1. " → "In those days: "
+    cleaned = cleaned.replaceFirst(RegExp(r'(?<=:\s*)\d+[a-z]?\.\s*'), '');
+    
+    // Remove leading conjunctions that are awkward with temporal incipits
+    final lowerText = cleaned.toLowerCase();
+    if (lowerText.startsWith('in those days') || lowerText.startsWith('at that time')) {
+      // Extract the prefix before the colon and preserve it
+      final colonIndex = cleaned.indexOf(':');
+      if (colonIndex > 0) {
+        final prefix = cleaned.substring(0, colonIndex + 1);
+        final suffix = cleaned.substring(colonIndex + 1).trim();
+        
+        // Remove leading conjunctions from suffix
+        final cleanSuffix = suffix.replaceFirst(
+          RegExp(r'^(?:Now,?\s*|Then,?\s*|And,?\s*|But,?\s*|So,?\s*|For,?\s*)', caseSensitive: false),
+          '',
+        ).trim();
+        
+        if (cleanSuffix.isNotEmpty) {
+          cleaned = prefix + ' ' + cleanSuffix[0].toUpperCase() + cleanSuffix.substring(1);
+        } else {
+          cleaned = prefix;
+        }
+      }
+    } else {
+      // General conjunction stripping for non-temporal incipits
+      cleaned = cleaned.replaceFirst(
+        RegExp(r'^(?:And |But |Now |Then |So |For |Thus |Therefore |Moreover |However |Also |Plus )', caseSensitive: false),
+        '',
+      );
+      
+      // Capitalize if we removed something
+      if (cleaned != text && cleaned.isNotEmpty && cleaned[0] != '"' && cleaned[0] != '\u201C') {
+        cleaned = cleaned[0].toUpperCase() + cleaned.substring(1);
+      }
+    }
+    
+    return cleaned;
+  }
+
+  /// Clean the first line of DB text before prepending a derived incipit.
+  ///
+  /// Strips verse numbers, leading conjunctions, and tautological temporal
+  /// phrases from the first line so the rendered output reads naturally:
+  ///   "In those days: 1. Now Moses was..." → "In those days: Moses was..."
+  ///   "At that time: 35. On that day..."   → "At that time: When evening had come..."
+  ///   "Beloved: 5. Who is it..."           → "Beloved: Who is it..."
+  String _cleanFirstLineForIncipit(String text, String incipitPrefix) {
+    final lines = text.split('\n');
+    if (lines.isEmpty) return text;
+
+    // Find the first non-empty line
+    var firstIdx = -1;
+    for (var i = 0; i < lines.length; i++) {
+      if (lines[i].trim().isNotEmpty) {
+        firstIdx = i;
+        break;
+      }
+    }
+    if (firstIdx < 0) return text;
+
+    var firstLine = lines[firstIdx].trim();
+
+    // Strip verse number prefix: "1. text" → "text", "35. text" → "text"
+    firstLine = firstLine.replaceFirst(RegExp(r'^\d+[a-z]?\.\s*'), '');
+
+    // Strip leading conjunctions that are tautological with the incipit prefix
+    final incipitLower = incipitPrefix.toLowerCase();
+
+    // Temporal tautology: "In those days" + "Now..." or "In those days..."
+    if (incipitLower.contains('in those days') || incipitLower.contains('at that time')) {
+      firstLine = firstLine.replaceFirst(
+        RegExp(r'^(?:Now,?\s*|Then,?\s*|And,?\s*|But,?\s*|So,?\s*|For,?\s*|On that day,?\s*|At that time,?\s*|In those days,?\s*|One day,?\s*|Once,?\s*|On (?:that|one|a certain) (?:day|occasion),?\s*)', caseSensitive: false),
+        '',
+      );
+    } else {
+      // General conjunction stripping for non-temporal incipits
+      firstLine = firstLine.replaceFirst(
+        RegExp(r'^(?:And |But |Now |Then |So |For |Thus |Therefore |Moreover )', caseSensitive: false),
+        '',
+      );
+    }
+
+    // Capitalize the first letter
+    if (firstLine.isNotEmpty && firstLine[0] != '"' && firstLine[0] != '\u201C') {
+      firstLine = firstLine[0].toUpperCase() + firstLine.substring(1);
+    }
+
+    lines[firstIdx] = firstLine;
+    return lines.join('\n');
+  }
+
+  /// Check if text looks like a lectionary incipit (not a raw verse).
+  bool _looksLikeIncipitText(String text) {
+    final lower = text.toLowerCase().trim();
+    const incipitPrefixes = [
+      'at that time',
+      'in those days',
+      'in the beginning',
+      'thus says the lord',
+      'the lord said',
+      'the lord spoke',
+      'jesus said',
+      'jesus told',
+      'moses said',
+      'brethren',
+      'brothers and sisters',
+      'beloved',
+      'my child',
+      'my son',
+      'hear, my children',
+      'children',
+      'i said to myself',
+      'the word of the lord came',
+      'job answered',
+      'wisdom has been',
+      'with their',
+      'the angel',
+      'now',
+      'then',
+      'and',
+      'but',
+      'so',
+      'for',
+      'therefore',
+      'however',
+    ];
+    return incipitPrefixes.any((p) => lower.startsWith(p));
   }
 
   @override

@@ -21,12 +21,13 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
   Map<int, List<_LegacyReadingRow>>? _legacyRowsByDate;
 
   Future<List<DailyReading>> resolve(DateTime date) async {
-    final liturgicalDay = _calendar.getLiturgicalDay(date);
-    final resolvedDay = await _ordoResolver.resolveDay(date);
-    final yearVariables = await _ordoResolver.resolveYearVariables(date);
+    final normalizedDate = _normalizeDate(date);
+    final liturgicalDay = _calendar.getLiturgicalDay(normalizedDate);
+    final resolvedDay = await _ordoResolver.resolveDay(normalizedDate);
+    final yearVariables = await _ordoResolver.resolveYearVariables(normalizedDate);
 
     final authoritativeOverride = _buildAuthoritativeCelebrationOverride(
-      date: date,
+      date: normalizedDate,
       celebrationTitle: resolvedDay.title,
       sundayCycle: yearVariables.sundayCycle,
     );
@@ -34,10 +35,10 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
       return authoritativeOverride;
     }
 
-    if (_isEasterVigil(date)) {
+    if (_isEasterVigil(normalizedDate)) {
       final standardEntries = await _catalog.loadStandardEntries();
       return _buildEasterVigilReadings(
-        date,
+        normalizedDate,
         standardEntries,
         yearVariables.sundayCycle,
       );
@@ -46,20 +47,20 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
     final memorialEntries = await _catalog.loadMemorialEntries();
     final celebrationEntry = _findCelebrationEntry(
       memorialEntries: memorialEntries,
-      date: date,
+      date: normalizedDate,
       celebrationTitle: resolvedDay.title,
     );
     if (celebrationEntry != null &&
         (celebrationEntry.firstReading.isNotEmpty ||
             celebrationEntry.gospel.isNotEmpty)) {
-      return _buildCelebrationReadings(date, celebrationEntry);
+      return _buildCelebrationReadings(normalizedDate, celebrationEntry);
     }
 
     final standardEntries = await _catalog.loadStandardEntries();
     final matches = standardEntries.where((entry) {
       return _matchesStandardEntry(
         entry: entry,
-        date: date,
+        date: normalizedDate,
         liturgicalDay: liturgicalDay,
         sundayCycle: yearVariables.sundayCycle,
         weekdayCycle: yearVariables.weekdayCycle,
@@ -67,19 +68,20 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
     }).toList();
 
     if (matches.isEmpty) {
-      final legacyFallback = await _resolveLegacyFallback(date);
+      final legacyFallback = await _resolveLegacyFallback(normalizedDate);
       if (legacyFallback.isNotEmpty) {
         return legacyFallback;
       }
       return const [];
     }
 
-    return _buildStandardReadings(date, matches);
+    return _buildStandardReadings(normalizedDate, matches);
   }
 
   Future<List<DailyReading>> _resolveLegacyFallback(DateTime date) async {
     final byDate = await _loadLegacyRowsByDate();
-    final key = _legacyDateKey(date);
+    final normalizedDate = _normalizeDate(date);
+    final key = _legacyDateKey(normalizedDate);
     final rows = byDate[key];
     if (rows == null || rows.isEmpty) {
       return const [];
@@ -102,7 +104,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         readings.add(DailyReading(
           reading: normalizedReading,
           position: 'Responsorial Psalm',
-          date: date,
+          date: normalizedDate,
           psalmResponse: row.psalmResponse?.trim().isEmpty == true ? null : row.psalmResponse,
         ));
         continue;
@@ -124,7 +126,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         readings.add(DailyReading(
           reading: normalizedReading,
           position: position,
-          date: date,
+          date: normalizedDate,
           gospelAcclamation:
               row.gospelAcclamation?.trim().isEmpty == true ? null : row.gospelAcclamation,
         ));
@@ -135,7 +137,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
       readings.add(DailyReading(
         reading: normalizedReading,
         position: _readingPosition(numberedReadingIndex),
-        date: date,
+        date: normalizedDate,
       ));
     }
 
@@ -181,7 +183,8 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
 
       final millis = timestamp > 9999999999 ? timestamp : timestamp * 1000;
       final date = DateTime.fromMillisecondsSinceEpoch(millis, isUtc: true);
-      final dateKey = _legacyDateKey(DateTime(date.year, date.month, date.day));
+      final localDate = date.toLocal();
+      final dateKey = _legacyDateKey(DateTime(localDate.year, localDate.month, localDate.day));
 
       final row = _LegacyReadingRow(
         position: position,
@@ -198,10 +201,11 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
 
   int _legacyDateKey(DateTime date) => date.year * 10000 + date.month * 100 + date.day;
 
+  DateTime _normalizeDate(DateTime date) => DateTime(date.year, date.month, date.day);
+
   bool _isLegacyPsalmReference(String reference) {
     final lower = reference.trim().toLowerCase();
-    return lower.startsWith('ps ') ||
-        lower.startsWith('psalm ') ||
+    return lower.startsWith('ps ') || lower.startsWith('psalm ') ||
         lower.startsWith('isa 12:') ||
         lower.startsWith('exod 15:') ||
         lower.startsWith('1 sam 2:') ||
@@ -714,6 +718,19 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
       );
     }
 
+    if (normalizedTitle == _normalizeTitle('Saint Joseph, Spouse of the Blessed Virgin Mary')) {
+      return _buildOverrideReadings(
+        date: date,
+        firstReading: '2 Sam 7:4-5a, 12-14a, 16',
+        psalm: 'Ps 89:2-3, 4-5, 27, 29',
+        psalmResponse: 'The son of David will live for ever.',
+        secondReading: 'Rom 4:13, 16-18, 22',
+        gospel: 'Matt 1:16, 18-21, 24a',
+        gospelAlternate: 'Luke 2:41-51a',
+        gospelAcclamation: 'Ps 84:5',
+      );
+    }
+
     return null;
   }
 
@@ -841,6 +858,8 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
             date: date,
             psalmResponse: null,
             gospelAcclamation: null,
+            incipit:
+                entry.firstReadingIncipit.isEmpty ? null : entry.firstReadingIncipit,
           ));
         } else if (!hasSameFirstReading) {
           firstReadingAlternativeCount += 1;
@@ -851,6 +870,8 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
             date: date,
             psalmResponse: null,
             gospelAcclamation: null,
+            incipit:
+                entry.firstReadingIncipit.isEmpty ? null : entry.firstReadingIncipit,
           ));
         }
       }
@@ -956,6 +977,11 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
     return value
         .toLowerCase()
         .replaceAll(RegExp(r'\s+'), ' ')
+        .replaceAll(',', '')
+        .replaceAll(RegExp(r'\bblessed virgin mary\b'), 'virgin mary')
+        .replaceAll(RegExp(r'\bspouse of the virgin mary\b'), 'husband of mary')
+        .replaceAll(RegExp(r'\bspouse of the blessed virgin mary\b'), 'husband of mary')
+        .replaceAll(RegExp(r'\bhusband of the blessed virgin mary\b'), 'husband of mary')
         .replaceAll(RegExp(r'[“”]'), '"')
         .trim();
   }

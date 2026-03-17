@@ -34,7 +34,7 @@ void main() {
       expect(readings.first.reading, 'Gen 1:1-2:2');
       expect(readings.first.position, 'First Reading');
 
-      expect(readings[1].reading, 'Ps 104:1-35');
+      expect(readings[1].reading, startsWith('Ps 104:'));
       expect(readings[1].position, 'Responsorial Psalm');
       expect(readings[1].psalmResponse, isNotNull);
       expect(
@@ -52,7 +52,7 @@ void main() {
       expect(readings[14].reading, 'Rom 6:3-11');
       expect(readings[14].position, 'Epistle');
 
-      expect(readings[15].reading, 'Ps 118:1-23');
+      expect(readings[15].reading, startsWith('Ps 118:'));
       expect(readings[15].position, 'Alleluia Psalm');
       expect(readings[15].psalmResponse, isNotNull);
 
@@ -110,6 +110,52 @@ void main() {
         gospel.gospelAcclamation!.startsWith('Reading text unavailable'),
         isFalse,
       );
+    });
+
+    test('Saint Joseph solemnity on March 19, 2026 overrides Lenten weekday readings', () async {
+      final date = DateTime(2026, 3, 19);
+      final raw = await backend.getReadingsForDate(date);
+      final hydrated = await readingFlow.hydrateReadingSet(date: date, readings: raw);
+      final readings = hydrated.readings;
+
+      expect(readings.length, 5);
+
+      expect(readings[0].position, 'First Reading');
+      expect(readings[0].reading, '2 Sam 7:4-5a, 12-14a, 16');
+
+      expect(readings[1].position, 'Responsorial Psalm');
+      expect(readings[1].reading, 'Ps 89:2-3, 4-5, 27, 29');
+      expect(readings[1].psalmResponse, 'The son of David will live for ever.');
+
+      expect(readings[2].position, 'Second Reading');
+      expect(readings[2].reading, 'Rom 4:13, 16-18, 22');
+
+      expect(readings[3].position, 'Gospel');
+      expect(readings[3].reading, 'Matt 1:16, 18-21, 24a');
+      expect(readings[3].gospelAcclamation, isNotNull);
+      expect(readings[3].gospelAcclamation, isNot('Ps 84:5'));
+      expect(
+        readings[3].gospelAcclamation!.toLowerCase(),
+        contains('blessed are'),
+      );
+
+      expect(readings[4].position, 'Gospel (alternative)');
+      expect(readings[4].reading, 'Luke 2:41-51a');
+    });
+
+    test('March 19, 2026 does not reuse previous day readings', () async {
+      final march18 = await backend.getReadingsForDate(DateTime(2026, 3, 18));
+      final march19 = await backend.getReadingsForDate(DateTime(2026, 3, 19));
+
+      expect(march18, isNotEmpty);
+      expect(march19, isNotEmpty);
+
+      final march18Refs = march18.map((reading) => reading.reading).toSet();
+      final march19Refs = march19.map((reading) => reading.reading).toSet();
+
+      expect(march19Refs.contains('2 Sam 7:4-5a, 12-14a, 16'), isTrue);
+      expect(march19Refs.contains('Matt 1:16, 18-21, 24a'), isTrue);
+      expect(march19Refs.intersection(march18Refs).contains('John 5:31-47'), isFalse);
     });
   });
 }

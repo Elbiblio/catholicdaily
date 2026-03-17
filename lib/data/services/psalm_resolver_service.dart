@@ -82,19 +82,32 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
       final position = (reading.position ?? '').toLowerCase();
       String? psalmResponse = reading.psalmResponse;
       String? gospelAcclamation = reading.gospelAcclamation;
+      final hasExplicitPsalmResponse =
+          psalmResponse != null && psalmResponse.trim().isNotEmpty;
+      final hasExplicitGospelAcclamation =
+          gospelAcclamation != null && gospelAcclamation.trim().isNotEmpty;
 
       if (position.contains('psalm')) {
         psalmOrdinal += 1;
-        final catalogResponse = _catalogService.resolvePsalmResponseFromEntries(
-          entries: catalogEntries,
-          psalmReference: reading.reading,
-          positionLabel: reading.position,
-          psalmSequence: psalmOrdinal,
-        );
+        if (!hasExplicitPsalmResponse) {
+          final catalogResponse = _catalogService.resolvePsalmResponseFromEntries(
+            entries: catalogEntries,
+            psalmReference: reading.reading,
+            positionLabel: reading.position,
+            psalmSequence: psalmOrdinal,
+          );
 
-        if (catalogResponse != null && catalogResponse.trim().isNotEmpty) {
-          psalmResponse = catalogResponse.trim();
-        } else if (psalmResponse == null || psalmResponse.trim().isEmpty) {
+          if (catalogResponse != null && catalogResponse.trim().isNotEmpty) {
+            psalmResponse = catalogResponse.trim();
+          } else if (psalmResponse == null || psalmResponse.trim().isEmpty) {
+            psalmResponse = await resolvePsalmResponse(
+              date: date,
+              psalmReference: reading.reading,
+              positionLabel: reading.position,
+              psalmSequence: psalmOrdinal,
+            );
+          }
+        } else if (psalmResponse.trim().startsWith('Reading text unavailable')) {
           psalmResponse = await resolvePsalmResponse(
             date: date,
             psalmReference: reading.reading,
@@ -105,40 +118,36 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
       }
 
       if (position.contains('gospel')) {
-        final catalogAcclamation = _catalogService.resolveGospelAcclamationFromEntries(
-          entries: catalogEntries,
-          gospelReference: reading.reading,
-          positionLabel: reading.position,
-        );
+        if (!hasExplicitGospelAcclamation) {
+          final catalogAcclamation = _catalogService.resolveGospelAcclamationFromEntries(
+            entries: catalogEntries,
+            gospelReference: reading.reading,
+            positionLabel: reading.position,
+          );
 
-        if (catalogAcclamation != null && catalogAcclamation.trim().isNotEmpty) {
-          gospelAcclamation = catalogAcclamation.trim();
-        } else if (gospelAcclamation == null || gospelAcclamation.trim().isEmpty) {
+          if (catalogAcclamation != null && catalogAcclamation.trim().isNotEmpty) {
+            gospelAcclamation = catalogAcclamation.trim();
+          } else if (gospelAcclamation == null || gospelAcclamation.trim().isEmpty) {
+            gospelAcclamation = await resolveGospelAcclamation(
+              date: date,
+              gospelReference: reading.reading,
+              positionLabel: reading.position,
+            );
+          }
+        } else if (gospelAcclamation.trim().startsWith('Reading text unavailable')) {
           gospelAcclamation = await resolveGospelAcclamation(
             date: date,
             gospelReference: reading.reading,
             positionLabel: reading.position,
           );
         }
-      } else if (position.contains('gospel') && gospelAcclamation != null) {
-        final trimmedAcclamation = gospelAcclamation.trim();
-        if (trimmedAcclamation.startsWith('Reading text unavailable')) {
-          gospelAcclamation = await resolveGospelAcclamation(
-            date: date,
-            gospelReference: reading.reading,
-            positionLabel: reading.position,
+        final trimmedAcclamation = gospelAcclamation?.trim();
+        if (trimmedAcclamation != null &&
+            !trimmedAcclamation.startsWith('Reading text unavailable') &&
+            _gospelAcclamationService.shouldResolveReference(trimmedAcclamation)) {
+          gospelAcclamation = await _gospelAcclamationService.getAcclamationText(
+            trimmedAcclamation,
           );
-        } else if (_gospelAcclamationService.shouldResolveReference(
-          trimmedAcclamation,
-        )) {
-          gospelAcclamation = await resolveGospelAcclamation(
-                date: date,
-                gospelReference: reading.reading,
-                positionLabel: reading.position,
-              ) ??
-              await _gospelAcclamationService.getAcclamationText(
-                trimmedAcclamation,
-              );
         }
       }
 

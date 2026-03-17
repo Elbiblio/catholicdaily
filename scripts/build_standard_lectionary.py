@@ -124,7 +124,8 @@ BOOK_FIXES = {
 FIELDS = [
     'season', 'week', 'day', 'weekday_cycle', 'sunday_cycle', 'reading_cycle',
     'first_reading', 'second_reading', 'psalm_reference', 'psalm_response',
-    'gospel', 'acclamation_ref', 'acclamation_text', 'lectionary_number'
+    'gospel', 'acclamation_ref', 'acclamation_text', 'lectionary_number',
+    'first_reading_incipit', 'gospel_incipit'
 ]
 
 

@@ -22,6 +22,7 @@ HEADER = [
     'acclamation_ref',
     'acclamation_text',
     'lectionary_number',
+    'first_reading_incipit',
     'gospel_incipit',
 ]
 
@@ -39,6 +40,7 @@ BOOK_REPLACEMENTS = [
     ('Micah', 'Mic'),
     ('Daniel', 'Dan'),
     ('Hosea', 'Hos'),
+    ('Wisdom', 'Wis'),
     ('Matthew', 'Matt'),
     ('Mark', 'Mark'),
     ('Luke', 'Luke'),
@@ -153,6 +155,20 @@ def normalize_general(value: str) -> tuple[str, list[str]]:
 def normalize_row(row: list[str]) -> tuple[list[str], list[str]]:
     fixed_row, changes = fix_column_count(row)
     normalized = list(fixed_row)
+
+    # Repair a common formatting issue where the final empty column was omitted
+    # and the lectionary number slid into the last field.
+    lectionary_index = HEADER.index('lectionary_number')
+    first_incipit_index = HEADER.index('first_reading_incipit')
+    gospel_incipit_index = HEADER.index('gospel_incipit')
+    if (
+        not normalized[lectionary_index].strip()
+        and not normalized[first_incipit_index].strip()
+        and normalized[gospel_incipit_index].strip().isdigit()
+    ):
+        normalized[lectionary_index] = normalized[gospel_incipit_index].strip()
+        normalized[gospel_incipit_index] = ''
+        changes.append('moved_numeric_gospel_incipit_to_lectionary_number')
 
     for index, field in enumerate(HEADER):
         value = normalized[index]

@@ -10,6 +10,7 @@ class StandardLectionaryEntry {
   final String sundayCycle;
   final String readingCycle;
   final String firstReading;
+  final String firstReadingIncipit;
   final String secondReading;
   final String psalmReference;
   final String psalmResponse;
@@ -27,6 +28,7 @@ class StandardLectionaryEntry {
     required this.sundayCycle,
     required this.readingCycle,
     required this.firstReading,
+    required this.firstReadingIncipit,
     required this.secondReading,
     required this.psalmReference,
     required this.psalmResponse,
@@ -49,11 +51,16 @@ class MemorialFeastEntry {
   final String commonType;
   final String firstReading;
   final String alternativeFirstReading;
+  final String firstReadingIncipit;
+  final String alternativeFirstReadingIncipit;
   final String psalmReference;
   final String psalmResponse;
   final String secondReading;
+  final String secondReadingIncipit;
   final String gospel;
+  final String gospelIncipit;
   final String alternativeGospel;
+  final String alternativeGospelIncipit;
   final String gospelAcclamation;
 
   const MemorialFeastEntry({
@@ -67,11 +74,16 @@ class MemorialFeastEntry {
     required this.commonType,
     required this.firstReading,
     required this.alternativeFirstReading,
+    required this.firstReadingIncipit,
+    required this.alternativeFirstReadingIncipit,
     required this.psalmReference,
     required this.psalmResponse,
     required this.secondReading,
+    required this.secondReadingIncipit,
     required this.gospel,
+    required this.gospelIncipit,
     required this.alternativeGospel,
+    required this.alternativeGospelIncipit,
     required this.gospelAcclamation,
   });
 }
@@ -119,7 +131,8 @@ class ReadingCatalogService extends BaseService<ReadingCatalogService> {
           acclamationRef: columns[11].trim(),
           acclamationText: columns[12].trim(),
           lectionaryNumber: columns[13].trim(),
-          gospelIncipit: columns.length > 14 ? columns[14].trim() : '',
+          firstReadingIncipit: columns.length > 14 ? columns[14].trim() : '',
+          gospelIncipit: columns.length > 15 ? columns[15].trim() : '',
         ),
       );
     }
@@ -142,7 +155,7 @@ class ReadingCatalogService extends BaseService<ReadingCatalogService> {
     final parsed = <MemorialFeastEntry>[];
     for (var i = 1; i < lines.length; i++) {
       final columns = parseCsvLine(lines[i]);
-      if (columns.length < 16) {
+      if (columns.length < 22) {
         continue;
       }
       parsed.add(
@@ -157,12 +170,17 @@ class ReadingCatalogService extends BaseService<ReadingCatalogService> {
           commonType: columns[7].trim(),
           firstReading: columns[8].trim(),
           alternativeFirstReading: columns[9].trim(),
-          psalmReference: columns[10].trim(),
-          psalmResponse: columns[11].trim(),
-          secondReading: columns[12].trim(),
-          gospel: columns[13].trim(),
-          alternativeGospel: columns[14].trim(),
-          gospelAcclamation: columns[15].trim(),
+          firstReadingIncipit: columns[10].trim(),
+          alternativeFirstReadingIncipit: columns[11].trim(),
+          psalmReference: columns[12].trim(),
+          psalmResponse: columns[13].trim(),
+          secondReading: columns[14].trim(),
+          secondReadingIncipit: columns[15].trim(),
+          gospel: columns[16].trim(),
+          gospelIncipit: columns[17].trim(),
+          alternativeGospel: columns[18].trim(),
+          alternativeGospelIncipit: columns[19].trim(),
+          gospelAcclamation: columns[20].trim(),
         ),
       );
     }

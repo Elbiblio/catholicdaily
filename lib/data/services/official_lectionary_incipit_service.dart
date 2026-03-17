@@ -459,8 +459,9 @@ class OfficialLectionaryIncipitService {
     // Stage 3 — suppress if tautological
     String? finalIncipit;
     if (candidate != null) {
-      finalIncipit =
-          _isIncipitRedundant(candidate, correctedText) ? null : candidate;
+      finalIncipit = _shouldSuppressIncipit(candidate, correctedText)
+          ? null
+          : candidate;
     }
 
     return (incipit: finalIncipit, correctedText: correctedText);
@@ -498,6 +499,11 @@ class OfficialLectionaryIncipitService {
   ///   1. Table-driven pattern match  → fastest, most explicit
   ///   2. Exact self-match            → catches incipits not yet in the table
   ///   3. Fuzzy semantic overlap      → last-resort heuristic
+  bool _shouldSuppressIncipit(String incipit, String readingText) {
+    return _isIncipitRedundant(incipit, readingText) ||
+        _isContextuallyAwkwardIncipit(incipit, readingText);
+  }
+
   bool _isIncipitRedundant(String incipit, String readingText) {
     final normReading = _normalizeForComparison(readingText);
     final normIncipit = _normalizeForComparison(incipit);
@@ -513,6 +519,35 @@ class OfficialLectionaryIncipitService {
 
     // Tier 3 – fuzzy semantic overlap
     return _hasSemanticOverlap(normIncipit, normReading);
+  }
+
+  bool _isContextuallyAwkwardIncipit(String incipit, String readingText) {
+    final normReading = _normalizeForComparison(readingText);
+    if (normReading.isEmpty) return false;
+
+    final firstWord = normReading.split(RegExp(r'\s+')).first;
+
+    if ((incipit == 'In those days,' || incipit == 'At that time,') &&
+        _awkwardAfterTemporalIncipit.contains(firstWord)) {
+      return true;
+    }
+
+    if ((incipit == 'Beloved:' ||
+            incipit == 'Brethren:' ||
+            incipit == 'My child,') &&
+        _awkwardAfterAddresseeIncipit.contains(firstWord)) {
+      return true;
+    }
+
+    if (incipit == 'Moses said to the people:') {
+      return !_startsWithAny(normReading, _mosesSpeechOpeners);
+    }
+
+    if (incipit == 'The LORD said to Moses:') {
+      return !_startsWithAny(normReading, _lordToMosesOpeners);
+    }
+
+    return false;
   }
 
   /// Heuristic: if ≥ 60 % of the incipit's meaningful words appear in the
@@ -546,6 +581,57 @@ class OfficialLectionaryIncipitService {
     'will', 'would', 'shall', 'should', 'may', 'might', 'can', 'could',
   };
 
+  static const Set<String> _awkwardAfterTemporalIncipit = {
+    'he',
+    'she',
+    'his',
+    'her',
+    'their',
+    'its',
+    'this',
+    'that',
+    'these',
+    'those',
+    'who',
+    'what',
+  };
+
+  static const Set<String> _awkwardAfterAddresseeIncipit = {
+    'that',
+    'this',
+    'who',
+    'what',
+    'when',
+    'while',
+    'as',
+    'after',
+    'if',
+    'because',
+    'although',
+    'his',
+    'her',
+    'their',
+    'he',
+    'she',
+    'they',
+  };
+
+  static const List<String> _mosesSpeechOpeners = [
+    'moses said',
+    'moses spoke',
+    'moses addressed',
+    'then moses said',
+    'then moses spoke',
+  ];
+
+  static const List<String> _lordToMosesOpeners = [
+    'the lord said to moses',
+    'the lord spoke to moses',
+    'then the lord said to moses',
+    'then the lord spoke to moses',
+    'god said to moses',
+  ];
+
   /// Strips leading typographic/straight quotes, lowercases, removes all
   /// punctuation (except word-internal apostrophes), and collapses whitespace
   /// so that content words can be compared with simple startsWith checks.
@@ -554,6 +640,7 @@ class OfficialLectionaryIncipitService {
         .trimLeft()
         // Strip leading curly or straight quote marks
         .replaceFirst(RegExp("^[\u201C\u201D\u2018\u2019\"']+"), '')
+        .replaceFirst(RegExp(r'^\d+[a-z]?\.\s*'), '')
         .replaceFirst(RegExp(r'^\d+[a-z]?\s+'), '')
         .toLowerCase()
         // Replace any non-word, non-space, non-apostrophe char with a space
@@ -610,6 +697,13 @@ class OfficialLectionaryIncipitService {
     if (!ref.startsWith(key)) return false;
     if (ref.length == key.length) return true;
     return ref[key.length] == ':';
+  }
+
+  bool _startsWithAny(String text, List<String> prefixes) {
+    for (final prefix in prefixes) {
+      if (text.startsWith(prefix)) return true;
+    }
+    return false;
   }
 
   // ══════════════════════════════════════════════════════════════════════════
