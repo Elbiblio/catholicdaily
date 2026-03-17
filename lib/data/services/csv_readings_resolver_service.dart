@@ -352,6 +352,8 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         position: 'First Reading',
         date: date,
         feast: entry.title,
+        incipit:
+            entry.firstReadingIncipit.isEmpty ? null : entry.firstReadingIncipit,
       ));
     }
     if (entry.alternativeFirstReading.isNotEmpty) {
@@ -360,6 +362,9 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         position: 'First Reading (alternative)',
         date: date,
         feast: entry.title,
+        incipit: entry.alternativeFirstReadingIncipit.isEmpty
+            ? null
+            : entry.alternativeFirstReadingIncipit,
       ));
     }
     if (entry.psalmReference.isNotEmpty) {
@@ -378,6 +383,8 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         position: 'Second Reading',
         date: date,
         feast: entry.title,
+        incipit:
+            entry.secondReadingIncipit.isEmpty ? null : entry.secondReadingIncipit,
       ));
     }
     if (entry.gospel.isNotEmpty) {
@@ -389,6 +396,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         gospelAcclamation: entry.gospelAcclamation.isEmpty
             ? null
             : entry.gospelAcclamation,
+        incipit: entry.gospelIncipit.isEmpty ? null : entry.gospelIncipit,
       ));
     }
     if (entry.alternativeGospel.isNotEmpty) {
@@ -400,6 +408,9 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         gospelAcclamation: entry.gospelAcclamation.isEmpty
             ? null
             : entry.gospelAcclamation,
+        incipit: entry.alternativeGospelIncipit.isEmpty
+            ? null
+            : entry.alternativeGospelIncipit,
       ));
     }
     return readings;

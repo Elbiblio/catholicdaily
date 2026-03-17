@@ -67,7 +67,10 @@ class ReadingsBackendWeb implements ReadingsBackend {
 
     final processed = _incipitService.processReading(reference, fullText);
     if (incipit != null && incipit.trim().isNotEmpty) {
-      return _replaceFirstNonEmptyLine(processed.correctedText, incipit.trim());
+      final cleaned = _cleanCsvIncipit(incipit.trim());
+      if (cleaned.isNotEmpty) {
+        return _mergeIncipitIntoFirstVerse(processed.correctedText, cleaned);
+      }
     }
 
     final derivedIncipit = processed.incipit;
@@ -82,7 +85,7 @@ class ReadingsBackendWeb implements ReadingsBackend {
     return '$cleanIncipit: $cleanedText';
   }
 
-  String _replaceFirstNonEmptyLine(String text, String replacementLine) {
+  String _mergeIncipitIntoFirstVerse(String text, String incipitText) {
     final lines = text.split('\n');
     for (var i = 0; i < lines.length; i++) {
       if (lines[i].trim().isEmpty) {
@@ -90,32 +93,127 @@ class ReadingsBackendWeb implements ReadingsBackend {
       }
 
       final originalLine = lines[i].trim();
-      final hasOwnVerseNumber = RegExp(r'^\d+[a-z]?[.\s]+').hasMatch(replacementLine);
+      final verseMatch = RegExp(r'^(\d+[a-z]?)\.\s*(.*)$').firstMatch(originalLine);
+      final versePrefix = verseMatch?.group(1);
+      final verseBody = (verseMatch?.group(2) ?? originalLine).trim();
+      final mergedLine = _mergeIncipitWithVerseText(incipitText, verseBody);
 
-      // Check if the replacement is a lectionary-style incipit that should
-      // NOT get a verse number prepended. These start with known incipit
-      // prefixes (e.g., "At that time,", "Thus says the LORD:", "Brethren:")
-      // or are capitalized prose that clearly isn't a raw verse.
-      final isIncipitReplacement = _looksLikeIncipitText(replacementLine);
-
-      if (!hasOwnVerseNumber && !isIncipitReplacement) {
-        final versePrefix = RegExp(r'^(\d+[a-z]?)').firstMatch(originalLine)?.group(1);
-        if (versePrefix != null && versePrefix.isNotEmpty) {
-          lines[i] = '$versePrefix. $replacementLine';
-          return lines.join('\n');
-        }
-      }
-
-      // Apply conjunction cleaning for incipit replacements
-      if (isIncipitReplacement) {
-        lines[i] = _cleanCsvIncipit(replacementLine);
-      } else {
-        lines[i] = replacementLine;
-      }
+      lines[i] = versePrefix != null && versePrefix.isNotEmpty
+          ? '$versePrefix. $mergedLine'
+          : mergedLine;
       return lines.join('\n');
     }
 
-    return replacementLine;
+    return incipitText;
+  }
+
+  String _mergeIncipitWithVerseText(String incipitText, String verseText) {
+    final cleanedIncipit = _cleanCsvIncipit(incipitText);
+    final cleanedVerse = verseText.trim();
+    if (cleanedIncipit.isEmpty || cleanedVerse.isEmpty) {
+      return cleanedIncipit.isEmpty ? cleanedVerse : cleanedIncipit;
+    }
+
+    final incipitParts = _splitIncipitParts(cleanedIncipit);
+    final incipitBody = incipitParts.$2;
+    final normalizedIncipit = _normalizeMergedIncipit(cleanedIncipit);
+
+    if (incipitBody.isNotEmpty) {
+      final overlap = _findLoosePhraseMatch(cleanedVerse, incipitBody);
+      if (overlap != null) {
+        final remainder = cleanedVerse.substring(overlap.end).trimLeft().replaceFirst(
+          RegExp(r'^[,;:!?.\-–—]+\s*'),
+          '',
+        );
+        if (remainder.isEmpty) {
+          return normalizedIncipit;
+        }
+        return _joinSentenceParts(normalizedIncipit, remainder);
+      }
+    }
+
+    if (_looksLikeIncipitText(cleanedIncipit)) {
+      final cleanedFirstLine = _cleanFirstLineForIncipit(cleanedVerse, normalizedIncipit);
+      return _joinIncipitAndVerse(normalizedIncipit, cleanedFirstLine);
+    }
+
+    return _joinIncipitAndVerse(normalizedIncipit, cleanedVerse);
+  }
+
+  (String, String) _splitIncipitParts(String incipit) {
+    final colonIndex = incipit.indexOf(':');
+    if (colonIndex >= 0) {
+      final prefix = incipit.substring(0, colonIndex).trim();
+      final body = incipit.substring(colonIndex + 1).trim();
+      return (prefix, body);
+    }
+    return ('', incipit.trim());
+  }
+
+  String _normalizeMergedIncipit(String incipit) {
+    return incipit.trim().replaceAll(RegExp(r'[,:;]+\s*$'), '').trim();
+  }
+
+  RegExpMatch? _findLoosePhraseMatch(String verseText, String phrase) {
+    var normalizedPhrase = phrase.trim();
+    normalizedPhrase = normalizedPhrase
+        .replaceAll('“', '')
+        .replaceAll('”', '')
+        .replaceFirst(RegExp("^[\"']+"), '')
+        .trim();
+    while (normalizedPhrase.isNotEmpty && '"\':;,.!?'.contains(normalizedPhrase[normalizedPhrase.length - 1])) {
+      normalizedPhrase = normalizedPhrase.substring(0, normalizedPhrase.length - 1).trimRight();
+    }
+    if (normalizedPhrase.isEmpty) {
+      return null;
+    }
+
+    final tokens = normalizedPhrase
+        .split(RegExp(r'\s+'))
+        .map((token) => token.replaceAll(RegExp("[^A-Za-z0-9']"), ''))
+        .where((token) => token.isNotEmpty)
+        .toList();
+    if (tokens.length < 3) {
+      return null;
+    }
+
+    final pattern = tokens.map(RegExp.escape).join(r'[\s\W_]+');
+    return RegExp(pattern, caseSensitive: false).firstMatch(verseText);
+  }
+
+  String _joinSentenceParts(String leading, String trailing) {
+    final trimmedLeading = leading.trimRight();
+    final trimmedTrailing = trailing.trimLeft();
+    if (trimmedLeading.isEmpty) {
+      return trimmedTrailing;
+    }
+    if (trimmedTrailing.isEmpty) {
+      return trimmedLeading;
+    }
+
+    if (RegExp(r'[.!?]$').hasMatch(trimmedLeading)) {
+      return '$trimmedLeading $trimmedTrailing';
+    }
+    return '$trimmedLeading. $trimmedTrailing';
+  }
+
+  String _joinIncipitAndVerse(String incipit, String verse) {
+    final trimmedIncipit = incipit.trimRight();
+    final trimmedVerse = verse.trimLeft();
+    if (trimmedIncipit.isEmpty) {
+      return trimmedVerse;
+    }
+    if (trimmedVerse.isEmpty) {
+      return trimmedIncipit;
+    }
+
+    if (RegExp(r'[:,;]$').hasMatch(trimmedIncipit)) {
+      return '$trimmedIncipit $trimmedVerse';
+    }
+    if (RegExp(r'[.!?]$').hasMatch(trimmedIncipit)) {
+      return '$trimmedIncipit $trimmedVerse';
+    }
+    return '$trimmedIncipit: $trimmedVerse';
   }
 
   /// Clean a CSV incipit value before using it to replace the first verse line.
@@ -146,7 +244,7 @@ class ReadingsBackendWeb implements ReadingsBackend {
         ).trim();
         
         if (cleanSuffix.isNotEmpty) {
-          cleaned = prefix + ' ' + cleanSuffix[0].toUpperCase() + cleanSuffix.substring(1);
+          cleaned = '$prefix ${cleanSuffix[0].toUpperCase()}${cleanSuffix.substring(1)}';
         } else {
           cleaned = prefix;
         }
