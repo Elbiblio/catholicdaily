@@ -83,17 +83,27 @@ jobs:
 
       - name: Configure R2 credentials
         if: env.HAS_R2_ACCESS == 'true'
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          aws-region: auto
+        shell: bash
+        run: |
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.R2_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.R2_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "AWS_DEFAULT_REGION=auto" >> $GITHUB_ENV
 
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
+
+      - name: Cache Gradle files
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('android/**/*.gradle*', 'android/**/*.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -107,8 +117,12 @@ jobs:
 
       - name: Prepare Android signing
         if: env.HAS_ANDROID_SIGNING == 'true'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         shell: bash
         run: |
+          set -euo pipefail
           KEYSTORE_PATH="$RUNNER_TEMP/release-keystore.jks"
           R2_ENDPOINT="https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com"
 
@@ -198,8 +212,12 @@ jobs:
 
       - name: Download Play Console service account
         if: env.HAS_ANDROID_SIGNING == 'true' && env.HAS_PLAY_UPLOAD == 'true'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         shell: bash
         run: |
+          set -euo pipefail
           PLAY_SERVICE_ACCOUNT_PATH="$RUNNER_TEMP/play-service-account.json"
           aws s3 cp "s3://${{ env.R2_BUCKET_NAME }}/${{ env.PLAY_SERVICE_ACCOUNT_OBJECT_KEY }}" "$PLAY_SERVICE_ACCOUNT_PATH" \
             --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com"
@@ -235,11 +253,11 @@ jobs:
 
       - name: Configure R2 credentials
         if: env.HAS_R2_ACCESS == 'true'
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          aws-region: auto
+        shell: bash
+        run: |
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.R2_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.R2_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "AWS_DEFAULT_REGION=auto" >> $GITHUB_ENV
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -257,8 +275,12 @@ jobs:
 
       - name: Prepare signing assets
         if: env.HAS_IOS_SIGNING == 'true'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         shell: bash
         run: |
+          set -euo pipefail
           CERT_PATH="$RUNNER_TEMP/build_certificate.p12"
           PROFILE_PATH="$RUNNER_TEMP/build_pp.mobileprovision"
           KEYCHAIN_PATH="$RUNNER_TEMP/app-signing.keychain-db"
@@ -355,8 +377,12 @@ jobs:
 
       - name: Prepare App Store Connect API key
         if: env.HAS_IOS_SIGNING == 'true' && env.HAS_TESTFLIGHT_UPLOAD == 'true'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         shell: bash
         run: |
+          set -euo pipefail
           KEY_ID="${{ secrets.APPSTORE_KEY_ID }}"
           if [ -z "$KEY_ID" ]; then
             KEY_ID=$(basename "${{ env.APPSTORE_API_KEY_OBJECT_KEY }}" | sed -E 's/^AuthKey_([^.]+)\.p8$/\1/')
