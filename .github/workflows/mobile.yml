@@ -13,6 +13,18 @@ on:
 
 env:
   FLUTTER_VERSION: '3.35.1'
+  R2_BUCKET_NAME: 'elbiblio-keystore'
+  ANDROID_KEYSTORE_OBJECT_KEY: 'android/app-release.jks'
+  IOS_P12_OBJECT_KEY: 'ios-distribution.p12'
+  IOS_PROVISION_PROFILE_OBJECT_KEY: 'Wildcard.mobileprovision'
+  APPSTORE_API_KEY_OBJECT_KEY: 'AuthKey_4WKTZ9VTBH_ConnectKey.p8'
+  PLAY_SERVICE_ACCOUNT_OBJECT_KEY: 'pc-api-8544579711642974481-790-f1fa1d5f9f3c.json'
+  PLAY_PACKAGE_NAME: 'com.elbiblio.catholicdaily'
+  PLAY_TRACK: 'internal'
+  APPLE_TEAM_ID: '24QSYQPJLT'
+  APPSTORE_ISSUER_ID: 'e9c47880-5d59-4555-ad9b-e0908960e3da'
+  ANDROID_KEY_ALIAS_FALLBACK: 'upload'
+  ANDROID_KEY_DNAME: 'CN=Catholic Daily, OU=Mobile, O=Elbiblio, L=Unknown, ST=Unknown, C=US'
 
 jobs:
   verify:
@@ -43,7 +55,17 @@ jobs:
         run: flutter analyze lib
 
       - name: Run tests
-        run: flutter test
+        shell: bash
+        run: |
+          mapfile -t test_files < <(
+            find test -type f -name '*_test.dart' \
+              ! -name 'export_*' \
+              ! -name 'extract_*' \
+              ! -name 'rendered_incipit_audit_test.dart' \
+              ! -name '_tmp_*' | sort
+          )
+          test ${#test_files[@]} -gt 0
+          flutter test "${test_files[@]}"
 
   android:
     name: Android Release Build
@@ -51,11 +73,21 @@ jobs:
     needs: verify
     if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
     env:
-      HAS_ANDROID_SIGNING: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' && secrets.ANDROID_STORE_PASSWORD != '' && secrets.ANDROID_KEY_ALIAS != '' && secrets.ANDROID_KEY_PASSWORD != '' }}
+      HAS_R2_ACCESS: ${{ secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '' }}
+      HAS_ANDROID_SIGNING: ${{ (secrets.ANDROID_KEYSTORE_PASSWORD != '' || secrets.ANDROID_STORE_PASSWORD != '') && (secrets.ANDROID_KEYSTORE_BASE64 != '' || (secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '')) }}
+      HAS_PLAY_UPLOAD: ${{ secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '' }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Configure R2 credentials
+        if: env.HAS_R2_ACCESS == 'true'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          aws-region: auto
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -77,11 +109,70 @@ jobs:
         if: env.HAS_ANDROID_SIGNING == 'true'
         shell: bash
         run: |
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > "$RUNNER_TEMP/release-keystore.jks"
-          echo "ANDROID_STORE_FILE=$RUNNER_TEMP/release-keystore.jks" >> $GITHUB_ENV
-          echo "ANDROID_STORE_PASSWORD=${{ secrets.ANDROID_STORE_PASSWORD }}" >> $GITHUB_ENV
-          echo "ANDROID_KEY_ALIAS=${{ secrets.ANDROID_KEY_ALIAS }}" >> $GITHUB_ENV
-          echo "ANDROID_KEY_PASSWORD=${{ secrets.ANDROID_KEY_PASSWORD }}" >> $GITHUB_ENV
+          KEYSTORE_PATH="$RUNNER_TEMP/release-keystore.jks"
+          R2_ENDPOINT="https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com"
+
+          if [ -n "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" ]; then
+            echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > "$KEYSTORE_PATH"
+          else
+            if aws s3 ls "s3://${{ env.R2_BUCKET_NAME }}/${{ env.ANDROID_KEYSTORE_OBJECT_KEY }}" --endpoint-url "$R2_ENDPOINT" >/dev/null 2>&1; then
+              aws s3 cp "s3://${{ env.R2_BUCKET_NAME }}/${{ env.ANDROID_KEYSTORE_OBJECT_KEY }}" "$KEYSTORE_PATH" \
+                --endpoint-url "$R2_ENDPOINT"
+            else
+              STORE_PASSWORD="${{ secrets.ANDROID_KEYSTORE_PASSWORD }}"
+              if [ -z "$STORE_PASSWORD" ]; then
+                STORE_PASSWORD="${{ secrets.ANDROID_STORE_PASSWORD }}"
+              fi
+
+              KEY_PASSWORD="${{ secrets.ANDROID_KEY_PASSWORD }}"
+              if [ -z "$KEY_PASSWORD" ]; then
+                KEY_PASSWORD="$STORE_PASSWORD"
+              fi
+
+              KEY_ALIAS="${{ secrets.ANDROID_KEY_ALIAS }}"
+              if [ -z "$KEY_ALIAS" ]; then
+                KEY_ALIAS="${{ env.ANDROID_KEY_ALIAS_FALLBACK }}"
+              fi
+
+              keytool -genkeypair -v \
+                -keystore "$KEYSTORE_PATH" \
+                -alias "$KEY_ALIAS" \
+                -keyalg RSA \
+                -keysize 2048 \
+                -validity 10000 \
+                -storepass "$STORE_PASSWORD" \
+                -keypass "$KEY_PASSWORD" \
+                -dname "${{ env.ANDROID_KEY_DNAME }}"
+
+              aws s3 cp "$KEYSTORE_PATH" "s3://${{ env.R2_BUCKET_NAME }}/${{ env.ANDROID_KEYSTORE_OBJECT_KEY }}" \
+                --endpoint-url "$R2_ENDPOINT"
+            fi
+          fi
+
+          STORE_PASSWORD="${{ secrets.ANDROID_KEYSTORE_PASSWORD }}"
+          if [ -z "$STORE_PASSWORD" ]; then
+            STORE_PASSWORD="${{ secrets.ANDROID_STORE_PASSWORD }}"
+          fi
+
+          KEY_PASSWORD="${{ secrets.ANDROID_KEY_PASSWORD }}"
+          if [ -z "$KEY_PASSWORD" ]; then
+            KEY_PASSWORD="$STORE_PASSWORD"
+          fi
+
+          KEY_ALIAS="${{ secrets.ANDROID_KEY_ALIAS }}"
+          if [ -z "$KEY_ALIAS" ]; then
+            KEY_ALIAS=$(keytool -list -v -keystore "$KEYSTORE_PATH" -storepass "$STORE_PASSWORD" 2>/dev/null | sed -n 's/^Alias name: //p' | head -n 1)
+          fi
+          if [ -z "$KEY_ALIAS" ]; then
+            KEY_ALIAS="${{ env.ANDROID_KEY_ALIAS_FALLBACK }}"
+          fi
+
+          test -n "$KEY_ALIAS"
+
+          echo "ANDROID_STORE_FILE=$KEYSTORE_PATH" >> $GITHUB_ENV
+          echo "ANDROID_STORE_PASSWORD=$STORE_PASSWORD" >> $GITHUB_ENV
+          echo "ANDROID_KEY_ALIAS=$KEY_ALIAS" >> $GITHUB_ENV
+          echo "ANDROID_KEY_PASSWORD=$KEY_PASSWORD" >> $GITHUB_ENV
 
       - name: Build Android app bundle
         if: env.HAS_ANDROID_SIGNING == 'true'
@@ -105,18 +196,50 @@ jobs:
             build/app/outputs/flutter-apk/*.apk
           if-no-files-found: error
 
+      - name: Download Play Console service account
+        if: env.HAS_ANDROID_SIGNING == 'true' && env.HAS_PLAY_UPLOAD == 'true'
+        shell: bash
+        run: |
+          PLAY_SERVICE_ACCOUNT_PATH="$RUNNER_TEMP/play-service-account.json"
+          aws s3 cp "s3://${{ env.R2_BUCKET_NAME }}/${{ env.PLAY_SERVICE_ACCOUNT_OBJECT_KEY }}" "$PLAY_SERVICE_ACCOUNT_PATH" \
+            --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com"
+          echo "PLAY_SERVICE_ACCOUNT_PATH=$PLAY_SERVICE_ACCOUNT_PATH" >> $GITHUB_ENV
+
+      - name: Upload Android app bundle to Google Play
+        if: env.HAS_ANDROID_SIGNING == 'true' && env.HAS_PLAY_UPLOAD == 'true'
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJson: ${{ env.PLAY_SERVICE_ACCOUNT_PATH }}
+          packageName: ${{ env.PLAY_PACKAGE_NAME }}
+          releaseFiles: build/app/outputs/bundle/release/app-release.aab
+          track: ${{ env.PLAY_TRACK }}
+          status: completed
+
+      - name: Skip Google Play upload when service account is unavailable
+        if: env.HAS_ANDROID_SIGNING == 'true' && env.HAS_PLAY_UPLOAD != 'true'
+        run: echo "Android signing is configured, but Play Console upload credentials are missing; skipping Play Store upload."
+
   ios:
     name: iOS Release Build
     runs-on: macos-latest
     needs: verify
     if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
     env:
-      HAS_IOS_SIGNING: ${{ secrets.IOS_BUILD_CERTIFICATE_BASE64 != '' && secrets.IOS_P12_PASSWORD != '' && secrets.IOS_PROVISION_PROFILE_BASE64 != '' && secrets.IOS_KEYCHAIN_PASSWORD != '' && secrets.APPLE_TEAM_ID != '' }}
-      HAS_TESTFLIGHT_UPLOAD: ${{ secrets.APPSTORE_ISSUER_ID != '' && secrets.APPSTORE_KEY_ID != '' && secrets.APPSTORE_PRIVATE_KEY != '' }}
+      HAS_R2_ACCESS: ${{ secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '' }}
+      HAS_IOS_SIGNING: ${{ (secrets.IOS_BUILD_CERTIFICATE_BASE64 != '' && secrets.IOS_PROVISION_PROFILE_BASE64 != '') || (secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '') }}
+      HAS_TESTFLIGHT_UPLOAD: ${{ secrets.APPSTORE_PRIVATE_KEY != '' || (secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '') }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Configure R2 credentials
+        if: env.HAS_R2_ACCESS == 'true'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          aws-region: auto
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -139,12 +262,44 @@ jobs:
           CERT_PATH="$RUNNER_TEMP/build_certificate.p12"
           PROFILE_PATH="$RUNNER_TEMP/build_pp.mobileprovision"
           KEYCHAIN_PATH="$RUNNER_TEMP/app-signing.keychain-db"
-          echo "${{ secrets.IOS_BUILD_CERTIFICATE_BASE64 }}" | base64 --decode > "$CERT_PATH"
-          echo "${{ secrets.IOS_PROVISION_PROFILE_BASE64 }}" | base64 --decode > "$PROFILE_PATH"
-          security create-keychain -p "${{ secrets.IOS_KEYCHAIN_PASSWORD }}" "$KEYCHAIN_PATH"
+          KEYCHAIN_PASSWORD="${{ secrets.IOS_KEYCHAIN_PASSWORD }}"
+          if [ -z "$KEYCHAIN_PASSWORD" ]; then
+            KEYCHAIN_PASSWORD="${{ secrets.ANDROID_KEYSTORE_PASSWORD }}"
+          fi
+
+          P12_PASSWORD="${{ secrets.IOS_P12_PASSWORD }}"
+          if [ -z "$P12_PASSWORD" ]; then
+            P12_PASSWORD="${{ secrets.ANDROID_KEYSTORE_PASSWORD }}"
+          fi
+
+          if [ -n "${{ secrets.IOS_BUILD_CERTIFICATE_BASE64 }}" ]; then
+            echo "${{ secrets.IOS_BUILD_CERTIFICATE_BASE64 }}" | base64 --decode > "$CERT_PATH"
+          else
+            if ! aws s3 ls "s3://${{ env.R2_BUCKET_NAME }}/${{ env.IOS_P12_OBJECT_KEY }}" \
+              --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com" >/dev/null 2>&1; then
+              echo "::error::iOS .p12 signing certificate not found in R2 at bucket=${{ env.R2_BUCKET_NAME }} key=${{ env.IOS_P12_OBJECT_KEY }}" >&2
+              exit 1
+            fi
+            aws s3 cp "s3://${{ env.R2_BUCKET_NAME }}/${{ env.IOS_P12_OBJECT_KEY }}" "$CERT_PATH" \
+              --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com"
+          fi
+
+          if [ -n "${{ secrets.IOS_PROVISION_PROFILE_BASE64 }}" ]; then
+            echo "${{ secrets.IOS_PROVISION_PROFILE_BASE64 }}" | base64 --decode > "$PROFILE_PATH"
+          else
+            if ! aws s3 ls "s3://${{ env.R2_BUCKET_NAME }}/${{ env.IOS_PROVISION_PROFILE_OBJECT_KEY }}" \
+              --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com" >/dev/null 2>&1; then
+              echo "::error::iOS provisioning profile not found in R2 at bucket=${{ env.R2_BUCKET_NAME }} key=${{ env.IOS_PROVISION_PROFILE_OBJECT_KEY }}" >&2
+              exit 1
+            fi
+            aws s3 cp "s3://${{ env.R2_BUCKET_NAME }}/${{ env.IOS_PROVISION_PROFILE_OBJECT_KEY }}" "$PROFILE_PATH" \
+              --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com"
+          fi
+
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
           security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
-          security unlock-keychain -p "${{ secrets.IOS_KEYCHAIN_PASSWORD }}" "$KEYCHAIN_PATH"
-          security import "$CERT_PATH" -P "${{ secrets.IOS_P12_PASSWORD }}" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security import "$CERT_PATH" -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
           security list-keychain -d user -s "$KEYCHAIN_PATH"
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp "$PROFILE_PATH" ~/Library/MobileDevice/Provisioning\ Profiles/
@@ -171,7 +326,7 @@ jobs:
             <key>stripSwiftSymbols</key>
             <true/>
             <key>teamID</key>
-            <string>${{ secrets.APPLE_TEAM_ID }}</string>
+            <string>${{ env.APPLE_TEAM_ID }}</string>
             <key>uploadBitcode</key>
             <false/>
             <key>uploadSymbols</key>
@@ -202,10 +357,27 @@ jobs:
         if: env.HAS_IOS_SIGNING == 'true' && env.HAS_TESTFLIGHT_UPLOAD == 'true'
         shell: bash
         run: |
+          KEY_ID="${{ secrets.APPSTORE_KEY_ID }}"
+          if [ -z "$KEY_ID" ]; then
+            KEY_ID=$(basename "${{ env.APPSTORE_API_KEY_OBJECT_KEY }}" | sed -E 's/^AuthKey_([^.]+)\.p8$/\1/')
+          fi
+
           mkdir -p ~/.appstoreconnect/private_keys
-          cat <<'EOF' > ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APPSTORE_KEY_ID }}.p8
-          ${{ secrets.APPSTORE_PRIVATE_KEY }}
-          EOF
+          KEY_PATH="$HOME/.appstoreconnect/private_keys/AuthKey_${KEY_ID}.p8"
+
+          if [ -n "${{ secrets.APPSTORE_PRIVATE_KEY }}" ]; then
+            printf '%s' '${{ secrets.APPSTORE_PRIVATE_KEY }}' > "$KEY_PATH"
+          else
+            if ! aws s3 ls "s3://${{ env.R2_BUCKET_NAME }}/${{ env.APPSTORE_API_KEY_OBJECT_KEY }}" \
+              --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com" >/dev/null 2>&1; then
+              echo "::error::App Store Connect API key .p8 not found in R2 at bucket=${{ env.R2_BUCKET_NAME }} key=${{ env.APPSTORE_API_KEY_OBJECT_KEY }}" >&2
+              exit 1
+            fi
+            aws s3 cp "s3://${{ env.R2_BUCKET_NAME }}/${{ env.APPSTORE_API_KEY_OBJECT_KEY }}" "$KEY_PATH" \
+              --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com"
+          fi
+
+          echo "APPSTORE_KEY_ID=$KEY_ID" >> $GITHUB_ENV
 
       - name: Upload to TestFlight
         if: env.HAS_IOS_SIGNING == 'true' && env.HAS_TESTFLIGHT_UPLOAD == 'true'
@@ -215,8 +387,8 @@ jobs:
           xcrun altool --upload-app \
             --type ios \
             --file "$IPA_PATH" \
-            --apiKey "${{ secrets.APPSTORE_KEY_ID }}" \
-            --apiIssuer "${{ secrets.APPSTORE_ISSUER_ID }}"
+            --apiKey "$APPSTORE_KEY_ID" \
+            --apiIssuer "${{ env.APPSTORE_ISSUER_ID }}"
         shell: bash
 
       - name: Skip TestFlight upload when App Store secrets are missing

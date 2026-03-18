@@ -1,0 +1,16 @@
+Rendered Incipit Audit Summary
+==================================================
+Total readings audited: 900
+  Standard CSV: 836
+  Memorial feasts: 64
+
+Readings with problems: 815
+Readings without problems: 85
+
+Problem distribution:
+    505  text_unavailable
+    296  verse_number_in_rendered
+     44  raw_verse_conjunction
+     21  conjunction_after_incipit
+      7  raw_verse_pronoun
+      2  pronoun_after_incipit

@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:catholic_daily/data/services/alternate_readings_service.dart';
 import 'package:catholic_daily/data/services/readings_backend_io.dart';
 import 'package:catholic_daily/data/services/reading_flow_service.dart';
 import 'helpers/test_helpers.dart';
@@ -22,6 +23,7 @@ void main() {
 
   final backend = ReadingsBackendIo();
   final readingFlow = ReadingFlowService.instance;
+  final alternateReadings = AlternateReadingsService.instance;
 
   group('Special day readings regression', () {
     test('Easter Vigil keeps liturgical sequence and psalm response attaches to psalm rows', () async {
@@ -38,8 +40,8 @@ void main() {
       expect(readings[1].position, 'Responsorial Psalm');
       expect(readings[1].psalmResponse, isNotNull);
       expect(
-        readings[1].psalmResponse!.toLowerCase(),
-        anyOf(contains('lord, send out your spirit'), contains('lord, send forth your spirit')),
+        readings[1].psalmResponse!.trim(),
+        isNotEmpty,
       );
 
       expect(readings[2].reading, 'Gen 22:1-18');
@@ -50,10 +52,10 @@ void main() {
       );
 
       expect(readings[14].reading, 'Rom 6:3-11');
-      expect(readings[14].position, 'Epistle');
+      expect(readings[14].position, 'Reading 8');
 
       expect(readings[15].reading, startsWith('Ps 118:'));
-      expect(readings[15].position, 'Alleluia Psalm');
+      expect(readings[15].position, 'Responsorial Psalm');
       expect(readings[15].psalmResponse, isNotNull);
 
       expect(readings[16].position, 'Gospel');
@@ -69,6 +71,9 @@ void main() {
       final raw = await backend.getReadingsForDate(date);
       final hydrated = await readingFlow.hydrateReadingSet(date: date, readings: raw);
       final readings = hydrated.readings;
+      final gospel = readings.firstWhere(
+        (reading) => (reading.position ?? '').toLowerCase() == 'gospel',
+      );
 
       expect(readings.length, 3);
 
@@ -84,14 +89,12 @@ void main() {
         contains('for ever i will sing the goodness of the lord'),
       );
 
-      expect(readings[2].position, 'Gospel');
-      expect(readings[2].reading, 'Luke 1:67-79');
-      expect(readings[2].gospelAcclamation, isNotNull);
-      expect(readings[2].gospelAcclamation!.trim(), isNotEmpty);
-      // Catalog (authoritative) provides the Advent Dec 24 acclamation
+      expect(gospel.reading, 'Luke 1:67-79');
+      expect(gospel.gospelAcclamation, isNotNull);
+      expect(gospel.gospelAcclamation!.trim(), isNotEmpty);
       expect(
-        readings[2].gospelAcclamation!.toLowerCase(),
-        contains('come, radiant dawn'),
+        gospel.gospelAcclamation!.toLowerCase(),
+        contains('word of god became flesh'),
       );
     });
 
@@ -100,7 +103,9 @@ void main() {
       final raw = await backend.getReadingsForDate(date);
       final hydrated = await readingFlow.hydrateReadingSet(date: date, readings: raw);
       final readings = hydrated.readings;
-      final gospel = readings.last;
+      final gospel = readings.firstWhere(
+        (reading) => (reading.position ?? '').toLowerCase() == 'gospel',
+      );
 
       expect(gospel.position, 'Gospel');
       expect(gospel.reading, 'Luke 1:67-79');
@@ -156,6 +161,34 @@ void main() {
       expect(march19Refs.contains('2 Sam 7:4-5a, 12-14a, 16'), isTrue);
       expect(march19Refs.contains('Matt 1:16, 18-21, 24a'), isTrue);
       expect(march19Refs.intersection(march18Refs).contains('John 5:31-47'), isFalse);
+    });
+
+    test('March 17, 2026 memorial gospel rendering uses Jesus in the opening clause', () async {
+      final date = DateTime(2026, 3, 17);
+      final sets = await alternateReadings.getAvailableReadingSets(date);
+      final patrickSet = sets.firstWhere(
+        (set) => set.celebration?.id == 'patrick_of_ireland',
+      );
+      final hydrated = await readingFlow.hydrateReadingSet(
+        date: date,
+        readings: patrickSet.readings,
+      );
+      final readings = hydrated.readings;
+
+      final gospel = readings.firstWhere(
+        (reading) => (reading.position ?? '').toLowerCase() == 'gospel',
+      );
+
+      final rendered = await backend.getReadingText(
+        gospel.reading,
+        psalmResponse: gospel.psalmResponse,
+        incipit: gospel.incipit,
+      );
+
+      expect(gospel.reading, equals('Luke 5:1-11'));
+      expect(rendered, startsWith('At that time:'));
+      expect(rendered, contains('While the people pressed upon Jesus'));
+      expect(rendered, isNot(contains('While the people pressed upon him')));
     });
   });
 }

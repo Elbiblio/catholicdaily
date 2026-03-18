@@ -37,11 +37,21 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
 
     if (_isEasterVigil(normalizedDate)) {
       final standardEntries = await _catalog.loadStandardEntries();
-      return _buildEasterVigilReadings(
+      final vigilReadings = _buildEasterVigilReadings(
         normalizedDate,
         standardEntries,
         yearVariables.sundayCycle,
       );
+      if (vigilReadings.isNotEmpty) {
+        return vigilReadings;
+      }
+
+      final legacyFallback = await _resolveLegacyFallback(normalizedDate);
+      if (legacyFallback.isNotEmpty) {
+        return legacyFallback;
+      }
+
+      return const [];
     }
 
     final memorialEntries = await _catalog.loadMemorialEntries();
@@ -75,7 +85,15 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
       return const [];
     }
 
-    return _buildStandardReadings(normalizedDate, matches);
+    final standardReadings = _buildStandardReadings(normalizedDate, matches);
+    if (_shouldPreferLegacyFallback(standardReadings)) {
+      final legacyFallback = await _resolveLegacyFallback(normalizedDate);
+      if (legacyFallback.isNotEmpty) {
+        return legacyFallback;
+      }
+    }
+
+    return standardReadings;
   }
 
   Future<List<DailyReading>> _resolveLegacyFallback(DateTime date) async {
@@ -97,8 +115,10 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
     for (var i = 0; i < sorted.length; i++) {
       final row = sorted[i];
       final normalizedReading = _normalizeReferenceStyle(row.reading);
-      final isPsalm = _isLegacyPsalmReference(normalizedReading);
-      final isGospel = _isLegacyGospelReference(normalizedReading);
+      final isPotentialPsalm = _isLegacyPsalmReference(normalizedReading);
+      final isPotentialGospel = _isLegacyGospelReference(normalizedReading);
+      final isPsalm = isPotentialPsalm && (!isPotentialGospel || row.position <= 2);
+      final isGospel = isPotentialGospel && (!isPotentialPsalm || row.position >= 3);
 
       if (isPsalm) {
         readings.add(DailyReading(
@@ -218,6 +238,21 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         lower.startsWith('mark ') ||
         lower.startsWith('luke ') ||
         lower.startsWith('john ');
+  }
+
+  bool _shouldPreferLegacyFallback(List<DailyReading> readings) {
+    if (readings.isEmpty) {
+      return true;
+    }
+
+    final hasGospel = readings.any(
+      (reading) => (reading.position ?? '').toLowerCase().contains('gospel'),
+    );
+    final hasNonPsalmReading = readings.any(
+      (reading) => !(reading.position ?? '').toLowerCase().contains('psalm'),
+    );
+
+    return !hasGospel || !hasNonPsalmReading;
   }
 
   MemorialFeastEntry? _findCelebrationEntry({

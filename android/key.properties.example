@@ -1,0 +1,4 @@
+storeFile=C:/path/to/release-keystore.jks
+storePassword=your-store-password
+keyAlias=your-key-alias
+keyPassword=your-key-password

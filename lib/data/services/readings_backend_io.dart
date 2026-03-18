@@ -739,6 +739,17 @@ class ReadingsBackendIo implements ReadingsBackend {
         after = after[0].toUpperCase() + after.substring(1);
       }
 
+      if (prefix.toLowerCase().startsWith('at that time') && after.isNotEmpty) {
+        after = after.replaceFirstMapped(
+          RegExp(r'^(?:(While|As|When|After)\s+)(?:he|him)\b', caseSensitive: false),
+          (m) => '${m.group(1)} Jesus',
+        );
+        after = after.replaceFirstMapped(
+          RegExp(r'^(?:He|Him)\b', caseSensitive: false),
+          (_) => 'Jesus',
+        );
+      }
+
       // Reconstruct: ensure prefix ends with clean separator
       final cleanPrefix = prefix.replaceAll(RegExp(r'[,:;\s]+$'), '');
       r = after.isNotEmpty ? '$cleanPrefix, $after' : cleanPrefix;

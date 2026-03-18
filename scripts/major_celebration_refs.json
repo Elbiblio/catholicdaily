@@ -14,7 +14,7 @@
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 67:1-8",
+        "reading": "Ps 67:2-3, 5, 6, 8",
         "psalm_response": "May God bless us in his mercy.",
         "gospel_acclamation": null
       },
@@ -28,7 +28,7 @@
         "position": "Gospel",
         "reading": "Luke 2:16-21",
         "psalm_response": null,
-        "gospel_acclamation": null
+        "gospel_acclamation": "Heb 1:1-2"
       }
     ]
   },
@@ -107,33 +107,33 @@
     "readings": [
       {
         "position": "First Reading",
-        "reading": "2 Sam 7:4-16",
+        "reading": "2 Sam 7:4-5a, 12-14a, 16",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 89:2-3, 4-5, 27 and 29",
-        "psalm_response": "The son of David will live for ever",
+        "reading": "Ps 89:2-3, 4-5, 27, 29",
+        "psalm_response": "The son of David will live for ever.",
         "gospel_acclamation": null
       },
       {
         "position": "Second Reading",
-        "reading": "Rom 4:13-22",
+        "reading": "Rom 4:13, 16-18, 22",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Gospel",
-        "reading": "Matt 1:16-24",
+        "reading": "Matt 1:16, 18-21, 24a",
         "psalm_response": null,
-        "gospel_acclamation": null
+        "gospel_acclamation": "Ps 84:5"
       },
       {
-        "position": "Gospel",
-        "reading": "Luke 2:41-51",
+        "position": "Gospel (alternative)",
+        "reading": "Luke 2:41-51a",
         "psalm_response": null,
-        "gospel_acclamation": null
+        "gospel_acclamation": "Ps 84:5"
       }
     ]
   },
@@ -145,7 +145,7 @@
     "week_number": 6,
     "readings": [
       {
-        "position": "Gospel",
+        "position": "Gospel at Procession",
         "reading": "Mark 11:1-10",
         "psalm_response": null,
         "gospel_acclamation": null
@@ -158,8 +158,8 @@
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 22:8-24",
-        "psalm_response": null,
+        "reading": "Ps 22:8-9, 17-18, 19-20, 23-24",
+        "psalm_response": "My God, my God, why have you abandoned me?",
         "gospel_acclamation": null
       },
       {
@@ -172,7 +172,7 @@
         "position": "Gospel",
         "reading": "Mark 14:1-15:47",
         "psalm_response": null,
-        "gospel_acclamation": null
+        "gospel_acclamation": "Phil 2:8-9"
       }
     ]
   },
@@ -185,21 +185,27 @@
     "readings": [
       {
         "position": "First Reading",
-        "reading": "Is 42:1-7",
+        "reading": "Isa 7:10-14; 8:10",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 27:1, 2, 3, 13-14",
-        "psalm_response": "The Lord is my light and my salvation.",
+        "reading": "Ps 40:7-8a, 8b-9, 10, 11",
+        "psalm_response": "Here I am, Lord; I come to do your will.",
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
+        "reading": "Heb 10:4-10",
+        "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Gospel",
-        "reading": "John 12:1-11",
+        "reading": "Luke 1:26-38",
         "psalm_response": null,
-        "gospel_acclamation": null
+        "gospel_acclamation": "The Word of God became flesh and dwelt among us, and we saw his glory."
       }
     ]
   },
@@ -361,13 +367,13 @@
         "gospel_acclamation": null
       },
       {
-        "position": "Epistle",
+        "position": "Reading 8",
         "reading": "Rom 6:3-11",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Alleluia Psalm",
+        "position": "Responsorial Psalm",
         "reading": "Ps 118:1-23",
         "psalm_response": null,
         "gospel_acclamation": null
@@ -394,7 +400,7 @@
         "gospel_acclamation": null
       },
       {
-        "position": "Alleluia Psalm",
+        "position": "Responsorial Psalm",
         "reading": "Ps 118:1-23",
         "psalm_response": "This is the day the Lord has made; let us rejoice and be glad.",
         "gospel_acclamation": null
@@ -418,10 +424,82 @@
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "Luke 24:13-35",
         "psalm_response": null,
         "gospel_acclamation": null
+      }
+    ]
+  },
+  {
+    "date": "2024-04-08T00:00:00.000",
+    "title": "The Annunciation of the Lord",
+    "rank": "Solemnity",
+    "season": "easter",
+    "week_number": 2,
+    "readings": [
+      {
+        "position": "First Reading",
+        "reading": "Isa 7:10-14; 8:10",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 40:7-8a, 8b-9, 10, 11",
+        "psalm_response": "Here I am, Lord; I come to do your will.",
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
+        "reading": "Heb 10:4-10",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel",
+        "reading": "Luke 1:26-38",
+        "psalm_response": null,
+        "gospel_acclamation": "The Word of God became flesh and dwelt among us, and we saw his glory."
+      }
+    ]
+  },
+  {
+    "date": "2024-05-19T00:00:00.000",
+    "title": "Pentecost Sunday",
+    "rank": "Solemnity",
+    "season": "easter",
+    "week_number": 8,
+    "readings": [
+      {
+        "position": "First Reading",
+        "reading": "Acts 2:1-11",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 104:1, 24, 29-30, 31, 34",
+        "psalm_response": "Lord, send out your Spirit, and renew the face of the earth.",
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
+        "reading": "1 Cor 12:3b-7, 12-13",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel",
+        "reading": "John 20:19-23",
+        "psalm_response": null,
+        "gospel_acclamation": "Come, Holy Spirit, fill the hearts of your faithful and kindle in them the fire of your love."
+      },
+      {
+        "position": "Gospel (alternative)",
+        "reading": "John 15:26-27; 16:12-15",
+        "psalm_response": null,
+        "gospel_acclamation": "Come, Holy Spirit, fill the hearts of your faithful and kindle in them the fire of your love."
       }
     ]
   },
@@ -434,14 +512,14 @@
     "readings": [
       {
         "position": "First Reading",
-        "reading": "Deut 4:32-34, 39-40",
+        "reading": "Dt 4:32-34, 39-40",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 33:4-5, 6+9, 18-19, 20+22",
-        "psalm_response": "Blessed the people the Lord has chosen to be his own.",
+        "reading": "Ps 33:4-5, 6, 9, 18-19, 20, 22",
+        "psalm_response": "Happy the people the Lord has chosen to be his own.",
         "gospel_acclamation": null
       },
       {
@@ -454,7 +532,7 @@
         "position": "Gospel",
         "reading": "Matt 28:16-20",
         "psalm_response": null,
-        "gospel_acclamation": null
+        "gospel_acclamation": "Glory to the Father, the Son, and the Holy Spirit; to God who is, who was, and who is to come."
       }
     ]
   },
@@ -487,7 +565,7 @@
         "position": "Gospel",
         "reading": "Mark 14:12-16, 22-26",
         "psalm_response": null,
-        "gospel_acclamation": null
+        "gospel_acclamation": "I am the living bread that came down from heaven, says the Lord; whoever eats this bread will live forever."
       }
     ]
   },
@@ -520,7 +598,7 @@
         "position": "Gospel",
         "reading": "John 19:31-37",
         "psalm_response": null,
-        "gospel_acclamation": null
+        "gospel_acclamation": "Take my yoke upon you, says the Lord, and learn from me, for I am meek and humble of heart."
       }
     ]
   },
@@ -533,8 +611,20 @@
     "readings": [
       {
         "position": "First Reading",
+        "reading": "2 Tim 4:1-8",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
         "reading": "Is 61:9-11",
         "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 71:8-22",
+        "psalm_response": "I will sing of your salvation.",
         "gospel_acclamation": null
       },
       {
@@ -545,6 +635,18 @@
       },
       {
         "position": "Gospel",
+        "reading": "Matt 5:3",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel (alternative)",
+        "reading": "Mark 12:38-44",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel (alternative)",
         "reading": "Luke 2:41-51 (proper)",
         "psalm_response": null,
         "gospel_acclamation": null
@@ -560,8 +662,20 @@
     "readings": [
       {
         "position": "First Reading",
+        "reading": "Isa 49:1-6",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
         "reading": "(Vigil Mass) Jer 1:4-10",
         "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 139:1-15",
+        "psalm_response": "Guide me, Lord, along the everlasting way.",
         "gospel_acclamation": null
       },
       {
@@ -571,13 +685,25 @@
         "gospel_acclamation": null
       },
       {
-        "position": "Second Reading",
+        "position": "Third Reading",
+        "reading": "Acts 13:22-26",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Fourth Reading",
         "reading": "1 Pet 1:8-12",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Gospel",
+        "reading": "Luke 1:57-80",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel (alternative)",
         "reading": "Luke 1:5-17",
         "psalm_response": null,
         "gospel_acclamation": null
@@ -593,8 +719,20 @@
     "readings": [
       {
         "position": "First Reading",
+        "reading": "Acts 12:1-11",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
         "reading": "(Vigil Mass) Acts 3:1-10",
         "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 34:1-9",
+        "psalm_response": "The Lord hears the cry of the poor.",
         "gospel_acclamation": null
       },
       {
@@ -604,13 +742,25 @@
         "gospel_acclamation": null
       },
       {
-        "position": "Second Reading",
+        "position": "Third Reading",
+        "reading": "2 Tim 4:6-18",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Fourth Reading",
         "reading": "Gal 1:11-20",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Gospel",
+        "reading": "Matt 16:13-19",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel (alternative)",
         "reading": "John 21:15-19",
         "psalm_response": null,
         "gospel_acclamation": null
@@ -626,8 +776,20 @@
     "readings": [
       {
         "position": "First Reading",
+        "reading": "Rev 11:19, 12:1-10",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
         "reading": "1 Chr 15:3-4, 15-16",
         "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 45:10-16",
+        "psalm_response": "The queen stands at your right hand, arrayed in gold.",
         "gospel_acclamation": null
       },
       {
@@ -637,13 +799,25 @@
         "gospel_acclamation": null
       },
       {
-        "position": "Second Reading",
+        "position": "Third Reading",
+        "reading": "1 Cor 15:20-27",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Fourth Reading",
         "reading": "16:1-2",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Gospel",
+        "reading": "Luke 1:39-56",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel (alternative)",
         "reading": "Luke 11:27-28",
         "psalm_response": null,
         "gospel_acclamation": null
@@ -751,7 +925,7 @@
         "gospel_acclamation": null
       },
       {
-        "position": "Epistle",
+        "position": "Reading 8",
         "reading": "Rom 8:31-39",
         "psalm_response": null,
         "gospel_acclamation": null
@@ -811,67 +985,67 @@
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "Matt 11:25-30",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "Matt 25:31-46",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "Luke 7:11-17",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "Luke 23:44-53, 24:1-6",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "Luke 24:13-16, 28-35",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "John 5:24-29",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "John 6:37-40",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "John 6:51-59",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "John 11:17-27",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "John 11:32-45",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "John 14:1-6",
         "psalm_response": null,
         "gospel_acclamation": null
@@ -879,7 +1053,7 @@
     ]
   },
   {
-    "date": "2024-12-01T00:00:00.000",
+    "date": "2024-11-24T00:00:00.000",
     "title": "Our Lord Jesus Christ, King of the Universe",
     "rank": "Solemnity",
     "season": "ordinaryTime",
@@ -887,27 +1061,27 @@
     "readings": [
       {
         "position": "First Reading",
-        "reading": "Jer 33:14-16",
+        "reading": "Dan 7:13-14",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 25:4bc-5ab, 6 and 7bc, 8-9",
-        "psalm_response": "Remember your mercies, O Lord",
+        "reading": "Ps 93:1, 1-2, 5",
+        "psalm_response": "The Lord is king; he is robed in majesty.",
         "gospel_acclamation": null
       },
       {
         "position": "Second Reading",
-        "reading": "1 Thess 3:12-4:2",
+        "reading": "Rev 1:5-8",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Gospel",
-        "reading": "Luke 21:25-36",
+        "reading": "John 18:33b-37",
         "psalm_response": null,
-        "gospel_acclamation": null
+        "gospel_acclamation": "Blessed is he who comes in the name of the Lord! Blessed is the kingdom of our father David that is to come!"
       }
     ]
   },
@@ -916,31 +1090,31 @@
     "title": "The Immaculate Conception of the Blessed Virgin Mary",
     "rank": "Solemnity",
     "season": "advent",
-    "week_number": 1,
+    "week_number": 2,
     "readings": [
       {
         "position": "First Reading",
-        "reading": "Bar 5:1-9",
+        "reading": "Gen 3:9-15, 20",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 126:1-6",
-        "psalm_response": "Their message goes out through all the earth.",
+        "reading": "Ps 98:1, 2-3ab, 3cd-4",
+        "psalm_response": "Sing to the Lord a new song, for he has done marvelous deeds.",
         "gospel_acclamation": null
       },
       {
         "position": "Second Reading",
-        "reading": "Phil 1:4-11",
+        "reading": "Eph 1:3-6, 11-12",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Gospel",
-        "reading": "Luke 3:1-6",
+        "reading": "Luke 1:26-38",
         "psalm_response": null,
-        "gospel_acclamation": null
+        "gospel_acclamation": "Hail, Mary, full of grace, the Lord is with you; blessed are you among women."
       }
     ]
   },
@@ -959,8 +1133,8 @@
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 98:1, 3-6",
-        "psalm_response": "All the ends of the earth have seen the saving power of God",
+        "reading": "Ps 96:1-13",
+        "psalm_response": "The Lord our God comes with power.",
         "gospel_acclamation": null
       },
       {
@@ -992,7 +1166,7 @@
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 67:1-8",
+        "reading": "Ps 67:2-3, 5, 6, 8",
         "psalm_response": "May God bless us in his mercy.",
         "gospel_acclamation": null
       },
@@ -1006,7 +1180,7 @@
         "position": "Gospel",
         "reading": "Luke 2:16-21",
         "psalm_response": null,
-        "gospel_acclamation": "The Word of God became flesh and made his dwelling among us, and we saw his glory."
+        "gospel_acclamation": "Heb 1:1-2"
       }
     ]
   },
@@ -1039,7 +1213,7 @@
         "position": "Gospel",
         "reading": "John 1:1-18",
         "psalm_response": null,
-        "gospel_acclamation": "I proclaim to you good news of great joy that will be for all the people. Today a savior has been born for you."
+        "gospel_acclamation": null
       }
     ]
   },
@@ -1072,7 +1246,7 @@
         "position": "Gospel",
         "reading": "Luke 3:15-22",
         "psalm_response": null,
-        "gospel_acclamation": "Whoever serves me must follow me, and where I am, there also will my servant be; the Father will honor whoever serves me."
+        "gospel_acclamation": null
       }
     ]
   },
@@ -1081,37 +1255,37 @@
     "title": "Saint Joseph, Spouse of the Blessed Virgin Mary",
     "rank": "Solemnity",
     "season": "lent",
-    "week_number": 3,
+    "week_number": 2,
     "readings": [
       {
         "position": "First Reading",
-        "reading": "2 Sam 7:4-16",
+        "reading": "2 Sam 7:4-5a, 12-14a, 16",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 89:2-3, 4-5, 27 and 29",
-        "psalm_response": "The son of David will live for ever",
+        "reading": "Ps 89:2-3, 4-5, 27, 29",
+        "psalm_response": "The son of David will live for ever.",
         "gospel_acclamation": null
       },
       {
         "position": "Second Reading",
-        "reading": "Rom 4:13-22",
+        "reading": "Rom 4:13, 16-18, 22",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Gospel",
-        "reading": "Matt 1:16-24",
+        "reading": "Matt 1:16, 18-21, 24a",
         "psalm_response": null,
-        "gospel_acclamation": "Jesus did this as the beginning of his signs in Cana in Galilee and so revealed his glory."
+        "gospel_acclamation": "Ps 84:5"
       },
       {
-        "position": "Gospel",
-        "reading": "Luke 2:41-51",
+        "position": "Gospel (alternative)",
+        "reading": "Luke 2:41-51a",
         "psalm_response": null,
-        "gospel_acclamation": null
+        "gospel_acclamation": "Ps 84:5"
       }
     ]
   },
@@ -1124,7 +1298,7 @@
     "readings": [
       {
         "position": "First Reading",
-        "reading": "Is 7:10-14",
+        "reading": "Isa 7:10-14; 8:10",
         "psalm_response": null,
         "gospel_acclamation": null
       },
@@ -1136,7 +1310,7 @@
       },
       {
         "position": "Second Reading",
-        "reading": "8:10",
+        "reading": "Heb 10:4-10",
         "psalm_response": null,
         "gospel_acclamation": null
       },
@@ -1144,7 +1318,79 @@
         "position": "Gospel",
         "reading": "Luke 1:26-38",
         "psalm_response": null,
-        "gospel_acclamation": "The Word of God became flesh and made his dwelling among us, and we saw his glory."
+        "gospel_acclamation": "The Word of God became flesh and dwelt among us, and we saw his glory."
+      }
+    ]
+  },
+  {
+    "date": "2025-04-13T00:00:00.000",
+    "title": "Palm Sunday of the Passion of the Lord",
+    "rank": "Solemnity",
+    "season": "lent",
+    "week_number": 6,
+    "readings": [
+      {
+        "position": "Gospel at Procession",
+        "reading": "Luke 19:28-40",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "First Reading",
+        "reading": "Isa 50:4-7",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 22:8-9, 17-18, 19-20, 23-24",
+        "psalm_response": "My God, my God, why have you abandoned me?",
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
+        "reading": "Phil 2:6-11",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel",
+        "reading": "Luke 22:14-23:56",
+        "psalm_response": null,
+        "gospel_acclamation": "Phil 2:8-9"
+      }
+    ]
+  },
+  {
+    "date": "2025-04-17T00:00:00.000",
+    "title": "Holy Thursday - Evening Mass of the Lord's Supper",
+    "rank": "Solemnity",
+    "season": "lent",
+    "week_number": 6,
+    "readings": [
+      {
+        "position": "First Reading",
+        "reading": "Exod 12:1-14",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 116:12-18",
+        "psalm_response": "To you, Lord, I will offer a sacrifice of praise.",
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
+        "reading": "1 Cor 11:23-26",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel",
+        "reading": "John 13:1-15",
+        "psalm_response": null,
+        "gospel_acclamation": null
       }
     ]
   },
@@ -1162,13 +1408,31 @@
         "gospel_acclamation": null
       },
       {
+        "position": "Second Reading",
+        "reading": "Isa 52:13-53:12",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 31:1-25",
+        "psalm_response": "Father, into your hands I commend my spirit.",
+        "gospel_acclamation": null
+      },
+      {
         "position": "Responsorial Psalm",
         "reading": "Ps 31:2+6, 12-13, 15-16, 17+25",
         "psalm_response": "Father, into your hands I commend my spirit.",
         "gospel_acclamation": null
       },
       {
-        "position": "Second Reading",
+        "position": "Third Reading",
+        "reading": "Heb 4:14-16, 5:7-9",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Fourth Reading",
         "reading": "Heb 4:14-16",
         "psalm_response": null,
         "gospel_acclamation": null
@@ -1177,7 +1441,202 @@
         "position": "Gospel",
         "reading": "John 18:1-19:42",
         "psalm_response": null,
-        "gospel_acclamation": "Peace be with you; as the Father has sent me, so I send you."
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel (alternative)",
+        "reading": "John 18:1-19:42",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      }
+    ]
+  },
+  {
+    "date": "2025-04-19T00:00:00.000",
+    "title": "Holy Saturday",
+    "rank": "Day",
+    "season": "lent",
+    "week_number": 6,
+    "readings": [
+      {
+        "position": "First Reading",
+        "reading": "Gen 1:1-2:2",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 104:1-35",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
+        "reading": "Gen 22:1-18",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 16:5-11",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Third Reading",
+        "reading": "Exod 14:15-15:1",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Exod 15:1-18",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Fourth Reading",
+        "reading": "Isa 54:5-14",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 30:1-13",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Fifth Reading",
+        "reading": "Isa 55:1-11",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Isa 12:1-6",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Sixth Reading",
+        "reading": "Bar 3:9-15, 32-4:4",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 19:8-11",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Seventh Reading",
+        "reading": "Ezek 36:16-28",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 42:3-5, 43:3-4",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Reading 8",
+        "reading": "Rom 6:3-11",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 118:1-23",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel",
+        "reading": "Luke 24:1-12",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      }
+    ]
+  },
+  {
+    "date": "2025-04-20T00:00:00.000",
+    "title": "Easter Sunday of the Resurrection of the Lord",
+    "rank": "Solemnity",
+    "season": "easter",
+    "week_number": 1,
+    "readings": [
+      {
+        "position": "First Reading",
+        "reading": "Acts 10:34-43",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 118:1-23",
+        "psalm_response": "This is the day the Lord has made; let us rejoice and be glad.",
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
+        "reading": "Col 3:1-4",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Third Reading",
+        "reading": "1 Cor 5:6-8",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel",
+        "reading": "John 20:1-9",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel (alternative)",
+        "reading": "Luke 24:13-35",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      }
+    ]
+  },
+  {
+    "date": "2025-06-08T00:00:00.000",
+    "title": "Pentecost Sunday",
+    "rank": "Solemnity",
+    "season": "easter",
+    "week_number": 8,
+    "readings": [
+      {
+        "position": "First Reading",
+        "reading": "Acts 2:1-11",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 104:1, 24, 29-30, 31, 34",
+        "psalm_response": "Lord, send out your Spirit, and renew the face of the earth.",
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
+        "reading": "Rom 8:8-17",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel",
+        "reading": "John 14:15-16, 23b-26",
+        "psalm_response": null,
+        "gospel_acclamation": "Come, Holy Spirit, fill the hearts of your faithful and kindle in them the fire of your love."
       }
     ]
   },
@@ -1197,7 +1656,7 @@
       {
         "position": "Responsorial Psalm",
         "reading": "Ps 8:4-5, 6-7, 8-9",
-        "psalm_response": null,
+        "psalm_response": "O Lord, our God, how wonderful your name in all the earth!",
         "gospel_acclamation": null
       },
       {
@@ -1210,7 +1669,7 @@
         "position": "Gospel",
         "reading": "John 16:12-15",
         "psalm_response": null,
-        "gospel_acclamation": "One does not live on bread alone, but on every word that comes forth from the mouth of God."
+        "gospel_acclamation": "Glory to the Father, the Son, and the Holy Spirit; to God who is, who was, and who is to come."
       }
     ]
   },
@@ -1241,9 +1700,9 @@
       },
       {
         "position": "Gospel",
-        "reading": "Luke 9:11-17",
+        "reading": "Luke 9:11b-17",
         "psalm_response": null,
-        "gospel_acclamation": "The crowds were astonished at his teaching, for he taught them as one having authority."
+        "gospel_acclamation": "I am the living bread that came down from heaven, says the Lord; whoever eats this bread will live forever."
       }
     ]
   },
@@ -1256,8 +1715,20 @@
     "readings": [
       {
         "position": "First Reading",
+        "reading": "Isa 49:1-6",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
         "reading": "(Vigil Mass) Jer 1:4-10",
         "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 139:1-15",
+        "psalm_response": "Guide me, Lord, along the everlasting way.",
         "gospel_acclamation": null
       },
       {
@@ -1267,16 +1738,28 @@
         "gospel_acclamation": null
       },
       {
-        "position": "Second Reading",
+        "position": "Third Reading",
+        "reading": "Acts 13:22-26",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Fourth Reading",
         "reading": "1 Pet 1:8-12",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Gospel",
+        "reading": "Luke 1:57-80",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel (alternative)",
         "reading": "Luke 1:5-17",
         "psalm_response": null,
-        "gospel_acclamation": "Come after me, and I will make you fishers of men."
+        "gospel_acclamation": null
       }
     ]
   },
@@ -1296,7 +1779,7 @@
       {
         "position": "Responsorial Psalm",
         "reading": "Ps 23:1-3a, 3b-4, 5, 6",
-        "psalm_response": "Even though I walk in the dark valley I fear no evil; for you are at my side.",
+        "psalm_response": "The Lord is my shepherd; there is nothing I shall want.",
         "gospel_acclamation": null
       },
       {
@@ -1309,7 +1792,7 @@
         "position": "Gospel",
         "reading": "Luke 15:3-7",
         "psalm_response": null,
-        "gospel_acclamation": "For you know the gracious act of our Lord Jesus Christ, that though he was rich, for your sake he became poor."
+        "gospel_acclamation": "Take my yoke upon you, says the Lord, and learn from me, for I am meek and humble of heart."
       }
     ]
   },
@@ -1322,8 +1805,20 @@
     "readings": [
       {
         "position": "First Reading",
+        "reading": "Gen 18:1-15",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
         "reading": "Is 61:9-11",
         "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Luke 1:46-55",
+        "psalm_response": "The Lord has remembered his mercy.",
         "gospel_acclamation": null
       },
       {
@@ -1334,9 +1829,54 @@
       },
       {
         "position": "Gospel",
+        "reading": "Matt 8:17",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel (alternative)",
+        "reading": "Matt 8:5-17",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel (alternative)",
         "reading": "Luke 2:41-51 (proper)",
         "psalm_response": null,
-        "gospel_acclamation": "You did not receive a spirit of slavery leading you back into fear, but you received a spirit of adoption."
+        "gospel_acclamation": null
+      }
+    ]
+  },
+  {
+    "date": "2025-06-29T00:00:00.000",
+    "title": "Saints Peter and Paul, Apostles",
+    "rank": "Solemnity",
+    "season": "ordinaryTime",
+    "week_number": 12,
+    "readings": [
+      {
+        "position": "First Reading",
+        "reading": "Zec 12:10-11; 13:1",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 63:2, 3-4, 5-6, 8-9",
+        "psalm_response": "My soul is thirsting for you, O Lord my God.",
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
+        "reading": "Gal 3:26-29",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel",
+        "reading": "Luke 9:18-24",
+        "psalm_response": null,
+        "gospel_acclamation": "Alleluia, alleluia. My sheep hear my voice, says the Lord; I know them, and they follow me."
       }
     ]
   },
@@ -1349,8 +1889,20 @@
     "readings": [
       {
         "position": "First Reading",
+        "reading": "Rev 11:19, 12:1-10",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
         "reading": "1 Chr 15:3-4, 15-16",
         "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 45:10-16",
+        "psalm_response": "The queen stands at your right hand, arrayed in gold.",
         "gospel_acclamation": null
       },
       {
@@ -1360,16 +1912,28 @@
         "gospel_acclamation": null
       },
       {
-        "position": "Second Reading",
+        "position": "Third Reading",
+        "reading": "1 Cor 15:20-27",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Fourth Reading",
         "reading": "16:1-2",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Gospel",
+        "reading": "Luke 1:39-56",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel (alternative)",
         "reading": "Luke 11:27-28",
         "psalm_response": null,
-        "gospel_acclamation": "The Word of God became flesh and made his dwelling among us, and we saw his glory."
+        "gospel_acclamation": null
       }
     ]
   },
@@ -1402,7 +1966,7 @@
         "position": "Gospel",
         "reading": "Matt 5:1-12",
         "psalm_response": null,
-        "gospel_acclamation": "May the Father of our Lord Jesus Christ enlighten the eyes of our hearts, that we may know what is the hope that belongs to his call."
+        "gospel_acclamation": null
       }
     ]
   },
@@ -1415,222 +1979,60 @@
     "readings": [
       {
         "position": "First Reading",
-        "reading": "Wis 3:1-9",
+        "reading": "Sir 35:12-14, 16-18",
         "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 34:2-3, 17-18, 19, 23",
+        "psalm_response": "The Lord hears the cry of the poor.",
         "gospel_acclamation": null
       },
       {
         "position": "Second Reading",
-        "reading": "Wis 4:7-15",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Third Reading",
-        "reading": "Isa 25:6-9",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Responsorial Psalm",
-        "reading": "Ps 23:1-6",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Responsorial Psalm",
-        "reading": "Ps 25:6-21",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Responsorial Psalm",
-        "reading": "Ps 27:1-14",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Fourth Reading",
-        "reading": "Rom 5:5-11",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Fifth Reading",
-        "reading": "Rom 5:17-21",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Sixth Reading",
-        "reading": "Rom 6:3-9",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Seventh Reading",
-        "reading": "Rom 8:14-23",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Epistle",
-        "reading": "Rom 8:31-39",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Reading 9",
-        "reading": "Rom 14:7-12",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Reading 10",
-        "reading": "1 Cor 15:20-28",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Reading 11",
-        "reading": "1 Cor 15:51-57",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Reading 12",
-        "reading": "2 Cor 4:14-5:1",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Reading 13",
-        "reading": "2 Cor 5:1, 6-10",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Reading 14",
-        "reading": "Phil 3:20-21",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Reading 15",
-        "reading": "1 Thess 4:13-18",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Reading 16",
-        "reading": "2 Tim 2:8-13",
+        "reading": "2 Tim 4:6-8, 16-18",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Gospel",
-        "reading": "Matt 5:1-12",
+        "reading": "Luke 18:9-14",
         "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Gospel",
-        "reading": "Matt 11:25-30",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Gospel",
-        "reading": "Matt 25:31-46",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Gospel",
-        "reading": "Luke 7:11-17",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Gospel",
-        "reading": "Luke 23:44-53, 24:1-6",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Gospel",
-        "reading": "Luke 24:13-16, 28-35",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Gospel",
-        "reading": "John 5:24-29",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Gospel",
-        "reading": "John 6:37-40",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Gospel",
-        "reading": "John 6:51-59",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Gospel",
-        "reading": "John 11:17-27",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Gospel",
-        "reading": "John 11:32-45",
-        "psalm_response": null,
-        "gospel_acclamation": null
-      },
-      {
-        "position": "Gospel",
-        "reading": "John 14:1-6",
-        "psalm_response": null,
-        "gospel_acclamation": null
+        "gospel_acclamation": "Alleluia, alleluia. God was reconciling the world to himself in Christ, and entrusting to us the message of salvation."
       }
     ]
   },
   {
-    "date": "2025-11-30T00:00:00.000",
+    "date": "2025-11-23T00:00:00.000",
     "title": "Our Lord Jesus Christ, King of the Universe",
     "rank": "Solemnity",
     "season": "ordinaryTime",
-    "week_number": 34,
+    "week_number": 33,
     "readings": [
       {
         "position": "First Reading",
-        "reading": "Isa 2:1-5",
+        "reading": "2 Sam 5:1-3",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 122:1-9",
+        "reading": "Ps 122:1-2, 3-4, 4-5",
         "psalm_response": "Let us go rejoicing to the house of the Lord.",
         "gospel_acclamation": null
       },
       {
         "position": "Second Reading",
-        "reading": "Rom 13:11-14",
+        "reading": "Col 1:12-20",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Gospel",
-        "reading": "Matt 24:37-44",
+        "reading": "Luke 23:35-43",
         "psalm_response": null,
-        "gospel_acclamation": "I am baptizing you with water, for repentance, but the one who is coming after me is mightier than I."
+        "gospel_acclamation": "Blessed is he who comes in the name of the Lord! Blessed is the kingdom of our father David that is to come!"
       }
     ]
   },
@@ -1643,19 +2045,19 @@
     "readings": [
       {
         "position": "First Reading",
-        "reading": "Gen 3:9-20",
+        "reading": "Gen 3:9-15, 20",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 98:1-4",
-        "psalm_response": "All the ends of the earth have seen the saving power of God.",
+        "reading": "Ps 98:1, 2-3ab, 3cd-4",
+        "psalm_response": "Sing to the Lord a new song, for he has done marvelous deeds.",
         "gospel_acclamation": null
       },
       {
         "position": "Second Reading",
-        "reading": "Eph 1:3-12",
+        "reading": "Eph 1:3-6, 11-12",
         "psalm_response": null,
         "gospel_acclamation": null
       },
@@ -1663,7 +2065,7 @@
         "position": "Gospel",
         "reading": "Luke 1:26-38",
         "psalm_response": null,
-        "gospel_acclamation": "I hope in the LORD, my soul trusts in his word."
+        "gospel_acclamation": "Hail, Mary, full of grace, the Lord is with you; blessed are you among women."
       }
     ]
   },
@@ -1682,8 +2084,8 @@
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 98:1, 3-6",
-        "psalm_response": "All the ends of the earth have seen the saving power of God",
+        "reading": "Ps 96:1-13",
+        "psalm_response": "The Lord our God comes with power.",
         "gospel_acclamation": null
       },
       {
@@ -1696,7 +2098,7 @@
         "position": "Gospel",
         "reading": "Luke 2:1-14",
         "psalm_response": null,
-        "gospel_acclamation": "The Word of God became flesh and made his dwelling among us, and we saw his glory."
+        "gospel_acclamation": null
       }
     ]
   },
@@ -1715,7 +2117,7 @@
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 67:1-8",
+        "reading": "Ps 67:2-3, 5, 6, 8",
         "psalm_response": "May God bless us in his mercy.",
         "gospel_acclamation": null
       },
@@ -1729,7 +2131,7 @@
         "position": "Gospel",
         "reading": "Luke 2:16-21",
         "psalm_response": null,
-        "gospel_acclamation": "The Word of God became flesh and made his dwelling among us, and we saw his glory."
+        "gospel_acclamation": "Heb 1:1-2"
       }
     ]
   },
@@ -1762,7 +2164,7 @@
         "position": "Gospel",
         "reading": "John 1:1-18",
         "psalm_response": null,
-        "gospel_acclamation": "Where is the newborn king of the Jews? We saw his star at its rising and have come to do him homage."
+        "gospel_acclamation": "Matthew 2:2"
       }
     ]
   },
@@ -1795,7 +2197,7 @@
         "position": "Gospel",
         "reading": "Matt 3:13-17",
         "psalm_response": null,
-        "gospel_acclamation": "It was not you who chose me, but I who chose you and appointed you to go and bear fruit that will remain."
+        "gospel_acclamation": "Cf. Mark 9:7"
       }
     ]
   },
@@ -1804,37 +2206,37 @@
     "title": "Saint Joseph, Spouse of the Blessed Virgin Mary",
     "rank": "Solemnity",
     "season": "lent",
-    "week_number": 5,
+    "week_number": 4,
     "readings": [
       {
         "position": "First Reading",
-        "reading": "2 Sam 7:4-16",
+        "reading": "2 Sam 7:4-5a, 12-14a, 16",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 89:2-3, 4-5, 27 and 29",
-        "psalm_response": "The son of David will live for ever",
+        "reading": "Ps 89:2-3, 4-5, 27, 29",
+        "psalm_response": "The son of David will live for ever.",
         "gospel_acclamation": null
       },
       {
         "position": "Second Reading",
-        "reading": "Rom 4:13-22",
+        "reading": "Rom 4:13, 16-18, 22",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Gospel",
-        "reading": "Matt 1:16-24",
+        "reading": "Matt 1:16, 18-21, 24a",
         "psalm_response": null,
-        "gospel_acclamation": "Jesus did this as the beginning of his signs in Cana in Galilee and so revealed his glory."
+        "gospel_acclamation": "Ps 84:5"
       },
       {
-        "position": "Gospel",
-        "reading": "Luke 2:41-51",
+        "position": "Gospel (alternative)",
+        "reading": "Luke 2:41-51a",
         "psalm_response": null,
-        "gospel_acclamation": null
+        "gospel_acclamation": "Ps 84:5"
       }
     ]
   },
@@ -1843,11 +2245,11 @@
     "title": "The Annunciation of the Lord",
     "rank": "Solemnity",
     "season": "lent",
-    "week_number": 6,
+    "week_number": 5,
     "readings": [
       {
         "position": "First Reading",
-        "reading": "Is 7:10-14",
+        "reading": "Isa 7:10-14; 8:10",
         "psalm_response": null,
         "gospel_acclamation": null
       },
@@ -1859,7 +2261,7 @@
       },
       {
         "position": "Second Reading",
-        "reading": "8:10",
+        "reading": "Heb 10:4-10",
         "psalm_response": null,
         "gospel_acclamation": null
       },
@@ -1867,7 +2269,7 @@
         "position": "Gospel",
         "reading": "Luke 1:26-38",
         "psalm_response": null,
-        "gospel_acclamation": "The Word of God became flesh and made his dwelling among us, and we saw his glory."
+        "gospel_acclamation": "The Word of God became flesh and dwelt among us, and we saw his glory."
       }
     ]
   },
@@ -1879,7 +2281,7 @@
     "week_number": 6,
     "readings": [
       {
-        "position": "Gospel",
+        "position": "Gospel at Procession",
         "reading": "Matt 21:1-11",
         "psalm_response": null,
         "gospel_acclamation": null
@@ -1892,8 +2294,8 @@
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 22:8-24",
-        "psalm_response": null,
+        "reading": "Ps 22:8-9, 17-18, 19-20, 23-24",
+        "psalm_response": "My God, my God, why have you abandoned me?",
         "gospel_acclamation": null
       },
       {
@@ -1906,7 +2308,7 @@
         "position": "Gospel",
         "reading": "Matt 26:14-27:66",
         "psalm_response": null,
-        "gospel_acclamation": null
+        "gospel_acclamation": "Phil 2:8-9"
       }
     ]
   },
@@ -1939,7 +2341,7 @@
         "position": "Gospel",
         "reading": "John 13:1-15",
         "psalm_response": null,
-        "gospel_acclamation": "Whoever loves me will keep my word, and my Father will love him, and we will come to him."
+        "gospel_acclamation": null
       }
     ]
   },
@@ -1972,7 +2374,7 @@
         "position": "Gospel",
         "reading": "John 18:1-19:42",
         "psalm_response": null,
-        "gospel_acclamation": "Peace be with you; as the Father has sent me, so I send you."
+        "gospel_acclamation": "Philippians 2:8-9"
       }
     ]
   },
@@ -2068,13 +2470,13 @@
         "gospel_acclamation": null
       },
       {
-        "position": "Epistle",
+        "position": "Reading 8",
         "reading": "Rom 6:3-11",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Alleluia Psalm",
+        "position": "Responsorial Psalm",
         "reading": "Ps 118:1-23",
         "psalm_response": null,
         "gospel_acclamation": null
@@ -2101,7 +2503,7 @@
         "gospel_acclamation": null
       },
       {
-        "position": "Alleluia Psalm",
+        "position": "Responsorial Psalm",
         "reading": "Ps 118:1-23",
         "psalm_response": "This is the day the Lord has made; let us rejoice and be glad.",
         "gospel_acclamation": null
@@ -2125,10 +2527,49 @@
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "Luke 24:13-35",
         "psalm_response": null,
         "gospel_acclamation": null
+      }
+    ]
+  },
+  {
+    "date": "2026-05-24T00:00:00.000",
+    "title": "Pentecost Sunday",
+    "rank": "Solemnity",
+    "season": "easter",
+    "week_number": 8,
+    "readings": [
+      {
+        "position": "First Reading",
+        "reading": "Acts 2:1-11",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 104:1, 24, 29-30, 31, 34",
+        "psalm_response": "Lord, send out your Spirit, and renew the face of the earth.",
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
+        "reading": "1 Cor 12:3b-7, 12-13",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel",
+        "reading": "John 20:19-23",
+        "psalm_response": null,
+        "gospel_acclamation": "Come, Holy Spirit, fill the hearts of your faithful and kindle in them the fire of your love."
+      },
+      {
+        "position": "Gospel (alternative)",
+        "reading": "John 15:26-27; 16:12-15",
+        "psalm_response": null,
+        "gospel_acclamation": "Come, Holy Spirit, fill the hearts of your faithful and kindle in them the fire of your love."
       }
     ]
   },
@@ -2146,9 +2587,9 @@
         "gospel_acclamation": null
       },
       {
-        "position": "Second Reading",
-        "reading": "Dan 3:52, 53, 54, 55, 56a",
-        "psalm_response": null,
+        "position": "Responsorial Psalm",
+        "reading": "Dan 3:52, 53, 54, 55, 56",
+        "psalm_response": "Glory and praise for ever!",
         "gospel_acclamation": null
       },
       {
@@ -2161,7 +2602,7 @@
         "position": "Gospel",
         "reading": "John 3:16-18",
         "psalm_response": null,
-        "gospel_acclamation": "Whoever loves me will keep my word, and my Father will love him, and we will come to him."
+        "gospel_acclamation": "Glory to the Father, the Son, and the Holy Spirit; to God who is, who was, and who is to come."
       }
     ]
   },
@@ -2194,7 +2635,7 @@
         "position": "Gospel",
         "reading": "John 6:51-58",
         "psalm_response": null,
-        "gospel_acclamation": "The crowds were astonished at his teaching, for he taught them as one having authority."
+        "gospel_acclamation": "I am the living bread that came down from heaven, says the Lord; whoever eats this bread will live forever."
       }
     ]
   },
@@ -2213,7 +2654,7 @@
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 103:1-2, 3-4, 6-7, 8+10",
+        "reading": "Ps 103:1-2, 3-4, 6-7, 8, 10",
         "psalm_response": "The Lord's kindness is everlasting to those who fear him.",
         "gospel_acclamation": null
       },
@@ -2227,7 +2668,7 @@
         "position": "Gospel",
         "reading": "Matt 11:25-30",
         "psalm_response": null,
-        "gospel_acclamation": "For you know the gracious act of our Lord Jesus Christ, that though he was rich, for your sake he became poor."
+        "gospel_acclamation": "Take my yoke upon you, says the Lord, and learn from me, for I am meek and humble of heart."
       }
     ]
   },
@@ -2240,8 +2681,20 @@
     "readings": [
       {
         "position": "First Reading",
+        "reading": "1 Kgs 19:19-21",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
         "reading": "Is 61:9-11",
         "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 16:1-10",
+        "psalm_response": "You are my inheritance, O Lord.",
         "gospel_acclamation": null
       },
       {
@@ -2251,10 +2704,22 @@
         "gospel_acclamation": null
       },
       {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 119:36-29",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
         "position": "Gospel",
+        "reading": "Matt 5:33-37",
+        "psalm_response": null,
+        "gospel_acclamation": "Psalm 119:36a, 29b"
+      },
+      {
+        "position": "Gospel (alternative)",
         "reading": "Luke 2:41-51 (proper)",
         "psalm_response": null,
-        "gospel_acclamation": "You did not receive a spirit of slavery leading you back into fear, but you received a spirit of adoption."
+        "gospel_acclamation": "Psalm 119:36a, 29b"
       }
     ]
   },
@@ -2267,8 +2732,20 @@
     "readings": [
       {
         "position": "First Reading",
+        "reading": "Isa 49:1-6",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
         "reading": "(Vigil Mass) Jer 1:4-10",
         "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 139:1-15",
+        "psalm_response": "Guide me, Lord, along the everlasting way.",
         "gospel_acclamation": null
       },
       {
@@ -2278,16 +2755,28 @@
         "gospel_acclamation": null
       },
       {
-        "position": "Second Reading",
+        "position": "Third Reading",
+        "reading": "Acts 13:22-26",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Fourth Reading",
         "reading": "1 Pet 1:8-12",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Gospel",
+        "reading": "Luke 1:57-80",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel (alternative)",
         "reading": "Luke 1:5-17",
         "psalm_response": null,
-        "gospel_acclamation": "Come after me, and I will make you fishers of men."
+        "gospel_acclamation": null
       }
     ]
   },
@@ -2300,8 +2789,20 @@
     "readings": [
       {
         "position": "First Reading",
+        "reading": "Acts 12:1-11",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
         "reading": "(Vigil Mass) Acts 3:1-10",
         "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 34:1-9",
+        "psalm_response": "The Lord hears the cry of the poor.",
         "gospel_acclamation": null
       },
       {
@@ -2311,16 +2812,28 @@
         "gospel_acclamation": null
       },
       {
-        "position": "Second Reading",
+        "position": "Third Reading",
+        "reading": "2 Tim 4:6-18",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Fourth Reading",
         "reading": "Gal 1:11-20",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Gospel",
+        "reading": "Matt 16:13-19",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel (alternative)",
         "reading": "John 21:15-19",
         "psalm_response": null,
-        "gospel_acclamation": "It was not you who chose me, but I who chose you and appointed you to go and bear fruit that will remain."
+        "gospel_acclamation": null
       }
     ]
   },
@@ -2333,8 +2846,20 @@
     "readings": [
       {
         "position": "First Reading",
+        "reading": "Rev 11:19, 12:1-10",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
         "reading": "1 Chr 15:3-4, 15-16",
         "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 45:10-16",
+        "psalm_response": "The queen stands at your right hand, arrayed in gold.",
         "gospel_acclamation": null
       },
       {
@@ -2344,16 +2869,28 @@
         "gospel_acclamation": null
       },
       {
-        "position": "Second Reading",
+        "position": "Third Reading",
+        "reading": "1 Cor 15:20-27",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Fourth Reading",
         "reading": "16:1-2",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Gospel",
+        "reading": "Luke 1:39-56",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel (alternative)",
         "reading": "Luke 11:27-28",
         "psalm_response": null,
-        "gospel_acclamation": "The Word of God became flesh and made his dwelling among us, and we saw his glory."
+        "gospel_acclamation": null
       }
     ]
   },
@@ -2366,27 +2903,27 @@
     "readings": [
       {
         "position": "First Reading",
-        "reading": "Rev 7:1-14",
+        "reading": "Wis 6:12-16",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 24:1-6",
-        "psalm_response": "Let the Lord enter; he is king of glory.",
+        "reading": "Ps 63:2, 3-4, 5-6, 7-8",
+        "psalm_response": "My soul is thirsting for you, O Lord my God.",
         "gospel_acclamation": null
       },
       {
         "position": "Second Reading",
-        "reading": "1 John 3:1-3",
+        "reading": "1 Thess 4:13-18",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Gospel",
-        "reading": "Matt 5:1-12",
+        "reading": "Matt 25:1-13",
         "psalm_response": null,
-        "gospel_acclamation": "May the Father of our Lord Jesus Christ enlighten the eyes of our hearts, that we may know what is the hope that belongs to his call."
+        "gospel_acclamation": "Alleluia, alleluia. Stay awake and be ready! For you do not know on what day your Lord will come."
       }
     ]
   },
@@ -2458,7 +2995,7 @@
         "gospel_acclamation": null
       },
       {
-        "position": "Epistle",
+        "position": "Reading 8",
         "reading": "Rom 8:31-39",
         "psalm_response": null,
         "gospel_acclamation": null
@@ -2518,67 +3055,67 @@
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "Matt 11:25-30",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "Matt 25:31-46",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "Luke 7:11-17",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "Luke 23:44-53, 24:1-6",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "Luke 24:13-16, 28-35",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "John 5:24-29",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "John 6:37-40",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "John 6:51-59",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "John 11:17-27",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "John 11:32-45",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "John 14:1-6",
         "psalm_response": null,
         "gospel_acclamation": null
@@ -2586,7 +3123,7 @@
     ]
   },
   {
-    "date": "2026-11-29T00:00:00.000",
+    "date": "2026-11-22T00:00:00.000",
     "title": "Our Lord Jesus Christ, King of the Universe",
     "rank": "Solemnity",
     "season": "ordinaryTime",
@@ -2594,27 +3131,27 @@
     "readings": [
       {
         "position": "First Reading",
-        "reading": "Isa 63:16-19, 64:1-7",
+        "reading": "Ezek 34:11-12, 15-17",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 80:1-19",
-        "psalm_response": "Lord, make us turn to you; let us see your face and we shall be saved.",
+        "reading": "Ps 23:1-2, 2-3, 5-6",
+        "psalm_response": "The Lord is my shepherd; there is nothing I shall want.",
         "gospel_acclamation": null
       },
       {
         "position": "Second Reading",
-        "reading": "1 Cor 1:3-9",
+        "reading": "1 Cor 15:20-26, 28",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Gospel",
-        "reading": "Mark 13:33-37",
+        "reading": "Matt 25:31-46",
         "psalm_response": null,
-        "gospel_acclamation": "Whoever serves me must follow me, and where I am, there also will my servant be; the Father will honor whoever serves me."
+        "gospel_acclamation": "Blessed is he who comes in the name of the Lord! Blessed is the kingdom of our father David that is to come!"
       }
     ]
   },
@@ -2627,19 +3164,19 @@
     "readings": [
       {
         "position": "First Reading",
-        "reading": "Gen 3:9-20",
+        "reading": "Gen 3:9-15, 20",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 98:1-4",
-        "psalm_response": "All the ends of the earth have seen the saving power of God.",
+        "reading": "Ps 98:1, 2-3ab, 3cd-4",
+        "psalm_response": "Sing to the Lord a new song, for he has done marvelous deeds.",
         "gospel_acclamation": null
       },
       {
         "position": "Second Reading",
-        "reading": "Eph 1:3-12",
+        "reading": "Eph 1:3-6, 11-12",
         "psalm_response": null,
         "gospel_acclamation": null
       },
@@ -2647,7 +3184,7 @@
         "position": "Gospel",
         "reading": "Luke 1:26-38",
         "psalm_response": null,
-        "gospel_acclamation": "I hope in the LORD, my soul trusts in his word."
+        "gospel_acclamation": "Hail, Mary, full of grace, the Lord is with you; blessed are you among women."
       }
     ]
   },
@@ -2666,8 +3203,8 @@
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 98:1, 3-6",
-        "psalm_response": "All the ends of the earth have seen the saving power of God",
+        "reading": "Ps 96:1-13",
+        "psalm_response": "The Lord our God comes with power.",
         "gospel_acclamation": null
       },
       {
@@ -2680,7 +3217,7 @@
         "position": "Gospel",
         "reading": "Luke 2:1-14",
         "psalm_response": null,
-        "gospel_acclamation": "The Word of God became flesh and made his dwelling among us, and we saw his glory."
+        "gospel_acclamation": null
       }
     ]
   },
@@ -2699,7 +3236,7 @@
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 67:1-8",
+        "reading": "Ps 67:2-3, 5, 6, 8",
         "psalm_response": "May God bless us in his mercy.",
         "gospel_acclamation": null
       },
@@ -2713,7 +3250,7 @@
         "position": "Gospel",
         "reading": "Luke 2:16-21",
         "psalm_response": null,
-        "gospel_acclamation": "The Word of God became flesh and made his dwelling among us, and we saw his glory."
+        "gospel_acclamation": "Heb 1:1-2"
       }
     ]
   },
@@ -2746,7 +3283,7 @@
         "position": "Gospel",
         "reading": "John 1:1-18",
         "psalm_response": null,
-        "gospel_acclamation": "The Word of God became flesh and made his dwelling among us, and we saw his glory."
+        "gospel_acclamation": null
       }
     ]
   },
@@ -2779,7 +3316,7 @@
         "position": "Gospel",
         "reading": "Mark 1:7-11",
         "psalm_response": null,
-        "gospel_acclamation": "As the Father loves me, so I also love you. Remain in my love, says the Lord."
+        "gospel_acclamation": null
       }
     ]
   },
@@ -2788,37 +3325,37 @@
     "title": "Saint Joseph, Spouse of the Blessed Virgin Mary",
     "rank": "Solemnity",
     "season": "lent",
-    "week_number": 6,
+    "week_number": 5,
     "readings": [
       {
         "position": "First Reading",
-        "reading": "2 Sam 7:4-16",
+        "reading": "2 Sam 7:4-5a, 12-14a, 16",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 89:2-3, 4-5, 27 and 29",
-        "psalm_response": "The son of David will live for ever",
+        "reading": "Ps 89:2-3, 4-5, 27, 29",
+        "psalm_response": "The son of David will live for ever.",
         "gospel_acclamation": null
       },
       {
         "position": "Second Reading",
-        "reading": "Rom 4:13-22",
+        "reading": "Rom 4:13, 16-18, 22",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Gospel",
-        "reading": "Matt 1:16-24",
+        "reading": "Matt 1:16, 18-21, 24a",
         "psalm_response": null,
-        "gospel_acclamation": "Jesus did this as the beginning of his signs in Cana in Galilee and so revealed his glory."
+        "gospel_acclamation": "Ps 84:5"
       },
       {
-        "position": "Gospel",
-        "reading": "Luke 2:41-51",
+        "position": "Gospel (alternative)",
+        "reading": "Luke 2:41-51a",
         "psalm_response": null,
-        "gospel_acclamation": null
+        "gospel_acclamation": "Ps 84:5"
       }
     ]
   },
@@ -2830,7 +3367,7 @@
     "week_number": 6,
     "readings": [
       {
-        "position": "Gospel",
+        "position": "Gospel at Procession",
         "reading": "Mark 11:1-10",
         "psalm_response": null,
         "gospel_acclamation": null
@@ -2843,8 +3380,8 @@
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 22:8-24",
-        "psalm_response": null,
+        "reading": "Ps 22:8-9, 17-18, 19-20, 23-24",
+        "psalm_response": "My God, my God, why have you abandoned me?",
         "gospel_acclamation": null
       },
       {
@@ -2857,7 +3394,7 @@
         "position": "Gospel",
         "reading": "Mark 14:1-15:47",
         "psalm_response": null,
-        "gospel_acclamation": null
+        "gospel_acclamation": "Phil 2:8-9"
       }
     ]
   },
@@ -2890,7 +3427,7 @@
         "position": "Gospel",
         "reading": "John 13:1-15",
         "psalm_response": null,
-        "gospel_acclamation": "The Word of God became flesh and made his dwelling among us, and we saw his glory."
+        "gospel_acclamation": null
       }
     ]
   },
@@ -2923,7 +3460,7 @@
         "position": "Gospel",
         "reading": "John 18:1-19:42",
         "psalm_response": null,
-        "gospel_acclamation": "Peace be with you; as the Father has sent me, so I send you."
+        "gospel_acclamation": null
       }
     ]
   },
@@ -3019,13 +3556,13 @@
         "gospel_acclamation": null
       },
       {
-        "position": "Epistle",
+        "position": "Reading 8",
         "reading": "Rom 6:3-11",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Alleluia Psalm",
+        "position": "Responsorial Psalm",
         "reading": "Ps 118:1-23",
         "psalm_response": null,
         "gospel_acclamation": null
@@ -3052,7 +3589,7 @@
         "gospel_acclamation": null
       },
       {
-        "position": "Alleluia Psalm",
+        "position": "Responsorial Psalm",
         "reading": "Ps 118:1-23",
         "psalm_response": "This is the day the Lord has made; let us rejoice and be glad.",
         "gospel_acclamation": null
@@ -3076,10 +3613,82 @@
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "Luke 24:13-35",
         "psalm_response": null,
         "gospel_acclamation": null
+      }
+    ]
+  },
+  {
+    "date": "2027-04-05T00:00:00.000",
+    "title": "The Annunciation of the Lord",
+    "rank": "Solemnity",
+    "season": "easter",
+    "week_number": 2,
+    "readings": [
+      {
+        "position": "First Reading",
+        "reading": "Isa 7:10-14; 8:10",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 40:7-8a, 8b-9, 10, 11",
+        "psalm_response": "Here I am, Lord; I come to do your will.",
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
+        "reading": "Heb 10:4-10",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel",
+        "reading": "Luke 1:26-38",
+        "psalm_response": null,
+        "gospel_acclamation": "The Word of God became flesh and dwelt among us, and we saw his glory."
+      }
+    ]
+  },
+  {
+    "date": "2027-05-16T00:00:00.000",
+    "title": "Pentecost Sunday",
+    "rank": "Solemnity",
+    "season": "easter",
+    "week_number": 8,
+    "readings": [
+      {
+        "position": "First Reading",
+        "reading": "Acts 2:1-11",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 104:1, 24, 29-30, 31, 34",
+        "psalm_response": "Lord, send out your Spirit, and renew the face of the earth.",
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
+        "reading": "1 Cor 12:3b-7, 12-13",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel",
+        "reading": "John 20:19-23",
+        "psalm_response": null,
+        "gospel_acclamation": "Come, Holy Spirit, fill the hearts of your faithful and kindle in them the fire of your love."
+      },
+      {
+        "position": "Gospel (alternative)",
+        "reading": "John 15:26-27; 16:12-15",
+        "psalm_response": null,
+        "gospel_acclamation": "Come, Holy Spirit, fill the hearts of your faithful and kindle in them the fire of your love."
       }
     ]
   },
@@ -3092,14 +3701,14 @@
     "readings": [
       {
         "position": "First Reading",
-        "reading": "Deut 4:32-34, 39-40",
+        "reading": "Dt 4:32-34, 39-40",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 33:4-5, 6+9, 18-19, 20+22",
-        "psalm_response": "Blessed the people the Lord has chosen to be his own.",
+        "reading": "Ps 33:4-5, 6, 9, 18-19, 20, 22",
+        "psalm_response": "Happy the people the Lord has chosen to be his own.",
         "gospel_acclamation": null
       },
       {
@@ -3112,7 +3721,7 @@
         "position": "Gospel",
         "reading": "Matt 28:16-20",
         "psalm_response": null,
-        "gospel_acclamation": "One does not live on bread alone, but on every word that comes forth from the mouth of God."
+        "gospel_acclamation": "Glory to the Father, the Son, and the Holy Spirit; to God who is, who was, and who is to come."
       }
     ]
   },
@@ -3145,7 +3754,7 @@
         "position": "Gospel",
         "reading": "Mark 14:12-16, 22-26",
         "psalm_response": null,
-        "gospel_acclamation": "The crowds were astonished at his teaching, for he taught them as one having authority."
+        "gospel_acclamation": "I am the living bread that came down from heaven, says the Lord; whoever eats this bread will live forever."
       }
     ]
   },
@@ -3178,7 +3787,7 @@
         "position": "Gospel",
         "reading": "John 19:31-37",
         "psalm_response": null,
-        "gospel_acclamation": "For you know the gracious act of our Lord Jesus Christ, that though he was rich, for your sake he became poor."
+        "gospel_acclamation": "Take my yoke upon you, says the Lord, and learn from me, for I am meek and humble of heart."
       }
     ]
   },
@@ -3191,21 +3800,45 @@
     "readings": [
       {
         "position": "First Reading",
+        "reading": "Tob 12:1-20",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
         "reading": "Is 61:9-11",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Third Reading",
+        "reading": "Tob 13:2-10",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Responsorial Psalm",
         "reading": "1 Sam 2:1, 4-8",
-        "psalm_response": "The Lord is kind and merciful.",
+        "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Gospel",
+        "reading": "Matt 5:3",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel (alternative)",
+        "reading": "Mark 12:38-44",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel (alternative)",
         "reading": "Luke 2:41-51 (proper)",
         "psalm_response": null,
-        "gospel_acclamation": "You did not receive a spirit of slavery leading you back into fear, but you received a spirit of adoption."
+        "gospel_acclamation": null
       }
     ]
   },
@@ -3218,8 +3851,20 @@
     "readings": [
       {
         "position": "First Reading",
+        "reading": "Isa 49:1-6",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
         "reading": "(Vigil Mass) Jer 1:4-10",
         "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 139:1-15",
+        "psalm_response": "Guide me, Lord, along the everlasting way.",
         "gospel_acclamation": null
       },
       {
@@ -3229,16 +3874,28 @@
         "gospel_acclamation": null
       },
       {
-        "position": "Second Reading",
+        "position": "Third Reading",
+        "reading": "Acts 13:22-26",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Fourth Reading",
         "reading": "1 Pet 1:8-12",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Gospel",
+        "reading": "Luke 1:57-80",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel (alternative)",
         "reading": "Luke 1:5-17",
         "psalm_response": null,
-        "gospel_acclamation": "Come after me, and I will make you fishers of men."
+        "gospel_acclamation": null
       }
     ]
   },
@@ -3251,27 +3908,84 @@
     "readings": [
       {
         "position": "First Reading",
+        "reading": "Acts 12:1-11",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
         "reading": "(Vigil Mass) Acts 3:1-10",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 19:2-3, 4-5",
-        "psalm_response": "Their message goes out through all the earth.",
+        "reading": "Ps 34:1-9",
+        "psalm_response": "The Lord hears the cry of the poor.",
         "gospel_acclamation": null
       },
       {
-        "position": "Second Reading",
+        "position": "Responsorial Psalm",
+        "reading": "Ps 19:2-3, 4-5",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Third Reading",
+        "reading": "2 Tim 4:6-18",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Fourth Reading",
         "reading": "Gal 1:11-20",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Gospel",
+        "reading": "Matt 16:13-19",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel (alternative)",
         "reading": "John 21:15-19",
         "psalm_response": null,
-        "gospel_acclamation": "It was not you who chose me, but I who chose you and appointed you to go and bear fruit that will remain."
+        "gospel_acclamation": null
+      }
+    ]
+  },
+  {
+    "date": "2027-08-15T00:00:00.000",
+    "title": "The Assumption of the Blessed Virgin Mary",
+    "rank": "Solemnity",
+    "season": "ordinaryTime",
+    "week_number": 22,
+    "readings": [
+      {
+        "position": "First Reading",
+        "reading": "Deut 4:1-2, 6-8",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Responsorial Psalm",
+        "reading": "Ps 15:2-3, 3-4, 4-5",
+        "psalm_response": "One who does justice will live in the presence of the Lord.",
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Second Reading",
+        "reading": "Jas 1:17-18, 21b-22, 27",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Gospel",
+        "reading": "Mark 7:1-8, 14-15, 21-23",
+        "psalm_response": null,
+        "gospel_acclamation": "Alleluia, alleluia. The Father willed to give us birth by the word of truth that we may be a kind of firstfruits of his creatures."
       }
     ]
   },
@@ -3304,7 +4018,7 @@
         "position": "Gospel",
         "reading": "Matt 5:1-12",
         "psalm_response": null,
-        "gospel_acclamation": "May the Father of our Lord Jesus Christ enlighten the eyes of our hearts, that we may know what is the hope that belongs to his call."
+        "gospel_acclamation": null
       }
     ]
   },
@@ -3376,7 +4090,7 @@
         "gospel_acclamation": null
       },
       {
-        "position": "Epistle",
+        "position": "Reading 8",
         "reading": "Rom 8:31-39",
         "psalm_response": null,
         "gospel_acclamation": null
@@ -3436,67 +4150,67 @@
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "Matt 11:25-30",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "Matt 25:31-46",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "Luke 7:11-17",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "Luke 23:44-53, 24:1-6",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "Luke 24:13-16, 28-35",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "John 5:24-29",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "John 6:37-40",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "John 6:51-59",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "John 11:17-27",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "John 11:32-45",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
-        "position": "Gospel",
+        "position": "Gospel (alternative)",
         "reading": "John 14:1-6",
         "psalm_response": null,
         "gospel_acclamation": null
@@ -3504,7 +4218,7 @@
     ]
   },
   {
-    "date": "2027-11-28T00:00:00.000",
+    "date": "2027-11-21T00:00:00.000",
     "title": "Our Lord Jesus Christ, King of the Universe",
     "rank": "Solemnity",
     "season": "ordinaryTime",
@@ -3512,27 +4226,27 @@
     "readings": [
       {
         "position": "First Reading",
-        "reading": "Jer 33:14-16",
+        "reading": "Dan 7:13-14",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 25:4bc-5ab, 6 and 7bc, 8-9",
-        "psalm_response": "Remember your mercies, O Lord",
+        "reading": "Ps 93:1, 1-2, 5",
+        "psalm_response": "The Lord is king; he is robed in majesty.",
         "gospel_acclamation": null
       },
       {
         "position": "Second Reading",
-        "reading": "1 Thess 3:12-4:2",
+        "reading": "Rev 1:5-8",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Gospel",
-        "reading": "Luke 21:25-36",
+        "reading": "John 18:33b-37",
         "psalm_response": null,
-        "gospel_acclamation": "May the Father of our Lord Jesus Christ enlighten the eyes of our hearts, that we may know what is the hope that belongs to his call."
+        "gospel_acclamation": "Blessed is he who comes in the name of the Lord! Blessed is the kingdom of our father David that is to come!"
       }
     ]
   },
@@ -3545,19 +4259,19 @@
     "readings": [
       {
         "position": "First Reading",
-        "reading": "Gen 3:9-20",
+        "reading": "Gen 3:9-15, 20",
         "psalm_response": null,
         "gospel_acclamation": null
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 98:1-4",
-        "psalm_response": "All the ends of the earth have seen the saving power of God.",
+        "reading": "Ps 98:1, 2-3ab, 3cd-4",
+        "psalm_response": "Sing to the Lord a new song, for he has done marvelous deeds.",
         "gospel_acclamation": null
       },
       {
         "position": "Second Reading",
-        "reading": "Eph 1:3-12",
+        "reading": "Eph 1:3-6, 11-12",
         "psalm_response": null,
         "gospel_acclamation": null
       },
@@ -3565,7 +4279,7 @@
         "position": "Gospel",
         "reading": "Luke 1:26-38",
         "psalm_response": null,
-        "gospel_acclamation": "I hope in the LORD, my soul trusts in his word."
+        "gospel_acclamation": "Hail, Mary, full of grace, the Lord is with you; blessed are you among women."
       }
     ]
   },
@@ -3584,8 +4298,8 @@
       },
       {
         "position": "Responsorial Psalm",
-        "reading": "Ps 98:1, 3-6",
-        "psalm_response": "All the ends of the earth have seen the saving power of God",
+        "reading": "Ps 96:1-13",
+        "psalm_response": "The Lord our God comes with power.",
         "gospel_acclamation": null
       },
       {
@@ -3598,7 +4312,7 @@
         "position": "Gospel",
         "reading": "Luke 2:1-14",
         "psalm_response": null,
-        "gospel_acclamation": "The Word of God became flesh and made his dwelling among us, and we saw his glory."
+        "gospel_acclamation": null
       }
     ]
   }

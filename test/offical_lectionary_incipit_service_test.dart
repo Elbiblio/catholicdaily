@@ -160,6 +160,16 @@ void main() {
         expect(result.correctedText, startsWith('1 Jesus said to his disciples'));
       });
 
+      test('processReading rewrites leading gospel temporal pronouns to Jesus', () {
+        final result = service.processReading(
+          'Luke 5:1-11',
+          '1 While the people pressed upon him to hear the word of God, he was standing by the lake of Gennesaret.',
+        );
+
+        expect(result.incipit, equals('At that time,'));
+        expect(result.correctedText, startsWith('1 While the people pressed upon Jesus'));
+      });
+
       test('Exodus 1-2 should be early narrative', () {
         expect(service.getOfficialIncipit('Exod 1:1-22'), equals('In those days,'));
         expect(service.getOfficialIncipit('Exod 2:1-10'), equals('In those days,'));

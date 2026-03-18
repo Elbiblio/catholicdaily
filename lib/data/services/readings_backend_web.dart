@@ -242,9 +242,21 @@ class ReadingsBackendWeb implements ReadingsBackend {
           RegExp(r'^(?:Now,?\s*|Then,?\s*|And,?\s*|But,?\s*|So,?\s*|For,?\s*)', caseSensitive: false),
           '',
         ).trim();
+        var normalizedSuffix = cleanSuffix;
+
+        if (lowerText.startsWith('at that time') && normalizedSuffix.isNotEmpty) {
+          normalizedSuffix = normalizedSuffix.replaceFirstMapped(
+            RegExp(r'^(?:(While|As|When|After)\s+)(?:he|him)\b', caseSensitive: false),
+            (m) => '${m.group(1)} Jesus',
+          );
+          normalizedSuffix = normalizedSuffix.replaceFirstMapped(
+            RegExp(r'^(?:He|Him)\b', caseSensitive: false),
+            (_) => 'Jesus',
+          );
+        }
         
-        if (cleanSuffix.isNotEmpty) {
-          cleaned = '$prefix ${cleanSuffix[0].toUpperCase()}${cleanSuffix.substring(1)}';
+        if (normalizedSuffix.isNotEmpty) {
+          cleaned = '$prefix ${normalizedSuffix[0].toUpperCase()}${normalizedSuffix.substring(1)}';
         } else {
           cleaned = prefix;
         }

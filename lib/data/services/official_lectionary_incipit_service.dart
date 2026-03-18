@@ -667,14 +667,16 @@ class OfficialLectionaryIncipitService {
   ///   Rule 3: "While he …"                      → "While Jesus …"
   ///   Rule 4: "When he …"                       → "When Jesus …"
   ///   Rule 5: "After he …"                      → "After Jesus …"
+  ///   Rule 6: first opener-clause "he/him"      → "Jesus"
   ///           Rules 2-5 cover temporal openers.  At the start of a gospel
   ///           pericope, the subject of such constructions is Jesus by
   ///           convention; adjust the opener list if edge cases arise.
   String _applyGospelPronounCorrections(String text) {
     final verbAlt = _jesusVerbs.join('|');
+    const versePrefix = r'(?:\d+[a-z]?\.\s*|\d+[a-z]?\s+)?';
     text = text.replaceFirstMapped(
       RegExp(
-        r'^((?:\d+[a-z]?\s+)?)He\s+(' + verbAlt + r')\b',
+        '^($versePrefix)He\s+(' + verbAlt + r')\b',
         caseSensitive: true,
       ),
       (m) => '${m.group(1)}Jesus ${m.group(2)}',
@@ -683,11 +685,37 @@ class OfficialLectionaryIncipitService {
     for (final opener in const ['As', 'While', 'When', 'After']) {
       text = text.replaceFirstMapped(
         RegExp(
-          r'^((?:\d+[a-z]?\s+)?)(' + opener + r'\s+)he\b',
+          '^($versePrefix)(' + opener + r'\s+)(?:he|him)\b',
           caseSensitive: true,
         ),
         (m) => '${m.group(1)}${m.group(2)}Jesus',
       );
+    }
+
+    text = text.replaceFirstMapped(
+      RegExp(
+        '^($versePrefix)(?:He|Him)\b',
+        caseSensitive: true,
+      ),
+      (m) => '${m.group(1)}Jesus',
+    );
+
+    final openerMatch = RegExp(
+      '^($versePrefix)([^,;:.!?]{0,120})',
+      dotAll: false,
+    ).firstMatch(text);
+    if (openerMatch != null) {
+      final prefix = openerMatch.group(1) ?? '';
+      final opener = openerMatch.group(2) ?? '';
+      if (!RegExp(r'\bJesus\b', caseSensitive: false).hasMatch(opener)) {
+        final normalizedOpener = opener.replaceFirstMapped(
+          RegExp(r'\b(?:he|him)\b', caseSensitive: false),
+          (_) => 'Jesus',
+        );
+        if (normalizedOpener != opener) {
+          text = '$prefix$normalizedOpener${text.substring(openerMatch.end)}';
+        }
+      }
     }
 
     return text;
