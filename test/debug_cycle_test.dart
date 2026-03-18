@@ -23,6 +23,6 @@ void main() {
       // Liturgical year starting Advent 2025 = Year A, so March 2026 = A
       // Pattern: 2020=A, 2021=B, 2022=C, 2023=A, 2024=B, 2025=C, 2026=A
       expect(year2026.sundayCycle, equals('A'));
-    }, skip: true);
-  }, skip: true);
+    }, skip: false);
+  }, skip: false);
 }

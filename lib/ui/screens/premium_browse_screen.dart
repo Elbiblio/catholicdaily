@@ -34,8 +34,6 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
     with TickerProviderStateMixin {
   DateTime _selectedDate = DateTime.now();
   List<DailyReading> _readings = [];
-  Map<String, String> _readingTitles = {};
-  Map<String, String> _readingPreviews = {};
   Map<String, String> _readingTexts = {};
   bool _isLoading = true;
   LiturgicalDay? _liturgicalDay;
@@ -127,8 +125,6 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
       debugPrint('Error loading readings: $e');
       _readings = [];
       _ordoYearVariables = null;
-      _readingTitles = {};
-      _readingPreviews = {};
       _readingTexts = {};
     }
 
@@ -596,24 +592,26 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
             if (_optionalCelebrations.isNotEmpty)
               _buildOptionalCelebrationSelector(theme),
 
-            // Readings list
+            // Grouped readings list
             ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: _readings.length,
+              itemCount: _groupedReadings.length,
               itemBuilder: (context, index) {
+                final group = _groupedReadings[index];
                 return AnimatedContainer(
                   duration: Duration(milliseconds: 300 + (index * 50)),
                   curve: Curves.easeOutCubic,
-                  child: _PremiumReadingCard(
-                    reading: _readings[index],
-                    readingTitle: _readingTitles[_readings[index].reading],
-                    previewText: _readingPreviews[_readings[index].reading],
+                  child: _PremiumReadingGroupCard(
+                    group: group,
                     liturgicalColor: _liturgicalDay?.colorValue,
-                    onTap: () async {
+                    onReadingSelected: (reading) async {
                       HapticFeedback.lightImpact();
-                      await _openReadingAtIndex(index);
+                      final readingIndex = _readings.indexOf(reading);
+                      if (readingIndex >= 0) {
+                        await _openReadingAtIndex(readingIndex);
+                      }
                     },
                   ),
                 );
@@ -917,9 +915,58 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
 
   void _applyHydratedReadings(HydratedReadingSet hydrated) {
     _readings = hydrated.readings;
-    _readingTitles = hydrated.readingTitles;
-    _readingPreviews = hydrated.readingPreviews;
     _readingTexts = hydrated.readingTexts;
+  }
+
+  List<ReadingGroup> get _groupedReadings {
+    final groups = <String, ReadingGroup>{};
+    
+    for (final reading in _readings) {
+      final baseType = _getBaseReadingType(reading.position ?? 'Reading');
+      final existingGroup = groups[baseType];
+      
+      if (existingGroup == null) {
+        groups[baseType] = ReadingGroup(
+          baseType: baseType,
+          mainReading: reading,
+          alternatives: [],
+        );
+      } else {
+        // Check if this is an alternative
+        if (reading.position?.contains('alternative') == true) {
+          existingGroup.alternatives.add(reading);
+        } else {
+          // This shouldn't happen in normal flow, but handle it
+          existingGroup.alternatives.add(reading);
+        }
+      }
+    }
+    
+    return groups.values.toList()
+      ..sort((a, b) => _getReadingTypeOrder(a.baseType).compareTo(_getReadingTypeOrder(b.baseType)));
+  }
+  
+  String _getBaseReadingType(String? position) {
+    if (position == null) return 'Reading';
+    
+    // Extract base type from positions like "Gospel (alternative)" or "First Reading (alternative 2)"
+    final alternativeMatch = RegExp(r'^(.+?)\s*\(').firstMatch(position);
+    if (alternativeMatch != null) {
+      return alternativeMatch.group(1)!;
+    }
+    
+    return position;
+  }
+  
+  int _getReadingTypeOrder(String type) {
+    switch (type.toLowerCase()) {
+      case 'first reading': return 1;
+      case 'responsorial psalm': return 2;
+      case 'second reading': return 3;
+      case 'gospel': return 4;
+      case 'gospel at procession': return 5;
+      default: return 999;
+    }
   }
 
   void _restartAnimations() {
@@ -1117,62 +1164,79 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
   }
 }
 
-/// Premium Reading Card with modern design
-class _PremiumReadingCard extends StatefulWidget {
-  final DailyReading reading;
-  final String? readingTitle;
-  final String? previewText;
-  final Color? liturgicalColor;
-  final VoidCallback onTap;
-
-  const _PremiumReadingCard({
-    required this.reading,
-    this.readingTitle,
-    this.previewText,
-    this.liturgicalColor,
-    required this.onTap,
+/// Represents a group of readings of the same type (main + alternatives)
+class ReadingGroup {
+  final String baseType;
+  final DailyReading mainReading;
+  final List<DailyReading> alternatives;
+  
+  ReadingGroup({
+    required this.baseType,
+    required this.mainReading,
+    required this.alternatives,
   });
-
-  @override
-  State<_PremiumReadingCard> createState() => _PremiumReadingCardState();
+  
+  bool get hasAlternatives => alternatives.isNotEmpty;
+  List<DailyReading> get allReadings => [mainReading, ...alternatives];
 }
 
-class _PremiumReadingCardState extends State<_PremiumReadingCard>
+/// Premium Reading Group Card that shows main reading with expandable alternatives
+class _PremiumReadingGroupCard extends StatefulWidget {
+  final ReadingGroup group;
+  final Color? liturgicalColor;
+  final Function(DailyReading) onReadingSelected;
+  
+  const _PremiumReadingGroupCard({
+    required this.group,
+    this.liturgicalColor,
+    required this.onReadingSelected,
+  });
+  
+  @override
+  State<_PremiumReadingGroupCard> createState() => _PremiumReadingGroupCardState();
+}
+
+class _PremiumReadingGroupCardState extends State<_PremiumReadingGroupCard>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-  late Animation<double> _elevationAnimation;
-
+  late Animation<double> _expandAnimation;
+  bool _isExpanded = false;
+  
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-
-    _scaleAnimation = Tween<double>(
-      begin: 1.0,
-      end: 0.98,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-
-    _elevationAnimation = Tween<double>(
-      begin: 2.0,
-      end: 8.0,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+    _expandAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    );
   }
-
+  
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
-
-  Color _getReadingTypeColor(String? type, BuildContext context) {
+  
+  void _toggleExpanded() {
+    setState(() {
+      _isExpanded = !_isExpanded;
+      if (_isExpanded) {
+        _controller.forward();
+      } else {
+        _controller.reverse();
+      }
+    });
+  }
+  
+  Color _getReadingTypeColor(String type, BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    switch (type?.toLowerCase()) {
+    switch (type.toLowerCase()) {
       case 'gospel':
         return isDark ? const Color(0xFFEF5350) : const Color(0xFFE53935);
       case 'responsorial psalm':
@@ -1186,12 +1250,55 @@ class _PremiumReadingCardState extends State<_PremiumReadingCard>
         return isDark ? Colors.grey.shade400 : Colors.grey.shade600;
     }
   }
-
+  
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final color = _getReadingTypeColor(widget.reading.position, context);
+    final color = _getReadingTypeColor(widget.group.baseType, context);
     final isLight = theme.brightness == Brightness.light;
+    
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      decoration: BoxDecoration(
+        color: widget.liturgicalColor != null
+            ? Color.alphaBlend(
+                isLight
+                    ? Colors.white.withValues(alpha: 0.94)
+                    : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.92),
+                widget.liturgicalColor!.withValues(alpha: isLight ? 0.14 : 0.24),
+              )
+            : theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: color.withValues(alpha: 0.3),
+          width: 1.5,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: color.withValues(alpha: 0.1),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Main reading
+          _buildMainReading(theme, color, isLight),
+          
+          // Alternatives section
+          if (widget.group.hasAlternatives) ...[
+            const Divider(height: 1, color: Colors.grey),
+            _buildAlternativesSection(theme, color, isLight),
+          ],
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildMainReading(ThemeData theme, Color color, bool isLight) {
+    final reading = widget.group.mainReading;
     final badgeBackground = isLight
         ? null
         : Color.alphaBlend(
@@ -1203,259 +1310,249 @@ class _PremiumReadingCardState extends State<_PremiumReadingCard>
         : (ThemeData.estimateBrightnessForColor(badgeBackground!) == Brightness.dark
               ? Colors.white.withValues(alpha: 0.94)
               : theme.colorScheme.onSurface);
-    final cardBaseColor = widget.liturgicalColor != null
-        ? Color.alphaBlend(
-            isLight
-                ? Colors.white.withValues(alpha: 0.94)
-                : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.92),
-            widget.liturgicalColor!.withValues(alpha: isLight ? 0.14 : 0.24),
-          )
-        : theme.colorScheme.surface;
 
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        return Transform.scale(
-          scale: _scaleAnimation.value,
-          child: GestureDetector(
-            onTapDown: (_) => _controller.forward(),
-            onTapUp: (_) => _controller.reverse(),
-            onTapCancel: () => _controller.reverse(),
-            onTap: widget.onTap,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              margin: const EdgeInsets.symmetric(vertical: 6),
-              decoration: BoxDecoration(
-                color: cardBaseColor,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: color.withValues(alpha: 0.3),
-                  width: 1.5,
+    return InkWell(
+      onTap: () => widget.onReadingSelected(reading),
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Reading type badge with alternative indicator
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: badgeBackground,
+                    gradient: isLight
+                        ? LinearGradient(
+                            colors: [
+                              color.withValues(alpha: 0.2),
+                              color.withValues(alpha: 0.1),
+                            ],
+                          )
+                        : null,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: isLight
+                          ? color.withValues(alpha: 0.3)
+                          : color.withValues(alpha: 0.42),
+                    ),
+                  ),
+                  child: Text(
+                    widget.group.baseType,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: badgeForeground,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: color.withValues(alpha: 0.1),
-                    blurRadius: _elevationAnimation.value,
-                    offset: Offset(0, _elevationAnimation.value / 2),
+                if (widget.group.hasAlternatives) ...[
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.amber.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.amber.withValues(alpha: 0.4)),
+                    ),
+                    child: Text(
+                      '+${widget.group.alternatives.length} alt',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: Colors.amber.shade700,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                 ],
+              ],
+            ),
+
+            const SizedBox(height: 16),
+
+            // Reference
+            Text(
+              reading.reading,
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w700,
+                color: theme.colorScheme.onSurface,
+                height: 1.3,
               ),
-              child: Container(
-                padding: const EdgeInsets.all(20),
+            ),
+
+            const SizedBox(height: 8),
+
+            // Psalm response if applicable
+            if (reading.psalmResponse != null && reading.psalmResponse!.trim().isNotEmpty) ...[
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      cardBaseColor,
-                      Color.alphaBlend(
-                        Colors.white.withValues(alpha: isLight ? 0.08 : 0.04),
-                        cardBaseColor,
-                      ),
-                    ],
-                  ),
+                  color: Colors.blue.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.blue.withValues(alpha: 0.2)),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Reading type badge
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: badgeBackground,
-                        gradient: isLight
-                            ? LinearGradient(
-                                colors: [
-                                  color.withValues(alpha: 0.2),
-                                  color.withValues(alpha: 0.1),
-                                ],
-                              )
-                            : null,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: isLight
-                              ? color.withValues(alpha: 0.3)
-                              : color.withValues(alpha: 0.42),
-                        ),
-                      ),
+                    Icon(
+                      Icons.music_note,
+                      size: 16,
+                      color: Colors.blue.shade700,
+                    ),
+                    const SizedBox(width: 6),
+                    Flexible(
                       child: Text(
-                        widget.reading.position ?? 'Reading',
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: badgeForeground,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    // Reference
-                    Text(
-                      widget.reading.reading,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        color: theme.colorScheme.onSurface,
-                        height: 1.3,
-                      ),
-                    ),
-
-                    const SizedBox(height: 8),
-
-                    if (widget.readingTitle != null) ...[
-                      Text(
-                        widget.readingTitle!,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
+                        'Response: ${reading.psalmResponse}',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: Colors.blue.shade700,
                           fontWeight: FontWeight.w600,
-                          height: 1.4,
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                    ],
-
-                    if (widget.previewText != null &&
-                        widget.previewText!.isNotEmpty) ...[
-                      Text(
-                        widget.previewText!,
-                        maxLines: 3,
                         overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(
-                            alpha: 0.88,
-                          ),
-                          height: 1.5,
-                        ),
+                        maxLines: 1,
                       ),
-                      const SizedBox(height: 10),
-                    ],
-
-                    // Direct psalm response display
-                    if (widget.reading.psalmResponse != null && 
-                        widget.reading.psalmResponse!.trim().isNotEmpty) ...[
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: Colors.blue.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.blue.withValues(alpha: 0.2)),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.music_note,
-                              size: 16,
-                              color: Colors.blue.shade700,
-                            ),
-                            const SizedBox(width: 6),
-                            Flexible(
-                              child: Text(
-                                'Response: ${widget.reading.psalmResponse}',
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: Colors.blue.shade700,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                    ],
-
-                    // Direct gospel acclamation display
-                    if (widget.reading.gospelAcclamation != null && 
-                        widget.reading.gospelAcclamation!.trim().isNotEmpty) ...[
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: Colors.red.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.red.withValues(alpha: 0.2)),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.celebration,
-                              size: 16,
-                              color: Colors.red.shade700,
-                            ),
-                            const SizedBox(width: 6),
-                            Flexible(
-                              child: Text(
-                                'Acclamation: ${_truncateAcclamation(widget.reading.gospelAcclamation!)}',
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: Colors.red.shade700,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                    ],
-
-                    // Feast indicator
-                    if (widget.reading.feast != null) ...[
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color:
-                              widget.liturgicalColor?.withValues(alpha: 0.1) ??
-                              theme.colorScheme.primaryContainer,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(
-                          widget.reading.feast!,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color:
-                                widget.liturgicalColor ??
-                                theme.colorScheme.onPrimaryContainer,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ],
-
-                    // Arrow indicator
-                    const SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Icon(
-                          Icons.arrow_forward_ios_rounded,
-                          color: color.withValues(alpha: 0.6),
-                          size: 16,
-                        ),
-                      ],
                     ),
                   ],
                 ),
               ),
+              const SizedBox(height: 12),
+            ],
+
+            // Arrow indicator
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: color.withValues(alpha: 0.6),
+                  size: 16,
+                ),
+              ],
             ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
-
-  /// Truncate acclamation text for display in widgets
-  String _truncateAcclamation(String text) {
-    if (text.length <= 40) return text;
-    return '${text.substring(0, 40).trimRight()}...';
+  
+  Widget _buildAlternativesSection(ThemeData theme, Color color, bool isLight) {
+    return Column(
+      children: [
+        // Expand/collapse button
+        InkWell(
+          onTap: _toggleExpanded,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            child: Row(
+              children: [
+                Icon(
+                  _isExpanded ? Icons.expand_less : Icons.expand_more,
+                  color: color.withValues(alpha: 0.8),
+                  size: 20,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  _isExpanded ? 'Hide Alternatives' : 'Show Alternatives',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: color.withValues(alpha: 0.8),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const Spacer(),
+                Text(
+                  '${widget.group.alternatives.length} available',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        
+        // Alternatives list
+        SizeTransition(
+          sizeFactor: _expandAnimation,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              children: widget.group.alternatives.asMap().entries.map((entry) {
+                final index = entry.key;
+                final alternative = entry.value;
+                return _buildAlternativeItem(theme, color, alternative, index + 1);
+              }).toList(),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+  
+  Widget _buildAlternativeItem(ThemeData theme, Color color, DailyReading reading, int number) {
+    return InkWell(
+      onTap: () => widget.onReadingSelected(reading),
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.05),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: color.withValues(alpha: 0.2)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    'Alternative $number',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: color.withValues(alpha: 0.9),
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: color.withValues(alpha: 0.6),
+                  size: 14,
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              reading.reading,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+                color: theme.colorScheme.onSurface,
+              ),
+            ),
+            if (reading.psalmResponse != null && reading.psalmResponse!.trim().isNotEmpty) ...[
+              const SizedBox(height: 6),
+              Text(
+                'Response: ${reading.psalmResponse}',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: Colors.blue.shade700,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -132,42 +132,45 @@ void main() {
       expect(readings['Gospel'], isNotEmpty);
     });
 
-    test('Lent Saturdays expose shorter alternatives and normalize references', () async {
+    test('Lent Saturdays normalize shorter gospel references correctly', () async {
       final lent4Saturday = await backend.getReadingsForDate(DateTime(2026, 3, 21));
       final lent5Saturday = await backend.getReadingsForDate(DateTime(2026, 3, 28));
 
       expect(lent4Saturday.any((r) => r.position == 'Gospel'), isTrue);
-      expect(lent4Saturday.any((r) => r.position == 'Gospel (alternative)'), isTrue);
-
-      expect(lent5Saturday.any((r) => r.position == 'First Reading'), isTrue);
       expect(lent5Saturday.any((r) => r.position == 'Gospel'), isTrue);
-      // The Lent 4 Saturday pair includes the known shorter gospel option.
-      // Lent 5 Saturday may or may not carry alternatives in source data.
 
-      final affected = [...lent4Saturday, ...lent5Saturday]
-          .where((r) => (r.position ?? '').toLowerCase().contains('reading') || (r.position ?? '').toLowerCase().contains('gospel'));
+      // Both dates should have standard reading positions (no alternatives)
+      expect(lent4Saturday.any((r) => r.position == 'First Reading'), isTrue);
+      expect(lent4Saturday.any((r) => r.position == 'Responsorial Psalm'), isTrue);
+      
+      expect(lent5Saturday.any((r) => r.position == 'First Reading'), isTrue);
+      expect(lent5Saturday.any((r) => r.position == 'Responsorial Psalm'), isTrue);
 
-      for (final row in affected) {
+      // Verify (shorter) markers are stripped from reading references
+      final allReadings = [...lent4Saturday, ...lent5Saturday];
+      for (final row in allReadings) {
+        expect(row.reading.toLowerCase(), isNot(contains('(shorter)')),
+            reason: '(shorter) marker should be stripped: ${row.reading}');
         expect(row.reading.toLowerCase(), isNot(contains('(s h o')),
             reason: 'Malformed shorter marker should be stripped: ${row.reading}');
       }
-    }, skip: 'Defunct broad verification assumption from older Lent shorter-option resolver path.');
+    }, skip: false);
 
-    test('Lent shorter-option gospels load text (no unavailable message)', () async {
+    test('Lent Saturday gospels load text successfully (no unavailable message)', () async {
       final readings = await backend.getReadingsForDate(DateTime(2026, 3, 21));
-      final alternatives = readings.where((r) => r.position == 'Gospel (alternative)').toList();
-      expect(alternatives, isNotEmpty);
+      final gospels = readings.where((r) => r.position == 'Gospel').toList();
+      expect(gospels, isNotEmpty, reason: 'Should have at least one gospel reading');
 
-      for (final gospel in alternatives) {
+      for (final gospel in gospels) {
         final text = await backend.getReadingText(
           gospel.reading,
           psalmResponse: gospel.psalmResponse,
           incipit: gospel.incipit,
         );
         expect(text, isNot(contains('Reading text unavailable')),
-            reason: 'Alternative gospel should parse and load: ${gospel.reading}');
+            reason: 'Gospel should parse and load successfully: ${gospel.reading}');
       }
-    }, skip: 'Defunct broad verification assumption from older Lent shorter-option resolver path.');
+    }, skip: false);
   });
 
   group('Sunday Readings (colon-notation CSV, Cycle A)', () {
