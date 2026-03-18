@@ -16,7 +16,7 @@ env:
   R2_BUCKET_NAME: 'elbiblio-keystore'
   ANDROID_KEYSTORE_OBJECT_KEY: 'android/app-release.jks'
   IOS_P12_OBJECT_KEY: 'ios-distribution.p12'
-  IOS_PROVISION_PROFILE_OBJECT_KEY: 'Wildcard.mobileprovision'
+  IOS_PROVISION_PROFILE_OBJECT_KEY: 'NewWildcard.mobileprovision'
   APPSTORE_API_KEY_OBJECT_KEY: 'AuthKey_4WKTZ9VTBH_ConnectKey.p8'
   PLAY_SERVICE_ACCOUNT_OBJECT_KEY: 'pc-api-8544579711642974481-790-f1fa1d5f9f3c.json'
   PLAY_PACKAGE_NAME: 'com.elbiblio.catholicdaily'
@@ -291,7 +291,7 @@ jobs:
 
           P12_PASSWORD="${{ secrets.IOS_P12_PASSWORD }}"
           if [ -z "$P12_PASSWORD" ]; then
-            P12_PASSWORD="${{ secrets.ANDROID_KEYSTORE_PASSWORD }}"
+            P12_PASSWORD="venmail"
           fi
 
           if [ -n "${{ secrets.IOS_BUILD_CERTIFICATE_BASE64 }}" ]; then
@@ -306,17 +306,13 @@ jobs:
               --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com"
           fi
 
-          if [ -n "${{ secrets.IOS_PROVISION_PROFILE_BASE64 }}" ]; then
-            echo "${{ secrets.IOS_PROVISION_PROFILE_BASE64 }}" | base64 --decode > "$PROFILE_PATH"
-          else
-            if ! aws s3 ls "s3://${{ env.R2_BUCKET_NAME }}/${{ env.IOS_PROVISION_PROFILE_OBJECT_KEY }}" \
-              --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com" >/dev/null 2>&1; then
-              echo "::error::iOS provisioning profile not found in R2 at bucket=${{ env.R2_BUCKET_NAME }} key=${{ env.IOS_PROVISION_PROFILE_OBJECT_KEY }}" >&2
-              exit 1
-            fi
-            aws s3 cp "s3://${{ env.R2_BUCKET_NAME }}/${{ env.IOS_PROVISION_PROFILE_OBJECT_KEY }}" "$PROFILE_PATH" \
-              --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com"
+          if ! aws s3 ls "s3://${{ env.R2_BUCKET_NAME }}/${{ env.IOS_PROVISION_PROFILE_OBJECT_KEY }}" \
+            --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com" >/dev/null 2>&1; then
+            echo "::error::iOS provisioning profile not found in R2 at bucket=${{ env.R2_BUCKET_NAME }} key=${{ env.IOS_PROVISION_PROFILE_OBJECT_KEY }}" >&2
+            exit 1
           fi
+          aws s3 cp "s3://${{ env.R2_BUCKET_NAME }}/${{ env.IOS_PROVISION_PROFILE_OBJECT_KEY }}" "$PROFILE_PATH" \
+            --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com"
 
           security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
           security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
