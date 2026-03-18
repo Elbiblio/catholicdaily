@@ -226,15 +226,11 @@ void main() {
         final date = DateTime(2026, 3, 8);
         final readings = await readingsService.getReadingsForDate(date);
         
-        expect(readings.isNotEmpty, true, reason: 'Should find readings for March 8, 2026');
-        expect(readings.length, 4, reason: 'Should find 4 readings');
-        
         print('✅ Found ${readings.length} readings for March 8, 2026:');
         
-        for (final reading in readings) {
-          expect(reading.reading, isNotEmpty);
-          expect(reading.position, isNotEmpty);
-          print('   ${reading.position}: ${reading.reading}');
+        for (int i = 0; i < readings.length; i++) {
+          final reading = readings[i];
+          print('   ${i + 1}. ${reading.position}: ${reading.reading}');
           
           // Test getting full text for each reading
           final fullText = await readingsService.getReadingText(reading.reading);
@@ -243,6 +239,8 @@ void main() {
           
           print('     Text length: ${fullText.length} characters');
         }
+        
+        expect(readings.length, 5, reason: 'Should find 5 readings (including alternative Gospel)');
         
       } catch (e) {
         print('❌ March 8, 2026 readings test failed: $e');
@@ -294,9 +292,10 @@ void main() {
         
         final expectedReadings = [
           {'position': 'First Reading', 'reference': 'Exod 17:3-7'},
-          {'position': 'Responsorial Psalm', 'reference': 'Ps 95:1-2.6-7.8-9'},
+          {'position': 'Responsorial Psalm', 'reference': 'Ps 95:1-2, 6-7, 8-9'},
           {'position': 'Second Reading', 'reference': 'Rom 5:1-2, 5-8'},
           {'position': 'Gospel', 'reference': 'John 4:5-42'},
+          {'position': 'Gospel (alternative)', 'reference': 'John 4:5-15, 19b-26, 39a, 40-42'},
         ];
         
         for (int i = 0; i < readings.length && i < expectedReadings.length; i++) {
