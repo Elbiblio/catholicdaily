@@ -27,9 +27,64 @@ env:
   ANDROID_KEY_DNAME: 'CN=Catholic Daily, OU=Mobile, O=Elbiblio, L=Unknown, ST=Unknown, C=US'
 
 jobs:
+  version_info:
+    name: Determine Package Version
+    runs-on: ubuntu-latest
+    outputs:
+      version_name: ${{ steps.version.outputs.version_name }}
+      version_code: ${{ steps.version.outputs.version_code }}
+      version_string: ${{ steps.version.outputs.version_string }}
+      version_changed: ${{ steps.version.outputs.version_changed }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine version info
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          version_line=$(grep '^version:' pubspec.yaml | head -n 1 || true)
+          if [ -z "$version_line" ]; then
+            echo "::error::Unable to find version in pubspec.yaml" >&2
+            exit 1
+          fi
+          current=$(echo "$version_line" | cut -d':' -f2 | tr -d '[:space:]')
+          if [ -z "$current" ]; then
+            echo "::error::pubspec.yaml version value is empty" >&2
+            exit 1
+          fi
+          version_name="${current%%+*}"
+          version_code="${current##*+}"
+          if [ "$version_name" = "$current" ]; then
+            version_code="1"
+          fi
+
+          previous=""
+          if git rev-parse HEAD^ >/dev/null 2>&1; then
+            prev_line=$(git show HEAD^:pubspec.yaml 2>/dev/null | grep '^version:' | head -n 1 || true)
+            if [ -n "$prev_line" ]; then
+              previous=$(echo "$prev_line" | cut -d':' -f2 | tr -d '[:space:]')
+            fi
+          fi
+
+          changed="true"
+          if [ -n "$previous" ] && [ "$previous" = "$current" ]; then
+            changed="false"
+          fi
+
+          echo "version_name=$version_name" >> "$GITHUB_OUTPUT"
+          echo "version_code=$version_code" >> "$GITHUB_OUTPUT"
+          echo "version_string=$current" >> "$GITHUB_OUTPUT"
+          echo "version_changed=$changed" >> "$GITHUB_OUTPUT"
+
   verify:
     name: Analyze and Test
     runs-on: ubuntu-latest
+    needs:
+      - version_info
 
     steps:
       - name: Checkout
@@ -70,12 +125,16 @@ jobs:
   android:
     name: Android Release Build
     runs-on: ubuntu-latest
-    needs: verify
-    if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    needs:
+      - verify
+      - version_info
+    if: (github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && (github.event_name == 'workflow_dispatch' || needs.version_info.outputs.version_changed == 'true')
     env:
       HAS_R2_ACCESS: ${{ secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '' }}
       HAS_ANDROID_SIGNING: ${{ (secrets.ANDROID_KEYSTORE_PASSWORD != '' || secrets.ANDROID_STORE_PASSWORD != '') && (secrets.ANDROID_KEYSTORE_BASE64 != '' || (secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '')) }}
       HAS_PLAY_UPLOAD: ${{ secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '' }}
+      VERSION_NAME: ${{ needs.version_info.outputs.version_name }}
+      VERSION_CODE: ${{ needs.version_info.outputs.version_code }}
 
     steps:
       - name: Checkout
@@ -190,11 +249,11 @@ jobs:
 
       - name: Build Android app bundle
         if: env.HAS_ANDROID_SIGNING == 'true'
-        run: flutter build appbundle --release
+        run: flutter build appbundle --release --build-name="${VERSION_NAME}" --build-number="${VERSION_CODE}"
 
       - name: Build Android APK
         if: env.HAS_ANDROID_SIGNING == 'true'
-        run: flutter build apk --release
+        run: flutter build apk --release --build-name="${VERSION_NAME}" --build-number="${VERSION_CODE}"
 
       - name: Skip signed Android build when secrets are missing
         if: env.HAS_ANDROID_SIGNING != 'true'
@@ -240,12 +299,16 @@ jobs:
   ios:
     name: iOS Release Build
     runs-on: macos-latest
-    needs: verify
-    if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    needs:
+      - verify
+      - version_info
+    if: (github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && (github.event_name == 'workflow_dispatch' || needs.version_info.outputs.version_changed == 'true')
     env:
       HAS_R2_ACCESS: ${{ secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '' }}
       HAS_IOS_SIGNING: ${{ (secrets.IOS_BUILD_CERTIFICATE_BASE64 != '' && secrets.IOS_PROVISION_PROFILE_BASE64 != '') || (secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '') }}
       HAS_TESTFLIGHT_UPLOAD: ${{ secrets.APPSTORE_PRIVATE_KEY != '' || (secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '') }}
+      VERSION_NAME: ${{ needs.version_info.outputs.version_name }}
+      VERSION_CODE: ${{ needs.version_info.outputs.version_code }}
 
     steps:
       - name: Checkout
@@ -294,17 +357,51 @@ jobs:
             P12_PASSWORD="venmail"
           fi
 
+          CERT_PATH="$RUNNER_TEMP/raw_certificate.p12"
           if [ -n "${{ secrets.IOS_BUILD_CERTIFICATE_BASE64 }}" ]; then
             echo "${{ secrets.IOS_BUILD_CERTIFICATE_BASE64 }}" | base64 --decode > "$CERT_PATH"
           else
-            if ! aws s3 ls "s3://${{ env.R2_BUCKET_NAME }}/${{ env.IOS_P12_OBJECT_KEY }}" \
-              --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com" >/dev/null 2>&1; then
-              echo "::error::iOS .p12 signing certificate not found in R2 at bucket=${{ env.R2_BUCKET_NAME }} key=${{ env.IOS_P12_OBJECT_KEY }}" >&2
-              exit 1
+            download_p12() {
+              local object_key="$1"
+              if aws s3 ls "s3://${{ env.R2_BUCKET_NAME }}/$object_key" \
+                --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com" >/dev/null 2>&1; then
+                aws s3 cp "s3://${{ env.R2_BUCKET_NAME }}/$object_key" "$CERT_PATH" \
+                  --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com"
+                echo "Using iOS signing certificate object: $object_key"
+                return 0
+              fi
+              return 1
+            }
+
+            if ! download_p12 "${{ env.IOS_P12_OBJECT_KEY }}"; then
+              FALLBACK_CERTS=(
+                "iosbuild/Venmail_Distribution.new.p12"
+                "iosbuild/Venmail_Distribution.p12"
+              )
+              FOUND_CERT=false
+              for cert in "${FALLBACK_CERTS[@]}"; do
+                if download_p12 "$cert"; then
+                  FOUND_CERT=true
+                  break
+                fi
+              done
+              if [ "$FOUND_CERT" != true ]; then
+                echo "::error::iOS .p12 signing certificate not found in R2 (checked ${FALLBACK_CERTS[*]})." >&2
+                exit 1
+              fi
             fi
-            aws s3 cp "s3://${{ env.R2_BUCKET_NAME }}/${{ env.IOS_P12_OBJECT_KEY }}" "$CERT_PATH" \
-              --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com"
           fi
+
+          # Repackage legacy PKCS#12 payload using OpenSSL so macOS security import can consume it.
+          LEGACY_PEM="$RUNNER_TEMP/legacy_certificate.pem"
+          MODERN_P12="$RUNNER_TEMP/modern_certificate.p12"
+          if ! openssl pkcs12 -legacy -in "$CERT_PATH" -nodes -passin pass:"$P12_PASSWORD" -out "$LEGACY_PEM" >/dev/null 2>&1; then
+            echo "::error::Unable to decode legacy iOS .p12 with provided password." >&2
+            exit 1
+          fi
+          openssl pkcs12 -export -in "$LEGACY_PEM" -out "$MODERN_P12" -passout pass:"$P12_PASSWORD" >/dev/null
+          rm -f "$LEGACY_PEM"
+          CERT_PATH="$MODERN_P12"
 
           if ! aws s3 ls "s3://${{ env.R2_BUCKET_NAME }}/${{ env.IOS_PROVISION_PROFILE_OBJECT_KEY }}" \
             --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com" >/dev/null 2>&1; then
@@ -324,7 +421,7 @@ jobs:
 
       - name: Build iOS without codesign
         if: env.HAS_IOS_SIGNING != 'true'
-        run: flutter build ios --release --no-codesign
+        run: flutter build ios --release --no-codesign --build-name="${VERSION_NAME}" --build-number="${VERSION_CODE}"
 
       - name: Generate export options
         if: env.HAS_IOS_SIGNING == 'true'
@@ -355,7 +452,7 @@ jobs:
 
       - name: Build signed iOS IPA
         if: env.HAS_IOS_SIGNING == 'true'
-        run: flutter build ipa --release --export-options-plist="$RUNNER_TEMP/ExportOptions.plist"
+        run: flutter build ipa --release --export-options-plist="$RUNNER_TEMP/ExportOptions.plist" --build-name="${VERSION_NAME}" --build-number="${VERSION_CODE}"
 
       - name: Package iOS build artifacts
         if: env.HAS_IOS_SIGNING != 'true'
