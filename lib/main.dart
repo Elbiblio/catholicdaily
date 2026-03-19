@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'data/services/theme_preferences.dart';
+import 'data/services/app_navigation_service.dart';
 import 'ui/screens/home_screen.dart';
+import 'ui/screens/reading_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,12 +40,38 @@ class CatholicDailyApp extends StatefulWidget {
 class _CatholicDailyAppState extends State<CatholicDailyApp> {
   late ThemeMode _themeMode;
   late AppThemeStyle _themeStyle;
+  final AppNavigationService _navigationService = AppNavigationService();
+  Widget? _initialScreen;
 
   @override
   void initState() {
     super.initState();
     _themeMode = widget.themePreferences.getThemeMode();
     _themeStyle = widget.themePreferences.getThemeStyle();
+    _initializeNavigation();
+  }
+
+  Future<void> _initializeNavigation() async {
+    await _navigationService.initialize();
+    
+    // Determine initial screen based on last navigation
+    if (_navigationService.shouldResumeToBibleChapter) {
+      final chapter = _navigationService.lastBibleChapter!;
+      _initialScreen = ReadingScreen(
+        reference: chapter['reference'] as String,
+        content: chapter['content'] as String,
+        liturgicalDay: null,
+      );
+    } else {
+      _initialScreen = HomeScreen(
+        themeMode: _themeMode,
+        themeStyle: _themeStyle,
+        onThemeModeChanged: _handleThemeModeChanged,
+        onThemeStyleChanged: _handleThemeStyleChanged,
+      );
+    }
+    
+    setState(() {});
   }
 
   @override
@@ -54,7 +82,7 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
       theme: _buildPremiumTheme(Brightness.light, _themeStyle),
       darkTheme: _buildPremiumTheme(Brightness.dark, _themeStyle),
       themeMode: _themeMode,
-      home: HomeScreen(
+      home: _initialScreen ?? HomeScreen(
         themeMode: _themeMode,
         themeStyle: _themeStyle,
         onThemeModeChanged: _handleThemeModeChanged,

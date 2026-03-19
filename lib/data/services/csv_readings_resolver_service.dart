@@ -548,12 +548,13 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         'B' => 'John 15:26-27; 16:12-15',
         _ => null,
       };
-      return _buildOverrideReadings(
+      return _buildPentecostOverrideReadings(
         date: date,
         firstReading: 'Acts 2:1-11',
         psalm: 'Ps 104:1, 24, 29-30, 31, 34',
         psalmResponse: 'Lord, send out your Spirit, and renew the face of the earth.',
         secondReading: secondReading,
+        sequence: 'Veni Sancte Spiritus (Sequence)',
         gospel: gospel,
         gospelAlternate: gospelAlt,
         gospelAcclamation: 'Come, Holy Spirit, fill the hearts of your faithful and kindle in them the fire of your love.',
@@ -778,6 +779,65 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
     }
 
     return null;
+  }
+
+  List<DailyReading> _buildPentecostOverrideReadings({
+    required DateTime date,
+    required String firstReading,
+    required String psalm,
+    required String psalmResponse,
+    String? secondReading,
+    required String sequence,
+    required String gospel,
+    String? gospelAlternate,
+    String? gospelAcclamation,
+  }) {
+    final readings = <DailyReading>[
+      DailyReading(
+        reading: _normalizeReferenceStyle(firstReading),
+        position: 'First Reading',
+        date: date,
+      ),
+      DailyReading(
+        reading: _normalizeReferenceStyle(psalm),
+        position: 'Responsorial Psalm',
+        date: date,
+        psalmResponse: psalmResponse,
+      ),
+    ];
+
+    if (secondReading != null && secondReading.isNotEmpty) {
+      readings.add(DailyReading(
+        reading: _normalizeReferenceStyle(secondReading),
+        position: 'Second Reading',
+        date: date,
+      ));
+    }
+
+    // Add the Sequence for Pentecost
+    readings.add(DailyReading(
+      reading: sequence,
+      position: 'Sequence',
+      date: date,
+    ));
+
+    readings.add(DailyReading(
+      reading: _normalizeReferenceStyle(gospel),
+      position: 'Gospel',
+      date: date,
+      gospelAcclamation: gospelAcclamation,
+    ));
+
+    if (gospelAlternate != null && gospelAlternate.isNotEmpty) {
+      readings.add(DailyReading(
+        reading: _normalizeReferenceStyle(gospelAlternate),
+        position: 'Gospel (alternative)',
+        date: date,
+        gospelAcclamation: gospelAcclamation,
+      ));
+    }
+
+    return readings;
   }
 
   List<DailyReading> _buildPalmSundayOverrideReadings({

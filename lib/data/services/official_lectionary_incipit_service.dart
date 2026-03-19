@@ -1,4 +1,4 @@
-/// Official Catholic Lectionary Incipit Service
+import 'intelligent_text_refinement_service.dart';
 ///
 /// Based on the General Instruction of the Lectionary (GILM) and the
 /// official Ordo Lectionum Missae. Implements a complete three-stage pipeline:
@@ -247,6 +247,20 @@ class OfficialLectionaryIncipitService {
       'in that time',
       'in those times',
       'in that day',
+      // Temporal sub-phrases the refinement service strips, kept here as a
+      // second-line safety net in case stripping fails (e.g. unusual casing).
+      'that night',
+      'that same night',
+      'that very night',
+      'that morning',
+      'that same morning',
+      'that very morning',
+      'that day',
+      'that same day',
+      'that very day',
+      'that evening',
+      'that same evening',
+      'that very evening',
     ],
 
     'At that time,': [
@@ -254,6 +268,19 @@ class OfficialLectionaryIncipitService {
       'in those days',
       'in that time',
       'at that moment',
+      // Same temporal sub-phrase safety net.
+      'that night',
+      'that same night',
+      'that very night',
+      'that morning',
+      'that same morning',
+      'that very morning',
+      'that day',
+      'that same day',
+      'that very day',
+      'that evening',
+      'that same evening',
+      'that very evening',
     ],
 
     // ── In principio / narrative openers ──────────────────────────────────
@@ -447,16 +474,23 @@ class OfficialLectionaryIncipitService {
     final book = _extractBookAbbreviation(readingReference);
     final isGospel = book != null && _gospelBooks.contains(book);
 
-    // Stage 1 — correct gospel pronouns first so the tautology check
-    //           in stage 3 operates on the final, corrected text.
-    final correctedText = isGospel
-        ? _applyGospelPronounCorrections(readingText)
-        : readingText;
+    // Stage 1a — structural text cleaning (redundant phrases, repeated formulae)
+    final textRefinementService = IntelligentTextRefinementService();
+    String correctedText = textRefinementService.refineReadingText(readingText);
+
+    // Stage 1b — gospel pronoun correction ("He said…" → "Jesus said…")
+    //   Deliberately separate from the refinement service so that the full
+    //   verb-list and verse-prefix logic (_applyGospelPronounCorrections) is
+    //   always used for gospels rather than the simpler heuristics that were
+    //   previously buried inside IntelligentTextRefinementService.
+    if (isGospel) {
+      correctedText = _applyGospelPronounCorrections(correctedText);
+    }
 
     // Stage 2 — candidate incipit by reference
     final candidate = getOfficialIncipit(readingReference);
 
-    // Stage 3 — suppress if tautological
+    // Stage 3 — tautology suppression
     String? finalIncipit;
     if (candidate != null) {
       finalIncipit = _shouldSuppressIncipit(candidate, correctedText)
@@ -483,6 +517,12 @@ class OfficialLectionaryIncipitService {
 
   bool usesIncipit(String readingReference) =>
       getOfficialIncipit(readingReference) != null;
+
+  /// Public method to check if an incipit should be suppressed.
+  /// Delegates to the private _shouldSuppressIncipit method.
+  bool shouldSuppressIncipit(String incipit, String readingText) {
+    return _shouldSuppressIncipit(incipit, readingText);
+  }
 
   Map<String, String> getBookSpecificRules() => Map.from(_bookSpecificRules);
   Map<String, String> getPassageSpecificRules() =>
@@ -676,7 +716,7 @@ class OfficialLectionaryIncipitService {
     const versePrefix = r'(?:\d+[a-z]?\.\s*|\d+[a-z]?\s+)?';
     text = text.replaceFirstMapped(
       RegExp(
-        '^($versePrefix)He\s+(' + verbAlt + r')\b',
+        '^(' + versePrefix + r')He\s+(' + verbAlt + r')\b',
         caseSensitive: true,
       ),
       (m) => '${m.group(1)}Jesus ${m.group(2)}',
@@ -685,7 +725,7 @@ class OfficialLectionaryIncipitService {
     for (final opener in const ['As', 'While', 'When', 'After']) {
       text = text.replaceFirstMapped(
         RegExp(
-          '^($versePrefix)(' + opener + r'\s+)(?:he|him)\b',
+          '^(' + versePrefix + ')(' + opener + r'\s+)(?:he|him)\b',
           caseSensitive: true,
         ),
         (m) => '${m.group(1)}${m.group(2)}Jesus',
@@ -694,7 +734,7 @@ class OfficialLectionaryIncipitService {
 
     text = text.replaceFirstMapped(
       RegExp(
-        '^($versePrefix)(?:He|Him)\b',
+        '^(' + versePrefix + r')(?:He|Him)\b',
         caseSensitive: true,
       ),
       (m) => '${m.group(1)}Jesus',

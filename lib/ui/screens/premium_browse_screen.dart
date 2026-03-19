@@ -35,6 +35,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
   DateTime _selectedDate = DateTime.now();
   List<DailyReading> _readings = [];
   Map<String, String> _readingTexts = {};
+  Map<String, String> _readingPreviews = {};
   bool _isLoading = true;
   LiturgicalDay? _liturgicalDay;
   OrdoYearVariables? _ordoYearVariables;
@@ -126,6 +127,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
       _readings = [];
       _ordoYearVariables = null;
       _readingTexts = {};
+      _readingPreviews = {};
     }
 
     setState(() => _isLoading = false);
@@ -352,26 +354,12 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                       ),
 
                     Text(
-                      _liturgicalDay!.title.isNotEmpty
-                          ? _liturgicalDay!.title
-                          : _liturgicalDay!.seasonName,
+                      _buildConciseHeader(_liturgicalDay!),
                       style: theme.textTheme.headlineSmall?.copyWith(
                         color: headerForeground,
-                        fontFamily: 'Canterbury',
+                        fontFamily: _shouldUseCanterburyFont(_liturgicalDay!) ? 'Canterbury' : null,
                         fontWeight: FontWeight.w700,
                         height: 1.15,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-
-                    const SizedBox(height: 8),
-
-                    Text(
-                      _liturgicalDay!.weekDescription,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: headerForeground.withValues(alpha: isLight ? 0.98 : 0.94),
-                        fontWeight: FontWeight.w500,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -606,6 +594,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                   child: _PremiumReadingGroupCard(
                     group: group,
                     liturgicalColor: _liturgicalDay?.colorValue,
+                    readingPreviews: _readingPreviews,
                     onReadingSelected: (reading) async {
                       HapticFeedback.lightImpact();
                       final readingIndex = _readings.indexOf(reading);
@@ -691,6 +680,70 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
         ],
       ),
     );
+  }
+
+  String _buildConciseHeader(LiturgicalDay liturgicalDay) {
+    // Check if it's Sunday with special formatting first
+    if (liturgicalDay.dayOfWeek.name == 'sunday') {
+      if (liturgicalDay.title.isNotEmpty && 
+          !liturgicalDay.title.toLowerCase().contains('of lent')) {
+        // Special Sunday (like Palm Sunday, Easter Sunday) - use title directly
+        return liturgicalDay.title;
+      } else if (liturgicalDay.title.isNotEmpty && 
+                 liturgicalDay.title.toLowerCase().contains('sunday')) {
+        // If "Sunday" is already in the title, use title directly
+        return liturgicalDay.title;
+      } else {
+        // Regular Sunday in Lent/Advent/Easter/etc.
+        return '${liturgicalDay.weekNumber}${_getOrdinalSuffix(liturgicalDay.weekNumber)} Sunday of ${liturgicalDay.seasonName}';
+      }
+    }
+    
+    // Check if it's a solemnity (but not special Sundays already handled)
+    if (liturgicalDay.rank != null && 
+        liturgicalDay.rank!.toLowerCase().contains('solemnity')) {
+      // For solemnities, use title case instead of all caps
+      if (liturgicalDay.title.isNotEmpty) {
+        return _toTitleCase(liturgicalDay.title);
+      }
+      return 'Solemnity';
+    }
+    
+    // For regular weekdays, show "Thursday of the x week of Lent" format
+    return liturgicalDay.weekDescription;
+  }
+  
+  String _getOrdinalSuffix(int number) {
+    if (number >= 11 && number <= 13) return 'th';
+    switch (number % 10) {
+      case 1: return 'st';
+      case 2: return 'nd';
+      case 3: return 'rd';
+      default: return 'th';
+    }
+  }
+  
+  String _toTitleCase(String text) {
+    if (text.isEmpty) return text;
+    
+    return text.split(' ').map((word) {
+      if (word.isEmpty) return word;
+      return '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}';
+    }).join(' ');
+  }
+  
+  bool _shouldUseCanterburyFont(LiturgicalDay liturgicalDay) {
+    // Use Canterbury font for Sundays and solemnities
+    if (liturgicalDay.dayOfWeek.name == 'sunday') {
+      return true;
+    }
+    
+    if (liturgicalDay.rank != null && 
+        liturgicalDay.rank!.toLowerCase().contains('solemnity')) {
+      return true;
+    }
+    
+    return false;
   }
 
   String _getLiturgicalDetails() {
@@ -916,6 +969,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
   void _applyHydratedReadings(HydratedReadingSet hydrated) {
     _readings = hydrated.readings;
     _readingTexts = hydrated.readingTexts;
+    _readingPreviews = hydrated.readingPreviews;
   }
 
   List<ReadingGroup> get _groupedReadings {
@@ -1184,11 +1238,13 @@ class ReadingGroup {
 class _PremiumReadingGroupCard extends StatefulWidget {
   final ReadingGroup group;
   final Color? liturgicalColor;
+  final Map<String, String> readingPreviews;
   final Function(DailyReading) onReadingSelected;
   
   const _PremiumReadingGroupCard({
     required this.group,
     this.liturgicalColor,
+    required this.readingPreviews,
     required this.onReadingSelected,
   });
   
@@ -1386,7 +1442,12 @@ class _PremiumReadingGroupCardState extends State<_PremiumReadingGroupCard>
               ),
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
+
+            // Reading preview
+            _buildReadingPreview(theme, reading),
+
+            const SizedBox(height: 12),
 
             // Psalm response if applicable
             if (reading.psalmResponse != null && reading.psalmResponse!.trim().isNotEmpty) ...[
@@ -1440,6 +1501,57 @@ class _PremiumReadingGroupCardState extends State<_PremiumReadingGroupCard>
     );
   }
   
+  Widget _buildReadingPreview(ThemeData theme, DailyReading reading) {
+    final preview = widget.readingPreviews[reading.reading];
+    if (preview == null || preview.trim().isEmpty) {
+      return const SizedBox.shrink();
+    }
+    
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: theme.colorScheme.outline.withValues(alpha: 0.2),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.format_quote,
+                size: 16,
+                color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+              ),
+              const SizedBox(width: 6),
+              Text(
+                'Preview',
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            preview,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.85),
+              height: 1.4,
+              fontStyle: FontStyle.italic,
+            ),
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
+  }
+  
   Widget _buildAlternativesSection(ThemeData theme, Color color, bool isLight) {
     return Column(
       children: [
@@ -1456,14 +1568,17 @@ class _PremiumReadingGroupCardState extends State<_PremiumReadingGroupCard>
                   size: 20,
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  _isExpanded ? 'Hide Alternatives' : 'Show Alternatives',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: color.withValues(alpha: 0.8),
-                    fontWeight: FontWeight.w600,
+                Expanded(
+                  child: Text(
+                    _isExpanded ? 'Hide Alternatives' : 'Show Alternatives',
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: color.withValues(alpha: 0.8),
+                      fontWeight: FontWeight.w600,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                const Spacer(),
+                const SizedBox(width: 8),
                 Text(
                   '${widget.group.alternatives.length} available',
                   style: theme.textTheme.bodySmall?.copyWith(
@@ -1540,6 +1655,8 @@ class _PremiumReadingGroupCardState extends State<_PremiumReadingGroupCard>
                 color: theme.colorScheme.onSurface,
               ),
             ),
+            const SizedBox(height: 8),
+            _buildReadingPreview(theme, reading),
             if (reading.psalmResponse != null && reading.psalmResponse!.trim().isNotEmpty) ...[
               const SizedBox(height: 6),
               Text(

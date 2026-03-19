@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'premium_browse_screen.dart';
-import 'search_screen.dart';
 import 'reading_screen.dart';
 import 'settings_screen.dart';
+import 'prayers_screen.dart';
+import 'bible_screen.dart';
 import '../../data/models/bible_version.dart';
 import '../../data/services/theme_preferences.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
@@ -11,6 +12,7 @@ import '../../data/services/readings_backend_io.dart';
 import '../../data/services/reading_flow_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/models/daily_reading.dart';
+import '../../data/services/app_navigation_service.dart';
 
 typedef ReadingSelectionHandler = void Function(
   String reference,
@@ -48,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? _lastReadingReference;
   String? _lastReadingContent;
   bool _resumedOnLaunch = false;
+  final AppNavigationService _navigationService = AppNavigationService();
 
   List<BibleVersion> _versions = [];
   bool _isLoading = true;
@@ -64,6 +67,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _initialize() async {
+    await _navigationService.initialize();
+    await _navigationService.trackHomeScreen();
+    
     final prefs = await SharedPreferences.getInstance();
     _currentIndex = prefs.getInt(_keyLastTabIndex) ?? 0;
     _lastReadingReference = prefs.getString(_keyLastReadingReference);
@@ -127,7 +133,8 @@ class _HomeScreenState extends State<HomeScreen> {
     List<DailyReading>? readingSet,
     int? selectedIndex,
   ]) {
-    if (readingSet != null) {
+    // Only build a new session if we don't already have one or if explicitly provided with a different set
+    if (readingSet != null && (_readingSession.isEmpty || !_readingSetsEqual(readingSet, _readingSession.readings))) {
       _readingSession = _readingFlow.buildSession(
         readings: readingSet,
         readingTexts: {},
@@ -150,6 +157,16 @@ class _HomeScreenState extends State<HomeScreen> {
       liturgicalDay: liturgicalDay,
       readingData: readingData,
     );
+  }
+
+  bool _readingSetsEqual(List<DailyReading> set1, List<DailyReading> set2) {
+    if (set1.length != set2.length) return false;
+    for (int i = 0; i < set1.length; i++) {
+      if (set1[i].reading != set2[i].reading || set1[i].position != set2[i].position) {
+        return false;
+      }
+    }
+    return true;
   }
 
   Future<void> _primeReadingTexts(List<DailyReading> readings) async {
@@ -197,26 +214,31 @@ class _HomeScreenState extends State<HomeScreen> {
     if (index < 0 || index >= _readingSession.readings.length) {
       return;
     }
+    if (index == _readingSession.currentIndex) {
+      return; // Already at this reading
+    }
     _readingSession = _readingSession.copyWith(currentIndex: index);
     _openCurrentReadingFromNavigation();
   }
 
   void _goToNextReading() {
-    if (_readingSession.hasNext) {
-      _readingSession = _readingSession.copyWith(
-        currentIndex: _readingSession.currentIndex + 1,
-      );
-      _openCurrentReadingFromNavigation();
+    if (!_readingSession.hasNext) {
+      return;
     }
+    _readingSession = _readingSession.copyWith(
+      currentIndex: _readingSession.currentIndex + 1,
+    );
+    _openCurrentReadingFromNavigation();
   }
 
   void _goToPrevReading() {
-    if (_readingSession.hasPrev) {
-      _readingSession = _readingSession.copyWith(
-        currentIndex: _readingSession.currentIndex - 1,
-      );
-      _openCurrentReadingFromNavigation();
+    if (!_readingSession.hasPrev) {
+      return;
     }
+    _readingSession = _readingSession.copyWith(
+      currentIndex: _readingSession.currentIndex - 1,
+    );
+    _openCurrentReadingFromNavigation();
   }
 
   void _openCurrentReadingFromNavigation() {
@@ -233,6 +255,8 @@ class _HomeScreenState extends State<HomeScreen> {
         cachedText,
         null,
         reading,
+        _readingSession.readings,
+        _readingSession.currentIndex,
       );
       return;
     }
@@ -261,6 +285,8 @@ class _HomeScreenState extends State<HomeScreen> {
       text,
       null,
       reading,
+      _readingSession.readings,
+      _readingSession.currentIndex,
     );
   }
 
@@ -321,7 +347,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final screens = [
       PremiumBrowseScreen(onReadingSelected: _onReadingSelected),
-      SearchScreen(onReadingSelected: _onReadingSelected),
+      const PrayersScreen(),
+      BibleScreen(onReadingSelected: (reference, content, liturgicalDay) {
+        _onReadingSelected(reference, content, liturgicalDay);
+      }),
       SettingsScreen(
         versions: _versions,
         themeMode: widget.themeMode,
@@ -353,12 +382,17 @@ class _HomeScreenState extends State<HomeScreen> {
             NavigationDestination(
               icon: Icon(Icons.book_outlined),
               selectedIcon: Icon(Icons.book),
-              label: 'Daily',
+              label: 'Readings',
             ),
             NavigationDestination(
-              icon: Icon(Icons.search_outlined),
-              selectedIcon: Icon(Icons.search),
-              label: 'Search',
+              icon: Icon(Icons.bookmark_outline),
+              selectedIcon: Icon(Icons.bookmark),
+              label: 'Prayers',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.menu_book_outlined),
+              selectedIcon: Icon(Icons.menu_book),
+              label: 'Bible',
             ),
             NavigationDestination(
               icon: Icon(Icons.settings_outlined),

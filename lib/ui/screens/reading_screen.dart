@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import '../../data/services/improved_liturgical_calendar_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/models/daily_reading.dart';
-import '../../data/services/reading_tts_service.dart';
-import '../utils/reading_title_formatter.dart';
-import '../widgets/bible_version_switcher.dart';
-import '../widgets/gospel_acclamation_widget.dart';
-import '../widgets/psalm_response_widget.dart';
-import '../../data/services/readings_backend_io.dart' as backend;
+import '../../data/services/improved_liturgical_calendar_service.dart';
 import '../widgets/parchment_background.dart';
+import '../widgets/psalm_response_widget.dart';
+import '../widgets/gospel_acclamation_widget.dart';
+import '../widgets/bible_version_switcher.dart';
+import '../utils/reading_title_formatter.dart';
 
 class ReadingScreen extends StatefulWidget {
   final String reference;
@@ -50,8 +47,8 @@ class _ReadingScreenState extends State<ReadingScreen> {
   final ScrollController _scrollController = ScrollController();
   String _currentContent = '';
   bool _isReloading = false;
-  bool _isSpeaking = false;
-  final ReadingTtsService _ttsService = ReadingTtsService.instance;
+  bool _isBookmarked = false;
+  bool _isNavigating = false;
 
   String get _readingLabel {
     final position = widget.readingData?.position?.trim();
@@ -61,50 +58,22 @@ class _ReadingScreenState extends State<ReadingScreen> {
 
     final reference = widget.reference.toLowerCase();
     if (reference.startsWith('ps ') || reference.startsWith('psalm ')) {
-      return 'Responsorial Psalm';
-    }
-    if (reference.startsWith('matt ') ||
-        reference.startsWith('mark ') ||
-        reference.startsWith('luke ') ||
-        reference.startsWith('john ')) {
+      return 'Psalm';
+    } else if (reference.contains('gospel') || reference.contains('mk') || 
+               reference.contains('mt') || reference.contains('lk') || reference.contains('jn')) {
       return 'Gospel';
+    } else if (reference.contains('reading')) {
+      final parts = reference.split('reading');
+      if (parts.length > 1) {
+        final number = parts[1].trim();
+        return 'Reading $number';
+      }
+      return 'Reading';
     }
     return 'Reading';
   }
 
-  String get _baseReadingSlot => _basePosition(widget.readingData?.position);
-
-  List<DailyReading> get _variantOptions {
-    final current = widget.readingData;
-    if (current == null || widget.sessionReadings.isEmpty) {
-      return const [];
-    }
-    final baseSlot = _basePosition(current.position);
-    return widget.sessionReadings
-        .where((reading) => _basePosition(reading.position) == baseSlot)
-        .toList();
-  }
-
-  bool get _hasVariants => _variantOptions.length > 1;
-
-  String _basePosition(String? position) {
-    final normalized = (position ?? '').trim();
-    if (normalized.isEmpty) {
-      return '';
-    }
-    return normalized
-        .replaceFirst(RegExp(r'\s*\(alternative(?:\s+\d+)?\)$', caseSensitive: false), '')
-        .trim();
-  }
-
-  String _variantLabel(DailyReading reading) {
-    final position = (reading.position ?? '').trim();
-    if (position.isEmpty) {
-      return reading.reading;
-    }
-    if (position == _baseReadingSlot) {
-      return 'Primary';
-    }
+  String _formatPosition(String position) {
     final match = RegExp(r'\(alternative(?:\s+(\d+))?\)$', caseSensitive: false)
         .firstMatch(position);
     if (match == null) {
@@ -114,456 +83,70 @@ class _ReadingScreenState extends State<ReadingScreen> {
     return number == null ? 'Alternative' : 'Alternative $number';
   }
 
-  Future<void> _showTtsControls() async {
-    await _ttsService.initialize();
-    if (!mounted) {
-      return;
-    }
-
-    var sliderValue = _ttsService.speechRate;
-    await showModalBottomSheet<void>(
-      context: context,
-      showDragHandle: true,
-      builder: (context) {
-        final theme = Theme.of(context);
-        return StatefulBuilder(
-          builder: (context, setModalState) {
-            return SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Read aloud',
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Adjust playback speed and start or stop reading.',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: FilledButton.icon(
-                            onPressed: () async {
-                              if (_isSpeaking) {
-                                await _stopTts();
-                              } else {
-                                await _toggleTts();
-                              }
-                              if (!mounted) {
-                                return;
-                              }
-                              setModalState(() {});
-                              setState(() {});
-                            },
-                            icon: Icon(_isSpeaking ? Icons.stop_circle_outlined : Icons.play_arrow_rounded),
-                            label: Text(_isSpeaking ? 'Stop' : 'Play'),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Speed',
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Text(
-                          '${sliderValue.toStringAsFixed(2)}x',
-                          style: theme.textTheme.labelLarge?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Slider(
-                      value: sliderValue,
-                      min: 0.3,
-                      max: 0.7,
-                      divisions: 8,
-                      label: sliderValue.toStringAsFixed(2),
-                      onChanged: (value) async {
-                        setModalState(() {
-                          sliderValue = value;
-                        });
-                        await _ttsService.setSpeechRate(value);
-                        if (mounted) {
-                          setState(() {});
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  void _selectVariant(DailyReading reading) {
-    final index = widget.sessionReadings.indexOf(reading);
-    if (index < 0) {
-      return;
-    }
-    widget.onSelectReadingIndex?.call(index);
-  }
-
-  String get _insightContextLabel {
-    final position = widget.readingData?.position?.trim();
-    if (position != null && position.isNotEmpty) {
-      return position;
-    }
-    return 'Reading';
-  }
-
   @override
   void initState() {
     super.initState();
     _currentContent = widget.content;
+    _loadBookmarkStatus();
   }
 
   @override
   void didUpdateWidget(ReadingScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.content != oldWidget.content) {
+    if (oldWidget.content != widget.content) {
       setState(() {
         _currentContent = widget.content;
       });
-      _scrollController.animateTo(
-        0,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
     }
   }
 
-  Future<void> _reloadWithNewVersion() async {
+  Future<void> _loadBookmarkStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    final bookmarks = prefs.getStringList('bookmarked_readings') ?? [];
     setState(() {
-      _isReloading = true;
-    });
-
-    try {
-      final readingsBackend = backend.ReadingsBackendIo();
-      final newContent = await readingsBackend.getReadingText(
-        widget.reference,
-        psalmResponse: widget.readingData?.psalmResponse,
-        incipit: widget.readingData?.incipit,
-      );
-      
-      if (mounted) {
-        setState(() {
-          _currentContent = newContent;
-          _isReloading = false;
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _isReloading = false;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to reload: $e')),
-        );
-      }
-    }
-  }
-
-  Future<void> _toggleTts() async {
-    if (_isSpeaking) {
-      await _stopTts();
-      return;
-    }
-
-    final didStart = await _ttsService.speak(
-      title: _readingLabel,
-      reference: widget.reference,
-      content: _currentContent,
-    );
-
-    if (!mounted) {
-      return;
-    }
-
-    if (didStart) {
-      setState(() {
-        _isSpeaking = true;
-      });
-      return;
-    }
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Text-to-speech is unavailable right now')),
-    );
-  }
-
-  Future<void> _stopTts() async {
-    await _ttsService.stop();
-    if (!mounted) {
-      return;
-    }
-    setState(() {
-      _isSpeaking = false;
+      _isBookmarked = bookmarks.contains(widget.reference);
     });
   }
 
-  Future<void> _showVerseActions({
-    _Verse? verse,
-    String? selectedText,
-    String? selectedLabel,
-  }) async {
-    final label = selectedLabel ?? (verse != null ? 'Verse ${verse.number}' : 'Selected text');
-    final text = selectedText ?? verse?.text;
+  Future<void> _toggleBookmark() async {
+    final prefs = await SharedPreferences.getInstance();
+    final bookmarks = prefs.getStringList('bookmarked_readings') ?? [];
+    
+    if (_isBookmarked) {
+      bookmarks.remove(widget.reference);
+    } else {
+      bookmarks.add(widget.reference);
+    }
+    
+    await prefs.setStringList('bookmarked_readings', bookmarks);
+    setState(() {
+      _isBookmarked = !_isBookmarked;
+    });
+  }
 
-    if (text == null || text.trim().isEmpty) {
+  void _selectVariant(DailyReading reading) async {
+    if (_isNavigating) return; // Prevent multiple simultaneous selections
+    
+    final index = widget.sessionReadings.indexOf(reading);
+    if (index < 0 || index == widget.currentReadingIndex) {
       return;
     }
 
-    if (!mounted) {
-      return;
-    }
+    setState(() {
+      _isNavigating = true;
+    });
 
-    final selectedAction = await showModalBottomSheet<String>(
-      context: context,
-      showDragHandle: true,
-      builder: (context) {
-        final theme = Theme.of(context);
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'AI Verse Insights',
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  '$label • ${widget.reference}',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                _InsightActionTile(
-                  icon: Icons.auto_awesome,
-                  title: 'Insight for $label',
-                  subtitle: 'Explain the selected verse or highlighted line.',
-                  onTap: () => Navigator.of(context).pop('selected'),
-                ),
-                const SizedBox(height: 8),
-                _InsightActionTile(
-                  icon: Icons.menu_book_rounded,
-                  title: 'Insight for entire $_insightContextLabel',
-                  subtitle: 'Explain the full passage you are currently viewing.',
-                  onTap: () => Navigator.of(context).pop('full'),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-
-    if (selectedAction == 'selected') {
-      await _showInsightSheet(
-        title: 'Insight for $label',
-        reference: verse != null ? '${widget.reference}:${verse.number}' : widget.reference,
-        highlightedText: text,
-        fetchInsight: () => _fetchInsight(
-          focusText: text,
-          fullContextText: _currentContent,
-          mode: 'selected',
-          verseNumber: verse?.number,
-        ),
-      );
-    } else if (selectedAction == 'full') {
-      await _showInsightSheet(
-        title: 'Insight for $_insightContextLabel',
-        reference: widget.reference,
-        highlightedText: _currentContent,
-        fetchInsight: () => _fetchInsight(
-          focusText: _currentContent,
-          fullContextText: _currentContent,
-          mode: 'full',
-        ),
-      );
-    }
-  }
-
-  Future<void> _showInsightSheet({
-    required String title,
-    required String reference,
-    required String highlightedText,
-    required Future<String> Function() fetchInsight,
-  }) async {
-    await showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => _ReadingInsightSheet(
-        title: title,
-        reference: reference,
-        highlightedText: highlightedText,
-        fetchInsight: fetchInsight,
-      ),
-    );
-  }
-
-  Future<String> _fetchInsight({
-    required String focusText,
-    required String fullContextText,
-    required String mode,
-    int? verseNumber,
-  }) async {
     try {
-      final insightReference = verseNumber != null
-          ? '$widget.reference:$verseNumber'
-          : widget.reference;
-      final verseId = _buildInsightVerseId(insightReference, mode);
-      final prompt = mode == 'full'
-          ? 'Explain this passage for a Catholic reader using the provided text and reference. Return the structured JSON shape expected by the API.'
-          : 'Explain this selected verse or line for a Catholic reader using the provided text and reference. Return the structured JSON shape expected by the API.';
-
-      final response = await http.post(
-        Uri.parse('https://api.elbiblio.com/api/bible/verses/$verseId/explain'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'text': focusText,
-          'reference': insightReference,
-          'version': 'rsvce',
-          'prompt': prompt,
-        }),
-      );
-      
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body) as Map<String, dynamic>;
-        final payload = (data['data'] as Map?)?.cast<String, dynamic>() ?? const <String, dynamic>{};
-        final formatted = _formatInsightResponse(payload, fullContextText: fullContextText);
-        if (formatted.trim().isNotEmpty) {
-          return formatted;
-        }
+      // Add a small delay for better UX feedback
+      await Future.delayed(const Duration(milliseconds: 100));
+      widget.onSelectReadingIndex?.call(index);
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isNavigating = false;
+        });
       }
-    } catch (e) {
-      debugPrint('Error fetching insight: $e');
     }
-    // Fallback if API fails or doesn't support generic text explanation yet
-    await Future.delayed(const Duration(seconds: 1));
-    if (mode == 'full') {
-      return "This passage is best understood as a whole unit. Read it in light of its literary setting, the surrounding verses, and the Church's living tradition. Ask how the full reading reveals God's action, what it teaches about Christ, and how it calls you to prayer and conversion.";
-    }
-    return "This selected verse or line can be read more fruitfully within the full passage around it. The Catholic tradition reads each verse in harmony with the whole of Scripture and the life of the Church, inviting prayerful reflection and concrete response.";
-  }
-
-  String _buildInsightVerseId(String reference, String mode) {
-    final sanitizedReference = reference
-        .toLowerCase()
-        .replaceAll(RegExp(r'[^a-z0-9]+'), '-')
-        .replaceAll(RegExp(r'-+'), '-')
-        .replaceAll(RegExp(r'^-|-$'), '');
-    final position = widget.readingData?.position
-        ?.toLowerCase()
-        .replaceAll(RegExp(r'[^a-z0-9]+'), '-')
-        .replaceAll(RegExp(r'-+'), '-')
-        .replaceAll(RegExp(r'^-|-$'), '');
-
-    return [
-      'missal',
-      position,
-      sanitizedReference,
-      mode,
-    ].whereType<String>().where((value) => value.isNotEmpty).join('_');
-  }
-
-  String _formatInsightResponse(
-    Map<String, dynamic> payload, {
-    required String fullContextText,
-  }) {
-    final quickInsight = (payload['quick_insight'] as Map?)?.cast<String, dynamic>() ?? const <String, dynamic>{};
-    final deeperExploration = (payload['deeper_exploration'] as Map?)?.cast<String, dynamic>() ?? const <String, dynamic>{};
-    final reflectionQuestions = (payload['reflection_questions'] as Map?)?.cast<String, dynamic>() ?? const <String, dynamic>{};
-    final livingThisOut = (payload['living_this_out'] as List?)?.whereType<Map>().map((item) => item.cast<String, dynamic>()).toList() ?? const <Map<String, dynamic>>[];
-    final theologicalNotes = (payload['theological_notes'] as List?)?.whereType<Map>().map((item) => item.cast<String, dynamic>()).toList() ?? const <Map<String, dynamic>>[];
-
-    final sections = <String>[];
-
-    void addSection(String title, String? content) {
-      final value = content?.trim();
-      if (value == null || value.isEmpty) {
-        return;
-      }
-      sections.add('$title\n$value');
-    }
-
-    addSection('Core meaning', quickInsight['core_meaning'] as String?);
-    addSection('Universal connection', quickInsight['universal_connection'] as String?);
-    addSection('Historical context', deeperExploration['historical_context'] as String?);
-    addSection('Original language insight', deeperExploration['original_language_insight'] as String?);
-    addSection('Biblical theme connection', deeperExploration['biblical_theme_connection'] as String?);
-
-    if (livingThisOut.isNotEmpty) {
-      final livingContent = livingThisOut.map((entry) {
-        final scenario = (entry['scenario'] as String?)?.trim();
-        final actions = (entry['actions'] as List?)?.whereType<String>().where((item) => item.trim().isNotEmpty).toList() ?? const <String>[];
-        final lines = <String>[];
-        if (scenario != null && scenario.isNotEmpty) {
-          lines.add(scenario);
-        }
-        lines.addAll(actions.map((action) => '- $action'));
-        return lines.join('\n');
-      }).where((entry) => entry.trim().isNotEmpty).join('\n\n');
-      addSection('Living this out', livingContent);
-    }
-
-    final questions = (reflectionQuestions['questions'] as List?)
-            ?.whereType<String>()
-            .where((item) => item.trim().isNotEmpty)
-            .toList() ??
-        const <String>[];
-    if (questions.isNotEmpty) {
-      addSection(
-        'Reflection questions',
-        questions.map((question) => '- $question').join('\n'),
-      );
-    }
-
-    if (theologicalNotes.isNotEmpty) {
-      final noteLines = theologicalNotes.map((entry) {
-        final topic = (entry['topic'] as String?)?.trim();
-        final note = (entry['note'] as String?)?.trim();
-        if (topic != null && topic.isNotEmpty && note != null && note.isNotEmpty) {
-          return '- $topic: $note';
-        }
-        return '- ${topic ?? note ?? ''}'.trim();
-      }).where((item) => item.length > 2).join('\n');
-      addSection('Theological notes', noteLines);
-    }
-
-    if (sections.isEmpty) {
-      return fullContextText.trim().isNotEmpty
-          ? 'This reading invites prayerful reflection within the whole passage. Read it slowly, note what it reveals about Christ, and ask how it calls you to faith, repentance, and charity.'
-          : '';
-    }
-
-    return sections.join('\n\n');
   }
 
   @override
@@ -574,41 +157,33 @@ class _ReadingScreenState extends State<ReadingScreen> {
     final ordoColor = widget.liturgicalDay?.colorValue ?? colorScheme.primary;
     final onOrdoColor = ThemeData.estimateBrightnessForColor(ordoColor) == Brightness.dark
         ? Colors.white
-        : colorScheme.onSurface;
-    final scaffoldColor = Color.alphaBlend(
-      (isLight ? Colors.white : colorScheme.surface).withValues(alpha: isLight ? 0.97 : 0.9),
-      ordoColor.withValues(alpha: isLight ? 0.08 : 0.18),
-    );
+        : isLight 
+            ? colorScheme.onSurface.withValues(alpha: 0.87)
+            : colorScheme.onSurface;
 
     return Scaffold(
-      backgroundColor: scaffoldColor,
+      backgroundColor: theme.colorScheme.surface,
       body: ParchmentBackground(
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color.alphaBlend(
-                  (isLight ? Colors.white : colorScheme.surface).withValues(alpha: isLight ? 0.88 : 0.22),
-                  ordoColor.withValues(alpha: isLight ? 0.10 : 0.18),
-                ),
-                scaffoldColor,
-              ],
-            ),
-          ),
-          child: CustomScrollView(
-            controller: _scrollController,
-            slivers: [
+        child: CustomScrollView(
+          controller: _scrollController,
+          slivers: [
             SliverAppBar(
               expandedHeight: widget.liturgicalDay != null ? 156 : 0,
               pinned: true,
+              automaticallyImplyLeading: true,
+              iconTheme: IconThemeData(
+                color: isLight 
+                    ? colorScheme.onSurface.withValues(alpha: 0.95)
+                    : onOrdoColor,
+              ),
               backgroundColor: Color.alphaBlend(
                 (isLight ? Colors.white : colorScheme.surface).withValues(alpha: isLight ? 0.94 : 0.84),
-                ordoColor.withValues(alpha: isLight ? 0.08 : 0.18),
+                ordoColor.withValues(alpha: isLight ? 0.06 : 0.12),
               ),
               surfaceTintColor: Colors.transparent,
-              foregroundColor: onOrdoColor,
+              foregroundColor: isLight 
+                  ? colorScheme.onSurface.withValues(alpha: 0.95)
+                  : onOrdoColor,
               flexibleSpace: widget.liturgicalDay != null
                   ? FlexibleSpaceBar(
                       background: Container(
@@ -619,13 +194,13 @@ class _ReadingScreenState extends State<ReadingScreen> {
                         child: Padding(
                           padding: EdgeInsets.fromLTRB(
                             16,
-                            MediaQuery.of(context).padding.top + kToolbarHeight + 12,
+                            MediaQuery.of(context).padding.top + 64,
                             16,
                             16,
                           ),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 widget.liturgicalDay!.fullDescription,
@@ -633,8 +208,6 @@ class _ReadingScreenState extends State<ReadingScreen> {
                                   color: onOrdoColor,
                                   fontWeight: FontWeight.w600,
                                 ),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
                               ),
                               const SizedBox(height: 4),
                               Text(
@@ -642,8 +215,6 @@ class _ReadingScreenState extends State<ReadingScreen> {
                                 style: theme.textTheme.bodySmall?.copyWith(
                                   color: onOrdoColor.withValues(alpha: 0.82),
                                 ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
                               ),
                             ],
                           ),
@@ -651,161 +222,98 @@ class _ReadingScreenState extends State<ReadingScreen> {
                       ),
                     )
                   : null,
+              actions: [
+                IconButton(
+                  icon: Icon(_isBookmarked ? Icons.bookmark : Icons.bookmark_border),
+                  onPressed: _toggleBookmark,
+                ),
+                PopupMenuButton<String>(
+                  onSelected: (value) {
+                    switch (value) {
+                      case 'copy':
+                        _copyText();
+                        break;
+                      case 'share':
+                        _shareText();
+                        break;
+                      case 'fullscreen':
+                        _toggleFullScreen();
+                        break;
+                    }
+                  },
+                  itemBuilder: (context) => [
+                    const PopupMenuItem(
+                      value: 'copy',
+                      child: Row(
+                        children: [
+                          Icon(Icons.copy),
+                          SizedBox(width: 12),
+                          Text('Copy text'),
+                        ],
+                      ),
+                    ),
+                    const PopupMenuItem(
+                      value: 'share',
+                      child: Row(
+                        children: [
+                          Icon(Icons.share),
+                          SizedBox(width: 12),
+                          Text('Share'),
+                        ],
+                      ),
+                    ),
+                    const PopupMenuItem(
+                      value: 'fullscreen',
+                      child: Row(
+                        children: [
+                          Icon(Icons.fullscreen),
+                          SizedBox(width: 12),
+                          Text('Fullscreen'),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
               title: Text(
                 _readingLabel,
                 style: theme.textTheme.titleLarge?.copyWith(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-              actions: [
-              // Text size controls
-              IconButton(
-                icon: Icon(_isSpeaking ? Icons.stop_circle_outlined : Icons.volume_up_outlined),
-                onPressed: _showTtsControls,
-                tooltip: _isSpeaking ? 'Reading aloud controls' : 'Read aloud controls',
-              ),
-              IconButton(
-                icon: const Icon(Icons.text_decrease),
-                onPressed: _textScale > 0.8
-                    ? () => setState(() => _textScale -= 0.1)
-                    : null,
-                tooltip: 'Decrease text size',
-              ),
-              IconButton(
-                icon: const Icon(Icons.text_increase),
-                onPressed: _textScale < 2.0
-                    ? () => setState(() => _textScale += 0.1)
-                    : null,
-                tooltip: 'Increase text size',
-              ),
-              // More options
-              PopupMenuButton<String>(
-                icon: const Icon(Icons.more_vert),
-                onSelected: (value) {
-                  switch (value) {
-                    case 'share':
-                      _shareText();
-                      break;
-                    case 'copy':
-                      _copyText();
-                      break;
-                    case 'tts':
-                      _showTtsControls();
-                      break;
-                    case 'insight_full':
-                      _showInsightSheet(
-                        title: 'Insight for $_insightContextLabel',
-                        reference: widget.reference,
-                        highlightedText: _currentContent,
-                        fetchInsight: () => _fetchInsight(
-                          focusText: _currentContent,
-                          fullContextText: _currentContent,
-                          mode: 'full',
-                        ),
-                      );
-                      break;
-                    case 'fullscreen':
-                      _toggleFullScreen();
-                      break;
-                  }
-                },
-                itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    value: 'share',
-                    child: Row(
-                      children: [
-                        Icon(Icons.share, size: 20),
-                        SizedBox(width: 12),
-                        Text('Share'),
-                      ],
-                    ),
-                  ),
-                  const PopupMenuItem(
-                    value: 'copy',
-                    child: Row(
-                      children: [
-                        Icon(Icons.copy, size: 20),
-                        SizedBox(width: 12),
-                        Text('Copy'),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 'tts',
-                    child: Row(
-                      children: [
-                        Icon(_isSpeaking ? Icons.stop_circle_outlined : Icons.volume_up_outlined, size: 20),
-                        const SizedBox(width: 12),
-                        Text(_isSpeaking ? 'Stop read aloud' : 'Read aloud'),
-                      ],
-                    ),
-                  ),
-                  const PopupMenuItem(
-                    value: 'insight_full',
-                    child: Row(
-                      children: [
-                        Icon(Icons.auto_awesome, size: 20),
-                        SizedBox(width: 12),
-                        Text('AI Insights (entire reading)'),
-                      ],
-                    ),
-                  ),
-                  const PopupMenuItem(
-                    value: 'fullscreen',
-                    child: Row(
-                      children: [
-                        Icon(Icons.fullscreen, size: 20),
-                        SizedBox(width: 12),
-                        Text('Full screen'),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-
-          // Content
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Reference header
-                  _buildHeader(theme),
-                  if (_hasVariants) ...[
-                    const SizedBox(height: 20),
-                    _buildVariantSwitcher(theme),
-                  ],
-                  const SizedBox(height: 32),
-
-                  // Psalm Response or Gospel Acclamation (before reading)
-                  _buildResponseAcclamation(theme),
-
-                  const SizedBox(height: 32),
-
-                  // Reading content with beautiful typography
-                  _buildContent(theme),
-
-                  const SizedBox(height: 48),
-                  
-                  // Version switcher
-                  _buildVersionFooter(theme),
-                  
-                  const SizedBox(height: 32),
-                  
-                  // Navigation
-                  _buildNavigation(theme),
-                  
-                  const SizedBox(height: 48),
-                ],
-              ),
             ),
-          ),
-        ],
-      ),
+            SliverToBoxAdapter(
+              child: _buildHeader(theme),
+            ),
+            if (widget.sessionReadings.length > 1)
+              SliverToBoxAdapter(
+                child: _buildVariantSwitcher(theme),
+              ),
+            if (widget.readingData?.psalmResponse != null)
+              SliverToBoxAdapter(
+                child: PsalmResponseWidget(
+                  reading: widget.readingData!,
+                  date: widget.liturgicalDay?.date ?? DateTime.now(),
+                ),
+              ),
+            if (widget.readingData?.gospelAcclamation != null)
+              SliverToBoxAdapter(
+                child: GospelAcclamationWidget(
+                  reading: widget.readingData!,
+                  date: widget.liturgicalDay?.date ?? DateTime.now(),
+                ),
+              ),
+            SliverToBoxAdapter(
+              child: _buildContent(theme),
+            ),
+            SliverToBoxAdapter(
+              child: _buildVersionFooter(theme),
+            ),
+            if (widget.hasNext || widget.hasPrev)
+              SliverToBoxAdapter(
+                child: _buildNavigation(theme),
+              ),
+          ],
         ),
       ),
       // Floating liturgical info button
@@ -822,48 +330,118 @@ class _ReadingScreenState extends State<ReadingScreen> {
   }
 
   Widget _buildNavigation(ThemeData theme) {
-    if (!widget.hasPrev && !widget.hasNext) return const SizedBox.shrink();
-    final isLight = theme.brightness == Brightness.light;
+    // Always show navigation when there are multiple readings in the session
+    final hasMultipleReadings = widget.sessionReadings.length > 1;
+    final shouldShowNavigation = hasMultipleReadings || widget.hasNext || widget.hasPrev;
+    
+    if (!shouldShowNavigation) return const SizedBox.shrink();
+    
     final ordoColor = widget.liturgicalDay?.colorValue ?? theme.colorScheme.primary;
     final buttonForeground = ThemeData.estimateBrightnessForColor(ordoColor) == Brightness.dark
         ? Colors.white
         : theme.colorScheme.onSurface;
-    
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        if (widget.hasPrev)
-          TextButton.icon(
-            onPressed: widget.onPrevReading,
-            icon: const Icon(Icons.arrow_back),
-            label: const Text('Previous'),
-            style: TextButton.styleFrom(
-              foregroundColor: theme.colorScheme.primary,
-              backgroundColor: Color.alphaBlend(
-                (isLight ? Colors.white : theme.colorScheme.surface).withValues(alpha: isLight ? 0.94 : 0.24),
-                ordoColor.withValues(alpha: isLight ? 0.08 : 0.14),
+
+    return Container(
+      margin: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Show reading count when there are multiple readings
+          if (hasMultipleReadings)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Text(
+                'Reading ${widget.currentReadingIndex + 1} of ${widget.sessionReadings.length}',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
-          )
-        else
-          const SizedBox.shrink(),
-          
-        if (widget.hasNext)
-          FilledButton.icon(
-            onPressed: widget.onNextReading,
-            icon: const Icon(Icons.arrow_forward),
-            label: const Text('Next Reading'),
-            style: FilledButton.styleFrom(
-              backgroundColor: Color.alphaBlend(
-                theme.colorScheme.primary.withValues(alpha: isLight ? 0.82 : 0.7),
-                ordoColor.withValues(alpha: isLight ? 0.18 : 0.24),
-              ),
-              foregroundColor: buttonForeground,
-            ),
-          )
-        else
-          const SizedBox.shrink(),
-      ],
+          // Navigation buttons
+          Row(
+            children: [
+              if (widget.hasPrev)
+                Expanded(
+                  child: FilledButton.icon(
+                    onPressed: _isNavigating ? null : () async {
+                      setState(() => _isNavigating = true);
+                      try {
+                        await Future.delayed(const Duration(milliseconds: 100));
+                        widget.onPrevReading?.call();
+                      } finally {
+                        if (mounted) {
+                          setState(() => _isNavigating = false);
+                        }
+                      }
+                    },
+                    icon: _isNavigating && widget.hasPrev && !widget.hasNext
+                        ? const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Icon(Icons.arrow_back),
+                    label: Text(_isNavigating && widget.hasPrev && !widget.hasNext ? 'Loading...' : 'Previous'),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: ordoColor,
+                      foregroundColor: buttonForeground,
+                    ),
+                  ),
+                ),
+              if (widget.hasPrev && widget.hasNext) const SizedBox(width: 12),
+              if (widget.hasNext)
+                Expanded(
+                  child: FilledButton.icon(
+                    onPressed: _isNavigating ? null : () async {
+                      setState(() => _isNavigating = true);
+                      try {
+                        await Future.delayed(const Duration(milliseconds: 100));
+                        widget.onNextReading?.call();
+                      } finally {
+                        if (mounted) {
+                          setState(() => _isNavigating = false);
+                        }
+                      }
+                    },
+                    icon: _isNavigating && widget.hasNext && !widget.hasPrev
+                        ? const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Icon(Icons.arrow_forward),
+                    label: Text(_isNavigating && widget.hasNext && !widget.hasPrev ? 'Loading...' : 'Next'),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: ordoColor,
+                      foregroundColor: buttonForeground,
+                    ),
+                  ),
+                ),
+              // Show disabled state when no navigation is available but there are multiple readings
+              if (!widget.hasPrev && !widget.hasNext && hasMultipleReadings)
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: Text(
+                      'No more readings in this session',
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -875,45 +453,32 @@ class _ReadingScreenState extends State<ReadingScreen> {
       position: widget.readingData?.position,
     );
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          _readingLabel,
-          style: theme.textTheme.labelLarge?.copyWith(
-            color: headerAccent,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0.3,
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            readingTitle,
+            style: theme.textTheme.titleLarge?.copyWith(
+              color: headerAccent,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        const SizedBox(height: 12),
-        Text(
-          readingTitle,
-          style: theme.textTheme.bodyMedium?.copyWith(
-            color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.84),
-            fontWeight: FontWeight.w600,
-            height: 1.45,
-          ),
-        ),
-        const SizedBox(height: 12),
-        Text(
-          widget.reference,
-          style: theme.textTheme.headlineMedium?.copyWith(
-            fontWeight: FontWeight.w800,
-            letterSpacing: -0.1,
-            height: 1.2,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Container(
-          width: 60,
-          height: 3,
-          decoration: BoxDecoration(
-            color: headerAccent,
-            borderRadius: BorderRadius.circular(2),
-          ),
-        ),
-      ],
+          if (widget.readingData?.position != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Text(
+                _formatPosition(widget.readingData!.position!),
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 
@@ -922,55 +487,96 @@ class _ReadingScreenState extends State<ReadingScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Available options',
-          style: theme.textTheme.labelLarge?.copyWith(
-            color: theme.colorScheme.onSurfaceVariant,
-            fontWeight: FontWeight.w700,
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+          child: Text(
+            'Alternative Readings',
+            style: theme.textTheme.labelMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
-        const SizedBox(height: 10),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: _variantOptions.map((reading) {
-            final isSelected = identical(reading, widget.readingData) ||
-                reading.reading == widget.readingData?.reading;
-            return ChoiceChip(
-              label: Text(_variantLabel(reading)),
-              selected: isSelected,
-              onSelected: (_) => _selectVariant(reading),
-              selectedColor: color.withValues(alpha: 0.18),
-              side: BorderSide(
-                color: isSelected
-                    ? color.withValues(alpha: 0.55)
-                    : theme.colorScheme.outlineVariant,
-              ),
-              labelStyle: theme.textTheme.labelLarge?.copyWith(
-                color: isSelected ? color : theme.colorScheme.onSurface,
-                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-              ),
-            );
-          }).toList(),
+        SizedBox(
+          height: 80,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemCount: widget.sessionReadings.length,
+            itemBuilder: (context, index) {
+              final reading = widget.sessionReadings[index];
+              final isSelected = index == widget.currentReadingIndex;
+              return Container(
+                width: 200,
+                margin: const EdgeInsets.only(right: 12),
+                child: Material(
+                  color: isSelected ? color : null,
+                  borderRadius: BorderRadius.circular(12),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    onTap: () => _selectVariant(reading),
+                    child: Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                reading.position ?? '',
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                  color: isSelected
+                                      ? theme.colorScheme.onPrimary
+                                      : theme.colorScheme.onSurfaceVariant,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                reading.reading,
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: isSelected
+                                      ? theme.colorScheme.onPrimary
+                                      : theme.colorScheme.onSurface,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                        ),
+                        if (_isNavigating && isSelected)
+                          Positioned.fill(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.black.withValues(alpha: 0.3),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Center(
+                                child: SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ],
     );
-  }
-
-  Color _resolveHeaderAccent(ThemeData theme, Color ordoColor) {
-    if (theme.brightness == Brightness.dark) {
-      return Color.lerp(ordoColor, Colors.white, 0.12) ?? ordoColor;
-    }
-
-    final contrastWithSurface = ThemeData.estimateBrightnessForColor(
-      Color.alphaBlend(Colors.white.withValues(alpha: 0.9), ordoColor.withValues(alpha: 0.2)),
-    );
-
-    if (contrastWithSurface == Brightness.light) {
-      return Color.lerp(ordoColor, Colors.black, 0.32) ?? ordoColor;
-    }
-
-    return Color.lerp(ordoColor, theme.colorScheme.primary, 0.16) ?? ordoColor;
   }
 
   Widget _buildContent(ThemeData theme) {
@@ -979,25 +585,25 @@ class _ReadingScreenState extends State<ReadingScreen> {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(32),
-          child: CircularProgressIndicator(
-            color: ordoColor,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(
+                color: ordoColor,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Loading reading...',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
           ),
         ),
       );
     }
 
-    final isPsalm = widget.reference.toLowerCase().startsWith('ps ') ||
-        widget.reference.toLowerCase().startsWith('psalm ');
-
-    if (isPsalm) {
-      return _buildPsalmContent(theme);
-    }
-
-    return _buildRegularContent(theme);
-  }
-
-  Widget _buildRegularContent(ThemeData theme) {
-    // Parse verses and build styled content
     final verses = _parseVerses(_currentContent);
     final isLight = theme.brightness == Brightness.light;
     final ordoColor = widget.liturgicalDay?.colorValue ?? theme.colorScheme.primary;
@@ -1005,537 +611,167 @@ class _ReadingScreenState extends State<ReadingScreen> {
       (isLight ? Colors.white : theme.colorScheme.surfaceContainer).withValues(alpha: isLight ? 0.92 : 0.52),
       ordoColor.withValues(alpha: isLight ? 0.06 : 0.16),
     );
-    final borderColor = Color.alphaBlend(
-      theme.colorScheme.outlineVariant.withValues(alpha: isLight ? 0.32 : 0.28),
-      ordoColor.withValues(alpha: isLight ? 0.08 : 0.16),
-    );
 
-    return Center(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 860),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 20),
-          decoration: BoxDecoration(
-            color: containerColor,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: borderColor,
+    return Container(
+      margin: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: containerColor,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: ordoColor.withValues(alpha: isLight ? 0.12 : 0.08),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            widget.reference,
+            style: theme.textTheme.titleMedium?.copyWith(
+              color: ordoColor,
+              fontWeight: FontWeight.w600,
             ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: verses.map((verse) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 18),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: 36,
-                      child: Text(
-                        '${verse.number}',
-                        style: theme.textTheme.labelMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: ordoColor.withValues(
-                            alpha: 0.75,
-                          ),
-                          fontSize: 13 * _textScale,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () => _showVerseActions(verse: verse),
-                        onLongPress: () => _showVerseActions(verse: verse),
-                        child: SelectableText(
-                          verse.text,
-                          style: theme.textTheme.bodyLarge?.copyWith(
-                            height: 1.9,
-                            letterSpacing: 0.15,
-                            fontSize: 19 * _textScale,
-                            fontWeight: FontWeight.w400,
-                            color: theme.colorScheme.onSurface,
-                          ),
-                          textScaler: const TextScaler.linear(1.0),
-                          contextMenuBuilder: (context, selectableTextState) {
-                            final defaultItems = selectableTextState.contextMenuButtonItems;
-                            return AdaptiveTextSelectionToolbar.buttonItems(
-                              anchors: selectableTextState.contextMenuAnchors,
-                              buttonItems: [
-                                ...defaultItems,
-                                ContextMenuButtonItem(
-                                  onPressed: () {
-                                    Navigator.of(context).maybePop();
-                                    _showVerseActions(verse: verse);
-                                  },
-                                  label: 'AI Insights (verse)',
-                                ),
-                                ContextMenuButtonItem(
-                                  onPressed: () {
-                                    Navigator.of(context).maybePop();
-                                    _showInsightSheet(
-                                      title: 'Insight for $_insightContextLabel',
-                                      reference: widget.reference,
-                                      highlightedText: _currentContent,
-                                      fetchInsight: () => _fetchInsight(
-                                        focusText: _currentContent,
-                                        fullContextText: _currentContent,
-                                        mode: 'full',
-                                      ),
-                                    );
-                                  },
-                                  label: 'AI Insights (reading)',
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
-        ),
+          const SizedBox(height: 16),
+          ...verses.map((verse) => _buildVerse(verse, theme)),
+        ],
       ),
     );
   }
 
-  Widget _buildPsalmContent(ThemeData theme) {
-    final stanzas = _currentContent
-        .split(RegExp(r'\n{2,}'))
-        .map((stanza) => stanza.trim())
-        .where((stanza) => stanza.isNotEmpty)
-        .toList();
-    final response = widget.readingData?.psalmResponse?.trim();
-    final isLight = theme.brightness == Brightness.light;
-    final ordoColor = widget.liturgicalDay?.colorValue ?? theme.colorScheme.primary;
-    final containerColor = Color.alphaBlend(
-      (isLight ? Colors.white : theme.colorScheme.surfaceContainer).withValues(alpha: isLight ? 0.92 : 0.52),
-      ordoColor.withValues(alpha: isLight ? 0.06 : 0.16),
-    );
-    final borderColor = Color.alphaBlend(
-      theme.colorScheme.outlineVariant.withValues(alpha: isLight ? 0.32 : 0.28),
-      ordoColor.withValues(alpha: isLight ? 0.08 : 0.16),
-    );
-
-    return Center(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 860),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 20),
-          decoration: BoxDecoration(
-            color: containerColor,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: borderColor,
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ...List.generate(stanzas.length, (index) {
-                final stanza = stanzas[index];
-                final lines = stanza
-                    .split('\n')
-                    .map((line) => line.trim())
-                    .where((line) => line.isNotEmpty)
-                    .toList();
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: 32,
-                            child: Text(
-                              '${index + 1}.',
-                              style: theme.textTheme.labelLarge?.copyWith(
-                                fontWeight: FontWeight.w700,
-                                color: ordoColor.withValues(alpha: 0.75),
-                                fontSize: 16 * _textScale,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: lines.map((line) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(bottom: 6),
-                                  child: GestureDetector(
-                                    behavior: HitTestBehavior.opaque,
-                                    onTap: () => _showVerseActions(
-                                      selectedText: line,
-                                      selectedLabel: 'Psalm line ${index + 1}',
-                                    ),
-                                    onLongPress: () => _showVerseActions(
-                                      selectedText: line,
-                                      selectedLabel: 'Psalm line ${index + 1}',
-                                    ),
-                                    child: SelectableText(
-                                      line,
-                                      style: theme.textTheme.bodyLarge?.copyWith(
-                                        height: 1.8,
-                                        letterSpacing: 0.1,
-                                        fontSize: 18 * _textScale,
-                                        fontWeight: FontWeight.w500,
-                                        color: theme.colorScheme.onSurface,
-                                      ),
-                                      contextMenuBuilder: (context, selectableTextState) {
-                                        final defaultItems = selectableTextState.contextMenuButtonItems;
-                                        return AdaptiveTextSelectionToolbar.buttonItems(
-                                          anchors: selectableTextState.contextMenuAnchors,
-                                          buttonItems: [
-                                            ...defaultItems,
-                                            ContextMenuButtonItem(
-                                              onPressed: () {
-                                                Navigator.of(context).maybePop();
-                                                _showVerseActions(
-                                                  selectedText: line,
-                                                  selectedLabel: 'Psalm line ${index + 1}',
-                                                );
-                                              },
-                                              label: 'AI Insights (line)',
-                                            ),
-                                            ContextMenuButtonItem(
-                                              onPressed: () {
-                                                Navigator.of(context).maybePop();
-                                                _showInsightSheet(
-                                                  title: 'Insight for $_insightContextLabel',
-                                                  reference: widget.reference,
-                                                  highlightedText: _currentContent,
-                                                  fetchInsight: () => _fetchInsight(
-                                                    focusText: _currentContent,
-                                                    fullContextText: _currentContent,
-                                                    mode: 'full',
-                                                  ),
-                                                );
-                                              },
-                                              label: 'AI Insights (reading)',
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 6),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          response != null && response.isNotEmpty
-                              ? 'R/. ${response.trim()}'
-                              : 'R/.',
-                          style: theme.textTheme.bodyLarge?.copyWith(
-                            fontStyle: FontStyle.italic,
-                            fontWeight: FontWeight.w600,
-                            color: ordoColor.withValues(alpha: 0.82),
-                          ),
-                        ),
-                      ),
-                    ],
+  Widget _buildVerse(_Verse verse, ThemeData theme) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (verse.number != null)
+            Container(
+              width: 32,
+              height: 32,
+              margin: const EdgeInsets.only(right: 12, top: 2),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.primary.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Center(
+                child: Text(
+                  verse.number.toString(),
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: theme.colorScheme.primary,
+                    fontWeight: FontWeight.w600,
                   ),
-                );
-              }),
-            ],
+                ),
+              ),
+            ),
+          Expanded(
+            child: Text(
+              verse.text,
+              style: theme.textTheme.bodyLarge?.copyWith(
+                height: 1.6,
+                fontSize: theme.textTheme.bodyLarge!.fontSize! * _textScale,
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
-  }
-
-  Widget _buildResponseAcclamation(ThemeData theme) {
-    if (widget.readingData == null) return const SizedBox.shrink();
-    
-    final reading = widget.readingData!;
-    final position = (reading.position ?? '').toLowerCase();
-
-    if (position.contains('psalm')) {
-      return PsalmResponseWidget(
-        reading: reading,
-        date: reading.date,
-      );
-    }
-
-    if (position.contains('gospel')) {
-      return GospelAcclamationWidget(
-        reading: reading,
-        date: reading.date,
-      );
-    }
-    
-    return const SizedBox.shrink();
   }
 
   Widget _buildVersionFooter(ThemeData theme) {
-    return BibleVersionSwitcher(
-      onVersionChanged: _reloadWithNewVersion,
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: BibleVersionSwitcher(
+        onVersionChanged: () {
+          // Handle version change
+        },
+      ),
     );
+  }
+
+  Color _resolveHeaderAccent(ThemeData theme, Color ordoColor) {
+    return theme.brightness == Brightness.light
+        ? ordoColor.withValues(alpha: 0.8)
+        : ordoColor.withValues(alpha: 0.9);
   }
 
   List<_Verse> _parseVerses(String content) {
     final verses = <_Verse>[];
     final lines = content.split('\n');
-
+    
     for (int i = 0; i < lines.length; i++) {
       final line = lines[i].trim();
       if (line.isEmpty) continue;
-
-      // Try to parse verse number at start
-      final match = RegExp(r'^(\d+)[.\s]+(.*)').firstMatch(line);
+      
+      // Try to extract verse number at the start
+      final match = RegExp(r'^(\d+)\s+(.+)$').firstMatch(line);
       if (match != null) {
-        verses.add(
-          _Verse(
-            number: int.tryParse(match.group(1) ?? '0') ?? i + 1,
-            text: match.group(2) ?? line,
-          ),
+        final number = int.tryParse(match.group(1) ?? '');
+        final text = match.group(2) ?? '';
+        if (number != null) {
+          verses.add(_Verse(number: number, text: text));
+          continue;
+        }
+      }
+      
+      // If no verse number found, treat as continuation
+      if (verses.isNotEmpty) {
+        verses.last = verses.last.copyWith(
+          text: verses.last.text + '\n' + line,
         );
       } else {
-        verses.add(_Verse(number: i + 1, text: line));
+        verses.add(_Verse(number: null, text: line));
       }
     }
-
+    
     return verses;
   }
 
-  void _shareText() {
-    final text = '${widget.reference}\n\n$_currentContent';
-    Clipboard.setData(ClipboardData(text: text));
+  void _copyText() {
+    Clipboard.setData(ClipboardData(text: _currentContent));
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Reading copied to clipboard')),
     );
   }
 
-  void _copyText() {
-    final text = '${widget.reference}\n\n$_currentContent';
-    Clipboard.setData(ClipboardData(text: text));
+  void _shareText() {
+    // TODO: Implement share functionality
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Reading copied to clipboard')),
+      const SnackBar(content: Text('Share functionality coming soon')),
     );
   }
 
   void _toggleFullScreen() {
-    // Toggle fullscreen mode
-    if (MediaQuery.of(context).size.width > 600) {
-      // Already reading-focused layout on large screens
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Reading mode enabled')));
-    }
+    // TODO: Implement fullscreen functionality
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Fullscreen functionality coming soon')),
+    );
   }
 
   @override
   void dispose() {
-    _ttsService.stop();
     _scrollController.dispose();
     super.dispose();
   }
 }
 
 class _Verse {
-  final int number;
+  final int? number;
   final String text;
 
-  _Verse({required this.number, required this.text});
-}
-
-class _InsightActionTile extends StatelessWidget {
-  const _InsightActionTile({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.onTap,
+  const _Verse({
+    required this.number,
+    required this.text,
   });
 
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final accentColor = theme.colorScheme.primary;
-    return Material(
-      color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.45),
-      borderRadius: BorderRadius.circular(16),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(16),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(icon, color: accentColor),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      subtitle,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 8),
-              Icon(Icons.chevron_right, color: theme.colorScheme.onSurfaceVariant),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ReadingInsightSheet extends StatefulWidget {
-  const _ReadingInsightSheet({
-    required this.title,
-    required this.reference,
-    required this.highlightedText,
-    required this.fetchInsight,
-  });
-
-  final String title;
-  final String reference;
-  final String highlightedText;
-  final Future<String> Function() fetchInsight;
-
-  @override
-  State<_ReadingInsightSheet> createState() => _ReadingInsightSheetState();
-}
-
-class _ReadingInsightSheetState extends State<_ReadingInsightSheet> {
-  late final Future<String> _future;
-
-  @override
-  void initState() {
-    super.initState();
-    _future = widget.fetchInsight();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final accentColor = theme.colorScheme.primary;
-    return FractionallySizedBox(
-      heightFactor: 0.92,
-      child: Container(
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surface,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-        ),
-        child: SafeArea(
-          top: false,
-          child: Column(
-            children: [
-              Container(
-                width: 48,
-                height: 5,
-                margin: const EdgeInsets.symmetric(vertical: 12),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: FutureBuilder<String>(
-                    future: _future,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState != ConnectionState.done) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-
-                      if (snapshot.hasError) {
-                        return Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(24),
-                            child: Text(
-                              'Unable to load insight. Please try again.',
-                              textAlign: TextAlign.center,
-                              style: theme.textTheme.bodyLarge?.copyWith(
-                                color: theme.colorScheme.error,
-                              ),
-                            ),
-                          ),
-                        );
-                      }
-
-                      return ListView(
-                        children: [
-                          Text(
-                            widget.title,
-                            style: theme.textTheme.headlineSmall?.copyWith(
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            widget.reference,
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: accentColor,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          Container(
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: theme.colorScheme.primaryContainer.withValues(alpha: 0.45),
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                color: accentColor.withValues(alpha: 0.15),
-                              ),
-                            ),
-                            child: Text(
-                              widget.highlightedText,
-                              style: theme.textTheme.bodyLarge?.copyWith(
-                                height: 1.6,
-                                fontStyle: FontStyle.italic,
-                                color: theme.colorScheme.onPrimaryContainer,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 24),
-                          Text(
-                            snapshot.data ?? 'No insight available.',
-                            style: theme.textTheme.bodyLarge?.copyWith(height: 1.7),
-                          ),
-                          const SizedBox(height: 32),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+  _Verse copyWith({
+    int? number,
+    String? text,
+  }) {
+    return _Verse(
+      number: number ?? this.number,
+      text: text ?? this.text,
     );
   }
 }
