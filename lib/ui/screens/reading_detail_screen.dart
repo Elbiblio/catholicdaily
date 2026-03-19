@@ -77,13 +77,13 @@ class ReadingDetailScreen extends StatelessWidget {
                   Icon(
                     Icons.calendar_today_rounded,
                     size: 20,
-                    color: theme.colorScheme.onSurfaceVariant,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
                   const SizedBox(width: 12),
                   Text(
                     dateStr,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -105,7 +105,7 @@ class ReadingDetailScreen extends StatelessWidget {
               Text(
                 reading.position!,
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                   fontStyle: FontStyle.italic,
                 ),
               ),

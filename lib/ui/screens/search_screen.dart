@@ -4,7 +4,7 @@ import '../../data/services/readings_service.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
 
 class SearchScreen extends StatefulWidget {
-  final Function(String reference, String content, LiturgicalDay? liturgicalDay)
+  final Function(String reference, String content, LiturgicalDay? liturgicalDay, {bool isBibleSearch})
   onReadingSelected;
 
   const SearchScreen({super.key, required this.onReadingSelected});
@@ -100,6 +100,7 @@ class _SearchScreenState extends State<SearchScreen> {
           '${_selectedBook!['name']} $chapter',
           text,
           null,
+          isBibleSearch: true,
         );
       }
     } catch (e) {

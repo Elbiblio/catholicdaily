@@ -29,7 +29,7 @@ class _PrayersScreenState extends State<PrayersScreen> with SingleTickerProvider
   }
 
   void _onTabChanged() {
-    if (_tabController.index == 1) { // Browse tab
+    if (_tabController.index == 1) { // Quick Access tab
       setState(() {}); // Refresh to show updated recently used/bookmarks
     }
   }
@@ -73,46 +73,32 @@ class _PrayersScreenState extends State<PrayersScreen> with SingleTickerProvider
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
-            Tab(icon: Icon(Icons.search), text: 'Search'),
-            Tab(icon: Icon(Icons.home), text: 'Browse'),
+            Tab(icon: Icon(Icons.home), text: 'Home'),
+            Tab(icon: Icon(Icons.dashboard), text: 'Quick Access'),
           ],
         ),
       ),
       body: TabBarView(
         controller: _tabController,
         children: [
-          _buildSearchTab(),
-          _buildBrowseTab(),
+          _buildHomeTab(),
+          _buildQuickAccessTab(),
         ],
       ),
     );
   }
 
-  Widget _buildSearchTab() {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: TextField(
-            onChanged: (query) {
-              setState(() {
-                _searchQuery = query;
-                _searchResults = _prayerService.searchPrayers(query);
-              });
-            },
-            decoration: InputDecoration(
-              hintText: 'Search prayers...',
-              prefixIcon: const Icon(Icons.search),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-          ),
-        ),
-        Expanded(
-          child: _buildSearchResults(),
-        ),
-      ],
+  Widget _buildHomeTab() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildRosarySection(),
+          const SizedBox(height: 24),
+          _buildCategoriesSection(),
+        ],
+      ),
     );
   }
 
@@ -165,38 +151,61 @@ class _PrayersScreenState extends State<PrayersScreen> with SingleTickerProvider
     );
   }
 
-  Widget _buildBrowseTab() {
+  Widget _buildQuickAccessTab() {
     if (_isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildSection(
-            title: 'Recently Used',
-            icon: Icons.history,
-            items: _recentlyUsedPrayers,
-            emptyMessage: 'No recently used prayers',
-            onTap: (prayer) => _openPrayer(prayer),
+    return Column(
+      children: [
+        // Search section at the top
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: TextField(
+            onChanged: (query) {
+              setState(() {
+                _searchQuery = query;
+                _searchResults = _prayerService.searchPrayers(query);
+              });
+            },
+            decoration: InputDecoration(
+              hintText: 'Search prayers...',
+              prefixIcon: const Icon(Icons.search),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
           ),
-          const SizedBox(height: 24),
-          _buildSection(
-            title: 'Bookmarks',
-            icon: Icons.bookmark,
-            items: _bookmarkedPrayers,
-            emptyMessage: 'No bookmarked prayers',
-            onTap: (prayer) => _openPrayer(prayer),
-            isBookmarkSection: true,
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildSection(
+                  title: 'Recently Used',
+                  icon: Icons.history,
+                  items: _recentlyUsedPrayers,
+                  emptyMessage: 'No recently used prayers',
+                  onTap: (prayer) => _openPrayer(prayer),
+                ),
+                const SizedBox(height: 24),
+                _buildSection(
+                  title: 'Bookmarks',
+                  icon: Icons.bookmark,
+                  items: _bookmarkedPrayers,
+                  emptyMessage: 'No bookmarked prayers',
+                  onTap: (prayer) => _openPrayer(prayer),
+                  isBookmarkSection: true,
+                ),
+                const SizedBox(height: 24),
+                _buildSearchResults(),
+              ],
+            ),
           ),
-          const SizedBox(height: 24),
-          _buildRosarySection(),
-          const SizedBox(height: 24),
-          _buildCategoriesSection(),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

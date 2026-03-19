@@ -19,11 +19,14 @@ class LectionaryPsalmFormatter {
   }) {
     final stanzaGroups = _parseStanzaGroups(reference);
     final stanzas = <String>[];
+    var verseCounter = 1; // Start numbering from 1 for display
 
     for (final groups in stanzaGroups) {
       final stanzaLines = <String>[];
       for (final group in groups) {
-        stanzaLines.addAll(_formatVerseGroup(group, verses));
+        stanzaLines.addAll(_formatVerseGroup(group, verses, verseCounter));
+        // Update verse counter based on how many verses were added
+        verseCounter += _countVersesInGroup(group);
       }
       if (stanzaLines.isNotEmpty) {
         stanzaLines[0] = _capitalizeFirst(stanzaLines[0]);
@@ -145,7 +148,7 @@ class LectionaryPsalmFormatter {
   }
   
   /// Format a verse group into lines
-  static List<String> _formatVerseGroup(_VerseGroup group, Map<int, String> verses) {
+  static List<String> _formatVerseGroup(_VerseGroup group, Map<int, String> verses, int startVerseNumber) {
     final lines = <String>[];
     
     if (group.startVerse == group.endVerse) {
@@ -156,15 +159,16 @@ class LectionaryPsalmFormatter {
           // Extract specific parts
           final extracted = PsalmVerseSplitter.getVerseParts(verseText, group.startParts!);
           if (extracted != null) {
-            lines.addAll(_splitIntoLines(extracted));
+            lines.add('$startVerseNumber ${extracted.trim()}');
           }
         } else {
           // Use complete verse
-          lines.addAll(_splitIntoLines(verseText));
+          lines.add('$startVerseNumber ${verseText.trim()}');
         }
       }
     } else {
-      // Range of verses
+      // Range of verses - combine into a single stanza
+      final rangeTexts = <String>[];
       for (var v = group.startVerse; v <= group.endVerse; v++) {
         final verseText = verses[v];
         if (verseText == null) continue;
@@ -183,23 +187,22 @@ class LectionaryPsalmFormatter {
         }
         
         if (textToUse != null) {
-          lines.addAll(_splitIntoLines(textToUse));
+          rangeTexts.add(textToUse.trim());
         }
+      }
+      
+      if (rangeTexts.isNotEmpty) {
+        lines.add('$startVerseNumber ${rangeTexts.join(' ')}');
       }
     }
     
     return lines;
   }
   
-  /// Split text into individual lines for display
-  static List<String> _splitIntoLines(String text) {
-    // Remove verse numbers if present
-    text = text.replaceFirst(RegExp(r'^\d+\.\s*'), '');
-    
-    // Split on semicolons and periods for line breaks
-    final parts = PsalmVerseSplitter.splitVerse(text);
-    
-    return parts.map((p) => p.trim()).where((p) => p.isNotEmpty).toList();
+  /// Count how many verses are in a group for numbering purposes
+  static int _countVersesInGroup(_VerseGroup group) {
+    // Each group (whether single verse or range) represents exactly 1 stanza
+    return 1;
   }
 }
 

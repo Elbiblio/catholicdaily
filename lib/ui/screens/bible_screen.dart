@@ -5,7 +5,7 @@ import '../../data/services/improved_liturgical_calendar_service.dart';
 import '../../data/services/app_navigation_service.dart';
 
 class BibleScreen extends StatefulWidget {
-  final Function(String reference, String content, LiturgicalDay? liturgicalDay)
+  final Function(String reference, String content, LiturgicalDay? liturgicalDay, {bool isBibleSearch})
   onReadingSelected;
 
   const BibleScreen({super.key, required this.onReadingSelected});
@@ -221,7 +221,7 @@ class _BibleScreenState extends State<BibleScreen> with SingleTickerProviderStat
       content: content,
     );
     
-    widget.onReadingSelected(reference, content, null);
+    widget.onReadingSelected(reference, content, null, isBibleSearch: true);
   }
 
   void _openInsight(Map<String, dynamic> item) {
@@ -229,6 +229,6 @@ class _BibleScreenState extends State<BibleScreen> with SingleTickerProviderStat
     final content = item['content'] as String? ?? '';
     final title = 'Insight: ${item['title'] as String? ?? reference}';
     
-    widget.onReadingSelected(title, content, null);
+    widget.onReadingSelected(title, content, null, isBibleSearch: true);
   }
 }

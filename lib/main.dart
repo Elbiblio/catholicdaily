@@ -61,6 +61,7 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
         reference: chapter['reference'] as String,
         content: chapter['content'] as String,
         liturgicalDay: null,
+        isBibleSearch: true,
       );
     } else {
       _initialScreen = HomeScreen(

@@ -1246,7 +1246,7 @@
   {
     "id": 21,
     "slug": "glorious1",
-    "title": "Glorious1",
+    "title": "1st Glorious Mystery - The Resurrection",
     "first_line": "1st glorious mystery - The Resurrection of Jesus Christ",
     "category": "prayer",
     "text": [
@@ -1265,7 +1265,7 @@
   {
     "id": 22,
     "slug": "glorious2",
-    "title": "Glorious2",
+    "title": "2nd Glorious Mystery - The Ascension",
     "first_line": "2nd glorious mystery - The Ascension of Jesus to Heaven",
     "category": "prayer",
     "text": [
@@ -1284,7 +1284,7 @@
   {
     "id": 23,
     "slug": "glorious3",
-    "title": "Glorious3",
+    "title": "3rd Glorious Mystery - The Descent of the Holy Spirit",
     "first_line": "3rd glorious mystery - The Descent of the Holy Ghost",
     "category": "prayer",
     "text": [
@@ -1305,7 +1305,7 @@
   {
     "id": 24,
     "slug": "glorious4",
-    "title": "Glorious4",
+    "title": "4th Glorious Mystery - The Assumption",
     "first_line": "4th glorious mystery - The Assumption of the Blessed Virgin Mary into Heaven",
     "category": "prayer",
     "text": [
@@ -1324,7 +1324,7 @@
   {
     "id": 25,
     "slug": "glorious5",
-    "title": "Glorious5",
+    "title": "5th Glorious Mystery - The Coronation",
     "first_line": "5th glorious mystery - The Coronation of the Blessed Virgin Mary as Queen of Heaven and Earth",
     "category": "prayer",
     "text": [
@@ -1653,7 +1653,7 @@
   {
     "id": 32,
     "slug": "joyful1",
-    "title": "Joyful1",
+    "title": "1st Joyful Mystery - The Annunciation",
     "first_line": "1st joyful mystery - The Annunciation of the Angel to Mary",
     "category": "prayer",
     "text": [
@@ -1672,7 +1672,7 @@
   {
     "id": 33,
     "slug": "joyful2",
-    "title": "Joyful2",
+    "title": "2nd Joyful Mystery - The Visitation",
     "first_line": "2nd joyful mystery - The visitation of Mary to Saint Elizabeth",
     "category": "prayer",
     "text": [
@@ -1691,7 +1691,7 @@
   {
     "id": 34,
     "slug": "joyful3",
-    "title": "Joyful3",
+    "title": "3rd Joyful Mystery - The Nativity",
     "first_line": "3rd joyful mystery - The nativity of Jesus in Bethlehem",
     "category": "prayer",
     "text": [
@@ -1710,7 +1710,7 @@
   {
     "id": 35,
     "slug": "joyful4",
-    "title": "Joyful4",
+    "title": "4th Joyful Mystery - The Presentation",
     "first_line": "4th joyful mystery - The presentation of Jesus to the Temple",
     "category": "prayer",
     "text": [
@@ -1729,7 +1729,7 @@
   {
     "id": 36,
     "slug": "joyful5",
-    "title": "Joyful5",
+    "title": "5th Joyful Mystery - The Finding in the Temple",
     "first_line": "5th joyful mystery - The finding of Jesus in the Temple",
     "category": "prayer",
     "text": [
@@ -1748,7 +1748,7 @@
   {
     "id": 37,
     "slug": "light1",
-    "title": "Light1",
+    "title": "1st Luminous Mystery - The Baptism of Jesus",
     "first_line": "1st mystery of light - The Baptism of Jesus",
     "category": "prayer",
     "text": [
@@ -1771,7 +1771,7 @@
   {
     "id": 38,
     "slug": "light2",
-    "title": "Light2",
+    "title": "2nd Luminous Mystery - The Wedding at Cana",
     "first_line": "2nd mystery of light - The wedding at Cana",
     "category": "prayer",
     "text": [
@@ -1796,7 +1796,7 @@
   {
     "id": 39,
     "slug": "light3",
-    "title": "Light3",
+    "title": "3rd Luminous Mystery - The Proclamation of the Kingdom",
     "first_line": "3rd mystery of light - The proclamation of the Kingdom of God",
     "category": "prayer",
     "text": [
@@ -1815,7 +1815,7 @@
   {
     "id": 40,
     "slug": "light4",
-    "title": "Light4",
+    "title": "4th Luminous Mystery - The Transfiguration",
     "first_line": "4th mystery of light - The Transfiguration",
     "category": "prayer",
     "text": [
@@ -1836,7 +1836,7 @@
   {
     "id": 41,
     "slug": "light5",
-    "title": "Light5",
+    "title": "5th Luminous Mystery - The Institution of the Eucharist",
     "first_line": "5th mystery of light - The institution of the Eucharist",
     "category": "prayer",
     "text": [
@@ -3682,7 +3682,7 @@
   {
     "id": 77,
     "slug": "sorrowful1",
-    "title": "Sorrowful1",
+    "title": "1st Sorrowful Mystery - The Agony in the Garden",
     "first_line": "1st sorrowful mystery - The Agony of Jesus in the garden",
     "category": "prayer",
     "text": [
@@ -3701,7 +3701,7 @@
   {
     "id": 78,
     "slug": "sorrowful2",
-    "title": "Sorrowful2",
+    "title": "2nd Sorrowful Mystery - The Scourging at the Pillar",
     "first_line": "2nd sorrowful mystery -The scourging of Jesus at the pillar",
     "category": "prayer",
     "text": [
@@ -3720,7 +3720,7 @@
   {
     "id": 79,
     "slug": "sorrowful3",
-    "title": "Sorrowful3",
+    "title": "3rd Sorrowful Mystery - The Crowning with Thorns",
     "first_line": "3rd sorrowful mystery - The Crowning with Thorns",
     "category": "prayer",
     "text": [
@@ -3739,7 +3739,7 @@
   {
     "id": 80,
     "slug": "sorrowful4",
-    "title": "Sorrowful4",
+    "title": "4th Sorrowful Mystery - The Carrying of the Cross",
     "first_line": "4th sorrowful mystery - The Carrying of the Cross",
     "category": "prayer",
     "text": [
@@ -3758,7 +3758,7 @@
   {
     "id": 81,
     "slug": "sorrowful5",
-    "title": "Sorrowful5",
+    "title": "5th Sorrowful Mystery - The Crucifixion",
     "first_line": "5th sorrowful mystery - The crucifixion and death of Jesus",
     "category": "prayer",
     "text": [

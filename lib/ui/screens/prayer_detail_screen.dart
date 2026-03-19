@@ -51,26 +51,45 @@ class _PrayerDetailScreenState extends State<PrayerDetailScreen> {
           "body": Style(
             fontSize: FontSize(16),
             lineHeight: LineHeight(1.5),
-            fontFamily: 'Canterbury',
+            fontFamily: null, // Default readable font for body
             margin: Margins.zero,
             padding: HtmlPaddings.zero,
+          ),
+          "h1": Style(
+            fontSize: FontSize(20),
+            fontFamily: 'Canterbury', // Canterbury font for titles
+            fontWeight: FontWeight.bold,
+            margin: Margins.only(bottom: 16),
+          ),
+          "h2": Style(
+            fontSize: FontSize(18),
+            fontFamily: 'Canterbury', // Canterbury font for titles
+            fontWeight: FontWeight.bold,
+            margin: Margins.only(bottom: 12),
+          ),
+          "h3": Style(
+            fontSize: FontSize(17),
+            fontFamily: 'Canterbury', // Canterbury font for titles
+            fontWeight: FontWeight.bold,
+            margin: Margins.only(bottom: 10),
           ),
           "br": Style(margin: Margins.only(bottom: 4)),
           "b": Style(
             fontWeight: FontWeight.bold,
             fontSize: FontSize(17),
+            fontFamily: 'Canterbury', // Canterbury font for bold text/titles
             margin: Margins.only(top: 12, bottom: 8),
           ),
           "font": Style(
             fontSize: FontSize(16),
-            fontFamily: 'Canterbury',
+            fontFamily: null, // Default readable font for regular text
             color: widget.prayer.htmlContent!.contains('#FF0000') 
                 ? Color(0xFF8C1D2F) 
                 : null,
           ),
           "html": Style(
             fontSize: FontSize(16),
-            fontFamily: 'Canterbury',
+            fontFamily: null, // Default readable font for content
           ),
         },
       );
@@ -79,7 +98,7 @@ class _PrayerDetailScreenState extends State<PrayerDetailScreen> {
         widget.prayer.displayText,
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
           height: 1.1,
-          fontFamily: 'Canterbury',
+          fontFamily: null, // Default readable font for body text
         ),
       );
     }

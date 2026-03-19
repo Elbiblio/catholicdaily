@@ -128,11 +128,18 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onReadingSelected(
     String reference,
     String content,
-    LiturgicalDay? liturgicalDay, [
+    LiturgicalDay? liturgicalDay, {
     DailyReading? readingData,
     List<DailyReading>? readingSet,
     int? selectedIndex,
-  ]) {
+    bool isBibleSearch = false,
+  }) {
+    // For bible search, don't build a reading session
+    if (isBibleSearch) {
+      _openBibleReading(reference: reference, content: content, liturgicalDay: liturgicalDay);
+      return;
+    }
+    
     // Only build a new session if we don't already have one or if explicitly provided with a different set
     if (readingSet != null && (_readingSession.isEmpty || !_readingSetsEqual(readingSet, _readingSession.readings))) {
       _readingSession = _readingFlow.buildSession(
@@ -182,6 +189,24 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     _readingSession = _readingSession.copyWith(readingTexts: updatedTexts);
+  }
+
+  void _openBibleReading({
+    required String reference,
+    required String content,
+    required LiturgicalDay? liturgicalDay,
+  }) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ReadingScreen(
+          reference: reference,
+          content: content,
+          liturgicalDay: liturgicalDay,
+          isBibleSearch: true,
+        ),
+      ),
+    );
   }
 
   void _openReading({
@@ -254,9 +279,9 @@ class _HomeScreenState extends State<HomeScreen> {
         reading.reading,
         cachedText,
         null,
-        reading,
-        _readingSession.readings,
-        _readingSession.currentIndex,
+        readingData: reading,
+        readingSet: _readingSession.readings,
+        selectedIndex: _readingSession.currentIndex,
       );
       return;
     }
@@ -284,9 +309,9 @@ class _HomeScreenState extends State<HomeScreen> {
       reading.reading,
       text,
       null,
-      reading,
-      _readingSession.readings,
-      _readingSession.currentIndex,
+      readingData: reading,
+      readingSet: _readingSession.readings,
+      selectedIndex: _readingSession.currentIndex,
     );
   }
 
@@ -346,10 +371,19 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     final screens = [
-      PremiumBrowseScreen(onReadingSelected: _onReadingSelected),
+      PremiumBrowseScreen(onReadingSelected: (reading, content, liturgicalDay, [readingData, readingSet, selectedIndex]) {
+        _onReadingSelected(
+          reading,
+          content,
+          liturgicalDay,
+          readingData: readingData,
+          readingSet: readingSet,
+          selectedIndex: selectedIndex,
+        );
+      }),
       const PrayersScreen(),
-      BibleScreen(onReadingSelected: (reference, content, liturgicalDay) {
-        _onReadingSelected(reference, content, liturgicalDay);
+      BibleScreen(onReadingSelected: (reference, content, liturgicalDay, {isBibleSearch = false}) {
+        _onReadingSelected(reference, content, liturgicalDay, isBibleSearch: isBibleSearch);
       }),
       SettingsScreen(
         versions: _versions,
