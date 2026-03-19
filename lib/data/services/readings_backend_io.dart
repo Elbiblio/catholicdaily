@@ -260,19 +260,19 @@ class ReadingsBackendIo implements ReadingsBackend {
         }
       }
       
-      // Fetch the verses from database
-      final db = await _rsvceDatabase;
-      final minVerse = versesToFetch.reduce((a, b) => a < b ? a : b);
-      final maxVerse = versesToFetch.reduce((a, b) => a > b ? a : b);
-      
+      // Fetch only the verses that are actually referenced — use IN (…) rather
+      // than a >= min AND <= max range, which would over-fetch skipped verses.
+      final sortedVerses = versesToFetch.toList()..sort();
+      final placeholders = sortedVerses.map((_) => '?').join(', ');
+
       final rows = await db.rawQuery('''
         SELECT v.verse_id, v.text
         FROM verses v
         JOIN books b ON b._id = v.book_id
         WHERE b.shortname = 'Ps' AND v.chapter_id = ? 
-          AND v.verse_id >= ? AND v.verse_id <= ?
+          AND v.verse_id IN ($placeholders)
         ORDER BY v.verse_id
-      ''', [chapter, minVerse, maxVerse]);
+      ''', [chapter, ...sortedVerses]);
       
       if (rows.isEmpty) {
         return 'Psalm text unavailable for $reference.';
@@ -385,52 +385,46 @@ class ReadingsBackendIo implements ReadingsBackend {
     return verses;
   }
   
-  /// Extract verse numbers from a single segment
+  /// Extract verse numbers from a single segment.
+  ///
+  /// Handles `+` and `&` as discrete-verse separators (e.g. "2+6", "3&5").
+  /// Note: ` and ` is intentionally NOT handled here — [_extractVerseNumbers]
+  /// already splits on ` and ` before calling this method.
   Set<int> _extractVerseNumbersFromSegment(String segment) {
     final verses = <int>{};
 
-    final normalizedSegment = segment.replaceAll('&', ' and ');
-
-    if (normalizedSegment.contains(' and ')) {
-      final andParts = normalizedSegment.split(' and ');
-      for (final part in andParts) {
-        verses.addAll(_extractVerseNumbersFromSegment(part.trim()));
-      }
-      return verses;
-    }
-
+    // Handle '+' and '&' as discrete-verse separators
+    final normalizedSegment = segment.replaceAll('&', '+');
     if (normalizedSegment.contains('+')) {
-      final plusParts = normalizedSegment.split('+');
-      for (final part in plusParts) {
+      for (final part in normalizedSegment.split('+')) {
         verses.addAll(_extractVerseNumbersFromSegment(part.trim()));
       }
       return verses;
     }
-    
+
     // Handle range (e.g., "4bc-5ab" or "8-9")
     if (normalizedSegment.contains('-')) {
       final parts = normalizedSegment.split('-');
       if (parts.length == 2) {
         final startMatch = RegExp(r'(\d+)').firstMatch(parts[0]);
         final endMatch = RegExp(r'(\d+)').firstMatch(parts[1]);
-        
+
         if (startMatch != null && endMatch != null) {
           final start = int.parse(startMatch.group(1)!);
           final end = int.parse(endMatch.group(1)!);
-          
           for (var i = start; i <= end; i++) {
             verses.add(i);
           }
         }
       }
     } else {
-      // Single verse
+      // Single verse (e.g., "6" or "7bc")
       final match = RegExp(r'(\d+)').firstMatch(normalizedSegment);
       if (match != null) {
         verses.add(int.parse(match.group(1)!));
       }
     }
-    
+
     return verses;
   }
 

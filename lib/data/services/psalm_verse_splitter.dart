@@ -142,24 +142,4 @@ class PsalmVerseSplitter {
         return -1;
     }
   }
-  
-  /// Get a range of parts from a verse (e.g., "bc" means parts b through c)
-  static String? getVersePartRange(String verseText, String startLetter, String endLetter) {
-    final parts = splitVerse(verseText);
-    final startIndex = _partLetterToIndex(startLetter);
-    final endIndex = _partLetterToIndex(endLetter);
-    
-    if (startIndex < 0 || endIndex < 0 || startIndex > endIndex) {
-      return null;
-    }
-    
-    final selectedParts = <String>[];
-    for (var i = startIndex; i <= endIndex && i < parts.length; i++) {
-      selectedParts.add(parts[i]);
-    }
-    
-    if (selectedParts.isEmpty) return null;
-    
-    return selectedParts.join('; ');
-  }
 }

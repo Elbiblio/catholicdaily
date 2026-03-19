@@ -26,14 +26,21 @@ class LectionaryPsalmFormatter {
         stanzaLines.addAll(_formatVerseGroup(group, verses));
       }
       if (stanzaLines.isNotEmpty) {
-        if (stanzaLines.isNotEmpty) {
-          stanzaLines[0] = _capitalizeFirst(stanzaLines[0]);
-        }
+        stanzaLines[0] = _capitalizeFirst(stanzaLines[0]);
         stanzas.add(stanzaLines.join('\n'));
       }
     }
 
-    return stanzas.join('\n\n');
+    // Interleave the refrain after every stanza (liturgical format: stanza → R. refrain → …)
+    final refrainLine = 'R. ${refrain.trim()}';
+    final buffer = StringBuffer();
+    for (var i = 0; i < stanzas.length; i++) {
+      if (i > 0) buffer.write('\n\n');
+      buffer.write(stanzas[i]);
+      buffer.write('\n\n');
+      buffer.write(refrainLine);
+    }
+    return buffer.toString().trimRight();
   }
 
   static String _capitalizeFirst(String input) {
