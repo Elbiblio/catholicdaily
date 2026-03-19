@@ -265,7 +265,7 @@ class ReadingsBackendIo implements ReadingsBackend {
       final sortedVerses = versesToFetch.toList()..sort();
       final placeholders = sortedVerses.map((_) => '?').join(', ');
 
-      final rows = await db.rawQuery('''
+      final rows = await (await _currentBibleDatabase).rawQuery('''
         SELECT v.verse_id, v.text
         FROM verses v
         JOIN books b ON b._id = v.book_id
@@ -296,7 +296,7 @@ class ReadingsBackendIo implements ReadingsBackend {
           // Fetch from a different chapter if needed
           Map<int, String> refrainSource = verses;
           if (refrainChapter != null && refrainChapter != chapter) {
-            final refrainRows = await db.rawQuery('''
+            final refrainRows = await (await _currentBibleDatabase).rawQuery('''
               SELECT v.verse_id, v.text
               FROM verses v
               JOIN books b ON b._id = v.book_id
