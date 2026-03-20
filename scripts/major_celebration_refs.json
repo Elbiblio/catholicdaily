@@ -490,6 +490,12 @@
         "gospel_acclamation": null
       },
       {
+        "position": "Sequence",
+        "reading": "Veni Sancte Spiritus (Sequence)",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
         "position": "Gospel",
         "reading": "John 20:19-23",
         "psalm_response": null,
@@ -1633,6 +1639,12 @@
         "gospel_acclamation": null
       },
       {
+        "position": "Sequence",
+        "reading": "Veni Sancte Spiritus (Sequence)",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
         "position": "Gospel",
         "reading": "John 14:15-16, 23b-26",
         "psalm_response": null,
@@ -2556,6 +2568,12 @@
       {
         "position": "Second Reading",
         "reading": "1 Cor 12:3b-7, 12-13",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Sequence",
+        "reading": "Veni Sancte Spiritus (Sequence)",
         "psalm_response": null,
         "gospel_acclamation": null
       },
@@ -3675,6 +3693,12 @@
       {
         "position": "Second Reading",
         "reading": "1 Cor 12:3b-7, 12-13",
+        "psalm_response": null,
+        "gospel_acclamation": null
+      },
+      {
+        "position": "Sequence",
+        "reading": "Veni Sancte Spiritus (Sequence)",
         "psalm_response": null,
         "gospel_acclamation": null
       },

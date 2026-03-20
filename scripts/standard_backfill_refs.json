@@ -43,7 +43,7 @@
     "sunday_cycle": "",
     "reading_cycle": "",
     "lectionary_number": "272",
-    "first_reading": "Acts 6:1-7",
+    "first_reading": "",
     "gospel": "John 6:16-21",
     "matched_date": "2024-04-13T00:00:00.000"
   },
@@ -54,9 +54,9 @@
     "weekday_cycle": "I/II",
     "sunday_cycle": "",
     "reading_cycle": "",
-    "lectionary_number": "278",
-    "first_reading": "Acts 9:31-42",
-    "gospel": "John 6:60-69",
+    "lectionary_number": "68c",
+    "first_reading": "",
+    "gospel": "John 6:53",
     "matched_date": "2024-04-20T00:00:00.000"
   },
   {
@@ -67,8 +67,8 @@
     "sunday_cycle": "",
     "reading_cycle": "",
     "lectionary_number": "284",
-    "first_reading": "Acts 13:44-52",
-    "gospel": "John 8:31-32",
+    "first_reading": "",
+    "gospel": "John 14:7-14",
     "matched_date": "2024-04-27T00:00:00.000"
   },
   {
@@ -142,54 +142,6 @@
     "first_reading": "Is 50:4-9a",
     "gospel": "Matt 26:14-25",
     "matched_date": "2024-03-27T00:00:00.000"
-  },
-  {
-    "season": "Lent",
-    "week": "1",
-    "day": "Saturday",
-    "weekday_cycle": "I/II",
-    "sunday_cycle": "",
-    "reading_cycle": "",
-    "lectionary_number": "229",
-    "first_reading": "Isa 58:9b-14",
-    "gospel": "Luke 5:27-32",
-    "matched_date": "2024-02-24T00:00:00.000"
-  },
-  {
-    "season": "Lent",
-    "week": "2",
-    "day": "Saturday",
-    "weekday_cycle": "I/II",
-    "sunday_cycle": "",
-    "reading_cycle": "",
-    "lectionary_number": "235",
-    "first_reading": "Mic 7:14-15, 18-20",
-    "gospel": "Luke 15:1-3, 11-32",
-    "matched_date": "2024-03-02T00:00:00.000"
-  },
-  {
-    "season": "Lent",
-    "week": "3",
-    "day": "Saturday",
-    "weekday_cycle": "I/II",
-    "sunday_cycle": "",
-    "reading_cycle": "",
-    "lectionary_number": "242",
-    "first_reading": "Exod 17:1-7",
-    "gospel": "John 4:5-15, 19-26, 39, 40-42",
-    "matched_date": "2024-03-09T00:00:00.000"
-  },
-  {
-    "season": "Lent",
-    "week": "4",
-    "day": "Saturday",
-    "weekday_cycle": "I/II",
-    "sunday_cycle": "",
-    "reading_cycle": "",
-    "lectionary_number": "249",
-    "first_reading": "Micah 7:7-9",
-    "gospel": "John 9:1, 6-9, 13-17, 34-38",
-    "matched_date": "2024-03-16T00:00:00.000"
   },
   {
     "season": "Ordinary Time",

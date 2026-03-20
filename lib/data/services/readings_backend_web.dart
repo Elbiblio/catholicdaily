@@ -5,7 +5,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import '../models/bible_book.dart';
 import '../models/daily_reading.dart';
 import 'csv_readings_resolver_service.dart';
-import 'official_lectionary_incipit_service.dart';
+import 'consolidated_incipit_service.dart';
 import 'reading_reference_parser.dart';
 import 'readings_backend.dart';
 import 'shared_service_utils.dart';
@@ -18,7 +18,7 @@ class ReadingsBackendWeb implements ReadingsBackend {
   Map<String, String> _aliases = const {};
   Map<String, Map<int, Map<int, String>>> _versesByBook = const {};
   
-  final OfficialLectionaryIncipitService _incipitService = OfficialLectionaryIncipitService();
+  final ConsolidatedIncipitService _incipitService = ConsolidatedIncipitService();
   final CsvReadingsResolverService _csvResolver = CsvReadingsResolverService.instance;
 
   @override
@@ -65,308 +65,17 @@ class ReadingsBackendWeb implements ReadingsBackend {
       return fullText;
     }
 
-    final processed = _incipitService.processReading(reference, fullText);
-    if (incipit != null && incipit.trim().isNotEmpty) {
-      final cleaned = _cleanCsvIncipit(incipit.trim());
-      if (cleaned.isNotEmpty) {
-        return _mergeIncipitIntoFirstVerse(processed.correctedText, cleaned);
-      }
-    }
-
-    final derivedIncipit = processed.incipit;
-    if (derivedIncipit == null || derivedIncipit.trim().isEmpty) {
-      return processed.correctedText;
-    }
-
-    final cleanIncipit = derivedIncipit
-        .trim()
-        .replaceAll(RegExp(r'[,:;]\s*$'), '');
-    final cleanedText = _cleanFirstLineForIncipit(processed.correctedText, cleanIncipit);
-    return '$cleanIncipit: $cleanedText';
-  }
-
-  String _mergeIncipitIntoFirstVerse(String text, String incipitText) {
-    final lines = text.split('\n');
-    for (var i = 0; i < lines.length; i++) {
-      if (lines[i].trim().isEmpty) {
-        continue;
-      }
-
-      final originalLine = lines[i].trim();
-      final verseMatch = RegExp(r'^(\d+[a-z]?)\.\s*(.*)$').firstMatch(originalLine);
-      final versePrefix = verseMatch?.group(1);
-      final verseBody = (verseMatch?.group(2) ?? originalLine).trim();
-      final mergedLine = _mergeIncipitWithVerseText(incipitText, verseBody);
-
-      lines[i] = versePrefix != null && versePrefix.isNotEmpty
-          ? '$versePrefix. $mergedLine'
-          : mergedLine;
-      return lines.join('\n');
-    }
-
-    return incipitText;
-  }
-
-  String _mergeIncipitWithVerseText(String incipitText, String verseText) {
-    final cleanedIncipit = _cleanCsvIncipit(incipitText);
-    final cleanedVerse = verseText.trim();
-    if (cleanedIncipit.isEmpty || cleanedVerse.isEmpty) {
-      return cleanedIncipit.isEmpty ? cleanedVerse : cleanedIncipit;
-    }
-
-    final incipitParts = _splitIncipitParts(cleanedIncipit);
-    final incipitBody = incipitParts.$2;
-    final normalizedIncipit = _normalizeMergedIncipit(cleanedIncipit);
-
-    if (incipitBody.isNotEmpty) {
-      final overlap = _findLoosePhraseMatch(cleanedVerse, incipitBody);
-      if (overlap != null) {
-        final remainder = cleanedVerse.substring(overlap.end).trimLeft().replaceFirst(
-          RegExp(r'^[,;:!?.\-–—]+\s*'),
-          '',
-        );
-        if (remainder.isEmpty) {
-          return normalizedIncipit;
-        }
-        return _joinSentenceParts(normalizedIncipit, remainder);
-      }
-    }
-
-    if (_looksLikeIncipitText(cleanedIncipit)) {
-      final cleanedFirstLine = _cleanFirstLineForIncipit(cleanedVerse, normalizedIncipit);
-      return _joinIncipitAndVerse(normalizedIncipit, cleanedFirstLine);
-    }
-
-    return _joinIncipitAndVerse(normalizedIncipit, cleanedVerse);
-  }
-
-  (String, String) _splitIncipitParts(String incipit) {
-    final colonIndex = incipit.indexOf(':');
-    if (colonIndex >= 0) {
-      final prefix = incipit.substring(0, colonIndex).trim();
-      final body = incipit.substring(colonIndex + 1).trim();
-      return (prefix, body);
-    }
-    return ('', incipit.trim());
-  }
-
-  String _normalizeMergedIncipit(String incipit) {
-    return incipit.trim().replaceAll(RegExp(r'[,:;]+\s*$'), '').trim();
-  }
-
-  RegExpMatch? _findLoosePhraseMatch(String verseText, String phrase) {
-    var normalizedPhrase = phrase.trim();
-    normalizedPhrase = normalizedPhrase
-        .replaceAll('“', '')
-        .replaceAll('”', '')
-        .replaceFirst(RegExp("^[\"']+"), '')
-        .trim();
-    while (normalizedPhrase.isNotEmpty && '"\':;,.!?'.contains(normalizedPhrase[normalizedPhrase.length - 1])) {
-      normalizedPhrase = normalizedPhrase.substring(0, normalizedPhrase.length - 1).trimRight();
-    }
-    if (normalizedPhrase.isEmpty) {
-      return null;
-    }
-
-    final tokens = normalizedPhrase
-        .split(RegExp(r'\s+'))
-        .map((token) => token.replaceAll(RegExp("[^A-Za-z0-9']"), ''))
-        .where((token) => token.isNotEmpty)
-        .toList();
-    if (tokens.length < 3) {
-      return null;
-    }
-
-    final pattern = tokens.map(RegExp.escape).join(r'[\s\W_]+');
-    return RegExp(pattern, caseSensitive: false).firstMatch(verseText);
-  }
-
-  String _joinSentenceParts(String leading, String trailing) {
-    final trimmedLeading = leading.trimRight();
-    final trimmedTrailing = trailing.trimLeft();
-    if (trimmedLeading.isEmpty) {
-      return trimmedTrailing;
-    }
-    if (trimmedTrailing.isEmpty) {
-      return trimmedLeading;
-    }
-
-    if (RegExp(r'[.!?]$').hasMatch(trimmedLeading)) {
-      return '$trimmedLeading $trimmedTrailing';
-    }
-    return '$trimmedLeading. $trimmedTrailing';
-  }
-
-  String _joinIncipitAndVerse(String incipit, String verse) {
-    final trimmedIncipit = incipit.trimRight();
-    final trimmedVerse = verse.trimLeft();
-    if (trimmedIncipit.isEmpty) {
-      return trimmedVerse;
-    }
-    if (trimmedVerse.isEmpty) {
-      return trimmedIncipit;
-    }
-
-    if (RegExp(r'[:,;]$').hasMatch(trimmedIncipit)) {
-      return '$trimmedIncipit $trimmedVerse';
-    }
-    if (RegExp(r'[.!?]$').hasMatch(trimmedIncipit)) {
-      return '$trimmedIncipit $trimmedVerse';
-    }
-    return '$trimmedIncipit: $trimmedVerse';
-  }
-
-  /// Clean a CSV incipit value before using it to replace the first verse line.
-  ///
-  /// CSV incipits often contain embedded verse numbers and lectionary-style
-  /// formatting that should not appear in the rendered text:
-  ///   "At that time: 1. An account of..."  →  "At that time: An account of..."
-  ///   "In those days: 1. Now the time..." → "In those days: The time..."
-  String _cleanCsvIncipit(String text) {
-    var cleaned = text.trim();
+    final processed = _incipitService.processReading(
+      reference: reference,
+      text: fullText,
+      csvIncipit: incipit,
+    );
     
-    // Remove verse number after incipit prefix: "In those days: 1. " → "In those days: "
-    cleaned = cleaned.replaceFirst(RegExp(r'(?<=:\s*)\d+[a-z]?\.\s*'), '');
-    
-    // Remove leading conjunctions that are awkward with temporal incipits
-    final lowerText = cleaned.toLowerCase();
-    if (lowerText.startsWith('in those days') || lowerText.startsWith('at that time')) {
-      // Extract the prefix before the colon and preserve it
-      final colonIndex = cleaned.indexOf(':');
-      if (colonIndex > 0) {
-        final prefix = cleaned.substring(0, colonIndex + 1);
-        final suffix = cleaned.substring(colonIndex + 1).trim();
-        
-        // Remove leading conjunctions from suffix
-        final cleanSuffix = suffix.replaceFirst(
-          RegExp(r'^(?:Now,?\s*|Then,?\s*|And,?\s*|But,?\s*|So,?\s*|For,?\s*)', caseSensitive: false),
-          '',
-        ).trim();
-        var normalizedSuffix = cleanSuffix;
-
-        if (lowerText.startsWith('at that time') && normalizedSuffix.isNotEmpty) {
-          normalizedSuffix = normalizedSuffix.replaceFirstMapped(
-            RegExp(r'^(?:(While|As|When|After)\s+)(?:he|him)\b', caseSensitive: false),
-            (m) => '${m.group(1)} Jesus',
-          );
-          normalizedSuffix = normalizedSuffix.replaceFirstMapped(
-            RegExp(r'^(?:He|Him)\b', caseSensitive: false),
-            (_) => 'Jesus',
-          );
-        }
-        
-        if (normalizedSuffix.isNotEmpty) {
-          cleaned = '$prefix ${normalizedSuffix[0].toUpperCase()}${normalizedSuffix.substring(1)}';
-        } else {
-          cleaned = prefix;
-        }
-      }
-    } else {
-      // General conjunction stripping for non-temporal incipits
-      cleaned = cleaned.replaceFirst(
-        RegExp(r'^(?:And |But |Now |Then |So |For |Thus |Therefore |Moreover |However |Also |Plus )', caseSensitive: false),
-        '',
-      );
-      
-      // Capitalize if we removed something
-      if (cleaned != text && cleaned.isNotEmpty && cleaned[0] != '"' && cleaned[0] != '\u201C') {
-        cleaned = cleaned[0].toUpperCase() + cleaned.substring(1);
-      }
-    }
-    
-    return cleaned;
+    return processed.formattedReading;
   }
 
-  /// Clean the first line of DB text before prepending a derived incipit.
-  ///
-  /// Strips verse numbers, leading conjunctions, and tautological temporal
-  /// phrases from the first line so the rendered output reads naturally:
-  ///   "In those days: 1. Now Moses was..." → "In those days: Moses was..."
-  ///   "At that time: 35. On that day..."   → "At that time: When evening had come..."
-  ///   "Beloved: 5. Who is it..."           → "Beloved: Who is it..."
-  String _cleanFirstLineForIncipit(String text, String incipitPrefix) {
-    final lines = text.split('\n');
-    if (lines.isEmpty) return text;
 
-    // Find the first non-empty line
-    var firstIdx = -1;
-    for (var i = 0; i < lines.length; i++) {
-      if (lines[i].trim().isNotEmpty) {
-        firstIdx = i;
-        break;
-      }
-    }
-    if (firstIdx < 0) return text;
-
-    var firstLine = lines[firstIdx].trim();
-
-    // Strip verse number prefix: "1. text" → "text", "35. text" → "text"
-    firstLine = firstLine.replaceFirst(RegExp(r'^\d+[a-z]?\.\s*'), '');
-
-    // Strip leading conjunctions that are tautological with the incipit prefix
-    final incipitLower = incipitPrefix.toLowerCase();
-
-    // Temporal tautology: "In those days" + "Now..." or "In those days..."
-    if (incipitLower.contains('in those days') || incipitLower.contains('at that time')) {
-      firstLine = firstLine.replaceFirst(
-        RegExp(r'^(?:Now,?\s*|Then,?\s*|And,?\s*|But,?\s*|So,?\s*|For,?\s*|On that day,?\s*|At that time,?\s*|In those days,?\s*|One day,?\s*|Once,?\s*|On (?:that|one|a certain) (?:day|occasion),?\s*)', caseSensitive: false),
-        '',
-      );
-    } else {
-      // General conjunction stripping for non-temporal incipits
-      firstLine = firstLine.replaceFirst(
-        RegExp(r'^(?:And |But |Now |Then |So |For |Thus |Therefore |Moreover )', caseSensitive: false),
-        '',
-      );
-    }
-
-    // Capitalize the first letter
-    if (firstLine.isNotEmpty && firstLine[0] != '"' && firstLine[0] != '\u201C') {
-      firstLine = firstLine[0].toUpperCase() + firstLine.substring(1);
-    }
-
-    lines[firstIdx] = firstLine;
-    return lines.join('\n');
-  }
-
-  /// Check if text looks like a lectionary incipit (not a raw verse).
-  bool _looksLikeIncipitText(String text) {
-    final lower = text.toLowerCase().trim();
-    const incipitPrefixes = [
-      'at that time',
-      'in those days',
-      'in the beginning',
-      'thus says the lord',
-      'the lord said',
-      'the lord spoke',
-      'jesus said',
-      'jesus told',
-      'moses said',
-      'brethren',
-      'brothers and sisters',
-      'beloved',
-      'my child',
-      'my son',
-      'hear, my children',
-      'children',
-      'i said to myself',
-      'the word of the lord came',
-      'job answered',
-      'wisdom has been',
-      'with their',
-      'the angel',
-      'now',
-      'then',
-      'and',
-      'but',
-      'so',
-      'for',
-      'therefore',
-      'however',
-    ];
-    return incipitPrefixes.any((p) => lower.startsWith(p));
-  }
-
+  
   @override
   Future<List<Book>> getBooks() async {
     await _ensureLoaded();

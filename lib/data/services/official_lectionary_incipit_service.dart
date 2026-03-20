@@ -148,6 +148,10 @@ class OfficialLectionaryIncipitService {
     'Dan 11': 'Thus says the LORD:',
     'Dan 12': 'Thus says the LORD:',
 
+    // Isaiah – specific passages
+    'Isa 7':  'The LORD spoke to Ahaz, saying:',
+    'Jeremiah 11': 'The LORD made it known to me',
+
     // Matthew – Sermon on the Mount is direct discourse to disciples
     'Matt 5': 'Jesus said to his disciples:',
     'Matt 6': 'Jesus said to his disciples:',
