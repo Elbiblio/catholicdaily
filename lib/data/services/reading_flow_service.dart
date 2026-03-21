@@ -1,7 +1,6 @@
 import '../models/daily_reading.dart';
 import '../models/reading_session.dart';
 import '../../ui/utils/reading_title_formatter.dart';
-import 'intelligent_text_refinement_service.dart';
 import 'psalm_resolver_service.dart';
 import 'readings_service.dart';
 import 'base_service.dart';
@@ -27,8 +26,6 @@ class ReadingFlowService extends BaseService<ReadingFlowService> {
 
   final PsalmResolverService _psalmResolver = PsalmResolverService.instance;
   final ReadingsService _readingsService = ReadingsService.instance;
-  final IntelligentTextRefinementService _refinementService =
-      IntelligentTextRefinementService();
 
   Future<HydratedReadingSet> hydrateReadingSet({
     required DateTime date,
@@ -50,7 +47,8 @@ class ReadingFlowService extends BaseService<ReadingFlowService> {
           psalmResponse: reading.psalmResponse,
           incipit: reading.incipit,
         );
-        final text = _refinementService.refineReadingText(rawText);
+        // Text is already processed by IncipitProcessingService in ReadingsService
+        final text = rawText;
         titles[reading.reading] = ReadingTitleFormatter.build(
           reference: reading.reading,
           position: reading.position,

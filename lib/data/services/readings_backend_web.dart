@@ -5,7 +5,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import '../models/bible_book.dart';
 import '../models/daily_reading.dart';
 import 'csv_readings_resolver_service.dart';
-import 'consolidated_incipit_service.dart';
+import 'incipit_processing_service.dart';
 import 'reading_reference_parser.dart';
 import 'readings_backend.dart';
 import 'shared_service_utils.dart';
@@ -18,7 +18,7 @@ class ReadingsBackendWeb implements ReadingsBackend {
   Map<String, String> _aliases = const {};
   Map<String, Map<int, Map<int, String>>> _versesByBook = const {};
   
-  final ConsolidatedIncipitService _incipitService = ConsolidatedIncipitService();
+  final IncipitProcessingService _incipitService = IncipitProcessingService();
   final CsvReadingsResolverService _csvResolver = CsvReadingsResolverService.instance;
 
   @override
@@ -65,13 +65,13 @@ class ReadingsBackendWeb implements ReadingsBackend {
       return fullText;
     }
 
-    final processed = _incipitService.processReading(
-      reference: reference,
-      text: fullText,
+    final processed = _incipitService.process(
+      reference,
+      fullText,
       csvIncipit: incipit,
     );
     
-    return processed.formattedReading;
+    return processed;
   }
 
 

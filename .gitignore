@@ -56,3 +56,7 @@ android/*.jks
 android/*.keystore
 android/app/*.jks
 android/app/*.keystore
+
+# Google Services
+google-services.json
+GoogleService-Info.plist

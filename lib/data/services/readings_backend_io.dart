@@ -6,7 +6,7 @@ import '../models/bible_book.dart';
 import '../models/daily_reading.dart';
 import 'csv_readings_resolver_service.dart';
 import 'daniel_verse_mapper.dart' show DeuterocanonicalVerseMapper;
-import 'consolidated_incipit_service.dart';
+import 'incipit_processing_service.dart';
 import 'reading_reference_parser.dart';
 import 'readings_backend.dart';
 import 'lectionary_psalm_formatter.dart';
@@ -24,7 +24,7 @@ class ReadingsBackendIo implements ReadingsBackend {
     }
   }
 
-  final ConsolidatedIncipitService _incipitService = ConsolidatedIncipitService();
+  final IncipitProcessingService _incipitProcessor = IncipitProcessingService();
   final CsvReadingsResolverService _csvResolver = CsvReadingsResolverService.instance;
 
   Database? _rsvceDb;
@@ -172,13 +172,7 @@ class ReadingsBackendIo implements ReadingsBackend {
       return fullText;
     }
 
-    final processed = _incipitService.processReading(
-      reference: reference,
-      text: fullText,
-      csvIncipit: incipit,
-    );
-    
-    return processed.formattedReading;
+    return _incipitProcessor.process(reference, fullText, csvIncipit: incipit);
   }
   
   /// Check if a reference is a responsorial psalm with complex notation
