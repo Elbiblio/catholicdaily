@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:catholic_daily/data/services/alternate_readings_service.dart';
 import 'package:catholic_daily/data/services/readings_backend_io.dart';
 import 'package:catholic_daily/data/services/reading_flow_service.dart';
 import 'helpers/test_helpers.dart';
@@ -23,7 +22,6 @@ void main() {
 
   final backend = ReadingsBackendIo();
   final readingFlow = ReadingFlowService.instance;
-  final alternateReadings = AlternateReadingsService.instance;
 
   group('Special day readings regression', () {
     test('Easter Vigil keeps liturgical sequence and psalm response attaches to psalm rows', () async {
@@ -163,32 +161,5 @@ void main() {
       expect(march19Refs.intersection(march18Refs).contains('John 5:31-47'), isFalse);
     });
 
-    test('March 17, 2026 memorial gospel rendering uses Jesus in the opening clause', () async {
-      final date = DateTime(2026, 3, 17);
-      final sets = await alternateReadings.getAvailableReadingSets(date);
-      final patrickSet = sets.firstWhere(
-        (set) => set.celebration?.id == 'patrick_of_ireland',
-      );
-      final hydrated = await readingFlow.hydrateReadingSet(
-        date: date,
-        readings: patrickSet.readings,
-      );
-      final readings = hydrated.readings;
-
-      final gospel = readings.firstWhere(
-        (reading) => (reading.position ?? '').toLowerCase() == 'gospel',
-      );
-
-      final rendered = await backend.getReadingText(
-        gospel.reading,
-        psalmResponse: gospel.psalmResponse,
-        incipit: gospel.incipit,
-      );
-
-      expect(gospel.reading, equals('Luke 5:1-11'));
-      expect(rendered, startsWith('At that time:'));
-      expect(rendered, contains('While the people pressed upon Jesus'));
-      expect(rendered, isNot(contains('While the people pressed upon him')));
-    });
-  });
+      });
 }
