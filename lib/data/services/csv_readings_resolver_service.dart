@@ -1023,33 +1023,114 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         }
       }
       if (entry.gospel.isNotEmpty) {
-        final normalizedGospel = _normalizeReferenceStyle(entry.gospel);
-        if (!hasGospel) {
-          hasGospel = true;
-          readings.add(DailyReading(
-            reading: normalizedGospel,
-            position: 'Gospel',
-            date: date,
-            gospelAcclamation:
-                entry.acclamationText.isEmpty ? null : entry.acclamationText,
-            incipit: entry.gospelIncipit.isEmpty ? null : entry.gospelIncipit,
-          ));
-        } else {
-          final hasSameGospel = readings.any(
-            (r) => r.reading == normalizedGospel &&
-                (r.position == 'Gospel' || r.position?.startsWith('Gospel (alternative') == true),
-          );
-          if (!hasSameGospel) {
-            gospelAlternativeCount += 1;
-            final suffix = gospelAlternativeCount == 1 ? '' : ' ${gospelAlternativeCount + 1}';
+        // Some standard lectionary rows encode an alternative Gospel in a single field using " or ".
+        // Example: "John 4:5-42 or 4:5-15, 19b-26, 39a, 40-42".
+        // Emit the first as 'Gospel' and the second as 'Gospel (alternative)'.
+        final rawGospel = entry.gospel.trim();
+        if (rawGospel.contains(' or ')) {
+          final parts = rawGospel.split(' or ');
+          final firstPart = parts[0].trim();
+          var secondPart = parts.sublist(1).join(' or ').trim(); // In case of nested 'or', join remainder
+
+          // Normalize first part normally
+          final normalizedFirst = _normalizeReferenceStyle(firstPart);
+
+          // If second part omits the book, propagate it from the first part
+          final bookMatch = RegExp(r'^[A-Za-z\s\d]+').firstMatch(normalizedFirst);
+          final firstBook = bookMatch != null
+              ? normalizedFirst.substring(0, normalizedFirst.indexOf(' ')).trim()
+              : '';
+          if (!RegExp(r'^[A-Za-z]').hasMatch(secondPart)) {
+            if (firstBook.isNotEmpty) {
+              secondPart = '$firstBook $secondPart';
+            }
+          }
+          final normalizedSecond = _normalizeReferenceStyle(secondPart);
+
+          if (!hasGospel) {
+            hasGospel = true;
             readings.add(DailyReading(
-              reading: normalizedGospel,
-              position: 'Gospel (alternative$suffix)',
+              reading: normalizedFirst,
+              position: 'Gospel',
               date: date,
               gospelAcclamation:
                   entry.acclamationText.isEmpty ? null : entry.acclamationText,
               incipit: entry.gospelIncipit.isEmpty ? null : entry.gospelIncipit,
             ));
+            // Always add the alternative when present
+            readings.add(DailyReading(
+              reading: normalizedSecond,
+              position: 'Gospel (alternative)',
+              date: date,
+              gospelAcclamation:
+                  entry.acclamationText.isEmpty ? null : entry.acclamationText,
+              // Use the same incipit if a single incipit is provided in the CSV for the combined row
+              incipit: entry.gospelIncipit.isEmpty ? null : entry.gospelIncipit,
+            ));
+          } else {
+            // If a primary Gospel already exists from another row, append both parts as alternatives if unique
+            final existsPrimary = readings.any(
+              (r) => r.reading == normalizedFirst &&
+                  (r.position == 'Gospel' || r.position?.startsWith('Gospel (alternative') == true),
+            );
+            if (!existsPrimary) {
+              gospelAlternativeCount += 1;
+              final suffix = gospelAlternativeCount == 1 ? '' : ' ${gospelAlternativeCount + 1}';
+              readings.add(DailyReading(
+                reading: normalizedFirst,
+                position: 'Gospel (alternative$suffix)',
+                date: date,
+                gospelAcclamation:
+                    entry.acclamationText.isEmpty ? null : entry.acclamationText,
+                incipit: entry.gospelIncipit.isEmpty ? null : entry.gospelIncipit,
+              ));
+            }
+            final existsAlt = readings.any(
+              (r) => r.reading == normalizedSecond &&
+                  (r.position == 'Gospel' || r.position?.startsWith('Gospel (alternative') == true),
+            );
+            if (!existsAlt) {
+              gospelAlternativeCount += 1;
+              final suffix = gospelAlternativeCount == 1 ? '' : ' ${gospelAlternativeCount + 1}';
+              readings.add(DailyReading(
+                reading: normalizedSecond,
+                position: 'Gospel (alternative$suffix)',
+                date: date,
+                gospelAcclamation:
+                    entry.acclamationText.isEmpty ? null : entry.acclamationText,
+                incipit: entry.gospelIncipit.isEmpty ? null : entry.gospelIncipit,
+              ));
+            }
+          }
+        } else {
+          final normalizedGospel = _normalizeReferenceStyle(rawGospel);
+          if (!hasGospel) {
+            hasGospel = true;
+            readings.add(DailyReading(
+              reading: normalizedGospel,
+              position: 'Gospel',
+              date: date,
+              gospelAcclamation:
+                  entry.acclamationText.isEmpty ? null : entry.acclamationText,
+              incipit: entry.gospelIncipit.isEmpty ? null : entry.gospelIncipit,
+            ));
+          } else {
+            final hasSameGospel = readings.any(
+              (r) => r.reading == normalizedGospel &&
+                  (r.position == 'Gospel' || r.position?.startsWith('Gospel (alternative') == true),
+            );
+            if (!hasSameGospel) {
+              gospelAlternativeCount += 1;
+              final suffix = gospelAlternativeCount == 1 ? '' : ' ${gospelAlternativeCount + 1}';
+              readings.add(DailyReading(
+                reading: normalizedGospel,
+                position: 'Gospel (alternative$suffix)',
+                date: date,
+                gospelAcclamation:
+                    entry.acclamationText.isEmpty ? null : entry.acclamationText,
+                incipit: entry.gospelIncipit.isEmpty ? null : entry.gospelIncipit,
+              ));
+            }
           }
         }
       }
