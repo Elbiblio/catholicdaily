@@ -2,7 +2,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 enum BibleVersionType {
   rsvce('rsvce', 'Revised Standard Version Catholic Edition', 'RSVCE'),
-  nabre('nabre', 'New American Bible Revised Edition', 'NABRE');
+  nabre('nabre', 'New American Bible Revised Edition', 'NABRE'),
+  jcb('jcb', 'Jerusalem Bible', 'JCB');
 
   final String dbName;
   final String fullName;

@@ -29,6 +29,7 @@ class ReadingsBackendIo implements ReadingsBackend {
 
   Database? _rsvceDb;
   Database? _nabreDb;
+  Database? _jcbDb;
   List<Book>? _booksCache;
   Map<String, String>? _aliasesCache;
   BibleVersionPreference? _versionPreference;
@@ -43,6 +44,11 @@ class ReadingsBackendIo implements ReadingsBackend {
     return _nabreDb!;
   }
 
+  Future<Database> get _jcbDatabase async {
+    _jcbDb ??= await _openAssetDatabase('jcb.db', readOnly: true);
+    return _jcbDb!;
+  }
+
   Future<Database> get _currentBibleDatabase async {
     _versionPreference ??= await BibleVersionPreference.getInstance();
     final version = _versionPreference!.currentVersion;
@@ -52,6 +58,8 @@ class ReadingsBackendIo implements ReadingsBackend {
         return _nabreDatabase;
       case BibleVersionType.rsvce:
         return _rsvceDatabase;
+      case BibleVersionType.jcb:
+        return _jcbDatabase;
     }
   }
 

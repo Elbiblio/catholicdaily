@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import '../../data/models/prayer.dart';
 import '../../data/services/prayer_service.dart';
+import '../../data/services/language_preference_service.dart';
+import '../widgets/language_switcher_widget.dart';
 
 class PrayerDetailScreen extends StatefulWidget {
   final Prayer prayer;
@@ -14,13 +16,25 @@ class PrayerDetailScreen extends StatefulWidget {
 
 class _PrayerDetailScreenState extends State<PrayerDetailScreen> {
   final PrayerService _prayerService = PrayerService();
+  final LanguagePreferenceService _languageService = LanguagePreferenceService();
   bool _isBookmarked = false;
+  String _currentLanguage = 'en';
 
   @override
   void initState() {
     super.initState();
     _loadBookmarkStatus();
     _markAsUsed();
+    _loadLanguagePreference();
+  }
+
+  Future<void> _loadLanguagePreference() async {
+    final language = await _languageService.getPreferredLanguage();
+    if (mounted) {
+      setState(() {
+        _currentLanguage = language;
+      });
+    }
   }
 
   Future<void> _loadBookmarkStatus() async {
@@ -43,7 +57,38 @@ class _PrayerDetailScreenState extends State<PrayerDetailScreen> {
     });
   }
 
+  Future<void> _onLanguageChanged(String language) async {
+    await _languageService.setPreferredLanguage(language);
+    if (mounted) {
+      setState(() {
+        _currentLanguage = language;
+      });
+    }
+  }
+
   Widget _buildPrayerContent() {
+    // Check if prayer has language-separated content
+    if (widget.prayer.contentByLanguage != null && 
+        widget.prayer.contentByLanguage!.isNotEmpty) {
+      
+      final languageContent = widget.prayer.getContentForLanguage(_currentLanguage);
+      if (languageContent != null) {
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          child: Text(
+            languageContent.join('\n\n'),
+            key: ValueKey(_currentLanguage),
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              height: 1.1,
+              fontFamily: _currentLanguage == 'la' ? 'Canterbury' : null,
+              fontSize: _currentLanguage == 'la' ? 18 : 16,
+            ),
+          ),
+        );
+      }
+    }
+
+    // Fallback to original HTML or text content
     if (widget.prayer.htmlContent != null && widget.prayer.htmlContent!.isNotEmpty) {
       return Html(
         data: widget.prayer.htmlContent!,
@@ -110,6 +155,18 @@ class _PrayerDetailScreenState extends State<PrayerDetailScreen> {
       appBar: AppBar(
         title: Text(widget.prayer.title),
         actions: [
+          // Add language switcher if prayer has multiple languages
+          if (widget.prayer.availableLanguages != null && 
+              widget.prayer.availableLanguages!.length > 1)
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: LanguageSwitcherWidget(
+                currentLanguage: _currentLanguage,
+                availableLanguages: widget.prayer.availableLanguages,
+                onLanguageChanged: _onLanguageChanged,
+                showLabels: false,
+              ),
+            ),
           IconButton(
             icon: Icon(_isBookmarked ? Icons.bookmark : Icons.bookmark_border),
             onPressed: _toggleBookmark,

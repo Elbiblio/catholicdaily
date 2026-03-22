@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/prayer.dart';
+import 'prayer_content_parser.dart';
 
 class PrayerService {
   static final PrayerService _instance = PrayerService._internal();
@@ -31,7 +32,9 @@ class PrayerService {
       _prayers = await Future.wait(jsonList.map((json) async {
         final prayer = Prayer.fromMap(json);
         final htmlContent = await _loadHtmlContent(prayer.sourceFile);
-        return prayer.copyWith(htmlContent: htmlContent);
+        final prayerWithHtml = prayer.copyWith(htmlContent: htmlContent);
+        // Parse content for language separation
+        return PrayerContentParser.parsePrayerContent(prayerWithHtml);
       }));
     } catch (e) {
       print('Error loading prayers: $e');

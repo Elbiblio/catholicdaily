@@ -7,6 +7,8 @@ class Prayer {
   final List<String> text;
   final String? sourceFile;
   final String? htmlContent;
+  final Map<String, List<String>>? contentByLanguage;
+  final List<String>? availableLanguages;
 
   const Prayer({
     required this.id,
@@ -17,6 +19,8 @@ class Prayer {
     required this.text,
     this.sourceFile,
     this.htmlContent,
+    this.contentByLanguage,
+    this.availableLanguages,
   });
 
   factory Prayer.fromMap(Map<String, dynamic> map) {
@@ -29,10 +33,32 @@ class Prayer {
       text: List<String>.from(map['text'] ?? const []),
       sourceFile: map['source_file']?.toString() ?? map['sourceFile']?.toString(),
       htmlContent: map['html_content']?.toString() ?? map['htmlContent']?.toString(),
+      contentByLanguage: map['contentByLanguage'] != null 
+          ? Map<String, List<String>>.from(map['contentByLanguage'])
+          : null,
+      availableLanguages: map['availableLanguages'] != null
+          ? List<String>.from(map['availableLanguages'])
+          : null,
     );
   }
 
   String get displayText => text.join('\n\n');
+
+  List<String>? getContentForLanguage(String language) {
+    return contentByLanguage?[language];
+  }
+
+  bool hasLanguage(String language) {
+    return availableLanguages?.contains(language) ?? false;
+  }
+
+  String getDisplayTextForLanguage(String language) {
+    final content = getContentForLanguage(language);
+    if (content != null) {
+      return content.join('\n\n');
+    }
+    return displayText; // Fallback to original
+  }
 
   Prayer copyWith({
     int? id,
@@ -43,6 +69,8 @@ class Prayer {
     List<String>? text,
     String? sourceFile,
     String? htmlContent,
+    Map<String, List<String>>? contentByLanguage,
+    List<String>? availableLanguages,
   }) {
     return Prayer(
       id: id ?? this.id,
@@ -53,6 +81,8 @@ class Prayer {
       text: text ?? this.text,
       sourceFile: sourceFile ?? this.sourceFile,
       htmlContent: htmlContent ?? this.htmlContent,
+      contentByLanguage: contentByLanguage ?? this.contentByLanguage,
+      availableLanguages: availableLanguages ?? this.availableLanguages,
     );
   }
 }

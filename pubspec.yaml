@@ -90,6 +90,7 @@ flutter:
   assets:
     - assets/rsvce.db
     - assets/nabre.db
+    - assets/jcb.db
     - assets/data/books_rows.json
     - assets/data/readings_rows.json
     - assets/data/verses_rows.json

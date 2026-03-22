@@ -50,8 +50,8 @@ class OfflineBibleService {
       return file.path;
     }
     
-    // Check if it's a bundled asset (RSVCE or NABRE)
-    if (dbName == 'rsvce.db' || dbName == 'nabre.db') {
+    // Check if it's a bundled asset (RSVCE, NABRE, or JCB)
+    if (dbName == 'rsvce.db' || dbName == 'nabre.db' || dbName == 'jcb.db') {
       return null; // Signals to use rootBundle / asset logic
     }
     
