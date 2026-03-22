@@ -9,6 +9,7 @@ import 'incipit_processing_service.dart';
 import 'reading_reference_parser.dart';
 import 'readings_backend.dart';
 import 'shared_service_utils.dart';
+import 'bible_version_preference.dart';
 
 ReadingsBackend createReadingsBackend() => ReadingsBackendWeb();
 
@@ -17,6 +18,7 @@ class ReadingsBackendWeb implements ReadingsBackend {
   List<Book> _books = const [];
   Map<String, String> _aliases = const {};
   Map<String, Map<int, Map<int, String>>> _versesByBook = const {};
+  BibleVersionPreference? _versionPreference;
   
   final IncipitProcessingService _incipitService = IncipitProcessingService();
   final CsvReadingsResolverService _csvResolver = CsvReadingsResolverService.instance;
@@ -110,11 +112,25 @@ class ReadingsBackendWeb implements ReadingsBackend {
   Future<void> _ensureLoaded() async {
     if (_isLoaded) return;
 
+    _versionPreference ??= await BibleVersionPreference.getInstance();
+    final currentVersion = _versionPreference!.currentVersion;
+    
+    // Try to load version-specific verses data, fall back to default
+    String versesJson;
+    try {
+      versesJson = await rootBundle.loadString(
+        'assets/data/verses_rows_${currentVersion.dbName}.json',
+      );
+    } catch (e) {
+      // Fall back to default verses file if version-specific one doesn't exist
+      versesJson = await rootBundle.loadString(
+        'assets/data/verses_rows.json',
+      );
+    }
+
+    // Load books data (same for all versions)
     final booksJson = await rootBundle.loadString(
       'assets/data/books_rows.json',
-    );
-    final versesJson = await rootBundle.loadString(
-      'assets/data/verses_rows.json',
     );
 
     final booksRows = jsonDecode(_stripBom(booksJson)) as List<dynamic>;
@@ -148,6 +164,12 @@ class ReadingsBackendWeb implements ReadingsBackend {
     _versesByBook = versesByBook;
 
     _isLoaded = true;
+  }
+
+  /// Reload verses data for the current Bible version
+  Future<void> reloadForVersionChange() async {
+    _isLoaded = false;
+    await _ensureLoaded();
   }
 
   List<String> _readRangeFromMemory(String shortName, ScriptureRange range) {

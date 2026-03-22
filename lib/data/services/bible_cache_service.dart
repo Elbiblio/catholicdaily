@@ -1,5 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'bible_version_preference.dart';
 
 class BibleCacheService {
   static const String _recentlyOpenedKey = 'recently_opened_passages';
@@ -84,6 +85,7 @@ class BibleCacheService {
     required String reference,
     required String title,
     required String content,
+    String? version,
   }) async {
     // Remove if already exists
     _recentlyOpened.removeWhere((item) => item['reference'] == reference);
@@ -93,6 +95,7 @@ class BibleCacheService {
       'reference': reference,
       'title': title,
       'content': content,
+      'version': version,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
     });
     
@@ -108,6 +111,7 @@ class BibleCacheService {
     required String reference,
     required String title,
     required String content,
+    String? version,
   }) async {
     final existingIndex = _bookmarked.indexWhere((item) => item['reference'] == reference);
     
@@ -118,6 +122,7 @@ class BibleCacheService {
         'reference': reference,
         'title': title,
         'content': content,
+        'version': version,
         'timestamp': DateTime.now().millisecondsSinceEpoch,
       });
     }
@@ -156,5 +161,45 @@ class BibleCacheService {
 
   Map<String, dynamic>? getCachedInsight(String reference) {
     return _insights[reference];
+  }
+
+  /// Refresh cached content for all items when Bible version changes
+  Future<void> refreshContentForVersionChange(String newVersion) async {
+    final preference = await BibleVersionPreference.getInstance();
+    final currentVersion = preference.currentVersion.dbName;
+    
+    if (currentVersion == newVersion) return;
+    
+    // Clear content cache but preserve metadata
+    _recentlyOpened = _recentlyOpened.map((item) => {
+      ...item,
+      'content': '', // Clear cached content
+      'version': currentVersion,
+    }).toList();
+    
+    _bookmarked = _bookmarked.map((item) => {
+      ...item,
+      'content': '', // Clear cached content
+      'version': currentVersion,
+    }).toList();
+    
+    await _saveData();
+  }
+
+  /// Get content for a specific reference, loading fresh content if version mismatch
+  Future<String?> getContentForReference(String reference, String currentVersion) async {
+    // Check recently opened first
+    final recentItem = _recentlyOpened.where((item) => item['reference'] == reference).firstOrNull;
+    if (recentItem != null && recentItem['version'] == currentVersion && recentItem['content']?.isNotEmpty == true) {
+      return recentItem['content'] as String?;
+    }
+    
+    // Check bookmarks
+    final bookmarkedItem = _bookmarked.where((item) => item['reference'] == reference).firstOrNull;
+    if (bookmarkedItem != null && bookmarkedItem['version'] == currentVersion && bookmarkedItem['content']?.isNotEmpty == true) {
+      return bookmarkedItem['content'] as String?;
+    }
+    
+    return null; // Content not cached or version mismatch
   }
 }

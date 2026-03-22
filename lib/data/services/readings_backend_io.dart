@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import '../models/bible_book.dart';
@@ -29,7 +30,6 @@ class ReadingsBackendIo implements ReadingsBackend {
 
   Database? _rsvceDb;
   Database? _nabreDb;
-  Database? _jcbDb;
   List<Book>? _booksCache;
   Map<String, String>? _aliasesCache;
   BibleVersionPreference? _versionPreference;
@@ -44,10 +44,6 @@ class ReadingsBackendIo implements ReadingsBackend {
     return _nabreDb!;
   }
 
-  Future<Database> get _jcbDatabase async {
-    _jcbDb ??= await _openAssetDatabase('jcb.db', readOnly: true);
-    return _jcbDb!;
-  }
 
   Future<Database> get _currentBibleDatabase async {
     _versionPreference ??= await BibleVersionPreference.getInstance();
@@ -58,8 +54,6 @@ class ReadingsBackendIo implements ReadingsBackend {
         return _nabreDatabase;
       case BibleVersionType.rsvce:
         return _rsvceDatabase;
-      case BibleVersionType.jcb:
-        return _jcbDatabase;
     }
   }
 
@@ -473,14 +467,19 @@ class ReadingsBackendIo implements ReadingsBackend {
 
   @override
   Future<void> close() async {
-    if (_rsvceDb != null) {
-      await _rsvceDb!.close();
-      _rsvceDb = null;
+    try {
+      await _rsvceDb?.close();
+      await _nabreDb?.close();
+    } catch (e) {
+      debugPrint('Error closing readings backend: $e');
     }
-    if (_nabreDb != null) {
-      await _nabreDb!.close();
-      _nabreDb = null;
-    }
+  }
+
+  @override
+  Future<void> reloadForVersionChange() async {
+    // For IO backend, the version preference is checked on each call,
+    // so no explicit reload is needed. The databases are cached and
+    // switched based on current version automatically.
   }
 
   Future<Map<String, String>> get _bookAliases async {

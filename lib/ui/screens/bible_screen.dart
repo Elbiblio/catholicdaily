@@ -3,6 +3,7 @@ import 'search_screen.dart';
 import '../../data/services/bible_cache_service.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
 import '../../data/services/app_navigation_service.dart';
+import '../../data/services/bible_version_preference.dart';
 
 class BibleScreen extends StatefulWidget {
   final Function(String reference, String content, LiturgicalDay? liturgicalDay, {bool isBibleSearch})
@@ -192,10 +193,12 @@ class _BibleScreenState extends State<BibleScreen> with SingleTickerProviderStat
     final title = item['title'] as String? ?? reference;
     final content = item['content'] as String? ?? '';
     
+    final preference = await BibleVersionPreference.getInstance();
     await _cacheService.toggleBookmark(
       reference: reference,
       title: title,
       content: content,
+      version: preference.currentVersion.dbName,
     );
     
     // Refresh the UI
@@ -215,10 +218,12 @@ class _BibleScreenState extends State<BibleScreen> with SingleTickerProviderStat
     );
     
     // Cache as recently opened
-    _cacheService.addRecentlyOpened(
+    final preference = await BibleVersionPreference.getInstance();
+    await _cacheService.addRecentlyOpened(
       reference: reference,
       title: title,
       content: content,
+      version: preference.currentVersion.dbName,
     );
     
     widget.onReadingSelected(reference, content, null, isBibleSearch: true);

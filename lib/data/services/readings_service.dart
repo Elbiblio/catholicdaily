@@ -70,4 +70,12 @@ class ReadingsService {
       debugPrint('Error closing readings backend: $e');
     }
   }
+
+  Future<void> reloadForVersionChange() async {
+    try {
+      await _backend.reloadForVersionChange();
+    } catch (e) {
+      debugPrint('Error reloading for version change: $e');
+    }
+  }
 }

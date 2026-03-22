@@ -123,11 +123,15 @@ class _BibleVersionSwitcherState extends State<BibleVersionSwitcher> {
               color: theme.colorScheme.onSurfaceVariant,
             ),
             const SizedBox(width: 8),
-            Text(
-              _currentVersion.fullName,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w500,
+            Expanded(
+              child: Text(
+                _currentVersion.fullName,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w500,
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
               ),
             ),
             const SizedBox(width: 4),

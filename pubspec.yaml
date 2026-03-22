@@ -33,7 +33,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   sqflite: ^2.4.2
   path_provider: ^2.1.5
-  http: ^1.6.0
+  http: ^0.13.6
   intl: ^0.20.2
   shared_preferences: ^2.5.3
   path: ^1.9.1
@@ -44,6 +44,9 @@ dependencies:
   archive: ^4.0.9
   flutter_tts: ^4.2.2
   flutter_html: ^3.0.0-beta.2
+  geolocator: ^10.1.0
+  permission_handler: ^11.3.1
+  google_maps_webservice: ^0.0.20-nullsafety.5
 
 dev_dependencies:
   flutter_test:
@@ -90,7 +93,6 @@ flutter:
   assets:
     - assets/rsvce.db
     - assets/nabre.db
-    - assets/jcb.db
     - assets/data/books_rows.json
     - assets/data/readings_rows.json
     - assets/data/verses_rows.json

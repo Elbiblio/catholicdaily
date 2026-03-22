@@ -136,9 +136,18 @@ class PrayerService {
       return 'Marian';
     }
     
+    // Rosary Mysteries (check before Lenten to avoid misclassification)
+    if (title.contains('mystery') && 
+        (title.contains('sorrowful') || title.contains('joyful') || 
+         title.contains('glorious') || title.contains('luminous')) ||
+        slug.contains('sorrowful') || slug.contains('joyful') ||
+        slug.contains('glorious') || slug.contains('luminous')) {
+      return 'Rosary';
+    }
+    
     // Lenten
     if (title.contains('stations') || title.contains('contrition') ||
-        title.contains('crucifix') || title.contains('dying') ||
+        title.contains('dying') ||
         slug.contains('stations') || slug.contains('act_of_contrition') ||
         slug.contains('prayer_before_crucifix') || slug.contains('prayer_for_the_dying')) {
       return 'Lenten';

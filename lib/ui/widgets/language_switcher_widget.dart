@@ -77,7 +77,8 @@ class _LanguageSwitcherWidgetState extends State<LanguageSwitcherWidget>
             children: languages.map((language) {
               final isSelected = language == _currentLanguage;
               
-              return Expanded(
+              return Flexible(
+                fit: FlexFit.loose,
                 child: GestureDetector(
                   onTap: () => _switchLanguage(language),
                   child: AnimatedContainer(

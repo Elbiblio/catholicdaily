@@ -14,4 +14,5 @@ abstract class ReadingsBackend {
     required int chapter,
   });
   Future<void> close();
+  Future<void> reloadForVersionChange();
 }

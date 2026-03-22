@@ -80,7 +80,6 @@ class _PrayerDetailScreenState extends State<PrayerDetailScreen> {
             key: ValueKey(_currentLanguage),
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               height: 1.1,
-              fontFamily: _currentLanguage == 'la' ? 'Canterbury' : null,
               fontSize: _currentLanguage == 'la' ? 18 : 16,
             ),
           ),
@@ -122,7 +121,6 @@ class _PrayerDetailScreenState extends State<PrayerDetailScreen> {
           "b": Style(
             fontWeight: FontWeight.bold,
             fontSize: FontSize(17),
-            fontFamily: 'Canterbury', // Canterbury font for bold text/titles
             margin: Margins.only(top: 12, bottom: 8),
           ),
           "font": Style(
@@ -135,6 +133,12 @@ class _PrayerDetailScreenState extends State<PrayerDetailScreen> {
           "html": Style(
             fontSize: FontSize(16),
             fontFamily: null, // Default readable font for content
+          ),
+          "img": Style(
+            width: Width(200, Unit.px),
+            height: Height(150, Unit.px),
+            margin: Margins.only(top: 8, bottom: 16),
+            alignment: Alignment.center,
           ),
         },
       );

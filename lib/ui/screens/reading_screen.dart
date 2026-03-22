@@ -3,12 +3,16 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/models/daily_reading.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
+import '../../data/services/readings_service.dart';
+import '../../data/services/bible_version_preference.dart';
 import '../widgets/parchment_background.dart';
 import '../widgets/psalm_response_widget.dart';
 import '../widgets/gospel_acclamation_widget.dart';
 import '../widgets/bible_version_switcher.dart';
 import '../utils/reading_title_formatter.dart';
 import '../utils/bible_reference_helper.dart';
+import '../../data/services/bible_cache_service.dart';
+import 'church_locator_screen.dart';
 
 class ReadingScreen extends StatefulWidget {
   final String reference;
@@ -67,7 +71,6 @@ Color _contrastColor(Color background, {double alpha = 1.0}) {
 
 class _ReadingScreenState extends State<ReadingScreen> {
   double _textScale = 1.0;
-  bool _showLiturgicalInfo = false;
   final ScrollController _scrollController = ScrollController();
   String _currentContent = '';
   bool _isReloading = false;
@@ -152,6 +155,14 @@ class _ReadingScreenState extends State<ReadingScreen> {
     setState(() {
       _isBookmarked = bookmarks.contains(widget.reference);
     });
+  }
+
+  void _openChurchLocator() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const ChurchLocatorScreen(),
+      ),
+    );
   }
 
   Future<void> _toggleBookmark() async {
@@ -445,9 +456,8 @@ void _selectVariant(DailyReading reading) async {
           ? FloatingActionButton.small(
               backgroundColor: widget.liturgicalDay!.colorValue,
               foregroundColor: widget.liturgicalDay!.textColor,
-              onPressed: () =>
-                  setState(() => _showLiturgicalInfo = !_showLiturgicalInfo),
-              child: Icon(_showLiturgicalInfo ? Icons.info : Icons.church),
+              onPressed: _openChurchLocator,
+              child: const Icon(Icons.church),
             )
           : null,
     );
@@ -915,11 +925,68 @@ void _selectVariant(DailyReading reading) async {
       padding: const EdgeInsets.all(16),
       child: BibleVersionSwitcher(
         onVersionChanged: () {
-          // Handle version change
+          _reloadContentForNewVersion();
         },
       ),
     );
   }
+
+  Future<void> _reloadContentForNewVersion() async {
+  setState(() => _isReloading = true);
+  
+  try {
+    // Reload backend data for version change
+    final readingsService = ReadingsService.instance;
+    await readingsService.reloadForVersionChange();
+    
+    // Refresh cache content for version change
+    if (widget.isBibleSearch) {
+      final cacheService = BibleCacheService();
+      final preference = await BibleVersionPreference.getInstance();
+      await cacheService.refreshContentForVersionChange(preference.currentVersion.dbName);
+    }
+    
+    String newContent;
+    
+    if (widget.isBibleSearch) {
+      // Handle bible chapter/page content
+      final parsed = BibleReferenceHelper.parseReference(widget.reference);
+      if (parsed == null) return;
+      
+      final bookName = parsed['bookName'] as String;
+      final chapter = parsed['chapter'] as int;
+      final shortName = await BibleReferenceHelper.getBookShortName(bookName);
+      
+      if (shortName == null) return;
+      
+      newContent = await readingsService.getChapterText(
+        bookShortName: shortName,
+        chapter: chapter,
+      );
+    } else {
+      // Handle regular liturgical readings
+      newContent = await readingsService.getReadingText(
+        widget.reference,
+        psalmResponse: widget.readingData?.psalmResponse,
+        incipit: widget.readingData?.incipit,
+      );
+    }
+    
+    if (mounted) {
+      setState(() {
+        _currentContent = newContent;
+        _isReloading = false;
+      });
+    }
+  } catch (e) {
+    if (mounted) {
+      setState(() => _isReloading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error loading content: $e')),
+      );
+    }
+  }
+}
 
   List<_Verse> _parseVerses(String content) {
     final verses = <_Verse>[];
