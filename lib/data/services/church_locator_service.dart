@@ -87,8 +87,8 @@ class ChurchLocatorService {
 
           // Calculate distance from user
           final distance = LocationService.calculateDistance(
-            userLatitude!,
-            userLongitude!,
+            userLatitude,
+            userLongitude,
             church.latitude,
             church.longitude,
           );
@@ -103,8 +103,8 @@ class ChurchLocatorService {
 
     // Get cached churches from database
     final cachedChurches = await _getCachedChurches(
-      userLatitude!,
-      userLongitude!,
+      userLatitude,
+      userLongitude,
       radius,
     );
 
