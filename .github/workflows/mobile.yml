@@ -59,7 +59,8 @@ jobs:
           version_name="${current%%+*}"
           version_code="${current##*+}"
           if [ "$version_name" = "$current" ]; then
-            version_code="1"
+            # No build number specified, generate one from timestamp
+            version_code=$(date +%s)
           fi
 
           previous=""
