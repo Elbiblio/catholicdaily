@@ -401,15 +401,23 @@ jobs:
           # Repackage legacy PKCS#12 payload using OpenSSL so macOS security import can consume it.
           LEGACY_PEM="$RUNNER_TEMP/legacy_certificate.pem"
           MODERN_P12="$RUNNER_TEMP/modern_certificate.p12"
+          P12_PASSWORD=""
           for _CANDIDATE in "${P12_PASSWORD_CANDIDATES[@]}"; do
-            if openssl pkcs12 -legacy -in "$CERT_PATH" -nodes -passin "pass:$_CANDIDATE" -out "$LEGACY_PEM" >/dev/null 2>&1; then
+            # Try without -legacy first: required for LibreSSL (macOS) and modern p12 files.
+            if openssl pkcs12 -in "$CERT_PATH" -nodes -passin "pass:$_CANDIDATE" -out "$LEGACY_PEM" 2>/dev/null; then
               P12_PASSWORD="$_CANDIDATE"
-              echo "P12 certificate decoded successfully."
+              echo "P12 certificate decoded (standard format)."
+              break
+            fi
+            # Fallback: try with -legacy for older p12 files on Linux/OpenSSL 3.x.
+            if openssl pkcs12 -legacy -in "$CERT_PATH" -nodes -passin "pass:$_CANDIDATE" -out "$LEGACY_PEM" 2>/dev/null; then
+              P12_PASSWORD="$_CANDIDATE"
+              echo "P12 certificate decoded (legacy format)."
               break
             fi
           done
           if [ -z "$P12_PASSWORD" ]; then
-            echo "::error::Unable to decode iOS .p12 – none of the candidate passwords worked." >&2
+            echo "::error::Unable to decode iOS .p12 – none of the candidate passwords worked (tried standard and legacy formats)." >&2
             exit 1
           fi
           openssl pkcs12 -export -in "$LEGACY_PEM" -out "$MODERN_P12" -passout pass:"$P12_PASSWORD" >/dev/null
