@@ -353,10 +353,15 @@ jobs:
             KEYCHAIN_PASSWORD="${{ secrets.ANDROID_KEYSTORE_PASSWORD }}"
           fi
 
-          P12_PASSWORD="${{ secrets.IOS_P12_PASSWORD }}"
-          if [ -z "$P12_PASSWORD" ]; then
-            P12_PASSWORD="venmail"
+          # Build an ordered list of P12 password candidates.
+          # The GitHub secret is tried first; known fallback passwords follow.
+          P12_PASSWORD_CANDIDATES=()
+          _SECRET_P12="${{ secrets.IOS_P12_PASSWORD }}"
+          if [ -n "$_SECRET_P12" ]; then
+            P12_PASSWORD_CANDIDATES+=("$_SECRET_P12")
           fi
+          P12_PASSWORD_CANDIDATES+=('venmail' '080King$' '080Test$')
+          P12_PASSWORD=""
 
           CERT_PATH="$RUNNER_TEMP/raw_certificate.p12"
           if [ -n "${{ secrets.IOS_BUILD_CERTIFICATE_BASE64 }}" ]; then
@@ -396,8 +401,15 @@ jobs:
           # Repackage legacy PKCS#12 payload using OpenSSL so macOS security import can consume it.
           LEGACY_PEM="$RUNNER_TEMP/legacy_certificate.pem"
           MODERN_P12="$RUNNER_TEMP/modern_certificate.p12"
-          if ! openssl pkcs12 -legacy -in "$CERT_PATH" -nodes -passin pass:"$P12_PASSWORD" -out "$LEGACY_PEM" >/dev/null 2>&1; then
-            echo "::error::Unable to decode legacy iOS .p12 with provided password." >&2
+          for _CANDIDATE in "${P12_PASSWORD_CANDIDATES[@]}"; do
+            if openssl pkcs12 -legacy -in "$CERT_PATH" -nodes -passin "pass:$_CANDIDATE" -out "$LEGACY_PEM" >/dev/null 2>&1; then
+              P12_PASSWORD="$_CANDIDATE"
+              echo "P12 certificate decoded successfully."
+              break
+            fi
+          done
+          if [ -z "$P12_PASSWORD" ]; then
+            echo "::error::Unable to decode iOS .p12 – none of the candidate passwords worked." >&2
             exit 1
           fi
           openssl pkcs12 -export -in "$LEGACY_PEM" -out "$MODERN_P12" -passout pass:"$P12_PASSWORD" >/dev/null
