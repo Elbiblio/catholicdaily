@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/prayer.dart';
@@ -37,7 +38,7 @@ class PrayerService {
         return PrayerContentParser.parsePrayerContent(prayerWithHtml);
       }));
     } catch (e) {
-      print('Error loading prayers: $e');
+      debugPrint('Error loading prayers: $e');
       _prayers = [];
     }
   }
@@ -47,7 +48,7 @@ class PrayerService {
     try {
       return await rootBundle.loadString('assets/prayers/$sourceFile');
     } catch (e) {
-      print('Error loading HTML content for $sourceFile: $e');
+      debugPrint('Error loading HTML content for $sourceFile: $e');
       return null;
     }
   }
@@ -63,7 +64,7 @@ class PrayerService {
           .cast<Prayer>()
           .toList();
     } catch (e) {
-      print('Error loading recently used prayers: $e');
+      debugPrint('Error loading recently used prayers: $e');
       _recentlyUsed = [];
     }
   }
@@ -86,7 +87,7 @@ class PrayerService {
       final slugs = _recentlyUsed.map((p) => p.slug).toList();
       await prefs.setStringList('recently_used_prayers', slugs);
     } catch (e) {
-      print('Error marking prayer as used: $e');
+      debugPrint('Error marking prayer as used: $e');
     }
   }
 
@@ -240,7 +241,7 @@ class PrayerService {
       
       await prefs.setStringList('bookmarked_prayers', bookmarks);
     } catch (e) {
-      print('Error toggling bookmark: $e');
+      debugPrint('Error toggling bookmark: $e');
     }
   }
 

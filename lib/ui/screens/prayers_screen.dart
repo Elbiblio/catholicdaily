@@ -104,11 +104,11 @@ class _PrayersScreenState extends State<PrayersScreen> with SingleTickerProvider
 
   Widget _buildSearchResults() {
     if (_searchQuery.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
           'Type in the search box above to find prayers',
           style: TextStyle(
-            color: Colors.grey,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
             fontSize: 16,
           ),
         ),
@@ -119,35 +119,31 @@ class _PrayersScreenState extends State<PrayersScreen> with SingleTickerProvider
       return Center(
         child: Text(
           'No prayers found for "$_searchQuery"',
-          style: const TextStyle(
-            color: Colors.grey,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
             fontSize: 16,
           ),
         ),
       );
     }
 
-    return ListView.builder(
-      padding: const EdgeInsets.all(16),
-      itemCount: _searchResults.length,
-      itemBuilder: (context, index) {
-        final prayer = _searchResults[index];
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 8),
-          child: Card(
-            child: ListTile(
-              title: Text(prayer.title),
-              subtitle: Text(
-                prayer.firstLine.length > 80
-                    ? '${prayer.firstLine.substring(0, 80)}...'
-                    : prayer.firstLine,
-              ),
-              trailing: const Icon(Icons.arrow_forward_ios),
-              onTap: () => _openPrayer(prayer),
+    // Use Column instead of ListView.builder to avoid nested scrollable issue
+    return Column(
+      children: _searchResults.map((prayer) => Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Card(
+          child: ListTile(
+            title: Text(prayer.title),
+            subtitle: Text(
+              prayer.firstLine.length > 80
+                  ? '${prayer.firstLine.substring(0, 80)}...'
+                  : prayer.firstLine,
             ),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+            onTap: () => _openPrayer(prayer),
           ),
-        );
-      },
+        ),
+      )).toList(),
     );
   }
 
@@ -401,6 +397,7 @@ class _PrayersScreenState extends State<PrayersScreen> with SingleTickerProvider
 
   void _openPrayer(Prayer prayer) async {
     await _prayerService.markPrayerAsUsed(prayer);
+    if (!mounted) return;
     Navigator.push(
       context,
       MaterialPageRoute(

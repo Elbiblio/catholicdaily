@@ -4,6 +4,7 @@ import 'data/services/theme_preferences.dart';
 import 'data/services/app_navigation_service.dart';
 import 'ui/screens/home_screen.dart';
 import 'ui/screens/reading_screen.dart';
+import 'ui/screens/onboarding_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,6 +43,7 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
   late AppThemeStyle _themeStyle;
   final AppNavigationService _navigationService = AppNavigationService();
   Widget? _initialScreen;
+  bool _showOnboarding = false;
 
   @override
   void initState() {
@@ -53,9 +55,14 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
 
   Future<void> _initializeNavigation() async {
     await _navigationService.initialize();
-    
+    _showOnboarding = await OnboardingScreen.shouldShow();
+
     // Determine initial screen based on last navigation
-    if (_navigationService.shouldResumeToBibleChapter) {
+    if (_showOnboarding) {
+      _initialScreen = OnboardingScreen(
+        onComplete: _onOnboardingComplete,
+      );
+    } else if (_navigationService.shouldResumeToBibleChapter) {
       final chapter = _navigationService.lastBibleChapter!;
       _initialScreen = ReadingScreen(
         reference: chapter['reference'] as String,
@@ -64,15 +71,26 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
         isBibleSearch: true,
       );
     } else {
-      _initialScreen = HomeScreen(
-        themeMode: _themeMode,
-        themeStyle: _themeStyle,
-        onThemeModeChanged: _handleThemeModeChanged,
-        onThemeStyleChanged: _handleThemeStyleChanged,
-      );
+      _initialScreen = _buildHomeScreen();
     }
-    
+
     setState(() {});
+  }
+
+  void _onOnboardingComplete() {
+    setState(() {
+      _showOnboarding = false;
+      _initialScreen = _buildHomeScreen();
+    });
+  }
+
+  Widget _buildHomeScreen() {
+    return HomeScreen(
+      themeMode: _themeMode,
+      themeStyle: _themeStyle,
+      onThemeModeChanged: _handleThemeModeChanged,
+      onThemeStyleChanged: _handleThemeStyleChanged,
+    );
   }
 
   @override
@@ -83,12 +101,7 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
       theme: _buildPremiumTheme(Brightness.light, _themeStyle),
       darkTheme: _buildPremiumTheme(Brightness.dark, _themeStyle),
       themeMode: _themeMode,
-      home: _initialScreen ?? HomeScreen(
-        themeMode: _themeMode,
-        themeStyle: _themeStyle,
-        onThemeModeChanged: _handleThemeModeChanged,
-        onThemeStyleChanged: _handleThemeStyleChanged,
-      ),
+      home: _initialScreen ?? _buildHomeScreen(),
     );
   }
 

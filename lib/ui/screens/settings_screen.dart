@@ -394,6 +394,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           const SizedBox(height: 24),
+          _SectionHeader(title: 'Legal'),
+          Card(
+            child: Column(
+              children: [
+                _SettingsTile(
+                  icon: Icons.description_outlined,
+                  title: 'Terms of Service',
+                  subtitle: 'Usage terms and conditions',
+                  onTap: () => _openLegalUrl('https://elbiblio.com/catholic-daily/terms'),
+                ),
+                const Divider(height: 1),
+                _SettingsTile(
+                  icon: Icons.privacy_tip_outlined,
+                  title: 'Privacy Policy',
+                  subtitle: 'How we handle your data',
+                  onTap: () => _openLegalUrl('https://elbiblio.com/cdr-policy'),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
           _SectionHeader(title: 'About'),
           Card(
             child: Column(
@@ -427,6 +448,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> _openLegalUrl(String url) async {
+    final uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication) && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Unable to open the page right now.')),
+      );
+    }
   }
 
   void _showRsvceInfo(BuildContext context) {
