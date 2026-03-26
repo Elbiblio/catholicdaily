@@ -30,7 +30,14 @@ class _PrayersScreenState extends State<PrayersScreen> with SingleTickerProvider
 
   void _onTabChanged() {
     if (_tabController.index == 1) { // Quick Access tab
-      setState(() {}); // Refresh to show updated recently used/bookmarks
+      // Sync recently used from service in-memory state immediately
+      setState(() {
+        _recentlyUsedPrayers = _prayerService.recentlyUsedPrayers;
+      });
+      // Also refresh bookmarks (user may have bookmarked in detail screen)
+      _prayerService.getBookmarkedPrayers().then((bookmarked) {
+        if (mounted) setState(() => _bookmarkedPrayers = bookmarked);
+      });
     }
   }
 

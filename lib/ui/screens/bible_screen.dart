@@ -19,18 +19,21 @@ class _BibleScreenState extends State<BibleScreen> with SingleTickerProviderStat
   late TabController _tabController;
   final BibleCacheService _cacheService = BibleCacheService();
   final AppNavigationService _navigationService = AppNavigationService();
+  late Future<void> _initFuture;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(_onTabChanged);
-    _cacheService.initialize();
+    _initFuture = _cacheService.initialize();
   }
 
   void _onTabChanged() {
     if (_tabController.index == 1) { // Quick Access tab
-      setState(() {}); // Refresh to show updated recently opened/bookmarks
+      setState(() {
+        _initFuture = _cacheService.initialize();
+      });
     }
   }
 
@@ -65,7 +68,7 @@ class _BibleScreenState extends State<BibleScreen> with SingleTickerProviderStat
 
   Widget _buildHomeTab() {
     return FutureBuilder(
-      future: _cacheService.initialize(),
+      future: _initFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return const Center(child: CircularProgressIndicator());

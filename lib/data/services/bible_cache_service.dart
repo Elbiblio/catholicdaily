@@ -76,7 +76,7 @@ class BibleCacheService {
           'timestamp': entry.value['timestamp'] as int?,
         })
         .toList()
-        ..sort((a, b) => (b['timestamp'] as int).compareTo(a['timestamp'] as int));
+        ..sort((a, b) => (b['timestamp'] as int? ?? 0).compareTo(a['timestamp'] as int? ?? 0));
     
     return recentInsights.take(10).toList();
   }
@@ -148,7 +148,7 @@ class BibleCacheService {
     // Keep only last 50 insights
     if (_insights.length > 50) {
       final sortedEntries = _insights.entries.toList()
-        ..sort((a, b) => (a.value['timestamp'] as int).compareTo(b.value['timestamp'] as int));
+        ..sort((a, b) => (a.value['timestamp'] as int? ?? 0).compareTo(b.value['timestamp'] as int? ?? 0));
       
       final toRemove = sortedEntries.take(_insights.length - 50);
       for (final entry in toRemove) {

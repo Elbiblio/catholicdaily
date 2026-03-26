@@ -436,9 +436,18 @@ jobs:
           security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
           security import "$CERT_PATH" -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
-          security list-keychain -d user -s "$KEYCHAIN_PATH"
+          # Allow codesign to access the key without a passphrase prompt (required on macOS 10.12+)
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          # Add new keychain to search list while PRESERVING existing keychains (system + login)
+          security list-keychain -d user -s "$KEYCHAIN_PATH" $(security list-keychain -d user | xargs)
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp "$PROFILE_PATH" ~/Library/MobileDevice/Provisioning\ Profiles/
+          # Export provisioning profile UUID for use in ExportOptions
+          PROFILE_UUID=$(security cms -D -i "$PROFILE_PATH" | plutil -extract UUID raw - 2>/dev/null || \
+            /usr/libexec/PlistBuddy -c 'Print :UUID' /dev/stdin <<< "$(security cms -D -i "$PROFILE_PATH")" 2>/dev/null || \
+            grep -a -A1 '<key>UUID</key>' <(security cms -D -i "$PROFILE_PATH") | tail -1 | sed 's/.*<string>\(.*\)<\/string>.*/\1/')
+          echo "IOS_PROFILE_UUID=$PROFILE_UUID" >> "$GITHUB_ENV"
+          echo "Provisioning profile UUID: $PROFILE_UUID"
 
       - name: Build iOS without codesign
         if: env.HAS_IOS_SIGNING != 'true'
@@ -448,6 +457,7 @@ jobs:
         if: env.HAS_IOS_SIGNING == 'true'
         shell: bash
         run: |
+          # Manual signing is required on CI — automatic signing needs an interactive Apple ID session
           cat <<EOF > "$RUNNER_TEMP/ExportOptions.plist"
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -458,7 +468,14 @@ jobs:
             <key>destination</key>
             <string>export</string>
             <key>signingStyle</key>
-            <string>automatic</string>
+            <string>manual</string>
+            <key>signingCertificate</key>
+            <string>Apple Distribution</string>
+            <key>provisioningProfiles</key>
+            <dict>
+              <key>com.elbiblio.catholicdaily</key>
+              <string>${IOS_PROFILE_UUID}</string>
+            </dict>
             <key>stripSwiftSymbols</key>
             <true/>
             <key>teamID</key>

@@ -69,9 +69,14 @@ class _ChurchLocatorScreenState extends State<ChurchLocatorScreen> {
   }
 
   void _showAddChurchDialog() {
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      builder: (context) => AddChurchDialog(
+      isScrollControlled: true,
+      useSafeArea: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => AddChurchSheet(
         onChurchAdded: (church) {
           setState(() {
             _churches.insert(0, church);
@@ -234,9 +239,14 @@ class _ChurchLocatorScreenState extends State<ChurchLocatorScreen> {
   }
 
   void _showEditChurchDialog(Church church) {
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      builder: (context) => AddChurchDialog(
+      isScrollControlled: true,
+      useSafeArea: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => AddChurchSheet(
         church: church,
         onChurchAdded: (updatedChurch) {
           setState(() {
@@ -459,30 +469,41 @@ class ChurchCard extends StatelessWidget {
   }
 }
 
-class AddChurchDialog extends StatefulWidget {
+class AddChurchSheet extends StatefulWidget {
   final Church? church;
   final Function(Church) onChurchAdded;
 
-  const AddChurchDialog({
+  const AddChurchSheet({
     super.key,
     this.church,
     required this.onChurchAdded,
   });
 
   @override
-  State<AddChurchDialog> createState() => _AddChurchDialogState();
+  State<AddChurchSheet> createState() => _AddChurchSheetState();
 }
 
-class _AddChurchDialogState extends State<AddChurchDialog> {
+class _AddChurchSheetState extends State<AddChurchSheet> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _addressController = TextEditingController();
   final _phoneController = TextEditingController();
   final _websiteController = TextEditingController();
-  final _massTimesController = TextEditingController();
   final _notesController = TextEditingController();
-
+  List<String> _massTimes = [];
+  String? _selectedSize;
   bool _isLoading = false;
+
+  // Common mass time presets grouped by day
+  static const _presets = {
+    'Saturday': ['4:00 PM', '5:00 PM', '5:30 PM', '7:00 PM'],
+    'Sunday': [
+      '7:00 AM', '7:30 AM', '8:00 AM', '8:30 AM', '9:00 AM', '9:30 AM',
+      '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '12:00 PM', '12:30 PM',
+      '1:00 PM', '5:00 PM', '7:00 PM',
+    ],
+    'Weekdays': ['6:00 AM', '6:30 AM', '7:00 AM', '7:30 AM', '8:00 AM', '12:00 PM', '5:30 PM', '7:00 PM'],
+  };
 
   @override
   void initState() {
@@ -492,8 +513,19 @@ class _AddChurchDialogState extends State<AddChurchDialog> {
       _addressController.text = widget.church!.address;
       _phoneController.text = widget.church!.phoneNumber ?? '';
       _websiteController.text = widget.church!.website ?? '';
-      _massTimesController.text = widget.church!.massTimes ?? '';
-      _notesController.text = widget.church!.notes ?? '';
+      // Parse existing mass times into chips
+      final raw = widget.church!.massTimes ?? '';
+      if (raw.isNotEmpty) {
+        _massTimes = raw.split(RegExp(r'[,·|]')).map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
+      }
+      final notes = widget.church!.notes ?? '';
+      final sizeMatch = RegExp(r'^\[Size: (Small|Medium|Large)\]\s*').firstMatch(notes);
+      if (sizeMatch != null) {
+        _selectedSize = sizeMatch.group(1)!.toLowerCase();
+        _notesController.text = notes.replaceFirst(sizeMatch.group(0)!, '').trim();
+      } else {
+        _notesController.text = notes;
+      }
     }
   }
 
@@ -503,47 +535,64 @@ class _AddChurchDialogState extends State<AddChurchDialog> {
     _addressController.dispose();
     _phoneController.dispose();
     _websiteController.dispose();
-    _massTimesController.dispose();
     _notesController.dispose();
     super.dispose();
   }
 
+  void _openMassTimesPicker() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) => _MassTimesPickerSheet(
+        selected: List.from(_massTimes),
+        presets: _presets,
+        onSave: (updated) => setState(() => _massTimes = updated),
+      ),
+    );
+  }
+
   Future<void> _saveChurch() async {
     if (!_formKey.currentState!.validate()) return;
-
     setState(() => _isLoading = true);
+
+    final massTimesStr = _massTimes.isEmpty ? null : _massTimes.join(' · ');
+    String? notes = _notesController.text.trim().isEmpty ? null : _notesController.text.trim();
+    if (_selectedSize != null) {
+      final sizeLabel = '${_selectedSize![0].toUpperCase()}${_selectedSize!.substring(1)}';
+      final annotation = '[Size: $sizeLabel]';
+      notes = notes != null ? '$annotation $notes' : annotation;
+    }
 
     try {
       final churchService = ChurchLocatorService();
-      
       if (widget.church != null) {
-        // Update existing church
         final updatedChurch = widget.church!.copyWith(
-          name: _nameController.text,
-          address: _addressController.text,
-          phoneNumber: _phoneController.text.isEmpty ? null : _phoneController.text,
-          website: _websiteController.text.isEmpty ? null : _websiteController.text,
-          massTimes: _massTimesController.text.isEmpty ? null : _massTimesController.text,
-          notes: _notesController.text.isEmpty ? null : _notesController.text,
+          name: _nameController.text.trim(),
+          address: _addressController.text.trim(),
+          phoneNumber: _phoneController.text.trim().isEmpty ? null : _phoneController.text.trim(),
+          website: _websiteController.text.trim().isEmpty ? null : _websiteController.text.trim(),
+          massTimes: massTimesStr,
+          notes: notes,
         );
-        
         await churchService.updateChurch(updatedChurch);
         widget.onChurchAdded(updatedChurch);
       } else {
-        // Add new church
         final church = await churchService.addCustomChurch(
-          name: _nameController.text,
-          address: _addressController.text,
-          phoneNumber: _phoneController.text.isEmpty ? null : _phoneController.text,
-          website: _websiteController.text.isEmpty ? null : _websiteController.text,
-          latitude: 0.0, // Would need geocoding for real implementation
+          name: _nameController.text.trim(),
+          address: _addressController.text.trim(),
+          phoneNumber: _phoneController.text.trim().isEmpty ? null : _phoneController.text.trim(),
+          website: _websiteController.text.trim().isEmpty ? null : _websiteController.text.trim(),
+          latitude: 0.0,
           longitude: 0.0,
-          massTimes: _massTimesController.text.isEmpty ? null : _massTimesController.text,
-          notes: _notesController.text.isEmpty ? null : _notesController.text,
+          massTimes: massTimesStr,
+          notes: notes,
         );
         widget.onChurchAdded(church);
       }
-
       Navigator.of(context).pop();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -557,119 +606,519 @@ class _AddChurchDialogState extends State<AddChurchDialog> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isEditing = widget.church != null;
 
-    return Dialog(
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.9,
-        constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height * 0.8,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.church != null ? 'Edit Church' : 'Add Church',
-                style: theme.textTheme.headlineSmall,
+    return Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Center(
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 12),
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(2),
               ),
-              const SizedBox(height: 24),
-              Expanded(
-                child: Form(
-                  key: _formKey,
-                  child: SingleChildScrollView(
-                    child: Column(
+            ),
+          ),
+          Flexible(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      isEditing ? 'Edit Church' : 'Add Church',
+                      style: theme.textTheme.headlineSmall,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Help others find Mass. Fields marked * are required.',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _nameController,
+                      textCapitalization: TextCapitalization.words,
+                      decoration: const InputDecoration(
+                        labelText: 'Church Name *',
+                        hintText: "e.g., St. Mary's Catholic Church",
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.church_outlined),
+                      ),
+                      validator: (v) =>
+                          (v == null || v.trim().isEmpty) ? 'Please enter church name' : null,
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _addressController,
+                      decoration: const InputDecoration(
+                        labelText: 'Address *',
+                        hintText: 'e.g., 123 Main St, City, State',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.location_on_outlined),
+                      ),
+                      validator: (v) =>
+                          (v == null || v.trim().isEmpty) ? 'Please enter address' : null,
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _phoneController,
+                      decoration: const InputDecoration(
+                        labelText: 'Phone Number',
+                        hintText: '+1 (555) 000-0000',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.phone_outlined),
+                      ),
+                      keyboardType: TextInputType.phone,
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _websiteController,
+                      decoration: const InputDecoration(
+                        labelText: 'Website',
+                        hintText: 'https://',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.language_outlined),
+                      ),
+                      keyboardType: TextInputType.url,
+                    ),
+                    const SizedBox(height: 16),
+                    _MassTimesTagField(
+                      times: _massTimes,
+                      theme: theme,
+                      onTap: _openMassTimesPicker,
+                      onRemove: (t) => setState(() => _massTimes.remove(t)),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      'Congregation Size',
+                      style: theme.textTheme.labelLarge?.copyWith(
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
                       children: [
-                        TextFormField(
-                          controller: _nameController,
-                          decoration: const InputDecoration(
-                            labelText: 'Church Name *',
-                            border: OutlineInputBorder(),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter church name';
-                            }
-                            return null;
-                          },
+                        _SizeChip(
+                          label: 'Small',
+                          icon: Icons.group_outlined,
+                          selected: _selectedSize == 'small',
+                          onTap: () => setState(() =>
+                              _selectedSize = _selectedSize == 'small' ? null : 'small'),
                         ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _addressController,
-                          decoration: const InputDecoration(
-                            labelText: 'Address *',
-                            border: OutlineInputBorder(),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter address';
-                            }
-                            return null;
-                          },
+                        const SizedBox(width: 8),
+                        _SizeChip(
+                          label: 'Medium',
+                          icon: Icons.groups_outlined,
+                          selected: _selectedSize == 'medium',
+                          onTap: () => setState(() =>
+                              _selectedSize = _selectedSize == 'medium' ? null : 'medium'),
                         ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _phoneController,
-                          decoration: const InputDecoration(
-                            labelText: 'Phone Number',
-                            border: OutlineInputBorder(),
-                          ),
-                          keyboardType: TextInputType.phone,
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _websiteController,
-                          decoration: const InputDecoration(
-                            labelText: 'Website',
-                            border: OutlineInputBorder(),
-                          ),
-                          keyboardType: TextInputType.url,
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _massTimesController,
-                          decoration: const InputDecoration(
-                            labelText: 'Mass Times',
-                            border: OutlineInputBorder(),
-                            helperText: 'e.g., Sat 5:00 PM, Sun 8:00 AM, 10:00 AM',
-                          ),
-                          maxLines: 2,
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _notesController,
-                          decoration: const InputDecoration(
-                            labelText: 'Notes',
-                            border: OutlineInputBorder(),
-                          ),
-                          maxLines: 3,
+                        const SizedBox(width: 8),
+                        _SizeChip(
+                          label: 'Large',
+                          icon: Icons.groups_2_outlined,
+                          selected: _selectedSize == 'large',
+                          onTap: () => setState(() =>
+                              _selectedSize = _selectedSize == 'large' ? null : 'large'),
                         ),
                       ],
                     ),
-                  ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _notesController,
+                      decoration: const InputDecoration(
+                        labelText: 'Notes',
+                        hintText: 'Parking info, accessibility, language of Mass...',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.notes_outlined),
+                      ),
+                      maxLines: 3,
+                    ),
+                    const SizedBox(height: 24),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: _isLoading ? null : () => Navigator.of(context).pop(),
+                          child: const Text('Cancel'),
+                        ),
+                        const SizedBox(width: 12),
+                        FilledButton.icon(
+                          onPressed: _isLoading ? null : _saveChurch,
+                          icon: _isLoading
+                              ? const SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                )
+                              : Icon(isEditing ? Icons.check : Icons.add),
+                          label: Text(isEditing ? 'Update' : 'Add Church'),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: _isLoading ? null : () => Navigator.of(context).pop(),
-                    child: const Text('Cancel'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Mass Times tag field (tap → opens picker sheet)
+// ---------------------------------------------------------------------------
+class _MassTimesTagField extends StatelessWidget {
+  final List<String> times;
+  final ThemeData theme;
+  final VoidCallback onTap;
+  final void Function(String) onRemove;
+
+  const _MassTimesTagField({
+    required this.times,
+    required this.theme,
+    required this.onTap,
+    required this.onRemove,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        constraints: const BoxConstraints(minHeight: 58),
+        padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+        decoration: BoxDecoration(
+          border: Border.all(color: theme.colorScheme.outline),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.schedule_outlined,
+                    size: 18,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.55)),
+                const SizedBox(width: 8),
+                Text(
+                  'Mass Times',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
                   ),
-                  const SizedBox(width: 12),
+                ),
+                const Spacer(),
+                Icon(Icons.add_circle_outline,
+                    size: 18, color: theme.colorScheme.primary),
+                const SizedBox(width: 2),
+                Text(
+                  'Add',
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: theme.colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+            if (times.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: times
+                    .map((t) => Chip(
+                          label: Text(t),
+                          labelStyle: theme.textTheme.labelSmall,
+                          deleteIcon: const Icon(Icons.close, size: 14),
+                          onDeleted: () => onRemove(t),
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          visualDensity: VisualDensity.compact,
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                        ))
+                    .toList(),
+              ),
+            ] else ...[
+              const SizedBox(height: 6),
+              Text(
+                'Tap to add — e.g. Sat 5:00 PM, Sun 10:00 AM',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.38),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Mass Times picker sheet
+// ---------------------------------------------------------------------------
+class _MassTimesPickerSheet extends StatefulWidget {
+  final List<String> selected;
+  final Map<String, List<String>> presets;
+  final void Function(List<String>) onSave;
+
+  const _MassTimesPickerSheet({
+    required this.selected,
+    required this.presets,
+    required this.onSave,
+  });
+
+  @override
+  State<_MassTimesPickerSheet> createState() => _MassTimesPickerSheetState();
+}
+
+class _MassTimesPickerSheetState extends State<_MassTimesPickerSheet>
+    with SingleTickerProviderStateMixin {
+  late List<String> _selected;
+  late TabController _tabs;
+  final _customController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _selected = List.from(widget.selected);
+    _tabs = TabController(length: widget.presets.length, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabs.dispose();
+    _customController.dispose();
+    super.dispose();
+  }
+
+  void _toggle(String day, String time) {
+    final tag = '$day $time';
+    setState(() {
+      if (_selected.contains(tag)) {
+        _selected.remove(tag);
+      } else {
+        _selected.add(tag);
+      }
+    });
+  }
+
+  void _addCustom() {
+    final val = _customController.text.trim();
+    if (val.isEmpty) return;
+    if (!_selected.contains(val)) {
+      setState(() => _selected.add(val));
+    }
+    _customController.clear();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final days = widget.presets.keys.toList();
+
+    return DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: 0.65,
+      minChildSize: 0.45,
+      maxChildSize: 0.92,
+      builder: (context, scrollController) {
+        return Column(
+          children: [
+            Center(
+              child: Container(
+                margin: const EdgeInsets.symmetric(vertical: 12),
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
+              child: Row(
+                children: [
+                  const Icon(Icons.schedule_outlined),
+                  const SizedBox(width: 8),
+                  Text('Mass Times',
+                      style: theme.textTheme.titleMedium
+                          ?.copyWith(fontWeight: FontWeight.bold)),
+                  const Spacer(),
                   FilledButton(
-                    onPressed: _isLoading ? null : _saveChurch,
-                    child: _isLoading
-                        ? const SizedBox(
-                            width: 16,
-                            height: 16,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : Text(widget.church != null ? 'Update' : 'Add'),
+                    onPressed: () {
+                      widget.onSave(_selected);
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Done'),
                   ),
                 ],
+              ),
+            ),
+            // Selected chips preview
+            if (_selected.isNotEmpty)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+                child: Wrap(
+                  spacing: 6,
+                  runSpacing: 4,
+                  children: _selected
+                      .map((t) => Chip(
+                            label: Text(t),
+                            labelStyle: theme.textTheme.labelSmall,
+                            deleteIcon: const Icon(Icons.close, size: 14),
+                            onDeleted: () => setState(() => _selected.remove(t)),
+                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            visualDensity: VisualDensity.compact,
+                            backgroundColor: theme.colorScheme.primaryContainer,
+                            labelPadding: const EdgeInsets.symmetric(horizontal: 2),
+                          ))
+                      .toList(),
+                ),
+              ),
+            const Divider(height: 1),
+            TabBar(
+              controller: _tabs,
+              tabs: days.map((d) => Tab(text: d)).toList(),
+              labelStyle: theme.textTheme.labelMedium
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            Expanded(
+              child: TabBarView(
+                controller: _tabs,
+                children: days.map((day) {
+                  final times = widget.presets[day]!;
+                  return SingleChildScrollView(
+                    controller: scrollController,
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: times.map((time) {
+                            final tag = '$day $time';
+                            final isSelected = _selected.contains(tag);
+                            return FilterChip(
+                              label: Text(time),
+                              selected: isSelected,
+                              onSelected: (_) => _toggle(day, time),
+                              selectedColor: theme.colorScheme.primaryContainer,
+                              checkmarkColor: theme.colorScheme.primary,
+                              labelStyle: theme.textTheme.bodySmall?.copyWith(
+                                fontWeight: isSelected
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                        const SizedBox(height: 20),
+                        // Custom entry row
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                controller: _customController,
+                                decoration: InputDecoration(
+                                  labelText: 'Custom time',
+                                  hintText: 'e.g., $day 9:15 AM',
+                                  border: const OutlineInputBorder(),
+                                  isDense: true,
+                                ),
+                                onSubmitted: (_) => _addCustom(),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            IconButton.filled(
+                              onPressed: _addCustom,
+                              icon: const Icon(Icons.add),
+                              tooltip: 'Add custom time',
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+
+class _SizeChip extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _SizeChip({
+    required this.label,
+    required this.icon,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          decoration: BoxDecoration(
+            color: selected
+                ? theme.colorScheme.primaryContainer
+                : theme.colorScheme.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: selected ? theme.colorScheme.primary : Colors.transparent,
+              width: 2,
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                icon,
+                size: 22,
+                color: selected
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.onSurface.withValues(alpha: 0.55),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                label,
+                style: theme.textTheme.labelMedium?.copyWith(
+                  color: selected
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.onSurface.withValues(alpha: 0.65),
+                  fontWeight: selected ? FontWeight.bold : FontWeight.normal,
+                ),
               ),
             ],
           ),
