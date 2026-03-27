@@ -36,6 +36,8 @@ jobs:
       version_code: ${{ steps.version.outputs.version_code }}
       version_string: ${{ steps.version.outputs.version_string }}
       version_changed: ${{ steps.version.outputs.version_changed }}
+      skip_android: ${{ steps.skip_markers.outputs.skip_android }}
+      skip_ios: ${{ steps.skip_markers.outputs.skip_ios }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -81,6 +83,23 @@ jobs:
           echo "version_code=$version_code" >> "$GITHUB_OUTPUT"
           echo "version_string=$current" >> "$GITHUB_OUTPUT"
           echo "version_changed=$changed" >> "$GITHUB_OUTPUT"
+
+      - name: Check platform skip markers
+        id: skip_markers
+        shell: bash
+        run: |
+          skip_android="false"
+          skip_ios="false"
+          if grep -q 'CI_SKIP_ANDROID' pubspec.yaml; then
+            skip_android="true"
+            echo "Detected CI_SKIP_ANDROID marker"
+          fi
+          if grep -q 'CI_SKIP_IOS' pubspec.yaml; then
+            skip_ios="true"
+            echo "Detected CI_SKIP_IOS marker"
+          fi
+          echo "skip_android=$skip_android" >> "$GITHUB_OUTPUT"
+          echo "skip_ios=$skip_ios" >> "$GITHUB_OUTPUT"
 
   verify:
     name: Analyze and Test
@@ -130,7 +149,10 @@ jobs:
     needs:
       - verify
       - version_info
-    if: (github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && (github.event_name == 'workflow_dispatch' || needs.version_info.outputs.version_changed == 'true')
+    if: >-
+      needs.version_info.outputs.skip_android != 'true' &&
+      (github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') &&
+      (github.event_name == 'workflow_dispatch' || needs.version_info.outputs.version_changed == 'true')
     env:
       HAS_R2_ACCESS: ${{ secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '' }}
       HAS_ANDROID_SIGNING: ${{ (secrets.ANDROID_KEYSTORE_PASSWORD != '' || secrets.ANDROID_STORE_PASSWORD != '') && (secrets.ANDROID_KEYSTORE_BASE64 != '' || (secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '')) }}
@@ -317,7 +339,10 @@ jobs:
     needs:
       - verify
       - version_info
-    if: (github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && (github.event_name == 'workflow_dispatch' || needs.version_info.outputs.version_changed == 'true')
+    if: >-
+      needs.version_info.outputs.skip_ios != 'true' &&
+      (github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') &&
+      (github.event_name == 'workflow_dispatch' || needs.version_info.outputs.version_changed == 'true')
     env:
       HAS_R2_ACCESS: ${{ secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '' }}
       HAS_IOS_SIGNING: ${{ (secrets.IOS_BUILD_CERTIFICATE_BASE64 != '' && secrets.IOS_PROVISION_PROFILE_BASE64 != '') || (secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '') }}
@@ -610,3 +635,45 @@ jobs:
           name: ios-release-artifacts
           path: build/ios-artifacts
           if-no-files-found: error
+
+  bump_version:
+    name: Bump Build Number
+    runs-on: ubuntu-latest
+    needs:
+      - version_info
+      - android
+      - ios
+    # Run only on main after at least one platform built successfully
+    if: |
+      always() &&
+      github.ref == 'refs/heads/main' &&
+      (needs.android.result == 'success' || needs.ios.result == 'success')
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Bump build number in pubspec.yaml
+        shell: bash
+        run: |
+          set -euo pipefail
+          current=$(grep '^version:' pubspec.yaml | cut -d':' -f2 | tr -d '[:space:]')
+          version_name="${current%%+*}"
+          build_number="${current##*+}"
+          new_build=$((build_number + 1))
+          new_version="${version_name}+${new_build}"
+          sed -i "s/^version: .*/version: ${new_version}/" pubspec.yaml
+          echo "Bumped: $current -> $new_version"
+
+      - name: Commit and push bumped version
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pubspec.yaml
+          git commit -m "chore: bump build number [skip ci]"
+          git push origin main
