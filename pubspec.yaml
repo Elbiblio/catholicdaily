@@ -18,10 +18,9 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # of the product and file versions while build-number is used as the build suffix.
 #
 # CI PLATFORM SKIP MARKERS (optional):
-# Add one or both of these comments to skip platform-specific builds in CI:
-#   # CI_SKIP_ANDROID - Skip Android release build
-#   # CI_SKIP_IOS - Skip iOS release build
-# Example: For Android-only fixes, add "# CI_SKIP_IOS" above the version line
+# To skip a platform build, add exactly one of these as its own line above the version:
+#   # CI_SKIP_ANDROID
+#   # CI_SKIP_IOS
 version: 1.2.1+15
 
 environment:

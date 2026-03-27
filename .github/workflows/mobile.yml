@@ -90,11 +90,11 @@ jobs:
         run: |
           skip_android="false"
           skip_ios="false"
-          if grep -q 'CI_SKIP_ANDROID' pubspec.yaml; then
+          if grep -qE '^# CI_SKIP_ANDROID\s*$' pubspec.yaml; then
             skip_android="true"
             echo "Detected CI_SKIP_ANDROID marker"
           fi
-          if grep -q 'CI_SKIP_IOS' pubspec.yaml; then
+          if grep -qE '^# CI_SKIP_IOS\s*$' pubspec.yaml; then
             skip_ios="true"
             echo "Detected CI_SKIP_IOS marker"
           fi
