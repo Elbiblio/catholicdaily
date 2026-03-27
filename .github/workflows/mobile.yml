@@ -502,15 +502,38 @@ jobs:
           </plist>
           EOF
 
-      - name: Inject provisioning profile into Release xcconfig
+      - name: Inject build settings into Release xcconfig
         if: env.HAS_IOS_SIGNING == 'true'
         shell: bash
         run: |
           echo "PROVISIONING_PROFILE_SPECIFIER=${IOS_PROFILE_UUID}" >> ios/Flutter/Release.xcconfig
+          echo "IPHONEOS_DEPLOYMENT_TARGET = 13.0" >> ios/Flutter/Release.xcconfig
 
       - name: Build signed iOS IPA
         if: env.HAS_IOS_SIGNING == 'true'
         run: flutter build ipa --release --export-options-plist="$RUNNER_TEMP/ExportOptions.plist" --build-name="${VERSION_NAME}" --build-number="${VERSION_CODE}"
+
+      - name: Fix App.framework MinimumOSVersion in IPA
+        if: env.HAS_IOS_SIGNING == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          IPA_PATH=$(find build/ios/ipa -maxdepth 1 -name '*.ipa' | head -n 1)
+          test -n "$IPA_PATH"
+          WORK_DIR="$RUNNER_TEMP/ipa-fix"
+          mkdir -p "$WORK_DIR"
+          unzip -q "$IPA_PATH" -d "$WORK_DIR"
+          # Patch MinimumOSVersion in all embedded frameworks that are missing it
+          find "$WORK_DIR/Payload" -path '*/Frameworks/*/Info.plist' | while read -r plist; do
+            current=$(/usr/libexec/PlistBuddy -c "Print :MinimumOSVersion" "$plist" 2>/dev/null || echo "")
+            if [ -z "$current" ]; then
+              /usr/libexec/PlistBuddy -c "Add :MinimumOSVersion string 13.0" "$plist"
+              echo "Patched MinimumOSVersion in $(basename "$(dirname "$plist")")"
+            fi
+          done
+          # Repackage IPA (preserve original path)
+          (cd "$WORK_DIR" && zip -q -r "$OLDPWD/$IPA_PATH" Payload)
+          rm -rf "$WORK_DIR"
 
       - name: Package iOS build artifacts
         if: env.HAS_IOS_SIGNING != 'true'
