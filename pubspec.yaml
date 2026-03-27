@@ -21,7 +21,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # To skip a platform build, add exactly one of these as its own line above the version:
 #   # CI_SKIP_ANDROID
 #   # CI_SKIP_IOS
-version: 1.2.1+17
+version: 1.2.1+18
 
 environment:
   sdk: ^3.9.0
