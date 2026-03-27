@@ -82,6 +82,46 @@ jobs:
           echo "version_string=$current" >> "$GITHUB_OUTPUT"
           echo "version_changed=$changed" >> "$GITHUB_OUTPUT"
 
+  bump_version:
+    name: Bump Build Number
+    runs-on: ubuntu-latest
+    needs:
+      - version_info
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    permissions:
+      contents: write
+    outputs:
+      version_name: ${{ steps.bump.outputs.version_name }}
+      new_build_number: ${{ steps.bump.outputs.new_build_number }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Bump build number
+        id: bump
+        shell: bash
+        run: |
+          set -euo pipefail
+          current=$(grep '^version:' pubspec.yaml | cut -d':' -f2 | tr -d '[:space:]')
+          version_name="${current%%+*}"
+          build_number="${current##*+}"
+          new_build=$((build_number + 1))
+          sed -i "s/^version: .*/version: ${version_name}+${new_build}/" pubspec.yaml
+          echo "Bumped: $current -> ${version_name}+${new_build}"
+          echo "version_name=$version_name" >> "$GITHUB_OUTPUT"
+          echo "new_build_number=$new_build" >> "$GITHUB_OUTPUT"
+
+      - name: Commit and push bumped build number
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pubspec.yaml
+          git commit -m "chore: bump build number to $(grep '^version:' pubspec.yaml | cut -d':' -f2 | tr -d '[:space:]') [skip ci]"
+          git push origin HEAD:main
+
   verify:
     name: Analyze and Test
     runs-on: ubuntu-latest
@@ -129,14 +169,14 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - verify
-      - version_info
-    if: (github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && (github.event_name == 'workflow_dispatch' || needs.version_info.outputs.version_changed == 'true')
+      - bump_version
+    if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
     env:
       HAS_R2_ACCESS: ${{ secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '' }}
       HAS_ANDROID_SIGNING: ${{ (secrets.ANDROID_KEYSTORE_PASSWORD != '' || secrets.ANDROID_STORE_PASSWORD != '') && (secrets.ANDROID_KEYSTORE_BASE64 != '' || (secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '')) }}
       HAS_PLAY_UPLOAD: ${{ secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '' }}
-      VERSION_NAME: ${{ needs.version_info.outputs.version_name }}
-      VERSION_CODE: ${{ needs.version_info.outputs.version_code }}
+      VERSION_NAME: ${{ needs.bump_version.outputs.version_name }}
+      VERSION_CODE: ${{ needs.bump_version.outputs.new_build_number }}
 
     steps:
       - name: Checkout
@@ -316,14 +356,14 @@ jobs:
     runs-on: macos-latest
     needs:
       - verify
-      - version_info
-    if: (github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && (github.event_name == 'workflow_dispatch' || needs.version_info.outputs.version_changed == 'true')
+      - bump_version
+    if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
     env:
       HAS_R2_ACCESS: ${{ secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '' }}
       HAS_IOS_SIGNING: ${{ (secrets.IOS_BUILD_CERTIFICATE_BASE64 != '' && secrets.IOS_PROVISION_PROFILE_BASE64 != '') || (secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '') }}
       HAS_TESTFLIGHT_UPLOAD: ${{ secrets.APPSTORE_PRIVATE_KEY != '' || (secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '') }}
-      VERSION_NAME: ${{ needs.version_info.outputs.version_name }}
-      VERSION_CODE: ${{ needs.version_info.outputs.version_code }}
+      VERSION_NAME: ${{ needs.bump_version.outputs.version_name }}
+      VERSION_CODE: ${{ needs.bump_version.outputs.new_build_number }}
 
     steps:
       - name: Checkout
@@ -610,45 +650,3 @@ jobs:
           name: ios-release-artifacts
           path: build/ios-artifacts
           if-no-files-found: error
-
-  bump_version:
-    name: Bump Build Number
-    runs-on: ubuntu-latest
-    needs:
-      - version_info
-      - android
-      - ios
-    # Run only on main after at least one platform built successfully
-    if: |
-      always() &&
-      github.ref == 'refs/heads/main' &&
-      (needs.android.result == 'success' || needs.ios.result == 'success')
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Bump build number in pubspec.yaml
-        shell: bash
-        run: |
-          set -euo pipefail
-          current=$(grep '^version:' pubspec.yaml | cut -d':' -f2 | tr -d '[:space:]')
-          version_name="${current%%+*}"
-          build_number="${current##*+}"
-          new_build=$((build_number + 1))
-          new_version="${version_name}+${new_build}"
-          sed -i "s/^version: .*/version: ${new_version}/" pubspec.yaml
-          echo "Bumped: $current -> $new_version"
-
-      - name: Commit and push bumped version
-        shell: bash
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add pubspec.yaml
-          git commit -m "chore: bump build number [skip ci]"
-          git push origin main
