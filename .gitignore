@@ -83,3 +83,5 @@ check_*.py
 trace_*.py
 simple_debug.py
 verify_*.py
+extract_*.py
+test_*.py
