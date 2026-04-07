@@ -1,0 +1,563 @@
+[
+  {
+    "id": "sign_of_the_cross",
+    "title": "Sign of the Cross",
+    "insertionPoint": "introductory_rites",
+    "order": 1,
+    "prayerSlug": "sign_of_the_cross",
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": false
+  },
+  {
+    "id": "greeting",
+    "title": "Greeting",
+    "insertionPoint": "introductory_rites",
+    "order": 2,
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": false,
+    "isDialogue": true,
+    "contentByLanguage": {
+      "en": [
+        "The Lord be with you.",
+        "And with your spirit."
+      ],
+      "la": [
+        "Dóminus vobíscum.",
+        "Et cum spíritu tuo."
+      ],
+      "es": [
+        "El Señor esté con ustedes.",
+        "Y con tu espíritu."
+      ],
+      "pt": [
+        "O Senhor esteja convosco.",
+        "E com o vosso espírito."
+      ],
+      "fr": [
+        "Le Seigneur soit avec vous.",
+        "Et avec votre esprit."
+      ],
+      "tl": [
+        "Ang Panginoon ay sumainyo.",
+        "At sa iyong espiritu."
+      ]
+    }
+  },
+  {
+    "id": "confiteor",
+    "title": "Penitential Act - Confiteor",
+    "insertionPoint": "introductory_rites",
+    "order": 3,
+    "prayerSlug": "confiteor",
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": true,
+    "alternativeGroup": "penitential_act"
+  },
+  {
+    "id": "penitential_act_simple",
+    "title": "Penitential Act - Have Mercy",
+    "insertionPoint": "introductory_rites",
+    "order": 3,
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": true,
+    "isDialogue": true,
+    "alternativeGroup": "penitential_act",
+    "contentByLanguage": {
+      "en": [
+        "Have mercy on us, Lord.",
+        "For we have sinned against you.",
+        "Show us, O Lord, your mercy.",
+        "And grant us your salvation."
+      ],
+      "la": [
+        "Miserére nostri, Dómine.",
+        "Quia peccávimus tibi.",
+        "Osténde nobis, Dómine, misericórdiam tuam.",
+        "Et salutáre tuum da nobis."
+      ]
+    }
+  },
+  {
+    "id": "kyrie",
+    "title": "Kyrie Eleison",
+    "insertionPoint": "introductory_rites",
+    "order": 4,
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": true,
+    "isDialogue": true,
+    "contentByLanguage": {
+      "en": [
+        "Lord, have mercy.",
+        "Lord, have mercy.",
+        "Christ, have mercy.",
+        "Christ, have mercy.",
+        "Lord, have mercy.",
+        "Lord, have mercy."
+      ],
+      "la": [
+        "Kýrie, eléison.",
+        "Kýrie, eléison.",
+        "Christe, eléison.",
+        "Christe, eléison.",
+        "Kýrie, eléison.",
+        "Kýrie, eléison."
+      ]
+    }
+  },
+  {
+    "id": "gloria",
+    "title": "Gloria",
+    "insertionPoint": "introductory_rites",
+    "order": 5,
+    "prayerSlug": "gloria",
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["sunday_or_solemnity", "not_advent", "not_lent"],
+    "isOptional": false
+  },
+  {
+    "id": "collect",
+    "title": "Collect (Opening Prayer)",
+    "insertionPoint": "introductory_rites",
+    "order": 6,
+    "type": "variable",
+    "source": "liturgical_calendar",
+    "sourceField": "collect",
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": false,
+    "role": "priest"
+  },
+  {
+    "id": "first_reading",
+    "title": "First Reading",
+    "insertionPoint": "before_first_reading",
+    "order": 1,
+    "type": "variable",
+    "source": "readings",
+    "sourceField": "first_reading",
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": false,
+    "role": "lector"
+  },
+  {
+    "id": "responsorial_psalm",
+    "title": "Responsorial Psalm",
+    "insertionPoint": "between_readings",
+    "order": 1,
+    "type": "variable",
+    "source": "readings",
+    "sourceField": "psalm",
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": false,
+    "role": "cantor",
+    "isResponsive": true
+  },
+  {
+    "id": "second_reading",
+    "title": "Second Reading",
+    "insertionPoint": "between_readings",
+    "order": 2,
+    "type": "variable",
+    "source": "readings",
+    "sourceField": "second_reading",
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["sunday_only", "solemnity"],
+    "isOptional": false,
+    "role": "lector"
+  },
+  {
+    "id": "gospel_acclamation",
+    "title": "Gospel Acclamation",
+    "insertionPoint": "before_gospel",
+    "order": 1,
+    "type": "variable",
+    "source": "readings",
+    "sourceField": "gospel_acclamation",
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": false,
+    "role": "cantor"
+  },
+  {
+    "id": "gospel",
+    "title": "Gospel",
+    "insertionPoint": "before_gospel",
+    "order": 2,
+    "type": "variable",
+    "source": "readings",
+    "sourceField": "gospel",
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": false,
+    "role": "deacon_or_priest",
+    "isDialogue": true,
+    "contentByLanguage": {
+      "en": [
+        "The Lord be with you.",
+        "And with your spirit.",
+        "A reading from the holy Gospel according to [N].",
+        "Glory to you, O Lord."
+      ],
+      "la": [
+        "Dóminus vobíscum.",
+        "Et cum spíritu tuo.",
+        "Léctio sancti Evangélii secúndum [N].",
+        "Glória tibi, Dómine."
+      ]
+    }
+  },
+  {
+    "id": "creed",
+    "title": "Creed",
+    "insertionPoint": "after_gospel",
+    "order": 1,
+    "prayerSlug": "credo",
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["sunday_only", "solemnity"],
+    "isOptional": false
+  },
+  {
+    "id": "prayer_of_the_faithful",
+    "title": "Prayer of the Faithful",
+    "insertionPoint": "after_gospel",
+    "order": 2,
+    "type": "variable",
+    "source": "liturgical_calendar",
+    "sourceField": "prayers_of_the_faithful",
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": false,
+    "role": "deacon",
+    "isResponsive": true
+  },
+  {
+    "id": "presentation_of_gifts",
+    "title": "Presentation of the Gifts",
+    "insertionPoint": "offertory",
+    "order": 1,
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": false,
+    "isDialogue": true,
+    "contentByLanguage": {
+      "en": [
+        "Blessed are you, Lord God of all creation, for through your goodness we have received the bread we offer you: fruit of the earth and work of human hands, it will become for us the bread of life.",
+        "Blessed be God for ever.",
+        "Blessed are you, Lord God of all creation, for through your goodness we have received the wine we offer you: fruit of the vine and work of human hands, it will become our spiritual drink.",
+        "Blessed be God for ever."
+      ],
+      "la": [
+        "Benedíctus es, Dómine, Deus univérsi, quia de tua largitáte accépimus panem, quem tibi offérimus, fructum terræ et óperis mánuum hóminum: ex quo nobis fiet panis vitæ.",
+        "Benedíctus Deus in sæcula.",
+        "Benedíctus es, Dómine, Deus univérsi, quia de tua largitáte accépimus vinum, quod tibi offérimus, fructum vitis et óperis mánuum hóminum: ex quo nobis fiet potus spiritális.",
+        "Benedíctus Deus in sæcula."
+      ]
+    }
+  },
+  {
+    "id": "prayer_over_offerings",
+    "title": "Prayer over the Offerings",
+    "insertionPoint": "offertory",
+    "order": 2,
+    "type": "variable",
+    "source": "liturgical_calendar",
+    "sourceField": "prayer_over_offerings",
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": false,
+    "role": "priest"
+  },
+  {
+    "id": "preface_dialogue",
+    "title": "Preface Dialogue",
+    "insertionPoint": "preface",
+    "order": 1,
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": false,
+    "isDialogue": true,
+    "contentByLanguage": {
+      "en": [
+        "The Lord be with you.",
+        "And with your spirit.",
+        "Lift up your hearts.",
+        "We lift them up to the Lord.",
+        "Let us give thanks to the Lord our God.",
+        "It is right and just."
+      ],
+      "la": [
+        "Dóminus vobíscum.",
+        "Et cum spíritu tuo.",
+        "Sursum corda.",
+        "Habémus ad Dóminum.",
+        "Grátias agámus Dómino Deo nostro.",
+        "Dignum et iustum est."
+      ]
+    }
+  },
+  {
+    "id": "preface",
+    "title": "Preface",
+    "insertionPoint": "preface",
+    "order": 2,
+    "type": "variable",
+    "source": "liturgical_calendar",
+    "sourceField": "preface",
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": false,
+    "role": "priest"
+  },
+  {
+    "id": "sanctus",
+    "title": "Sanctus",
+    "insertionPoint": "sanctus",
+    "order": 1,
+    "prayerSlug": "sanctus",
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": false
+  },
+  {
+    "id": "eucharistic_prayer_acclamation",
+    "title": "Mystery of Faith Acclamation",
+    "insertionPoint": "acclamation",
+    "order": 1,
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": false,
+    "isDialogue": true,
+    "contentByLanguage": {
+      "en": [
+        "The mystery of faith.",
+        "We proclaim your Death, O Lord, and profess your Resurrection until you come again."
+      ],
+      "la": [
+        "Mystérium fídei.",
+        "Annuntiamus mortem tuam, Dómine, confitémur resurrectiónem tuam, donec venias."
+      ]
+    }
+  },
+  {
+    "id": "final_doxology",
+    "title": "Final Doxology",
+    "insertionPoint": "acclamation",
+    "order": 2,
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": false,
+    "isDialogue": true,
+    "contentByLanguage": {
+      "en": [
+        "Through him, and with him, and in him, O God, almighty Father, in the unity of the Holy Spirit, all glory and honor is yours, for ever and ever.",
+        "Amen."
+      ],
+      "la": [
+        "Per ipsum, et cum ipso, et in ipso, Dómine, Deus Pater omnípotens, in unitáte Spíritus Sancti, omnis honor et glória tua, per ómnia sæcula sæculórum.",
+        "Amen."
+      ]
+    }
+  },
+  {
+    "id": "pater_noster",
+    "title": "Our Father",
+    "insertionPoint": "lords_prayer",
+    "order": 1,
+    "prayerSlug": "pater_noster",
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": false
+  },
+  {
+    "id": "embolism",
+    "title": "Embolism",
+    "insertionPoint": "lords_prayer",
+    "order": 2,
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": false,
+    "isDialogue": true,
+    "contentByLanguage": {
+      "en": [
+        "Deliver us, Lord, we pray, from every evil, graciously grant peace in our days, that, by the help of your mercy, we may be always free from sin and safe from all distress, as we await the blessed hope and the coming of our Savior, Jesus Christ.",
+        "For the kingdom, the power and the glory are yours now and for ever."
+      ],
+      "la": [
+        "Líbera nos, quæsumus, Dómine, ab ómnibus malis, da propítius pacem in diébus nostris, ut, ope misericórdiæ tuæ adiúti, et a peccáto simus semper líberi et ab omni perturbatióne secúri, exspectántes beátam spem et advéntum Salvatóris nostri Iesu Christi.",
+        "Tuum est regnum, et potéstas, et glória in sæcula."
+      ]
+    }
+  },
+  {
+    "id": "sign_of_peace",
+    "title": "Sign of Peace",
+    "insertionPoint": "sign_of_peace",
+    "order": 1,
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": false,
+    "isDialogue": true,
+    "contentByLanguage": {
+      "en": [
+        "The Peace of the Lord be with you always.",
+        "And with your spirit.",
+        "Let us offer each other the sign of peace."
+      ],
+      "la": [
+        "Pax Dómini sit semper vobíscum.",
+        "Et cum spíritu tuo.",
+        "Offérte vobis pacem."
+      ]
+    }
+  },
+  {
+    "id": "agnus_dei",
+    "title": "Lamb of God",
+    "insertionPoint": "fraction",
+    "order": 1,
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": true,
+    "contentByLanguage": {
+      "en": [
+        "Lamb of God, you take away the sins of the world, have mercy on us.",
+        "Lamb of God, you take away the sins of the world, have mercy on us.",
+        "Lamb of God, you take away the sins of the world, grant us peace."
+      ],
+      "la": [
+        "Agnus Dei, qui tollis peccata mundi, miserere nobis.",
+        "Agnus Dei, qui tollis peccata mundi, miserere nobis.",
+        "Agnus Dei, qui tollis peccata mundi, dona nobis pacem."
+      ],
+      "es": [
+        "Cordero de Dios, que quitas el pecado del mundo, ten piedad de nosotros.",
+        "Cordero de Dios, que quitas el pecado del mundo, ten piedad de nosotros.",
+        "Cordero de Dios, que quitas el pecado del mundo, danos la paz."
+      ],
+      "pt": [
+        "Cordeiro de Deus, que tirais o pecado do mundo, tende piedade de nós.",
+        "Cordeiro de Deus, que tirais o pecado do mundo, tende piedade de nós.",
+        "Cordeiro de Deus, que tirais o pecado do mundo, dai-nos a paz."
+      ],
+      "fr": [
+        "Agneau de Dieu, qui enlèves le péché du monde, prends pitié de nous.",
+        "Agneau de Dieu, qui enlèves le péché du monde, prends pitié de nous.",
+        "Agneau de Dieu, qui enlèves le péché du monde, donne-nous la paix."
+      ],
+      "tl": [
+        "Kordero ng Diyos, ikaw ang nag-aalis ng mga kasalanan ng sanlibutan, maawa ka sa amin.",
+        "Kordero ng Diyos, ikaw ang nag-aalis ng mga kasalanan ng sanlibutan, maawa ka sa amin.",
+        "Kordero ng Diyos, ikaw ang nag-aalis ng mga kasalanan ng sanlibutan, bigyan mo kami ng kapayapaan."
+      ]
+    }
+  },
+  {
+    "id": "communion_invitation",
+    "title": "Communion Invitation",
+    "insertionPoint": "communion",
+    "order": 1,
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": false,
+    "isDialogue": true,
+    "contentByLanguage": {
+      "en": [
+        "Behold the Lamb of God, behold him who takes away the sins of the world.",
+        "Lord, I am not worthy that you should enter under my roof, but only say the word and my soul shall be healed."
+      ],
+      "la": [
+        "Ecce Agnus Dei, ecce qui tollit peccáta mundi.",
+        "Dómine, non sum dignus ut intres sub tectum meum, sed tantum dic verbo et sanábitur ánima mea."
+      ]
+    }
+  },
+  {
+    "id": "communion_antiphon",
+    "title": "Communion Antiphon",
+    "insertionPoint": "communion",
+    "order": 2,
+    "type": "variable",
+    "source": "liturgical_calendar",
+    "sourceField": "communion_antiphon",
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": false,
+    "role": "choir"
+  },
+  {
+    "id": "prayer_after_communion",
+    "title": "Prayer after Communion",
+    "insertionPoint": "after_communion",
+    "order": 1,
+    "type": "variable",
+    "source": "liturgical_calendar",
+    "sourceField": "prayer_after_communion",
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": false,
+    "role": "priest"
+  },
+  {
+    "id": "final_blessing",
+    "title": "Final Blessing",
+    "insertionPoint": "concluding_rites",
+    "order": 1,
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": false,
+    "isDialogue": true,
+    "contentByLanguage": {
+      "en": [
+        "The Lord be with you.",
+        "And with your spirit."
+      ],
+      "la": [
+        "Dóminus vobíscum.",
+        "Et cum spíritu tuo."
+      ]
+    }
+  },
+  {
+    "id": "dismissal",
+    "title": "Dismissal",
+    "insertionPoint": "concluding_rites",
+    "order": 2,
+    "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
+    "conditions": ["always"],
+    "isOptional": false,
+    "isDialogue": true,
+    "contentByLanguage": {
+      "en": [
+        "Go forth, the Mass is ended.",
+        "Thanks be to God."
+      ],
+      "la": [
+        "Ite, missa est.",
+        "Deo gratias."
+      ],
+      "es": [
+        "Podéis ir en paz, la misa ha terminado.",
+        "Demos gracias a Dios."
+      ],
+      "pt": [
+        "Ide em paz, a missa terminou.",
+        "Graças a Deus."
+      ],
+      "fr": [
+        "Allez en paix, la messe est terminée.",
+        "Rendons grâce à Dieu."
+      ],
+      "tl": [
+        "Punta na sa kapayapaan, ang misa ay natapos na.",
+        "Salamat sa Diyos."
+      ]
+    }
+  }
+]
