@@ -6,12 +6,18 @@ class ReadingTitleFormatter {
     final book = _bookNames[shortBook] ?? shortBook;
     final positionLabel = (position ?? '').toLowerCase();
 
-    if (_gospels.contains(shortBook) || positionLabel == 'gospel') {
+    // Check for gospel first - this takes precedence over psalm check
+    if (_gospels.contains(shortBook) || positionLabel == 'gospel' || positionLabel == 'gospel (alternative)' || positionLabel == 'gospel at procession') {
       return 'A reading from the holy Gospel according to $book';
     }
 
-    if (positionLabel == 'responsorial psalm' || shortBook == 'Ps') {
-      return 'Responsorial Psalm';
+    if (positionLabel == 'alleluia psalm' || positionLabel == 'alleluia psalm (alternative)') {
+      return positionLabel.contains('(alternative)') ? 'Alleluia Psalm (Alternative)' : 'Alleluia Psalm';
+    }
+
+    // Only check for psalm if position explicitly indicates it's a psalm
+    if (positionLabel == 'responsorial psalm' || positionLabel == 'responsorial psalm (alternative)') {
+      return positionLabel.contains('(alternative)') ? 'Responsorial Psalm (Alternative)' : 'Responsorial Psalm';
     }
 
     final pauline = _paulineHeadings[shortBook];

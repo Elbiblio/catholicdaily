@@ -107,8 +107,9 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
 
     final sorted = [...rows]..sort((a, b) => a.position.compareTo(b.position));
     final readings = <DailyReading>[];
-    var numberedReadingIndex = 0;
     var hasMainGospel = false;
+    var hasFirstReading = false;
+    var hasSecondReading = false;
     final hasNonPsalmNonGospel =
         sorted.any((r) => !_isLegacyPsalmReference(r.reading) && !_isLegacyGospelReference(r.reading));
 
@@ -153,10 +154,26 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         continue;
       }
 
-      numberedReadingIndex += 1;
+      String position;
+      
+      // Determine if this is a first or second reading based on position
+      // Legacy data uses position numbers: 1 = first reading, 2 = psalm, 3 = second reading, 4 = gospel
+      // But we need to handle alternatives correctly
+      if (!hasFirstReading) {
+        position = 'First Reading';
+        hasFirstReading = true;
+      } else if (!hasSecondReading) {
+        position = 'Second Reading';
+        hasSecondReading = true;
+      } else {
+        // This is an alternative reading - determine if it's first or second reading alternative
+        // by checking if we've seen a second reading yet
+        position = hasSecondReading ? 'Second Reading (alternative)' : 'First Reading (alternative)';
+      }
+      
       readings.add(DailyReading(
         reading: normalizedReading,
-        position: _readingPosition(numberedReadingIndex),
+        position: position,
         date: normalizedDate,
       ));
     }
@@ -332,6 +349,14 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
     if (_isEasterVigil(date)) {
       return season == 'easter' && week == 'vigil';
     }
+    if (_isChristmasDay(date)) {
+      // Default to Christmas Day mass on December 25
+      return season == 'christmas' && week == 'christmas' && day == 'christmas day';
+    }
+    if (_isChristmasVigil(date)) {
+      // Christmas Vigil on evening of December 24
+      return season == 'christmas' && week == 'christmas' && day == 'christmas vigil';
+    }
     if (_isEasterOctave(date)) {
       return season == 'easter' && week == 'octave';
     }
@@ -460,7 +485,6 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
       return entry.season == 'Easter' &&
           entry.week == 'Vigil' &&
           entry.day.startsWith('Easter Vigil') &&
-          !entry.day.contains('(Alt)') &&
           (entry.sundayCycle.isEmpty ||
               entry.sundayCycle == 'A/B/C' ||
               entry.sundayCycle.toUpperCase() == sundayCycle.toUpperCase());
@@ -470,34 +494,102 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
       return const [];
     }
 
+    // Separate main entries from alternatives
+    final mainEntries = vigilEntries.where((e) => !e.day.contains('(Alt)')).toList();
+    final altEntries = vigilEntries.where((e) => e.day.contains('(Alt)')).toList();
+
     final readings = <DailyReading>[];
-    for (final entry in vigilEntries) {
-      final isAlleluiaPsalm = entry.day.contains('Alleluia Psalm');
+    var readingIndex = 0;
+
+    // Process main entries first
+    for (final entry in mainEntries) {
+      final isAlleluiaPsalm = entry.day.toLowerCase().contains('alleluia psalm');
+      final isAlternative = entry.day.contains('(Alt)');
+
       if (entry.firstReading.isNotEmpty) {
+        readingIndex++;
+        String position;
+        if (isAlleluiaPsalm) {
+          position = 'Epistle';
+        } else {
+          position = _readingPosition(readingIndex);
+          if (isAlternative) {
+            position += ' (alternative)';
+          }
+        }
         readings.add(DailyReading(
           reading: _normalizeReferenceStyle(entry.firstReading),
-          position: isAlleluiaPsalm ? 'Epistle' : _readingPosition(readings.where((r) => r.position?.contains('Reading') == true).length + 1),
+          position: position,
           date: date,
+          incipit: entry.firstReadingIncipit.isEmpty ? null : entry.firstReadingIncipit,
         ));
       }
       if (entry.psalmReference.isNotEmpty) {
+        String position;
+        if (isAlleluiaPsalm) {
+          position = 'Alleluia Psalm';
+        } else {
+          position = 'Responsorial Psalm';
+          if (isAlternative) {
+            position += ' (alternative)';
+          }
+        }
         readings.add(DailyReading(
           reading: _normalizeEasterVigilPsalmReference(entry.psalmReference),
-          position: isAlleluiaPsalm ? 'Alleluia Psalm' : 'Responsorial Psalm',
+          position: position,
           date: date,
           psalmResponse: entry.psalmResponse.isEmpty ? null : entry.psalmResponse,
         ));
       }
     }
 
-    final gospelEntry = vigilEntries.last;
-    readings.add(DailyReading(
-      reading: _normalizeReferenceStyle(_cycleSpecificGospel(gospelEntry.gospel, sundayCycle)),
-      position: 'Gospel',
-      date: date,
-      gospelAcclamation: gospelEntry.acclamationText.isEmpty ? null : gospelEntry.acclamationText,
-      incipit: gospelEntry.gospelIncipit.isEmpty ? null : gospelEntry.gospelIncipit,
-    ));
+    // Process alternative entries after main entries
+    for (final entry in altEntries) {
+      final isAlleluiaPsalm = entry.day.toLowerCase().contains('alleluia psalm');
+      
+      if (entry.firstReading.isNotEmpty) {
+        readingIndex++;
+        String position;
+        if (isAlleluiaPsalm) {
+          position = 'Epistle (alternative)';
+        } else {
+          position = '${_readingPosition(readingIndex)} (alternative)';
+        }
+        readings.add(DailyReading(
+          reading: _normalizeReferenceStyle(entry.firstReading),
+          position: position,
+          date: date,
+          incipit: entry.firstReadingIncipit.isEmpty ? null : entry.firstReadingIncipit,
+        ));
+      }
+      if (entry.psalmReference.isNotEmpty) {
+        String position;
+        if (isAlleluiaPsalm) {
+          position = 'Alleluia Psalm (alternative)';
+        } else {
+          position = 'Responsorial Psalm (alternative)';
+        }
+        readings.add(DailyReading(
+          reading: _normalizeEasterVigilPsalmReference(entry.psalmReference),
+          position: position,
+          date: date,
+          psalmResponse: entry.psalmResponse.isEmpty ? null : entry.psalmResponse,
+        ));
+      }
+    }
+
+    // Add Gospel from the last main entry (Alleluia Psalm entry)
+    final gospelEntry = mainEntries.where((e) => e.day.toLowerCase().contains('alleluia psalm')).firstOrNull;
+    if (gospelEntry != null) {
+      readings.add(DailyReading(
+        reading: _normalizeReferenceStyle(_cycleSpecificGospel(gospelEntry.gospel, sundayCycle)),
+        position: 'Gospel',
+        date: date,
+        gospelAcclamation: gospelEntry.acclamationText.isEmpty ? null : gospelEntry.acclamationText,
+        incipit: gospelEntry.gospelIncipit.isEmpty ? null : gospelEntry.gospelIncipit,
+      ));
+    }
+
     return readings;
   }
 
@@ -1320,6 +1412,14 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
   bool _isEasterVigil(DateTime date) {
     final easter = _calculateEasterSunday(date.year);
     return _isSameDate(date, easter.subtract(const Duration(days: 1)));
+  }
+
+  bool _isChristmasDay(DateTime date) {
+    return date.month == 12 && date.day == 25;
+  }
+
+  bool _isChristmasVigil(DateTime date) {
+    return date.month == 12 && date.day == 24;
   }
 
   bool _isEasterOctave(DateTime date) {

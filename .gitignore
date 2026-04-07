@@ -60,3 +60,26 @@ android/app/*.keystore
 # Google Services
 google-services.json
 GoogleService-Info.plist
+
+# Backup files
+*.backup
+*.bak
+*.backup2
+*.backup3
+
+# Large binary files
+*.mp4
+*.mp3
+*.wav
+*.avi
+*.mov
+*.pdf
+*.epub
+*.doc
+*.docx
+
+# Temporary/debug scripts
+check_*.py
+trace_*.py
+simple_debug.py
+verify_*.py

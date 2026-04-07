@@ -4,9 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/models/daily_reading.dart';
+import '../../data/models/navigable_item.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
 import '../../data/services/readings_service.dart';
 import '../../data/services/bible_version_preference.dart';
+import '../../data/services/order_of_mass_preference_service.dart';
 import '../widgets/parchment_background.dart';
 import '../widgets/psalm_response_widget.dart';
 import '../widgets/gospel_acclamation_widget.dart';
@@ -29,6 +31,9 @@ class ReadingScreen extends StatefulWidget {
   final bool hasNext;
   final bool hasPrev;
   final bool isBibleSearch;
+  final List<NavigableItem> navigableItems;
+  final int currentNavigableIndex;
+  final VoidCallback? onOrderOfMassToggled;
 
   const ReadingScreen({
     super.key,
@@ -44,6 +49,9 @@ class ReadingScreen extends StatefulWidget {
     this.hasNext = false,
     this.hasPrev = false,
     this.isBibleSearch = false,
+    this.navigableItems = const [],
+    this.currentNavigableIndex = 0,
+    this.onOrderOfMassToggled,
   });
 
   @override
@@ -74,12 +82,15 @@ Color _contrastColor(Color background, {double alpha = 1.0}) {
 class _ReadingScreenState extends State<ReadingScreen> {
   double _textScale = 1.0;
   final ScrollController _scrollController = ScrollController();
+  final OrderOfMassPreferenceService _orderOfMassPreferenceService =
+      OrderOfMassPreferenceService();
   String _currentContent = '';
   bool _isReloading = false;
   bool _isBookmarked = false;
   bool _isNavigating = false;
   bool _hasPreviousChapter = false;
   bool _hasNextChapter = false;
+  bool _showOrderOfMass = false;
 
   String get _readingLabel {
     final position = widget.readingData?.position?.trim();
@@ -117,11 +128,28 @@ class _ReadingScreenState extends State<ReadingScreen> {
     return number == null ? 'Alternative' : 'Alternative $number';
   }
 
+  String? get _nextItemLabel {
+    if (widget.navigableItems.isEmpty) return null;
+    final nextIndex = widget.currentNavigableIndex + 1;
+    if (nextIndex >= widget.navigableItems.length) return null;
+    final nextItem = widget.navigableItems[nextIndex];
+    return nextItem.isOrderOfMass ? nextItem.orderOfMassItem?.title : nextItem.reading?.position;
+  }
+
+  String? get _prevItemLabel {
+    if (widget.navigableItems.isEmpty) return null;
+    final prevIndex = widget.currentNavigableIndex - 1;
+    if (prevIndex < 0) return null;
+    final prevItem = widget.navigableItems[prevIndex];
+    return prevItem.isOrderOfMass ? prevItem.orderOfMassItem?.title : prevItem.reading?.position;
+  }
+
   @override
   void initState() {
     super.initState();
     _currentContent = widget.content;
     _loadBookmarkStatus();
+    _loadOrderOfMassPreference();
     if (widget.isBibleSearch) {
       _checkChapterAvailability();
     }
@@ -157,6 +185,27 @@ class _ReadingScreenState extends State<ReadingScreen> {
     setState(() {
       _isBookmarked = bookmarks.contains(widget.reference);
     });
+  }
+
+  Future<void> _loadOrderOfMassPreference() async {
+    final showOrderOfMass = await _orderOfMassPreferenceService.getShowOrderOfMass();
+    if (mounted) {
+      setState(() {
+        _showOrderOfMass = showOrderOfMass;
+      });
+    }
+  }
+
+  Future<void> _toggleOrderOfMass() async {
+    final newValue = !_showOrderOfMass;
+    await _orderOfMassPreferenceService.setShowOrderOfMass(newValue);
+    if (mounted) {
+      setState(() {
+        _showOrderOfMass = newValue;
+      });
+    }
+    // Notify parent to rebuild the flow
+    widget.onOrderOfMassToggled?.call();
   }
 
   void _openChurchLocator() {
@@ -395,9 +444,23 @@ void _selectVariant(DailyReading reading) async {
                       case 'insights':
                         _showAiInsights();
                         break;
+                      case 'toggle_order_of_mass':
+                        _toggleOrderOfMass();
+                        break;
                     }
                   },
                   itemBuilder: (context) => [
+                    if (widget.liturgicalDay != null && !widget.isBibleSearch)
+                      PopupMenuItem(
+                        value: 'toggle_order_of_mass',
+                        child: Row(
+                          children: [
+                            Icon(_showOrderOfMass ? Icons.visibility_off : Icons.visibility),
+                            const SizedBox(width: 12),
+                            Text(_showOrderOfMass ? 'Hide Order of Mass' : 'Show Order of Mass'),
+                          ],
+                        ),
+                      ),
                     const PopupMenuItem(
                       value: 'insights',
                       child: Row(
@@ -549,6 +612,153 @@ void _selectVariant(DailyReading reading) async {
                   ),
                 ),
               ),
+          ],
+        ),
+      );
+    }
+
+    // For order of mass flow
+    if (widget.navigableItems.isNotEmpty) {
+      final shouldShowNavigation = widget.hasNext || widget.hasPrev;
+      if (!shouldShowNavigation) return const SizedBox.shrink();
+
+      final ordoColor =
+          widget.liturgicalDay?.colorValue ?? theme.colorScheme.primary;
+      final buttonForeground = _contrastColor(ordoColor);
+
+      return Container(
+        margin: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Progress indicator with more context
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.linear_scale,
+                    size: 16,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    '${widget.currentNavigableIndex + 1} of ${widget.navigableItems.length}',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              children: [
+                if (widget.hasPrev)
+                  Expanded(
+                    child: FilledButton.icon(
+                      onPressed: _isNavigating
+                          ? null
+                          : () async {
+                              setState(() => _isNavigating = true);
+                              try {
+                                await Future.delayed(
+                                    const Duration(milliseconds: 100));
+                                widget.onPrevReading?.call();
+                              } finally {
+                                if (mounted) {
+                                  setState(() => _isNavigating = false);
+                                }
+                              }
+                            },
+                      icon: _isNavigating && widget.hasPrev && !widget.hasNext
+                          ? const SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Icon(Icons.arrow_back),
+                      label: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(_isNavigating && widget.hasPrev && !widget.hasNext
+                              ? 'Loading...'
+                              : 'Previous'),
+                          if (_prevItemLabel != null)
+                            Text(
+                              _prevItemLabel!,
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                fontSize: 10,
+                                color: buttonForeground.withValues(alpha: 0.8),
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                        ],
+                      ),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: ordoColor,
+                        foregroundColor: buttonForeground,
+                      ),
+                    ),
+                  ),
+                if (widget.hasPrev && widget.hasNext) const SizedBox(width: 12),
+                if (widget.hasNext)
+                  Expanded(
+                    child: FilledButton.icon(
+                      onPressed: _isNavigating
+                          ? null
+                          : () async {
+                              setState(() => _isNavigating = true);
+                              try {
+                                await Future.delayed(
+                                    const Duration(milliseconds: 100));
+                                widget.onNextReading?.call();
+                              } finally {
+                                if (mounted) {
+                                  setState(() => _isNavigating = false);
+                                }
+                              }
+                            },
+                      icon: _isNavigating && widget.hasNext && !widget.hasPrev
+                          ? const SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Icon(Icons.arrow_forward),
+                      label: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(_isNavigating && widget.hasNext && !widget.hasPrev
+                              ? 'Loading...'
+                              : 'Next'),
+                          if (_nextItemLabel != null)
+                            Text(
+                              _nextItemLabel!,
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                fontSize: 10,
+                                color: buttonForeground.withValues(alpha: 0.8),
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                        ],
+                      ),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: ordoColor,
+                        foregroundColor: buttonForeground,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ],
         ),
       );

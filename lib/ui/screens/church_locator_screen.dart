@@ -3,6 +3,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../data/models/church.dart';
 import '../../data/services/church_locator_service.dart';
 import '../../data/services/location_service.dart';
+import '../widgets/church_locator/church_card.dart';
+import '../widgets/church_locator/size_chip.dart';
 
 class ChurchLocatorScreen extends StatefulWidget {
   const ChurchLocatorScreen({super.key});
@@ -291,184 +293,6 @@ class _ChurchLocatorScreenState extends State<ChurchLocatorScreen> {
   }
 }
 
-class ChurchCard extends StatelessWidget {
-  final Church church;
-  final VoidCallback? onCall;
-  final VoidCallback? onWebsite;
-  final VoidCallback? onEdit;
-  final VoidCallback? onDelete;
-
-  const ChurchCard({
-    super.key,
-    required this.church,
-    this.onCall,
-    this.onWebsite,
-    this.onEdit,
-    this.onDelete,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.church,
-                  color: colorScheme.primary,
-                  size: 24,
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        church.name,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      if (church.distance != null) ...[
-                        const SizedBox(height: 2),
-                        Text(
-                          church.distanceDisplay,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: colorScheme.primary,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-                if (church.isUserAdded)
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: colorScheme.primaryContainer,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      'Added',
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: colorScheme.onPrimaryContainer,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Icon(
-                  Icons.location_on_outlined,
-                  size: 16,
-                  color: colorScheme.onSurface.withValues(alpha: 0.6),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    church.shortAddress,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: colorScheme.onSurface.withValues(alpha: 0.8),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            if (church.phoneNumber != null) ...[
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Icon(
-                    Icons.phone_outlined,
-                    size: 16,
-                    color: colorScheme.onSurface.withValues(alpha: 0.6),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    church.phoneNumber!,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: colorScheme.onSurface.withValues(alpha: 0.8),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-            if (church.massTimes != null) ...[
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Icon(
-                    Icons.schedule_outlined,
-                    size: 16,
-                    color: colorScheme.onSurface.withValues(alpha: 0.6),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      church.massTimes!,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: colorScheme.onSurface.withValues(alpha: 0.7),
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                if (onCall != null)
-                  TextButton.icon(
-                    onPressed: onCall,
-                    icon: const Icon(Icons.phone, size: 16),
-                    label: const Text('Call'),
-                  ),
-                if (onWebsite != null) ...[
-                  if (onCall != null) const SizedBox(width: 8),
-                  TextButton.icon(
-                    onPressed: onWebsite,
-                    icon: const Icon(Icons.language, size: 16),
-                    label: const Text('Website'),
-                  ),
-                ],
-                const Spacer(),
-                if (onEdit != null)
-                  IconButton(
-                    onPressed: onEdit,
-                    icon: const Icon(Icons.edit_outlined),
-                    tooltip: 'Edit',
-                  ),
-                if (onDelete != null)
-                  IconButton(
-                    onPressed: onDelete,
-                    icon: const Icon(Icons.delete_outline),
-                    tooltip: 'Delete',
-                  ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class AddChurchSheet extends StatefulWidget {
   final Church? church;
   final Function(Church) onChurchAdded;
@@ -708,7 +532,7 @@ class _AddChurchSheetState extends State<AddChurchSheet> {
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        _SizeChip(
+                        SizeChip(
                           label: 'Small',
                           icon: Icons.group_outlined,
                           selected: _selectedSize == 'small',
@@ -716,7 +540,7 @@ class _AddChurchSheetState extends State<AddChurchSheet> {
                               _selectedSize = _selectedSize == 'small' ? null : 'small'),
                         ),
                         const SizedBox(width: 8),
-                        _SizeChip(
+                        SizeChip(
                           label: 'Medium',
                           icon: Icons.groups_outlined,
                           selected: _selectedSize == 'medium',
@@ -724,7 +548,7 @@ class _AddChurchSheetState extends State<AddChurchSheet> {
                               _selectedSize = _selectedSize == 'medium' ? null : 'medium'),
                         ),
                         const SizedBox(width: 8),
-                        _SizeChip(
+                        SizeChip(
                           label: 'Large',
                           icon: Icons.groups_2_outlined,
                           selected: _selectedSize == 'large',
@@ -1062,68 +886,6 @@ class _MassTimesPickerSheetState extends State<_MassTimesPickerSheet>
           ],
         );
       },
-    );
-  }
-}
-
-// ---------------------------------------------------------------------------
-
-class _SizeChip extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const _SizeChip({
-    required this.label,
-    required this.icon,
-    required this.selected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          decoration: BoxDecoration(
-            color: selected
-                ? theme.colorScheme.primaryContainer
-                : theme.colorScheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: selected ? theme.colorScheme.primary : Colors.transparent,
-              width: 2,
-            ),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                icon,
-                size: 22,
-                color: selected
-                    ? theme.colorScheme.primary
-                    : theme.colorScheme.onSurface.withValues(alpha: 0.55),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                label,
-                style: theme.textTheme.labelMedium?.copyWith(
-                  color: selected
-                      ? theme.colorScheme.primary
-                      : theme.colorScheme.onSurface.withValues(alpha: 0.65),
-                  fontWeight: selected ? FontWeight.bold : FontWeight.normal,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

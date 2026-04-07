@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../data/models/bible_version.dart';
+import '../../data/services/language_preference_service.dart';
+import '../../data/services/order_of_mass_preference_service.dart';
 import '../../data/services/theme_preferences.dart';
 import '../../data/services/offline_bible_service.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -34,8 +36,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   String _selectedThemeStyle = 'standard';
   String _appVersion = '1.0.0';
   final _bibleService = OfflineBibleService();
+  final _orderOfMassPreferenceService = OrderOfMassPreferenceService();
   List<BibleVersion> _availableVersions = [];
   bool _isLoadingVersions = true;
+  bool _showOrderOfMass = false;
+  String _orderOfMassLanguage = LanguagePreferenceService.english;
   static const _androidPackageName = 'com.elbiblio.catholicdaily';
   static const _iosAppStoreId = '';
   static const _iosSearchTerm = 'Catholic Daily Missal';
@@ -47,6 +52,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _selectedThemeStyle = _themeStyleToValue(widget.themeStyle);
     _loadAppInfo();
     _loadBibleVersions();
+    _loadOrderOfMassPreferences();
   }
 
   @override
@@ -73,6 +79,70 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() {
       _availableVersions = versions;
       _isLoadingVersions = false;
+    });
+  }
+
+  Future<void> _loadOrderOfMassPreferences() async {
+    final showOrderOfMass =
+        await _orderOfMassPreferenceService.getShowOrderOfMass();
+    final orderOfMassLanguage =
+        await _orderOfMassPreferenceService.getPreferredLanguage();
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _showOrderOfMass = showOrderOfMass;
+      _orderOfMassLanguage = orderOfMassLanguage;
+    });
+  }
+
+  Future<void> _setShowOrderOfMass(bool value) async {
+    await _orderOfMassPreferenceService.setShowOrderOfMass(value);
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _showOrderOfMass = value;
+    });
+  }
+
+  Future<void> _showOrderOfMassLanguageDialog(BuildContext context) async {
+    final selected = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Order of Mass Language'),
+        contentPadding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: _orderOfMassPreferenceService.availableLanguages.length,
+            itemBuilder: (context, index) {
+              final languageCode = _orderOfMassPreferenceService.availableLanguages[index];
+              final displayName = _orderOfMassPreferenceService.getLanguageDisplayName(languageCode);
+              return _buildSelectionTile(
+                context,
+                title: displayName,
+                subtitle: 'Show the Order of Mass in $displayName.',
+                selected: _orderOfMassLanguage == languageCode,
+                onTap: () => Navigator.pop(context, languageCode),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+
+    if (selected == null) {
+      return;
+    }
+
+    await _orderOfMassPreferenceService.setPreferredLanguage(selected);
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _orderOfMassLanguage = selected;
     });
   }
 
@@ -368,6 +438,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   title: 'Theme Style',
                   subtitle: _themeStyleLabel(),
                   onTap: () => _showThemeStyleDialog(context),
+                ),
+                const Divider(height: 1),
+                _SettingsSwitchTile(
+                  icon: Icons.auto_awesome_outlined,
+                  title: 'Show Order of Mass',
+                  subtitle: 'Display compact Mass parts with liturgical readings.',
+                  value: _showOrderOfMass,
+                  onChanged: _setShowOrderOfMass,
+                ),
+                const Divider(height: 1),
+                _SettingsTile(
+                  icon: Icons.translate_outlined,
+                  title: 'Order of Mass Language',
+                  subtitle: _orderOfMassPreferenceService.getLanguageDisplayName(_orderOfMassLanguage),
+                  onTap: _showOrderOfMass ? () => _showOrderOfMassLanguageDialog(context) : null,
                 ),
               ],
             ),
@@ -724,6 +809,39 @@ class _SettingsTile extends StatelessWidget {
           ? Icon(Icons.chevron_right, color: colorScheme.onSurfaceVariant)
           : null,
       onTap: onTap,
+    );
+  }
+}
+
+class _SettingsSwitchTile extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  const _SettingsSwitchTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.value,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return SwitchListTile.adaptive(
+      secondary: Icon(icon, color: colorScheme.primary),
+      title: Text(title),
+      subtitle: Text(
+        subtitle,
+        style: TextStyle(color: colorScheme.onSurfaceVariant),
+      ),
+      value: value,
+      onChanged: onChanged,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
     );
   }
 }

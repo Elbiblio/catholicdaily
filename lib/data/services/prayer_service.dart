@@ -32,7 +32,8 @@ class PrayerService {
       final List<dynamic> jsonList = json.decode(jsonString);
       _prayers = await Future.wait(jsonList.map((json) async {
         final prayer = Prayer.fromMap(json);
-        final htmlContent = await _loadHtmlContent(prayer.sourceFile);
+        // Load English version by default for backward compatibility
+        final htmlContent = await _loadHtmlContent(prayer.sourceFile, 'en');
         final prayerWithHtml = prayer.copyWith(htmlContent: htmlContent);
         // Parse content for language separation
         return PrayerContentParser.parsePrayerContent(prayerWithHtml);
@@ -43,14 +44,29 @@ class PrayerService {
     }
   }
 
-  Future<String?> _loadHtmlContent(String? sourceFile) async {
+  Future<String?> _loadHtmlContent(String? sourceFile, [String language = 'en']) async {
     if (sourceFile == null) return null;
     try {
-      return await rootBundle.loadString('assets/prayers/$sourceFile');
+      // Try language-specific path first
+      final languagePath = 'assets/prayers/$language/$sourceFile';
+      try {
+        return await rootBundle.loadString(languagePath);
+      } catch (e) {
+        // Fallback to old path if language-specific file doesn't exist
+        if (language == 'en') {
+          return await rootBundle.loadString('assets/prayers/$sourceFile');
+        }
+        // For other languages, return null if file doesn't exist
+        return null;
+      }
     } catch (e) {
-      debugPrint('Error loading HTML content for $sourceFile: $e');
+      debugPrint('Error loading HTML content for $sourceFile ($language): $e');
       return null;
     }
+  }
+
+  Future<String?> loadHtmlContentForLanguage(String? sourceFile, String language) async {
+    return _loadHtmlContent(sourceFile, language);
   }
 
   Future<void> _loadRecentlyUsed() async {

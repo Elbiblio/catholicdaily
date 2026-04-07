@@ -4,6 +4,8 @@ import 'reading_screen.dart';
 import 'settings_screen.dart';
 import 'prayers_screen.dart';
 import 'bible_screen.dart';
+import 'hymn_list_screen.dart';
+import 'mass_flow_screen.dart';
 import '../../data/models/bible_version.dart';
 import '../../data/services/theme_preferences.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
@@ -114,10 +116,17 @@ class _HomeScreenState extends State<HomeScreen> {
         readings: rawReadings,
       );
 
+      final navigableItems = await _readingFlow.buildNavigableFlow(
+        date: _currentDate,
+        readings: hydrated.readings,
+      );
+
       _readingSession = _readingFlow.buildSession(
         readings: hydrated.readings,
         readingTexts: hydrated.readingTexts,
         selectedIndex: 0,
+        navigableItems: navigableItems,
+        navigableIndex: 0,
       );
     } catch (e) {
       debugPrint('Error loading current readings: $e');
@@ -204,6 +213,8 @@ class _HomeScreenState extends State<HomeScreen> {
           content: content,
           liturgicalDay: liturgicalDay,
           isBibleSearch: true,
+          navigableItems: const [],
+          currentNavigableIndex: 0,
         ),
       ),
     );
@@ -225,14 +236,22 @@ class _HomeScreenState extends State<HomeScreen> {
           readingData: readingData,
           sessionReadings: _readingSession.readings,
           currentReadingIndex: _readingSession.currentIndex,
-          hasNext: _readingSession.hasNext,
-          hasPrev: _readingSession.hasPrev,
+          hasNext: _readingSession.hasNavigableItems ? _readingSession.hasNextNavigable : _readingSession.hasNext,
+          hasPrev: _readingSession.hasNavigableItems ? _readingSession.hasPrevNavigable : _readingSession.hasPrev,
           onNextReading: _goToNextReading,
           onPrevReading: _goToPrevReading,
           onSelectReadingIndex: _goToReadingAtIndex,
+          navigableItems: _readingSession.navigableItems,
+          currentNavigableIndex: _readingSession.navigableIndex,
+          onOrderOfMassToggled: _handleOrderOfMassToggled,
         ),
       ),
     );
+  }
+
+  Future<void> _handleOrderOfMassToggled() async {
+    // Rebuild the navigable flow with the new order of mass preference
+    await _loadCurrentReadings();
   }
 
   void _goToReadingAtIndex(int index) {
@@ -242,28 +261,79 @@ class _HomeScreenState extends State<HomeScreen> {
     if (index == _readingSession.currentIndex) {
       return; // Already at this reading
     }
-    _readingSession = _readingSession.copyWith(currentIndex: index);
+    
+    // Find the corresponding navigable index
+    final navigableIndex = _readingSession.navigableItems.indexWhere(
+      (item) => item.isReading && item.reading?.reading == _readingSession.readings[index].reading,
+    );
+    
+    _readingSession = _readingSession.copyWith(
+      currentIndex: index,
+      navigableIndex: navigableIndex >= 0 ? navigableIndex : index,
+    );
     _openCurrentReadingFromNavigation();
   }
 
   void _goToNextReading() {
-    if (!_readingSession.hasNext) {
+    if (!_readingSession.hasNavigableItems) {
+      if (!_readingSession.hasNext) return;
+      _readingSession = _readingSession.copyWith(
+        currentIndex: _readingSession.currentIndex + 1,
+      );
+      _openCurrentReadingFromNavigation();
       return;
     }
-    _readingSession = _readingSession.copyWith(
-      currentIndex: _readingSession.currentIndex + 1,
-    );
-    _openCurrentReadingFromNavigation();
+
+    if (!_readingSession.hasNextNavigable) {
+      return;
+    }
+    
+    final nextIndex = _readingSession.navigableIndex + 1;
+    _readingSession = _readingSession.copyWith(navigableIndex: nextIndex);
+    
+    // Update current reading index if the next item is a reading
+    final nextItem = _readingSession.currentNavigableItem;
+    if (nextItem?.isReading == true) {
+      final readingIndex = _readingSession.readings.indexWhere(
+        (r) => r.reading == nextItem!.reading!.reading,
+      );
+      if (readingIndex >= 0) {
+        _readingSession = _readingSession.copyWith(currentIndex: readingIndex);
+      }
+    }
+    
+    _openCurrentNavigableItemFromNavigation();
   }
 
   void _goToPrevReading() {
-    if (!_readingSession.hasPrev) {
+    if (!_readingSession.hasNavigableItems) {
+      if (!_readingSession.hasPrev) return;
+      _readingSession = _readingSession.copyWith(
+        currentIndex: _readingSession.currentIndex - 1,
+      );
+      _openCurrentReadingFromNavigation();
       return;
     }
-    _readingSession = _readingSession.copyWith(
-      currentIndex: _readingSession.currentIndex - 1,
-    );
-    _openCurrentReadingFromNavigation();
+
+    if (!_readingSession.hasPrevNavigable) {
+      return;
+    }
+    
+    final prevIndex = _readingSession.navigableIndex - 1;
+    _readingSession = _readingSession.copyWith(navigableIndex: prevIndex);
+    
+    // Update current reading index if the previous item is a reading
+    final prevItem = _readingSession.currentNavigableItem;
+    if (prevItem?.isReading == true) {
+      final readingIndex = _readingSession.readings.indexWhere(
+        (r) => r.reading == prevItem!.reading!.reading,
+      );
+      if (readingIndex >= 0) {
+        _readingSession = _readingSession.copyWith(currentIndex: readingIndex);
+      }
+    }
+    
+    _openCurrentNavigableItemFromNavigation();
   }
 
   void _openCurrentReadingFromNavigation() {
@@ -287,6 +357,31 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     _resolveReadingTextAndOpen(reading);
+  }
+
+  void _openCurrentNavigableItemFromNavigation() {
+    final item = _readingSession.currentNavigableItem;
+    if (item == null) {
+      return;
+    }
+
+    if (item.isReading) {
+      _openCurrentReadingFromNavigation();
+    } else if (item.isOrderOfMass) {
+      // Open order of mass item - will be handled by ReadingScreen
+      final reading = _readingSession.currentReading;
+      if (reading != null) {
+        final cachedText = _readingSession.textFor(reading.reading);
+        _onReadingSelected(
+          reading.reading,
+          cachedText ?? reading.reading,
+          null,
+          readingData: reading,
+          readingSet: _readingSession.readings,
+          selectedIndex: _readingSession.currentIndex,
+        );
+      }
+    }
   }
 
   Future<void> _resolveReadingTextAndOpen(DailyReading reading) async {
@@ -382,9 +477,11 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       }),
       const PrayersScreen(),
+      const MassFlowScreen(),
       BibleScreen(onReadingSelected: (reference, content, liturgicalDay, {isBibleSearch = false}) {
         _onReadingSelected(reference, content, liturgicalDay, isBibleSearch: isBibleSearch);
       }),
+      const HymnListScreen(),
       SettingsScreen(
         versions: _versions,
         themeMode: widget.themeMode,
@@ -424,9 +521,19 @@ class _HomeScreenState extends State<HomeScreen> {
               label: 'Prayers',
             ),
             NavigationDestination(
+              icon: Icon(Icons.church_outlined),
+              selectedIcon: Icon(Icons.church),
+              label: 'Mass',
+            ),
+            NavigationDestination(
               icon: Icon(Icons.menu_book_outlined),
               selectedIcon: Icon(Icons.menu_book),
               label: 'Bible',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.music_note_outlined),
+              selectedIcon: Icon(Icons.music_note),
+              label: 'Hymns',
             ),
             NavigationDestination(
               icon: Icon(Icons.settings_outlined),

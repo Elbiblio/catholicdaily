@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(flutter test:*)",
+      "Bash(php artisan:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(flutter analyze:*)",
+      "Bash(find /c/dev/catholicdaily-flutter/android/app/src/main/res -type f -name *.png)",
+      "Bash(find C:/dev/catholicdaily-flutter/android/app/src/main/res -name ic_launcher* -type f)",
+      "Bash(flutter pub:*)",
+      "Bash(find \"C:/dev/catholicdaily-flutter/android/app/src/main/res\" -name \"launcher_icon.png\" -type f -delete)",
+      "Bash(ls C:/dev/catholicdaily-flutter/ios/Flutter/*.xcconfig)"
+    ]
+  }
+}

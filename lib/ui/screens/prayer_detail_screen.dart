@@ -126,8 +126,10 @@ class _PrayerDetailScreenState extends State<PrayerDetailScreen> {
           "font": Style(
             fontSize: FontSize(16),
             fontFamily: null, // Default readable font for regular text
-            color: widget.prayer.htmlContent!.contains('#FF0000') 
-                ? Color(0xFF8C1D2F) 
+            color: widget.prayer.htmlContent!.contains('#FF0000')
+                ? (Theme.of(context).brightness == Brightness.dark
+                    ? const Color(0xFFE57373)
+                    : const Color(0xFF8C1D2F))
                 : null,
           ),
           "html": Style(

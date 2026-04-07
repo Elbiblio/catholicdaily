@@ -25,8 +25,8 @@ class ReadingDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isPsalm = (reading.position?.toLowerCase() ?? '').contains('psalm');
-    final isGospel = (reading.position?.toLowerCase() ?? '').contains('gospel');
+    final hasPsalmResponse = reading.psalmResponse != null && reading.psalmResponse!.trim().isNotEmpty;
+    final hasGospelAcclamation = reading.gospelAcclamation != null && reading.gospelAcclamation!.trim().isNotEmpty;
     final dateStr = DateFormat('EEEE, MMMM d, y').format(date);
     final heading = ReadingTitleFormatter.build(
       reference: reading.reading,
@@ -111,8 +111,8 @@ class ReadingDetailScreen extends StatelessWidget {
               ),
             const SizedBox(height: 24),
 
-            // Psalm Response Widget (only for psalms)
-            if (isPsalm) ...[
+            // Psalm Response Widget (only when psalmResponse is present)
+            if (hasPsalmResponse) ...[
               PsalmResponseWidget(
                 reading: reading,
                 date: date,
@@ -120,8 +120,8 @@ class ReadingDetailScreen extends StatelessWidget {
               const SizedBox(height: 24),
             ],
 
-            // Gospel Acclamation Widget (only for gospels)
-            if (isGospel) ...[
+            // Gospel Acclamation Widget (only when gospelAcclamation is present)
+            if (hasGospelAcclamation) ...[
               GospelAcclamationWidget(
                 reading: reading,
                 date: date,

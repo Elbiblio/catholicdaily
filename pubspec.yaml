@@ -103,7 +103,14 @@ flutter:
     - assets/data/readings_rows.json
     - assets/data/verses_rows.json
     - assets/data/prayers.json
+    - assets/data/order_of_mass.json
+    - assets/data/hymns.json
+    - assets/data/hymn_categories.json
+    - assets/data/prayer_of_faithful_mapped.csv
+    - assets/data/cpl_prayer_faithful_spanish.csv
     - assets/prayers/
+    - scripts/prayer_of_faithful_mapped.csv
+    - scripts/divinum_officium_propers_english.csv
     - standard_lectionary_complete.csv
     - memorial_feasts.csv
 

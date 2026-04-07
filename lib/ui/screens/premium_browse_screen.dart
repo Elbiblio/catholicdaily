@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -11,6 +12,10 @@ import '../../data/models/daily_reading.dart';
 import '../../data/services/optional_memorial_service.dart';
 import '../../data/services/alternate_readings_service.dart';
 import '../../data/services/reading_flow_service.dart';
+import '../widgets/premium_browse/date_navigation.dart';
+import '../widgets/premium_browse/liturgical_summary_row.dart';
+import '../widgets/premium_browse/main_reading.dart';
+import '../widgets/premium_browse/alternatives_section.dart';
 
 /// Premium Browse Screen with modern 2026 design principles
 class PremiumBrowseScreen extends StatefulWidget {
@@ -613,72 +618,11 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
   }
 
   Widget _buildDateNavigation(ThemeData theme) {
-    final ordoColor = _liturgicalDay?.colorValue ?? theme.colorScheme.primary;
-    final isLight = theme.brightness == Brightness.light;
-    final navAccent = _resolveNavigationAccent(theme, ordoColor);
-    final containerColor = isLight
-        ? Color.alphaBlend(Colors.white.withValues(alpha: 0.72), navAccent.withValues(alpha: 0.42))
-        : Color.alphaBlend(theme.colorScheme.surfaceContainer.withValues(alpha: 0.8), navAccent.withValues(alpha: 0.36));
-    final buttonColor = isLight
-        ? Color.alphaBlend(Colors.white.withValues(alpha: 0.84), navAccent.withValues(alpha: 0.34))
-        : Color.alphaBlend(theme.colorScheme.surface.withValues(alpha: 0.88), navAccent.withValues(alpha: 0.28));
-    final foregroundColor = _resolveHeaderForeground(theme, buttonColor);
-
-    return Container(
-      margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: containerColor,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isLight
-              ? navAccent.withValues(alpha: 0.28)
-              : navAccent.withValues(alpha: 0.24),
-        ),
-      ),
-      child: Row(
-        children: [
-          // Previous button
-          Expanded(
-            child: IconButton(
-              onPressed: _previousDay,
-              icon: const Icon(Icons.chevron_left_rounded),
-              style: IconButton.styleFrom(
-                backgroundColor: buttonColor,
-                foregroundColor: foregroundColor,
-              ),
-            ),
-          ),
-
-          // Date display
-          Expanded(
-            flex: 3,
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Text(
-                DateFormat('MMM d, yyyy').format(_selectedDate),
-                textAlign: TextAlign.center,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: foregroundColor,
-                ),
-              ),
-            ),
-          ),
-
-          // Next button
-          Expanded(
-            child: IconButton(
-              onPressed: _nextDay,
-              icon: const Icon(Icons.chevron_right_rounded),
-              style: IconButton.styleFrom(
-                backgroundColor: buttonColor,
-                foregroundColor: foregroundColor,
-              ),
-            ),
-          ),
-        ],
-      ),
+    return DateNavigation(
+      selectedDate: _selectedDate,
+      liturgicalColor: _liturgicalDay?.colorValue,
+      onPreviousDay: _previousDay,
+      onNextDay: _nextDay,
     );
   }
 
@@ -761,113 +705,18 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
   }
 
   Widget _buildLiturgicalSummaryRow(ThemeData theme, Color foregroundColor) {
-    final isLight = theme.brightness == Brightness.light;
-    final chipForeground = isLight ? theme.colorScheme.onSurface : foregroundColor;
     final countdown = _buildCountdownLabel();
-    final isSunday = _selectedDate.weekday == DateTime.sunday;
-    final chips = <Widget>[
-      _buildDetailChip(
-        theme,
-        'Season',
-        _liturgicalDay!.seasonName,
-        chipForeground,
-      ),
-      if (_liturgicalDay!.weekNumber > 0)
-        _buildDetailChip(theme, 'Week', '${_liturgicalDay!.weekNumber}', chipForeground),
-      if (_ordoYearVariables != null && isSunday)
-        _buildDetailChip(theme, 'Sunday', _ordoYearVariables!.sundayCycle, chipForeground),
-      if (_ordoYearVariables != null && !isSunday)
-        _buildDetailChip(theme, 'Year', _ordoYearVariables!.weekdayCycle, chipForeground),
-      if (countdown != null)
-        _buildDetailChip(
-          theme,
-          countdown.$1,
-          countdown.$2,
-          chipForeground,
-          onTap: () => _jumpToDate(countdown.$3, openFirstReading: true),
-        ),
-    ];
-
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          for (int index = 0; index < chips.length; index++) ...[
-            chips[index],
-            if (index < chips.length - 1) const SizedBox(width: 8),
-          ],
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDetailChip(
-    ThemeData theme,
-    String label,
-    String value,
-    Color foregroundColor,
-    {VoidCallback? onTap}
-  ) {
-    final isLight = theme.brightness == Brightness.light;
-    final liturgicalColor = _liturgicalDay?.colorValue ?? theme.colorScheme.primary;
-    final chip = Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: isLight
-            ? Color.alphaBlend(
-                Colors.white.withValues(alpha: 0.94),
-                liturgicalColor.withValues(alpha: 0.08),
-              )
-            : theme.colorScheme.surface.withValues(alpha: 0.72),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: isLight
-              ? liturgicalColor.withValues(alpha: 0.24)
-              : foregroundColor.withValues(alpha: 0.12),
-        ),
-        boxShadow: isLight
-            ? [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.04),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ]
-            : null,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: theme.textTheme.labelSmall?.copyWith(
-              color: foregroundColor.withValues(alpha: isLight ? 0.72 : 0.72),
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            value,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: foregroundColor,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      ),
-    );
-
-    if (onTap == null) {
-      return chip;
-    }
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: chip,
-      ),
+    
+    return LiturgicalSummaryRow(
+      seasonName: _liturgicalDay!.seasonName,
+      weekNumber: _liturgicalDay!.weekNumber,
+      sundayCycle: _ordoYearVariables?.sundayCycle,
+      weekdayCycle: _ordoYearVariables?.weekdayCycle,
+      foregroundColor: foregroundColor,
+      liturgicalColor: _liturgicalDay?.colorValue,
+      countdownLabel: countdown?.$1,
+      countdownValue: countdown?.$2,
+      onCountdownTap: countdown != null ? () => _jumpToDate(countdown.$3, openFirstReading: true) : null,
     );
   }
 
@@ -949,21 +798,58 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
     return Color.lerp(seasonal, theme.colorScheme.primary, blendAmount) ?? theme.colorScheme.primary;
   }
 
-  Color _resolveNavigationAccent(ThemeData theme, Color ordoColor) {
-    if (theme.brightness == Brightness.dark) {
-      return Color.lerp(ordoColor, Colors.white, 0.12) ?? ordoColor;
-    }
-
-    return Color.lerp(ordoColor, theme.colorScheme.primary, 0.18) ?? ordoColor;
-  }
-
   Color _resolveHeaderForeground(ThemeData theme, Color backgroundColor) {
     if (theme.brightness == Brightness.dark) {
       return Colors.white.withValues(alpha: 0.96);
     }
 
+    // Calculate luminance of the background color
     final brightness = ThemeData.estimateBrightnessForColor(backgroundColor);
-    return brightness == Brightness.dark ? Colors.white : theme.colorScheme.onSurface;
+    
+    // For light mode, ensure sufficient contrast using WCAG luminance calculation
+    if (brightness == Brightness.dark) {
+      return Colors.white;
+    }
+    
+    // If background is light, use onSurface (which is typically dark)
+    // But check if contrast is sufficient (4.5:1 ratio)
+    final onSurfaceColor = theme.colorScheme.onSurface;
+    if (_hasSufficientContrast(backgroundColor, onSurfaceColor)) {
+      return onSurfaceColor;
+    }
+    
+    // If contrast is insufficient, use a darker color
+    return Colors.black.withValues(alpha: 0.87);
+  }
+
+  bool _hasSufficientContrast(Color foreground, Color background) {
+    // Calculate relative luminance for both colors
+    final fgLuminance = _calculateLuminance(foreground);
+    final bgLuminance = _calculateLuminance(background);
+    
+    // Calculate contrast ratio
+    final lighter = fgLuminance > bgLuminance ? fgLuminance : bgLuminance;
+    final darker = fgLuminance > bgLuminance ? bgLuminance : fgLuminance;
+    
+    final contrastRatio = (lighter + 0.05) / (darker + 0.05);
+    
+    // WCAG AA requires at least 4.5:1 for normal text
+    return contrastRatio >= 4.5;
+  }
+
+  double _calculateLuminance(Color color) {
+    // Convert to sRGB
+    final r = (color.r * 255.0).round() / 255;
+    final g = (color.g * 255.0).round() / 255;
+    final b = (color.b * 255.0).round() / 255;
+    
+    // Apply gamma correction
+    final rLinear = r <= 0.03928 ? r / 12.92 : math.pow((r + 0.055) / 1.055, 2.4).toDouble();
+    final gLinear = g <= 0.03928 ? g / 12.92 : math.pow((g + 0.055) / 1.055, 2.4).toDouble();
+    final bLinear = b <= 0.03928 ? b / 12.92 : math.pow((b + 0.055) / 1.055, 2.4).toDouble();
+    
+    // Calculate luminance
+    return 0.2126 * rLinear + 0.7152 * gLinear + 0.0722 * bLinear;
   }
 
   void _applyHydratedReadings(HydratedReadingSet hydrated) {
@@ -1031,11 +917,16 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
   }
 
   Widget _buildOptionalCelebrationSelector(ThemeData theme) {
+    final isDark = theme.brightness == Brightness.dark;
     final baseBorderColor = _celebrationsSuppressed
-        ? const Color(0xFFD9A441)
+        ? (isDark
+            ? const Color(0xFFE7C27A)
+            : const Color(0xFFD9A441))
         : theme.colorScheme.tertiary;
     final baseBackgroundColor = _celebrationsSuppressed
-        ? const Color(0xFF3A2B1A)
+        ? (isDark
+            ? const Color(0xFF2B2117)
+            : const Color(0xFF3A2B1A))
         : theme.colorScheme.tertiaryContainer.withValues(alpha: 0.3);
 
     return Container(
@@ -1101,8 +992,11 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                 final celebration = entry.value;
                 final hasProper = celebration.hasProperReadings;
                 final selected = _selectedCelebrationIndex == idx;
+                final isDark = theme.brightness == Brightness.dark;
                 final chipForeground = _celebrationsSuppressed
-                    ? const Color(0xFFE7C27A)
+                    ? (isDark
+                        ? const Color(0xFFE7C27A)
+                        : const Color(0xFFD9A441))
                     : (hasProper
                         ? theme.colorScheme.tertiary
                         : theme.colorScheme.onSurfaceVariant);
@@ -1117,10 +1011,14 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                   ),
                   selected: selected,
                   selectedColor: _celebrationsSuppressed
-                      ? const Color(0xFF8B5E1A)
+                      ? (isDark
+                          ? const Color(0xFF8B5E1A)
+                          : const Color(0xFFD9A441))
                       : theme.colorScheme.primary,
                   backgroundColor: _celebrationsSuppressed
-                      ? const Color(0xFF2B2117)
+                      ? (isDark
+                          ? const Color(0xFF2B2117)
+                          : const Color(0xFF3A2B1A))
                       : theme.colorScheme.surface,
                   side: BorderSide(
                     color: selected
@@ -1354,322 +1252,30 @@ class _PremiumReadingGroupCardState extends State<_PremiumReadingGroupCard>
   }
   
   Widget _buildMainReading(ThemeData theme, Color color, bool isLight) {
-    final reading = widget.group.mainReading;
-    final badgeBackground = isLight
-        ? null
-        : Color.alphaBlend(
-            theme.colorScheme.surface.withValues(alpha: 0.86),
-            color.withValues(alpha: 0.18),
-          );
-    final badgeForeground = isLight
-        ? color
-        : (ThemeData.estimateBrightnessForColor(badgeBackground!) == Brightness.dark
-              ? Colors.white.withValues(alpha: 0.94)
-              : theme.colorScheme.onSurface);
-
-    return InkWell(
-      onTap: () => widget.onReadingSelected(reading),
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Reading type badge with alternative indicator
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: badgeBackground,
-                    gradient: isLight
-                        ? LinearGradient(
-                            colors: [
-                              color.withValues(alpha: 0.2),
-                              color.withValues(alpha: 0.1),
-                            ],
-                          )
-                        : null,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: isLight
-                          ? color.withValues(alpha: 0.3)
-                          : color.withValues(alpha: 0.42),
-                    ),
-                  ),
-                  child: Text(
-                    widget.group.baseType,
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: badgeForeground,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ),
-                if (widget.group.hasAlternatives) ...[
-                  const SizedBox(width: 8),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.amber.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.amber.withValues(alpha: 0.4)),
-                    ),
-                    child: Text(
-                      '+${widget.group.alternatives.length} alt',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: Colors.amber.shade700,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ],
-              ],
-            ),
-
-            const SizedBox(height: 16),
-
-            // Reference
-            Text(
-              reading.reading,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w700,
-                color: theme.colorScheme.onSurface,
-                height: 1.3,
-              ),
-            ),
-
-            const SizedBox(height: 12),
-
-            // Reading preview
-            _buildReadingPreview(theme, reading),
-
-            const SizedBox(height: 12),
-
-            // Psalm response if applicable
-            if (reading.psalmResponse != null && reading.psalmResponse!.trim().isNotEmpty) ...[
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                decoration: BoxDecoration(
-                  color: Colors.blue.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.blue.withValues(alpha: 0.2)),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.music_note,
-                      size: 16,
-                      color: Colors.blue.shade700,
-                    ),
-                    const SizedBox(width: 6),
-                    Flexible(
-                      child: Text(
-                        'Response: ${reading.psalmResponse}',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: Colors.blue.shade700,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
-            ],
-
-            // Arrow indicator
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  color: color.withValues(alpha: 0.6),
-                  size: 16,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-  
-  Widget _buildReadingPreview(ThemeData theme, DailyReading reading) {
-    final preview = widget.readingPreviews[reading.reading];
-    if (preview == null || preview.trim().isEmpty) {
-      return const SizedBox.shrink();
-    }
+    final group = widget.group;
+    final reading = group.mainReading;
     
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: theme.colorScheme.outline.withValues(alpha: 0.2),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(
-                Icons.format_quote,
-                size: 16,
-                color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
-              ),
-              const SizedBox(width: 6),
-              Text(
-                'Preview',
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            preview,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.85),
-              height: 1.4,
-              fontStyle: FontStyle.italic,
-            ),
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
+    return MainReading(
+      reading: reading,
+      baseType: group.baseType,
+      alternatives: group.alternatives,
+      previewText: widget.readingPreviews[reading.reading],
+      color: color,
+      onTap: () => widget.onReadingSelected(reading),
     );
   }
   
   Widget _buildAlternativesSection(ThemeData theme, Color color, bool isLight) {
-    return Column(
-      children: [
-        // Expand/collapse button
-        InkWell(
-          onTap: _toggleExpanded,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            child: Row(
-              children: [
-                Icon(
-                  _isExpanded ? Icons.expand_less : Icons.expand_more,
-                  color: color.withValues(alpha: 0.8),
-                  size: 20,
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    _isExpanded ? 'Hide Alternatives' : 'Show Alternatives',
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: color.withValues(alpha: 0.8),
-                      fontWeight: FontWeight.w600,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  '${widget.group.alternatives.length} available',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        
-        // Alternatives list
-        SizeTransition(
-          sizeFactor: _expandAnimation,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              children: widget.group.alternatives.asMap().entries.map((entry) {
-                final index = entry.key;
-                final alternative = entry.value;
-                return _buildAlternativeItem(theme, color, alternative, index + 1);
-              }).toList(),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-  
-  Widget _buildAlternativeItem(ThemeData theme, Color color, DailyReading reading, int number) {
-    return InkWell(
-      onTap: () => widget.onReadingSelected(reading),
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 8),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.05),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color.withValues(alpha: 0.2)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Text(
-                    'Alternative $number',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: color.withValues(alpha: 0.9),
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-                const Spacer(),
-                Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  color: color.withValues(alpha: 0.6),
-                  size: 14,
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              reading.reading,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-                color: theme.colorScheme.onSurface,
-              ),
-            ),
-            const SizedBox(height: 8),
-            _buildReadingPreview(theme, reading),
-            if (reading.psalmResponse != null && reading.psalmResponse!.trim().isNotEmpty) ...[
-              const SizedBox(height: 6),
-              Text(
-                'Response: ${reading.psalmResponse}',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: Colors.blue.shade700,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ],
-        ),
-      ),
+    final group = widget.group;
+    
+    return AlternativesSection(
+      alternatives: group.alternatives,
+      readingPreviews: widget.readingPreviews,
+      color: color,
+      isExpanded: _isExpanded,
+      expandAnimation: _expandAnimation,
+      onToggleExpanded: _toggleExpanded,
+      onAlternativeSelected: (reading) => widget.onReadingSelected(reading),
     );
   }
 }

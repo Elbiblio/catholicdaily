@@ -11,16 +11,43 @@ class LanguagePreferenceService {
   // Language codes
   static const String english = 'en';
   static const String latin = 'la';
-  
+  static const String spanish = 'es';
+  static const String portuguese = 'pt';
+  static const String french = 'fr';
+  static const String tagalog = 'tl';
+  static const String italian = 'it';
+  static const String polish = 'pl';
+  static const String vietnamese = 'vi';
+  static const String korean = 'ko';
+
   // Display names
   static const Map<String, String> _languageNames = {
     english: 'English',
     latin: 'Latin',
+    spanish: 'Español',
+    portuguese: 'Português',
+    french: 'Français',
+    tagalog: 'Tagalog',
+    italian: 'Italiano',
+    polish: 'Polski',
+    vietnamese: 'Tiếng Việt',
+    korean: '한국어',
   };
 
   String? _cachedLanguage;
 
-  List<String> get availableLanguages => [english, latin];
+  List<String> get availableLanguages => [
+        english,
+        latin,
+        spanish,
+        portuguese,
+        french,
+        tagalog,
+        italian,
+        polish,
+        vietnamese,
+        korean,
+      ];
   
   String getLanguageDisplayName(String languageCode) {
     return _languageNames[languageCode] ?? languageCode;
@@ -53,7 +80,10 @@ class LanguagePreferenceService {
 
   Future<void> toggleLanguage() async {
     final current = await getPreferredLanguage();
-    final newLanguage = current == english ? latin : english;
+    final languages = availableLanguages;
+    final currentIndex = languages.indexOf(current);
+    final nextIndex = (currentIndex + 1) % languages.length;
+    final newLanguage = languages[nextIndex];
     await setPreferredLanguage(newLanguage);
   }
 
