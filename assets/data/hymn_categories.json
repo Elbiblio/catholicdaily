@@ -1,0 +1,110 @@
+[
+  {
+    "id": "general",
+    "name": "General",
+    "description": "Other hymns and songs",
+    "hymn_count": 158
+  },
+  {
+    "id": "communion",
+    "name": "Communion",
+    "description": "Hymns for communion service",
+    "hymn_count": 115
+  },
+  {
+    "id": "entrance",
+    "name": "Entrance",
+    "description": "Hymns for processional and entrance",
+    "hymn_count": 65
+  },
+  {
+    "id": "marian",
+    "name": "Marian",
+    "description": "Hymns dedicated to Mary",
+    "hymn_count": 49
+  },
+  {
+    "id": "offertory",
+    "name": "Offertory",
+    "description": "Hymns for offertory procession",
+    "hymn_count": 48
+  },
+  {
+    "id": "dismissal",
+    "name": "Dismissal",
+    "description": "Hymns related to dismissal",
+    "hymn_count": 46
+  },
+  {
+    "id": "christmas",
+    "name": "Christmas",
+    "description": "Christmas carols and hymns",
+    "hymn_count": 38
+  },
+  {
+    "id": "lenten",
+    "name": "Lenten",
+    "description": "Lenten season hymns",
+    "hymn_count": 33
+  },
+  {
+    "id": "memorial",
+    "name": "Memorial",
+    "description": "Memorial and funeral hymns",
+    "hymn_count": 28
+  },
+  {
+    "id": "feast",
+    "name": "Feast",
+    "description": "Hymns related to feast",
+    "hymn_count": 21
+  },
+  {
+    "id": "easter",
+    "name": "Easter",
+    "description": "Easter celebration hymns",
+    "hymn_count": 15
+  },
+  {
+    "id": "advent",
+    "name": "Advent",
+    "description": "Hymns related to advent",
+    "hymn_count": 11
+  },
+  {
+    "id": "benediction",
+    "name": "Benediction",
+    "description": "Benediction hymns",
+    "hymn_count": 10
+  },
+  {
+    "id": "holy spirit",
+    "name": "Holy Spirit",
+    "description": "Hymns related to holy spirit",
+    "hymn_count": 9
+  },
+  {
+    "id": "wedding",
+    "name": "Wedding",
+    "description": "Hymns related to wedding",
+    "hymn_count": 5
+  },
+  {
+    "id": "christ the king",
+    "name": "Christ The King",
+    "description": "Hymns related to christ the king",
+    "hymn_count": 3
+  },
+  {
+    "id": "palm sunday",
+    "name": "Palm Sunday",
+    "description": "Hymns related to palm sunday",
+    "hymn_count": 1
+  },
+  {
+    "id": "pentecost",
+    "name": "Pentecost",
+    "description": "Hymns related to pentecost",
+    "hymn_count": 1
+  }
+]
