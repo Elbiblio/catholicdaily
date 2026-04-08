@@ -5,23 +5,30 @@ import 'package:flutter/foundation.dart';
 /// MIDI playback state
 class HymnMidiState {
   final bool isPlaying;
+  final bool isPaused;
   final String? currentFile;
   final int? positionMs;
 
   const HymnMidiState({
     this.isPlaying = false,
+    this.isPaused = false,
     this.currentFile,
     this.positionMs,
   });
 
+  bool get hasActiveFile => currentFile != null;
+
   HymnMidiState copyWith({
     bool? isPlaying,
+    bool? isPaused,
     String? currentFile,
+    bool clearFile = false,
     int? positionMs,
   }) {
     return HymnMidiState(
       isPlaying: isPlaying ?? this.isPlaying,
-      currentFile: currentFile ?? this.currentFile,
+      isPaused: isPaused ?? this.isPaused,
+      currentFile: clearFile ? null : (currentFile ?? this.currentFile),
       positionMs: positionMs ?? this.positionMs,
     );
   }
@@ -29,6 +36,13 @@ class HymnMidiState {
 
 /// MIDI playback service for hymns using audioplayers
 class HymnMidiService {
+  static final HymnMidiService instance = HymnMidiService._internal();
+  factory HymnMidiService() => instance;
+
+  HymnMidiService._internal() {
+    _setupAudioPlayer();
+  }
+
   final AudioPlayer _audioPlayer = AudioPlayer();
   HymnMidiState _state = const HymnMidiState();
   final StreamController<HymnMidiState> _stateController = StreamController<HymnMidiState>.broadcast();
@@ -42,10 +56,6 @@ class HymnMidiService {
 
   /// Check if MIDI playback is available (audioplayers works on all platforms)
   bool get isAvailable => true;
-
-  HymnMidiService() {
-    _setupAudioPlayer();
-  }
 
   void _setupAudioPlayer() {
     // Listen to player state changes
@@ -81,6 +91,7 @@ class HymnMidiService {
 
       _updateState(_state.copyWith(
         isPlaying: true,
+        isPaused: false,
         currentFile: assetPath,
         positionMs: 0,
       ));
@@ -91,12 +102,14 @@ class HymnMidiService {
     }
   }
 
-  /// Stop playback
+  /// Stop playback and clear active file
   Future<void> stop() async {
     try {
       await _audioPlayer.stop();
       _updateState(_state.copyWith(
         isPlaying: false,
+        isPaused: false,
+        clearFile: true,
         positionMs: 0,
       ));
     } catch (_) {
@@ -104,21 +117,21 @@ class HymnMidiService {
     }
   }
 
-  /// Pause playback
+  /// Pause playback (keeps position for resume)
   Future<void> pause() async {
     try {
       await _audioPlayer.pause();
-      _updateState(_state.copyWith(isPlaying: false));
+      _updateState(_state.copyWith(isPlaying: false, isPaused: true));
     } catch (_) {
       // Ignore pause errors
     }
   }
 
-  /// Resume playback
+  /// Resume playback from paused position
   Future<void> resume() async {
     try {
       await _audioPlayer.resume();
-      _updateState(_state.copyWith(isPlaying: true));
+      _updateState(_state.copyWith(isPlaying: true, isPaused: false));
     } catch (_) {
       // Ignore resume errors
     }

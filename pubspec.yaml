@@ -111,6 +111,7 @@ flutter:
     - assets/data/prayer_of_faithful_mapped.csv
     - assets/data/cpl_prayer_faithful_spanish.csv
     - assets/prayers/
+    - assets/midi/
     - scripts/prayer_of_faithful_mapped.csv
     - scripts/divinum_officium_propers_english.csv
     - standard_lectionary_complete.csv

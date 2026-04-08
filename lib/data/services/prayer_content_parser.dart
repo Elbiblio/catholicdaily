@@ -112,27 +112,46 @@ class PrayerContentParser {
   }
 
   static String _cleanHtmlLine(String line) {
-    // Remove HTML tags but preserve text content
     String cleaned = line;
-    
+
     // Remove common HTML tags
     cleaned = cleaned.replaceAll(RegExp(r'<[^>]*>'), '');
-    cleaned = cleaned.replaceAll('&nbsp;', ' ');
+
+    // Decode named HTML entities
+    cleaned = cleaned.replaceAll('&nbsp;', '\u00A0');
     cleaned = cleaned.replaceAll('&amp;', '&');
     cleaned = cleaned.replaceAll('&lt;', '<');
     cleaned = cleaned.replaceAll('&gt;', '>');
-    cleaned = cleaned.replaceAll('&#146;', "'");
-    cleaned = cleaned.replaceAll('&#225;', 'á');
-    cleaned = cleaned.replaceAll('&#233;', 'é');
-    cleaned = cleaned.replaceAll('&#237;', 'í');
-    cleaned = cleaned.replaceAll('&#243;', 'ó');
-    cleaned = cleaned.replaceAll('&#250;', 'ú');
-    cleaned = cleaned.replaceAll('&#193;', 'Á');
-    cleaned = cleaned.replaceAll('&#201;', 'É');
-    cleaned = cleaned.replaceAll('&#205;', 'Í');
-    cleaned = cleaned.replaceAll('&#211;', 'Ó');
-    cleaned = cleaned.replaceAll('&#218;', 'Ú');
-    
+    cleaned = cleaned.replaceAll('&quot;', '"');
+    cleaned = cleaned.replaceAll('&apos;', "'");
+    cleaned = cleaned.replaceAll('&aelig;', 'æ');
+    cleaned = cleaned.replaceAll('&AElig;', 'Æ');
+    cleaned = cleaned.replaceAll('&oelig;', 'œ');
+    cleaned = cleaned.replaceAll('&OElig;', 'Œ');
+    cleaned = cleaned.replaceAll('&rsquo;', '\u2019');
+    cleaned = cleaned.replaceAll('&lsquo;', '\u2018');
+    cleaned = cleaned.replaceAll('&rdquo;', '\u201D');
+    cleaned = cleaned.replaceAll('&ldquo;', '\u201C');
+    cleaned = cleaned.replaceAll('&mdash;', '\u2014');
+    cleaned = cleaned.replaceAll('&ndash;', '\u2013');
+    cleaned = cleaned.replaceAll('&hellip;', '\u2026');
+
+    // Decode numeric HTML entities (e.g. &#230; &#x00E6;)
+    cleaned = cleaned.replaceAllMapped(
+      RegExp(r'&#x([0-9A-Fa-f]+);'),
+      (m) {
+        final codePoint = int.tryParse(m.group(1)!, radix: 16);
+        return codePoint != null ? String.fromCharCode(codePoint) : m.group(0)!;
+      },
+    );
+    cleaned = cleaned.replaceAllMapped(
+      RegExp(r'&#(\d+);'),
+      (m) {
+        final codePoint = int.tryParse(m.group(1)!);
+        return codePoint != null ? String.fromCharCode(codePoint) : m.group(0)!;
+      },
+    );
+
     return cleaned.trim();
   }
 }

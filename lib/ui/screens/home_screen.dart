@@ -44,13 +44,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   static const _keyLastTabIndex = 'home_last_tab_index';
-  static const _keyLastReadingReference = 'last_reading_reference';
-  static const _keyLastReadingContent = 'last_reading_content';
 
   int _currentIndex = 0;
-  String? _lastReadingReference;
-  String? _lastReadingContent;
-  bool _resumedOnLaunch = false;
   final AppNavigationService _navigationService = AppNavigationService();
 
   List<BibleVersion> _versions = [];
@@ -73,8 +68,6 @@ class _HomeScreenState extends State<HomeScreen> {
     
     final prefs = await SharedPreferences.getInstance();
     _currentIndex = prefs.getInt(_keyLastTabIndex) ?? 0;
-    _lastReadingReference = prefs.getString(_keyLastReadingReference);
-    _lastReadingContent = prefs.getString(_keyLastReadingContent);
 
     _versions = [
       BibleVersion(
@@ -90,18 +83,12 @@ class _HomeScreenState extends State<HomeScreen> {
     await _loadCurrentReadings();
     
     setState(() => _isLoading = false);
-
-    if (!_resumedOnLaunch &&
-        (_lastReadingReference?.isNotEmpty ?? false) &&
-        (_lastReadingContent?.isNotEmpty ?? false)) {
-      _resumedOnLaunch = true;
+    
+    // Handle Bible chapter resume in bible reading mode only
+    if (_navigationService.shouldResumeToBibleChapter) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
-        _openReading(
-          reference: _lastReadingReference!,
-          content: _lastReadingContent!,
-          liturgicalDay: null,
-        );
+        _resumeToBibleChapter();
       });
     }
   }
@@ -131,6 +118,23 @@ class _HomeScreenState extends State<HomeScreen> {
       debugPrint('Error loading current readings: $e');
       _readingSession = ReadingSession.empty();
     }
+  }
+
+  void _resumeToBibleChapter() {
+    final chapter = _navigationService.lastBibleChapter!;
+    
+    // Switch to Bible tab first
+    setState(() {
+      _currentIndex = 1; // Bible tab index
+    });
+    _persistTab(1); // Persist the Bible tab selection
+    
+    // Then open the bible chapter
+    _openBibleReading(
+      reference: chapter['reference'] as String,
+      content: chapter['content'] as String,
+      liturgicalDay: null,
+    );
   }
 
   void _onReadingSelected(
@@ -165,7 +169,6 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
     
-    _persistLastReading(reference: reference, content: content);
     _openReading(
       reference: reference,
       content: content,
@@ -403,16 +406,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<void> _persistLastReading({
-    required String reference,
-    required String content,
-  }) async {
-    _lastReadingReference = reference;
-    _lastReadingContent = content;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_keyLastReadingReference, reference);
-    await prefs.setString(_keyLastReadingContent, content);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -469,11 +462,11 @@ class _HomeScreenState extends State<HomeScreen> {
           selectedIndex: selectedIndex,
         );
       }),
-      const PrayersScreen(),
       BibleScreen(onReadingSelected: (reference, content, liturgicalDay, {isBibleSearch = false}) {
         _onReadingSelected(reference, content, liturgicalDay, isBibleSearch: isBibleSearch);
       }),
       const HymnListScreen(),
+      const PrayersScreen(),
       SettingsScreen(
         versions: _versions,
         themeMode: widget.themeMode,
@@ -508,11 +501,6 @@ class _HomeScreenState extends State<HomeScreen> {
               label: 'Readings',
             ),
             NavigationDestination(
-              icon: Icon(Icons.bookmark_outline),
-              selectedIcon: Icon(Icons.bookmark),
-              label: 'Prayers',
-            ),
-            NavigationDestination(
               icon: Icon(Icons.menu_book_outlined),
               selectedIcon: Icon(Icons.menu_book),
               label: 'Bible',
@@ -521,6 +509,11 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Icon(Icons.music_note_outlined),
               selectedIcon: Icon(Icons.music_note),
               label: 'Hymns',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.bookmark_outline),
+              selectedIcon: Icon(Icons.bookmark),
+              label: 'Prayers',
             ),
             NavigationDestination(
               icon: Icon(Icons.settings_outlined),

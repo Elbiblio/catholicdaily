@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'data/services/theme_preferences.dart';
 import 'data/services/app_navigation_service.dart';
 import 'ui/screens/home_screen.dart';
-import 'ui/screens/reading_screen.dart';
 import 'ui/screens/onboarding_screen.dart';
 
 void main() async {
@@ -57,20 +56,10 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
     await _navigationService.initialize();
     _showOnboarding = await OnboardingScreen.shouldShow();
 
-    // Determine initial screen based on last navigation
+    // Always start with onboarding or home screen
     if (_showOnboarding) {
       _initialScreen = OnboardingScreen(
         onComplete: _onOnboardingComplete,
-      );
-    } else if (_navigationService.shouldResumeToBibleChapter) {
-      final chapter = _navigationService.lastBibleChapter!;
-      _initialScreen = ReadingScreen(
-        reference: chapter['reference'] as String,
-        content: chapter['content'] as String,
-        liturgicalDay: null,
-        isBibleSearch: true,
-        navigableItems: const [],
-        currentNavigableIndex: 0,
       );
     } else {
       _initialScreen = _buildHomeScreen();

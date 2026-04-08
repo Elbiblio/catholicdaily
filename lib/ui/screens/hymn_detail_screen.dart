@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../data/models/hymn.dart';
 import '../../data/services/hymn_favorites_service.dart';
@@ -19,7 +20,7 @@ class HymnDetailScreen extends StatefulWidget {
 
 class _HymnDetailScreenState extends State<HymnDetailScreen> {
   final HymnFavoritesService _favoritesService = HymnFavoritesService.instance;
-  final HymnMidiService _midiService = HymnMidiService();
+  final HymnMidiService _midiService = HymnMidiService.instance;
 
   bool _isFavorite = false;
   double _fontSize = 20.0;
@@ -70,11 +71,29 @@ class _HymnDetailScreenState extends State<HymnDetailScreen> {
 
   Future<void> _playMidi() async {
     if (widget.hymn.midiFile != null) {
-      await _midiService.playAsset('assets/midi/${widget.hymn.midiFile}');
+      try {
+        final state = _midiService.state;
+        if (state.isPaused &&
+            state.currentFile == 'assets/midi/${widget.hymn.midiFile}') {
+          await _midiService.resume();
+        } else {
+          await _midiService.playAsset('assets/midi/${widget.hymn.midiFile}');
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Audio file not available for this hymn')),
+          );
+        }
+      }
     }
   }
 
-  void _stopMidi() async {
+  Future<void> _pauseMidi() async {
+    await _midiService.pause();
+  }
+
+  Future<void> _stopMidi() async {
     await _midiService.stop();
   }
 
@@ -285,15 +304,28 @@ class _HymnDetailScreenState extends State<HymnDetailScreen> {
                 ),
               ),
               const SizedBox(width: 12),
-              // MIDI button
-              if (widget.hymn.midiFile != null)
+              // MIDI controls
+              if (widget.hymn.midiFile != null) ...[
                 _buildCompactMediaIcon(
                   theme: theme,
-                  icon: Icons.piano,
-                  onTap: midiState.isPlaying ? _stopMidi : _playMidi,
-                  tooltip: midiState.isPlaying ? 'Stop' : 'Play MIDI',
-                  isActive: midiState.isPlaying,
+                  icon: midiState.isPlaying
+                      ? Icons.pause_rounded
+                      : Icons.play_arrow_rounded,
+                  onTap: midiState.isPlaying ? _pauseMidi : _playMidi,
+                  tooltip: midiState.isPlaying ? 'Pause' : 'Play',
+                  isActive: midiState.isPlaying || midiState.isPaused,
                 ),
+                if (midiState.isPlaying || midiState.isPaused) ...[
+                  const SizedBox(width: 6),
+                  _buildCompactMediaIcon(
+                    theme: theme,
+                    icon: Icons.stop_rounded,
+                    onTap: _stopMidi,
+                    tooltip: 'Stop',
+                    isActive: false,
+                  ),
+                ],
+              ],
             ],
           ),
         ],

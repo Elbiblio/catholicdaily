@@ -1051,7 +1051,7 @@ class HymnRecommendationService
   /// [category] (case-insensitive equality or containment).
   bool _hymnMatchesCategory(Hymn hymn, String category) {
     final lower = category.toLowerCase();
-    if (hymn.category?.toLowerCase() == lower) return true;
+    if (hymn.category.toLowerCase() == lower) return true;
     if (hymn.tags.any((t) => t.toLowerCase() == lower)) return true;
     if (hymn.themes?.toLowerCase().contains(lower) ?? false) return true;
     return false;

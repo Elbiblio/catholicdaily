@@ -10,7 +10,6 @@ import '../../data/services/readings_service.dart';
 import '../../data/services/readings_backend_io.dart';
 import '../../data/services/reading_flow_service.dart';
 import '../widgets/parchment_background.dart';
-import '../widgets/language_switcher_widget.dart';
 import '../utils/contrast_helper.dart';
 
 class MassFlowScreen extends StatefulWidget {
@@ -154,6 +153,67 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
       appBar: AppBar(
         title: const Text('Order of Mass'),
         actions: [
+          PopupMenuButton<String>(
+            icon: Icon(Icons.translate, color: theme.colorScheme.onSurface),
+            tooltip: 'Language',
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                enabled: false,
+                child: Text(
+                  'Mass Prayers',
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              ..._orderOfMassPreference.availableLanguages.map((lang) {
+                final displayName = _orderOfMassPreference.getLanguageDisplayName(lang);
+                return PopupMenuItem(
+                  value: lang,
+                  onTap: () => _onSecondaryLanguageChanged(lang),
+                  child: Row(
+                    children: [
+                      Icon(
+                        lang == _secondaryLanguage ? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                        color: theme.colorScheme.primary,
+                      ),
+                      const SizedBox(width: 12),
+                      Text(displayName),
+                    ],
+                  ),
+                );
+              }),
+              const PopupMenuDivider(),
+              PopupMenuItem(
+                enabled: false,
+                child: Text(
+                  'App Language',
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              ..._languageService.availableLanguages.map((lang) {
+                final displayName = _languageService.getLanguageDisplayName(lang);
+                return PopupMenuItem(
+                  value: lang,
+                  onTap: () => _onPrimaryLanguageChanged(lang),
+                  child: Row(
+                    children: [
+                      Icon(
+                        lang == _primaryLanguage ? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                        color: theme.colorScheme.primary,
+                      ),
+                      const SizedBox(width: 12),
+                      Text(displayName),
+                    ],
+                  ),
+                );
+              }),
+            ],
+          ),
           IconButton(
             icon: const Icon(Icons.calendar_today),
             onPressed: _selectDate,
@@ -228,12 +288,6 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
     return CustomScrollView(
       slivers: [
         if (_liturgicalDay != null) _buildLiturgicalHeader(theme, readableColor),
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: _buildLanguageSwitchers(theme),
-          ),
-        ),
         // Introductory Rites
         ..._getSectionsForInsertionPoint('introductory_rites'),
         // Readings Section (Liturgy of the Word)
@@ -318,59 +372,7 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
     );
   }
 
-  Widget _buildLanguageSwitchers(ThemeData theme) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'App Language',
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: ContrastHelper.getSecondaryContrastColor(theme.colorScheme.surface, theme),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  LanguageSwitcherWidget(
-                    currentLanguage: _primaryLanguage,
-                    availableLanguages: _languageService.availableLanguages,
-                    onLanguageChanged: _onPrimaryLanguageChanged,
-                    showLabels: true,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Mass Prayers',
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: ContrastHelper.getSecondaryContrastColor(theme.colorScheme.surface, theme),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  LanguageSwitcherWidget(
-                    currentLanguage: _secondaryLanguage,
-                    availableLanguages: _orderOfMassPreference.availableLanguages,
-                    onLanguageChanged: _onSecondaryLanguageChanged,
-                    showLabels: true,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
+  
   Widget _buildSection(ResolvedOrderOfMassSection section) {
     return SliverToBoxAdapter(
       child: Padding(
@@ -618,27 +620,43 @@ class _MassFlowItemCard extends StatelessWidget {
     // Return V/R markers based on role and dialogue/responsive flags
     final roleLower = role.toLowerCase();
     if (roleLower == 'priest' || roleLower == 'deacon' || roleLower == 'deacon_or_priest') {
-      return 'V';
+      return 'V.';
     }
     if (roleLower == 'all' || isResponsive) {
-      return 'R';
+      return 'R.';
     }
     // For other roles, show role name with appropriate marker
     switch (roleLower) {
       case 'lector':
-        return 'V: Lector';
+        return 'V. Lector';
       case 'cantor':
-        return 'V: Cantor';
+        return 'V. Cantor';
       case 'choir':
-        return 'R: Choir';
+        return 'R. Choir';
       default:
-        return isDialogue ? 'V: $role' : role;
+        return isDialogue ? 'V. $role' : role;
     }
   }
 
   String _getLinePrefix(ResolvedOrderOfMassItem item, int lineIndex, String line) {
     if (!item.isDialogue && !item.isResponsive) return '';
 
+    // Use structured dialogue data if available
+    if (item.dialogueStructure != null && item.dialogueStructure!.isNotEmpty) {
+      // Get the current language (fallback to English if not available)
+      final language = this.language;
+      
+      final dialogueLines = item.dialogueStructure![language];
+      if (dialogueLines != null && lineIndex < dialogueLines.length) {
+        final dialogueLine = dialogueLines[lineIndex];
+        final prefix = dialogueLine['prefix'];
+        if (prefix != null && (prefix == 'V' || prefix == 'R')) {
+          return '$prefix. ';
+        }
+      }
+    }
+
+    // Fallback to original logic for non-structured dialogues
     final role = item.role?.toLowerCase() ?? '';
     final lineLower = line.trim().toLowerCase();
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../data/services/language_preference_service.dart';
-import '../utils/contrast_helper.dart';
 
 class LanguageSwitcherWidget extends StatefulWidget {
   final String? currentLanguage;
@@ -74,6 +73,9 @@ class _LanguageSwitcherWidgetState extends State<LanguageSwitcherWidget>
                 ? Theme.of(context).colorScheme.surfaceContainer
                 : Theme.of(context).colorScheme.surfaceContainerHighest,
             borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
+            ),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -112,11 +114,10 @@ class _LanguageSwitcherWidgetState extends State<LanguageSwitcherWidget>
                             style: TextStyle(
                               color: isSelected
                                   ? Theme.of(context).colorScheme.onPrimary
-                                  : ContrastHelper.getContrastColor(
-                                      Theme.of(context).colorScheme.surfaceContainerHighest,
-                                      Theme.of(context),
-                                    ),
-                              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                                  : Theme.of(context).brightness == Brightness.light
+                                      ? Colors.black87
+                                      : Colors.white70,
+                              fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                               fontSize: 14,
                             ),
                           ),
@@ -129,10 +130,9 @@ class _LanguageSwitcherWidgetState extends State<LanguageSwitcherWidget>
                           size: 16,
                           color: isSelected
                               ? Theme.of(context).colorScheme.onPrimary
-                              : ContrastHelper.getContrastColor(
-                                  Theme.of(context).colorScheme.surfaceContainerHighest,
-                                  Theme.of(context),
-                                ),
+                              : Theme.of(context).brightness == Brightness.light
+                                  ? Colors.black87
+                                  : Colors.white70,
                         ),
                       ],
                     ),
@@ -183,6 +183,9 @@ class CompactLanguageSwitcher extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.secondaryContainer,
           borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
+          ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -190,15 +193,19 @@ class CompactLanguageSwitcher extends StatelessWidget {
             Icon(
               isLatin ? Icons.menu_book : Icons.translate_outlined,
               size: 14,
-              color: Theme.of(context).colorScheme.onSecondaryContainer,
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.black87
+                  : Colors.white,
             ),
             const SizedBox(width: 4),
             Text(
               displayName,
               style: TextStyle(
                 fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: Theme.of(context).colorScheme.onSecondaryContainer,
+                fontWeight: FontWeight.w600,
+                color: Theme.of(context).brightness == Brightness.light
+                    ? Colors.black87
+                    : Colors.white,
                 fontFamily: isLatin ? 'Canterbury' : null,
               ),
             ),
@@ -206,7 +213,9 @@ class CompactLanguageSwitcher extends StatelessWidget {
             Icon(
               Icons.keyboard_arrow_down,
               size: 14,
-              color: Theme.of(context).colorScheme.onSecondaryContainer,
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.black87
+                  : Colors.white,
             ),
           ],
         ),

@@ -18,6 +18,7 @@ class ResolvedOrderOfMassItem {
   final String insertionPoint;
   final int order;
   final Map<String, List<String>> contentByLanguage;
+  final Map<String, List<Map<String, String>>>? dialogueStructure;
   final List<String> availableLanguages;
   final bool isOptional;
   final String? type;
@@ -34,6 +35,7 @@ class ResolvedOrderOfMassItem {
     required this.insertionPoint,
     required this.order,
     required this.contentByLanguage,
+    this.dialogueStructure,
     required this.availableLanguages,
     required this.isOptional,
     this.type,
@@ -46,7 +48,51 @@ class ResolvedOrderOfMassItem {
   });
 
   List<String>? getContentForLanguage(String languageCode) {
-    return contentByLanguage[languageCode];
+    final content = contentByLanguage[languageCode];
+    if (content == null) return null;
+    return content.map(_decodeHtmlEntities).toList();
+  }
+
+  /// Decode HTML entities in text (e.g., &#230; -> æ, &#233; -> é)
+  static String _decodeHtmlEntities(String text) {
+    String decoded = text;
+
+    // Decode named HTML entities
+    decoded = decoded.replaceAll('&aelig;', 'æ');
+    decoded = decoded.replaceAll('&AElig;', 'Æ');
+    decoded = decoded.replaceAll('&oelig;', 'œ');
+    decoded = decoded.replaceAll('&OElig;', 'Œ');
+    decoded = decoded.replaceAll('&rsquo;', '\u2019');
+    decoded = decoded.replaceAll('&lsquo;', '\u2018');
+    decoded = decoded.replaceAll('&rdquo;', '\u201D');
+    decoded = decoded.replaceAll('&ldquo;', '\u201C');
+    decoded = decoded.replaceAll('&mdash;', '\u2014');
+    decoded = decoded.replaceAll('&ndash;', '\u2013');
+    decoded = decoded.replaceAll('&hellip;', '\u2026');
+    decoded = decoded.replaceAll('&nbsp;', '\u00A0');
+    decoded = decoded.replaceAll('&amp;', '&');
+    decoded = decoded.replaceAll('&lt;', '<');
+    decoded = decoded.replaceAll('&gt;', '>');
+    decoded = decoded.replaceAll('&quot;', '"');
+    decoded = decoded.replaceAll('&apos;', "'");
+
+    // Decode numeric HTML entities (e.g., &#230; &#x00E6;)
+    decoded = decoded.replaceAllMapped(
+      RegExp(r'&#x([0-9A-Fa-f]+);'),
+      (m) {
+        final codePoint = int.tryParse(m.group(1)!, radix: 16);
+        return codePoint != null ? String.fromCharCode(codePoint) : m.group(0)!;
+      },
+    );
+    decoded = decoded.replaceAllMapped(
+      RegExp(r'&#(\d+);'),
+      (m) {
+        final codePoint = int.tryParse(m.group(1)!);
+        return codePoint != null ? String.fromCharCode(codePoint) : m.group(0)!;
+      },
+    );
+
+    return decoded;
   }
 
   bool hasLanguage(String languageCode) {
@@ -227,6 +273,7 @@ class OrderOfMassService {
       insertionPoint: item.insertionPoint,
       order: item.order,
       contentByLanguage: nextContent,
+      dialogueStructure: item.dialogueStructure,
       availableLanguages: List<String>.from(item.availableLanguages),
       isOptional: item.isOptional,
       type: item.type,
@@ -365,6 +412,7 @@ class OrderOfMassService {
       insertionPoint: item.insertionPoint,
       order: item.order,
       contentByLanguage: parsedContent,
+      dialogueStructure: item.dialogueStructure,
       availableLanguages: availableLanguages,
       isOptional: item.isOptional,
       type: item.type,
@@ -395,6 +443,7 @@ class OrderOfMassService {
       insertionPoint: item.insertionPoint,
       order: item.order,
       contentByLanguage: parsedContent,
+      dialogueStructure: item.dialogueStructure,
       availableLanguages: availableLanguages,
       isOptional: item.isOptional,
       type: item.type,

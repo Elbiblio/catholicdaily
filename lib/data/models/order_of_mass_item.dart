@@ -5,6 +5,7 @@ class OrderOfMassItem {
   final int order;
   final String? prayerSlug;
   final Map<String, List<String>>? contentByLanguage;
+  final Map<String, List<Map<String, String>>>? dialogueStructure;
   final List<String> availableLanguages;
   final List<String> conditions;
   final bool isOptional;
@@ -23,6 +24,7 @@ class OrderOfMassItem {
     required this.order,
     this.prayerSlug,
     this.contentByLanguage,
+    this.dialogueStructure,
     required this.availableLanguages,
     required this.conditions,
     required this.isOptional,
@@ -47,6 +49,19 @@ class OrderOfMassItem {
       );
     }
 
+    final rawDialogueStructure = map['dialogueStructure'];
+    Map<String, List<Map<String, String>>>? parsedDialogueStructure;
+    if (rawDialogueStructure is Map) {
+      parsedDialogueStructure = rawDialogueStructure.map(
+        (key, value) => MapEntry(
+          key.toString(),
+          List<Map<String, String>>.from(
+            (value as List).map((item) => Map<String, String>.from(item as Map)),
+          ),
+        ),
+      );
+    }
+
     final parsedLanguages = map['availableLanguages'] is List
         ? List<String>.from((map['availableLanguages'] as List).map((item) => item.toString()))
         : <String>[];
@@ -62,6 +77,7 @@ class OrderOfMassItem {
       order: (map['order'] as num?)?.toInt() ?? 0,
       prayerSlug: map['prayerSlug']?.toString(),
       contentByLanguage: parsedContent,
+      dialogueStructure: parsedDialogueStructure,
       availableLanguages: parsedLanguages,
       conditions: parsedConditions,
       isOptional: map['isOptional'] == true,

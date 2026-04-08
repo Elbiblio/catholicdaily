@@ -16,6 +16,8 @@ import '../widgets/premium_browse/liturgical_summary_row.dart';
 import '../widgets/premium_browse/main_reading.dart';
 import '../widgets/premium_browse/alternatives_section.dart';
 import '../utils/contrast_helper.dart';
+import '../utils/reading_type_colors.dart';
+import '../widgets/premium_browse/daily_mass_at_a_glance_card.dart';
 import 'mass_flow_screen.dart';
 
 /// Premium Browse Screen with modern 2026 design principles
@@ -582,10 +584,28 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
             // Date navigation with premium design
             _buildDateNavigation(theme),
 
-            // Full Mass Readings Button
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: _buildFullMassReadingsButton(theme),
+            // Daily Mass at-a-glance summary card
+            DailyMassAtAGlanceCard(
+              liturgicalDay: _liturgicalDay,
+              readingGroups: _groupedReadings
+                  .map((g) => (baseType: g.baseType, mainReading: g.mainReading))
+                  .toList(),
+              onBeginMass: () {
+                HapticFeedback.mediumImpact();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MassFlowScreen(date: _selectedDate),
+                  ),
+                );
+              },
+              onReadingRowTap: (baseType, reading) async {
+                HapticFeedback.lightImpact();
+                final readingIndex = _readings.indexOf(reading);
+                if (readingIndex >= 0) {
+                  await _openReadingAtIndex(readingIndex);
+                }
+              },
             ),
 
             // Optional celebrations selector
@@ -651,106 +671,6 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
       liturgicalColor: _liturgicalDay?.colorValue,
       onPreviousDay: _previousDay,
       onNextDay: _nextDay,
-    );
-  }
-
-  Widget _buildFullMassReadingsButton(ThemeData theme) {
-    final liturgicalColor = _liturgicalDay?.colorValue ?? theme.colorScheme.primary;
-    
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () {
-            HapticFeedback.mediumImpact();
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MassFlowScreen(date: _selectedDate),
-              ),
-            );
-          },
-          borderRadius: BorderRadius.circular(16),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color.alphaBlend(
-                    liturgicalColor.withValues(alpha: 0.15),
-                    theme.colorScheme.surface,
-                  ),
-                  Color.alphaBlend(
-                    liturgicalColor.withValues(alpha: 0.25),
-                    theme.colorScheme.surface,
-                  ),
-                ],
-              ),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: liturgicalColor.withValues(alpha: 0.3),
-                width: 1.5,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: liturgicalColor.withValues(alpha: 0.1),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: liturgicalColor.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Icon(
-                        Icons.church_rounded,
-                        color: liturgicalColor,
-                        size: 24,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Complete Mass',
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w700,
-                            color: theme.colorScheme.onSurface,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          'View full Order of Mass with all prayers',
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                  size: 18,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
 
@@ -1265,22 +1185,11 @@ class _PremiumReadingGroupCardState extends State<_PremiumReadingGroupCard>
   }
   
   Color _getReadingTypeColor(String type, BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
-    switch (type.toLowerCase()) {
-      case 'gospel':
-        return isDark ? const Color(0xFFEF5350) : const Color(0xFFE53935);
-      case 'responsorial psalm':
-        return widget.liturgicalColor ??
-            (isDark ? const Color(0xFF42A5F5) : const Color(0xFF2196F3));
-      case 'first reading':
-        return isDark ? const Color(0xFFAB47BC) : const Color(0xFF9C27B0);
-      case 'second reading':
-        return isDark ? const Color(0xFF26A69A) : const Color(0xFF009688);
-      default:
-        return theme.colorScheme.onSurfaceVariant;
-    }
+    return ReadingTypeColors.forType(
+      type,
+      context,
+      liturgicalColor: widget.liturgicalColor,
+    );
   }
   
   @override

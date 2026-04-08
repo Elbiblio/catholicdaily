@@ -42,6 +42,22 @@
       "tl": [
         {"text": "Ang Panginoon ay sumainyo.", "role": "priest", "prefix": "V"},
         {"text": "At sa iyong espiritu.", "role": "people", "prefix": "R"}
+      ],
+      "it": [
+        {"text": "Il Signore sia con voi.", "role": "priest", "prefix": "V"},
+        {"text": "E con il tuo spirito.", "role": "people", "prefix": "R"}
+      ],
+      "pl": [
+        {"text": "Pan niech z wami.", "role": "priest", "prefix": "V"},
+        {"text": "I z duchem Twoim.", "role": "people", "prefix": "R"}
+      ],
+      "vi": [
+        {"text": "Chúa trên phù cùng anh em.", "role": "priest", "prefix": "V"},
+        {"text": "Và cùng Thánh Thánh anh em.", "role": "people", "prefix": "R"}
+      ],
+      "ko": [
+        {"text": "Jesu Kristo wa, hyangja nim.", "role": "priest", "prefix": "V"},
+        {"text": "Geurigo sseonghona nim.", "role": "people", "prefix": "R"}
       ]
     },
     "contentByLanguage": {
@@ -92,6 +108,20 @@
     "isOptional": true,
     "isDialogue": true,
     "alternativeGroup": "penitential_act",
+    "dialogueStructure": {
+      "en": [
+        {"text": "Have mercy on us, Lord.", "role": "priest", "prefix": "V"},
+        {"text": "For we have sinned against you.", "role": "people", "prefix": "R"},
+        {"text": "Show us, O Lord, your mercy.", "role": "priest", "prefix": "V"},
+        {"text": "And grant us your salvation.", "role": "people", "prefix": "R"}
+      ],
+      "la": [
+        {"text": "Miserére nostri, Dómine.", "role": "priest", "prefix": "V"},
+        {"text": "Quia peccávimus tibi.", "role": "people", "prefix": "R"},
+        {"text": "Osténde nobis, Dómine, misericórdiam tuam.", "role": "priest", "prefix": "V"},
+        {"text": "Et salutáre tuum da nobis.", "role": "people", "prefix": "R"}
+      ]
+    },
     "contentByLanguage": {
       "en": [
         "Have mercy on us, Lord.",
@@ -116,6 +146,24 @@
     "conditions": ["always"],
     "isOptional": true,
     "isDialogue": true,
+    "dialogueStructure": {
+      "en": [
+        {"text": "Lord, have mercy.", "role": "priest", "prefix": "V"},
+        {"text": "Lord, have mercy.", "role": "people", "prefix": "R"},
+        {"text": "Christ, have mercy.", "role": "priest", "prefix": "V"},
+        {"text": "Christ, have mercy.", "role": "people", "prefix": "R"},
+        {"text": "Lord, have mercy.", "role": "priest", "prefix": "V"},
+        {"text": "Lord, have mercy.", "role": "people", "prefix": "R"}
+      ],
+      "la": [
+        {"text": "Kýrie, eléison.", "role": "priest", "prefix": "V"},
+        {"text": "Kýrie, eléison.", "role": "people", "prefix": "R"},
+        {"text": "Christe, eléison.", "role": "priest", "prefix": "V"},
+        {"text": "Christe, eléison.", "role": "people", "prefix": "R"},
+        {"text": "Kýrie, eléison.", "role": "priest", "prefix": "V"},
+        {"text": "Kýrie, eléison.", "role": "people", "prefix": "R"}
+      ]
+    },
     "contentByLanguage": {
       "en": [
         "Lord, have mercy.",
@@ -325,6 +373,38 @@
         {"text": "Habémus ad Dóminum.", "role": "people", "prefix": "R"},
         {"text": "Grátias agámus Dómino Deo nostro.", "role": "priest", "prefix": "V"},
         {"text": "Dignum et iustum est.", "role": "people", "prefix": "R"}
+      ],
+      "it": [
+        {"text": "Il Signore sia con voi.", "role": "priest", "prefix": "V"},
+        {"text": "E con il tuo spirito.", "role": "people", "prefix": "R"},
+        {"text": "In alto i cuori.", "role": "priest", "prefix": "V"},
+        {"text": "Sono rivolti al Signore.", "role": "people", "prefix": "R"},
+        {"text": "Rendiamo grazie al Signore nostro Dio.", "role": "priest", "prefix": "V"},
+        {"text": "È cosa giusta e buona.", "role": "people", "prefix": "R"}
+      ],
+      "pl": [
+        {"text": "Pan niech z wami.", "role": "priest", "prefix": "V"},
+        {"text": "I z duchem Twoim.", "role": "people", "prefix": "R"},
+        {"text": "Wzniecie serca.", "role": "priest", "prefix": "V"},
+        {"text": "Wznieserzyli je do Pana.", "role": "people", "prefix": "R"},
+        {"text": "Dzi?kujmy Panu Bogu naszemu.", "role": "priest", "prefix": "V"},
+        {"text": "Warte i sprawiedliwe.", "role": "people", "prefix": "R"}
+      ],
+      "vi": [
+        {"text": "Chúa trên phù cùng anh em.", "role": "priest", "prefix": "V"},
+        {"text": "Và cùng Thánh Thánh anh em.", "role": "people", "prefix": "R"},
+        {"text": "Hãy nâng tâm trí lên.", "role": "priest", "prefix": "V"},
+        {"text": "Chúng con nâng lên cùng Chúa.", "role": "people", "prefix": "R"},
+        {"text": "Chúng ta tôn kính Chúa.", "role": "priest", "prefix": "V"},
+        {"text": "Thích ?úng và công chính.", "role": "people", "prefix": "R"}
+      ],
+      "ko": [
+        {"text": "Jesu Kristo wa, hyangja nim.", "role": "priest", "prefix": "V"},
+        {"text": "Geurigo sseonghona nim.", "role": "people", "prefix": "R"},
+        {"text": "Maeum-eul deulgi.", "role": "priest", "prefix": "V"},
+        {"text": "Hananim-ege deulgo.", "role": "people", "prefix": "R"},
+        {"text": "Hananim-ege gamsahanda.", "role": "priest", "prefix": "V"},
+        {"text": "Gwa-uihago jeonguihanda.", "role": "people", "prefix": "R"}
       ]
     },
     "contentByLanguage": {
@@ -386,6 +466,22 @@
       "la": [
         {"text": "Mystérium fídei.", "role": "priest", "prefix": "V"},
         {"text": "Annuntiamus mortem tuam, Dómine, confitémur resurrectiónem tuam, donec venias.", "role": "people", "prefix": "R"}
+      ],
+      "it": [
+        {"text": "Mistero della fede.", "role": "priest", "prefix": "V"},
+        {"text": "Annunciamo la tua morte, Signore, e professiamo la tua risurrezione.", "role": "people", "prefix": "R"}
+      ],
+      "pl": [
+        {"text": "Tajemnica wiary.", "role": "priest", "prefix": "V"},
+        {"text": "G?osimy Twoj? ?mier?, Panie, i wyznajemy Twoje zmartwychwstanie.", "role": "people", "prefix": "R"}
+      ],
+      "vi": [
+        {"text": "Bí ?n c?a tin lành.", "role": "priest", "prefix": "V"},
+        {"text": "Chúng tôi công b? cái ?c? c?a Chúa.", "role": "people", "prefix": "R"}
+      ],
+      "ko": [
+        {"text": "Sin-ui bimil.", "role": "priest", "prefix": "V"},
+        {"text": "Jesu-ui jug-eul al-ligo.", "role": "people", "prefix": "R"}
       ]
     },
     "contentByLanguage": {
@@ -415,6 +511,22 @@
       ],
       "la": [
         {"text": "Per ipsum, et cum ipso, et in ipso, Dómine, Deus Pater omnípotens, in unitáte Spíritus Sancti, omnis honor et glória tua, per ómnia sæcula sæculórum.", "role": "priest", "prefix": "V"},
+        {"text": "Amen.", "role": "people", "prefix": "R"}
+      ],
+      "it": [
+        {"text": "Per lui, con lui e in lui, Dio Padre onnipotente, nell'unità dello Spirito Santo, ogni gloria e onore.", "role": "priest", "prefix": "V"},
+        {"text": "Amen.", "role": "people", "prefix": "R"}
+      ],
+      "pl": [
+        {"text": "Przez Niego, z Nim i w Nim, Bo?e Ojciec wszechmog?cy.", "role": "priest", "prefix": "V"},
+        {"text": "Amen.", "role": "people", "prefix": "R"}
+      ],
+      "vi": [
+        {"text": "Nguyen Ngai, cung Ngai, trong Ngai.", "role": "priest", "prefix": "V"},
+        {"text": "Amen.", "role": "people", "prefix": "R"}
+      ],
+      "ko": [
+        {"text": "Geu-eul tonghae, geu-wa hamkkeh, geu-an-eseo.", "role": "priest", "prefix": "V"},
         {"text": "Amen.", "role": "people", "prefix": "R"}
       ]
     },
@@ -448,6 +560,16 @@
     "conditions": ["always"],
     "isOptional": false,
     "isDialogue": true,
+    "dialogueStructure": {
+      "en": [
+        {"text": "Deliver us, Lord, we pray, from every evil, graciously grant peace in our days, that, by the help of your mercy, we may be always free from sin and safe from all distress, as we await the blessed hope and the coming of our Savior, Jesus Christ.", "role": "priest", "prefix": "V"},
+        {"text": "For the kingdom, the power and the glory are yours now and for ever.", "role": "people", "prefix": "R"}
+      ],
+      "la": [
+        {"text": "Líbera nos, quæsumus, Dómine, ab ómnibus malis, da propítius pacem in diébus nostris, ut, ope misericórdiæ tuæ adiúti, et a peccáto simus semper líberi et ab omni perturbatióne secúri, exspectántes beátam spem et advéntum Salvatóris nostri Iesu Christi.", "role": "priest", "prefix": "V"},
+        {"text": "Tuum est regnum, et potéstas, et glória in sæcula.", "role": "people", "prefix": "R"}
+      ]
+    },
     "contentByLanguage": {
       "en": [
         "Deliver us, Lord, we pray, from every evil, graciously grant peace in our days, that, by the help of your mercy, we may be always free from sin and safe from all distress, as we await the blessed hope and the coming of our Savior, Jesus Christ.",
@@ -468,6 +590,18 @@
     "conditions": ["always"],
     "isOptional": false,
     "isDialogue": true,
+    "dialogueStructure": {
+      "en": [
+        {"text": "The Peace of the Lord be with you always.", "role": "priest", "prefix": "V"},
+        {"text": "And with your spirit.", "role": "people", "prefix": "R"},
+        {"text": "Let us offer each other the sign of peace.", "role": "priest", "prefix": "V"}
+      ],
+      "la": [
+        {"text": "Pax Dómini sit semper vobíscum.", "role": "priest", "prefix": "V"},
+        {"text": "Et cum spíritu tuo.", "role": "people", "prefix": "R"},
+        {"text": "Offérte vobis pacem.", "role": "priest", "prefix": "V"}
+      ]
+    },
     "contentByLanguage": {
       "en": [
         "The Peace of the Lord be with you always.",
@@ -539,6 +673,22 @@
       "la": [
         {"text": "Ecce Agnus Dei, ecce qui tollit peccáta mundi.", "role": "priest", "prefix": "V"},
         {"text": "Dómine, non sum dignus ut intres sub tectum meum, sed tantum dic verbo et sanábitur ánima mea.", "role": "people", "prefix": "R"}
+      ],
+      "it": [
+        {"text": "Ecco l'Agnello di Dio, ecco colui che toglie i peccati del mondo.", "role": "priest", "prefix": "V"},
+        {"text": "Signore, non sono degno che tu entri sotto il mio tetto, ma di' soltanto una parola.", "role": "people", "prefix": "R"}
+      ],
+      "pl": [
+        {"text": "Oto Baranek Bo?y, który gniezie grzechy ?wiata.", "role": "priest", "prefix": "V"},
+        {"text": "Panie, nie jestem godzien.", "role": "people", "prefix": "R"}
+      ],
+      "vi": [
+        {"text": "Này Chiên Thiên Chúa, ?ng xóa t?t c? t?t lõi.", "role": "priest", "prefix": "V"},
+        {"text": "Là Chúa, tôi không xúng ?áng.", "role": "people", "prefix": "R"}
+      ],
+      "ko": [
+        {"text": "Hana-nim-ui yang-eul bolra.", "role": "priest", "prefix": "V"},
+        {"text": "Jesu-nim, je jeog-eul.", "role": "people", "prefix": "R"}
       ]
     },
     "contentByLanguage": {
@@ -587,6 +737,32 @@
     "conditions": ["always"],
     "isOptional": false,
     "isDialogue": true,
+    "dialogueStructure": {
+      "en": [
+        {"text": "The Lord be with you.", "role": "priest", "prefix": "V"},
+        {"text": "And with your spirit.", "role": "people", "prefix": "R"}
+      ],
+      "la": [
+        {"text": "Dóminus vobíscum.", "role": "priest", "prefix": "V"},
+        {"text": "Et cum spíritu tuo.", "role": "people", "prefix": "R"}
+      ],
+      "it": [
+        {"text": "Il Signore sia con voi.", "role": "priest", "prefix": "V"},
+        {"text": "E con il tuo spirito.", "role": "people", "prefix": "R"}
+      ],
+      "pl": [
+        {"text": "Pan niech z wami.", "role": "priest", "prefix": "V"},
+        {"text": "I z duchem Twoim.", "role": "people", "prefix": "R"}
+      ],
+      "vi": [
+        {"text": "Chúa trên phù cùng anh em.", "role": "priest", "prefix": "V"},
+        {"text": "Và cùng Thánh Thánh anh em.", "role": "people", "prefix": "R"}
+      ],
+      "ko": [
+        {"text": "Jesu Kristo wa, hyangja nim.", "role": "priest", "prefix": "V"},
+        {"text": "Geurigo sseonghona nim.", "role": "people", "prefix": "R"}
+      ]
+    },
     "contentByLanguage": {
       "en": [
         "The Lord be with you.",
@@ -607,6 +783,48 @@
     "conditions": ["always"],
     "isOptional": false,
     "isDialogue": true,
+    "dialogueStructure": {
+      "en": [
+        {"text": "Go forth, the Mass is ended.", "role": "priest", "prefix": "V"},
+        {"text": "Thanks be to God.", "role": "people", "prefix": "R"}
+      ],
+      "la": [
+        {"text": "Ite, missa est.", "role": "priest", "prefix": "V"},
+        {"text": "Deo gratias.", "role": "people", "prefix": "R"}
+      ],
+      "es": [
+        {"text": "Podéis ir en paz, la misa ha terminado.", "role": "priest", "prefix": "V"},
+        {"text": "Demos gracias a Dios.", "role": "people", "prefix": "R"}
+      ],
+      "pt": [
+        {"text": "Ide em paz, a missa terminou.", "role": "priest", "prefix": "V"},
+        {"text": "Graças a Deus.", "role": "people", "prefix": "R"}
+      ],
+      "fr": [
+        {"text": "Allez en paix, la messe est terminée.", "role": "priest", "prefix": "V"},
+        {"text": "Rendons grâce à Dieu.", "role": "people", "prefix": "R"}
+      ],
+      "tl": [
+        {"text": "Punta na sa kapayapaan, ang misa ay natapos na.", "role": "priest", "prefix": "V"},
+        {"text": "Salamat sa Diyos.", "role": "people", "prefix": "R"}
+      ],
+      "it": [
+        {"text": "Andate in pace, la Messa è finita.", "role": "priest", "prefix": "V"},
+        {"text": "Rendiamo grazie a Dio.", "role": "people", "prefix": "R"}
+      ],
+      "pl": [
+        {"text": "Id?ciecie w pokoju, Msza sko?czona.", "role": "priest", "prefix": "V"},
+        {"text": "Dzi?kujemy Bogu.", "role": "people", "prefix": "R"}
+      ],
+      "vi": [
+        {"text": "Hãy ra ?i bình an, Thánh L? ?ã k?t thúc.", "role": "priest", "prefix": "V"},
+        {"text": "T?n Chúa.", "role": "people", "prefix": "R"}
+      ],
+      "ko": [
+        {"text": "Pyeonghwa-e gaseo, misa-ga gyeollyeom.", "role": "priest", "prefix": "V"},
+        {"text": "Hananim-e gamsahanda.", "role": "people", "prefix": "R"}
+      ]
+    },
     "contentByLanguage": {
       "en": [
         "Go forth, the Mass is ended.",
