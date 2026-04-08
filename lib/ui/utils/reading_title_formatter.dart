@@ -15,6 +15,10 @@ class ReadingTitleFormatter {
       return positionLabel.contains('(alternative)') ? 'Alleluia Psalm (Alternative)' : 'Alleluia Psalm';
     }
 
+    if (positionLabel == 'gospel acclamation') {
+      return 'Gospel Acclamation';
+    }
+
     // Only check for psalm if position explicitly indicates it's a psalm
     if (positionLabel == 'responsorial psalm' || positionLabel == 'responsorial psalm (alternative)') {
       return positionLabel.contains('(alternative)') ? 'Responsorial Psalm (Alternative)' : 'Responsorial Psalm';

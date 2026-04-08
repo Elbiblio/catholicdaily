@@ -5,7 +5,6 @@ import '../../data/services/improved_liturgical_calendar_service.dart';
 import '../../data/services/order_of_mass_service.dart';
 import '../../data/services/order_of_mass_preference_service.dart';
 import '../../data/services/language_preference_service.dart';
-import '../../data/services/prayer_of_faithful_loader_service.dart';
 import '../../data/services/readings_service.dart';
 import '../../data/services/readings_backend_io.dart';
 import '../../data/services/reading_flow_service.dart';
@@ -29,8 +28,7 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
   final OrderOfMassPreferenceService _orderOfMassPreference = OrderOfMassPreferenceService();
   final LanguagePreferenceService _languageService = LanguagePreferenceService();
   final ImprovedLiturgicalCalendarService _calendarService = ImprovedLiturgicalCalendarService.instance;
-  final PrayerOfFaithfulLoaderService _prayerLoader = PrayerOfFaithfulLoaderService();
-  final ReadingsBackendIo _readingsBackend = ReadingsBackendIo();
+    final ReadingsBackendIo _readingsBackend = ReadingsBackendIo();
 
   late DateTime _selectedDate;
   String _primaryLanguage = 'en';
@@ -105,14 +103,14 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
     }
   }
 
-  void _onPrimaryLanguageChanged(String language) async {
+  Future<void> _onPrimaryLanguageChanged(String language) async {
     await _languageService.setPreferredLanguage(language);
     if (mounted) {
       setState(() => _primaryLanguage = language);
     }
   }
 
-  void _onSecondaryLanguageChanged(String language) async {
+  Future<void> _onSecondaryLanguageChanged(String language) async {
     await _orderOfMassPreference.setPreferredLanguage(language);
     if (mounted) {
       setState(() => _secondaryLanguage = language);
@@ -120,29 +118,6 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
     await _loadMassForDate(_selectedDate);
   }
 
-  Future<void> _populatePrayerDatabase() async {
-    setState(() => _isLoading = true);
-    
-    try {
-      await _prayerLoader.populateDatabase(
-        year: _selectedDate.year,
-        languageCode: _secondaryLanguage,
-      );
-      
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Prayer database populated successfully')),
-        );
-        await _loadMassForDate(_selectedDate);
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error populating database: $e')),
-        );
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -219,25 +194,6 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
             onPressed: _selectDate,
             tooltip: 'Select Date',
           ),
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              if (value == 'download') {
-                _populatePrayerDatabase();
-              }
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: 'download',
-                child: Row(
-                  children: [
-                    Icon(Icons.download),
-                    SizedBox(width: 12),
-                    Text('Populate Prayer Database'),
-                  ],
-                ),
-              ),
-            ],
-          ),
         ],
       ),
       body: ParchmentBackground(
@@ -290,10 +246,14 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
         if (_liturgicalDay != null) _buildLiturgicalHeader(theme, readableColor),
         // Introductory Rites
         ..._getSectionsForInsertionPoint('introductory_rites'),
-        // Readings Section (Liturgy of the Word)
+        // Liturgy of the Word
+        ..._getSectionsForInsertionPoint('before_first_reading'),
         if (_readings != null && _readings!.isNotEmpty)
           _buildReadingsSection(theme, readableColor),
-        // Continue with remaining mass sections
+        ..._getSectionsForInsertionPoint('between_readings'),
+        ..._getSectionsForInsertionPoint('before_gospel'),
+        ..._getSectionsForInsertionPoint('after_gospel'),
+        // Liturgy of the Eucharist
         ..._getSectionsForInsertionPoint('offertory'),
         ..._getSectionsForInsertionPoint('preface'),
         ..._getSectionsForInsertionPoint('sanctus'),
@@ -842,6 +802,18 @@ class _ReadingCardState extends State<_ReadingCard> {
 
   String get _readingLabel {
     final position = widget.reading.position?.toLowerCase() ?? '';
+    
+    // Handle Gospel Acclamation - this appears before the Gospel
+    if (widget.reading.gospelAcclamation != null && 
+        widget.reading.gospelAcclamation!.trim().isNotEmpty) {
+      // Check if this reading has a gospel acclamation but isn't the gospel itself
+      final isGospel = position.contains('gospel');
+      if (!isGospel) {
+        // This is the Gospel Acclamation as a separate item
+        return 'Gospel Acclamation';
+      }
+    }
+    
     if (position.contains('gospel')) return 'Gospel';
     if (position.contains('first')) return 'First Reading';
     if (position.contains('second')) return 'Second Reading';

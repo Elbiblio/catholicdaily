@@ -21,6 +21,7 @@ class HymnDetailScreen extends StatefulWidget {
 class _HymnDetailScreenState extends State<HymnDetailScreen> {
   final HymnFavoritesService _favoritesService = HymnFavoritesService.instance;
   final HymnMidiService _midiService = HymnMidiService.instance;
+  StreamSubscription<HymnMidiState>? _midiSubscription;
 
   bool _isFavorite = false;
   double _fontSize = 20.0;
@@ -30,11 +31,14 @@ class _HymnDetailScreenState extends State<HymnDetailScreen> {
     super.initState();
     _loadFavoriteStatus();
     _loadUserPreferences();
+    _midiSubscription = _midiService.stateStream.listen((_) {
+      if (mounted) setState(() {});
+    });
   }
 
   @override
   void dispose() {
-    _midiService.dispose();
+    _midiSubscription?.cancel();
     super.dispose();
   }
 

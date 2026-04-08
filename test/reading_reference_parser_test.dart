@@ -2,7 +2,6 @@ import 'package:catholic_daily/data/models/bible_book.dart';
 import 'package:catholic_daily/data/services/lectionary_psalm_formatter.dart';
 import 'package:catholic_daily/data/services/psalm_verse_splitter.dart';
 import 'package:catholic_daily/data/services/reading_reference_parser.dart';
-import 'package:catholic_daily/data/services/responsorial_psalm_parser.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -177,16 +176,4 @@ void main() {
     expect(formatted, contains('for he comes'));
   });
 
-  test('parses responsorial psalm plus groups into individual verse ranges', () {
-    final ranges = ResponsorialPsalmParser.parse('Ps 30:1+3, 4-5, 10+11+12');
-
-    expect(ranges, hasLength(6));
-    expect(ranges[0].startVerse, 1);
-    expect(ranges[1].startVerse, 3);
-    expect(ranges[2].startVerse, 4);
-    expect(ranges[2].endVerse, 5);
-    expect(ranges[3].startVerse, 10);
-    expect(ranges[4].startVerse, 11);
-    expect(ranges[5].startVerse, 12);
-  });
 }

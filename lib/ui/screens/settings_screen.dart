@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../data/models/bible_version.dart';
 import '../../data/services/theme_preferences.dart';
+import '../../data/services/bible_version_preference.dart';
 import '../../data/services/offline_bible_service.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -33,9 +34,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   String _selectedTheme = 'system';
   String _selectedThemeStyle = 'standard';
   String _appVersion = '1.0.0';
-  final _bibleService = OfflineBibleService();
-  List<BibleVersion> _availableVersions = [];
-  bool _isLoadingVersions = true;
+  BibleVersionType? _currentBibleVersion;
   static const _androidPackageName = 'com.elbiblio.catholicdaily';
   static const _iosAppStoreId = '';
   static const _iosSearchTerm = 'Catholic Daily Missal';
@@ -46,7 +45,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _selectedTheme = _themeModeToValue(widget.themeMode);
     _selectedThemeStyle = _themeStyleToValue(widget.themeStyle);
     _loadAppInfo();
-    _loadBibleVersions();
+    _loadCurrentBibleVersion();
+  }
+
+  Future<void> _loadCurrentBibleVersion() async {
+    final pref = await BibleVersionPreference.getInstance();
+    if (!mounted) return;
+    setState(() => _currentBibleVersion = pref.currentVersion);
   }
 
   @override
@@ -70,17 +75,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
-  Future<void> _loadBibleVersions() async {
-    setState(() => _isLoadingVersions = true);
-    final versions = await _bibleService.fetchAvailableVersions();
-    if (!mounted) {
-      return;
-    }
-    setState(() {
-      _availableVersions = versions;
-      _isLoadingVersions = false;
-    });
-  }
+
 
   Future<void> _requestReview() async {
     final InAppReview inAppReview = InAppReview.instance;
@@ -156,67 +151,45 @@ class _SettingsScreenState extends State<SettingsScreen> {
     widget.onThemeStyleChanged(style);
   }
 
-  void _showBibleVersionsDialog(BuildContext context) {
+  void _showBibleVersionSelector(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setState) {
-          return AlertDialog(
-            title: const Text('Bible Translations'),
-            content: SizedBox(
-              width: double.maxFinite,
-              child: _isLoadingVersions
-                  ? const Center(child: CircularProgressIndicator())
-                  : ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: _availableVersions.length,
-                      itemBuilder: (context, index) {
-                        final version = _availableVersions[index];
-                        return ListTile(
-                          title: Text(version.abbreviation),
-                          subtitle: Text(version.name),
-                          trailing: version.isDownloaded
-                              ? const Icon(Icons.check_circle, color: Colors.green)
-                              : IconButton(
-                                  icon: const Icon(Icons.download),
-                                  onPressed: () async {
-                                    // Handle download
-                                    try {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(content: Text('Downloading ${version.abbreviation}...')),
-                                      );
-                                      await _bibleService.downloadVersion(version, (progress) {
-                                        // Could show progress here
-                                      });
-                                      await _loadBibleVersions();
-                                      setState(() {});
-                                      if (context.mounted) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(content: Text('Downloaded ${version.abbreviation} successfully')),
-                                        );
-                                      }
-                                    } catch (e) {
-                                      if (context.mounted) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(content: Text('Failed to download: $e')),
-                                        );
-                                      }
-                                    }
-                                  },
-                                ),
-                        );
-                      },
-                    ),
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Select Bible Translation'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: BibleVersionType.values.map((version) {
+              final isSelected = _currentBibleVersion == version;
+              return ListTile(
+                leading: Icon(
+                  isSelected ? Icons.check_circle : Icons.circle_outlined,
+                  color: isSelected ? Colors.green : null,
+                ),
+                title: Text(
+                  version.abbreviation,
+                  style: TextStyle(
+                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
+                  ),
+                ),
+                subtitle: Text(version.fullName),
+                onTap: () async {
+                  final pref = await BibleVersionPreference.getInstance();
+                  await pref.setVersion(version);
+                  setState(() => _currentBibleVersion = version);
+                  if (context.mounted) Navigator.pop(context);
+                },
+              );
+            }).toList(),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Close'),
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Close'),
-              ),
-            ],
-          );
-        },
-      ),
+          ],
+        );
+      },
     );
   }
 
@@ -339,16 +312,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 _SettingsTile(
                   icon: Icons.menu_book,
                   title: 'Current Translation',
-                  subtitle: widget.versions.isNotEmpty
-                      ? widget.versions.first.name
-                      : 'RSVCE',
-                  onTap: () => _showBibleVersionsDialog(context),
+                  subtitle: _currentBibleVersion?.fullName ?? 'RSVCE',
+                  onTap: () => _showBibleVersionSelector(context),
                 ),
                 const Divider(height: 1),
                 _SettingsTile(
                   icon: Icons.info_outline,
-                  title: 'About RSVCE',
-                  subtitle: 'Revised Standard Version Catholic Edition',
+                  title: 'About ${_currentBibleVersion?.abbreviation ?? 'RSVCE'}',
+                  subtitle: _currentBibleVersion?.fullName ??
+                      'Revised Standard Version Catholic Edition',
                   onTap: () => _showRsvceInfo(context),
                 ),
               ],
@@ -438,9 +410,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 const Divider(height: 1),
                 _SettingsTile(
                   icon: Icons.storage,
-                  title: 'Data',
-                  subtitle: 'Offline Bible included',
-                  onTap: null,
+                  title: 'Data & Downloads',
+                  subtitle: 'Manage Bible translations',
+                  onTap: () => _showDataManagementDialog(context),
                 ),
               ],
             ),
@@ -457,6 +429,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  void _showDataManagementDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => _DataManagementDialog(),
     );
   }
 
@@ -701,6 +680,163 @@ class _SectionHeader extends StatelessWidget {
           letterSpacing: 1,
           color: colorScheme.onSurfaceVariant,
         ),
+      ),
+    );
+  }
+}
+
+class _DataManagementDialog extends StatefulWidget {
+  @override
+  State<_DataManagementDialog> createState() => _DataManagementDialogState();
+}
+
+class _DataManagementDialogState extends State<_DataManagementDialog> {
+  final _service = OfflineBibleService();
+  List<BibleVersion> _versions = [];
+  bool _isLoading = true;
+  final Map<String, double> _downloadProgress = {};
+  final Map<String, bool> _downloading = {};
+
+  // Built-in versions always available offline
+  static const _builtInIds = {'rsvce', 'nabre'};
+
+  @override
+  void initState() {
+    super.initState();
+    _loadVersions();
+  }
+
+  Future<void> _loadVersions() async {
+    try {
+      final versions = await _service.fetchAvailableVersions();
+      if (mounted) setState(() { _versions = versions; _isLoading = false; });
+    } catch (_) {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _download(BibleVersion version) async {
+    setState(() { _downloading[version.id] = true; _downloadProgress[version.id] = 0; });
+    try {
+      await _service.downloadVersion(version, (progress) {
+        if (mounted) setState(() => _downloadProgress[version.id] = progress);
+      });
+      if (mounted) {
+        setState(() {
+          _downloading[version.id] = false;
+          final idx = _versions.indexWhere((v) => v.id == version.id);
+          if (idx >= 0) _versions[idx] = BibleVersion(
+            id: version.id, name: version.name, abbreviation: version.abbreviation,
+            isDownloaded: true, size: version.size, downloadUrl: version.downloadUrl,
+          );
+        });
+      }
+    } catch (_) {
+      if (mounted) setState(() => _downloading[version.id] = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Bible Translations'),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Included offline',
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+                  ),
+                  const SizedBox(height: 8),
+                  ..._versions.where((v) => _builtInIds.contains(v.id)).map((v) => _VersionTile(
+                    version: v, isBuiltIn: true,
+                    isDownloading: false, progress: 0,
+                    onDownload: null,
+                  )),
+                  if (_versions.any((v) => !_builtInIds.contains(v.id))) ...[
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Additional translations',
+                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+                    ),
+                    const SizedBox(height: 8),
+                    ..._versions.where((v) => !_builtInIds.contains(v.id)).map((v) => _VersionTile(
+                      version: v, isBuiltIn: false,
+                      isDownloading: _downloading[v.id] ?? false,
+                      progress: _downloadProgress[v.id] ?? 0,
+                      onDownload: (v.isDownloaded || (_downloading[v.id] ?? false)) ? null : () => _download(v),
+                    )),
+                  ],
+                  if (_versions.isEmpty)
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      child: Text('No additional translations available.'),
+                    ),
+                ],
+              ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Close'),
+        ),
+      ],
+    );
+  }
+}
+
+class _VersionTile extends StatelessWidget {
+  final BibleVersion version;
+  final bool isBuiltIn;
+  final bool isDownloading;
+  final double progress;
+  final VoidCallback? onDownload;
+
+  const _VersionTile({
+    required this.version,
+    required this.isBuiltIn,
+    required this.isDownloading,
+    required this.progress,
+    required this.onDownload,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(version.abbreviation, style: const TextStyle(fontWeight: FontWeight.w600)),
+                Text(version.name, style: TextStyle(fontSize: 12, color: colorScheme.onSurfaceVariant)),
+                if (isDownloading) ...[
+                  const SizedBox(height: 4),
+                  LinearProgressIndicator(value: progress > 0 ? progress : null),
+                ],
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          if (isBuiltIn || version.isDownloaded)
+            Icon(Icons.check_circle, color: Colors.green.shade600, size: 20)
+          else if (isDownloading)
+            const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+          else
+            IconButton(
+              icon: const Icon(Icons.download_outlined),
+              onPressed: onDownload,
+              tooltip: 'Download',
+            ),
+        ],
       ),
     );
   }

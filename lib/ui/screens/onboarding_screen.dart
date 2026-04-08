@@ -37,7 +37,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       title: 'Welcome to\nCatholic Daily',
       subtitle: 'Your faithful companion for the liturgical life',
       description:
-          'Mass readings, prayers, and Scripture — beautifully presented for daily devotion.',
+          'Mass readings, prayers, and Scripture — beautifully presented for daily devotion.\n\nA distraction free digital missal that does not expire.',
       accentIcon: Icons.auto_awesome,
     ),
     _OnboardingPage(
@@ -45,7 +45,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       title: 'Liturgical Calendar',
       subtitle: 'Every day through 2038',
       description:
-          'Follow the Church\'s liturgical year with complete daily readings, feast days, liturgical colors, and seasonal context — all calculated and ready offline.',
+          'Follow the Church\'s liturgical year with complete daily readings, feast days, liturgical colors, and seasonal context — all available and ready offline.',
       accentIcon: Icons.event_available,
     ),
     _OnboardingPage(

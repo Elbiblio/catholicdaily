@@ -18,6 +18,8 @@ import '../widgets/premium_browse/alternatives_section.dart';
 import '../utils/contrast_helper.dart';
 import '../utils/reading_type_colors.dart';
 import '../widgets/premium_browse/daily_mass_at_a_glance_card.dart';
+import '../widgets/premium_browse/todays_saint_card.dart';
+import '../widgets/liturgical_calendar_view.dart';
 import 'mass_flow_screen.dart';
 
 /// Premium Browse Screen with modern 2026 design principles
@@ -197,39 +199,49 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
     );
   }
 
-  void _showDatePicker() async {
+  void _showDatePicker() {
     HapticFeedback.lightImpact();
-    final DateTime? picked = await showDatePicker(
+    showModalBottomSheet(
       context: context,
-      initialDate: _selectedDate,
-      firstDate: DateTime(2020, 1, 1),
-      lastDate: DateTime(2030, 12, 31),
-      builder: (context, child) {
-        final theme = Theme.of(context);
-        return Theme(
-          data: theme.copyWith(
-            colorScheme: theme.colorScheme.copyWith(
-              primary: theme.colorScheme.primary,
-              onPrimary: theme.colorScheme.onPrimary,
-              surface: theme.colorScheme.surface,
-              onSurface: theme.colorScheme.onSurface,
-            ),
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                foregroundColor: theme.colorScheme.primary,
-              ),
+      isScrollControlled: true,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8, bottom: 8),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Drag handle
+                Container(
+                  width: 36,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                LiturgicalCalendarView(
+                  selectedDate: _selectedDate,
+                  onDateSelected: (date) {
+                    Navigator.pop(context);
+                    if (date != _selectedDate) {
+                      HapticFeedback.mediumImpact();
+                      setState(() => _selectedDate = date);
+                      _loadReadings();
+                    }
+                  },
+                ),
+              ],
             ),
           ),
-          child: child!,
         );
       },
     );
-    
-    if (picked != null && picked != _selectedDate) {
-      HapticFeedback.mediumImpact();
-      setState(() => _selectedDate = picked);
-      _loadReadings();
-    }
   }
 
   @override
@@ -608,6 +620,14 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
               },
             ),
 
+            // Today's Saint card
+            if (_optionalCelebrations.isNotEmpty)
+              TodaysSaintCard(
+                celebrations: _optionalCelebrations,
+                liturgicalDay: _liturgicalDay,
+                isSuppressed: _celebrationsSuppressed,
+              ),
+
             // Optional celebrations selector
             if (_optionalCelebrations.isNotEmpty)
               Padding(
@@ -671,6 +691,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
       liturgicalColor: _liturgicalDay?.colorValue,
       onPreviousDay: _previousDay,
       onNextDay: _nextDay,
+      onDateTap: _showDatePicker,
     );
   }
 
@@ -901,8 +922,9 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
       case 'first reading': return 1;
       case 'responsorial psalm': return 2;
       case 'second reading': return 3;
-      case 'gospel': return 4;
-      case 'gospel at procession': return 5;
+      case 'gospel acclamation': return 4;
+      case 'gospel': return 5;
+      case 'gospel at procession': return 6;
       default: return 999;
     }
   }

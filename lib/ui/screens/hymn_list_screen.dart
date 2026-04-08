@@ -28,6 +28,7 @@ class _HymnListScreenState extends State<HymnListScreen> with SingleTickerProvid
   final ReadingsBackendIo _readingsBackend = ReadingsBackendIo();
   final TextEditingController _searchController = TextEditingController();
   late TabController _tabController;
+  int _currentTabIndex = 0;
 
   List<Hymn> _hymns = [];
   List<HymnCategory> _categories = [];
@@ -41,6 +42,11 @@ class _HymnListScreenState extends State<HymnListScreen> with SingleTickerProvid
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    _tabController.addListener(() {
+      if (_tabController.index != _currentTabIndex) {
+        setState(() => _currentTabIndex = _tabController.index);
+      }
+    });
     _selectedCategory = widget.initialCategory;
     if (widget.initialQuery != null) {
       _searchController.text = widget.initialQuery!;
@@ -141,31 +147,45 @@ class _HymnListScreenState extends State<HymnListScreen> with SingleTickerProvid
       ),
       body: Column(
         children: [
-          // Search bar - always visible above tabs
-          Container(
-            padding: const EdgeInsets.all(16),
-            color: Theme.of(context).colorScheme.surface,
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: 'Search hymns...',
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: _searchController.text.isNotEmpty
-                    ? IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: () {
-                          _searchController.clear();
-                          _onSearchChanged('');
-                        },
-                      )
-                    : null,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+          // Show subtitle on Today tab, search bar on others
+          if (_currentTabIndex == 0)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              color: Theme.of(context).colorScheme.surface,
+              child: Text(
+                'Recommended hymns for today\'s readings',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontStyle: FontStyle.italic,
                 ),
               ),
-              onChanged: _onSearchChanged,
+            )
+          else
+            Container(
+              padding: const EdgeInsets.all(16),
+              color: Theme.of(context).colorScheme.surface,
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: 'Search hymns...',
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: _searchController.text.isNotEmpty
+                      ? IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () {
+                            _searchController.clear();
+                            _onSearchChanged('');
+                          },
+                        )
+                      : null,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                onChanged: _onSearchChanged,
+              ),
             ),
-          ),
           // Tab content
           Expanded(
             child: _isLoading

@@ -28,10 +28,28 @@ class ReadingDetailScreen extends StatelessWidget {
     final hasPsalmResponse = reading.psalmResponse != null && reading.psalmResponse!.trim().isNotEmpty;
     final hasGospelAcclamation = reading.gospelAcclamation != null && reading.gospelAcclamation!.trim().isNotEmpty;
     final dateStr = DateFormat('EEEE, MMMM d, y').format(date);
-    final heading = ReadingTitleFormatter.build(
-      reference: reading.reading,
-      position: reading.position,
-    );
+    
+    String heading;
+    // Handle Gospel Acclamation - this appears before the Gospel
+    if (hasGospelAcclamation) {
+      // Check if this reading has a gospel acclamation but isn't the gospel itself
+      final position = reading.position?.toLowerCase() ?? '';
+      final isGospel = position.contains('gospel');
+      if (!isGospel) {
+        // This is the Gospel Acclamation as a separate item
+        heading = 'Gospel Acclamation';
+      } else {
+        heading = ReadingTitleFormatter.build(
+          reference: reading.reading,
+          position: reading.position,
+        );
+      }
+    } else {
+      heading = ReadingTitleFormatter.build(
+        reference: reading.reading,
+        position: reading.position,
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(

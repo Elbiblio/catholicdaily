@@ -14,6 +14,12 @@ import '../../data/services/reading_flow_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/models/daily_reading.dart';
 import '../../data/services/app_navigation_service.dart';
+import 'package:in_app_review/in_app_review.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:io' show Platform;
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 typedef ReadingSelectionHandler = void Function(
   String reference,
@@ -44,6 +50,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   static const _keyLastTabIndex = 'home_last_tab_index';
+  static const _keyUsageCount = 'app_usage_count';
+  static const _keyReviewPromptShown = 'review_prompt_shown';
+  static const _androidPackageName = 'com.elbiblio.catholicdaily';
 
   int _currentIndex = 0;
   final AppNavigationService _navigationService = AppNavigationService();
@@ -77,20 +86,28 @@ class _HomeScreenState extends State<HomeScreen> {
         isDownloaded: true,
         size: 0,
       ),
+      BibleVersion(
+        id: 'nabre',
+        name: 'New American Bible Revised Edition',
+        abbreviation: 'NABRE',
+        isDownloaded: true,
+        size: 0,
+      ),
     ];
     
     // Load current day's readings
     await _loadCurrentReadings();
     
     setState(() => _isLoading = false);
-    
-    // Handle Bible chapter resume in bible reading mode only
-    if (_navigationService.shouldResumeToBibleChapter) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) return;
+
+    // Schedule post-frame callbacks
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (_navigationService.shouldResumeToBibleChapter) {
         _resumeToBibleChapter();
-      });
-    }
+      }
+      _checkAndShowReviewPrompt();
+    });
   }
 
   Future<void> _loadCurrentReadings() async {
@@ -529,5 +546,170 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _persistTab(int index) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(_keyLastTabIndex, index);
+  }
+
+  Future<void> _checkAndShowReviewPrompt() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool(_keyReviewPromptShown) ?? false) return;
+    final count = (prefs.getInt(_keyUsageCount) ?? 0) + 1;
+    await prefs.setInt(_keyUsageCount, count);
+    if (count == 3 && mounted) {
+      await prefs.setBool(_keyReviewPromptShown, true);
+      _showExperienceDialog();
+    }
+  }
+
+  void _showExperienceDialog() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Enjoying Catholic Daily?'),
+        content: const Text('Are you happy with your experience so far?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              _showNegativeFeedbackDialog();
+            },
+            child: const Text('Not Really'),
+          ),
+          FilledButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              _showRateUsDialog();
+            },
+            child: const Text('Yes, I Am!'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showRateUsDialog() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Thanks for the support!'),
+        content: const Text(
+          "We're glad you're enjoying Catholic Daily. Help others discover it by leaving us a rating on the app store.",
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Maybe Later'),
+          ),
+          FilledButton(
+            onPressed: () async {
+              Navigator.pop(ctx);
+              await _requestReview();
+            },
+            child: const Text('Rate Now'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _requestReview() async {
+    final inAppReview = InAppReview.instance;
+    if (await inAppReview.isAvailable()) {
+      await inAppReview.requestReview();
+      return;
+    }
+    final uri = Platform.isIOS
+        ? Uri.parse('https://apps.apple.com/us/search?term=${Uri.encodeComponent('Catholic Daily Missal')}')
+        : Uri.parse('https://play.google.com/store/apps/details?id=$_androidPackageName');
+    if (mounted) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  void _showNegativeFeedbackDialog() {
+    final textController = TextEditingController();
+    final emailController = TextEditingController();
+    bool isSubmitting = false;
+
+    showDialog(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          title: const Text('Share Your Feedback'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text("We're sorry to hear that. What could we do better?"),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: emailController,
+                  decoration: const InputDecoration(
+                    labelText: 'Email (optional)',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: textController,
+                  decoration: const InputDecoration(
+                    labelText: 'Your feedback',
+                    border: OutlineInputBorder(),
+                  ),
+                  maxLines: 4,
+                  autofocus: true,
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: isSubmitting ? null : () => Navigator.pop(ctx),
+              child: const Text('Cancel'),
+            ),
+            FilledButton(
+              onPressed: isSubmitting
+                  ? null
+                  : () async {
+                      if (textController.text.trim().isEmpty) return;
+                      setDialogState(() => isSubmitting = true);
+                      try {
+                        String appVersion = '';
+                        try {
+                          final info = await PackageInfo.fromPlatform();
+                          appVersion = '${info.version}+${info.buildNumber}';
+                        } catch (_) {}
+                        final platform = Platform.isAndroid ? 'android' : (Platform.isIOS ? 'ios' : 'other');
+                        await http.post(
+                          Uri.parse('https://api.elbiblio.com/api/feedback'),
+                          headers: {'Content-Type': 'application/json'},
+                          body: jsonEncode({
+                            'message': textController.text.trim(),
+                            'email': emailController.text.trim(),
+                            'type': 'general',
+                            'app_version': appVersion,
+                            'platform': platform,
+                          }),
+                        );
+                        if (ctx.mounted) {
+                          Navigator.pop(ctx);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Thank you for your feedback! We'll use it to improve the app."),
+                            ),
+                          );
+                        }
+                      } catch (_) {
+                        setDialogState(() => isSubmitting = false);
+                      }
+                    },
+              child: isSubmitting
+                  ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                  : const Text('Send'),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -92,16 +92,6 @@ class _ReadingScreenState extends State<ReadingScreen> {
   String get _readingLabel {
     final position = widget.readingData?.position?.trim();
     if (position != null && position.isNotEmpty) {
-      // Handle Gospel Acclamation - this appears before the Gospel
-      if (widget.readingData?.gospelAcclamation != null && 
-          widget.readingData!.gospelAcclamation!.trim().isNotEmpty) {
-        // Check if this reading has a gospel acclamation but isn't the gospel itself
-        final isGospel = position.toLowerCase().contains('gospel');
-        if (!isGospel) {
-          // This might be the Gospel Acclamation as a separate item
-          // In the navigable flow, it's presented before the Gospel
-        }
-      }
       return position;
     }
 
@@ -1018,6 +1008,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
     if (lowerPos.contains('second reading')) return 'Second Reading';
     if (lowerPos.contains('responsorial psalm')) return 'Responsorial Psalm';
     if (lowerPos.contains('alleluia psalm')) return 'Alleluia Psalm';
+    if (lowerPos.contains('gospel acclamation')) return 'Gospel Acclamation';
     if (lowerPos.contains('gospel')) return 'Gospel';
 
     return position.split('(').first.trim();
@@ -1032,8 +1023,10 @@ class _ReadingScreenState extends State<ReadingScreen> {
         return 2;
       case 'second reading':
         return 3;
-      case 'gospel':
+      case 'gospel acclamation':
         return 4;
+      case 'gospel':
+        return 5;
       default:
         return 999;
     }

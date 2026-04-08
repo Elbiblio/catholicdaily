@@ -7,6 +7,7 @@ class DateNavigation extends StatelessWidget {
   final Color? liturgicalColor;
   final VoidCallback onPreviousDay;
   final VoidCallback onNextDay;
+  final VoidCallback? onDateTap;
 
   const DateNavigation({
     super.key,
@@ -14,6 +15,7 @@ class DateNavigation extends StatelessWidget {
     this.liturgicalColor,
     required this.onPreviousDay,
     required this.onNextDay,
+    this.onDateTap,
   });
 
   Color _resolveNavigationAccent(ThemeData theme, Color ordoColor) {
@@ -68,17 +70,33 @@ class DateNavigation extends StatelessWidget {
             ),
           ),
 
-          // Date display
+          // Date display (tappable to open calendar)
           Expanded(
             flex: 3,
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Text(
-                DateFormat('MMM d, yyyy').format(selectedDate),
-                textAlign: TextAlign.center,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: foregroundColor,
+            child: GestureDetector(
+              onTap: onDateTap,
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      DateFormat('MMM d, yyyy').format(selectedDate),
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: foregroundColor,
+                      ),
+                    ),
+                    if (onDateTap != null) ...[
+                      const SizedBox(width: 4),
+                      Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        size: 18,
+                        color: foregroundColor.withValues(alpha: 0.6),
+                      ),
+                    ],
+                  ],
                 ),
               ),
             ),

@@ -19,6 +19,9 @@ class ReadingTypeColors {
         return isDark ? const Color(0xFFAB47BC) : const Color(0xFF9C27B0);
       case 'second reading':
         return isDark ? const Color(0xFF26A69A) : const Color(0xFF009688);
+      case 'gospel acclamation':
+        // Gold/amber — evokes the Alleluia and festive character of the acclamation
+        return isDark ? const Color(0xFFFFCA28) : const Color(0xFFF9A825);
       default:
         return theme.colorScheme.onSurfaceVariant;
     }

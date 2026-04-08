@@ -7,7 +7,7 @@ import '../models/order_of_mass_item.dart';
 import '../models/prayer.dart';
 import 'improved_liturgical_calendar_service.dart';
 import 'ordo_resolver_service.dart';
-import 'prayer_service.dart';
+import 'prebuilt_prayer_service.dart';
 import 'missal_rites_service.dart';
 import 'divinum_officium_loader_service.dart';
 import 'prayer_of_the_faithful_service.dart';
@@ -118,7 +118,7 @@ class OrderOfMassService {
   factory OrderOfMassService() => _instance;
   OrderOfMassService._internal();
 
-  final PrayerService _prayerService = PrayerService();
+  final PrebuiltPrayerService _prayerService = PrebuiltPrayerService.instance;
   final OrdoResolverService _ordoResolver = OrdoResolverService.instance;
   final MissalRitesService _missalRitesService = MissalRitesService.instance;
   final DivinumOfficiumLoaderService _divinumOfficiumLoader = DivinumOfficiumLoaderService();
@@ -131,8 +131,7 @@ class OrderOfMassService {
     String languageCode = 'en',
     List<DailyReading>? lectionaryReadings,
   }) async {
-    await _prayerService.initialize();
-    final config = await _loadConfig();
+        final config = await _loadConfig();
     final liturgicalDay = await _ordoResolver.resolveDay(date);
     final dateStr = date.toIso8601String().split('T').first;
 
@@ -365,11 +364,15 @@ class OrderOfMassService {
     }
 
     if (item.prayerSlug != null && item.prayerSlug!.trim().isNotEmpty) {
-      final prayer = _prayerService.findPrayerBySlug(item.prayerSlug!.trim());
-      if (prayer == null) {
-        return item.hasInlineContent ? _resolveInlineItem(item) : null;
+      // Handle prayers of faithful using date-based lookup
+      if (item.prayerSlug!.contains('prayers_of_faithful')) {
+        final prayer = await _prayerService.getPrayer(dateStr, languageCode);
+        if (prayer == null) {
+          return item.hasInlineContent ? _resolveInlineItem(item) : null;
+        }
+        return _resolvePrayerOfFaithfulItem(item, prayer, languageCode);
       }
-      return _resolvePrayerItem(item, prayer);
+      return item.hasInlineContent ? _resolveInlineItem(item) : null;
     }
 
     if (item.hasInlineContent) {
@@ -377,6 +380,25 @@ class OrderOfMassService {
     }
 
     return null;
+  }
+
+  ResolvedOrderOfMassItem _resolvePrayerOfFaithfulItem(OrderOfMassItem item, String prayerContent, String languageCode) {
+    return ResolvedOrderOfMassItem(
+      id: item.id,
+      title: item.title,
+      insertionPoint: item.insertionPoint,
+      order: item.order,
+      contentByLanguage: {languageCode: [prayerContent]},
+      availableLanguages: [languageCode],
+      isOptional: false,
+      type: item.type,
+      source: item.source,
+      sourceField: item.sourceField,
+      role: item.role,
+      isDialogue: item.isDialogue,
+      isResponsive: item.isResponsive,
+      alternativeGroup: item.alternativeGroup,
+    );
   }
 
   ResolvedOrderOfMassItem _resolvePrayerItem(OrderOfMassItem item, Prayer prayer) {

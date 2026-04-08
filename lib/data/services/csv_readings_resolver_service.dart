@@ -121,13 +121,34 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
       final isPsalm = isPotentialPsalm && (!isPotentialGospel || row.position <= 2);
       final isGospel = isPotentialGospel && (!isPotentialPsalm || row.position >= 3);
 
+      // Skip gospel acclamations that are being treated as separate reading items
+      // Gospel acclamations should be attached to the gospel reading, not be separate items
+      if (row.gospelAcclamation != null && 
+          row.gospelAcclamation!.trim().isNotEmpty && 
+          !isGospel) {
+        continue;
+      }
+
       if (isPsalm) {
-        readings.add(DailyReading(
-          reading: normalizedReading,
-          position: 'Responsorial Psalm',
-          date: normalizedDate,
-          psalmResponse: row.psalmResponse?.trim().isEmpty == true ? null : row.psalmResponse,
-        ));
+        final response = row.psalmResponse?.trim().isEmpty == true ? null : row.psalmResponse;
+        final alreadyHasPsalm = readings.any((r) => r.position == 'Responsorial Psalm');
+        if (response == null || alreadyHasPsalm) {
+          // Psalm-like ref with no response is a Gospel Acclamation verse (e.g. Easter Alleluia Ps 118:24).
+          // A second psalm-like ref after the real Responsorial Psalm is also an Acclamation.
+          readings.add(DailyReading(
+            reading: normalizedReading,
+            position: 'Gospel Acclamation',
+            date: normalizedDate,
+            gospelAcclamation: normalizedReading,
+          ));
+        } else {
+          readings.add(DailyReading(
+            reading: normalizedReading,
+            position: 'Responsorial Psalm',
+            date: normalizedDate,
+            psalmResponse: response,
+          ));
+        }
         continue;
       }
 
@@ -1036,6 +1057,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
     var secondReadingAlternativeCount = 0;
     var gospelAlternativeCount = 0;
     var hasPsalm = false;
+    var hasAcclamation = false;
     var hasSecondReading = false;
     var hasGospel = false;
 
@@ -1115,6 +1137,17 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         }
       }
       if (entry.gospel.isNotEmpty) {
+        // Emit Gospel Acclamation as a separate reading once, just before the first gospel.
+        if (!hasGospel && !hasAcclamation && entry.acclamationRef.isNotEmpty) {
+          hasAcclamation = true;
+          readings.add(DailyReading(
+            reading: _normalizeReferenceStyle(entry.acclamationRef),
+            position: 'Gospel Acclamation',
+            date: date,
+            gospelAcclamation: entry.acclamationText.isEmpty ? null : entry.acclamationText,
+          ));
+        }
+
         // Some standard lectionary rows encode an alternative Gospel in a single field using " or ".
         // Example: "John 4:5-42 or 4:5-15, 19b-26, 39a, 40-42".
         // Emit the first as 'Gospel' and the second as 'Gospel (alternative)'.

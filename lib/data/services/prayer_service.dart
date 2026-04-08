@@ -133,19 +133,35 @@ class PrayerService extends BaseService<PrayerService> {
   String _categorizePrayer(Prayer prayer) {
     final title = prayer.title.toLowerCase();
     final slug = prayer.slug.toLowerCase();
-    
+
+    // Confession Preparation
+    if (slug.contains('examination_of_conscience') ||
+        slug.contains('prayer_before_confession') ||
+        slug.contains('prayer_after_confession') ||
+        slug.contains('act_of_perfect_contrition') ||
+        title.contains('examination of conscience') ||
+        title.contains('confession')) {
+      return 'Confession Prep';
+    }
+
     // Mass & Liturgical
-    if (title.contains('creed') || title.contains('sanctus') || 
+    if (title.contains('creed') || title.contains('sanctus') ||
         title.contains('pater noster') || title.contains('our father') ||
         title.contains('sign of the cross') || title.contains('confiteor') ||
         title.contains('benediction') || title.contains('memorial acclamations') ||
+        title.contains('te deum') || title.contains('magnificat') ||
+        title.contains('benedictus') || title.contains('nunc dimittis') ||
+        title.contains('lord have mercy') || title.contains('glory to god') ||
         slug.contains('credo') || slug.contains('sanctus') ||
-        slug.contains('pater_noster') || slug.contains('signum_crucis')) {
+        slug.contains('pater_noster') || slug.contains('signum_crucis') ||
+        slug.contains('te_deum') || slug.contains('magnificat') ||
+        slug.contains('benedictus') || slug.contains('nunc_dimittis') ||
+        slug.contains('lord_have_mercy') || slug.contains('glory_to_god')) {
       return 'Mass & Liturgical';
     }
-    
+
     // Marian
-    if (title.contains('mary') || title.contains('marian') || 
+    if (title.contains('mary') || title.contains('marian') ||
         title.contains('hail mary') || title.contains('ave maria') ||
         title.contains('memorare') || title.contains('regina') ||
         title.contains('salve') || title.contains('immaculate') ||
@@ -153,56 +169,83 @@ class PrayerService extends BaseService<PrayerService> {
         title.contains('litany of mary') || title.contains('invocation to mary') ||
         slug.contains('mary') || slug.contains('memorare') ||
         slug.contains('regina_caeli') || slug.contains('salve_regina') ||
-        slug.contains('litany_of_mary')) {
+        slug.contains('litany_of_mary') ||
+        slug.contains('novena_our_lady')) {
       return 'Marian';
     }
-    
+
     // Rosary Mysteries (check before Lenten to avoid misclassification)
-    if (title.contains('mystery') && 
-        (title.contains('sorrowful') || title.contains('joyful') || 
+    if (title.contains('mystery') &&
+        (title.contains('sorrowful') || title.contains('joyful') ||
          title.contains('glorious') || title.contains('luminous')) ||
         slug.contains('sorrowful') || slug.contains('joyful') ||
         slug.contains('glorious') || slug.contains('luminous')) {
       return 'Rosary';
     }
-    
+
     // Lenten
-    if (title.contains('stations') || title.contains('contrition') ||
+    if (title.contains('stations') ||
         title.contains('dying') ||
-        slug.contains('stations') || slug.contains('act_of_contrition') ||
+        slug.contains('stations') ||
         slug.contains('prayer_before_crucifix') || slug.contains('prayer_for_the_dying')) {
       return 'Lenten';
     }
-    
+
+    // Sacred Heart & Divine Mercy
+    if (title.contains('sacred heart') || title.contains('divine mercy') ||
+        slug.contains('sacred_heart') || slug.contains('divine_mercy') ||
+        slug.contains('consecration_sacred_heart') ||
+        slug.contains('litany_sacred_heart') ||
+        slug.contains('novena_sacred_heart')) {
+      return 'Sacred Heart & Divine Mercy';
+    }
+
+    // Catholic Societies
+    if (title.contains('legion of mary') ||
+        slug.contains('legion_of_mary') || slug.contains('catena')) {
+      return 'Catholic Societies';
+    }
+
     // Commons & Devotional
     if (title.contains('angel') || title.contains('holy spirit') ||
-        title.contains('glory be') || title.contains('glory to god') ||
+        title.contains('glory be') ||
         title.contains('peace prayer') || title.contains('morning offering') ||
         title.contains('grace') || title.contains('spiritual communion') ||
+        title.contains('holy family') || title.contains('vocations') ||
+        title.contains('eternal rest') || title.contains('guardian angel') ||
         slug.contains('angel_of_god') || slug.contains('angelus') ||
         slug.contains('anima_christi') || slug.contains('come_holy_spirit') ||
         slug.contains('glory_be') || slug.contains('peace_prayer') ||
         slug.contains('morning_offering') || slug.contains('grace_before_after_meal') ||
-        slug.contains('spiritual_communion')) {
+        slug.contains('spiritual_communion') || slug.contains('eternal_rest') ||
+        slug.contains('prayer_to_guardian_angel') || slug.contains('prayer_to_holy_family') ||
+        slug.contains('prayer_for_vocations') || slug.contains('purgatorian') ||
+        slug.contains('novena_holy_spirit') || slug.contains('we_fly')) {
       return 'Commons & Devotional';
     }
-    
+
     // Saints & Novenas
     if (title.contains('st.') || title.contains('saint') ||
-        title.contains('divine mercy') || title.contains('novena') ||
+        title.contains('novena') || title.contains('litany of s') ||
         title.contains('michael') || title.contains('anthony') ||
         title.contains('augustine') || title.contains('john vianney') ||
         title.contains('joseph') || title.contains('thomas') ||
-        title.contains('valentine') ||
+        title.contains('valentine') || title.contains('padre pio') ||
+        title.contains('therese') || title.contains('rita') ||
+        title.contains('jude') || title.contains('infant jesus') ||
+        title.contains('litany of the saints') ||
         slug.contains('st_') || slug.contains('saint') ||
-        slug.contains('divine_mercy') || slug.contains('novena') ||
+        slug.contains('novena') || slug.contains('litany_of_st') ||
+        slug.contains('litany_of_saints') ||
         slug.contains('st_michael') || slug.contains('st_anthony') ||
         slug.contains('st_augustine') || slug.contains('st_john') ||
         slug.contains('st_joseph') || slug.contains('st_thomas') ||
-        slug.contains('st_valentine')) {
+        slug.contains('st_valentine') || slug.contains('st_padre_pio') ||
+        slug.contains('st_therese') || slug.contains('st_rita') ||
+        slug.contains('st_jude') || slug.contains('infant_jesus')) {
       return 'Saints & Novenas';
     }
-    
+
     // Life Events
     if (title.contains('engaged') || title.contains('married') ||
         title.contains('smoking') || title.contains('christlikeness') ||
@@ -210,22 +253,22 @@ class PrayerService extends BaseService<PrayerService> {
         slug.contains('prayer_stop_smoking') || slug.contains('prayer_for_christlikeness')) {
       return 'Life Events';
     }
-    
+
     // Rosary (group the mysteries)
     if (title.contains('joyful') || title.contains('sorrowful') ||
         title.contains('glorious') || title.contains('luminous') ||
         title.contains('rosary') || title.contains('decade') ||
         slug.contains('joyful') || slug.contains('sorrowful') ||
         slug.contains('glorious') || slug.contains('light') ||
-        slug.contains('rosary_for_the_dead')) {
+        slug.contains('rosary_for_the_dead') || slug.contains('oh_my_jesus')) {
       return 'Rosary';
     }
-    
+
     // Acts of Faith
     if (title.contains('act of') || slug.contains('act_of')) {
       return 'Acts of Faith';
     }
-    
+
     return prayer.category == 'prayer' ? 'Prayers' : prayer.category;
   }
 

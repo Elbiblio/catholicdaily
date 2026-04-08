@@ -4629,5 +4629,285 @@
       "Sub tuum praesidium confugimus, Sancta Dei Genetrix. Nostras deprecationes ne despicias in necessitatibus1, sed a periculis cunctis libera nos semper, Virgo gloriosa et benedicta. Amen."
     ],
     "source_file": "we_fly_to_your_patronage.html"
+  },
+  {
+    "id": 94,
+    "slug": "litany_sacred_heart",
+    "title": "Litany Of The Sacred Heart",
+    "first_line": "Lord, have mercy on us. Christ, have mercy on us.",
+    "category": "prayer",
+    "text": [
+      "Lord, have mercy on us..."
+    ]
+  },
+  {
+    "id": 95,
+    "slug": "examination_of_conscience",
+    "title": "Examination Of Conscience",
+    "first_line": "Come, Holy Spirit, enlighten my mind that I may clearly know my sins.",
+    "category": "prayer",
+    "text": [
+      "Come, Holy Spirit..."
+    ]
+  },
+  {
+    "id": 96,
+    "slug": "prayer_before_confession",
+    "title": "Prayer Before Confession",
+    "first_line": "O Most Merciful God, I come before Thee as a sinner in need of Thy forgiveness.",
+    "category": "prayer",
+    "text": [
+      "O Most Merciful God..."
+    ]
+  },
+  {
+    "id": 97,
+    "slug": "prayer_after_confession",
+    "title": "Prayer After Confession",
+    "first_line": "Almighty and merciful God, I thank Thee for the grace of this sacrament.",
+    "category": "prayer",
+    "text": [
+      "Almighty and merciful God..."
+    ]
+  },
+  {
+    "id": 98,
+    "slug": "act_of_perfect_contrition",
+    "title": "Act Of Perfect Contrition",
+    "first_line": "O my God, I am heartily sorry for having offended Thee.",
+    "category": "prayer",
+    "text": [
+      "O my God, I am heartily sorry..."
+    ]
+  },
+  {
+    "id": 99,
+    "slug": "legion_of_mary_prayers",
+    "title": "Legion Of Mary Prayers (Tessera)",
+    "first_line": "In the name of the Father, and of the Son, and of the Holy Spirit.",
+    "category": "prayer",
+    "text": [
+      "In the name of the Father..."
+    ]
+  },
+  {
+    "id": 100,
+    "slug": "magnificat",
+    "title": "The Magnificat",
+    "first_line": "My soul proclaims the greatness of the Lord.",
+    "category": "prayer",
+    "text": [
+      "My soul proclaims..."
+    ]
+  },
+  {
+    "id": 101,
+    "slug": "te_deum",
+    "title": "Te Deum",
+    "first_line": "We praise Thee, O God: we acknowledge Thee to be the Lord.",
+    "category": "prayer",
+    "text": [
+      "We praise Thee, O God..."
+    ]
+  },
+  {
+    "id": 102,
+    "slug": "benedictus",
+    "title": "The Benedictus",
+    "first_line": "Blessed be the Lord, the God of Israel.",
+    "category": "prayer",
+    "text": [
+      "Blessed be the Lord..."
+    ]
+  },
+  {
+    "id": 103,
+    "slug": "nunc_dimittis",
+    "title": "Nunc Dimittis",
+    "first_line": "Lord, now lettest Thou Thy servant depart in peace.",
+    "category": "prayer",
+    "text": [
+      "Lord, now lettest Thou..."
+    ]
+  },
+  {
+    "id": 104,
+    "slug": "eternal_rest",
+    "title": "Eternal Rest",
+    "first_line": "Eternal rest grant unto them, O Lord.",
+    "category": "prayer",
+    "text": [
+      "Eternal rest grant..."
+    ]
+  },
+  {
+    "id": 105,
+    "slug": "litany_of_st_joseph",
+    "title": "Litany Of St. Joseph",
+    "first_line": "Lord, have mercy on us. Christ, have mercy on us.",
+    "category": "prayer",
+    "text": [
+      "Lord, have mercy on us..."
+    ]
+  },
+  {
+    "id": 106,
+    "slug": "prayer_to_st_jude",
+    "title": "Prayer To St. Jude",
+    "first_line": "Most holy Apostle, St. Jude, faithful servant and friend of Jesus.",
+    "category": "prayer",
+    "text": [
+      "Most holy Apostle..."
+    ]
+  },
+  {
+    "id": 107,
+    "slug": "prayer_to_st_therese",
+    "title": "Prayer To St. Therese Of Lisieux",
+    "first_line": "O Little Therese of the Child Jesus.",
+    "category": "prayer",
+    "text": [
+      "O Little Therese..."
+    ]
+  },
+  {
+    "id": 108,
+    "slug": "prayer_to_st_rita",
+    "title": "Prayer To St. Rita Of Cascia",
+    "first_line": "O holy patroness of those in need, St. Rita.",
+    "category": "prayer",
+    "text": [
+      "O holy patroness..."
+    ]
+  },
+  {
+    "id": 109,
+    "slug": "prayer_to_st_padre_pio",
+    "title": "Prayer To St. Padre Pio",
+    "first_line": "Beloved St. Padre Pio, thou who bore the sacred wounds of our Lord.",
+    "category": "prayer",
+    "text": [
+      "Beloved St. Padre Pio..."
+    ]
+  },
+  {
+    "id": 110,
+    "slug": "prayer_to_st_joseph_worker",
+    "title": "Prayer To St. Joseph The Worker",
+    "first_line": "O Glorious St. Joseph, model of all who are devoted to labor.",
+    "category": "prayer",
+    "text": [
+      "O Glorious St. Joseph..."
+    ]
+  },
+  {
+    "id": 111,
+    "slug": "prayer_to_guardian_angel",
+    "title": "Prayer To My Guardian Angel",
+    "first_line": "Angel of God, my guardian dear, to whom Gods love commits me here.",
+    "category": "prayer",
+    "text": [
+      "Angel of God..."
+    ]
+  },
+  {
+    "id": 112,
+    "slug": "prayer_to_holy_family",
+    "title": "Prayer To The Holy Family",
+    "first_line": "Jesus, Mary, and Joseph, in you we contemplate the splendor of true love.",
+    "category": "prayer",
+    "text": [
+      "Jesus, Mary, and Joseph..."
+    ]
+  },
+  {
+    "id": 113,
+    "slug": "prayer_for_vocations",
+    "title": "Prayer For Vocations",
+    "first_line": "Loving and generous God, it is Thou who callest us by name.",
+    "category": "prayer",
+    "text": [
+      "Loving and generous God..."
+    ]
+  },
+  {
+    "id": 114,
+    "slug": "novena_holy_spirit",
+    "title": "Novena To The Holy Spirit",
+    "first_line": "Come, Holy Spirit, fill the hearts of Thy faithful.",
+    "category": "prayer",
+    "text": [
+      "Come, Holy Spirit..."
+    ]
+  },
+  {
+    "id": 115,
+    "slug": "novena_sacred_heart",
+    "title": "Novena To The Sacred Heart",
+    "first_line": "O most holy Heart of Jesus, fountain of every blessing.",
+    "category": "prayer",
+    "text": [
+      "O most holy Heart..."
+    ]
+  },
+  {
+    "id": 116,
+    "slug": "novena_st_jude",
+    "title": "Novena To St. Jude",
+    "first_line": "O most holy Apostle, St. Jude Thaddeus.",
+    "category": "prayer",
+    "text": [
+      "O most holy Apostle..."
+    ]
+  },
+  {
+    "id": 117,
+    "slug": "novena_our_lady_perpetual_help",
+    "title": "Novena To Our Lady Of Perpetual Help",
+    "first_line": "O Mother of Perpetual Help, thou art the dispenser of all the gifts.",
+    "category": "prayer",
+    "text": [
+      "O Mother of Perpetual Help..."
+    ]
+  },
+  {
+    "id": 118,
+    "slug": "novena_st_therese",
+    "title": "Novena To St. Therese Of Lisieux",
+    "first_line": "O Little Therese of the Child Jesus, who during thy short life on earth.",
+    "category": "prayer",
+    "text": [
+      "O Little Therese..."
+    ]
+  },
+  {
+    "id": 119,
+    "slug": "novena_infant_jesus_prague",
+    "title": "Novena To The Infant Jesus Of Prague",
+    "first_line": "O Jesus, Who hast said, Ask, and you shall receive.",
+    "category": "prayer",
+    "text": [
+      "O Jesus, Who hast said..."
+    ]
+  },
+  {
+    "id": 120,
+    "slug": "litany_of_saints",
+    "title": "Litany Of The Saints",
+    "first_line": "Lord, have mercy on us. Christ, have mercy on us.",
+    "category": "prayer",
+    "text": [
+      "Lord, have mercy..."
+    ]
+  },
+  {
+    "id": 121,
+    "slug": "divine_mercy_novena",
+    "title": "Divine Mercy Novena",
+    "first_line": "You expired, Jesus, but the source of life gushed forth for souls.",
+    "category": "prayer",
+    "text": [
+      "You expired, Jesus..."
+    ]
   }
 ]
