@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../data/models/daily_reading.dart';
 import 'reading_preview.dart';
+import '../../utils/contrast_helper.dart';
 
 class AlternativeItem extends StatelessWidget {
   final DailyReading reading;
@@ -47,7 +48,10 @@ class AlternativeItem extends StatelessWidget {
                   child: Text(
                     'Alternative $number',
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: color.withValues(alpha: 0.9),
+                      color: ContrastHelper.getContrastColor(
+                        color.withValues(alpha: 0.15),
+                        theme,
+                      ),
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -55,7 +59,7 @@ class AlternativeItem extends StatelessWidget {
                 const Spacer(),
                 Icon(
                   Icons.arrow_forward_ios_rounded,
-                  color: color.withValues(alpha: 0.6),
+                  color: ContrastHelper.getSecondaryContrastColor(theme.colorScheme.surface, theme),
                   size: 14,
                 ),
               ],
@@ -78,7 +82,7 @@ class AlternativeItem extends StatelessWidget {
               Text(
                 'Response: ${reading.psalmResponse}',
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: Colors.blue.shade700,
+                  color: theme.colorScheme.primary,
                   fontWeight: FontWeight.w500,
                 ),
               ),

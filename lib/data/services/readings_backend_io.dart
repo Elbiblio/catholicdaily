@@ -446,7 +446,7 @@ class ReadingsBackendIo implements ReadingsBackend {
     required String bookShortName,
     required int chapter,
   }) async {
-    final db = await _rsvceDatabase;
+    final db = await _currentBibleDatabase;
     final rows = await db.rawQuery(
       '''
       SELECT v.verse_id, v.text

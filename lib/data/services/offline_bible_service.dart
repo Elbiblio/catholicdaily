@@ -61,31 +61,38 @@ class OfflineBibleService {
   Future<void> downloadVersion(BibleVersion version, Function(double) onProgress) async {
     if (version.downloadUrl == null) return;
 
+    final client = http.Client();
     try {
       final docsDir = await getApplicationDocumentsDirectory();
       final dbName = version.downloadUrl!.split('/').last;
       final file = File(path.join(docsDir.path, dbName));
 
       final request = http.Request('GET', Uri.parse(version.downloadUrl!));
-      final response = await http.Client().send(request);
+      final response = await client.send(request);
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        throw Exception('download_http_${response.statusCode}');
+      }
       
       final contentLength = response.contentLength ?? 0;
       int downloadedLength = 0;
 
       final sink = file.openWrite();
-
-      await for (final chunk in response.stream) {
-        sink.add(chunk);
-        downloadedLength += chunk.length;
-        if (contentLength > 0) {
-          onProgress(downloadedLength / contentLength);
+      try {
+        await for (final chunk in response.stream) {
+          sink.add(chunk);
+          downloadedLength += chunk.length;
+          if (contentLength > 0) {
+            onProgress(downloadedLength / contentLength);
+          }
         }
+      } finally {
+        await sink.close();
       }
-
-      await sink.close();
     } catch (e) {
       developer.log('Error downloading Bible version', error: e, name: 'OfflineBibleService');
       throw Exception('Failed to download ${version.name}');
+    } finally {
+      client.close();
     }
   }
 

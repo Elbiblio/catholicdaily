@@ -98,6 +98,9 @@ class UltimateGospelAcclamationMapper {
     '303-1': LectionaryVerse(id: '303-1', reference: 'Luke 24:34', text: 'The Lord has truly been raised and has appeared to Simon.', season: 'Easter'),
     '303-2': LectionaryVerse(id: '303-2', reference: 'Luke 24:46', text: 'Christ had to suffer and rise from the dead, and so enter into his glory.', season: 'Easter'),
     '303-3': LectionaryVerse(id: '303-3', reference: 'Mark 16:15', text: 'Go into the whole world and proclaim the Gospel to every creature.', season: 'Easter'),
+
+    // Easter Octave - per weekday_a_full.txt, uses Psalm 118:24 for all 8 days
+    '303-octave': LectionaryVerse(id: '303-octave', reference: 'Ps 118:24', text: 'This is the day the Lord has made; let us rejoice and be glad.', season: 'Easter'),
   };
 
   /// Special date mappings with multiple readings
@@ -228,9 +231,9 @@ class UltimateGospelAcclamationMapper {
 
   /// Check for special liturgical days
   UltimateAcclamationResult? _checkSpecialLiturgicalDay(DateTime date, LiturgicalContext context) {
-    // Easter Octave (no ordinary verses)
+    // Easter Octave - per weekday_a_full.txt, uses Psalm 118:24 for all 8 days
     if (context.season == 'Easter' && context.weekNumber == 1) {
-      final verse = _lectionaryIndex['303-1'];
+      final verse = _lectionaryIndex['303-octave'];
       if (verse != null) {
         return UltimateAcclamationResult(
           verseId: verse.id,
@@ -476,8 +479,8 @@ class UltimateGospelAcclamationMapper {
   /// Get Easter verse
   String _getEasterVerse(DateTime date, LiturgicalContext context) {
     if (context.weekNumber == 1) {
-      // Easter Octave
-      return '303-${(date.day % 3) + 1}';
+      // Easter Octave - per weekday_a_full.txt, uses Psalm 118:24 for all 8 days
+      return '303-octave';
     } else if (context.weekNumber! <= 7) {
       // Easter weeks 2-7 - specific mapping for research report cases
       if (context.weekNumber == 2 && date.weekday == DateTime.tuesday) {

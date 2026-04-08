@@ -22,7 +22,7 @@ class ReadingPreview extends StatelessWidget {
       return Text(
         'No preview available',
         style: theme.textTheme.bodyMedium?.copyWith(
-          color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
           fontStyle: FontStyle.italic,
         ),
       );
@@ -31,7 +31,7 @@ class ReadingPreview extends StatelessWidget {
     return Text(
       preview,
       style: theme.textTheme.bodyMedium?.copyWith(
-        color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.95),
         height: 1.5,
       ),
       maxLines: maxLines,

@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import '../../data/models/daily_reading.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
 import '../../data/services/order_of_mass_service.dart';
 import '../../data/services/order_of_mass_preference_service.dart';
 import '../../data/services/language_preference_service.dart';
 import '../../data/services/prayer_of_faithful_loader_service.dart';
+import '../../data/services/readings_service.dart';
+import '../../data/services/readings_backend_io.dart';
+import '../../data/services/reading_flow_service.dart';
 import '../widgets/parchment_background.dart';
 import '../widgets/language_switcher_widget.dart';
+import '../utils/contrast_helper.dart';
 
 class MassFlowScreen extends StatefulWidget {
   final DateTime? date;
@@ -25,11 +31,13 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
   final LanguagePreferenceService _languageService = LanguagePreferenceService();
   final ImprovedLiturgicalCalendarService _calendarService = ImprovedLiturgicalCalendarService.instance;
   final PrayerOfFaithfulLoaderService _prayerLoader = PrayerOfFaithfulLoaderService();
+  final ReadingsBackendIo _readingsBackend = ReadingsBackendIo();
 
   late DateTime _selectedDate;
   String _primaryLanguage = 'en';
   String _secondaryLanguage = 'en';
   List<ResolvedOrderOfMassSection>? _sections;
+  List<DailyReading>? _readings;
   LiturgicalDay? _liturgicalDay;
   bool _isLoading = true;
 
@@ -59,16 +67,21 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
 
     try {
       final liturgicalDay = await _calendarService.getLiturgicalDay(date);
+      final lectionaryReadings =
+          await ReadingsService.instance.getReadingsForDate(date);
       final sections = await _orderOfMassService.getSectionsForDate(
         date,
         languageCode: _secondaryLanguage,
+        lectionaryReadings: lectionaryReadings,
       );
+      final readings = await _readingsBackend.getReadingsForDate(date);
 
       if (mounted) {
         setState(() {
           _selectedDate = date;
           _liturgicalDay = liturgicalDay;
           _sections = sections;
+          _readings = readings;
           _isLoading = false;
         });
       }
@@ -95,12 +108,16 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
 
   void _onPrimaryLanguageChanged(String language) async {
     await _languageService.setPreferredLanguage(language);
-    setState(() => _primaryLanguage = language);
+    if (mounted) {
+      setState(() => _primaryLanguage = language);
+    }
   }
 
   void _onSecondaryLanguageChanged(String language) async {
     await _orderOfMassPreference.setPreferredLanguage(language);
-    setState(() => _secondaryLanguage = language);
+    if (mounted) {
+      setState(() => _secondaryLanguage = language);
+    }
     await _loadMassForDate(_selectedDate);
   }
 
@@ -201,35 +218,68 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
   }
 
   Widget _buildMassContent(ThemeData theme) {
+    final bool isLight = theme.brightness == Brightness.light;
+    final Color sectionColor = _liturgicalDay?.colorValue ?? theme.colorScheme.primary;
+    // Ensure good contrast in light mode
+    final Color readableColor = isLight
+        ? sectionColor.withValues(alpha: 0.95)
+        : sectionColor;
+
     return CustomScrollView(
       slivers: [
-        if (_liturgicalDay != null) _buildLiturgicalHeader(theme),
+        if (_liturgicalDay != null) _buildLiturgicalHeader(theme, readableColor),
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: _buildLanguageSwitchers(theme),
           ),
         ),
-        ..._sections!.map((section) => _buildSection(section)),
+        // Introductory Rites
+        ..._getSectionsForInsertionPoint('introductory_rites'),
+        // Readings Section (Liturgy of the Word)
+        if (_readings != null && _readings!.isNotEmpty)
+          _buildReadingsSection(theme, readableColor),
+        // Continue with remaining mass sections
+        ..._getSectionsForInsertionPoint('offertory'),
+        ..._getSectionsForInsertionPoint('preface'),
+        ..._getSectionsForInsertionPoint('sanctus'),
+        ..._getSectionsForInsertionPoint('acclamation'),
+        ..._getSectionsForInsertionPoint('lords_prayer'),
+        ..._getSectionsForInsertionPoint('sign_of_peace'),
+        ..._getSectionsForInsertionPoint('fraction'),
+        ..._getSectionsForInsertionPoint('communion'),
+        ..._getSectionsForInsertionPoint('after_communion'),
+        ..._getSectionsForInsertionPoint('concluding_rites'),
         const SliverToBoxAdapter(child: SizedBox(height: 32)),
       ],
     );
   }
 
-  Widget _buildLiturgicalHeader(ThemeData theme) {
+  List<Widget> _getSectionsForInsertionPoint(String insertionPoint) {
+    if (_sections == null) return [];
+    return _sections!
+        .where((s) => s.insertionPoint == insertionPoint)
+        .map((section) => _buildSection(section))
+        .toList();
+  }
+
+  Widget _buildLiturgicalHeader(ThemeData theme, Color readableColor) {
     final ordoColor = _liturgicalDay!.colorValue;
+    final bool isLight = theme.brightness == Brightness.light;
+    // Use higher alpha for better contrast in light mode
+    final bgAlpha = isLight ? 0.35 : 0.15;
 
     return SliverToBoxAdapter(
       child: Container(
-        color: ordoColor.withValues(alpha: 0.15),
+        color: ordoColor.withValues(alpha: bgAlpha),
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              _selectedDate.toString().split(' ')[0],
+              DateFormat.yMMMMd().format(_selectedDate),
               style: theme.textTheme.labelLarge?.copyWith(
-                color: ordoColor,
+                color: readableColor,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -237,7 +287,7 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
             Text(
               _liturgicalDay!.fullDescription,
               style: theme.textTheme.headlineSmall?.copyWith(
-                color: ordoColor,
+                color: readableColor,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -245,10 +295,24 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
             Text(
               _liturgicalDay!.weekDescription,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
+                color: ContrastHelper.getSecondaryContrastColor(ordoColor.withValues(alpha: bgAlpha), theme),
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildReadingsSection(ThemeData theme, Color sectionColor) {
+    if (_readings == null || _readings!.isEmpty) return const SliverToBoxAdapter();
+
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+        child: _ReadingsSectionWidget(
+          readings: _readings!,
+          liturgicalColor: sectionColor,
         ),
       ),
     );
@@ -267,7 +331,7 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
                   Text(
                     'App Language',
                     style: theme.textTheme.labelSmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
+                      color: ContrastHelper.getSecondaryContrastColor(theme.colorScheme.surface, theme),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -288,7 +352,7 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
                   Text(
                     'Mass Prayers',
                     style: theme.textTheme.labelSmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
+                      color: ContrastHelper.getSecondaryContrastColor(theme.colorScheme.surface, theme),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -349,7 +413,7 @@ class _MassFlowSectionWidgetState extends State<_MassFlowSectionWidget> {
         color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: sectionColor.withValues(alpha: 0.3),
+          color: sectionColor.withValues(alpha: 0.4),
           width: 1,
         ),
       ),
@@ -362,7 +426,7 @@ class _MassFlowSectionWidgetState extends State<_MassFlowSectionWidget> {
             child: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: sectionColor.withValues(alpha: 0.1),
+                color: sectionColor.withValues(alpha: 0.18),
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
               ),
               child: Row(
@@ -375,14 +439,17 @@ class _MassFlowSectionWidgetState extends State<_MassFlowSectionWidget> {
                           widget.section.title,
                           style: theme.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.w700,
-                            color: sectionColor,
+                            color: ContrastHelper.getContrastColor(
+                              sectionColor.withValues(alpha: 0.18),
+                              theme,
+                            ),
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           '${widget.section.items.length} part${widget.section.items.length == 1 ? '' : 's'}',
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
+                            color: ContrastHelper.getSecondaryContrastColor(sectionColor.withValues(alpha: 0.18), theme),
                           ),
                         ),
                       ],
@@ -390,7 +457,10 @@ class _MassFlowSectionWidgetState extends State<_MassFlowSectionWidget> {
                   ),
                   Icon(
                     _isExpanded ? Icons.expand_less : Icons.expand_more,
-                    color: sectionColor,
+                    color: ContrastHelper.getContrastColor(
+                      sectionColor.withValues(alpha: 0.18),
+                      theme,
+                    ),
                   ),
                 ],
               ),
@@ -463,6 +533,7 @@ class _MassFlowItemCard extends StatelessWidget {
                   item.title,
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w700,
+                    color: ContrastHelper.getContrastColor(theme.colorScheme.surface, theme),
                   ),
                 ),
               ),
@@ -481,59 +552,425 @@ class _MassFlowItemCard extends StatelessWidget {
                     ),
                   ),
                 ),
-              if (item.role != null) ...[
+                          if (item.role != null) ...[
                 const SizedBox(width: 8),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: sectionColor.withValues(alpha: 0.15),
+                    // Higher contrast for light mode
+                    color: sectionColor.withValues(alpha: theme.brightness == Brightness.light ? 0.35 : 0.15),
                     borderRadius: BorderRadius.circular(999),
                   ),
                   child: Text(
-                    _formatRole(item.role!),
+                    _formatRole(item.role!, item.isDialogue, item.isResponsive),
                     style: theme.textTheme.labelSmall?.copyWith(
-                      color: sectionColor,
-                      fontWeight: FontWeight.w600,
+                      // Ensure readable contrast in light mode
+                      color: theme.brightness == Brightness.light
+                          ? sectionColor.withValues(alpha: 1.0)
+                          : sectionColor,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
               ],
             ],
           ),
-          const SizedBox(height: 12),
-          ...content.map(
-            (line) => Padding(
-              padding: const EdgeInsets.only(bottom: 6),
-              child: Text(
-                line,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  height: 1.5,
+                  const SizedBox(height: 12),
+          ...content.asMap().entries.map(
+            (entry) {
+              final index = entry.key;
+              final line = entry.value;
+              // Prefix lines with V or R markers for dialogue/responsive prayers
+              final String prefix = _getLinePrefix(item, index, line);
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      if (prefix.isNotEmpty)
+                        TextSpan(
+                          text: prefix,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            height: 1.5,
+                            fontWeight: FontWeight.w700,
+                            color: ContrastHelper.getContrastColor(theme.colorScheme.surface, theme),
+                          ),
+                        ),
+                      TextSpan(
+                        text: line,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          height: 1.5,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ],
       ),
     );
   }
 
-  String _formatRole(String role) {
-    switch (role.toLowerCase()) {
-      case 'priest':
-        return 'Priest';
-      case 'deacon':
-      case 'deacon_or_priest':
-        return 'Deacon/Priest';
-      case 'lector':
-        return 'Lector';
-      case 'cantor':
-        return 'Cantor';
-      case 'choir':
-        return 'Choir';
-      case 'all':
-        return 'All';
-      default:
-        return role;
+  String _formatRole(String role, bool isDialogue, bool isResponsive) {
+    // Return V/R markers based on role and dialogue/responsive flags
+    final roleLower = role.toLowerCase();
+    if (roleLower == 'priest' || roleLower == 'deacon' || roleLower == 'deacon_or_priest') {
+      return 'V';
     }
+    if (roleLower == 'all' || isResponsive) {
+      return 'R';
+    }
+    // For other roles, show role name with appropriate marker
+    switch (roleLower) {
+      case 'lector':
+        return 'V: Lector';
+      case 'cantor':
+        return 'V: Cantor';
+      case 'choir':
+        return 'R: Choir';
+      default:
+        return isDialogue ? 'V: $role' : role;
+    }
+  }
+
+  String _getLinePrefix(ResolvedOrderOfMassItem item, int lineIndex, String line) {
+    if (!item.isDialogue && !item.isResponsive) return '';
+
+    final role = item.role?.toLowerCase() ?? '';
+    final lineLower = line.trim().toLowerCase();
+
+    // Priest/Deacon lines get V
+    if (role == 'priest' || role == 'deacon' || role == 'deacon_or_priest' || role == 'lector') {
+      return 'V. ';
+    }
+
+    // All/People responses get R
+    if (role == 'all' || item.isResponsive) {
+      return 'R. ';
+    }
+
+    // For mixed dialogue, alternate based on common patterns
+    if (item.isDialogue) {
+      // If it's the first line and it's a greeting/invitation, it's typically the Priest (V)
+      if (lineIndex == 0) {
+        return 'V. ';
+      }
+      // Check for common response patterns
+      if (lineLower.startsWith('and with your spirit') ||
+          lineLower.startsWith('amen') ||
+          lineLower.startsWith('we lift them up') ||
+          lineLower.startsWith('it is right and just') ||
+          lineLower.startsWith('holy, holy') ||
+          lineLower.startsWith('lord, i am not worthy') ||
+          lineLower.startsWith('blessed is he who comes') ||
+          lineLower.startsWith('have mercy on us') ||
+          lineLower.startsWith('grant us peace') ||
+          lineLower.startsWith('lamb of god')) {
+        return 'R. ';
+      }
+    }
+
+    return '';
+  }
+}
+
+// Widget to display readings in the mass flow
+class _ReadingsSectionWidget extends StatefulWidget {
+  final List<DailyReading> readings;
+  final Color liturgicalColor;
+
+  const _ReadingsSectionWidget({
+    required this.readings,
+    required this.liturgicalColor,
+  });
+
+  @override
+  State<_ReadingsSectionWidget> createState() => _ReadingsSectionWidgetState();
+}
+
+class _ReadingsSectionWidgetState extends State<_ReadingsSectionWidget> {
+  bool _isExpanded = true;
+  final Set<int> _expandedReadings = {};
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final bool isLight = theme.brightness == Brightness.light;
+    // Ensure good contrast
+    final Color sectionColor = isLight
+        ? widget.liturgicalColor.withValues(alpha: 0.9)
+        : widget.liturgicalColor;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: sectionColor.withValues(alpha: 0.4),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        children: [
+          // Section header
+          InkWell(
+            onTap: () => setState(() => _isExpanded = !_isExpanded),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: sectionColor.withValues(alpha: isLight ? 0.15 : 0.1),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Liturgy of the Word',
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: ContrastHelper.getContrastColor(
+                      sectionColor.withValues(alpha: 0.18),
+                      theme,
+                    ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '${widget.readings.length} reading${widget.readings.length == 1 ? '' : 's'}',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: ContrastHelper.getSecondaryContrastColor(sectionColor.withValues(alpha: 0.15), theme),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Icon(
+                    _isExpanded ? Icons.expand_less : Icons.expand_more,
+                    color: ContrastHelper.getContrastColor(
+                      sectionColor.withValues(alpha: 0.18),
+                      theme,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // Readings list
+          AnimatedCrossFade(
+            firstChild: const SizedBox.shrink(),
+            secondChild: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: widget.readings.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final reading = entry.value;
+                  return _ReadingCard(
+                    reading: reading,
+                    index: index,
+                    isExpanded: _expandedReadings.contains(index),
+                    onToggle: () => setState(() {
+                      if (_expandedReadings.contains(index)) {
+                        _expandedReadings.remove(index);
+                      } else {
+                        _expandedReadings.add(index);
+                      }
+                    }),
+                    sectionColor: sectionColor,
+                  );
+                }).toList(),
+              ),
+            ),
+            crossFadeState: _isExpanded
+                ? CrossFadeState.showSecond
+                : CrossFadeState.showFirst,
+            duration: const Duration(milliseconds: 300),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ReadingCard extends StatefulWidget {
+  final DailyReading reading;
+  final int index;
+  final bool isExpanded;
+  final VoidCallback onToggle;
+  final Color sectionColor;
+
+  const _ReadingCard({
+    required this.reading,
+    required this.index,
+    required this.isExpanded,
+    required this.onToggle,
+    required this.sectionColor,
+  });
+
+  @override
+  State<_ReadingCard> createState() => _ReadingCardState();
+}
+
+class _ReadingCardState extends State<_ReadingCard> {
+  final ReadingFlowService _readingFlow = ReadingFlowService.instance;
+  String? _fullReadingText;
+  bool _isLoadingText = false;
+
+  String get _readingLabel {
+    final position = widget.reading.position?.toLowerCase() ?? '';
+    if (position.contains('gospel')) return 'Gospel';
+    if (position.contains('first')) return 'First Reading';
+    if (position.contains('second')) return 'Second Reading';
+    if (position.contains('psalm')) return 'Responsorial Psalm';
+    return 'Reading ${widget.index + 1}';
+  }
+
+  @override
+  void didUpdateWidget(_ReadingCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Fetch reading text when expanded and not already loaded
+    if (widget.isExpanded && !oldWidget.isExpanded && _fullReadingText == null) {
+      _fetchReadingText();
+    }
+  }
+
+  Future<void> _fetchReadingText() async {
+    if (_fullReadingText != null) return;
+    
+    setState(() => _isLoadingText = true);
+    
+    try {
+      final text = await _readingFlow.getReadingText(widget.reading);
+      if (mounted) {
+        setState(() {
+          _fullReadingText = text;
+          _isLoadingText = false;
+        });
+      }
+    } catch (e) {
+      debugPrint('Error fetching reading text: $e');
+      if (mounted) {
+        setState(() => _isLoadingText = false);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: widget.sectionColor.withValues(alpha: 0.2),
+        ),
+      ),
+      child: Column(
+        children: [
+          // Reading header
+          InkWell(
+            onTap: widget.onToggle,
+            borderRadius: BorderRadius.circular(12),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _readingLabel,
+                          style: theme.textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: ContrastHelper.getContrastColor(
+                              theme.colorScheme.surface,
+                              theme,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          widget.reading.reading,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: ContrastHelper.getSecondaryContrastColor(widget.sectionColor.withValues(alpha: 0.3), theme),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Icon(
+                    widget.isExpanded ? Icons.expand_less : Icons.expand_more,
+                    color: ContrastHelper.getContrastColor(
+                      theme.colorScheme.surface,
+                      theme,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          if (widget.isExpanded) ...[
+            if (_isLoadingText)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          widget.sectionColor,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      'Loading reading...',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: ContrastHelper.getSecondaryContrastColor(widget.sectionColor.withValues(alpha: 0.3), theme),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            else if (_fullReadingText != null)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                child: Text(
+                  _fullReadingText!,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: ContrastHelper.getSecondaryContrastColor(widget.sectionColor.withValues(alpha: 0.3), theme),
+                    height: 1.5,
+                  ),
+                ),
+              )
+            else if (widget.reading.incipit != null)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                child: Text(
+                  widget.reading.incipit!,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontStyle: FontStyle.italic,
+                    color: ContrastHelper.getSecondaryContrastColor(widget.sectionColor.withValues(alpha: 0.3), theme),
+                  ),
+                ),
+              ),
+          ],
+        ],
+      ),
+    );
   }
 }

@@ -1,14 +1,19 @@
 import 'package:flutter/foundation.dart';
 import '../models/bible_book.dart';
 import '../models/daily_reading.dart';
+import 'base_service.dart';
 import 'readings_backend.dart';
 import 'readings_backend_io.dart'
     if (dart.library.html) 'readings_backend_web.dart'
     as backend_factory;
 
 /// Canonical service for readings + Bible text across all supported platforms.
-class ReadingsService {
-  static final ReadingsService instance = ReadingsService._();
+class ReadingsService extends BaseService<ReadingsService> {
+  static ReadingsService get instance => BaseService.init(() => ReadingsService._());
+  
+  /// Factory constructor for backward compatibility
+  factory ReadingsService() => instance;
+  
   ReadingsService._();
 
   final ReadingsBackend _backend = backend_factory.createReadingsBackend();

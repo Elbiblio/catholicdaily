@@ -1,12 +1,8 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import '../../data/models/hymn.dart';
 import '../../data/services/hymn_favorites_service.dart';
 import '../../data/services/hymn_midi_service.dart';
 import '../../data/services/hymn_user_preferences.dart';
-import '../utils/sing_along_timeline.dart';
-import '../utils/meter_parser.dart';
 import '../widgets/rich_content_view.dart';
 
 class HymnDetailScreen extends StatefulWidget {
@@ -24,37 +20,19 @@ class HymnDetailScreen extends StatefulWidget {
 class _HymnDetailScreenState extends State<HymnDetailScreen> {
   final HymnFavoritesService _favoritesService = HymnFavoritesService.instance;
   final HymnMidiService _midiService = HymnMidiService();
-  
+
   bool _isFavorite = false;
-  bool _professionalMode = true; // Classic mode
   double _fontSize = 20.0;
-  int _manualBpm = 0; // 0 means use hymn.bpm or default
-  bool _showBpmSlider = false;
-  
-  SingAlongTimeline _timeline = const SingAlongTimeline.empty();
-  final Stopwatch _karaokeWatch = Stopwatch();
-  Timer? _karaokeTicker;
-  int _currentWordGlobalIndex = 0;
-  int _currentLineIndex = 0;
-  StreamSubscription? _midiStateSubscription;
 
   @override
   void initState() {
     super.initState();
     _loadFavoriteStatus();
     _loadUserPreferences();
-    _initializeTimeline();
-    
-    _midiStateSubscription = _midiService.stateStream.listen((state) {
-      _onMidiStateChanged(state);
-    });
   }
 
   @override
   void dispose() {
-    _midiStateSubscription?.cancel();
-    _karaokeTicker?.cancel();
-    _karaokeWatch.stop();
     _midiService.dispose();
     super.dispose();
   }
@@ -70,110 +48,15 @@ class _HymnDetailScreenState extends State<HymnDetailScreen> {
 
   Future<void> _loadUserPreferences() async {
     await HymnUserPreferences.init();
-    setState(() {
-      _professionalMode = HymnUserPreferences.professionalMode;
-      _fontSize = HymnUserPreferences.defaultFontSize;
-      _manualBpm = HymnUserPreferences.manualBpm.toInt();
-      _showBpmSlider = HymnUserPreferences.showBpmSlider;
-    });
+    if (mounted) {
+      setState(() {
+        _fontSize = HymnUserPreferences.defaultFontSize;
+      });
+    }
   }
 
   Future<void> _saveUserPreferences() async {
-    await HymnUserPreferences.setProfessionalMode(_professionalMode);
     await HymnUserPreferences.setDefaultFontSize(_fontSize);
-    await HymnUserPreferences.setManualBpm(_manualBpm.toDouble());
-    await HymnUserPreferences.setShowBpmSlider(_showBpmSlider);
-  }
-
-  void _initializeTimeline() {
-    final bpm = _effectiveBpm();
-    _timeline = SingAlongTimeline.fromLyrics(
-      widget.hymn.displayLyrics,
-      bpm: bpm,
-      meterRaw: widget.hymn.meter,
-      tunePhraseMap: widget.hymn.primaryTune != null 
-          ? TunePhraseMap.fromMap(widget.hymn.primaryTune!)
-          : null,
-    );
-  }
-
-  int _effectiveBpm() {
-    if (_manualBpm > 0) return _manualBpm;
-    if (widget.hymn.bpm != null && widget.hymn.bpm! > 0) return widget.hymn.bpm!;
-    return 120; // Default BPM
-  }
-
-  void _onMidiStateChanged(HymnMidiState state) {
-    _syncKaraokeWithAudio(state);
-    
-    if (state.isCalibrating && state.detectedBpm != null) {
-      // BPM detected from calibration
-      setState(() {
-        _manualBpm = state.detectedBpm!;
-      });
-      _saveUserPreferences();
-      _rebuildTimeline(resetProgress: true);
-    }
-  }
-
-  void _rebuildTimeline({bool resetProgress = true}) {
-    final bpm = _effectiveBpm();
-    setState(() {
-      _timeline = SingAlongTimeline.fromLyrics(
-        widget.hymn.displayLyrics,
-        bpm: bpm,
-        meterRaw: widget.hymn.meter,
-        tunePhraseMap: widget.hymn.primaryTune != null 
-            ? TunePhraseMap.fromMap(widget.hymn.primaryTune!)
-            : null,
-      );
-      if (resetProgress) {
-        _resetKaraokeProgress();
-      }
-    });
-  }
-
-  void _resetKaraokeProgress() {
-    _karaokeTicker?.cancel();
-    _karaokeWatch.stop();
-    _currentWordGlobalIndex = 0;
-    _currentLineIndex = 0;
-  }
-
-  void _syncKaraokeWithAudio(HymnMidiState audioState) {
-    if (audioState.isPlaying && audioState.positionMs != null) {
-      if (_karaokeWatch.isRunning) {
-        _karaokeWatch.stop();
-      }
-      _karaokeTicker?.cancel();
-      _updateKaraokeProgress(audioState.positionMs);
-      return;
-    }
-
-    if (audioState.isPlaying && !_professionalMode) {
-      if (!_karaokeWatch.isRunning) {
-        _karaokeWatch.start();
-        _karaokeTicker = Timer.periodic(
-          const Duration(milliseconds: 50),
-          (_) => _updateKaraokeProgress(),
-        );
-      }
-    } else {
-      _karaokeTicker?.cancel();
-      _karaokeWatch.stop();
-    }
-  }
-
-  void _updateKaraokeProgress([int? positionMs]) {
-    final ms = positionMs ?? _karaokeWatch.elapsedMilliseconds;
-    final wordIndex = _timeline.wordIndexAt(ms);
-    
-    if (wordIndex != _currentWordGlobalIndex) {
-      setState(() {
-        _currentWordGlobalIndex = wordIndex;
-        _currentLineIndex = _timeline.lineIndexForWord(wordIndex);
-      });
-    }
   }
 
   Future<void> _toggleFavorite() async {
@@ -187,31 +70,12 @@ class _HymnDetailScreenState extends State<HymnDetailScreen> {
 
   Future<void> _playMidi() async {
     if (widget.hymn.midiFile != null) {
-      _resetKaraokeProgress();
       await _midiService.playAsset('assets/midi/${widget.hymn.midiFile}');
     }
   }
 
   void _stopMidi() async {
     await _midiService.stop();
-    _resetKaraokeProgress();
-  }
-
-  void _startCalibration() {
-    _midiService.startCalibration();
-    _playMidi();
-  }
-
-  void _stopCalibration() {
-    _midiService.stopCalibration();
-  }
-
-  void _recordCalibrationTap() {
-    _midiService.recordTap();
-  }
-
-  void _resetCalibration() {
-    _midiService.resetCalibration();
   }
 
   @override
@@ -296,9 +160,7 @@ class _HymnDetailScreenState extends State<HymnDetailScreen> {
   }
 
   Widget _buildLyricCard(ThemeData theme) {
-    final scheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
-    final midiState = _midiService.state;
 
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 14, 14, 12),
@@ -330,110 +192,28 @@ class _HymnDetailScreenState extends State<HymnDetailScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildCompactHeaderPanel(theme),
-          const SizedBox(height: 10),
-          _buildModeTabs(theme),
-          if (!_professionalMode && _showBpmSlider) ...[
-            const SizedBox(height: 8),
-            _buildCompactBpmPanel(theme),
-          ],
-          if (midiState.isCalibrating) ...[
-            const SizedBox(height: 8),
-            _buildCalibrationPanel(theme, midiState),
-          ],
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              Text(
-                _professionalMode ? 'Lyrics' : 'Sing Along',
-                style: theme.textTheme.titleLarge?.copyWith(
-                  color: isDark
-                      ? const Color(0xFFF2E9D2)
-                      : const Color(0xFF6A4A12),
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const Spacer(),
-              if (!_professionalMode && !midiState.isCalibrating)
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _showBpmSlider = !_showBpmSlider;
-                    });
-                    _saveUserPreferences();
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: scheme.surface.withValues(alpha: 0.35),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          '${_effectiveBpm()} BPM',
-                          style: theme.textTheme.labelMedium?.copyWith(
-                            color: isDark
-                                ? const Color(0xFFEED9A0)
-                                : const Color(0xFF8A5C00),
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        Icon(
-                          _showBpmSlider ? Icons.expand_less : Icons.expand_more,
-                          size: 15,
-                          color: isDark
-                              ? const Color(0xFFEED9A0)
-                              : const Color(0xFF8A5C00),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-            ],
-          ),
-          if (!_professionalMode && !midiState.isCalibrating) ...[
-            const SizedBox(height: 6),
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: _startCalibration,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: scheme.primary.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: scheme.primary.withValues(alpha: 0.3),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.touch_app,
-                          size: 16,
-                          color: scheme.primary,
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          'Calibrate Tempo',
-                          style: theme.textTheme.labelSmall?.copyWith(
-                            color: scheme.primary,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-
-          ..._buildLyricLines(theme),
+          const SizedBox(height: 16),
+          _buildLyricsSection(theme),
         ],
       ),
+    );
+  }
+
+  Widget _buildLyricsSection(ThemeData theme) {
+    final isDark = theme.brightness == Brightness.dark;
+
+    return RichContentView(
+      content: widget.hymn.content,
+      fallbackLines: widget.hymn.displayLyrics,
+      fontSize: _fontSize,
+      centered: true,
+      baseStyle: theme.textTheme.bodyLarge?.copyWith(
+        fontSize: _fontSize,
+        height: 1.18,
+        color: isDark ? const Color(0xFFE8ECF7) : const Color(0xFF2A2E35),
+        fontWeight: FontWeight.w400,
+      ),
+      accentColor: isDark ? const Color(0xFFFFE7AD) : const Color(0xFF7C4F00),
     );
   }
 
@@ -558,316 +338,6 @@ class _HymnDetailScreenState extends State<HymnDetailScreen> {
     );
   }
 
-  Widget _buildModeTabs(ThemeData theme) {
-    final scheme = theme.colorScheme;
-    return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: scheme.surface.withValues(alpha: 0.35),
-        borderRadius: BorderRadius.circular(18),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: _buildModeTab(
-              theme: theme,
-              label: 'Classic',
-              icon: Icons.menu_book_rounded,
-              selected: _professionalMode,
-              onTap: () {
-                setState(() {
-                  _professionalMode = true;
-                  _resetKaraokeProgress();
-                });
-                _saveUserPreferences();
-              },
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: _buildModeTab(
-              theme: theme,
-              label: 'Sing Along',
-              icon: Icons.auto_awesome,
-              selected: !_professionalMode,
-              onTap: () {
-                setState(() {
-                  _professionalMode = false;
-                  _syncKaraokeWithAudio(_midiService.state);
-                });
-                _saveUserPreferences();
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildModeTab({
-    required ThemeData theme,
-    required String label,
-    required IconData icon,
-    required bool selected,
-    required VoidCallback onTap,
-  }) {
-    final scheme = theme.colorScheme;
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 180),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
-          color: selected ? scheme.primary.withValues(alpha: 0.14) : Colors.transparent,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: selected ? scheme.primary.withValues(alpha: 0.24) : Colors.transparent,
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 16, color: selected ? scheme.primary : scheme.onSurfaceVariant),
-            const SizedBox(width: 8),
-            Flexible(
-              child: Text(
-                label,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.labelLarge?.copyWith(
-                  color: selected ? scheme.primary : scheme.onSurfaceVariant,
-                  fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCompactBpmPanel(ThemeData theme) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 4),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Slider(
-            value: _manualBpm == 0 ? _effectiveBpm().toDouble() : _manualBpm.toDouble(),
-            min: 56,
-            max: 132,
-            divisions: 76,
-            onChanged: (value) {
-              setState(() {
-                _manualBpm = value.round();
-              });
-              _saveUserPreferences();
-              _rebuildTimeline(resetProgress: false);
-            },
-          ),
-          Center(
-            child: Text(
-              '${_manualBpm == 0 ? _effectiveBpm() : _manualBpm} BPM',
-              style: theme.textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCalibrationPanel(ThemeData theme, HymnMidiState midiState) {
-    final scheme = theme.colorScheme;
-    
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 4),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: scheme.primary.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: scheme.primary.withValues(alpha: 0.3),
-        ),
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Tap to the beat',
-                style: theme.textTheme.labelMedium?.copyWith(
-                  color: scheme.primary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Row(
-                children: [
-                  TextButton(
-                    onPressed: _resetCalibration,
-                    child: Text(
-                      'Reset',
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: scheme.primary,
-                      ),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: _stopCalibration,
-                    child: Text(
-                      'Done',
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: scheme.primary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          GestureDetector(
-            onTap: _recordCalibrationTap,
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              decoration: BoxDecoration(
-                color: scheme.surface.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.touch_app,
-                    size: 32,
-                    color: scheme.primary,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Tap here in rhythm',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: scheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 8),
-          if (midiState.detectedBpm != null)
-            Text(
-              'Detected: ${midiState.detectedBpm} BPM (${midiState.tapTimestamps.length} taps)',
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: scheme.primary,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
-  List<Widget> _buildLyricLines(ThemeData theme) {
-    final isDark = theme.brightness == Brightness.dark;
-
-    if (_professionalMode) {
-      return [
-        RichContentView(
-          content: widget.hymn.content,
-          fallbackLines: widget.hymn.displayLyrics,
-          fontSize: _fontSize,
-          centered: true,
-          baseStyle: theme.textTheme.bodyLarge?.copyWith(
-            fontSize: _fontSize,
-            height: 1.18,
-            color: isDark ? const Color(0xFFE8ECF7) : const Color(0xFF2A2E35),
-            fontWeight: FontWeight.w400,
-          ),
-          accentColor: isDark ? const Color(0xFFFFE7AD) : const Color(0xFF7C4F00),
-        ),
-      ];
-    }
-
-    final lineWidgets = <Widget>[];
-
-    for (var i = 0; i < _timeline.lines.length; i++) {
-      final line = _timeline.lines[i];
-      final isActiveLine = !_professionalMode && _currentLineIndex == i;
-
-      final baseColor = isDark
-          ? const Color(0xFFE8ECF7)
-          : const Color(0xFF2A2E35);
-      final activeColor = isDark
-          ? const Color(0xFFFFE7AD)
-          : const Color(0xFF7C4F00);
-
-      lineWidgets.add(
-        GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: (!_professionalMode && line.words.isNotEmpty)
-              ? () {
-                  // Could add tap-to-seek functionality here
-                }
-              : null,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 180),
-            margin: const EdgeInsets.symmetric(vertical: 2),
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: isActiveLine
-                  ? (isDark
-                        ? const Color(0xFF2C3550).withValues(alpha: 0.55)
-                        : const Color(0xFFECDDB8).withValues(alpha: 0.6))
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Center(
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  style: theme.textTheme.bodyLarge?.copyWith(
-                    fontSize: _fontSize,
-                    height: 1.22,
-                    color: baseColor,
-                  ),
-                  children: [
-                    for (var w = 0; w < line.words.length; w++)
-                      TextSpan(
-                        text:
-                            '${line.words[w].text}${w == line.words.length - 1 ? '' : ' '}',
-                        style: TextStyle(
-                          color:
-                              line.words[w].globalIndex <= _currentWordGlobalIndex
-                                  ? activeColor
-                                  : baseColor,
-                          fontWeight:
-                              line.words[w].globalIndex <= _currentWordGlobalIndex
-                                  ? FontWeight.w600
-                                  : FontWeight.w400,
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-
-      if (line.hasBreakAfter) {
-        lineWidgets.add(const SizedBox(height: 14));
-      }
-    }
-
-    return lineWidgets;
-  }
-
   void _showFontSizeDialog() {
     showDialog(
       context: context,
@@ -903,6 +373,10 @@ class _HymnDetailScreenState extends State<HymnDetailScreen> {
           ),
         ],
       ),
-    ).then((_) => setState(() {}));
+    ).then((_) {
+      if (mounted) {
+        setState(() {});
+      }
+    });
   }
 }

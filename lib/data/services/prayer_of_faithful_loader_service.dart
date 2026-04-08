@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'improved_liturgical_calendar_service.dart';
 import 'missal_rites_service.dart';
@@ -92,7 +93,7 @@ class PrayerOfFaithfulLoaderService {
       _cachedEntries = entries;
       return entries;
     } catch (e) {
-      print('Error loading prayer of faithful CSV: $e');
+      debugPrint('Error loading prayer of faithful CSV: $e');
       return [];
     }
   }

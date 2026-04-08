@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../data/models/hymn.dart';
 import '../../data/models/daily_reading.dart';
-import '../../data/services/hymn_recommendation_service.dart';
+import '../../data/services/robust_hymn_recommendation_service.dart';
 import '../widgets/hymn_card.dart';
 import '../screens/hymn_detail_screen.dart';
 import '../screens/hymn_list_screen.dart';
@@ -21,7 +21,7 @@ class HymnRecommendationsWidget extends StatefulWidget {
 }
 
 class _HymnRecommendationsWidgetState extends State<HymnRecommendationsWidget> {
-  final HymnRecommendationService _recommendationService = HymnRecommendationService.instance;
+  final RobustHymnRecommendationService _recommendationService = RobustHymnRecommendationService.instance;
 
   Map<String, List<Hymn>> _recommendations = {};
   bool _isLoading = true;
@@ -37,7 +37,7 @@ class _HymnRecommendationsWidgetState extends State<HymnRecommendationsWidget> {
     setState(() => _isLoading = true);
 
     try {
-      final recommendations = await _recommendationService.getRecommendedHymnsForMassParts(
+      final recommendations = await _recommendationService.getMassPartRecommendations(
         widget.date,
         widget.readings,
       );
@@ -47,8 +47,10 @@ class _HymnRecommendationsWidgetState extends State<HymnRecommendationsWidget> {
         _isLoading = false;
       });
     } catch (e) {
-      print('Error loading hymn recommendations: $e');
-      setState(() => _isLoading = false);
+      debugPrint('Error loading hymn recommendations: $e');
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 

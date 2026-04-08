@@ -26,6 +26,7 @@ class _ChurchLocatorScreenState extends State<ChurchLocatorScreen> {
   }
 
   Future<void> _loadNearbyChurches() async {
+    if (!mounted) return;
     setState(() {
       _isLoading = true;
       _error = null;
@@ -33,15 +34,19 @@ class _ChurchLocatorScreenState extends State<ChurchLocatorScreen> {
 
     try {
       final churches = await _churchService.findNearbyChurches();
-      setState(() {
-        _churches = churches;
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _churches = churches;
+          _isLoading = false;
+        });
+      }
     } catch (e) {
-      setState(() {
-        _error = e.toString();
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _error = 'Unable to load nearby churches right now.';
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -276,9 +281,11 @@ class _ChurchLocatorScreenState extends State<ChurchLocatorScreen> {
           FilledButton(
             onPressed: () async {
               await _churchService.deleteCustomChurch(church.id);
-              setState(() {
-                _churches.removeWhere((c) => c.id == church.id);
-              });
+              if (mounted) {
+                setState(() {
+                  _churches.removeWhere((c) => c.id == church.id);
+                });
+              }
               Navigator.of(context).pop();
             },
             style: FilledButton.styleFrom(
@@ -419,11 +426,15 @@ class _AddChurchSheetState extends State<AddChurchSheet> {
       }
       Navigator.of(context).pop();
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Unable to save church details right now.')),
+        );
+      }
     } finally {
-      setState(() => _isLoading = false);
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 

@@ -3,12 +3,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/prayer.dart';
+import 'base_service.dart';
 import 'prayer_content_parser.dart';
 
-class PrayerService {
-  static final PrayerService _instance = PrayerService._internal();
-  factory PrayerService() => _instance;
-  PrayerService._internal();
+class PrayerService extends BaseService<PrayerService> {
+  static PrayerService get instance => BaseService.init(() => PrayerService._());
+  
+  /// Factory constructor for backward compatibility
+  factory PrayerService() => instance;
+  
+  PrayerService._();
 
   List<Prayer> _prayers = [];
   List<Prayer> _recentlyUsed = [];

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../data/models/daily_reading.dart';
+import '../utils/contrast_helper.dart';
 import '../../data/services/psalm_resolver_service.dart';
 
 /// Widget that displays psalm response with on-demand fetching for missing responses
@@ -94,14 +95,10 @@ class _PsalmResponseWidgetState extends State<PsalmResponseWidget> {
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDark
-            ? const Color(0xFF42A5F5).withValues(alpha: 0.1)
-            : const Color(0xFF2196F3).withValues(alpha: 0.05),
+        color: theme.colorScheme.primary.withValues(alpha: isDark ? 0.1 : 0.05),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: isDark
-              ? const Color(0xFF42A5F5).withValues(alpha: 0.3)
-              : const Color(0xFF2196F3).withValues(alpha: 0.2),
+          color: theme.colorScheme.primary.withValues(alpha: isDark ? 0.3 : 0.2),
         ),
       ),
       child: Column(
@@ -112,17 +109,19 @@ class _PsalmResponseWidgetState extends State<PsalmResponseWidget> {
               Icon(
                 Icons.music_note_rounded,
                 size: 16,
-                color: isDark
-                    ? const Color(0xFF42A5F5)
-                    : const Color(0xFF2196F3),
+                color: ContrastHelper.getContrastColor(
+                  theme.colorScheme.primary.withValues(alpha: isDark ? 0.1 : 0.05),
+                  theme,
+                ),
               ),
               const SizedBox(width: 8),
               Text(
                 'Response',
                 style: theme.textTheme.labelMedium?.copyWith(
-                  color: isDark
-                      ? const Color(0xFF42A5F5)
-                      : const Color(0xFF2196F3),
+                  color: ContrastHelper.getContrastColor(
+                    theme.colorScheme.primary.withValues(alpha: isDark ? 0.1 : 0.05),
+                    theme,
+                  ),
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0.5,
                 ),

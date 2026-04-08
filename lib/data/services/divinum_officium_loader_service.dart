@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'improved_liturgical_calendar_service.dart';
 
@@ -93,7 +94,7 @@ class DivinumOfficiumLoaderService {
       _cachedEntries = entries;
       return entries;
     } catch (e) {
-      print('Error loading Divinum Officium CSV: $e');
+      debugPrint('Error loading Divinum Officium CSV: $e');
       return [];
     }
   }

@@ -54,7 +54,9 @@ class _SearchScreenState extends State<SearchScreen> {
       _books = [];
       _filteredBooks = [];
     }
-    setState(() => _isLoading = false);
+    if (mounted) {
+      setState(() => _isLoading = false);
+    }
   }
 
   void _onSearchChanged() {
@@ -112,7 +114,9 @@ class _SearchScreenState extends State<SearchScreen> {
       }
     }
 
-    setState(() => _isLoading = false);
+    if (mounted) {
+      setState(() => _isLoading = false);
+    }
   }
 
   void _goBack() {
@@ -213,62 +217,74 @@ class _SearchScreenState extends State<SearchScreen> {
     }
 
     // Chapter selection
-    return GridView.builder(
-      padding: const EdgeInsets.all(16),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 6,
-        childAspectRatio: 1.25,
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 8,
-      ),
-      itemCount: _selectedBook!['chapters'] as int,
-      itemBuilder: (context, index) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
         final colorScheme = Theme.of(context).colorScheme;
-        final chapter = index + 1;
-        final isSelected = chapter == _selectedChapter;
+        final gridWidth = constraints.maxWidth;
+        final crossAxisCount = (gridWidth / 72).floor().clamp(3, 8);
 
-        return Material(
-          color: colorScheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(12),
-          child: InkWell(
-            onTap: () => _selectChapter(chapter),
-            borderRadius: BorderRadius.circular(12),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 180),
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? colorScheme.primaryContainer
-                    : colorScheme.surfaceContainerHighest,
-                border: Border.all(
-                  color: isSelected
-                      ? colorScheme.primary
-                      : colorScheme.outline.withValues(alpha: 0.5),
-                  width: isSelected ? 1.8 : 1.0,
-                ),
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: isSelected
-                    ? [
-                        BoxShadow(
-                          color: colorScheme.primary.withValues(alpha: 0.2),
-                          blurRadius: 10,
-                          offset: const Offset(0, 3),
-                        ),
-                      ]
-                    : null,
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                '$chapter',
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: isSelected
-                      ? colorScheme.onPrimaryContainer
-                      : colorScheme.onSurface,
-                  fontSize: 16,
-                ),
-              ),
-            ),
+        return GridView.builder(
+          padding: const EdgeInsets.all(16),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount,
+            childAspectRatio: 1.25,
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 8,
           ),
+          itemCount: _selectedBook!['chapters'] as int,
+          itemBuilder: (context, index) {
+            final chapter = index + 1;
+            final isSelected = chapter == _selectedChapter;
+
+            return Semantics(
+              button: true,
+              label: 'Chapter $chapter',
+              selected: isSelected,
+              child: Material(
+                color: colorScheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(12),
+                child: InkWell(
+                  onTap: () => _selectChapter(chapter),
+                  borderRadius: BorderRadius.circular(12),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 180),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? colorScheme.primaryContainer
+                          : colorScheme.surfaceContainerHighest,
+                      border: Border.all(
+                        color: isSelected
+                            ? colorScheme.primary
+                            : colorScheme.outline.withValues(alpha: 0.5),
+                        width: isSelected ? 1.8 : 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: isSelected
+                          ? [
+                              BoxShadow(
+                                color: colorScheme.primary.withValues(alpha: 0.2),
+                                blurRadius: 10,
+                                offset: const Offset(0, 3),
+                              ),
+                            ]
+                          : null,
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      '$chapter',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: isSelected
+                            ? colorScheme.onPrimaryContainer
+                            : colorScheme.onSurface,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
         );
       },
     );

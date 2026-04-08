@@ -28,13 +28,13 @@ class DetailChip extends StatelessWidget {
         color: isLight
             ? Color.alphaBlend(
                 Colors.white.withValues(alpha: 0.94),
-                effectiveLiturgicalColor.withValues(alpha: 0.08),
+                effectiveLiturgicalColor.withValues(alpha: 0.15),
               )
             : theme.colorScheme.surface.withValues(alpha: 0.72),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isLight
-              ? effectiveLiturgicalColor.withValues(alpha: 0.24)
+              ? effectiveLiturgicalColor.withValues(alpha: 0.35)
               : foregroundColor.withValues(alpha: 0.12),
         ),
         boxShadow: isLight
@@ -53,7 +53,7 @@ class DetailChip extends StatelessWidget {
           Text(
             label,
             style: theme.textTheme.labelSmall?.copyWith(
-              color: foregroundColor.withValues(alpha: isLight ? 0.72 : 0.72),
+              color: foregroundColor.withValues(alpha: isLight ? 0.85 : 0.72),
               fontWeight: FontWeight.w700,
             ),
           ),

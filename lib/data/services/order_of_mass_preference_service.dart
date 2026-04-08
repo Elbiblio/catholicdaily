@@ -6,7 +6,6 @@ class OrderOfMassPreferenceService {
   factory OrderOfMassPreferenceService() => _instance;
   OrderOfMassPreferenceService._internal();
 
-  static const String _showOrderOfMassKey = 'show_order_of_mass';
   static const String _preferredLanguageKey = 'preferred_order_of_mass_language';
   static const String _defaultLanguage = 'en';
 
@@ -36,7 +35,6 @@ class OrderOfMassPreferenceService {
     korean: '한국어',
   };
 
-  bool? _cachedShowOrderOfMass;
   String? _cachedLanguage;
 
   List<String> get availableLanguages => [
@@ -54,29 +52,6 @@ class OrderOfMassPreferenceService {
 
   String getLanguageDisplayName(String languageCode) {
     return _languageNames[languageCode] ?? languageCode;
-  }
-
-  Future<bool> getShowOrderOfMass() async {
-    if (_cachedShowOrderOfMass != null) {
-      return _cachedShowOrderOfMass!;
-    }
-
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      _cachedShowOrderOfMass = prefs.getBool(_showOrderOfMassKey) ?? false;
-      return _cachedShowOrderOfMass!;
-    } catch (_) {
-      _cachedShowOrderOfMass = false;
-      return false;
-    }
-  }
-
-  Future<void> setShowOrderOfMass(bool value) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool(_showOrderOfMassKey, value);
-      _cachedShowOrderOfMass = value;
-    } catch (_) {}
   }
 
   Future<String> getPreferredLanguage() async {
@@ -103,7 +78,6 @@ class OrderOfMassPreferenceService {
   }
 
   void resetCache() {
-    _cachedShowOrderOfMass = null;
     _cachedLanguage = null;
   }
 }

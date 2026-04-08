@@ -5,7 +5,6 @@ import 'settings_screen.dart';
 import 'prayers_screen.dart';
 import 'bible_screen.dart';
 import 'hymn_list_screen.dart';
-import 'mass_flow_screen.dart';
 import '../../data/models/bible_version.dart';
 import '../../data/services/theme_preferences.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
@@ -243,15 +242,9 @@ class _HomeScreenState extends State<HomeScreen> {
           onSelectReadingIndex: _goToReadingAtIndex,
           navigableItems: _readingSession.navigableItems,
           currentNavigableIndex: _readingSession.navigableIndex,
-          onOrderOfMassToggled: _handleOrderOfMassToggled,
         ),
       ),
     );
-  }
-
-  Future<void> _handleOrderOfMassToggled() async {
-    // Rebuild the navigable flow with the new order of mass preference
-    await _loadCurrentReadings();
   }
 
   void _goToReadingAtIndex(int index) {
@@ -477,7 +470,6 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       }),
       const PrayersScreen(),
-      const MassFlowScreen(),
       BibleScreen(onReadingSelected: (reference, content, liturgicalDay, {isBibleSearch = false}) {
         _onReadingSelected(reference, content, liturgicalDay, isBibleSearch: isBibleSearch);
       }),
@@ -519,11 +511,6 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Icon(Icons.bookmark_outline),
               selectedIcon: Icon(Icons.bookmark),
               label: 'Prayers',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.church_outlined),
-              selectedIcon: Icon(Icons.church),
-              label: 'Mass',
             ),
             NavigationDestination(
               icon: Icon(Icons.menu_book_outlined),

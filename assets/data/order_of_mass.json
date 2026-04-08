@@ -18,6 +18,32 @@
     "conditions": ["always"],
     "isOptional": false,
     "isDialogue": true,
+    "dialogueStructure": {
+      "en": [
+        {"text": "The Lord be with you.", "role": "priest", "prefix": "V"},
+        {"text": "And with your spirit.", "role": "people", "prefix": "R"}
+      ],
+      "la": [
+        {"text": "Dóminus vobíscum.", "role": "priest", "prefix": "V"},
+        {"text": "Et cum spíritu tuo.", "role": "people", "prefix": "R"}
+      ],
+      "es": [
+        {"text": "El Señor esté con ustedes.", "role": "priest", "prefix": "V"},
+        {"text": "Y con tu espíritu.", "role": "people", "prefix": "R"}
+      ],
+      "pt": [
+        {"text": "O Senhor esteja convosco.", "role": "priest", "prefix": "V"},
+        {"text": "E com o vosso espírito.", "role": "people", "prefix": "R"}
+      ],
+      "fr": [
+        {"text": "Le Seigneur soit avec vous.", "role": "priest", "prefix": "V"},
+        {"text": "Et avec votre esprit.", "role": "people", "prefix": "R"}
+      ],
+      "tl": [
+        {"text": "Ang Panginoon ay sumainyo.", "role": "priest", "prefix": "V"},
+        {"text": "At sa iyong espiritu.", "role": "people", "prefix": "R"}
+      ]
+    },
     "contentByLanguage": {
       "en": [
         "The Lord be with you.",
@@ -168,7 +194,7 @@
     "source": "readings",
     "sourceField": "second_reading",
     "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
-    "conditions": ["sunday_only", "solemnity"],
+    "conditions": ["sunday_or_solemnity"],
     "isOptional": false,
     "role": "lector"
   },
@@ -220,20 +246,20 @@
     "order": 1,
     "prayerSlug": "credo",
     "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
-    "conditions": ["sunday_only", "solemnity"],
+    "conditions": ["sunday_or_solemnity"],
     "isOptional": false
   },
   {
     "id": "prayer_of_the_faithful",
-    "title": "Prayer of the Faithful",
+    "title": "Universal Prayer (Prayer of the Faithful)",
     "insertionPoint": "after_gospel",
     "order": 2,
     "type": "variable",
     "source": "liturgical_calendar",
     "sourceField": "prayers_of_the_faithful",
     "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
-    "conditions": ["always"],
-    "isOptional": false,
+    "conditions": ["sunday_or_solemnity"],
+    "isOptional": true,
     "role": "deacon",
     "isResponsive": true
   },
@@ -283,6 +309,24 @@
     "conditions": ["always"],
     "isOptional": false,
     "isDialogue": true,
+    "dialogueStructure": {
+      "en": [
+        {"text": "The Lord be with you.", "role": "priest", "prefix": "V"},
+        {"text": "And with your spirit.", "role": "people", "prefix": "R"},
+        {"text": "Lift up your hearts.", "role": "priest", "prefix": "V"},
+        {"text": "We lift them up to the Lord.", "role": "people", "prefix": "R"},
+        {"text": "Let us give thanks to the Lord our God.", "role": "priest", "prefix": "V"},
+        {"text": "It is right and just.", "role": "people", "prefix": "R"}
+      ],
+      "la": [
+        {"text": "Dóminus vobíscum.", "role": "priest", "prefix": "V"},
+        {"text": "Et cum spíritu tuo.", "role": "people", "prefix": "R"},
+        {"text": "Sursum corda.", "role": "priest", "prefix": "V"},
+        {"text": "Habémus ad Dóminum.", "role": "people", "prefix": "R"},
+        {"text": "Grátias agámus Dómino Deo nostro.", "role": "priest", "prefix": "V"},
+        {"text": "Dignum et iustum est.", "role": "people", "prefix": "R"}
+      ]
+    },
     "contentByLanguage": {
       "en": [
         "The Lord be with you.",
@@ -334,6 +378,16 @@
     "conditions": ["always"],
     "isOptional": false,
     "isDialogue": true,
+    "dialogueStructure": {
+      "en": [
+        {"text": "The mystery of faith.", "role": "priest", "prefix": "V"},
+        {"text": "We proclaim your Death, O Lord, and profess your Resurrection until you come again.", "role": "people", "prefix": "R"}
+      ],
+      "la": [
+        {"text": "Mystérium fídei.", "role": "priest", "prefix": "V"},
+        {"text": "Annuntiamus mortem tuam, Dómine, confitémur resurrectiónem tuam, donec venias.", "role": "people", "prefix": "R"}
+      ]
+    },
     "contentByLanguage": {
       "en": [
         "The mystery of faith.",
@@ -354,6 +408,16 @@
     "conditions": ["always"],
     "isOptional": false,
     "isDialogue": true,
+    "dialogueStructure": {
+      "en": [
+        {"text": "Through him, and with him, and in him, O God, almighty Father, in the unity of the Holy Spirit, all glory and honor is yours, for ever and ever.", "role": "priest", "prefix": "V"},
+        {"text": "Amen.", "role": "people", "prefix": "R"}
+      ],
+      "la": [
+        {"text": "Per ipsum, et cum ipso, et in ipso, Dómine, Deus Pater omnípotens, in unitáte Spíritus Sancti, omnis honor et glória tua, per ómnia sæcula sæculórum.", "role": "priest", "prefix": "V"},
+        {"text": "Amen.", "role": "people", "prefix": "R"}
+      ]
+    },
     "contentByLanguage": {
       "en": [
         "Through him, and with him, and in him, O God, almighty Father, in the unity of the Holy Spirit, all glory and honor is yours, for ever and ever.",
@@ -467,6 +531,16 @@
     "conditions": ["always"],
     "isOptional": false,
     "isDialogue": true,
+    "dialogueStructure": {
+      "en": [
+        {"text": "Behold the Lamb of God, behold him who takes away the sins of the world.", "role": "priest", "prefix": "V"},
+        {"text": "Lord, I am not worthy that you should enter under my roof, but only say the word and my soul shall be healed.", "role": "people", "prefix": "R"}
+      ],
+      "la": [
+        {"text": "Ecce Agnus Dei, ecce qui tollit peccáta mundi.", "role": "priest", "prefix": "V"},
+        {"text": "Dómine, non sum dignus ut intres sub tectum meum, sed tantum dic verbo et sanábitur ánima mea.", "role": "people", "prefix": "R"}
+      ]
+    },
     "contentByLanguage": {
       "en": [
         "Behold the Lamb of God, behold him who takes away the sins of the world.",

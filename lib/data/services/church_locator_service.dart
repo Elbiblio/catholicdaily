@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../models/church.dart';
 import 'location_service.dart';
@@ -69,8 +70,15 @@ class ChurchLocatorService {
       );
 
       if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
+        final decoded = json.decode(response.body);
+        if (decoded is! List) {
+          throw const FormatException('Invalid churches payload');
+        }
+        final List<dynamic> data = decoded;
         for (final churchData in data) {
+          if (churchData is! Map<String, dynamic>) {
+            continue;
+          }
           final church = Church.fromDatabase({
             'id': churchData['id']?.toString() ?? '',
             'name': churchData['name'] ?? '',
@@ -98,7 +106,7 @@ class ChurchLocatorService {
       }
     } catch (e) {
       // If API fails, continue with cached churches only
-      print('elbiblio API error: $e');
+      debugPrint('elbiblio API error: $e');
     }
 
     // Get cached churches from database
@@ -145,6 +153,11 @@ class ChurchLocatorService {
     final churches = <Church>[];
     for (final map in maps) {
       final church = Church.fromDatabase(map);
+      final hasCoordinates = !(church.latitude == 0.0 && church.longitude == 0.0);
+      if (church.isUserAdded && !hasCoordinates) {
+        churches.add(church.copyWith(distance: null));
+        continue;
+      }
       final distance = LocationService.calculateDistance(
         userLatitude,
         userLongitude,
@@ -222,7 +235,7 @@ class ChurchLocatorService {
         church = church.copyWith(id: responseData['id'].toString());
       }
     } catch (e) {
-      print('Failed to submit church to API: $e');
+      debugPrint('Failed to submit church to API: $e');
       // Continue with local storage even if API fails
     }
 
@@ -246,7 +259,7 @@ class ChurchLocatorService {
       );
       // API response doesn't need to be successful for local deletion
     } catch (e) {
-      print('Failed to delete church from API: $e');
+      debugPrint('Failed to delete church from API: $e');
     }
 
     // Delete from local database

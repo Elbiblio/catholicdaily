@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../data/models/daily_reading.dart';
 import 'reading_preview.dart';
+import '../../utils/contrast_helper.dart';
 
 class MainReading extends StatelessWidget {
   final DailyReading reading;
@@ -33,7 +34,13 @@ class MainReading extends StatelessWidget {
             color.withValues(alpha: 0.18),
           );
     final badgeForeground = isLight
-        ? color
+        ? ContrastHelper.getContrastColor(
+            Color.alphaBlend(
+              Colors.white.withValues(alpha: 0.94),
+              color.withValues(alpha: 0.15),
+            ),
+            theme,
+          )
         : (ThemeData.estimateBrightnessForColor(badgeBackground!) == Brightness.dark
               ? Colors.white.withValues(alpha: 0.94)
               : theme.colorScheme.onSurface);
@@ -85,14 +92,17 @@ class MainReading extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: Colors.amber.withValues(alpha: 0.2),
+                      color: theme.colorScheme.secondaryContainer.withValues(alpha: 0.5),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.amber.withValues(alpha: 0.4)),
+                      border: Border.all(color: theme.colorScheme.secondary.withValues(alpha: 0.3)),
                     ),
                     child: Text(
                       '+${alternatives.length} alt',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: Colors.amber.shade700,
+                        color: ContrastHelper.getContrastColor(
+                          theme.colorScheme.secondaryContainer.withValues(alpha: 0.5),
+                          theme,
+                        ),
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -128,9 +138,9 @@ class MainReading extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
-                  color: Colors.blue.withValues(alpha: 0.1),
+                  color: theme.colorScheme.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.blue.withValues(alpha: 0.2)),
+                  border: Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.2)),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -138,14 +148,20 @@ class MainReading extends StatelessWidget {
                     Icon(
                       Icons.music_note,
                       size: 16,
-                      color: Colors.blue.shade700,
+                      color: ContrastHelper.getContrastColor(
+                        theme.colorScheme.primary.withValues(alpha: 0.1),
+                        theme,
+                      ),
                     ),
                     const SizedBox(width: 6),
                     Flexible(
                       child: Text(
                         'Response: ${reading.psalmResponse}',
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: Colors.blue.shade700,
+                          color: ContrastHelper.getContrastColor(
+                            theme.colorScheme.primary.withValues(alpha: 0.1),
+                            theme,
+                          ),
                           fontWeight: FontWeight.w600,
                         ),
                         overflow: TextOverflow.ellipsis,

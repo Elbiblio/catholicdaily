@@ -1,6 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import 'bible_version_preference.dart';
 
 class BibleCacheService {
   static const String _recentlyOpenedKey = 'recently_opened_passages';
@@ -165,22 +164,26 @@ class BibleCacheService {
 
   /// Refresh cached content for all items when Bible version changes
   Future<void> refreshContentForVersionChange(String newVersion) async {
-    final preference = await BibleVersionPreference.getInstance();
-    final currentVersion = preference.currentVersion.dbName;
-    
-    if (currentVersion == newVersion) return;
+    final hasVersionMismatch = _recentlyOpened.any(
+      (item) => item['version'] != null && item['version'] != newVersion,
+    ) ||
+        _bookmarked.any(
+          (item) => item['version'] != null && item['version'] != newVersion,
+        );
+
+    if (!hasVersionMismatch) return;
     
     // Clear content cache but preserve metadata
     _recentlyOpened = _recentlyOpened.map((item) => {
       ...item,
       'content': '', // Clear cached content
-      'version': currentVersion,
+      'version': newVersion,
     }).toList();
     
     _bookmarked = _bookmarked.map((item) => {
       ...item,
       'content': '', // Clear cached content
-      'version': currentVersion,
+      'version': newVersion,
     }).toList();
     
     await _saveData();

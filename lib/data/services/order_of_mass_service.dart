@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart' show rootBundle;
 
+import '../models/daily_reading.dart';
 import '../models/order_of_mass_item.dart';
 import '../models/prayer.dart';
 import 'improved_liturgical_calendar_service.dart';
@@ -82,6 +83,7 @@ class OrderOfMassService {
   Future<List<ResolvedOrderOfMassSection>> getSectionsForDate(
     DateTime date, {
     String languageCode = 'en',
+    List<DailyReading>? lectionaryReadings,
   }) async {
     await _prayerService.initialize();
     final config = await _loadConfig();
@@ -91,11 +93,16 @@ class OrderOfMassService {
     final resolvedItems = <ResolvedOrderOfMassItem>[];
     for (final item in config) {
       if (_matchesAnyCondition(item.conditions, liturgicalDay)) {
-        // Skip readings-based variable items - they belong in reading flow, not mass flow
+        // Skip readings-based variable items (scripture text lives in the lectionary flow).
+        // Keep items that also ship inline liturgical text (e.g. Gospel dialogue before the reading).
         if (item.type == 'variable' && item.source == 'readings') {
+          if (item.hasInlineContent) {
+            final inline = _resolveInlineItem(item);
+            resolvedItems.add(inline);
+          }
           continue;
         }
-        
+
         final resolved = await _resolveItem(item, dateStr, languageCode);
         if (resolved != null) {
           resolvedItems.add(resolved);
@@ -134,7 +141,7 @@ class OrderOfMassService {
       'concluding_rites',
     ];
 
-    return orderedInsertionPoints
+    final sections = orderedInsertionPoints
         .where(grouped.containsKey)
         .map(
           (insertionPoint) => ResolvedOrderOfMassSection(
@@ -144,6 +151,92 @@ class OrderOfMassService {
           ),
         )
         .toList();
+
+    return _substituteGospelDialoguePlaceholders(sections, lectionaryReadings);
+  }
+
+  List<ResolvedOrderOfMassSection> _substituteGospelDialoguePlaceholders(
+    List<ResolvedOrderOfMassSection> sections,
+    List<DailyReading>? readings,
+  ) {
+    if (readings == null || readings.isEmpty) return sections;
+    final evangelist = _evangelistNameFromReadings(readings);
+    if (evangelist == null) return sections;
+
+    return sections.map((section) {
+      if (section.insertionPoint != 'before_gospel') return section;
+      final newItems = section.items.map((item) {
+        if (item.id != 'gospel') return item;
+        return _withGospelDialogueSubstituted(item, evangelist);
+      }).toList();
+      return ResolvedOrderOfMassSection(
+        insertionPoint: section.insertionPoint,
+        title: section.title,
+        items: newItems,
+      );
+    }).toList();
+  }
+
+  static String? _evangelistNameFromReadings(List<DailyReading> readings) {
+    for (final r in readings) {
+      final p = r.position?.toLowerCase() ?? '';
+      if (p.contains('gospel')) {
+        return _evangelistFromReference(r.reading);
+      }
+    }
+    for (final r in readings) {
+      final ref = r.reading.trim().toLowerCase();
+      if (ref.startsWith('matt ') ||
+          ref.startsWith('mark ') ||
+          ref.startsWith('luke ') ||
+          ref.startsWith('john ')) {
+        return _evangelistFromReference(r.reading);
+      }
+    }
+    return null;
+  }
+
+  static String? _evangelistFromReference(String reference) {
+    final book = reference.trim().split(RegExp(r'\s+')).first.toLowerCase();
+    switch (book) {
+      case 'matt':
+        return 'Matthew';
+      case 'mark':
+        return 'Mark';
+      case 'luke':
+        return 'Luke';
+      case 'john':
+        return 'John';
+      default:
+        return null;
+    }
+  }
+
+  ResolvedOrderOfMassItem _withGospelDialogueSubstituted(
+    ResolvedOrderOfMassItem item,
+    String evangelist,
+  ) {
+    final nextContent = <String, List<String>>{};
+    for (final e in item.contentByLanguage.entries) {
+      nextContent[e.key] =
+          e.value.map((line) => line.replaceAll('[N]', evangelist)).toList();
+    }
+    return ResolvedOrderOfMassItem(
+      id: item.id,
+      title: item.title,
+      insertionPoint: item.insertionPoint,
+      order: item.order,
+      contentByLanguage: nextContent,
+      availableLanguages: List<String>.from(item.availableLanguages),
+      isOptional: item.isOptional,
+      type: item.type,
+      source: item.source,
+      sourceField: item.sourceField,
+      role: item.role,
+      isDialogue: item.isDialogue,
+      isResponsive: item.isResponsive,
+      alternativeGroup: item.alternativeGroup,
+    );
   }
 
   Future<List<OrderOfMassItem>> _loadConfig() async {
@@ -363,9 +456,9 @@ class OrderOfMassService {
       case 'between_readings':
         return 'Between the Readings';
       case 'before_gospel':
-        return 'Gospel';
+        return 'Before the Gospel';
       case 'after_gospel':
-        return 'After the Gospel';
+        return 'Liturgy of the Word (Conclusion)';
       case 'offertory':
         return 'Liturgy of the Eucharist';
       case 'preface':
@@ -379,7 +472,7 @@ class OrderOfMassService {
       case 'sign_of_peace':
         return 'Sign of Peace';
       case 'fraction':
-        return 'Fraction of the Bread';
+        return 'Lamb of God';
       case 'communion':
         return 'Holy Communion';
       case 'after_communion':

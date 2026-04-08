@@ -30,7 +30,7 @@ class _BibleScreenState extends State<BibleScreen> with SingleTickerProviderStat
   }
 
   void _onTabChanged() {
-    if (_tabController.index == 1) { // Quick Access tab
+    if (_tabController.index == 1 && mounted) { // Quick Access tab
       setState(() {
         _initFuture = _cacheService.initialize();
       });
@@ -172,6 +172,7 @@ class _BibleScreenState extends State<BibleScreen> with SingleTickerProviderStat
                 IconButton(
                   icon: Icon(isBookmarked ? Icons.bookmark : Icons.bookmark_border),
                   onPressed: () => _toggleBookmark(item),
+                  tooltip: isBookmarked ? 'Remove bookmark' : 'Add bookmark',
                 ),
                 const Icon(Icons.chevron_right),
               ],
@@ -182,6 +183,7 @@ class _BibleScreenState extends State<BibleScreen> with SingleTickerProviderStat
                 if (reference.isNotEmpty) IconButton(
                   icon: Icon(isBookmarked ? Icons.bookmark : Icons.bookmark_border),
                   onPressed: () => _toggleBookmark(item),
+                  tooltip: isBookmarked ? 'Remove bookmark' : 'Add bookmark',
                 ),
                 const Icon(Icons.chevron_right),
               ],

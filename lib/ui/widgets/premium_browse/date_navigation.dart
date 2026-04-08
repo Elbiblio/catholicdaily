@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../../ui/utils/contrast_helper.dart';
 
 class DateNavigation extends StatelessWidget {
   final DateTime selectedDate;
@@ -24,12 +25,7 @@ class DateNavigation extends StatelessWidget {
   }
 
   Color _resolveHeaderForeground(ThemeData theme, Color backgroundColor) {
-    if (theme.brightness == Brightness.dark) {
-      return Colors.white.withValues(alpha: 0.96);
-    }
-
-    final brightness = ThemeData.estimateBrightnessForColor(backgroundColor);
-    return brightness == Brightness.dark ? Colors.white : theme.colorScheme.onSurface;
+    return ContrastHelper.getContrastColor(backgroundColor, theme);
   }
 
   @override

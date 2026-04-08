@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../data/models/daily_reading.dart';
 import 'alternative_item.dart';
+import '../../utils/contrast_helper.dart';
 
 class AlternativesSection extends StatelessWidget {
   final List<DailyReading> alternatives;
@@ -37,7 +38,7 @@ class AlternativesSection extends StatelessWidget {
               children: [
                 Icon(
                   isExpanded ? Icons.expand_less : Icons.expand_more,
-                  color: color.withValues(alpha: 0.8),
+                  color: ContrastHelper.getContrastColor(theme.colorScheme.surface, theme),
                   size: 20,
                 ),
                 const SizedBox(width: 8),
@@ -45,7 +46,7 @@ class AlternativesSection extends StatelessWidget {
                   child: Text(
                     isExpanded ? 'Hide Alternatives' : 'Show Alternatives',
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: color.withValues(alpha: 0.8),
+                      color: ContrastHelper.getContrastColor(theme.colorScheme.surface, theme),
                       fontWeight: FontWeight.w600,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -55,7 +56,7 @@ class AlternativesSection extends StatelessWidget {
                 Text(
                   '${alternatives.length} available',
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
+                    color: ContrastHelper.getSecondaryContrastColor(theme.colorScheme.surface, theme),
                   ),
                 ),
               ],

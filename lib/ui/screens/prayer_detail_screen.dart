@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../data/models/prayer.dart';
 import '../../data/services/prayer_service.dart';
 import '../../data/services/language_preference_service.dart';
@@ -52,9 +53,11 @@ class _PrayerDetailScreenState extends State<PrayerDetailScreen> {
 
   Future<void> _toggleBookmark() async {
     await _prayerService.toggleBookmark(widget.prayer);
-    setState(() {
-      _isBookmarked = !_isBookmarked;
-    });
+    if (mounted) {
+      setState(() {
+        _isBookmarked = !_isBookmarked;
+      });
+    }
   }
 
   Future<void> _onLanguageChanged(String language) async {
@@ -157,6 +160,9 @@ class _PrayerDetailScreenState extends State<PrayerDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final displayLines = widget.prayer.displayText.split('\n');
+    final displayFirstLine = displayLines.isNotEmpty ? displayLines.first : '';
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.prayer.title),
@@ -176,10 +182,12 @@ class _PrayerDetailScreenState extends State<PrayerDetailScreen> {
           IconButton(
             icon: Icon(_isBookmarked ? Icons.bookmark : Icons.bookmark_border),
             onPressed: _toggleBookmark,
+            tooltip: _isBookmarked ? 'Remove bookmark' : 'Add bookmark',
           ),
           IconButton(
             icon: const Icon(Icons.share),
             onPressed: _sharePrayer,
+            tooltip: 'Share prayer',
           ),
         ],
       ),
@@ -189,7 +197,7 @@ class _PrayerDetailScreenState extends State<PrayerDetailScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (widget.prayer.firstLine.isNotEmpty && 
-                widget.prayer.firstLine != widget.prayer.displayText.split('\n')[0])
+                widget.prayer.firstLine != displayFirstLine)
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -213,9 +221,21 @@ class _PrayerDetailScreenState extends State<PrayerDetailScreen> {
   }
 
   void _sharePrayer() {
-    // TODO: Implement share functionality
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Share functionality coming soon')),
-    );
+    final String shareText;
+    
+    // Get prayer content based on current language
+    if (widget.prayer.contentByLanguage != null && 
+        widget.prayer.contentByLanguage!.isNotEmpty) {
+      final languageContent = widget.prayer.getContentForLanguage(_currentLanguage);
+      if (languageContent != null && languageContent.isNotEmpty) {
+        shareText = '${widget.prayer.title}\n\n${languageContent.join('\n\n')}\n\nShared from Catholic Daily app';
+      } else {
+        shareText = '${widget.prayer.title}\n\n${widget.prayer.displayText}\n\nShared from Catholic Daily app';
+      }
+    } else {
+      shareText = '${widget.prayer.title}\n\n${widget.prayer.displayText}\n\nShared from Catholic Daily app';
+    }
+    
+    Share.share(shareText, subject: widget.prayer.title);
   }
 }

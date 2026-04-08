@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -16,6 +15,8 @@ import '../widgets/premium_browse/date_navigation.dart';
 import '../widgets/premium_browse/liturgical_summary_row.dart';
 import '../widgets/premium_browse/main_reading.dart';
 import '../widgets/premium_browse/alternatives_section.dart';
+import '../utils/contrast_helper.dart';
+import 'mass_flow_screen.dart';
 
 /// Premium Browse Screen with modern 2026 design principles
 class PremiumBrowseScreen extends StatefulWidget {
@@ -341,10 +342,10 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                         ),
                         margin: const EdgeInsets.only(bottom: 12),
                         decoration: BoxDecoration(
-                          color: headerForeground.withValues(alpha: 0.10),
+                          color: headerForeground.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
-                            color: headerForeground.withValues(alpha: 0.18),
+                            color: headerForeground.withValues(alpha: 0.25),
                             width: 1,
                           ),
                         ),
@@ -386,7 +387,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                           Text(
                             _showLiturgicalDetails ? 'Less' : 'More',
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: headerForeground.withValues(alpha: 0.82),
+                              color: headerForeground.withValues(alpha: 0.95),
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -396,7 +397,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                             duration: const Duration(milliseconds: 300),
                             child: Icon(
                               Icons.expand_more,
-                              color: headerForeground.withValues(alpha: 0.82),
+                              color: headerForeground.withValues(alpha: 0.95),
                               size: 20,
                             ),
                           ),
@@ -424,7 +425,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                                 child: Text(
                                   _getLiturgicalDetails(),
                                   style: theme.textTheme.bodySmall?.copyWith(
-                                    color: theme.colorScheme.onSurface.withValues(alpha: 0.86),
+                                    color: theme.colorScheme.onSurface.withValues(alpha: 0.95),
                                     height: 1.5,
                                   ),
                                 ),
@@ -509,7 +510,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
               Text(
                 'Loading Today\'s Readings',
                 style: theme.textTheme.titleMedium?.copyWith(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.95),
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -546,7 +547,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
               Text(
                 'Check your connection or try another date',
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.95),
                 ),
               ),
               const SizedBox(height: 24),
@@ -581,35 +582,62 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
             // Date navigation with premium design
             _buildDateNavigation(theme),
 
+            // Full Mass Readings Button
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: _buildFullMassReadingsButton(theme),
+            ),
+
             // Optional celebrations selector
             if (_optionalCelebrations.isNotEmpty)
-              _buildOptionalCelebrationSelector(theme),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 16),
+                child: _buildOptionalCelebrationSelector(theme),
+              ),
 
             // Grouped readings list
-            ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: _groupedReadings.length,
-              itemBuilder: (context, index) {
-                final group = _groupedReadings[index];
-                return AnimatedContainer(
-                  duration: Duration(milliseconds: 300 + (index * 50)),
-                  curve: Curves.easeOutCubic,
-                  child: _PremiumReadingGroupCard(
-                    group: group,
-                    liturgicalColor: _liturgicalDay?.colorValue,
-                    readingPreviews: _readingPreviews,
-                    onReadingSelected: (reading) async {
-                      HapticFeedback.lightImpact();
-                      final readingIndex = _readings.indexOf(reading);
-                      if (readingIndex >= 0) {
-                        await _openReadingAtIndex(readingIndex);
-                      }
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 8),
+                  Text(
+                    'Today\'s Readings',
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  ListView.builder(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _groupedReadings.length,
+                    itemBuilder: (context, index) {
+                      final group = _groupedReadings[index];
+                      return AnimatedContainer(
+                        duration: Duration(milliseconds: 300 + (index * 50)),
+                        curve: Curves.easeOutCubic,
+                        child: _PremiumReadingGroupCard(
+                          group: group,
+                          liturgicalColor: _liturgicalDay?.colorValue,
+                          readingPreviews: _readingPreviews,
+                          onReadingSelected: (reading) async {
+                            HapticFeedback.lightImpact();
+                            final readingIndex = _readings.indexOf(reading);
+                            if (readingIndex >= 0) {
+                              await _openReadingAtIndex(readingIndex);
+                            }
+                          },
+                        ),
+                      );
                     },
                   ),
-                );
-              },
+                  const SizedBox(height: 24),
+                ],
+              ),
             ),
           ],
         ),
@@ -623,6 +651,106 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
       liturgicalColor: _liturgicalDay?.colorValue,
       onPreviousDay: _previousDay,
       onNextDay: _nextDay,
+    );
+  }
+
+  Widget _buildFullMassReadingsButton(ThemeData theme) {
+    final liturgicalColor = _liturgicalDay?.colorValue ?? theme.colorScheme.primary;
+    
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {
+            HapticFeedback.mediumImpact();
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MassFlowScreen(date: _selectedDate),
+              ),
+            );
+          },
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color.alphaBlend(
+                    liturgicalColor.withValues(alpha: 0.15),
+                    theme.colorScheme.surface,
+                  ),
+                  Color.alphaBlend(
+                    liturgicalColor.withValues(alpha: 0.25),
+                    theme.colorScheme.surface,
+                  ),
+                ],
+              ),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: liturgicalColor.withValues(alpha: 0.3),
+                width: 1.5,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: liturgicalColor.withValues(alpha: 0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: liturgicalColor.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(
+                        Icons.church_rounded,
+                        color: liturgicalColor,
+                        size: 24,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Complete Mass',
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: theme.colorScheme.onSurface,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          'View full Order of Mass with all prayers',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                  size: 18,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -799,57 +927,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
   }
 
   Color _resolveHeaderForeground(ThemeData theme, Color backgroundColor) {
-    if (theme.brightness == Brightness.dark) {
-      return Colors.white.withValues(alpha: 0.96);
-    }
-
-    // Calculate luminance of the background color
-    final brightness = ThemeData.estimateBrightnessForColor(backgroundColor);
-    
-    // For light mode, ensure sufficient contrast using WCAG luminance calculation
-    if (brightness == Brightness.dark) {
-      return Colors.white;
-    }
-    
-    // If background is light, use onSurface (which is typically dark)
-    // But check if contrast is sufficient (4.5:1 ratio)
-    final onSurfaceColor = theme.colorScheme.onSurface;
-    if (_hasSufficientContrast(backgroundColor, onSurfaceColor)) {
-      return onSurfaceColor;
-    }
-    
-    // If contrast is insufficient, use a darker color
-    return Colors.black.withValues(alpha: 0.87);
-  }
-
-  bool _hasSufficientContrast(Color foreground, Color background) {
-    // Calculate relative luminance for both colors
-    final fgLuminance = _calculateLuminance(foreground);
-    final bgLuminance = _calculateLuminance(background);
-    
-    // Calculate contrast ratio
-    final lighter = fgLuminance > bgLuminance ? fgLuminance : bgLuminance;
-    final darker = fgLuminance > bgLuminance ? bgLuminance : fgLuminance;
-    
-    final contrastRatio = (lighter + 0.05) / (darker + 0.05);
-    
-    // WCAG AA requires at least 4.5:1 for normal text
-    return contrastRatio >= 4.5;
-  }
-
-  double _calculateLuminance(Color color) {
-    // Convert to sRGB
-    final r = (color.r * 255.0).round() / 255;
-    final g = (color.g * 255.0).round() / 255;
-    final b = (color.b * 255.0).round() / 255;
-    
-    // Apply gamma correction
-    final rLinear = r <= 0.03928 ? r / 12.92 : math.pow((r + 0.055) / 1.055, 2.4).toDouble();
-    final gLinear = g <= 0.03928 ? g / 12.92 : math.pow((g + 0.055) / 1.055, 2.4).toDouble();
-    final bLinear = b <= 0.03928 ? b / 12.92 : math.pow((b + 0.055) / 1.055, 2.4).toDouble();
-    
-    // Calculate luminance
-    return 0.2126 * rLinear + 0.7152 * gLinear + 0.0722 * bLinear;
+    return ContrastHelper.getContrastColor(backgroundColor, theme);
   }
 
   void _applyHydratedReadings(HydratedReadingSet hydrated) {
@@ -1201,7 +1279,7 @@ class _PremiumReadingGroupCardState extends State<_PremiumReadingGroupCard>
       case 'second reading':
         return isDark ? const Color(0xFF26A69A) : const Color(0xFF009688);
       default:
-        return isDark ? Colors.grey.shade400 : Colors.grey.shade600;
+        return theme.colorScheme.onSurfaceVariant;
     }
   }
   
@@ -1243,7 +1321,7 @@ class _PremiumReadingGroupCardState extends State<_PremiumReadingGroupCard>
           
           // Alternatives section
           if (widget.group.hasAlternatives) ...[
-            const Divider(height: 1, color: Colors.grey),
+            Divider(height: 1, color: theme.colorScheme.outline.withValues(alpha: 0.3)),
             _buildAlternativesSection(theme, color, isLight),
           ],
         ],

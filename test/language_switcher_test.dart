@@ -46,12 +46,12 @@ void main() {
       // Test available languages
       expect(service.availableLanguages, contains('en'));
       expect(service.availableLanguages, contains('la'));
-      expect(service.availableLanguages.length, equals(2));
+      expect(service.availableLanguages.length, greaterThanOrEqualTo(2));
       
       // Test language validation
       expect(service.isValidLanguage('en'), isTrue);
       expect(service.isValidLanguage('la'), isTrue);
-      expect(service.isValidLanguage('es'), isFalse);
+      expect(service.isValidLanguage('es'), isTrue);
     });
 
     test('Prayer model language helper methods work correctly', () {

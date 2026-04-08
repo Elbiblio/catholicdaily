@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import '../models/hymn.dart';
 import '../models/hymn_category.dart';
@@ -26,7 +27,7 @@ class HymnService extends BaseService<HymnService> {
       _cachedHymns = data.map((json) => Hymn.fromMap(json)).toList();
       return _cachedHymns!;
     } catch (e) {
-      print('Error loading hymns from assets: $e');
+      debugPrint('Error loading hymns from assets: $e');
       return [];
     }
   }
@@ -42,7 +43,7 @@ class HymnService extends BaseService<HymnService> {
       _cachedCategories = data.map((json) => HymnCategory.fromMap(json)).toList();
       return _cachedCategories!;
     } catch (e) {
-      print('Error loading categories from assets: $e');
+      debugPrint('Error loading categories from assets: $e');
       return [];
     }
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../data/services/language_preference_service.dart';
+import '../utils/contrast_helper.dart';
 
 class LanguageSwitcherWidget extends StatefulWidget {
   final String? currentLanguage;
@@ -69,7 +70,9 @@ class _LanguageSwitcherWidgetState extends State<LanguageSwitcherWidget>
       builder: (context, child) {
         return Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceContainerHighest,
+            color: Theme.of(context).brightness == Brightness.light
+                ? Theme.of(context).colorScheme.surfaceContainer
+                : Theme.of(context).colorScheme.surfaceContainerHighest,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Row(
@@ -109,7 +112,10 @@ class _LanguageSwitcherWidgetState extends State<LanguageSwitcherWidget>
                             style: TextStyle(
                               color: isSelected
                                   ? Theme.of(context).colorScheme.onPrimary
-                                  : Theme.of(context).colorScheme.onSurfaceVariant,
+                                  : ContrastHelper.getContrastColor(
+                                      Theme.of(context).colorScheme.surfaceContainerHighest,
+                                      Theme.of(context),
+                                    ),
                               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                               fontSize: 14,
                             ),
@@ -123,7 +129,10 @@ class _LanguageSwitcherWidgetState extends State<LanguageSwitcherWidget>
                           size: 16,
                           color: isSelected
                               ? Theme.of(context).colorScheme.onPrimary
-                              : Theme.of(context).colorScheme.onSurfaceVariant,
+                              : ContrastHelper.getContrastColor(
+                                  Theme.of(context).colorScheme.surfaceContainerHighest,
+                                  Theme.of(context),
+                                ),
                         ),
                       ],
                     ),
