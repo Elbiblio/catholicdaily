@@ -4,7 +4,6 @@ import 'package:flutter/services.dart' show rootBundle;
 
 import '../models/daily_reading.dart';
 import '../models/order_of_mass_item.dart';
-import '../models/prayer.dart';
 import 'improved_liturgical_calendar_service.dart';
 import 'ordo_resolver_service.dart';
 import 'prebuilt_prayer_service.dart';
@@ -401,52 +400,7 @@ class OrderOfMassService {
     );
   }
 
-  ResolvedOrderOfMassItem _resolvePrayerItem(OrderOfMassItem item, Prayer prayer) {
-    final parsedContent = <String, List<String>>{};
-    final availableLanguages = <String>[];
-
-    // Load all available languages - UI will select based on user preference
-    // This allows language switching without reloading prayers
-
-    final sourceContent = prayer.contentByLanguage;
-    if (sourceContent != null && sourceContent.isNotEmpty) {
-      for (final entry in sourceContent.entries) {
-        final cleaned = entry.value.where((line) => line.trim().isNotEmpty).toList();
-        if (cleaned.isEmpty) {
-          continue;
-        }
-        parsedContent[entry.key] = cleaned;
-        availableLanguages.add(entry.key);
-      }
-    }
-
-    if (parsedContent.isEmpty && prayer.text.isNotEmpty) {
-      final cleaned = prayer.text.where((line) => line.trim().isNotEmpty).toList();
-      if (cleaned.isNotEmpty) {
-        parsedContent['en'] = cleaned;
-        availableLanguages.add('en');
-      }
-    }
-
-    return ResolvedOrderOfMassItem(
-      id: item.id,
-      title: item.title,
-      insertionPoint: item.insertionPoint,
-      order: item.order,
-      contentByLanguage: parsedContent,
-      dialogueStructure: item.dialogueStructure,
-      availableLanguages: availableLanguages,
-      isOptional: item.isOptional,
-      type: item.type,
-      source: item.source,
-      sourceField: item.sourceField,
-      role: item.role,
-      isDialogue: item.isDialogue,
-      isResponsive: item.isResponsive,
-      alternativeGroup: item.alternativeGroup,
-    );
-  }
-
+  
   ResolvedOrderOfMassItem _resolveInlineItem(OrderOfMassItem item) {
     final parsedContent = <String, List<String>>{};
     final availableLanguages = <String>[];

@@ -325,7 +325,7 @@ class PastoralJudgmentEngine {
     
     // Theological depth indicators
     final themes = hymn.themes?.toLowerCase().split(',').map((s) => s.trim()).toList() ?? [];
-    final categories = hymn.category.toLowerCase().split(',').map((s) => s.trim()).toList() ?? [];
+    final categories = hymn.category.toLowerCase().split(',').map((s) => s.trim()).toList();
     
     if (themes.contains('scripture') || themes.contains('biblical')) score += 5.0;
     if (themes.contains('catechetical') || themes.contains('teaching')) score += 5.0;
@@ -409,7 +409,7 @@ class MusicalJudgmentEngine {
     double score = 0.0;
     
     final themes = hymn.themes?.toLowerCase().split(',').map((s) => s.trim()).toList() ?? [];
-    final categories = hymn.category.toLowerCase().split(',').map((s) => s.trim()).toList() ?? [];
+    final categories = hymn.category.toLowerCase().split(',').map((s) => s.trim()).toList();
     
     // Sacred character indicators
     if (themes.contains('sacred') || themes.contains('worship')) score += 8.0;
@@ -466,7 +466,7 @@ class TheologicalThemeExtractor {
     final themeWeights = <String, double>{};
     
     for (final reading in readings) {
-      final text = (reading.reading ?? '').toLowerCase();
+      final text = reading.reading.toLowerCase();
       final source = reading.source?.toLowerCase() ?? '';
       
       // Weight by source importance
