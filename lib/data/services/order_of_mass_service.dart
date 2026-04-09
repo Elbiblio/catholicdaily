@@ -4,12 +4,14 @@ import 'package:flutter/services.dart' show rootBundle;
 
 import '../models/daily_reading.dart';
 import '../models/order_of_mass_item.dart';
+import '../models/prayer.dart';
 import 'improved_liturgical_calendar_service.dart';
 import 'ordo_resolver_service.dart';
 import 'prebuilt_prayer_service.dart';
 import 'missal_rites_service.dart';
 import 'divinum_officium_loader_service.dart';
 import 'prayer_of_the_faithful_service.dart';
+import 'prayer_service.dart';
 
 class ResolvedOrderOfMassItem {
   final String id;
@@ -122,6 +124,7 @@ class OrderOfMassService {
   final MissalRitesService _missalRitesService = MissalRitesService.instance;
   final DivinumOfficiumLoaderService _divinumOfficiumLoader = DivinumOfficiumLoaderService();
   final PrayerOfTheFaithfulService _prayerOfTheFaithfulService = PrayerOfTheFaithfulService.instance;
+  final PrayerService _prayerContentService = PrayerService.instance;
 
   List<OrderOfMassItem>? _cachedConfig;
 
@@ -371,6 +374,14 @@ class OrderOfMassService {
         }
         return _resolvePrayerOfFaithfulItem(item, prayer, languageCode);
       }
+      
+      // Handle static prayers using PrayerService
+      await _prayerContentService.initialize();
+      final prayer = _prayerContentService.findPrayerBySlug(item.prayerSlug!);
+      if (prayer != null) {
+        return _resolveStaticPrayerItem(item, prayer, languageCode);
+      }
+      
       return item.hasInlineContent ? _resolveInlineItem(item) : null;
     }
 
@@ -390,6 +401,40 @@ class OrderOfMassService {
       contentByLanguage: {languageCode: [prayerContent]},
       availableLanguages: [languageCode],
       isOptional: false,
+      type: item.type,
+      source: item.source,
+      sourceField: item.sourceField,
+      role: item.role,
+      isDialogue: item.isDialogue,
+      isResponsive: item.isResponsive,
+      alternativeGroup: item.alternativeGroup,
+    );
+  }
+
+  ResolvedOrderOfMassItem _resolveStaticPrayerItem(OrderOfMassItem item, Prayer prayer, String languageCode) {
+    final contentByLanguage = <String, List<String>>{};
+    final availableLanguages = <String>[];
+
+    // Load content for requested language
+    final content = prayer.contentByLanguage?[languageCode];
+    if (content != null && content.isNotEmpty) {
+      contentByLanguage[languageCode] = content;
+      availableLanguages.add(languageCode);
+    } else if (prayer.text.isNotEmpty) {
+      // Fallback to text field if language-specific content not available
+      contentByLanguage[languageCode] = prayer.text;
+      availableLanguages.add(languageCode);
+    }
+
+    return ResolvedOrderOfMassItem(
+      id: item.id,
+      title: item.title,
+      insertionPoint: item.insertionPoint,
+      order: item.order,
+      contentByLanguage: contentByLanguage,
+      dialogueStructure: item.dialogueStructure,
+      availableLanguages: availableLanguages,
+      isOptional: item.isOptional,
       type: item.type,
       source: item.source,
       sourceField: item.sourceField,
