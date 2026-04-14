@@ -47,7 +47,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 3,
@@ -101,7 +102,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 4,
@@ -161,7 +163,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 5,
@@ -263,7 +266,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 6,
@@ -337,7 +341,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 7,
@@ -395,7 +400,8 @@
       "benediction"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 8,
@@ -471,7 +477,8 @@
       "benediction"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 9,
@@ -503,7 +510,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 10,
@@ -563,7 +571,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 11,
@@ -625,7 +634,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 12,
@@ -693,7 +703,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 13,
@@ -767,7 +778,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 18,
@@ -827,7 +839,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 20,
@@ -879,7 +892,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 21,
@@ -929,7 +943,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 23,
@@ -997,7 +1012,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 22,
@@ -1065,7 +1081,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 24,
@@ -1133,7 +1150,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 14,
@@ -1209,7 +1227,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 15,
@@ -1313,7 +1332,8 @@
       "christ_the_king"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 16,
@@ -1365,7 +1385,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 17,
@@ -1441,7 +1462,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 25,
@@ -1487,7 +1509,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 26,
@@ -1563,7 +1586,10 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": [
+      "amazing_grace__new_britain.mid"
+    ]
   },
   {
     "id": 19,
@@ -1615,7 +1641,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 27,
@@ -1699,7 +1726,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 2,
@@ -1733,7 +1761,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 28,
@@ -1813,7 +1842,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 29,
@@ -1893,7 +1923,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 30,
@@ -1941,7 +1972,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 31,
@@ -2001,7 +2033,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 33,
@@ -2061,7 +2094,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 32,
@@ -2097,7 +2131,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 34,
@@ -2157,7 +2192,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 448,
@@ -2201,7 +2237,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 35,
@@ -2253,7 +2290,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 36,
@@ -2307,7 +2345,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 37,
@@ -2359,7 +2398,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 38,
@@ -2411,7 +2451,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 39,
@@ -2491,7 +2532,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 40,
@@ -2551,7 +2593,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 41,
@@ -2615,7 +2658,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 42,
@@ -2719,7 +2763,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 43,
@@ -2803,7 +2848,8 @@
       "easter"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 44,
@@ -2863,7 +2909,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 45,
@@ -2921,7 +2968,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 46,
@@ -2983,7 +3031,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 47,
@@ -3059,7 +3108,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 48,
@@ -3095,7 +3145,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 49,
@@ -3137,7 +3188,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 50,
@@ -3181,7 +3233,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 51,
@@ -3311,7 +3364,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 52,
@@ -3377,7 +3431,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 53,
@@ -3457,7 +3512,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 54,
@@ -3501,7 +3557,10 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": [
+      "be_thou_my_vision__slane.mid"
+    ]
   },
   {
     "id": 56,
@@ -3553,7 +3612,8 @@
       "easter"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 179,
@@ -3607,7 +3667,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 55,
@@ -3675,7 +3736,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 57,
@@ -3809,7 +3871,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 58,
@@ -3909,7 +3972,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 59,
@@ -3941,7 +4005,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 60,
@@ -4001,7 +4066,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 61,
@@ -4053,7 +4119,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 64,
@@ -4145,7 +4212,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 65,
@@ -4197,7 +4265,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 66,
@@ -4229,7 +4298,8 @@
       "benediction"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 67,
@@ -4285,7 +4355,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 62,
@@ -4347,7 +4418,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 63,
@@ -4399,7 +4471,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 68,
@@ -4457,7 +4530,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 69,
@@ -4517,7 +4591,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 70,
@@ -4585,7 +4660,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 71,
@@ -4645,7 +4721,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 72,
@@ -4711,7 +4788,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 74,
@@ -4795,7 +4873,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 73,
@@ -4847,7 +4926,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 75,
@@ -4909,7 +4989,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 209,
@@ -4961,7 +5042,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 76,
@@ -5035,7 +5117,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 77,
@@ -5141,7 +5224,8 @@
       "feast"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 78,
@@ -5193,7 +5277,10 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": [
+      "children_in_thy_presence.mid"
+    ]
   },
   {
     "id": 79,
@@ -5269,7 +5356,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 80,
@@ -5313,7 +5401,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 81,
@@ -5391,7 +5480,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 83,
@@ -5471,7 +5561,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 85,
@@ -5539,7 +5630,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 84,
@@ -5615,7 +5707,8 @@
       "christ_the_king"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 82,
@@ -5675,7 +5768,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 86,
@@ -5759,7 +5853,8 @@
       "easter"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 87,
@@ -5851,7 +5946,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 88,
@@ -5931,7 +6027,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 89,
@@ -6041,7 +6138,10 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": [
+      "christmas_comes_to_bless.mid"
+    ]
   },
   {
     "id": 90,
@@ -6109,7 +6209,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 91,
@@ -6169,7 +6270,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 92,
@@ -6237,7 +6339,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 93,
@@ -6281,7 +6384,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 94,
@@ -6357,7 +6461,8 @@
       "holy_spirit"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 95,
@@ -6407,7 +6512,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 96,
@@ -6467,7 +6573,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 97,
@@ -6515,7 +6622,8 @@
       "advent"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 98,
@@ -6595,7 +6703,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 99,
@@ -6655,7 +6764,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 100,
@@ -6747,7 +6857,10 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": [
+      "come_thou_almighty_king__italian_hymn.mid"
+    ]
   },
   {
     "id": 101,
@@ -6847,7 +6960,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 102,
@@ -6899,7 +7013,10 @@
       "advent"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": [
+      "come_thou_long_expected.mid"
+    ]
   },
   {
     "id": 103,
@@ -6975,7 +7092,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 104,
@@ -7045,7 +7163,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 105,
@@ -7099,7 +7218,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 106,
@@ -7215,7 +7335,8 @@
       "christ_the_king"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 108,
@@ -7347,7 +7468,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 107,
@@ -7439,7 +7561,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 109,
@@ -7507,7 +7630,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 110,
@@ -7575,7 +7699,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 111,
@@ -7643,7 +7768,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 112,
@@ -7783,7 +7909,8 @@
       "feast"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 114,
@@ -7851,7 +7978,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 113,
@@ -7943,7 +8071,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 115,
@@ -8011,7 +8140,8 @@
       "advent"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 116,
@@ -8051,7 +8181,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 117,
@@ -8301,7 +8432,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 118,
@@ -8351,7 +8483,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 120,
@@ -8445,7 +8578,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 121,
@@ -8501,7 +8635,8 @@
       "feast"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 122,
@@ -8563,7 +8698,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 123,
@@ -8631,7 +8767,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 124,
@@ -8699,7 +8836,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 125,
@@ -8783,7 +8921,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 126,
@@ -8829,7 +8968,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 127,
@@ -8891,7 +9031,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 128,
@@ -8947,7 +9088,10 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": [
+      "faith_of_our_fathers__st_catherine.mid"
+    ]
   },
   {
     "id": 129,
@@ -9015,7 +9159,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 130,
@@ -9169,7 +9314,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 131,
@@ -9221,7 +9367,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 132,
@@ -9347,7 +9494,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 133,
@@ -9391,7 +9539,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 134,
@@ -9443,7 +9592,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 135,
@@ -9487,7 +9637,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 136,
@@ -9557,7 +9708,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 137,
@@ -9629,7 +9781,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 138,
@@ -9673,7 +9826,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 139,
@@ -9725,7 +9879,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 140,
@@ -9777,7 +9932,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 141,
@@ -9833,7 +9989,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 142,
@@ -9893,7 +10050,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 143,
@@ -9977,7 +10135,8 @@
       "feast"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 144,
@@ -10079,7 +10238,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 145,
@@ -10147,7 +10307,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 146,
@@ -10229,7 +10390,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 147,
@@ -10273,7 +10435,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 148,
@@ -10335,7 +10498,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 149,
@@ -10407,7 +10571,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 150,
@@ -10475,7 +10640,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 151,
@@ -10527,7 +10693,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 152,
@@ -10581,7 +10748,8 @@
       "feast"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 153,
@@ -10649,7 +10817,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 154,
@@ -10779,7 +10948,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 155,
@@ -10889,7 +11059,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 156,
@@ -10965,7 +11136,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 157,
@@ -11013,7 +11185,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 158,
@@ -11105,7 +11278,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 159,
@@ -11139,7 +11313,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 160,
@@ -11199,7 +11374,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 161,
@@ -11251,7 +11427,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 162,
@@ -11311,7 +11488,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 163,
@@ -11389,7 +11567,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 164,
@@ -11439,7 +11618,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 165,
@@ -11507,7 +11687,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 166,
@@ -11575,7 +11756,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 167,
@@ -11635,7 +11817,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 168,
@@ -11711,7 +11894,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 169,
@@ -11763,7 +11947,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 170,
@@ -11821,7 +12006,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 171,
@@ -11931,7 +12117,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 172,
@@ -12007,7 +12194,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 173,
@@ -12077,7 +12265,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 174,
@@ -12137,7 +12326,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 175,
@@ -12193,7 +12383,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 176,
@@ -12237,7 +12428,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 177,
@@ -12311,7 +12503,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 178,
@@ -12403,7 +12596,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 181,
@@ -12487,7 +12681,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 180,
@@ -12555,7 +12750,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 183,
@@ -12629,7 +12825,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 182,
@@ -12675,7 +12872,8 @@
       "easter"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 184,
@@ -12723,7 +12921,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 186,
@@ -12771,7 +12970,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 187,
@@ -12825,7 +13025,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 188,
@@ -12877,7 +13078,8 @@
       "feast"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 185,
@@ -12953,7 +13155,8 @@
       "feast"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 189,
@@ -13021,7 +13224,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 190,
@@ -13081,7 +13285,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 191,
@@ -13175,7 +13380,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 192,
@@ -13251,7 +13457,8 @@
       "feast"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 193,
@@ -13343,7 +13550,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 194,
@@ -13423,7 +13631,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 195,
@@ -13499,7 +13708,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 196,
@@ -13567,7 +13777,10 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": [
+      "queen_of_heaven.mid"
+    ]
   },
   {
     "id": 197,
@@ -13623,7 +13836,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 198,
@@ -13699,7 +13913,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 199,
@@ -13767,7 +13982,8 @@
       "feast"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 200,
@@ -13843,7 +14059,8 @@
       "pentecost"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 201,
@@ -13921,7 +14138,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 202,
@@ -13991,7 +14209,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 205,
@@ -14051,7 +14270,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 203,
@@ -14103,7 +14323,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 206,
@@ -14197,7 +14418,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 207,
@@ -14265,7 +14487,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 204,
@@ -14349,7 +14572,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 208,
@@ -14421,7 +14645,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 210,
@@ -14473,7 +14698,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 211,
@@ -14535,7 +14761,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 212,
@@ -14627,7 +14854,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 213,
@@ -14659,7 +14887,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 214,
@@ -14719,7 +14948,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 215,
@@ -14767,7 +14997,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 216,
@@ -14827,7 +15058,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 217,
@@ -14879,7 +15111,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 218,
@@ -14933,7 +15166,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 219,
@@ -14985,7 +15219,8 @@
       "feast"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 220,
@@ -15103,7 +15338,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 221,
@@ -15213,7 +15449,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 222,
@@ -15287,7 +15524,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 223,
@@ -15355,7 +15593,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 641,
@@ -15409,7 +15648,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 224,
@@ -15461,7 +15701,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 225,
@@ -15521,7 +15762,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 226,
@@ -15601,7 +15843,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 227,
@@ -15661,7 +15904,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 228,
@@ -15765,7 +16009,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 243,
@@ -15809,7 +16054,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 229,
@@ -15869,7 +16115,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 230,
@@ -15949,7 +16196,8 @@
       "holy_spirit"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 231,
@@ -16017,7 +16265,8 @@
       "holy_spirit"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 232,
@@ -16079,7 +16328,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 233,
@@ -16123,7 +16373,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 234,
@@ -16197,7 +16448,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 235,
@@ -16275,7 +16527,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 236,
@@ -16345,7 +16598,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 237,
@@ -16413,7 +16667,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 238,
@@ -16479,7 +16734,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 239,
@@ -16563,7 +16819,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 240,
@@ -16623,7 +16880,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 241,
@@ -16667,7 +16925,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 242,
@@ -16809,7 +17068,8 @@
       "benediction"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 244,
@@ -16863,7 +17123,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 245,
@@ -16939,7 +17200,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 246,
@@ -16999,7 +17261,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 247,
@@ -17061,7 +17324,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 248,
@@ -17113,7 +17377,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 249,
@@ -17221,7 +17486,8 @@
       "feast"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 250,
@@ -17283,7 +17549,8 @@
       "wedding"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 251,
@@ -17367,7 +17634,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 252,
@@ -17451,7 +17719,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 253,
@@ -17519,7 +17788,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 254,
@@ -17587,7 +17857,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 255,
@@ -17655,7 +17926,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 256,
@@ -17747,7 +18019,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 257,
@@ -17815,7 +18088,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 258,
@@ -17875,7 +18149,8 @@
       "wedding"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 259,
@@ -17943,7 +18218,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 260,
@@ -18011,7 +18287,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 261,
@@ -18055,7 +18332,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 262,
@@ -18133,7 +18411,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 263,
@@ -18175,7 +18454,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 264,
@@ -18221,7 +18501,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 265,
@@ -18275,7 +18556,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 266,
@@ -18315,7 +18597,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 267,
@@ -18383,7 +18666,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 269,
@@ -18429,7 +18713,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 270,
@@ -18509,7 +18794,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 272,
@@ -18645,7 +18931,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 274,
@@ -18697,7 +18984,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 275,
@@ -18749,7 +19037,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 449,
@@ -18819,7 +19108,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 276,
@@ -18879,7 +19169,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 277,
@@ -18959,7 +19250,8 @@
       "feast"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 278,
@@ -19019,7 +19311,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 279,
@@ -19065,7 +19358,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 280,
@@ -19125,7 +19419,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 282,
@@ -19189,7 +19484,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 281,
@@ -19247,7 +19543,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 283,
@@ -19355,7 +19652,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 268,
@@ -19461,7 +19759,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 413,
@@ -19521,7 +19820,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 284,
@@ -19575,7 +19875,8 @@
       "easter"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 285,
@@ -19659,7 +19960,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 292,
@@ -19741,7 +20043,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 286,
@@ -19811,7 +20114,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 287,
@@ -19895,7 +20199,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 288,
@@ -19955,7 +20260,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 290,
@@ -20103,7 +20409,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 289,
@@ -20155,7 +20462,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 293,
@@ -20199,7 +20507,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 294,
@@ -20343,7 +20652,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 295,
@@ -20463,7 +20773,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 291,
@@ -20539,7 +20850,10 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": [
+      "jesus_to_thee.mid"
+    ]
   },
   {
     "id": 296,
@@ -20607,7 +20921,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 298,
@@ -20671,7 +20986,8 @@
       "wedding"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 297,
@@ -20739,7 +21055,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 299,
@@ -20791,7 +21108,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 300,
@@ -20851,7 +21169,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 301,
@@ -20889,7 +21208,8 @@
       "easter"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 302,
@@ -20941,7 +21261,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 303,
@@ -21009,7 +21330,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 304,
@@ -21085,7 +21407,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 305,
@@ -21427,7 +21750,8 @@
       "feast"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 306,
@@ -21483,7 +21807,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 307,
@@ -21539,7 +21864,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 308,
@@ -21617,7 +21943,8 @@
       "feast"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 309,
@@ -21687,7 +22014,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 310,
@@ -21739,7 +22067,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 314,
@@ -21777,7 +22106,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 311,
@@ -21809,7 +22139,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 312,
@@ -21861,7 +22192,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 313,
@@ -21921,7 +22253,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 315,
@@ -22031,7 +22364,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 316,
@@ -22093,7 +22427,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 317,
@@ -22145,7 +22480,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 318,
@@ -22221,7 +22557,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 319,
@@ -22267,7 +22604,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 320,
@@ -22315,7 +22653,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 321,
@@ -22363,7 +22702,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 322,
@@ -22399,7 +22739,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 323,
@@ -22475,7 +22816,8 @@
       "wedding"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 324,
@@ -22545,7 +22887,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 325,
@@ -22629,7 +22972,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 326,
@@ -22709,7 +23053,8 @@
       "feast"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 327,
@@ -22777,7 +23122,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 328,
@@ -22825,7 +23171,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 329,
@@ -22917,7 +23264,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 330,
@@ -22973,7 +23321,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 331,
@@ -23029,7 +23378,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 332,
@@ -23105,7 +23455,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 333,
@@ -23149,7 +23500,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 334,
@@ -23201,7 +23553,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 335,
@@ -23245,7 +23598,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 336,
@@ -23313,7 +23667,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 337,
@@ -23365,7 +23720,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 338,
@@ -23469,7 +23825,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 339,
@@ -23513,7 +23870,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 340,
@@ -23647,7 +24005,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 341,
@@ -23703,7 +24062,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 342,
@@ -23763,7 +24123,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 343,
@@ -23817,7 +24178,8 @@
       "easter"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 344,
@@ -23851,7 +24213,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 348,
@@ -23911,7 +24274,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 347,
@@ -23979,7 +24343,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 349,
@@ -24059,7 +24424,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 350,
@@ -24161,7 +24527,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 351,
@@ -24205,7 +24572,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 352,
@@ -24271,7 +24639,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 345,
@@ -24323,7 +24692,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 346,
@@ -24383,7 +24753,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 353,
@@ -24435,7 +24806,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 354,
@@ -24551,7 +24923,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 355,
@@ -24595,7 +24968,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 356,
@@ -24655,7 +25029,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 357,
@@ -24719,7 +25094,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 358,
@@ -24779,7 +25155,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 359,
@@ -24811,7 +25188,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 119,
@@ -24871,7 +25249,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 360,
@@ -24949,7 +25328,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 361,
@@ -25009,7 +25389,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 362,
@@ -25069,7 +25450,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 363,
@@ -25145,7 +25527,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 364,
@@ -25231,7 +25614,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 365,
@@ -25291,7 +25675,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 366,
@@ -25375,7 +25760,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 367,
@@ -25445,7 +25831,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 368,
@@ -25505,7 +25892,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 369,
@@ -25557,7 +25945,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 370,
@@ -25615,7 +26004,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 371,
@@ -25667,7 +26057,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 372,
@@ -25727,7 +26118,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 373,
@@ -25791,7 +26183,8 @@
       "easter"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 374,
@@ -25841,7 +26234,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 375,
@@ -25917,7 +26311,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 544,
@@ -25995,7 +26390,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 376,
@@ -26093,7 +26489,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 377,
@@ -26137,7 +26534,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 378,
@@ -26197,7 +26595,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 379,
@@ -26269,7 +26668,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 380,
@@ -26363,7 +26763,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 381,
@@ -26431,7 +26832,8 @@
       "feast"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 382,
@@ -26483,7 +26885,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 383,
@@ -26551,7 +26954,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 384,
@@ -26619,7 +27023,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 385,
@@ -26709,7 +27114,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 386,
@@ -26761,7 +27167,8 @@
       "easter"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 387,
@@ -26819,7 +27226,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 388,
@@ -26863,7 +27271,8 @@
       "feast"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 389,
@@ -26899,7 +27308,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 390,
@@ -27009,7 +27419,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 391,
@@ -27065,7 +27476,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 392,
@@ -27143,7 +27555,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 393,
@@ -27267,7 +27680,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 394,
@@ -27355,7 +27769,8 @@
       "advent"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 395,
@@ -27453,7 +27868,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 396,
@@ -27561,7 +27977,8 @@
       "advent"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 397,
@@ -27657,7 +28074,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 398,
@@ -27699,7 +28117,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 399,
@@ -27777,7 +28196,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 400,
@@ -27857,7 +28277,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 401,
@@ -27925,7 +28346,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 402,
@@ -27977,7 +28399,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 403,
@@ -28045,7 +28468,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 404,
@@ -28113,7 +28537,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 405,
@@ -28147,7 +28572,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 406,
@@ -28225,7 +28651,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 407,
@@ -28289,7 +28716,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 408,
@@ -28341,7 +28769,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 409,
@@ -28401,7 +28830,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 410,
@@ -28449,7 +28879,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 411,
@@ -28523,7 +28954,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 412,
@@ -28591,7 +29023,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 414,
@@ -28659,7 +29092,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 415,
@@ -28727,7 +29161,10 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": [
+      "o_king_of_kings2.mid"
+    ]
   },
   {
     "id": 416,
@@ -28779,7 +29216,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 417,
@@ -29011,7 +29449,8 @@
       "feast"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 419,
@@ -29095,7 +29534,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 420,
@@ -29205,7 +29645,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 421,
@@ -29265,7 +29706,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 422,
@@ -29309,7 +29751,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 423,
@@ -29369,7 +29812,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 424,
@@ -29415,7 +29859,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 425,
@@ -29479,7 +29924,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 426,
@@ -29573,7 +30019,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 427,
@@ -29617,7 +30064,8 @@
       "wedding"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 428,
@@ -29717,7 +30165,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 429,
@@ -29789,7 +30238,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 432,
@@ -29841,7 +30291,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 430,
@@ -30053,7 +30504,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 431,
@@ -30153,7 +30605,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 433,
@@ -30233,7 +30686,8 @@
       "feast"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 434,
@@ -30289,7 +30743,8 @@
       "benediction"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 435,
@@ -30341,7 +30796,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 436,
@@ -30393,7 +30849,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 437,
@@ -30477,7 +30934,8 @@
       "holy_spirit"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 438,
@@ -30521,7 +30979,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 439,
@@ -30573,7 +31032,8 @@
       "benediction"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 440,
@@ -30679,7 +31139,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 441,
@@ -30757,7 +31218,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 442,
@@ -30805,7 +31267,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 443,
@@ -30873,7 +31336,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 444,
@@ -30927,7 +31391,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 445,
@@ -31019,7 +31484,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 446,
@@ -31087,7 +31553,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 450,
@@ -31163,7 +31630,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 447,
@@ -31207,7 +31675,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 452,
@@ -31275,7 +31744,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 454,
@@ -31367,7 +31837,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 453,
@@ -31437,7 +31908,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 455,
@@ -31523,7 +31995,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 457,
@@ -31597,7 +32070,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 456,
@@ -31721,7 +32195,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 458,
@@ -31757,7 +32232,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 459,
@@ -31817,7 +32293,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 460,
@@ -31879,7 +32356,10 @@
       "easter"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": [
+      "our_lord_is_risen__2.mid"
+    ]
   },
   {
     "id": 461,
@@ -32049,7 +32529,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 462,
@@ -32097,7 +32578,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 463,
@@ -32157,7 +32639,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 464,
@@ -32245,7 +32728,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 465,
@@ -32331,7 +32815,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 466,
@@ -32391,7 +32876,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 467,
@@ -32509,7 +32995,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 468,
@@ -32559,7 +33046,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 469,
@@ -32633,7 +33121,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 470,
@@ -32703,7 +33192,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 471,
@@ -32779,7 +33269,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 472,
@@ -32831,7 +33322,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 473,
@@ -32883,7 +33375,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 474,
@@ -33025,7 +33518,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 475,
@@ -33101,7 +33595,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 476,
@@ -33163,7 +33658,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 477,
@@ -33231,7 +33727,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 478,
@@ -33285,7 +33782,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 479,
@@ -33345,7 +33843,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 480,
@@ -33455,7 +33954,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 481,
@@ -33483,7 +33983,10 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": [
+      "queen_of_heaven.mid"
+    ]
   },
   {
     "id": 485,
@@ -33517,7 +34020,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 482,
@@ -33553,7 +34057,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 483,
@@ -33657,7 +34162,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 484,
@@ -33779,7 +34285,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 486,
@@ -33847,7 +34354,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 487,
@@ -33937,7 +34445,8 @@
       "advent"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 488,
@@ -34029,7 +34538,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 489,
@@ -34167,7 +34677,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 490,
@@ -34211,7 +34722,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 491,
@@ -34289,7 +34801,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 492,
@@ -34351,7 +34864,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 493,
@@ -34403,7 +34917,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 494,
@@ -34447,7 +34962,8 @@
       "holy_spirit"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 559,
@@ -34507,7 +35023,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 495,
@@ -34625,7 +35142,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 496,
@@ -34677,7 +35195,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 497,
@@ -34729,7 +35248,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 498,
@@ -34799,7 +35319,10 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": [
+      "silent_night__silent_night.mid"
+    ]
   },
   {
     "id": 500,
@@ -34859,7 +35382,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 501,
@@ -34935,7 +35459,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 499,
@@ -34995,7 +35520,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 502,
@@ -35059,7 +35585,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 503,
@@ -35111,7 +35638,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 271,
@@ -35231,7 +35759,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 504,
@@ -35315,7 +35844,8 @@
       "easter"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 505,
@@ -35367,7 +35897,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 506,
@@ -35427,7 +35958,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 507,
@@ -35479,7 +36011,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 508,
@@ -35555,7 +36088,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 509,
@@ -35607,7 +36141,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 510,
@@ -35667,7 +36202,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 511,
@@ -35747,7 +36283,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 512,
@@ -35807,7 +36344,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 513,
@@ -35855,7 +36393,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 514,
@@ -35899,7 +36438,10 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": [
+      "soul_of_my_saviour2.mid"
+    ]
   },
   {
     "id": 515,
@@ -35983,7 +36525,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 517,
@@ -36051,7 +36594,8 @@
       "holy_spirit"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 516,
@@ -36137,7 +36681,8 @@
       "holy_spirit"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 518,
@@ -36181,7 +36726,8 @@
       "holy_spirit"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 519,
@@ -36249,7 +36795,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 520,
@@ -36317,7 +36864,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 521,
@@ -36401,7 +36949,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 522,
@@ -36469,7 +37018,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 523,
@@ -36527,7 +37077,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 524,
@@ -36611,7 +37162,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 525,
@@ -36691,7 +37243,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 526,
@@ -36743,7 +37296,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 527,
@@ -36797,7 +37351,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 528,
@@ -36849,7 +37404,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 529,
@@ -36909,7 +37465,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 531,
@@ -36955,7 +37512,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 530,
@@ -37007,7 +37565,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 532,
@@ -37077,7 +37636,10 @@
       "benediction"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": [
+      "tantum_ergo_sacramentum1.mid"
+    ]
   },
   {
     "id": 533,
@@ -37127,7 +37689,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 534,
@@ -37241,7 +37804,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 535,
@@ -37309,7 +37873,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 536,
@@ -37385,7 +37950,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 537,
@@ -37455,7 +38021,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 538,
@@ -37523,7 +38090,8 @@
       "advent"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 539,
@@ -37591,7 +38159,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 540,
@@ -37663,7 +38232,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 541,
@@ -37721,7 +38291,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 542,
@@ -37755,7 +38326,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 543,
@@ -37815,7 +38387,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 545,
@@ -37867,7 +38440,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 546,
@@ -37927,7 +38501,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 273,
@@ -37967,7 +38542,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 547,
@@ -38043,7 +38619,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 548,
@@ -38087,7 +38664,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 451,
@@ -38147,7 +38725,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 549,
@@ -38223,7 +38802,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 639,
@@ -38323,7 +38903,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 550,
@@ -38381,7 +38962,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 551,
@@ -38449,7 +39031,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 552,
@@ -38581,7 +39164,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 553,
@@ -38657,7 +39241,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 554,
@@ -38717,7 +39302,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 555,
@@ -38769,7 +39355,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 556,
@@ -38821,7 +39408,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 557,
@@ -38889,7 +39477,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 558,
@@ -38957,7 +39546,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 560,
@@ -39009,7 +39599,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 561,
@@ -39061,7 +39652,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 562,
@@ -39277,7 +39869,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 563,
@@ -39345,7 +39938,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 564,
@@ -39415,7 +40009,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 565,
@@ -39535,7 +40130,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 566,
@@ -39599,7 +40195,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 567,
@@ -39723,7 +40320,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 568,
@@ -39783,7 +40381,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 569,
@@ -39843,7 +40442,8 @@
       "easter"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 570,
@@ -39941,7 +40541,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 571,
@@ -39993,7 +40594,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 572,
@@ -40061,7 +40663,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 573,
@@ -40113,7 +40716,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 574,
@@ -40193,7 +40797,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 575,
@@ -40237,7 +40842,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 576,
@@ -40321,7 +40927,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 577,
@@ -40395,7 +41002,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 578,
@@ -40465,7 +41073,8 @@
       "easter"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 579,
@@ -40503,7 +41112,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 580,
@@ -40573,7 +41183,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 581,
@@ -40647,7 +41258,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 582,
@@ -40715,7 +41327,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 583,
@@ -40799,7 +41412,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 584,
@@ -40859,7 +41473,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 585,
@@ -40903,7 +41518,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 586,
@@ -40983,7 +41599,8 @@
       "holy_spirit"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 587,
@@ -41023,7 +41640,8 @@
       "benediction"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 588,
@@ -41189,7 +41807,8 @@
       "benediction"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 589,
@@ -41259,7 +41878,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 590,
@@ -41341,7 +41961,8 @@
       "advent"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 612,
@@ -41385,7 +42006,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 592,
@@ -41441,7 +42063,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 591,
@@ -41493,7 +42116,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 593,
@@ -41563,7 +42187,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 594,
@@ -41663,7 +42288,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 595,
@@ -41711,7 +42337,8 @@
       "feast"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 596,
@@ -41761,7 +42388,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 597,
@@ -41829,7 +42457,10 @@
       "feast"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": [
+      "we_celebrate.mid"
+    ]
   },
   {
     "id": 598,
@@ -41867,7 +42498,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 599,
@@ -41961,7 +42593,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 600,
@@ -42045,7 +42678,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 601,
@@ -42091,7 +42725,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 602,
@@ -42185,7 +42820,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 603,
@@ -42261,7 +42897,8 @@
       "advent"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 604,
@@ -42321,7 +42958,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 605,
@@ -42365,7 +43003,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 606,
@@ -42441,7 +43080,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 607,
@@ -42509,7 +43149,8 @@
       "easter"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 608,
@@ -42591,7 +43232,8 @@
       "entrance"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 609,
@@ -42635,7 +43277,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 610,
@@ -42713,7 +43356,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 611,
@@ -42781,7 +43425,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 613,
@@ -42851,7 +43496,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 614,
@@ -42911,7 +43557,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 615,
@@ -42963,7 +43610,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 616,
@@ -43049,7 +43697,10 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": [
+      "what_a_friend_we_have_in_jesus__what_a_friend.mid"
+    ]
   },
   {
     "id": 617,
@@ -43119,7 +43770,8 @@
       "palm_sunday"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 618,
@@ -43195,7 +43847,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 418,
@@ -43259,7 +43912,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 619,
@@ -43347,7 +44001,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 620,
@@ -43395,7 +44050,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 621,
@@ -43475,7 +44131,8 @@
       "advent"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 622,
@@ -43535,7 +44192,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 623,
@@ -43695,7 +44353,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 624,
@@ -43767,7 +44426,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 625,
@@ -43841,7 +44501,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 626,
@@ -43893,7 +44554,8 @@
       "advent"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 627,
@@ -43941,7 +44603,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 628,
@@ -44041,7 +44704,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 629,
@@ -44101,7 +44765,8 @@
       "lenten"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 630,
@@ -44157,7 +44822,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 631,
@@ -44217,7 +44883,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 632,
@@ -44269,7 +44936,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 633,
@@ -44337,7 +45005,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 634,
@@ -44387,7 +45056,8 @@
       "dismissal"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 635,
@@ -44455,7 +45125,8 @@
       "christmas"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 636,
@@ -44535,7 +45206,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 637,
@@ -44595,7 +45267,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 638,
@@ -44647,7 +45320,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 652,
@@ -44697,7 +45371,8 @@
     "composer": null,
     "tags": [],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 640,
@@ -44765,7 +45440,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 642,
@@ -44837,7 +45513,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 643,
@@ -44957,7 +45634,8 @@
       "easter"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 644,
@@ -45017,7 +45695,8 @@
       "general"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 645,
@@ -45081,7 +45760,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 646,
@@ -45145,7 +45825,8 @@
       "memorial"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 647,
@@ -45209,7 +45890,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 648,
@@ -45261,7 +45943,8 @@
       "marian"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 649,
@@ -45319,7 +46002,8 @@
       "offertory"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 650,
@@ -45381,7 +46065,8 @@
       "communion"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 651,
@@ -45451,7 +46136,8 @@
       "benediction"
     ],
     "is_favorite": false,
-    "last_accessed": null
+    "last_accessed": null,
+    "alternate_midi_files": []
   },
   {
     "id": 653,
@@ -45508,7 +46194,8 @@
     "alternate_tunes": [],
     "source_attribution": [
       "Public-domain text candidate; verify exact tune source before download."
-    ]
+    ],
+    "alternate_midi_files": []
   },
   {
     "id": 654,
@@ -45562,7 +46249,8 @@
     "alternate_tunes": [],
     "source_attribution": [
       "Public-domain text candidate; verify exact tune source before download."
-    ]
+    ],
+    "alternate_midi_files": []
   },
   {
     "id": 655,
@@ -45611,7 +46299,8 @@
     "alternate_tunes": [],
     "source_attribution": [
       "Public-domain text candidate; verify exact tune source before download."
-    ]
+    ],
+    "alternate_midi_files": []
   },
   {
     "id": 656,
@@ -45660,6 +46349,7 @@
     "alternate_tunes": [],
     "source_attribution": [
       "Public-domain text candidate; verify exact tune source before download."
-    ]
+    ],
+    "alternate_midi_files": []
   }
 ]

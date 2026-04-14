@@ -88,6 +88,48 @@ class MemorialFeastEntry {
   });
 }
 
+class SpecialPeriodEntry {
+  final String id;
+  final String season;
+  final String day;
+  final String dayNum;
+  final String week;
+  final String firstReading;
+  final String alternativeFirstReading;
+  final String firstReadingIncipit;
+  final String alternativeFirstReadingIncipit;
+  final String psalmReference;
+  final String psalmResponse;
+  final String secondReading;
+  final String secondReadingIncipit;
+  final String gospel;
+  final String gospelIncipit;
+  final String alternativeGospel;
+  final String alternativeGospelIncipit;
+  final String sourceFile;
+
+  const SpecialPeriodEntry({
+    required this.id,
+    required this.season,
+    required this.day,
+    required this.dayNum,
+    required this.week,
+    required this.firstReading,
+    required this.alternativeFirstReading,
+    required this.firstReadingIncipit,
+    required this.alternativeFirstReadingIncipit,
+    required this.psalmReference,
+    required this.psalmResponse,
+    required this.secondReading,
+    required this.secondReadingIncipit,
+    required this.gospel,
+    required this.gospelIncipit,
+    required this.alternativeGospel,
+    required this.alternativeGospelIncipit,
+    required this.sourceFile,
+  });
+}
+
 class ReadingCatalogService extends BaseService<ReadingCatalogService> {
   static ReadingCatalogService get instance =>
       BaseService.init(() => ReadingCatalogService._());
@@ -97,6 +139,8 @@ class ReadingCatalogService extends BaseService<ReadingCatalogService> {
   List<StandardLectionaryEntry>? _standardEntries;
   List<MemorialFeastEntry>? _memorialEntries;
   Map<String, List<MemorialFeastEntry>>? _memorialEntriesByMonthDay;
+  List<SpecialPeriodEntry>? _specialEntries;
+  Map<String, List<SpecialPeriodEntry>>? _specialEntriesBySeasonDayNum;
 
   Future<List<StandardLectionaryEntry>> loadStandardEntries() async {
     if (_standardEntries != null) {
@@ -206,6 +250,82 @@ class ReadingCatalogService extends BaseService<ReadingCatalogService> {
   ) async {
     await loadMemorialEntries();
     return _memorialEntriesByMonthDay?['$month-$day'] ?? const [];
+  }
+
+  Future<List<SpecialPeriodEntry>> loadSpecialPeriodEntries() async {
+    if (_specialEntries != null) {
+      return _specialEntries!;
+    }
+
+    final rawCsv = await rootBundle.loadString('special_period_readings.csv');
+    final lines = rawCsv
+        .split(RegExp(r'\r?\n'))
+        .where((line) => line.trim().isNotEmpty)
+        .toList();
+
+    final parsed = <SpecialPeriodEntry>[];
+    for (var i = 1; i < lines.length; i++) {
+      final columns = parseCsvLine(lines[i]);
+      if (columns.length < 16) {
+        continue;
+      }
+      parsed.add(
+        SpecialPeriodEntry(
+          id: columns[0].trim(),
+          season: columns[1].trim(),
+          day: columns[2].trim(),
+          dayNum: columns[3].trim(),
+          week: columns[4].trim(),
+          firstReading: columns[5].trim(),
+          alternativeFirstReading: columns[6].trim(),
+          firstReadingIncipit: columns[7].trim(),
+          alternativeFirstReadingIncipit: columns[8].trim(),
+          psalmReference: columns[9].trim(),
+          psalmResponse: columns[10].trim(),
+          secondReading: columns[11].trim(),
+          secondReadingIncipit: columns[12].trim(),
+          gospel: columns[13].trim(),
+          gospelIncipit: columns[14].trim(),
+          alternativeGospel: columns[15].trim(),
+          alternativeGospelIncipit: columns[16].trim(),
+          sourceFile: columns[17].trim(),
+        ),
+      );
+    }
+
+    _specialEntries = parsed;
+    _specialEntriesBySeasonDayNum = <String, List<SpecialPeriodEntry>>{};
+    for (final entry in parsed) {
+      if (entry.season.isEmpty || entry.day.isEmpty || entry.dayNum.isEmpty) {
+        continue;
+      }
+      final key = '${entry.season.toLowerCase()}-${entry.day.toLowerCase()}-${entry.dayNum}';
+      _specialEntriesBySeasonDayNum!
+          .putIfAbsent(key, () => <SpecialPeriodEntry>[])
+          .add(entry);
+    }
+
+    return parsed;
+  }
+
+  Future<List<SpecialPeriodEntry>> getSpecialPeriodEntriesForSeasonDayNum(
+    String season,
+    String day,
+    String dayNum,
+  ) async {
+    await loadSpecialPeriodEntries();
+    return _specialEntriesBySeasonDayNum?['${season.toLowerCase()}-${day.toLowerCase()}-$dayNum'] ?? const [];
+  }
+
+  Future<List<SpecialPeriodEntry>> getSpecialPeriodEntriesForSeasonDay(
+    String season,
+    String day,
+  ) async {
+    await loadSpecialPeriodEntries();
+    return _specialEntries?.where((entry) =>
+      entry.season.toLowerCase() == season.toLowerCase() &&
+      entry.day.toLowerCase() == day.toLowerCase()
+    ).toList() ?? const [];
   }
 
   List<String> parseCsvLine(String line) {

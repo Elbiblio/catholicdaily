@@ -66,6 +66,17 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
       return _buildCelebrationReadings(normalizedDate, celebrationEntry);
     }
 
+    // Check for special period readings
+    final seasonStr = liturgicalDay.season.toString().split('.').last;
+    final dayStr = resolvedDay.dayOfWeek.toString().split('.').last;
+    final specialPeriodEntries = await _catalog.getSpecialPeriodEntriesForSeasonDay(
+      seasonStr,
+      dayStr,
+    );
+    if (specialPeriodEntries.isNotEmpty) {
+      return _buildSpecialPeriodReadings(normalizedDate, specialPeriodEntries);
+    }
+
     final standardEntries = await _catalog.loadStandardEntries();
     final matches = standardEntries.where((entry) {
       return _matchesStandardEntry(
@@ -420,6 +431,74 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
       return true;
     }
     return week == liturgicalDay.weekNumber.toString();
+  }
+
+  List<DailyReading> _buildSpecialPeriodReadings(
+    DateTime date,
+    List<SpecialPeriodEntry> entries,
+  ) {
+    final readings = <DailyReading>[];
+    for (final entry in entries) {
+      if (entry.firstReading.isNotEmpty) {
+        readings.add(DailyReading(
+          reading: _normalizeReferenceStyle(entry.firstReading),
+          position: 'First Reading',
+          date: date,
+          feast: '${entry.season} ${entry.day}',
+          incipit: entry.firstReadingIncipit.isEmpty ? null : entry.firstReadingIncipit,
+        ));
+      }
+      if (entry.alternativeFirstReading.isNotEmpty) {
+        readings.add(DailyReading(
+          reading: _normalizeReferenceStyle(entry.alternativeFirstReading),
+          position: 'First Reading (alternative)',
+          date: date,
+          feast: '${entry.season} ${entry.day}',
+          incipit: entry.alternativeFirstReadingIncipit.isEmpty
+              ? null
+              : entry.alternativeFirstReadingIncipit,
+        ));
+      }
+      if (entry.psalmReference.isNotEmpty) {
+        readings.add(DailyReading(
+          reading: _normalizeReferenceStyle(entry.psalmReference),
+          position: 'Responsorial Psalm',
+          date: date,
+          feast: '${entry.season} ${entry.day}',
+          incipit: entry.psalmResponse.isEmpty ? null : entry.psalmResponse,
+        ));
+      }
+      if (entry.secondReading.isNotEmpty) {
+        readings.add(DailyReading(
+          reading: _normalizeReferenceStyle(entry.secondReading),
+          position: 'Second Reading',
+          date: date,
+          feast: '${entry.season} ${entry.day}',
+          incipit: entry.secondReadingIncipit.isEmpty ? null : entry.secondReadingIncipit,
+        ));
+      }
+      if (entry.gospel.isNotEmpty) {
+        readings.add(DailyReading(
+          reading: _normalizeReferenceStyle(entry.gospel),
+          position: 'Gospel',
+          date: date,
+          feast: '${entry.season} ${entry.day}',
+          incipit: entry.gospelIncipit.isEmpty ? null : entry.gospelIncipit,
+        ));
+      }
+      if (entry.alternativeGospel.isNotEmpty) {
+        readings.add(DailyReading(
+          reading: _normalizeReferenceStyle(entry.alternativeGospel),
+          position: 'Gospel (alternative)',
+          date: date,
+          feast: '${entry.season} ${entry.day}',
+          incipit: entry.alternativeGospelIncipit.isEmpty
+              ? null
+              : entry.alternativeGospelIncipit,
+        ));
+      }
+    }
+    return readings;
   }
 
   List<DailyReading> _buildCelebrationReadings(
