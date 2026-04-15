@@ -1,27 +1,69 @@
 class ReadingTitleFormatter {
   static String build({required String reference, String? position}) {
+    final positionRaw = (position ?? '').trim();
+    final positionLower = positionRaw.toLowerCase();
+
+    // Sequences (Pentecost, Corpus Christi, Easter) use a hymn reference
+    // rather than a scripture book, so short-circuit before book lookup.
+    if (positionLower == 'sequence') return 'Sequence';
+    if (positionLower == 'epistle') {
+      final shortBookForEpistle = _extractShortBook(reference);
+      if (shortBookForEpistle != null) {
+        final paulineEpistle = _paulineHeadings[shortBookForEpistle];
+        if (paulineEpistle != null) return paulineEpistle;
+        final catholicEpistle = _catholicEpistleHeadings[shortBookForEpistle];
+        if (catholicEpistle != null) return catholicEpistle;
+      }
+      return 'Epistle';
+    }
+
+    final positionLabel = (position ?? '').toLowerCase();
+
+    // Gospel Acclamation / Verse before the Gospel / Alleluia take precedence.
+    // They often cite a gospel verse (e.g. "John 3:16") but their heading
+    // must never resolve to "A reading from the holy Gospel according to …".
+    if (positionLabel == 'gospel acclamation' ||
+        positionLabel == 'verse before the gospel' ||
+        positionLabel == 'alleluia' ||
+        positionLabel == 'alleluia verse') {
+      return 'Gospel Acclamation';
+    }
+
+    if (positionLabel == 'alleluia psalm' ||
+        positionLabel == 'alleluia psalm (alternative)') {
+      return positionLabel.contains('(alternative)')
+          ? 'Alleluia Psalm (Alternative)'
+          : 'Alleluia Psalm';
+    }
+
     final shortBook = _extractShortBook(reference);
     if (shortBook == null) return 'A reading from Sacred Scripture';
 
     final book = _bookNames[shortBook] ?? shortBook;
-    final positionLabel = (position ?? '').toLowerCase();
 
-    // Check for gospel first - this takes precedence over psalm check
-    if (_gospels.contains(shortBook) || positionLabel == 'gospel' || positionLabel == 'gospel (alternative)' || positionLabel == 'gospel at procession') {
+    // Gospel heading: only when the position explicitly marks it as a Gospel
+    // OR there is no position at all (Bible browse contexts).
+    final isGospelPosition = positionLabel == 'gospel' ||
+        positionLabel == 'gospel (alternative)' ||
+        positionLabel.startsWith('gospel (alternative') ||
+        positionLabel == 'gospel at procession';
+    final isUnlabelledGospel =
+        positionLabel.isEmpty && _gospels.contains(shortBook);
+    if (isGospelPosition || isUnlabelledGospel) {
       return 'A reading from the holy Gospel according to $book';
     }
 
-    if (positionLabel == 'alleluia psalm' || positionLabel == 'alleluia psalm (alternative)') {
-      return positionLabel.contains('(alternative)') ? 'Alleluia Psalm (Alternative)' : 'Alleluia Psalm';
-    }
-
-    if (positionLabel == 'gospel acclamation') {
-      return 'Gospel Acclamation';
-    }
-
     // Only check for psalm if position explicitly indicates it's a psalm
-    if (positionLabel == 'responsorial psalm' || positionLabel == 'responsorial psalm (alternative)') {
-      return positionLabel.contains('(alternative)') ? 'Responsorial Psalm (Alternative)' : 'Responsorial Psalm';
+    if (positionLabel.startsWith('responsorial psalm')) {
+      // Preserves Easter Vigil labels like
+      // "Responsorial Psalm after First Reading".
+      if (positionLabel.contains('(alternative)')) return 'Responsorial Psalm (Alternative)';
+      if (positionLabel == 'responsorial psalm') return 'Responsorial Psalm';
+      // Title-case the raw position for variants like "... after Epistle".
+      return position!.replaceAllMapped(
+        RegExp(r'\b\w'),
+        (m) => m.group(0)!.toUpperCase(),
+      );
     }
 
     final pauline = _paulineHeadings[shortBook];

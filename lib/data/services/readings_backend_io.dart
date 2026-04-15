@@ -8,6 +8,7 @@ import '../models/daily_reading.dart';
 import 'csv_readings_resolver_service.dart';
 import 'daniel_verse_mapper.dart' show DeuterocanonicalVerseMapper;
 import 'incipit_processing_service.dart';
+import 'lectionary_psalm_catalog_service.dart';
 import 'reading_reference_parser.dart';
 import 'readings_backend.dart';
 import 'lectionary_psalm_formatter.dart';
@@ -27,6 +28,8 @@ class ReadingsBackendIo implements ReadingsBackend {
 
   final IncipitProcessingService _incipitProcessor = IncipitProcessingService();
   final CsvReadingsResolverService _csvResolver = CsvReadingsResolverService.instance;
+  final LectionaryPsalmCatalogService _psalmCatalog =
+      LectionaryPsalmCatalogService.instance;
 
   Database? _rsvceDb;
   Database? _nabreDb;
@@ -61,23 +64,115 @@ class ReadingsBackendIo implements ReadingsBackend {
   Future<List<DailyReading>> getReadingsForDate(DateTime date) async {
     final readings = await _csvResolver.resolve(date);
 
-    // Decode psalm responses that are verse references into actual text.
-    // Preserve gospel acclamation values as stored so higher-level date-aware
-    // resolution can prefer the official liturgical acclamation text.
+    var psalmOrdinal = 0;
     for (var i = 0; i < readings.length; i++) {
       final r = readings[i];
-      String? decodedPsalm = r.psalmResponse;
-      
-      if (r.psalmResponse != null) {
-        decodedPsalm = await _decodePsalmResponseRef(r.psalmResponse!, r.reading);
+      final position = (r.position ?? '').toLowerCase();
+      var updated = r;
+
+      if (position.contains('psalm')) {
+        psalmOrdinal += 1;
+        // Step 1: enrich the reading's reference with "(R. Xx)" notation
+        // when available in the supplementary lectionary_psalms[_weekday].csv.
+        final bestEntry = await _psalmCatalog.getBestPsalmEntryForDate(
+          date: date,
+          psalmReference: updated.reading,
+          positionLabel: updated.position,
+          psalmSequence: psalmOrdinal,
+        );
+        String enrichedReference = updated.reading;
+        if (bestEntry != null &&
+            RegExp(r'\(R\.', caseSensitive: false)
+                .hasMatch(bestEntry.fullReference)) {
+          enrichedReference = _mergeRNotation(
+            base: updated.reading,
+            enriched: bestEntry.fullReference,
+          );
+        }
+        if (enrichedReference != updated.reading) {
+          updated = updated.copyWith(reading: enrichedReference);
+        }
+
+        // Step 2: decode the refrain text from RSVCE using the (R. Xx)
+        // notation. This is the authoritative source the user expects so
+        // the displayed refrain matches the RSVCE verse text verbatim.
+        final decodedFromR = await _decodeRefrainFromRNotation(
+          enrichedReference,
+        );
+        if (decodedFromR != null && decodedFromR.trim().isNotEmpty) {
+          updated = updated.copyWith(psalmResponse: decodedFromR);
+        } else if (r.psalmResponse != null) {
+          final decoded =
+              await _decodePsalmResponseRef(r.psalmResponse!, updated.reading);
+          if (decoded != r.psalmResponse) {
+            updated = updated.copyWith(psalmResponse: decoded);
+          }
+        }
+      } else if (r.psalmResponse != null) {
+        final decoded =
+            await _decodePsalmResponseRef(r.psalmResponse!, r.reading);
+        if (decoded != r.psalmResponse) {
+          updated = updated.copyWith(psalmResponse: decoded);
+        }
       }
 
-      if (decodedPsalm != r.psalmResponse) {
-        readings[i] = r.copyWith(psalmResponse: decodedPsalm);
+      if (!identical(updated, r)) {
+        readings[i] = updated;
       }
     }
 
     return readings;
+  }
+
+  /// Appends the "(R. Xx)" refrain notation from [enriched] onto [base]
+  /// when the two references point to the same psalm passage.
+  String _mergeRNotation({required String base, required String enriched}) {
+    final rMatch =
+        RegExp(r'\(R\.[^)]+\)', caseSensitive: false).firstMatch(enriched);
+    if (rMatch == null) return base;
+    if (RegExp(r'\(R\.', caseSensitive: false).hasMatch(base)) return base;
+    return '$base ${rMatch.group(0)!}';
+  }
+
+  /// Reads "(R. 7a)" / "(R. see 7)" / "(R. cf. 30)" style notation from a
+  /// psalm [reference] and fetches the corresponding verse text from the
+  /// currently selected Bible database. Returns null when no notation is
+  /// present or the verse cannot be fetched.
+  Future<String?> _decodeRefrainFromRNotation(String reference) async {
+    final chapterMatch =
+        RegExp(r'(?:Ps|Psalm)\s+(\d+)', caseSensitive: false)
+            .firstMatch(reference);
+    if (chapterMatch == null) return null;
+
+    final rMatch = RegExp(
+      r'\(R\.\s*(?:see\s+|cf\.?\s*)?(\d+)([a-d])?\s*\)',
+      caseSensitive: false,
+    ).firstMatch(reference);
+    if (rMatch == null) return null;
+
+    final chapter = int.parse(chapterMatch.group(1)!);
+    final verseNum = int.parse(rMatch.group(1)!);
+    final partLetter = rMatch.group(2);
+
+    try {
+      final db = await _currentBibleDatabase;
+      final rows = await db.rawQuery('''
+        SELECT v.text
+        FROM verses v
+        JOIN books b ON b._id = v.book_id
+        WHERE b.shortname = 'Ps' AND v.chapter_id = ? AND v.verse_id = ?
+      ''', [chapter, verseNum]);
+
+      if (rows.isEmpty) return null;
+      final verseText = rows.first['text'] as String;
+
+      if (partLetter != null) {
+        return PsalmVerseSplitter.getVersePart(verseText, partLetter);
+      }
+      return verseText.replaceFirst(RegExp(r'^\d+\.\s*'), '').trim();
+    } catch (_) {
+      return null;
+    }
   }
 
   /// If [response] looks like a verse reference (e.g. "Ps 147:12" or "Ps 145:8a"),
@@ -139,8 +234,17 @@ class ReadingsBackendIo implements ReadingsBackend {
     if (_isResponsorialPsalm(reference)) {
       return await _getResponsorialPsalmText(reference, psalmResponse: psalmResponse);
     }
-    
-    final ranges = ReadingReferenceParser.parse(reference);
+
+    // Strip "see" / "cf." / "cf" prefixes so allusive acclamation references
+    // like "cf. Luke 24:32" can still be looked up.
+    final cleanReference = reference
+        .replaceFirst(
+          RegExp(r'^\s*(?:see|cf\.?|confer)\s+', caseSensitive: false),
+          '',
+        )
+        .trim();
+
+    final ranges = ReadingReferenceParser.parse(cleanReference);
     if (ranges.isEmpty) {
       return 'Reading text unavailable for $reference.';
     }

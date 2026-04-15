@@ -66,7 +66,8 @@ class IncipitProcessingService {
 
     if (cleanedCsvIncipit != null && cleanedCsvIncipit.isNotEmpty) {
       // CSV incipit provided — merge it against the corrected text.
-      return _pass2MergeCsvIncipit(correctedText, cleanedCsvIncipit);
+      return _pass2MergeCsvIncipit(correctedText, cleanedCsvIncipit,
+          reference: reference);
     }
 
     if (derivedIncipit == null || derivedIncipit.trim().isEmpty) {
@@ -185,9 +186,15 @@ class IncipitProcessingService {
   /// Strategy (in order):
   ///   1. Verbatim phrase match: finds the incipit body verbatim in the verse
   ///      and discards that redundant prefix.
-  ///   2. Token-alignment fallback: delegates to Pass 3 deduplicator, which
-  ///      tolerates pronoun/synonym substitutions.
-  String _pass2MergeCsvIncipit(String text, String csvIncipit) {
+  ///   2. Subset-verse expansion: if every meaningful CSV token is already
+  ///      present in the verse, treat the verse as the authoritative body
+  ///      and prepend a book-appropriate narrative prefix (e.g. "In those
+  ///      days:" for Acts, "Brethren:" for Paul, "Beloved:" for Catholic
+  ///      epistles). Preserves words like "rose up" that CSV partials drop.
+  ///   3. Token-alignment dedupe (right-to-left): finds the closing incipit
+  ///      token in the verse and appends the verse remainder with a comma.
+  String _pass2MergeCsvIncipit(String text, String csvIncipit,
+      {String reference = ''}) {
     final lines = text.split('\n');
     for (var i = 0; i < lines.length; i++) {
       if (lines[i].trim().isEmpty) continue;
@@ -198,7 +205,11 @@ class IncipitProcessingService {
       final versePrefix = verseMatch?.group(1);
       final verseBody = (verseMatch?.group(2) ?? originalLine).trim();
 
-      final mergedBody = _mergeCsvIncipitWithVerse(csvIncipit, verseBody);
+      final mergedBody = _mergeCsvIncipitWithVerse(
+        csvIncipit,
+        verseBody,
+        reference: reference,
+      );
       lines[i] = versePrefix != null && versePrefix.isNotEmpty
           ? '$versePrefix. $mergedBody'
           : mergedBody;
@@ -208,7 +219,8 @@ class IncipitProcessingService {
     return csvIncipit;
   }
 
-  String _mergeCsvIncipitWithVerse(String csvIncipit, String verseText) {
+  String _mergeCsvIncipitWithVerse(String csvIncipit, String verseText,
+      {String reference = ''}) {
     final cleanedVerse = verseText.trim();
     if (csvIncipit.isEmpty || cleanedVerse.isEmpty) {
       return csvIncipit.isEmpty ? cleanedVerse : csvIncipit;
@@ -230,9 +242,183 @@ class IncipitProcessingService {
       }
     }
 
-    // ── 2b: Token-alignment fallback (Pass 3 deduplicator) ──────────────
+    // ── 2b: Subset-verse expansion ───────────────────────────────────────
+    final incipitTokensMeaningful = _tokenize(incipitBody);
+    if (incipitTokensMeaningful.length >= 2) {
+      final lowerVerse = cleanedVerse.toLowerCase();
+      final allCovered = incipitTokensMeaningful.every(
+        (t) => RegExp('\\b${RegExp.escape(t)}\\b').hasMatch(lowerVerse),
+      );
+      if (allCovered) {
+        final prefix = _selectLectionaryPrefix(
+          csvIncipit: csvIncipit,
+          reference: reference,
+        );
+        final body = _stripLeadingNarrativeOpener(cleanedVerse);
+        if (body.isNotEmpty && prefix.isNotEmpty) {
+          return _joinWithColon(_normalizeTrailingPunct(prefix), body);
+        }
+      }
+    }
+
+    // ── 2c: Token-alignment fallback (Pass 3 deduplicator, right-to-left)
     final deduped = _pass3DeduplicateFirstLine(cleanedVerse, normalizedIncipit);
-    return _joinWithColon(normalizedIncipit, deduped);
+    if (deduped.isEmpty) return normalizedIncipit;
+    if (deduped == cleanedVerse) {
+      // No dedupe → incipit and verse do not share wording; use colon so the
+      // CSV prefix reads as an introduction ("Jesus said to Nicodemus: For
+      // God so loved …"). For single-word openers (BELOVED, BRETHREN,
+      // BEHOLD, MY SON, MY BROTHERS) also strip a leading narrative
+      // conjunction from the verse so we get "Beloved: if you invoke…"
+      // rather than "Beloved: And if you invoke…".
+      if (_isSingleOpener(normalizedIncipit)) {
+        final stripped = _stripLeadingNarrativeOpener(deduped);
+        if (stripped.isNotEmpty) {
+          return _joinWithColon(normalizedIncipit, stripped);
+        }
+      }
+      return _joinWithColon(normalizedIncipit, deduped);
+    }
+    // Dedupe consumed part of the verse → continue the sentence with a comma.
+    return _joinWithComma(normalizedIncipit, deduped);
+  }
+
+  /// Returns true when [incipit] is a single-word lectionary opener such as
+  /// "BELOVED", "BRETHREN", "BEHOLD", "MY SON", "MY BROTHERS".
+  bool _isSingleOpener(String incipit) {
+    final trimmed = incipit.trim().toLowerCase().replaceAll(RegExp(r'[,:;]$'), '');
+    const openers = {
+      'beloved',
+      'brethren',
+      'brothers',
+      'brothers and sisters',
+      'behold',
+      'hear',
+      'listen',
+      'my son',
+      'my sons',
+      'my brother',
+      'my brothers',
+      'my brothers and sisters',
+      'dearly beloved',
+    };
+    return openers.contains(trimmed);
+  }
+
+  /// Returns the best lectionary-style prefix for a subset CSV incipit.
+  ///
+  /// Rules:
+  ///   • If the CSV incipit starts with a recognized narrative prefix, use
+  ///     the CSV's pre-colon portion (or the whole string when no colon).
+  ///   • Otherwise derive a prefix from the scripture book in [reference]:
+  ///     Acts / OT historical → "In those days"
+  ///     Pauline letters      → "Brethren"
+  ///     Catholic epistles    → "Beloved"
+  ///     Gospels              → "At that time"
+  String _selectLectionaryPrefix({
+    required String csvIncipit,
+    required String reference,
+  }) {
+    final lower = csvIncipit.toLowerCase().trimLeft();
+    for (final opener in _kIncipitOpeners) {
+      if (lower.startsWith(opener)) {
+        final prefix = _extractIncipitPrefix(csvIncipit);
+        return prefix.isNotEmpty ? prefix : csvIncipit;
+      }
+    }
+    final bookBased = _bookPrefix(reference);
+    if (bookBased != null) return bookBased;
+    // Fall back to the CSV incipit as-is.
+    return csvIncipit;
+  }
+
+  /// Returns a lectionary-style narrative prefix ("In those days",
+  /// "Brethren", "Beloved", "At that time") based on the book of [reference],
+  /// or null when no sensible default applies.
+  String? _bookPrefix(String reference) {
+    final ref = reference.trim();
+    if (ref.isEmpty) return null;
+
+    final bookMatch = RegExp(r'^([0-9]?\s*[A-Za-z]+)').firstMatch(ref);
+    final book = bookMatch?.group(1)?.trim();
+    if (book == null || book.isEmpty) return null;
+
+    final lower = book.toLowerCase();
+    if (lower.startsWith('acts')) return 'In those days';
+    if (lower.startsWith('matt') ||
+        lower.startsWith('mark') ||
+        lower.startsWith('luke') ||
+        lower.startsWith('john')) {
+      return 'At that time';
+    }
+    // Pauline epistles
+    const pauline = {
+      'rom', 'cor', '1cor', '2cor', 'gal', 'eph', 'phil',
+      'col', 'thess', '1thess', '2thess', 'tim', '1tim', '2tim',
+      'titus', 'phlm', 'heb',
+    };
+    final normalizedBook = lower.replaceAll(' ', '');
+    for (final p in pauline) {
+      if (normalizedBook == p || normalizedBook.endsWith(p)) {
+        return 'Brethren';
+      }
+    }
+    // Catholic epistles
+    const catholic = {
+      'jas', 'james', '1pet', '2pet', 'pet',
+      '1john', '2john', '3john', 'jude',
+    };
+    for (final c in catholic) {
+      if (normalizedBook == c || normalizedBook.endsWith(c)) {
+        return 'Beloved';
+      }
+    }
+    // OT historical / narrative
+    const otHistorical = {
+      'gen', 'exod', 'lev', 'num', 'deut', 'josh', 'judg', 'ruth',
+      '1sam', '2sam', 'sam', '1kgs', '2kgs', 'kgs',
+      '1chr', '2chr', 'chr', 'ezra', 'neh', 'tob', 'jud', 'esth',
+      '1macc', '2macc', 'macc',
+    };
+    for (final o in otHistorical) {
+      if (normalizedBook == o || normalizedBook.endsWith(o)) {
+        return 'In those days';
+      }
+    }
+    return null;
+  }
+
+  /// Extracts the leading phrase of a CSV incipit ("In those days", "Brethren",
+  /// "Jesus said to Nicodemus", etc.). Returns the segment before the first
+  /// colon, or the whole incipit when no colon exists.
+  String _extractIncipitPrefix(String incipit) {
+    final colonIndex = incipit.indexOf(':');
+    if (colonIndex > 0) return incipit.substring(0, colonIndex).trim();
+    return incipit.trim();
+  }
+
+  /// Strips leading narrative conjunctions ("But", "And", "Now", "Then",
+  /// "So", "Therefore", "Moreover", "Again") from a verse body so the
+  /// resulting phrase reads naturally after an incipit prefix.
+  String _stripLeadingNarrativeOpener(String body) {
+    var result = body.trim();
+    // Remove a standalone leading verse-number prefix, if any.
+    result = result.replaceFirst(RegExp(r'^\d+[a-z]?\.\s*'), '');
+    final match = RegExp(
+      r'^(?:And|But|Now|Then|So|For|Thus|Therefore|Moreover|Again|Yet)\s+',
+      caseSensitive: false,
+    ).firstMatch(result);
+    if (match != null) {
+      result = result.substring(match.end).trimLeft();
+    }
+    // Capitalize the first letter of the remainder.
+    if (result.isNotEmpty) {
+      final ch = result[0];
+      if (ch != '"' && ch != '\u201C' && ch != "'") {
+        result = ch.toUpperCase() + result.substring(1);
+      }
+    }
+    return result;
   }
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -309,30 +495,27 @@ class IncipitProcessingService {
   /// Core deduplicator: returns the portion of [firstLine] that is NOT already
   /// covered by [incipitPrefix].
   ///
-  /// Returns [firstLine] unchanged when overlap ratio < 0.6 (no redundancy).
+  /// Strategy (right-to-left, non-sequential):
+  ///   1. Count how many incipit tokens appear anywhere in the verse
+  ///      (coverage). Requires ≥ 0.5 ratio before we touch the verse.
+  ///   2. Walk incipit tokens right-to-left; the first one found in the
+  ///      verse defines the strip boundary. This tolerates verb-tense
+  ///      substitutions mid-incipit (e.g. CSV says "stood" but the verse
+  ///      has "standing") — the closing token ("Eleven", "him", …) still
+  ///      pins the end of the echo correctly.
+  ///
+  /// Returns [firstLine] unchanged when coverage < 0.5 (no redundancy).
   /// Returns **empty string** when the whole line IS the incipit (caller skips it).
   String _pass3DeduplicateFirstLine(String firstLine, String incipitPrefix) {
     final incipitTokens = _tokenize(incipitPrefix);
     if (incipitTokens.length < 2) return firstLine;
 
-    // Sequential token alignment: walk incipitTokens in order, searching each
-    // within a sliding 90-char window over the verse text.  Unmatched tokens
-    // are silently skipped (accommodates "people" → "them" etc.).
     final lowerLine =
         firstLine.toLowerCase().replaceAll(RegExp(r"[^\w\s']"), ' ');
 
-    int lastMatchEnd = -1;
     int matchedCount = 0;
-    int searchFrom = 0;
-    const int kWindow = 90;
-
     for (final token in incipitTokens) {
-      final windowEnd = (searchFrom + kWindow).clamp(0, lowerLine.length);
-      final segment = lowerLine.substring(searchFrom, windowEnd);
-      final m = RegExp('\\b${RegExp.escape(token)}\\b').firstMatch(segment);
-      if (m != null) {
-        lastMatchEnd = searchFrom + m.end;
-        searchFrom = lastMatchEnd;
+      if (RegExp('\\b${RegExp.escape(token)}\\b').hasMatch(lowerLine)) {
         matchedCount++;
       }
     }
@@ -342,7 +525,22 @@ class IncipitProcessingService {
     final isProphetic = _isPropheticIncipit(incipitPrefix) &&
         _startsWithPropheticRedundancy(firstLine);
 
-    if (!isProphetic && ratio < 0.6) return firstLine;
+    if (!isProphetic && ratio < 0.5) return firstLine;
+
+    // Right-to-left: find the closing incipit token that appears in the
+    // verse and strip up to its LAST occurrence in the verse.
+    int lastMatchEnd = -1;
+    for (var i = incipitTokens.length - 1; i >= 0; i--) {
+      final token = incipitTokens[i];
+      final matches = RegExp('\\b${RegExp.escape(token)}\\b')
+          .allMatches(lowerLine)
+          .toList();
+      if (matches.isNotEmpty) {
+        lastMatchEnd = matches.last.end;
+        break;
+      }
+    }
+
     if (lastMatchEnd < 0) return firstLine;
 
     var remainder = firstLine.substring(lastMatchEnd).trimLeft();
@@ -429,6 +627,30 @@ class IncipitProcessingService {
     return '$i: $v';
   }
 
+  /// Joins [incipit] and [verse] with a comma when the incipit ends with a
+  /// noun phrase that should flow naturally into the following clause
+  /// (e.g. "THEN Peter stood up with the Eleven" + "lifted up his voice").
+  /// If the incipit already ends with punctuation, respect it.
+  String _joinWithComma(String incipit, String verse) {
+    final i = incipit.trimRight();
+    final v = verse.trimLeft();
+    if (i.isEmpty) return v;
+    if (v.isEmpty) return i;
+    if (RegExp(r'[:,;.!?]$').hasMatch(i)) return '$i $v';
+    // Drop a leading narrative conjunction so the joined sentence reads
+    // naturally; keep the casing of the next word intact (e.g. "But God"
+    // → "God" should stay capitalized, not become "god").
+    final cleanedV = v.replaceFirst(
+      RegExp(
+        r'^(?:And|But|Now|Then|So|For|Thus|Therefore|Moreover|Again|Yet)\s+',
+        caseSensitive: false,
+      ),
+      '',
+    );
+    final joined = cleanedV.isEmpty ? v : cleanedV;
+    return '$i, $joined';
+  }
+
   /// Extracts the part of an incipit that comes after the first colon.
   /// E.g. "Thus says the LORD: The LORD spoke" → "The LORD spoke".
   /// Returns the whole string if no colon is present.
@@ -469,36 +691,44 @@ class IncipitProcessingService {
   // Pass 2 — Text cleaning and incipit derivation
   // ─────────────────────────────────────────────────────────────────────────
 
-  /// Cleans and normalizes verse text.
-  /// Removes common formatting issues and standardizes punctuation.
+  /// Cleans and normalizes verse text while PRESERVING newline boundaries
+  /// so that per-verse processing (incipit merge, dedupe) works on one verse
+  /// at a time — never stripping content across verse boundaries.
   String _cleanVerseText(String rawText) {
-    var text = rawText.trim();
-    
-    // Remove excessive whitespace
-    text = text.replaceAll(RegExp(r'\s+'), ' ');
-    
-    // Fix common punctuation issues
-    text = text.replaceAllMapped(RegExp(r'\s*([.,;:!?])\s*'), (match) => '${match.group(1)} ');
-    text = text.replaceAll(RegExp(r'\s*\n\s*'), ' ');
-    
-    // Remove verse numbers at the start of lines
-    text = text.replaceAll(RegExp(r'^\d+[a-z]?\.\s*'), '');
-    
-    // Clean up quotes and brackets
-    text = text.replaceAll(RegExp(r'["'']'), '"');
-    text = text.replaceAll(RegExp(r'[\[\]{}]'), '');
-    
-    // Ensure proper spacing around punctuation
-    text = text.replaceAllMapped(RegExp(r'\s+([.,;:!?])'), (match) => '${match.group(1)}');
-    text = text.replaceAllMapped(RegExp(r'([.,;:!?])\s+'), (match) => '${match.group(1)} ');
-    
-    // Remove any remaining backslash-number sequences (e.g., \1, \12, \13)
-    text = text.replaceAll(RegExp(r'\\\d+'), '');
-    
-    // Final cleanup
-    text = text.trim();
-    
-    return text;
+    // Split on newlines, clean each line, rejoin. This guarantees that an
+    // incipit dedupe cannot accidentally reach into verse 29 while merging
+    // verse 13.
+    final lines = rawText.split(RegExp(r'\r?\n'));
+    final cleaned = <String>[];
+    for (final raw in lines) {
+      var text = raw;
+
+      // Collapse runs of spaces/tabs (but never newlines) to a single space.
+      text = text.replaceAll(RegExp(r'[ \t]+'), ' ');
+
+      // Ensure a single space after closing punctuation and no space before.
+      text = text.replaceAllMapped(
+        RegExp(r' +([.,;:!?])'),
+        (match) => match.group(1)!,
+      );
+      text = text.replaceAllMapped(
+        RegExp(r'([.,;:!?]) +'),
+        (match) => '${match.group(1)} ',
+      );
+
+      // Strip leftover backslash-number artifacts from some importers.
+      text = text.replaceAll(RegExp(r'\\\d+'), '');
+
+      cleaned.add(text.trim());
+    }
+    // Drop empty lines from the beginning and end; preserve interior blanks.
+    while (cleaned.isNotEmpty && cleaned.first.isEmpty) {
+      cleaned.removeAt(0);
+    }
+    while (cleaned.isNotEmpty && cleaned.last.isEmpty) {
+      cleaned.removeLast();
+    }
+    return cleaned.join('\n');
   }
 
   /// Attempts to derive an official incipit from the verse text.
@@ -721,6 +951,31 @@ const List<String> _kPropheticIndicators = [
   'the lord spoke',
   'the word of the lord',
   'hear the word of the lord',
+];
+
+const List<String> _kIncipitOpeners = [
+  'in those days',
+  'at that time',
+  'brethren',
+  'beloved',
+  'my son',
+  'my sons',
+  'my brothers',
+  'my brothers and sisters',
+  'dearly beloved',
+  'thus says the lord',
+  'thus says the lord god',
+  'thus saith the lord',
+  'hear the word of the lord',
+  'the word of the lord',
+  'on that day',
+  'one day',
+  'once,',
+  'jesus said',
+  'the lord said',
+  'the lord spoke',
+  'the lord says',
+  'the spirit of the lord',
 ];
 
 const List<String> _kPropheticClausePrefixes = [

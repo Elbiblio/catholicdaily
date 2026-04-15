@@ -6,41 +6,85 @@
 /// Since the RSVCE database stores complete verses only, we need to
 /// intelligently split them based on punctuation and poetic structure.
 class PsalmVerseSplitter {
-  /// Split a verse into parts (a, b, c, d) based on punctuation
-  /// 
-  /// Hebrew poetry uses parallelism, so verses typically have 2-4 lines.
-  /// Two-pass split:
-  ///   1. Split on sentence-ending punctuation (. ; ! ?)
-  ///   2. Split each sentence on comma + conjunction boundaries
-  /// This produces finer-grained parts so notation like "13cd" resolves
-  /// correctly even for long verses.
+  /// Split a verse into parts (a, b, c, d) based on punctuation.
+  ///
+  /// Hebrew poetry is typically bicolon (a/b parallelism). We respect
+  /// strong sentence boundaries (. ; ! ?) first; then, within a sentence,
+  /// we collapse a multi-clause list into a BINARY split so lectionary
+  /// "Xa" notation returns the FIRST HALF of the parallelism rather than
+  /// just the opening clause.
+  ///
+  /// Example:
+  ///   "This poor man cried, and the LORD heard him, and saved him out of
+  ///    all his troubles."
+  ///   → ["This poor man cried, and the LORD heard him",
+  ///      "and saved him out of all his troubles"]
+  ///   getVersePart("a") returns the full first half (matches Lectionary).
   static List<String> splitVerse(String verseText) {
-    // Remove verse number if present at start
     var text = verseText.replaceFirst(RegExp(r'^\d+\.\s*'), '').trim();
-    // Normalise missing spaces after commas before conjunctions
     text = text.replaceAllMapped(
-      RegExp(r',(?=(?:and|but|or|yet|for|nor|so|because|that|who)\b)', caseSensitive: false),
+      RegExp(r',(?=(?:and|but|or|yet|for|nor|so|because|that|who)\b)',
+          caseSensitive: false),
       (m) => ', ',
     );
 
     final parts = <String>[];
-
-    // Pass 1 – split on sentence-ending punctuation
     final sentences = text.split(RegExp(r'(?<=[.!?;])\s*'));
 
     for (final sentence in sentences) {
       final trimmed = sentence.trim();
       if (trimmed.isEmpty) continue;
 
-      // Pass 2 – split each sentence on comma + conjunction boundaries
       final subParts = _splitOnConjunctionComma(trimmed);
-      parts.addAll(subParts);
+      if (subParts.length <= 2) {
+        parts.addAll(subParts);
+      } else {
+        // Fold N>2 clauses into a 2-part a/b split at the BALANCED boundary
+        // (the conjunction comma whose split yields the most even halves).
+        final pair = _balancedBinarySplit(trimmed);
+        parts.addAll(pair);
+      }
     }
 
     if (parts.isEmpty) {
       parts.add(text);
     }
 
+    return parts;
+  }
+
+  /// Splits [sentence] at the comma+conjunction boundary that produces the
+  /// most balanced a/b halves. Falls back to a single-element list when no
+  /// comma+conjunction boundary exists.
+  static List<String> _balancedBinarySplit(String sentence) {
+    final stripped = sentence.replaceFirst(RegExp(r'[.!?;:]\s*$'), '');
+    final boundaryPattern = RegExp(
+      r',\s*(?=(?:and|but|or|yet|for|nor|so|because|that|who)\b)',
+      caseSensitive: false,
+    );
+    final matches = boundaryPattern.allMatches(stripped).toList();
+    if (matches.isEmpty) return [stripped.trim()];
+
+    final length = stripped.length;
+    final mid = length / 2;
+    // Pick the boundary whose start position is closest to mid.
+    RegExpMatch? best;
+    num bestDelta = double.infinity;
+    for (final m in matches) {
+      final delta = (m.start - mid).abs();
+      if (delta < bestDelta) {
+        bestDelta = delta;
+        best = m;
+      }
+    }
+    if (best == null) return [stripped.trim()];
+
+    final a = stripped.substring(0, best.start).trim();
+    final b = stripped.substring(best.end).trim();
+    final parts = <String>[];
+    if (a.isNotEmpty) parts.add(a);
+    if (b.isNotEmpty) parts.add(b);
+    if (parts.isEmpty) return [stripped.trim()];
     return parts;
   }
 

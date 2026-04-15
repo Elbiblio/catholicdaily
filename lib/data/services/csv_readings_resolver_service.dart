@@ -36,22 +36,10 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
     }
 
     if (_isEasterVigil(normalizedDate)) {
-      final standardEntries = await _catalog.loadStandardEntries();
-      final vigilReadings = _buildEasterVigilReadings(
+      return _buildAuthoritativeEasterVigilReadings(
         normalizedDate,
-        standardEntries,
         yearVariables.sundayCycle,
       );
-      if (vigilReadings.isNotEmpty) {
-        return vigilReadings;
-      }
-
-      final legacyFallback = await _resolveLegacyFallback(normalizedDate);
-      if (legacyFallback.isNotEmpty) {
-        return legacyFallback;
-      }
-
-      return const [];
     }
 
     final memorialEntries = await _catalog.loadMemorialEntries();
@@ -64,17 +52,6 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         (celebrationEntry.firstReading.isNotEmpty ||
             celebrationEntry.gospel.isNotEmpty)) {
       return _buildCelebrationReadings(normalizedDate, celebrationEntry);
-    }
-
-    // Check for special period readings
-    final seasonStr = liturgicalDay.season.toString().split('.').last;
-    final dayStr = resolvedDay.dayOfWeek.toString().split('.').last;
-    final specialPeriodEntries = await _catalog.getSpecialPeriodEntriesForSeasonDay(
-      seasonStr,
-      dayStr,
-    );
-    if (specialPeriodEntries.isNotEmpty) {
-      return _buildSpecialPeriodReadings(normalizedDate, specialPeriodEntries);
     }
 
     final standardEntries = await _catalog.loadStandardEntries();
@@ -294,14 +271,17 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
       return true;
     }
 
+    // Check if we have any actual readings (not just psalm or acclamation)
+    final hasFirstReading = readings.any(
+      (reading) => (reading.position ?? '').toLowerCase().contains('first reading'),
+    );
     final hasGospel = readings.any(
       (reading) => (reading.position ?? '').toLowerCase().contains('gospel'),
     );
-    final hasNonPsalmReading = readings.any(
-      (reading) => !(reading.position ?? '').toLowerCase().contains('psalm'),
-    );
 
-    return !hasGospel || !hasNonPsalmReading;
+    // Prefer legacy fallback only if we have no readings at all
+    // Weekdays typically don't have gospel readings, so we shouldn't require gospel
+    return !hasFirstReading && !hasGospel;
   }
 
   MemorialFeastEntry? _findCelebrationEntry({
@@ -313,7 +293,8 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
 
     for (final entry in memorialEntries) {
       if (_normalizeTitle(entry.title) == normalizedTitle) {
-        return entry;
+        if (_isMemorialEntryWellFormed(entry)) return entry;
+        return null;
       }
     }
 
@@ -327,11 +308,33 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
       }
       if (int.tryParse(entry.month) == date.month &&
           int.tryParse(entry.day) == date.day) {
-        return entry;
+        if (_isMemorialEntryWellFormed(entry)) return entry;
+        return null;
       }
     }
 
     return null;
+  }
+
+  /// Returns false when a memorial entry has obvious field-shift corruption
+  /// (e.g. psalmReference contains a sentence instead of a Psalm reference,
+  /// or firstReading begins with a parenthetical like "(Vigil Mass)").
+  bool _isMemorialEntryWellFormed(MemorialFeastEntry entry) {
+    final fr = entry.firstReading.trim();
+    if (fr.startsWith('(')) return false;
+    final pr = entry.psalmReference.trim();
+    if (pr.isNotEmpty) {
+      final validPsalmPrefix = RegExp(
+        r'^(Ps|Psalm|Isa|Exod|1\s+Sam|Dan|Luke\s+1)',
+      );
+      if (!validPsalmPrefix.hasMatch(pr)) return false;
+    }
+    final gospel = entry.gospel.trim();
+    if (gospel.isNotEmpty) {
+      final validGospelPrefix = RegExp(r'^(Matt|Mark|Luke|John)\s');
+      if (!validGospelPrefix.hasMatch(gospel)) return false;
+    }
+    return true;
   }
 
   bool _matchesStandardEntry({
@@ -347,28 +350,8 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
     final day = entry.day.trim().toLowerCase();
     final liturgicalSeason = liturgicalDay.seasonName.toLowerCase();
 
-    if (entry.sundayCycle.isNotEmpty &&
-        entry.sundayCycle != 'A/B/C' &&
-        entry.sundayCycle.toUpperCase() != sundayCycle.toUpperCase()) {
-      return false;
-    }
-
-    if (entry.weekdayCycle.isNotEmpty &&
-        entry.weekdayCycle != 'I/II' &&
-        entry.weekdayCycle.toUpperCase() != weekdayCycle.toUpperCase()) {
-      return false;
-    }
-
-    if (_monthDayLabel(date).toLowerCase() == day) {
-      if (season == 'advent' && _isDecember17To24(date)) {
-        return week == 'dec 17-24';
-      }
-      if (season == 'christmas' && _isChristmasOctave(date)) {
-        return week == 'octave';
-      }
-      return true;
-    }
-
+    // ── Special day checks first (before season check, since Holy Week
+    //    entries use season='Holy Week' but calendar returns 'Lent') ──
     if (_isHolyThursday(date)) {
       return season == 'holy week' && day == 'holy thursday';
     }
@@ -381,124 +364,87 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
     if (_isEasterVigil(date)) {
       return season == 'easter' && week == 'vigil';
     }
-    if (_isChristmasDay(date)) {
-      // Default to Christmas Day mass on December 25
-      return season == 'christmas' && week == 'christmas' && day == 'christmas day';
-    }
     if (_isChristmasVigil(date)) {
-      // Christmas Vigil on evening of December 24
-      return season == 'christmas' && week == 'christmas' && day == 'christmas vigil';
+      return season == 'christmas' && day.contains('christmas') && day.contains('vigil');
     }
-    if (_isEasterOctave(date)) {
-      return season == 'easter' && week == 'octave';
+    if (_isChristmasDay(date)) {
+      return season == 'christmas' && day.contains('christmas');
     }
     if (_isAshWednesday(date)) {
-      return season == 'lent' && week == 'after ash wed' && day == 'ash wednesday';
+      return season == 'lent' && day == 'ash wednesday';
     }
     if (_isAfterAshWednesdayToSaturday(date)) {
       return season == 'lent' && week == 'after ash wed' && day == liturgicalDay.dayName.toLowerCase();
     }
+    if (_isEasterOctave(date)) {
+      if (season != 'easter' || week != 'octave') {
+        return false;
+      }
+      // Octave entries are per-day (Mon-Sat), so filter by weekday.
+      return day == liturgicalDay.dayName.toLowerCase();
+    }
 
+    // ── Season must match exactly ──
+    if (season != liturgicalSeason) {
+      return false;
+    }
+
+    // Sunday cycle check (for Sunday entries)
+    if (entry.sundayCycle.isNotEmpty &&
+        entry.sundayCycle != 'A/B/C' &&
+        entry.sundayCycle != 'ABC' &&
+        entry.sundayCycle.toUpperCase() != sundayCycle.toUpperCase()) {
+      return false;
+    }
+
+    // Weekday cycle check
+    if (entry.weekdayCycle.isNotEmpty &&
+        entry.weekdayCycle != 'I/II' &&
+        entry.weekdayCycle.toUpperCase() != weekdayCycle.toUpperCase()) {
+      return false;
+    }
+
+    // Date-based matches (December 17-24, Christmas octave, etc.)
+    if (_monthDayLabel(date).toLowerCase() == day) {
+      if (season == 'advent' && _isDecember17To24(date)) {
+        return week == 'dec 17-24' || week.isEmpty;
+      }
+      if (season == 'christmas' && _isChristmasOctave(date)) {
+        return week == 'octave' || week.isEmpty;
+      }
+      return true;
+    }
+
+    // Sunday matching: require season + day + week number
     if (isSunday) {
       if (day != 'sunday') {
         return false;
       }
-      if (season != liturgicalSeason) {
-        return false;
-      }
+      // Week must match; skip entries without week numbers
       if (week.isEmpty) {
-        return true;
+        return false;
       }
       return week == liturgicalDay.weekNumber.toString();
     }
 
+    // Weekday matching: require season + day of week + week number
     if (day != liturgicalDay.dayName.toLowerCase()) {
       return false;
     }
     if (_isDecember17To24(date)) {
-      return season == 'advent' && week == 'dec 17-24';
+      return season == 'advent' && (week == 'dec 17-24' || week.isEmpty);
     }
     if (_isChristmasOctave(date)) {
-      return season == 'christmas' && week == 'octave';
+      return season == 'christmas' && (week == 'octave' || week.isEmpty);
     }
     if (season == 'holy week') {
       return false;
     }
-    if (season != liturgicalSeason) {
+    // Week must match; skip entries without week numbers
+    if (week.isEmpty) {
       return false;
     }
-    if (week.isEmpty) {
-      return true;
-    }
     return week == liturgicalDay.weekNumber.toString();
-  }
-
-  List<DailyReading> _buildSpecialPeriodReadings(
-    DateTime date,
-    List<SpecialPeriodEntry> entries,
-  ) {
-    final readings = <DailyReading>[];
-    for (final entry in entries) {
-      if (entry.firstReading.isNotEmpty) {
-        readings.add(DailyReading(
-          reading: _normalizeReferenceStyle(entry.firstReading),
-          position: 'First Reading',
-          date: date,
-          feast: '${entry.season} ${entry.day}',
-          incipit: entry.firstReadingIncipit.isEmpty ? null : entry.firstReadingIncipit,
-        ));
-      }
-      if (entry.alternativeFirstReading.isNotEmpty) {
-        readings.add(DailyReading(
-          reading: _normalizeReferenceStyle(entry.alternativeFirstReading),
-          position: 'First Reading (alternative)',
-          date: date,
-          feast: '${entry.season} ${entry.day}',
-          incipit: entry.alternativeFirstReadingIncipit.isEmpty
-              ? null
-              : entry.alternativeFirstReadingIncipit,
-        ));
-      }
-      if (entry.psalmReference.isNotEmpty) {
-        readings.add(DailyReading(
-          reading: _normalizeReferenceStyle(entry.psalmReference),
-          position: 'Responsorial Psalm',
-          date: date,
-          feast: '${entry.season} ${entry.day}',
-          incipit: entry.psalmResponse.isEmpty ? null : entry.psalmResponse,
-        ));
-      }
-      if (entry.secondReading.isNotEmpty) {
-        readings.add(DailyReading(
-          reading: _normalizeReferenceStyle(entry.secondReading),
-          position: 'Second Reading',
-          date: date,
-          feast: '${entry.season} ${entry.day}',
-          incipit: entry.secondReadingIncipit.isEmpty ? null : entry.secondReadingIncipit,
-        ));
-      }
-      if (entry.gospel.isNotEmpty) {
-        readings.add(DailyReading(
-          reading: _normalizeReferenceStyle(entry.gospel),
-          position: 'Gospel',
-          date: date,
-          feast: '${entry.season} ${entry.day}',
-          incipit: entry.gospelIncipit.isEmpty ? null : entry.gospelIncipit,
-        ));
-      }
-      if (entry.alternativeGospel.isNotEmpty) {
-        readings.add(DailyReading(
-          reading: _normalizeReferenceStyle(entry.alternativeGospel),
-          position: 'Gospel (alternative)',
-          date: date,
-          feast: '${entry.season} ${entry.day}',
-          incipit: entry.alternativeGospelIncipit.isEmpty
-              ? null
-              : entry.alternativeGospelIncipit,
-        ));
-      }
-    }
-    return readings;
   }
 
   List<DailyReading> _buildCelebrationReadings(
@@ -528,13 +474,13 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
       ));
     }
     if (entry.psalmReference.isNotEmpty) {
+      final cleanedResponse = _stripLectionaryNoise(entry.psalmResponse);
       readings.add(DailyReading(
         reading: _normalizeReferenceStyle(entry.psalmReference),
         position: 'Responsorial Psalm',
         date: date,
         feast: entry.title,
-        psalmResponse:
-            entry.psalmResponse.isEmpty ? null : entry.psalmResponse,
+        psalmResponse: cleanedResponse.isEmpty ? null : cleanedResponse,
       ));
     }
     if (entry.secondReading.isNotEmpty) {
@@ -553,9 +499,9 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         position: 'Gospel',
         date: date,
         feast: entry.title,
-        gospelAcclamation: entry.gospelAcclamation.isEmpty
+        gospelAcclamation: _stripLectionaryNoise(entry.gospelAcclamation).isEmpty
             ? null
-            : entry.gospelAcclamation,
+            : _stripLectionaryNoise(entry.gospelAcclamation),
         incipit: entry.gospelIncipit.isEmpty ? null : entry.gospelIncipit,
       ));
     }
@@ -565,9 +511,9 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         position: 'Gospel (alternative)',
         date: date,
         feast: entry.title,
-        gospelAcclamation: entry.gospelAcclamation.isEmpty
+        gospelAcclamation: _stripLectionaryNoise(entry.gospelAcclamation).isEmpty
             ? null
-            : entry.gospelAcclamation,
+            : _stripLectionaryNoise(entry.gospelAcclamation),
         incipit: entry.alternativeGospelIncipit.isEmpty
             ? null
             : entry.alternativeGospelIncipit,
@@ -576,6 +522,106 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
     return readings;
   }
 
+  /// Authoritative Easter Vigil reading set: 7 OT readings (each with its
+  /// own responsorial psalm), the Epistle (Rom 6), and the cycle-appropriate
+  /// resurrection Gospel. Source: Roman Missal / Lectionary for Mass.
+  List<DailyReading> _buildAuthoritativeEasterVigilReadings(
+    DateTime date,
+    String sundayCycle,
+  ) {
+    final cycle = sundayCycle.toUpperCase();
+
+    final gospel = switch (cycle) {
+      'A' => 'Matt 28:1-10',
+      'B' => 'Mark 16:1-7',
+      'C' => 'Luke 24:1-12',
+      _ => 'Matt 28:1-10',
+    };
+
+    // Each tuple: reading reference, psalm reference, psalm response, incipit.
+    final otReadings = <_VigilReading>[
+      _VigilReading(
+        reading: 'Gen 1:1-2:2',
+        psalm: 'Ps 104:1-2, 5-6, 10 and 12, 13-14, 24 and 35',
+        psalmResponse: 'Send forth your Spirit, O Lord, and renew the face of the earth.',
+      ),
+      _VigilReading(
+        reading: 'Gen 22:1-18',
+        psalm: 'Ps 16:5, 8, 9-10, 11',
+        psalmResponse: 'You are my inheritance, O Lord.',
+      ),
+      _VigilReading(
+        reading: 'Exod 14:15-15:1',
+        psalm: 'Exod 15:1-2, 3-4, 5-6, 17-18',
+        psalmResponse: 'Let us sing to the Lord; he has covered himself in glory.',
+      ),
+      _VigilReading(
+        reading: 'Isa 54:5-14',
+        psalm: 'Ps 30:2 and 4, 5-6, 11-12, 13',
+        psalmResponse: 'I will praise you, Lord, for you have rescued me.',
+      ),
+      _VigilReading(
+        reading: 'Isa 55:1-11',
+        psalm: 'Isa 12:2-3, 4, 5-6',
+        psalmResponse: 'You will draw water joyfully from the springs of salvation.',
+      ),
+      _VigilReading(
+        reading: 'Bar 3:9-15, 32-4:4',
+        psalm: 'Ps 19:8, 9, 10, 11',
+        psalmResponse: 'Lord, you have the words of everlasting life.',
+      ),
+      _VigilReading(
+        reading: 'Ezek 36:16-17a, 18-28',
+        psalm: 'Ps 42:3, 5; 43:3, 4',
+        psalmResponse: 'Like a deer that longs for running streams, my soul longs for you, my God.',
+      ),
+    ];
+
+    final readings = <DailyReading>[];
+
+    for (var i = 0; i < otReadings.length; i++) {
+      final entry = otReadings[i];
+      final positionLabel = _readingPosition(i + 1);
+      readings.add(DailyReading(
+        reading: entry.reading,
+        position: positionLabel,
+        date: date,
+      ));
+      readings.add(DailyReading(
+        reading: entry.psalm,
+        position: 'Responsorial Psalm after $positionLabel',
+        date: date,
+        psalmResponse: entry.psalmResponse,
+      ));
+    }
+
+    // Epistle (8th reading)
+    readings.add(DailyReading(
+      reading: 'Rom 6:3-11',
+      position: 'Epistle',
+      date: date,
+    ));
+    readings.add(DailyReading(
+      reading: 'Ps 118:1-2, 16-17, 22-23',
+      position: 'Responsorial Psalm after Epistle',
+      date: date,
+      psalmResponse: 'Alleluia, alleluia, alleluia.',
+    ));
+
+    // Gospel
+    readings.add(DailyReading(
+      reading: gospel,
+      position: 'Gospel',
+      date: date,
+      gospelAcclamation: 'This is the day the Lord has made; let us rejoice and be glad.',
+    ));
+
+    return readings;
+  }
+
+  // Legacy CSV-based Easter Vigil builder retained for reference — unused
+  // after the authoritative override above took over.
+  // ignore: unused_element
   List<DailyReading> _buildEasterVigilReadings(
     DateTime date,
     List<StandardLectionaryEntry> entries,
@@ -685,7 +731,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         reading: _normalizeReferenceStyle(_cycleSpecificGospel(gospelEntry.gospel, sundayCycle)),
         position: 'Gospel',
         date: date,
-        gospelAcclamation: gospelEntry.acclamationText.isEmpty ? null : gospelEntry.acclamationText,
+        gospelAcclamation: _stripLectionaryNoise(gospelEntry.acclamationText).isEmpty ? null : _stripLectionaryNoise(gospelEntry.acclamationText),
         incipit: gospelEntry.gospelIncipit.isEmpty ? null : gospelEntry.gospelIncipit,
       ));
     }
@@ -970,6 +1016,320 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
       );
     }
 
+    if (normalizedTitle == _normalizeTitle('Saints Peter and Paul, Apostles')) {
+      return _buildOverrideReadings(
+        date: date,
+        firstReading: 'Acts 12:1-11',
+        psalm: 'Ps 34:2-3, 4-5, 6-7, 8-9',
+        psalmResponse: 'The angel of the Lord will rescue those who fear him.',
+        secondReading: '2 Tim 4:6-8, 17-18',
+        gospel: 'Matt 16:13-19',
+        gospelAcclamation: 'You are Peter, and upon this rock I will build my Church, and the gates of the netherworld shall not prevail against it.',
+      );
+    }
+
+    if (normalizedTitle == _normalizeTitle('The Exaltation of the Holy Cross')) {
+      return _buildOverrideReadings(
+        date: date,
+        firstReading: 'Num 21:4b-9',
+        psalm: 'Ps 78:1-2, 34-35, 36-37, 38',
+        psalmResponse: 'Do not forget the works of the Lord!',
+        secondReading: 'Phil 2:6-11',
+        gospel: 'John 3:13-17',
+        gospelAcclamation: 'We adore you, O Christ, and we bless you, because by your Cross you have redeemed the world.',
+      );
+    }
+
+    if (normalizedTitle == _normalizeTitle('The Transfiguration of the Lord')) {
+      final gospel = switch (cycle) {
+        'A' => 'Matt 17:1-9',
+        'B' => 'Mark 9:2-10',
+        'C' => 'Luke 9:28b-36',
+        _ => 'Matt 17:1-9',
+      };
+      return _buildOverrideReadings(
+        date: date,
+        firstReading: 'Dan 7:9-10, 13-14',
+        psalm: 'Ps 97:1-2, 5-6, 9',
+        psalmResponse: 'The Lord is king, the Most High over all the earth.',
+        secondReading: '2 Pet 1:16-19',
+        gospel: gospel,
+        gospelAcclamation: 'This is my beloved Son, with whom I am well pleased; listen to him.',
+      );
+    }
+
+    if (normalizedTitle == _normalizeTitle('The Presentation of the Lord')) {
+      return _buildOverrideReadings(
+        date: date,
+        firstReading: 'Mal 3:1-4',
+        psalm: 'Ps 24:7, 8, 9, 10',
+        psalmResponse: 'Who is this king of glory? It is the Lord!',
+        secondReading: 'Heb 2:14-18',
+        gospel: 'Luke 2:22-40',
+        gospelAcclamation: 'A light of revelation to the Gentiles, and the glory of your people Israel.',
+      );
+    }
+
+    if (normalizedTitle == _normalizeTitle('The Assumption of the Blessed Virgin Mary') ||
+        normalizedTitle == _normalizeTitle('The Assumption')) {
+      return _buildOverrideReadings(
+        date: date,
+        firstReading: 'Rev 11:19a; 12:1-6a, 10ab',
+        psalm: 'Ps 45:10, 11, 12, 16',
+        psalmResponse: 'The queen stands at your right hand, arrayed in gold.',
+        secondReading: '1 Cor 15:20-27',
+        gospel: 'Luke 1:39-56',
+        gospelAcclamation: 'Mary is taken up to heaven; the host of angels rejoices.',
+      );
+    }
+
+    if (normalizedTitle == _normalizeTitle('All Saints')) {
+      return _buildOverrideReadings(
+        date: date,
+        firstReading: 'Rev 7:2-4, 9-14',
+        psalm: 'Ps 24:1-2, 3-4, 5-6',
+        psalmResponse: 'Lord, this is the people that longs to see your face.',
+        secondReading: '1 John 3:1-3',
+        gospel: 'Matt 5:1-12a',
+        gospelAcclamation: 'Come to me, all you who labor and are burdened, and I will give you rest.',
+      );
+    }
+
+    if (normalizedTitle == _normalizeTitle('The Commemoration of All the Faithful Departed') ||
+        normalizedTitle == _normalizeTitle('All Souls')) {
+      return _buildOverrideReadings(
+        date: date,
+        firstReading: 'Wis 3:1-9',
+        psalm: 'Ps 23:1-3a, 3b-4, 5, 6',
+        psalmResponse: 'The Lord is my shepherd; there is nothing I shall want.',
+        secondReading: 'Rom 5:5-11',
+        gospel: 'John 6:37-40',
+        gospelAcclamation: 'This is the will of my Father, says the Lord: that I should not lose anything of what he gave me, but that I should raise it on the last day.',
+      );
+    }
+
+    if (normalizedTitle == _normalizeTitle('The Dedication of the Lateran Basilica')) {
+      return _buildOverrideReadings(
+        date: date,
+        firstReading: 'Ezek 47:1-2, 8-9, 12',
+        psalm: 'Ps 46:2-3, 5-6, 8-9',
+        psalmResponse: 'The waters of the river gladden the city of God, the holy dwelling of the Most High.',
+        secondReading: '1 Cor 3:9c-11, 16-17',
+        gospel: 'John 2:13-22',
+        gospelAcclamation: 'I have chosen and consecrated this house, says the Lord, that my name may be there forever.',
+      );
+    }
+
+    if (normalizedTitle == _normalizeTitle('The Nativity of Saint John the Baptist')) {
+      return _buildOverrideReadings(
+        date: date,
+        firstReading: 'Isa 49:1-6',
+        psalm: 'Ps 139:1-3, 13-14, 14-15',
+        psalmResponse: 'I praise you, for I am wonderfully made.',
+        secondReading: 'Acts 13:22-26',
+        gospel: 'Luke 1:57-66, 80',
+        gospelAcclamation: 'You, child, will be called prophet of the Most High, for you will go before the Lord to prepare his ways.',
+      );
+    }
+
+    if (normalizedTitle == _normalizeTitle('The Holy Family of Jesus, Mary and Joseph') ||
+        normalizedTitle == _normalizeTitle('Holy Family')) {
+      final firstReading = switch (cycle) {
+        'A' => 'Sir 3:2-6, 12-14',
+        'B' => 'Gen 15:1-6; 21:1-3',
+        'C' => '1 Sam 1:20-22, 24-28',
+        _ => 'Sir 3:2-6, 12-14',
+      };
+      final psalm = switch (cycle) {
+        'A' => 'Ps 128:1-2, 3, 4-5',
+        'B' => 'Ps 105:1-2, 3-4, 5-6, 8-9',
+        'C' => 'Ps 84:2-3, 5-6, 9-10',
+        _ => 'Ps 128:1-2, 3, 4-5',
+      };
+      final psalmResponse = switch (cycle) {
+        'A' => 'Blessed are those who fear the Lord and walk in his ways.',
+        'B' => 'The Lord remembers his covenant for ever.',
+        'C' => 'Blessed are they who dwell in your house, O Lord.',
+        _ => 'Blessed are those who fear the Lord and walk in his ways.',
+      };
+      final secondReading = switch (cycle) {
+        'A' => 'Col 3:12-21',
+        'B' => 'Heb 11:8, 11-12, 17-19',
+        'C' => '1 John 3:1-2, 21-24',
+        _ => 'Col 3:12-21',
+      };
+      final gospel = switch (cycle) {
+        'A' => 'Matt 2:13-15, 19-23',
+        'B' => 'Luke 2:22-40',
+        'C' => 'Luke 2:41-52',
+        _ => 'Matt 2:13-15, 19-23',
+      };
+      return _buildOverrideReadings(
+        date: date,
+        firstReading: firstReading,
+        psalm: psalm,
+        psalmResponse: psalmResponse,
+        secondReading: secondReading,
+        gospel: gospel,
+        gospelAcclamation: 'Let the peace of Christ control your hearts; let the word of Christ dwell in you richly.',
+      );
+    }
+
+    if (normalizedTitle == _normalizeTitle('Easter Sunday of the Resurrection of the Lord')) {
+      return _buildOverrideReadings(
+        date: date,
+        firstReading: 'Acts 10:34a, 37-43',
+        psalm: 'Ps 118:1-2, 16-17, 22-23',
+        psalmResponse: 'This is the day the Lord has made; let us rejoice and be glad.',
+        secondReading: 'Col 3:1-4',
+        gospel: 'John 20:1-9',
+        gospelAcclamation: 'Christ, our paschal lamb, has been sacrificed; let us then feast with joy in the Lord.',
+      );
+    }
+
+    // Apostle and other major feasts (gospel-required days)
+    final apostleFeasts = <String, _ApostleFeast>{
+      _normalizeTitle('The Conversion of Saint Paul, Apostle'): _ApostleFeast(
+        firstReading: 'Acts 22:3-16',
+        psalm: 'Ps 117:1, 2',
+        psalmResponse: 'Go out to all the world and tell the Good News.',
+        gospel: 'Mark 16:15-18',
+        gospelAcclamation: 'I have chosen you from the world, says the Lord, to go and bear fruit that will remain.',
+      ),
+      _normalizeTitle('The Chair of Saint Peter, Apostle'): _ApostleFeast(
+        firstReading: '1 Pet 5:1-4',
+        psalm: 'Ps 23:1-3a, 4, 5, 6',
+        psalmResponse: 'The Lord is my shepherd; there is nothing I shall want.',
+        gospel: 'Matt 16:13-19',
+        gospelAcclamation: 'You are Peter, and upon this rock I will build my Church, and the gates of the netherworld shall not prevail against it.',
+      ),
+      _normalizeTitle('Saint Mark, Evangelist'): _ApostleFeast(
+        firstReading: '1 Pet 5:5b-14',
+        psalm: 'Ps 89:2-3, 6-7, 16-17',
+        psalmResponse: 'For ever I will sing the goodness of the Lord.',
+        gospel: 'Mark 16:15-20',
+        gospelAcclamation: 'We proclaim Christ crucified; Christ is the power of God and the wisdom of God.',
+      ),
+      _normalizeTitle('Saints Philip and James, Apostles'): _ApostleFeast(
+        firstReading: '1 Cor 15:1-8',
+        psalm: 'Ps 19:2-3, 4-5',
+        psalmResponse: 'Their message goes out through all the earth.',
+        gospel: 'John 14:6-14',
+        gospelAcclamation: 'I am the way and the truth and the life, says the Lord; no one comes to the Father, except through me.',
+      ),
+      _normalizeTitle('Saint Matthias, Apostle'): _ApostleFeast(
+        firstReading: 'Acts 1:15-17, 20-26',
+        psalm: 'Ps 113:1-2, 3-4, 5-6, 7-8',
+        psalmResponse: 'The Lord will give him a seat with the leaders of his people.',
+        gospel: 'John 15:9-17',
+        gospelAcclamation: 'I chose you from the world, says the Lord, to go and bear fruit that will remain.',
+      ),
+      _normalizeTitle('Saint Thomas, Apostle'): _ApostleFeast(
+        firstReading: 'Eph 2:19-22',
+        psalm: 'Ps 117:1, 2',
+        psalmResponse: 'Go out to all the world and tell the Good News.',
+        gospel: 'John 20:24-29',
+        gospelAcclamation: 'You believe in me, Thomas, because you have seen me, says the Lord; blessed are they who have not seen me, but still believe!',
+      ),
+      _normalizeTitle('Saint Mary Magdalene'): _ApostleFeast(
+        firstReading: 'Song 3:1-4b',
+        psalm: 'Ps 63:2, 3-4, 5-6, 8-9',
+        psalmResponse: 'My soul is thirsting for you, O Lord my God.',
+        gospel: 'John 20:1-2, 11-18',
+        gospelAcclamation: 'Tell us, Mary, what did you see on the way? I have seen the Lord of life arisen!',
+      ),
+      _normalizeTitle('Saint James, Apostle'): _ApostleFeast(
+        firstReading: '2 Cor 4:7-15',
+        psalm: 'Ps 126:1-2ab, 2cd-3, 4-5, 6',
+        psalmResponse: 'Those who sow in tears shall reap rejoicing.',
+        gospel: 'Matt 20:20-28',
+        gospelAcclamation: 'I chose you from the world, says the Lord, to go and bear fruit that will remain.',
+      ),
+      _normalizeTitle('Saint Bartholomew, Apostle'): _ApostleFeast(
+        firstReading: 'Rev 21:9b-14',
+        psalm: 'Ps 145:10-11, 12-13, 17-18',
+        psalmResponse: 'Your friends make known, O Lord, the glorious splendor of your Kingdom.',
+        gospel: 'John 1:45-51',
+        gospelAcclamation: 'Rabbi, you are the Son of God; you are the King of Israel.',
+      ),
+      _normalizeTitle('The Nativity of the Blessed Virgin Mary'): _ApostleFeast(
+        firstReading: 'Mic 5:1-4a',
+        psalm: 'Ps 13:6ab, 6c',
+        psalmResponse: 'With delight I rejoice in the Lord.',
+        gospel: 'Matt 1:1-16, 18-23',
+        gospelAcclamation: 'Blessed are you, holy Virgin Mary, and most worthy of all praise; for from you arose the sun of justice, Christ our God.',
+      ),
+      _normalizeTitle('Saint Matthew, Apostle and Evangelist'): _ApostleFeast(
+        firstReading: 'Eph 4:1-7, 11-13',
+        psalm: 'Ps 19:2-3, 4-5',
+        psalmResponse: 'Their message goes out through all the earth.',
+        gospel: 'Matt 9:9-13',
+        gospelAcclamation: 'We praise you, O God, we acclaim you as Lord; the glorious company of Apostles praises you.',
+      ),
+      _normalizeTitle('Saints Michael, Gabriel, and Raphael, Archangels'): _ApostleFeast(
+        firstReading: 'Dan 7:9-10, 13-14',
+        psalm: 'Ps 138:1-2ab, 2cde-3, 4-5',
+        psalmResponse: 'In the sight of the angels I will sing your praises, Lord.',
+        gospel: 'John 1:47-51',
+        gospelAcclamation: 'Bless the Lord, all you his angels, you ministers, who do his will.',
+      ),
+      _normalizeTitle('Saint Luke, Evangelist'): _ApostleFeast(
+        firstReading: '2 Tim 4:10-17b',
+        psalm: 'Ps 145:10-11, 12-13, 17-18',
+        psalmResponse: 'Your friends make known, O Lord, the glorious splendor of your Kingdom.',
+        gospel: 'Luke 10:1-9',
+        gospelAcclamation: 'I chose you from the world, says the Lord, to go and bear fruit that will remain.',
+      ),
+      _normalizeTitle('Saints Simon and Jude, Apostles'): _ApostleFeast(
+        firstReading: 'Eph 2:19-22',
+        psalm: 'Ps 19:2-3, 4-5',
+        psalmResponse: 'Their message goes out through all the earth.',
+        gospel: 'Luke 6:12-16',
+        gospelAcclamation: 'We praise you, O God, we acclaim you as Lord; the glorious company of Apostles praises you.',
+      ),
+      _normalizeTitle('Saint Andrew, Apostle'): _ApostleFeast(
+        firstReading: 'Rom 10:9-18',
+        psalm: 'Ps 19:2-3, 4-5',
+        psalmResponse: 'Their message goes out through all the earth.',
+        gospel: 'Matt 4:18-22',
+        gospelAcclamation: 'Come after me, says the Lord, and I will make you fishers of men.',
+      ),
+      _normalizeTitle('Saint Stephen, The First Martyr'): _ApostleFeast(
+        firstReading: 'Acts 6:8-10; 7:54-59',
+        psalm: 'Ps 31:3cd-4, 6 and 8ab, 16bc and 17',
+        psalmResponse: 'Into your hands, O Lord, I commend my spirit.',
+        gospel: 'Matt 10:17-22',
+        gospelAcclamation: 'Blessed is he who comes in the name of the Lord! Blessed is the kingdom of our father David that is to come!',
+      ),
+      _normalizeTitle('Saint John, Apostle and Evangelist'): _ApostleFeast(
+        firstReading: '1 John 1:1-4',
+        psalm: 'Ps 97:1-2, 5-6, 11-12',
+        psalmResponse: 'Rejoice in the Lord, you just!',
+        gospel: 'John 20:1a, 2-8',
+        gospelAcclamation: 'We praise you, O God, we acclaim you as Lord; the glorious company of Apostles praises you.',
+      ),
+      _normalizeTitle('The Holy Innocents, Martyrs'): _ApostleFeast(
+        firstReading: '1 John 1:5 - 2:2',
+        psalm: 'Ps 124:2-3, 4-5, 7b-8',
+        psalmResponse: 'Our soul has been rescued like a bird from the fowler\'s snare.',
+        gospel: 'Matt 2:13-18',
+        gospelAcclamation: 'We praise you, O God, we acclaim you as Lord; the white-robed army of martyrs praises you.',
+      ),
+    };
+
+    final feast = apostleFeasts[normalizedTitle];
+    if (feast != null) {
+      return _buildOverrideReadings(
+        date: date,
+        firstReading: feast.firstReading,
+        psalm: feast.psalm,
+        psalmResponse: feast.psalmResponse,
+        secondReading: null,
+        gospel: feast.gospel,
+        gospelAcclamation: feast.gospelAcclamation,
+      );
+    }
+
     return null;
   }
 
@@ -1144,8 +1504,9 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
       if (entry.firstReading.isNotEmpty) {
         final normalized = _normalizeReferenceStyle(entry.firstReading);
         final firstReadingExists = readings.any((r) => r.position == 'First Reading');
+        final candidateKey = _referenceDedupeKey(normalized);
         final hasSameFirstReading = readings.any(
-          (r) => r.reading == normalized &&
+          (r) => _referenceDedupeKey(r.reading) == candidateKey &&
               (r.position == 'First Reading' || r.position?.startsWith('First Reading (alternative') == true),
         );
 
@@ -1176,12 +1537,13 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
       }
       if (entry.psalmReference.isNotEmpty && !hasPsalm) {
         hasPsalm = true;
+        final cleanedResponse =
+            _stripLectionaryNoise(entry.psalmResponse);
         readings.add(DailyReading(
           reading: _normalizeReferenceStyle(entry.psalmReference),
           position: 'Responsorial Psalm',
           date: date,
-          psalmResponse:
-              entry.psalmResponse.isEmpty ? null : entry.psalmResponse,
+          psalmResponse: cleanedResponse.isEmpty ? null : cleanedResponse,
         ));
       }
       if (entry.secondReading.isNotEmpty) {
@@ -1192,10 +1554,12 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
             reading: normalizedSecondReading,
             position: firstReadingCount <= 1 ? 'Second Reading' : 'Epistle',
             date: date,
+            incipit: entry.secondReadingIncipit.isEmpty ? null : entry.secondReadingIncipit,
           ));
         } else {
+          final candidateKey = _referenceDedupeKey(normalizedSecondReading);
           final hasSameSecondReading = readings.any(
-            (r) => r.reading == normalizedSecondReading &&
+            (r) => _referenceDedupeKey(r.reading) == candidateKey &&
                 (r.position == 'Second Reading' ||
                     r.position?.startsWith('Second Reading (alternative') == true ||
                     r.position == 'Epistle' ||
@@ -1223,7 +1587,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
             reading: _normalizeReferenceStyle(entry.acclamationRef),
             position: 'Gospel Acclamation',
             date: date,
-            gospelAcclamation: entry.acclamationText.isEmpty ? null : entry.acclamationText,
+            gospelAcclamation: _stripLectionaryNoise(entry.acclamationText).isEmpty ? null : _stripLectionaryNoise(entry.acclamationText),
           ));
         }
 
@@ -1257,8 +1621,9 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
               reading: normalizedFirst,
               position: 'Gospel',
               date: date,
-              gospelAcclamation:
-                  entry.acclamationText.isEmpty ? null : entry.acclamationText,
+              gospelAcclamation: _stripLectionaryNoise(entry.acclamationText).isEmpty
+                  ? null
+                  : _stripLectionaryNoise(entry.acclamationText),
               incipit: entry.gospelIncipit.isEmpty ? null : entry.gospelIncipit,
             ));
             // Always add the alternative when present
@@ -1266,8 +1631,9 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
               reading: normalizedSecond,
               position: 'Gospel (alternative)',
               date: date,
-              gospelAcclamation:
-                  entry.acclamationText.isEmpty ? null : entry.acclamationText,
+              gospelAcclamation: _stripLectionaryNoise(entry.acclamationText).isEmpty
+                  ? null
+                  : _stripLectionaryNoise(entry.acclamationText),
               // Use the same incipit if a single incipit is provided in the CSV for the combined row
               incipit: entry.gospelIncipit.isEmpty ? null : entry.gospelIncipit,
             ));
@@ -1284,8 +1650,9 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
                 reading: normalizedFirst,
                 position: 'Gospel (alternative$suffix)',
                 date: date,
-                gospelAcclamation:
-                    entry.acclamationText.isEmpty ? null : entry.acclamationText,
+                gospelAcclamation: _stripLectionaryNoise(entry.acclamationText).isEmpty
+                    ? null
+                    : _stripLectionaryNoise(entry.acclamationText),
                 incipit: entry.gospelIncipit.isEmpty ? null : entry.gospelIncipit,
               ));
             }
@@ -1300,8 +1667,9 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
                 reading: normalizedSecond,
                 position: 'Gospel (alternative$suffix)',
                 date: date,
-                gospelAcclamation:
-                    entry.acclamationText.isEmpty ? null : entry.acclamationText,
+                gospelAcclamation: _stripLectionaryNoise(entry.acclamationText).isEmpty
+                    ? null
+                    : _stripLectionaryNoise(entry.acclamationText),
                 incipit: entry.gospelIncipit.isEmpty ? null : entry.gospelIncipit,
               ));
             }
@@ -1314,8 +1682,9 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
               reading: normalizedGospel,
               position: 'Gospel',
               date: date,
-              gospelAcclamation:
-                  entry.acclamationText.isEmpty ? null : entry.acclamationText,
+              gospelAcclamation: _stripLectionaryNoise(entry.acclamationText).isEmpty
+                  ? null
+                  : _stripLectionaryNoise(entry.acclamationText),
               incipit: entry.gospelIncipit.isEmpty ? null : entry.gospelIncipit,
             ));
           } else {
@@ -1330,8 +1699,9 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
                 reading: normalizedGospel,
                 position: 'Gospel (alternative$suffix)',
                 date: date,
-                gospelAcclamation:
-                    entry.acclamationText.isEmpty ? null : entry.acclamationText,
+                gospelAcclamation: _stripLectionaryNoise(entry.acclamationText).isEmpty
+                    ? null
+                    : _stripLectionaryNoise(entry.acclamationText),
                 incipit: entry.gospelIncipit.isEmpty ? null : entry.gospelIncipit,
               ));
             }
@@ -1364,6 +1734,48 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
     }
   }
 
+  /// Strips page numbers, section headers, and lectionary-rubric residue
+  /// that the source PDF extraction glued onto the end of refrain / gospel
+  /// acclamation text. Examples the cleaner must handle:
+  ///   "God loved … eternal life. 518 SECOND WEEK OF EASTER"
+  ///       → "God loved … eternal life."
+  ///   "Lord Jesus … you speak to us.-R."
+  ///       → "Lord Jesus … you speak to us."
+  ///   "I give you a new commandment … GO S P E L 1586 TWENTY-FIRST WEEK …"
+  ///       → "I give you a new commandment …"
+  String _stripLectionaryNoise(String value) {
+    var cleaned = value.trim();
+    if (cleaned.isEmpty) return cleaned;
+
+    // Normalize spaced-out section markers e.g. "GO S P E L" → "GOSPEL".
+    cleaned = cleaned.replaceAllMapped(
+      RegExp(r'\b([A-Z])(\s[A-Z]){3,}\b'),
+      (match) => match.group(0)!.replaceAll(' ', ''),
+    );
+
+    // Trailing " 1234 SECTION HEADER" (page number + ALL-CAPS heading).
+    cleaned = cleaned.replaceFirst(
+      RegExp(r'\s+\d{2,4}\s+[A-Z][A-Z \-–]{2,}.*$'),
+      '',
+    );
+
+    // Trailing ALL-CAPS section heading without a page number (e.g.
+    // "… give ear to my words. GOSPEL" → strip "GOSPEL").
+    cleaned = cleaned.replaceFirst(
+      RegExp(r'\s+(GOSPEL|EPISTLE|RESPONSORIAL\s+PSALM|ALLELUIA|SEQUENCE)\b.*$',
+          caseSensitive: true),
+      '',
+    );
+
+    // Trailing rubric "-R." / "- R." / ".—R." (response marker artifact).
+    cleaned = cleaned.replaceFirst(
+      RegExp(r'\s*[-–—]\s*R\.?\s*$'),
+      '',
+    );
+
+    return cleaned.trim();
+  }
+
   String _normalizeTitle(String value) {
     return value
         .toLowerCase()
@@ -1375,6 +1787,21 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         .replaceAll(RegExp(r'\bhusband of the blessed virgin mary\b'), 'husband of mary')
         .replaceAll(RegExp(r'[“”]'), '"')
         .trim();
+  }
+
+  /// Produces a loose key for deduping scripture references that differ only
+  /// in punctuation/whitespace/book-name style, e.g. "2 Cor 5:20-6:2" and
+  /// "2 Corinthians 5.20 - 6.2" both map to "2cor5206-62" (chapter:verse
+  /// boundaries collapsed). Book names get abbreviated first via
+  /// [_normalizeReferenceStyle] so "Corinthians" and "Cor" hash the same.
+  String _referenceDedupeKey(String value) {
+    final abbreviated = _normalizeReferenceStyle(value);
+    return abbreviated
+        .toLowerCase()
+        .replaceAll(RegExp(r'\s+'), '')
+        .replaceAll('.', ':')
+        .replaceAll(',', '')
+        .replaceAll(';', '');
   }
 
   String _normalizeReferenceStyle(String value) {
@@ -1399,18 +1826,53 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
     result = result
         .replaceAll('2 Samuel', '2 Sam')
         .replaceAll('1 Samuel', '1 Sam')
+        .replaceAll('2 Corinthians', '2 Cor')
+        .replaceAll('1 Corinthians', '1 Cor')
+        .replaceAll('2 Kings', '2 Kgs')
+        .replaceAll('1 Kings', '1 Kgs')
+        .replaceAll('2 Chronicles', '2 Chr')
+        .replaceAll('1 Chronicles', '1 Chr')
+        .replaceAll('2 Thessalonians', '2 Thess')
+        .replaceAll('1 Thessalonians', '1 Thess')
+        .replaceAll('2 Timothy', '2 Tim')
+        .replaceAll('1 Timothy', '1 Tim')
+        .replaceAll('2 Peter', '2 Pet')
+        .replaceAll('1 Peter', '1 Pet')
+        .replaceAll('2 John', '2 John')
+        .replaceAll('1 John', '1 John')
         .replaceAll('Isaiah', 'Isa')
         .replaceAll('Jeremiah', 'Jer')
         .replaceAll('Zephaniah', 'Zeph')
+        .replaceAll('Zechariah', 'Zech')
         .replaceAll('Malachi', 'Mal')
         .replaceAll('Genesis', 'Gen')
         .replaceAll('Exodus', 'Exod')
+        .replaceAll('Leviticus', 'Lev')
+        .replaceAll('Numbers', 'Num')
+        .replaceAll('Deuteronomy', 'Deut')
         .replaceAll('Matthew', 'Matt')
         .replaceAll('Luke', 'Luke')
         .replaceAll('Mark', 'Mark')
         .replaceAll('John', 'John')
         .replaceAll('Romans', 'Rom')
+        .replaceAll('Galatians', 'Gal')
+        .replaceAll('Ephesians', 'Eph')
+        .replaceAll('Philippians', 'Phil')
+        .replaceAll('Colossians', 'Col')
+        .replaceAll('Philemon', 'Phlm')
+        .replaceAll('Hebrews', 'Heb')
+        .replaceAll('James', 'Jas')
+        .replaceAll('Revelation', 'Rev')
+        .replaceAll('Wisdom', 'Wis')
+        .replaceAll('Sirach', 'Sir')
+        .replaceAll('Ecclesiastes', 'Eccl')
+        .replaceAll('Ecclesiasticus', 'Sir')
+        .replaceAll('Ezekiel', 'Ezek')
+        .replaceAll('Daniel', 'Dan')
+        .replaceAll('Lamentations', 'Lam')
+        .replaceAll('Nehemiah', 'Neh')
         .replaceAll('Baruch', 'Bar')
+        .replaceAll('Psalms', 'Ps')
         .replaceAll('Psalm', 'Ps');
     // Convert period notation to colon for the chapter.verse separator only.
     // Anchored to the start so mid-string periods like "and 12.13" are not touched.
@@ -1420,7 +1882,9 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
       (match) => '${match.group(1)}:${match.group(2)}',
     );
     result = result.replaceFirst(RegExp(r'\s+or\s+.+$', caseSensitive: false), '');
-    result = result.replaceFirst(RegExp(r'\s*\(R\.[^)]+\)$', caseSensitive: false), '');
+    // Note: "(R. Xx)" refrain notation is preserved intentionally. The
+    // ReadingsBackend decodes it to fetch the authoritative RSVCE refrain
+    // text so the displayed response matches the selected Bible translation.
     return result;
   }
 
@@ -1608,6 +2072,22 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
   }
 }
 
+class _ApostleFeast {
+  final String firstReading;
+  final String psalm;
+  final String psalmResponse;
+  final String gospel;
+  final String gospelAcclamation;
+
+  const _ApostleFeast({
+    required this.firstReading,
+    required this.psalm,
+    required this.psalmResponse,
+    required this.gospel,
+    required this.gospelAcclamation,
+  });
+}
+
 class _LegacyReadingRow {
   final int position;
   final String reading;
@@ -1619,5 +2099,17 @@ class _LegacyReadingRow {
     required this.reading,
     this.psalmResponse,
     this.gospelAcclamation,
+  });
+}
+
+class _VigilReading {
+  final String reading;
+  final String psalm;
+  final String psalmResponse;
+
+  const _VigilReading({
+    required this.reading,
+    required this.psalm,
+    required this.psalmResponse,
   });
 }

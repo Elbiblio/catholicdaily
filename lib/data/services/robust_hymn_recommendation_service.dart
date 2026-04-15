@@ -10,6 +10,8 @@
 // 4. Theological Theme Extraction - Advanced semantic analysis
 // 5. Three Judgments Integration - Unified evaluation engine
 
+import 'dart:math';
+
 import '../models/hymn.dart';
 import '../models/daily_reading.dart';
 import 'hymn_service.dart';
@@ -435,96 +437,201 @@ class MusicalJudgmentEngine {
   }
 }
 
-// ==================== THEOLOGICAL THEME EXTRACTOR ====================
+// ==================== RICH TEXT THEME EXTRACTOR ====================
 
-/// Advanced semantic analysis for theological theme detection
-class TheologicalThemeExtractor {
-  static const Map<String, List<String>> _theologicalThemes = {
-    'creation': ['creation', 'creator', 'made', 'formed', 'beginning', 'genesis'],
-    'fall': ['fall', 'sin', 'disobedience', 'forbidden', 'temptation', 'expulsion'],
-    'redemption': ['redeem', 'save', 'salvation', 'rescue', 'deliver', 'ransom'],
-    'sanctification': ['sanctify', 'holy', 'saint', 'purify', 'consecrate', 'make holy'],
-    'incarnation': ['incarnat', 'word made flesh', 'emmanuel', 'born child', 'nativity'],
-    'passion': ['passion', 'cross', 'crucif', 'suffer', 'death', 'calvary'],
-    'resurrection': ['resurrection', 'risen', 'alive', 'victory', 'empty tomb'],
-    'ascension': ['ascension', 'ascended', 'heaven', 'right hand', 'glorified'],
-    'eucharist': ['bread', 'wine', 'body', 'blood', 'communion', 'eucharist', 'table'],
-    'baptism': ['bapti', 'water', 'cleansed', 'born again', 'holy spirit'],
-    'confirmation': ['confirm', 'spirit', 'seal', 'anoint', 'strengthen'],
-    'reconciliation': ['reconcil', 'forgive', 'mercy', 'pardon', 'confess'],
-    'anointing': ['anoint', 'heal', 'sick', 'suffering', 'oil'],
-    'holyOrders': ['priest', 'deacon', 'bishop', 'ordain', 'ministry'],
-    'marriage': ['marriage', 'union', 'covenant', 'love', 'faithful'],
-    'trinity': ['trinity', 'father', 'son', 'holy spirit', 'three persons'],
-    'mary': ['mary', 'virgin', 'mother', 'theotokos', 'marian'],
-    'saints': ['saint', 'martyr', 'witness', 'holy ones', 'blessed'],
-    'church': ['church', 'body of christ', 'community', 'assembly', 'people of god'],
-    'eschatology': ['heaven', 'eternal', 'last day', 'judgment', 'new creation'],
+/// Extracts theological themes from actual text fields on DailyReading:
+/// incipit, psalmResponse, gospelAcclamation, and feast name.
+/// Uses synonym clusters so hymn lyrics can be matched meaningfully.
+class RichTextThemeExtractor {
+  // Each theme maps to synonyms checked against DailyReading text fields
+  // AND against hymn title + first_line + lyrics.
+  static const Map<String, List<String>> _themeSynonyms = {
+    'shepherd': ['shepherd', 'sheep', 'flock', 'pasture', 'lead', 'stray', 'lost', 'found', 'lambs', 'herd', 'goat'],
+    'eucharist': ['bread', 'wine', 'body', 'blood', 'table', 'feed', 'eat', 'drink', 'hunger', 'thirst', 'nourish', 'feast', 'supper', 'manna', 'loaves'],
+    'mercy': ['mercy', 'forgive', 'pardon', 'compassion', 'tender', 'kindness', 'gentle', 'reconcil', 'guilt', 'sin', 'contrite', 'penitent', 'sorrow', 'repent'],
+    'light': ['light', 'darkness', 'lamp', 'shine', 'blind', 'sight', 'see', 'dawn', 'radiance', 'glory', 'illuminate', 'beacon', 'star', 'sun'],
+    'mission': ['send', 'go forth', 'proclaim', 'witness', 'apostle', 'nations', 'world', 'spread', 'preach', 'announce', 'herald', 'mission', 'disciple', 'fishers'],
+    'resurrection': ['risen', 'resurrection', 'alive', 'victory', 'tomb', 'death', 'life', 'raised', 'conquer', 'glorified', 'alleluia', 'hallelujah', 'living'],
+    'holySpirit': ['spirit', 'holy spirit', 'pentecost', 'fire', 'wind', 'breath', 'advocate', 'comforter', 'paraclete', 'anointed', 'filled', 'gifts', 'fruits'],
+    'faith': ['faith', 'believe', 'trust', 'hope', 'confident', 'assurance', 'anchor', 'doubt', 'certainty', 'commit', 'reliance', 'firm', 'foundation'],
+    'healing': ['heal', 'cure', 'sick', 'leper', 'blind', 'lame', 'deaf', 'raise', 'restore', 'wholeness', 'cleanse', 'well', 'infirm', 'suffering'],
+    'praise': ['praise', 'glory', 'honor', 'worship', 'magnify', 'bless', 'exalt', 'acclaim', 'jubilee', 'sing', 'hymn', 'rejoice', 'thanksgiving', 'grateful'],
+    'kingdom': ['kingdom', 'reign', 'king', 'throne', 'crown', 'lord', 'rule', 'dominion', 'power', 'majesty', 'sovereign', 'authority', 'christ the king'],
+    'covenant': ['covenant', 'promise', 'faithful', 'chosen', 'people', 'inheritance', 'law', 'commandment', 'testament', 'seal', 'bond', 'pledge'],
+    'sacrifice': ['sacrifice', 'offer', 'oblation', 'gift', 'altar', 'priest', 'atonement', 'lamb', 'immolate', 'victim', 'incense', 'consecrate'],
+    'water': ['water', 'river', 'stream', 'spring', 'living water', 'thirst', 'fountain', 'well', 'rain', 'flood', 'baptism', 'cleanse', 'wash'],
+    'word': ['word', 'scripture', 'gospel', 'teach', 'wisdom', 'truth', 'law', 'prophet', 'voice', 'logos', 'proclaim', 'listen', 'hear'],
+    'marian': ['mary', 'virgin', 'mother', 'immaculate', 'assumption', 'rosary', 'queen', 'ave', 'magnificat', 'handmaid', 'lady', 'annunciation'],
+    'advent': ['come', 'coming', 'wait', 'prepare', 'maranatha', 'advent', 'expectation', 'hope', 'watchful', 'ready', 'awaken', 'dawn', 'Emmanuel'],
+    'passion': ['cross', 'crucif', 'suffer', 'calvary', 'wound', 'thorn', 'nail', 'gethsemane', 'agony', 'betrayal', 'passion', 'lament', 'sorrow'],
+    'peace': ['peace', 'shalom', 'reconcil', 'unity', 'harmony', 'still', 'quiet', 'rest', 'comfort', 'solace', 'tranquil', 'serene'],
+    'love': ['love', 'charity', 'agape', 'beloved', 'heart', 'tenderness', 'devoted', 'care', 'embrace', 'friend', 'neighbor', 'commandment'],
+    'eternal': ['eternal', 'everlasting', 'immortal', 'heaven', 'paradise', 'last day', 'judgment', 'new creation', 'new earth', 'life eternal', 'resurrection'],
+    'creation': ['creation', 'creator', 'made', 'formed', 'earth', 'nature', 'sky', 'sea', 'creature', 'universe', 'genesis', 'sustain'],
+    'trinity': ['trinity', 'father', 'son', 'holy spirit', 'three', 'triune', 'doxology', 'persons', 'godhead'],
+    'call': ['call', 'vocation', 'chosen', 'follow', 'leave', 'nets', 'come after', 'disciple', 'invite', 'welcome', 'gather', 'seek'],
+    'justice': ['justice', 'poor', 'oppressed', 'widow', 'orphan', 'hungry', 'stranger', 'righteous', 'equity', 'liberation', 'freedom', 'captive'],
   };
-  
-  Map<String, double> extractTheologicalThemes(List<DailyReading> readings) {
-    final themeWeights = <String, double>{};
-    
+
+  // Direct feast-name → theme mappings (highest priority signal)
+  static const Map<String, List<String>> _feastThemes = {
+    'holy thursday': ['eucharist', 'love', 'sacrifice'],
+    'good friday': ['passion', 'sacrifice', 'love'],
+    'easter': ['resurrection', 'praise', 'eternal'],
+    'easter vigil': ['resurrection', 'water', 'light'],
+    'pentecost': ['holySpirit', 'mission', 'praise'],
+    'ascension': ['kingdom', 'mission', 'eternal'],
+    'trinity': ['trinity', 'praise', 'faith'],
+    'corpus christi': ['eucharist', 'praise', 'sacrifice'],
+    'body and blood': ['eucharist', 'sacrifice', 'praise'],
+    'sacred heart': ['love', 'mercy', 'passion'],
+    'christ the king': ['kingdom', 'praise', 'eternal'],
+    'all saints': ['eternal', 'praise', 'faith'],
+    'immaculate conception': ['marian', 'mercy', 'advent'],
+    'assumption': ['marian', 'eternal', 'praise'],
+    'annunciation': ['marian', 'advent', 'word'],
+    'baptism of the lord': ['water', 'holySpirit', 'call'],
+    'epiphany': ['light', 'mission', 'kingdom'],
+    'presentation': ['light', 'sacrifice', 'marian'],
+    'palm sunday': ['passion', 'kingdom', 'sacrifice'],
+    'ash wednesday': ['mercy', 'passion', 'covenant'],
+  };
+
+  /// Extract weighted themes from all rich text fields in today's readings.
+  /// Returns map of theme → weight (higher = stronger signal).
+  Map<String, double> extractFromReadings(List<DailyReading> readings) {
+    final weights = <String, double>{};
+
+    // Apply feast-name themes first (strong direct signal)
     for (final reading in readings) {
-      final text = reading.reading.toLowerCase();
-      final source = reading.source?.toLowerCase() ?? '';
-      
-      // Weight by source importance
-      double weight = 1.0;
-      if (source.contains('gospel')) weight = 1.5;
-      else if (source.contains('psalm')) weight = 0.5;
-      else if (source.contains('reading')) weight = 1.0;
-      
-      // Extract themes
-      for (final entry in _theologicalThemes.entries) {
-        final theme = entry.key;
-        final keywords = entry.value;
-        
-        int matches = 0;
-        for (final keyword in keywords) {
-          if (text.contains(keyword)) matches++;
-        }
-        
-        if (matches > 0) {
-          themeWeights[theme] = (themeWeights[theme] ?? 0.0) + (matches * weight);
+      final feast = reading.feast?.toLowerCase() ?? '';
+      if (feast.isEmpty) continue;
+      for (final entry in _feastThemes.entries) {
+        if (feast.contains(entry.key)) {
+          for (final theme in entry.value) {
+            weights[theme] = (weights[theme] ?? 0.0) + 2.0;
+          }
         }
       }
     }
-    
-    return themeWeights;
+
+    for (final reading in readings) {
+      final position = (reading.position ?? '').toLowerCase();
+      final isGospel = position.contains('gospel');
+      final isPsalm = position.contains('psalm');
+
+      // Build weighted text segments from rich fields
+      final segments = <_TextSegment>[
+        if ((reading.gospelAcclamation ?? '').isNotEmpty)
+          _TextSegment(reading.gospelAcclamation!.toLowerCase(), isGospel ? 2.0 : 1.5),
+        if ((reading.incipit ?? '').isNotEmpty)
+          _TextSegment(reading.incipit!.toLowerCase(), isGospel ? 2.0 : 1.0),
+        if ((reading.psalmResponse ?? '').isNotEmpty)
+          _TextSegment(reading.psalmResponse!.toLowerCase(), isPsalm ? 1.5 : 1.0),
+      ];
+
+      for (final segment in segments) {
+        for (final entry in _themeSynonyms.entries) {
+          final theme = entry.key;
+          final synonyms = entry.value;
+          int hits = 0;
+          for (final syn in synonyms) {
+            if (segment.text.contains(syn)) hits++;
+          }
+          if (hits > 0) {
+            weights[theme] = (weights[theme] ?? 0.0) + (hits * segment.weight);
+          }
+        }
+      }
+    }
+
+    return weights;
   }
-  
-  double calculateThemeMatchScore(Hymn hymn, Map<String, double> readingThemes) {
+
+  /// Score a hymn against a set of active reading themes.
+  /// Scans title (3x), firstLine (2x), and full lyrics (1x).
+  double scoreHymnAgainstThemes(Hymn hymn, Map<String, double> readingThemes) {
     if (readingThemes.isEmpty) return 0.0;
-    
-    final hymnText = [
-      hymn.title.toLowerCase(),
-      hymn.lyrics.join(' ').toLowerCase(),
-      (hymn.themes ?? '').toLowerCase(),
-      hymn.category.toLowerCase(),
-    ].join(' ');
-    
+
+    final titleText = hymn.title.toLowerCase();
+    final firstLineText = (hymn.firstLine ?? '').toLowerCase();
+    final lyricsText = hymn.displayLyrics.join(' ').toLowerCase();
+
     double score = 0.0;
     double totalWeight = 0.0;
-    
+
     for (final entry in readingThemes.entries) {
       final theme = entry.key;
-      final weight = entry.value;
-      totalWeight += weight;
-      
-      final keywords = _theologicalThemes[theme] ?? [];
-      int matches = 0;
-      for (final keyword in keywords) {
-        if (hymnText.contains(keyword)) matches++;
+      final themeWeight = entry.value;
+      totalWeight += themeWeight;
+
+      final synonyms = _themeSynonyms[theme] ?? [];
+      double hymnHits = 0.0;
+      for (final syn in synonyms) {
+        if (titleText.contains(syn)) hymnHits += 3.0;
+        if (firstLineText.contains(syn) && firstLineText != titleText) hymnHits += 2.0;
+        if (lyricsText.contains(syn)) hymnHits += 1.0;
       }
-      
-      if (matches > 0) {
-        score += (matches / keywords.length) * weight;
+      if (hymnHits > 0 && synonyms.isNotEmpty) {
+        score += (hymnHits / (synonyms.length * 3.0)) * themeWeight;
       }
     }
-    
+
     return totalWeight > 0 ? (score / totalWeight) * 100.0 : 0.0;
   }
+
+  /// Return the top N theme keys by weight.
+  List<String> topThemes(Map<String, double> weights, {int n = 3}) {
+    final sorted = weights.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+    return sorted.take(n).map((e) => e.key).toList();
+  }
+
+  /// Build a focused theme map for a specific mass part.
+  /// Each part is steered toward a different aspect of the day's readings.
+  Map<String, double> themeMapForPart(
+    String massPart,
+    Map<String, double> allThemes,
+  ) {
+    final partThemes = Map<String, double>.from(allThemes);
+
+    switch (massPart.toLowerCase()) {
+      case 'entrance':
+        // Amplify call/kingdom/praise — sets the gathering tone
+        _boost(partThemes, ['call', 'kingdom', 'praise', 'advent', 'light'], 1.5);
+        break;
+      case 'offertory':
+        // Amplify sacrifice/covenant/word — the offering moment
+        _boost(partThemes, ['sacrifice', 'covenant', 'word', 'creation', 'love'], 1.5);
+        break;
+      case 'communion':
+        // Always strongly amplify eucharist cluster
+        _boost(partThemes, ['eucharist', 'shepherd', 'water', 'peace', 'love'], 2.0);
+        partThemes['eucharist'] = (partThemes['eucharist'] ?? 0.0) + 4.0; // baseline boost
+        break;
+      case 'dismissal':
+        // Amplify mission/praise/eternal — sending the assembly
+        _boost(partThemes, ['mission', 'praise', 'eternal', 'justice', 'holySpirit'], 1.5);
+        break;
+    }
+    return partThemes;
+  }
+
+  void _boost(Map<String, double> map, List<String> keys, double multiplier) {
+    for (final key in keys) {
+      if (map.containsKey(key)) {
+        map[key] = map[key]! * multiplier;
+      } else {
+        map[key] = multiplier; // introduce even if not detected in readings
+      }
+    }
+  }
+}
+
+class _TextSegment {
+  final String text;
+  final double weight;
+  const _TextSegment(this.text, this.weight);
 }
 
 // ==================== THREE JUDGMENTS INTEGRATION ENGINE ====================
@@ -534,46 +641,49 @@ class ThreeJudgmentsIntegrationEngine {
   final LiturgicalJudgmentEngine _liturgicalEngine = LiturgicalJudgmentEngine();
   final PastoralJudgmentEngine _pastoralEngine = PastoralJudgmentEngine();
   final MusicalJudgmentEngine _musicalEngine = MusicalJudgmentEngine();
-  final TheologicalThemeExtractor _themeExtractor = TheologicalThemeExtractor();
-  
+  final RichTextThemeExtractor themeExtractor = RichTextThemeExtractor();
+
   ThreeJudgmentsScore evaluateHymn(
     Hymn hymn,
     EnhancedLiturgicalContext context,
     Map<String, double> readingThemes, {
     String? massPart,
   }) {
-    // Calculate individual judgment scores
     final liturgicalScore = _liturgicalEngine.calculateLiturgicalScore(hymn, context, massPart);
     final pastoralScore = _pastoralEngine.calculatePastoralScore(hymn, context);
     final musicalScore = _musicalEngine.calculateMusicalScore(hymn, context);
-    
-    // Theme matching bonus
-    final themeScore = _themeExtractor.calculateThemeMatchScore(hymn, readingThemes);
-    
-    // Combined score with liturgical primacy (40% liturgical, 30% pastoral, 30% musical)
-    final combinedScore = (liturgicalScore * 0.4) + (pastoralScore * 0.3) + (musicalScore * 0.3);
-    
-    // Add theme bonus as extra credit
-    final finalScore = (combinedScore * 0.8) + (themeScore * 0.2);
-    
+
+    // General hymns are eligible for any part but get a small category-match penalty
+    final categories = hymn.category.toLowerCase().split(',').map((s) => s.trim()).toList();
+    final isGeneralHymn = categories.contains('general') && massPart != null && !categories.contains(massPart);
+    final generalPenalty = isGeneralHymn ? -5.0 : 0.0;
+
+    final themeScore = themeExtractor.scoreHymnAgainstThemes(hymn, readingThemes);
+
+    // Combined: liturgical primacy 35%, pastoral 25%, musical 20%, theme 20%
+    final combinedScore = (liturgicalScore * 0.35) +
+        (pastoralScore * 0.25) +
+        (musicalScore * 0.20) +
+        (themeScore * 0.20) +
+        generalPenalty;
+
     final evaluationDetails = <String, dynamic>{
       'liturgicalScore': liturgicalScore,
       'pastoralScore': pastoralScore,
       'musicalScore': musicalScore,
       'themeScore': themeScore,
       'combinedScore': combinedScore,
-      'finalScore': finalScore,
       'passesLiturgicalJudgment': liturgicalScore >= 70,
       'passesPastoralJudgment': pastoralScore >= 60,
       'passesMusicalJudgment': musicalScore >= 65,
       'validation': _liturgicalEngine.validateHymn(hymn, context),
     };
-    
+
     return ThreeJudgmentsScore(
       liturgicalScore: liturgicalScore,
       pastoralScore: pastoralScore,
       musicalScore: musicalScore,
-      combinedScore: finalScore,
+      combinedScore: combinedScore,
       evaluationDetails: evaluationDetails,
     );
   }
@@ -591,59 +701,78 @@ class RobustHymnRecommendationService extends BaseService<RobustHymnRecommendati
   final ImprovedLiturgicalCalendarService _calendar = ImprovedLiturgicalCalendarService.instance;
   final ThreeJudgmentsIntegrationEngine _integrationEngine = ThreeJudgmentsIntegrationEngine();
   
-  /// Get comprehensive recommendations using Three Judgments framework
+  /// Get comprehensive recommendations using Three Judgments framework.
+  /// [partThemes] is a pre-computed theme map for this specific mass part.
+  /// [dateSeed] drives the deterministic daily rotation within the top-N pool.
   Future<List<Hymn>> getRobustRecommendations(
     DateTime date,
     List<DailyReading> readings, {
     String? massPart,
-    int maxResults = 10,
+    Map<String, double>? partThemes,
+    int maxResults = 5,
+    int candidatePoolSize = 12,
   }) async {
-    // Build enhanced liturgical context
     final liturgicalDay = _calendar.getLiturgicalDay(date);
     final context = _integrationEngine._liturgicalEngine.buildContext({
       'season': liturgicalDay.season.name,
       'feast': liturgicalDay.title,
       'feastType': liturgicalDay.rank ?? 'feria',
     });
-    
-    // Extract theological themes from readings
-    final readingThemes = _integrationEngine._themeExtractor.extractTheologicalThemes(readings);
-    
-    // Get all hymns and evaluate
+
+    // Use pre-computed part-specific themes if provided, else extract fresh
+    final readingThemes = partThemes ??
+        _integrationEngine.themeExtractor.extractFromReadings(readings);
+
     final allHymns = await _hymnService.getHymnsFromAssets();
     final evaluatedHymns = <Hymn, ThreeJudgmentsScore>{};
-    
+
     for (final hymn in allHymns) {
-      // Filter by mass part category if specified
       if (massPart != null) {
         final categories = hymn.category.toLowerCase().split(',').map((s) => s.trim()).toList();
-        // Only include hymns that match the mass part or are general
         if (!categories.contains(massPart) && !categories.contains('general')) {
           continue;
         }
       }
-      
+
       final score = _integrationEngine.evaluateHymn(
         hymn,
         context,
         readingThemes,
         massPart: massPart,
       );
-      
-      // Only include hymns that pass liturgical judgment
+
       if (score.passesLiturgicalJudgment) {
         evaluatedHymns[hymn] = score;
       }
     }
-    
-    // Sort by combined score and return top results
+
+    // Sort by combined score to get quality candidates
     final sortedHymns = evaluatedHymns.entries.toList()
       ..sort((a, b) => b.value.combinedScore.compareTo(a.value.combinedScore));
-    
-    return sortedHymns
-        .take(maxResults)
-        .map((entry) => entry.key)
+
+    // Take a candidate pool larger than maxResults
+    final pool = sortedHymns
+        .take(candidatePoolSize)
+        .map((e) => e.key)
         .toList();
+
+    // Apply deterministic date-seeded shuffle within the pool for daily variety
+    // Same date always yields same order; different dates rotate through the pool
+    final dateSeed = date.year * 1000 + _dayOfYear(date);
+    final partOffset = massPart != null ? massPart.hashCode.abs() % 97 : 0;
+    final rng = Random(dateSeed + partOffset);
+    for (int i = pool.length - 1; i > 0; i--) {
+      final j = rng.nextInt(i + 1);
+      final tmp = pool[i];
+      pool[i] = pool[j];
+      pool[j] = tmp;
+    }
+
+    return pool.take(maxResults).toList();
+  }
+
+  int _dayOfYear(DateTime date) {
+    return date.difference(DateTime(date.year, 1, 1)).inDays + 1;
   }
   
   /// Get detailed evaluation for a specific hymn
@@ -659,9 +788,9 @@ class RobustHymnRecommendationService extends BaseService<RobustHymnRecommendati
       'feast': liturgicalDay.title,
       'feastType': liturgicalDay.rank ?? 'feria',
     });
-    
-    final readingThemes = _integrationEngine._themeExtractor.extractTheologicalThemes(readings);
-    
+
+    final readingThemes = _integrationEngine.themeExtractor.extractFromReadings(readings);
+
     return _integrationEngine.evaluateHymn(
       hymn,
       context,
@@ -670,48 +799,49 @@ class RobustHymnRecommendationService extends BaseService<RobustHymnRecommendati
     );
   }
   
-  /// Get recommendations for all mass parts with minimum guarantee
+  /// Get recommendations for all mass parts with per-part theme targeting
+  /// and date-seeded rotation for daily variety.
   Future<Map<String, List<Hymn>>> getMassPartRecommendations(
     DateTime date,
     List<DailyReading> readings, {
     int maxResultsPerPart = 5,
     int minResultsPerPart = 2,
   }) async {
-    // Only these 4 mass parts are used for recommendations
-    final massParts = ['entrance', 'offertory', 'communion', 'dismissal'];
+    // Extract themes once from all readings (expensive — do not repeat per part)
+    final allThemes = _integrationEngine.themeExtractor.extractFromReadings(readings);
+
+    const massParts = ['entrance', 'offertory', 'communion', 'dismissal'];
     final results = <String, List<Hymn>>{};
-    
+
     for (final part in massParts) {
+      // Build a part-specific theme map (steers scoring toward the right aspect)
+      final partThemes = _integrationEngine.themeExtractor.themeMapForPart(part, allThemes);
+
       var recommendations = await getRobustRecommendations(
         date,
         readings,
         massPart: part,
+        partThemes: partThemes,
         maxResults: maxResultsPerPart,
       );
-      
-      // Fallback: If we don't have minimum hymns, get more with relaxed criteria
+
+      // Fallback: guarantee minimum results using category matches
       if (recommendations.length < minResultsPerPart) {
         final allHymns = await _hymnService.getHymnsFromAssets();
-        
-        // Get hymns that match the specific mass part category (only the 4 allowed)
         final categoryMatches = allHymns.where((hymn) {
           final categories = hymn.category.toLowerCase().split(',').map((s) => s.trim()).toList();
-          // Only match if the category is exactly one of the 4 mass parts
-          return categories.contains(part);
+          return categories.contains(part) && !recommendations.contains(hymn);
         }).toList();
-        
-        // Add category-matched hymns to reach minimum
+
         for (final hymn in categoryMatches) {
-          if (!recommendations.contains(hymn)) {
-            recommendations.add(hymn);
-            if (recommendations.length >= minResultsPerPart) break;
-          }
+          recommendations.add(hymn);
+          if (recommendations.length >= minResultsPerPart) break;
         }
       }
-      
+
       results[part] = recommendations;
     }
-    
+
     return results;
   }
 }

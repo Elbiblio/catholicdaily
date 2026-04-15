@@ -471,7 +471,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Text('- 27 books of the New Testament'),
               SizedBox(height: 16),
               Text(
-                'The text is used with permission and is available offline.',
+                'The bible is available offline.',
                 style: TextStyle(fontStyle: FontStyle.italic),
               ),
             ],
@@ -642,7 +642,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     showAboutDialog(
       context: context,
       applicationName: 'Catholic Daily',
-      applicationVersion: '1.0.0',
+      applicationVersion: _appVersion,
       applicationIcon: Container(
         width: 48,
         height: 48,
@@ -655,6 +655,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
       children: const [
         Text(
           'Your daily companion for Catholic liturgical readings. Includes the complete RSV Catholic Edition Bible and daily Mass readings.',
+        ),
+        SizedBox(height: 16),
+        Text(
+          'Attributions',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 4),
+        Text(
+          'Prayer of the Faithful sourced from BiddingPrayers.com.',
         ),
       ],
     );

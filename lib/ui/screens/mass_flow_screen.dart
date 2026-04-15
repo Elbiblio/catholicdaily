@@ -236,10 +236,14 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
   Widget _buildMassContent(ThemeData theme) {
     final bool isLight = theme.brightness == Brightness.light;
     final Color sectionColor = _liturgicalDay?.colorValue ?? theme.colorScheme.primary;
-    // Ensure good contrast in light mode
-    final Color readableColor = isLight
-        ? sectionColor.withValues(alpha: 0.95)
-        : sectionColor;
+    // Use higher alpha for better contrast in light mode (must match _buildLiturgicalHeader bgAlpha)
+    final double bgAlpha = isLight ? 0.35 : 0.15;
+    final Color headerBg = Color.alphaBlend(
+      sectionColor.withValues(alpha: bgAlpha),
+      theme.colorScheme.surface,
+    );
+    // Guarantee readable text against the actual blended header background
+    final Color readableColor = ContrastHelper.getContrastColor(headerBg, theme);
 
     return CustomScrollView(
       slivers: [
@@ -280,12 +284,16 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
   Widget _buildLiturgicalHeader(ThemeData theme, Color readableColor) {
     final ordoColor = _liturgicalDay!.colorValue;
     final bool isLight = theme.brightness == Brightness.light;
-    // Use higher alpha for better contrast in light mode
     final bgAlpha = isLight ? 0.35 : 0.15;
+    // Compute fully-opaque blended background for accurate contrast calculations
+    final headerBg = Color.alphaBlend(
+      ordoColor.withValues(alpha: bgAlpha),
+      theme.colorScheme.surface,
+    );
 
     return SliverToBoxAdapter(
       child: Container(
-        color: ordoColor.withValues(alpha: bgAlpha),
+        color: headerBg,
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -309,7 +317,7 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
             Text(
               _liturgicalDay!.weekDescription,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: ContrastHelper.getSecondaryContrastColor(ordoColor.withValues(alpha: bgAlpha), theme),
+                color: ContrastHelper.getSecondaryContrastColor(headerBg, theme),
               ),
             ),
           ],

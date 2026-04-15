@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
+import '../../data/services/reading_catalog_service.dart';
 
 /// A month-view liturgical calendar showing liturgical colors and feast days.
 /// Used as a date picker replacement in the PremiumBrowseScreen.
@@ -27,6 +28,9 @@ class _LiturgicalCalendarViewState extends State<LiturgicalCalendarView> {
   // Cache liturgical days per month to avoid recomputation
   final Map<String, List<LiturgicalDay>> _cache = {};
 
+  // memorial_feasts.csv data keyed by "month-day" -> shortest title for display
+  Map<String, String>? _feastByMonthDay;
+
   static const _minDate = 2020;
   static const _maxDate = 2030;
   // Total months from Jan 2020 to Dec 2030
@@ -38,6 +42,32 @@ class _LiturgicalCalendarViewState extends State<LiturgicalCalendarView> {
     _displayedMonth = DateTime(widget.selectedDate.year, widget.selectedDate.month);
     final initialPage = _monthToIndex(_displayedMonth);
     _pageController = PageController(initialPage: initialPage);
+    _loadFeastData();
+  }
+
+  Future<void> _loadFeastData() async {
+    try {
+      final entries = await ReadingCatalogService.instance.loadMemorialEntries();
+      final map = <String, String>{};
+      for (final e in entries) {
+        if (e.month.isEmpty || e.day.isEmpty || e.title.isEmpty) continue;
+        final key = '${e.month}-${e.day}';
+        // Keep the first (highest-rank) entry; prefer shorter label
+        if (!map.containsKey(key) || e.title.length < map[key]!.length) {
+          map[key] = e.title;
+        }
+      }
+      if (mounted) {
+        setState(() => _feastByMonthDay = map);
+      }
+    } catch (_) {
+      if (mounted) setState(() => _feastByMonthDay = {});
+    }
+  }
+
+  String? _getFeastLabel(int month, int day) {
+    if (_feastByMonthDay == null) return null;
+    return _feastByMonthDay!['$month-$day'];
   }
 
   @override
@@ -83,7 +113,7 @@ class _LiturgicalCalendarViewState extends State<LiturgicalCalendarView> {
         _buildWeekdayLabels(theme),
         // Calendar grid via PageView
         SizedBox(
-          height: 320,
+          height: 380,
           child: PageView.builder(
             controller: _pageController,
             itemCount: _totalMonths,
@@ -207,6 +237,9 @@ class _LiturgicalCalendarViewState extends State<LiturgicalCalendarView> {
                 final isHighRank = litDay.rank == 'Solemnity' ||
                     litDay.rank == 'Feast' ||
                     litDay.rank == 'Sunday';
+                final isSunday = date.weekday == DateTime.sunday;
+                final feastLabel = _getFeastLabel(date.month, date.day) ??
+                    (hasFeast && isHighRank ? litDay.title : null);
 
                 return Expanded(
                   child: GestureDetector(
@@ -227,7 +260,7 @@ class _LiturgicalCalendarViewState extends State<LiturgicalCalendarView> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // Day number
+                          // Day number — red for Sundays
                           Text(
                             '${dayIndex + 1}',
                             style: theme.textTheme.bodySmall?.copyWith(
@@ -236,7 +269,9 @@ class _LiturgicalCalendarViewState extends State<LiturgicalCalendarView> {
                                   : FontWeight.w500,
                               color: selected
                                   ? theme.colorScheme.onPrimary
-                                  : theme.colorScheme.onSurface,
+                                  : isSunday
+                                      ? const Color(0xFFB22222)
+                                      : theme.colorScheme.onSurface,
                               fontSize: 13,
                             ),
                           ),
@@ -258,6 +293,27 @@ class _LiturgicalCalendarViewState extends State<LiturgicalCalendarView> {
                                   : null,
                             ),
                           ),
+                          // Feast / memorial label
+                          if (feastLabel != null) ...[  
+                            const SizedBox(height: 2),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 1),
+                              child: Text(
+                                feastLabel,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 7,
+                                  height: 1.1,
+                                  fontWeight: isHighRank ? FontWeight.w600 : FontWeight.w400,
+                                  color: selected
+                                      ? theme.colorScheme.onPrimary.withValues(alpha: 0.85)
+                                      : theme.colorScheme.onSurface.withValues(alpha: 0.72),
+                                ),
+                              ),
+                            ),
+                          ],
                         ],
                       ),
                     ),

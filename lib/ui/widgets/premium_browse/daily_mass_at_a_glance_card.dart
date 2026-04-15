@@ -85,9 +85,21 @@ class DailyMassAtAGlanceCard extends StatelessWidget {
     ThemeData theme,
     Color liturgicalColor,
   ) {
+    final isDark = theme.brightness == Brightness.dark;
     final subtitle = liturgicalDay?.title.isNotEmpty == true
         ? liturgicalDay!.title
         : liturgicalDay?.seasonName ?? '';
+
+    // Header sits on the top-left of the gradient (lower alpha end)
+    final headerBg = Color.alphaBlend(
+      liturgicalColor.withValues(alpha: isDark ? 0.18 : 0.10),
+      theme.colorScheme.surface,
+    );
+    final iconColor = ReadingTypeColors.ensureContrast(
+      liturgicalColor,
+      headerBg,
+      minRatio: 3.0,
+    );
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -95,7 +107,7 @@ class DailyMassAtAGlanceCard extends StatelessWidget {
         children: [
           Icon(
             Icons.church_rounded,
-            color: liturgicalColor,
+            color: iconColor,
             size: 20,
           ),
           const SizedBox(width: 10),
@@ -125,24 +137,39 @@ class DailyMassAtAGlanceCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          FilledButton.tonal(
-            onPressed: onBeginMass,
-            style: FilledButton.styleFrom(
-              backgroundColor: liturgicalColor.withValues(alpha: 0.18),
-              foregroundColor: liturgicalColor,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              textStyle: theme.textTheme.labelMedium?.copyWith(
-                fontWeight: FontWeight.w700,
+          Builder(builder: (context) {
+            // Resolve the actual opaque button background so foreground
+            // contrast can be calculated accurately.
+            final btnBg = Color.alphaBlend(
+              liturgicalColor.withValues(alpha: 0.18),
+              theme.colorScheme.surface,
+            );
+            // Use the liturgical color as foreground only if it passes 4.5:1;
+            // otherwise fall back to black/white.
+            final btnFg = ReadingTypeColors.ensureContrast(
+              liturgicalColor,
+              btnBg,
+              minRatio: 4.5,
+            );
+            return FilledButton.tonal(
+              onPressed: onBeginMass,
+              style: FilledButton.styleFrom(
+                backgroundColor: btnBg,
+                foregroundColor: btnFg,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                textStyle: theme.textTheme.labelMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                minimumSize: Size.zero,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              minimumSize: Size.zero,
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            child: const Text('Begin Mass'),
-          ),
+              child: const Text('Begin Mass'),
+            );
+          }),
         ],
       ),
     );
@@ -154,10 +181,17 @@ class DailyMassAtAGlanceCard extends StatelessWidget {
     Color liturgicalColor,
     ({String baseType, DailyReading mainReading}) group,
   ) {
+    final isDark = theme.brightness == Brightness.dark;
+    // Compute the effective row background (bottom-end of the card gradient)
+    final rowBackground = Color.alphaBlend(
+      liturgicalColor.withValues(alpha: isDark ? 0.28 : 0.18),
+      theme.colorScheme.surface,
+    );
     final accentColor = ReadingTypeColors.forType(
       group.baseType,
       context,
       liturgicalColor: liturgicalColor,
+      background: rowBackground,
     );
     final psalmResponse = group.mainReading.psalmResponse;
 

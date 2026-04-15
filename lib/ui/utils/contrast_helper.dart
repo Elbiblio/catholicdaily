@@ -46,8 +46,15 @@ class ContrastHelper {
     ThemeData theme, {
     double alpha = 1.0,
   }) {
+    // If the background has transparency, resolve it against white so
+    // luminance calculations are accurate (semi-transparent colors appear
+    // lighter over a typical light surface than their raw value suggests).
+    final resolved = background.a < 1.0
+        ? Color.alphaBlend(background, Colors.white)
+        : background;
+
     // Calculate luminance of background
-    final bgLuminance = _calculateLuminance(background);
+    final bgLuminance = _calculateLuminance(resolved);
     
     // For very light backgrounds (luminance > 0.85), always use dark text
     if (bgLuminance > 0.85) {
@@ -60,8 +67,8 @@ class ContrastHelper {
     }
     
     // For mid-range backgrounds, test both black and white
-    final blackContrast = _calculateContrastRatio(Colors.black, background);
-    final whiteContrast = _calculateContrastRatio(Colors.white, background);
+    final blackContrast = _calculateContrastRatio(Colors.black, resolved);
+    final whiteContrast = _calculateContrastRatio(Colors.white, resolved);
     
     // Choose the color with better contrast
     if (blackContrast >= whiteContrast) {
@@ -72,28 +79,36 @@ class ContrastHelper {
   }
 
   /// Get a contrast-aware color that blends with the theme's onSurface color
-  /// Useful for secondary text that needs to be readable but not as prominent
+  /// Useful for secondary text that needs to be readable but not as prominent.
+  /// Guarantees at least 3:1 contrast ratio against [background]; falls back
+  /// to pure black/white when the softer blend would fail that threshold.
   static Color getSecondaryContrastColor(
     Color background,
     ThemeData theme, {
     double alpha = 1.0,
   }) {
-    final primaryContrast = getContrastColor(background, theme, alpha: 1.0);
-    
-    // Blend with onSurfaceVariant for a softer appearance
-    if (primaryContrast == Colors.black) {
-      // Dark text - blend with a slightly lighter color
-      return Color.alphaBlend(
-        theme.colorScheme.onSurfaceVariant,
-        Colors.black,
-      ).withValues(alpha: alpha);
-    } else {
-      // Light text - blend with a slightly darker color
-      return Color.alphaBlend(
-        theme.colorScheme.onSurfaceVariant,
-        Colors.white,
-      ).withValues(alpha: alpha);
+    // Resolve semi-transparent backgrounds against white before contrast math
+    final resolved = background.a < 1.0
+        ? Color.alphaBlend(background, Colors.white)
+        : background;
+
+    final primaryContrast = getContrastColor(resolved, theme, alpha: 1.0);
+    final useDark = primaryContrast == Colors.black;
+
+    // Attempt a softer blend with onSurfaceVariant
+    final blended = Color.alphaBlend(
+      theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.85),
+      useDark ? Colors.black : Colors.white,
+    );
+
+    // Verify the blend still passes 3:1 against the opaque resolved background
+    final ratio = _calculateContrastRatio(blended, resolved);
+    if (ratio >= 3.0) {
+      return blended.withValues(alpha: alpha);
     }
+
+    // Blend failed — return safe base color
+    return primaryContrast.withValues(alpha: alpha);
   }
 
   /// Calculate an appropriate alpha for a color overlay to ensure text readability

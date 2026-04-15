@@ -179,8 +179,18 @@ class ImprovedLiturgicalCalendarService {
   }
 
   int _calculateOrdinaryTimeWeekIi(DateTime pentecostStart, DateTime date) {
-    final daysSincePentecost = date.difference(pentecostStart).inDays;
-    return (daysSincePentecost ~/ 7) + 9; // Start counting from week 9 after Pentecost
+    // Work backwards from Christ the King (last Sunday of OT = Week 34).
+    // This keeps week numbers aligned with Lectionary regardless of how many
+    // OT weeks were actually completed before Lent.
+    final adventStart = _calculateAdventStart(date.year);
+    final christTheKing = adventStart.subtract(const Duration(days: 7));
+    // Find the Sunday that starts the liturgical week containing `date`.
+    final daysToSubtract = date.weekday == DateTime.sunday ? 0 : date.weekday;
+    final weekStart = date.subtract(Duration(days: daysToSubtract));
+    final daysFromCtk = christTheKing.difference(weekStart).inDays;
+    final weeksBack = daysFromCtk ~/ 7;
+    final week = 34 - weeksBack;
+    return week < 1 ? 1 : week;
   }
 
   DayOfWeek _getDayOfWeek(int weekday) {

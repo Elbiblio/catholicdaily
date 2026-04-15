@@ -1,3 +1,6 @@
+import 'package:flutter/foundation.dart' show debugPrint;
+import 'package:flutter/services.dart' show rootBundle;
+
 import 'base_service.dart';
 import 'ordo_resolver_service.dart';
 import 'improved_liturgical_calendar_service.dart';
@@ -113,25 +116,108 @@ class LectionaryPsalmCatalogService extends BaseService<LectionaryPsalmCatalogSe
     }
 
     final standardEntries = await _readingCatalogService.loadStandardEntries();
-    final parsed = standardEntries.map((entry) {
-      return LectionaryPsalmCatalogEntry(
-        season: entry.season,
-        week: entry.week,
-        day: entry.day,
-        weekdayCycle: entry.weekdayCycle,
-        sundayCycle: entry.sundayCycle,
-        fullReference: entry.psalmReference,
-        refrainText: entry.psalmResponse,
-        acclamationRef: entry.acclamationRef,
-        acclamationText: entry.acclamationText,
-        lectionaryNumber: entry.lectionaryNumber,
+    final parsed = <LectionaryPsalmCatalogEntry>[];
+
+    // Primary: rows from the standard lectionary CSV.
+    for (final entry in standardEntries) {
+      parsed.add(
+        LectionaryPsalmCatalogEntry(
+          season: entry.season,
+          week: entry.week,
+          day: entry.day,
+          weekdayCycle: entry.weekdayCycle,
+          sundayCycle: entry.sundayCycle,
+          fullReference: entry.psalmReference,
+          refrainText: entry.psalmResponse,
+          acclamationRef: entry.acclamationRef,
+          acclamationText: entry.acclamationText,
+          lectionaryNumber: entry.lectionaryNumber,
+        ),
       );
-    }).where((entry) {
-      return entry.fullReference.trim().isNotEmpty || entry.acclamationText.trim().isNotEmpty;
+    }
+
+    // Supplementary: rows from lectionary_psalms.csv and
+    // lectionary_psalms_weekday.csv. These files preserve the lectionary
+    // "(R. Xx)" verse refrain notation and cleaner acclamation text that
+    // the primary CSV drops/pollutes.
+    parsed.addAll(
+      await _loadSupplementary('lectionary_psalms.csv'),
+    );
+    parsed.addAll(
+      await _loadSupplementary('lectionary_psalms_weekday.csv'),
+    );
+
+    final filtered = parsed.where((entry) {
+      return entry.fullReference.trim().isNotEmpty ||
+          entry.acclamationText.trim().isNotEmpty;
     }).toList();
 
-    _entries = parsed;
-    return parsed;
+    _entries = filtered;
+    return filtered;
+  }
+
+  Future<List<LectionaryPsalmCatalogEntry>> _loadSupplementary(
+    String asset,
+  ) async {
+    try {
+      final rawCsv = await rootBundle.loadString(asset);
+      final lines = rawCsv
+          .split(RegExp(r'\r?\n'))
+          .where((line) => line.trim().isNotEmpty)
+          .toList();
+      if (lines.length <= 1) return const [];
+
+      final out = <LectionaryPsalmCatalogEntry>[];
+      // Header: Season,Week,Day,Weekday Cycle,Sunday Cycle,Full Reference,
+      //         Refrain Text,Acclamation Ref,Acclamation Text,Lectionary Number
+      for (var i = 1; i < lines.length; i++) {
+        final cols = _readingCatalogService.parseCsvLineWithPadding(lines[i], 10);
+        out.add(
+          LectionaryPsalmCatalogEntry(
+            season: cols[0].trim(),
+            week: cols[1].trim(),
+            day: cols[2].trim(),
+            weekdayCycle: cols[3].trim(),
+            sundayCycle: cols[4].trim(),
+            fullReference: cols[5].trim(),
+            refrainText: cols[6].trim(),
+            acclamationRef: cols[7].trim(),
+            acclamationText: cols[8].trim(),
+            lectionaryNumber: cols[9].trim(),
+          ),
+        );
+      }
+      return out;
+    } catch (e) {
+      debugPrint('Supplementary psalm catalog missing ($asset): $e');
+      return const [];
+    }
+  }
+
+  /// Returns the richest catalog entry for [date] / [psalmReference]:
+  /// the one whose [fullReference] contains a "(R. Xx)" verse refrain notation
+  /// (allowing us to decode the refrain from RSVCE). Falls back to the first
+  /// non-R entry when no R-bearing match is found.
+  Future<LectionaryPsalmCatalogEntry?> getBestPsalmEntryForDate({
+    required DateTime date,
+    required String psalmReference,
+    String? positionLabel,
+    int? psalmSequence,
+  }) async {
+    final matches = await getEntriesForDate(date);
+    if (matches.isEmpty) return null;
+
+    // Prefer matches whose fullReference carries "(R. Xx)" notation.
+    final rBearing = matches
+        .where((e) => RegExp(r'\(R\.', caseSensitive: false).hasMatch(e.fullReference))
+        .toList();
+    final pool = rBearing.isNotEmpty ? rBearing : matches;
+    return _resolvePsalmEntry(
+      entries: pool,
+      psalmReference: psalmReference,
+      positionLabel: positionLabel,
+      psalmSequence: psalmSequence,
+    );
   }
 
   bool _matchesDate({

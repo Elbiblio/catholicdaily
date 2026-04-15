@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/models/daily_reading.dart';
 import '../../data/models/navigable_item.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
@@ -79,6 +80,8 @@ Color _contrastColor(Color background, {double alpha = 1.0}) {
 }
 
 class _ReadingScreenState extends State<ReadingScreen> {
+  static const _verseNumbersKey = 'show_verse_numbers';
+
   double _textScale = 1.0;
   final ScrollController _scrollController = ScrollController();
   String _currentContent = '';
@@ -88,6 +91,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
   bool _hasPreviousChapter = false;
   bool _hasNextChapter = false;
   bool _isFullScreen = false;
+  bool _showVerseNumbers = true;
 
   String get _readingLabel {
     final position = widget.readingData?.position?.trim();
@@ -147,8 +151,29 @@ class _ReadingScreenState extends State<ReadingScreen> {
     super.initState();
     _currentContent = widget.content;
     _loadBookmarkStatus();
+    _loadVerseNumberPref();
     if (widget.isBibleSearch) {
       _checkChapterAvailability();
+    }
+  }
+
+  Future<void> _loadVerseNumberPref() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (mounted) {
+      setState(() {
+        _showVerseNumbers = prefs.getBool(_verseNumbersKey) ?? true;
+      });
+    }
+  }
+
+  Future<void> _toggleVerseNumbers() async {
+    final prefs = await SharedPreferences.getInstance();
+    final newValue = !_showVerseNumbers;
+    await prefs.setBool(_verseNumbersKey, newValue);
+    if (mounted) {
+      setState(() {
+        _showVerseNumbers = newValue;
+      });
     }
   }
 
@@ -422,6 +447,9 @@ class _ReadingScreenState extends State<ReadingScreen> {
                       case 'insights':
                         _showAiInsights();
                         break;
+                      case 'verse_numbers':
+                        _toggleVerseNumbers();
+                        break;
                     }
                   },
                   itemBuilder: (context) => [
@@ -432,6 +460,16 @@ class _ReadingScreenState extends State<ReadingScreen> {
                           Icon(Icons.auto_awesome),
                           SizedBox(width: 12),
                           Text('AI Insights'),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 'verse_numbers',
+                      child: Row(
+                        children: [
+                          Icon(_showVerseNumbers ? Icons.format_list_numbered : Icons.format_list_numbered_rtl),
+                          const SizedBox(width: 12),
+                          Text(_showVerseNumbers ? 'Hide verse numbers' : 'Show verse numbers'),
                         ],
                       ),
                     ),
@@ -1003,30 +1041,60 @@ class _ReadingScreenState extends State<ReadingScreen> {
   String _getBaseReadingType(String position) {
     final lowerPos = position.toLowerCase();
 
+    // Preserve unique slot labels like "Responsorial Psalm after First Reading"
+    // (Easter Vigil) so they do not collapse into a single "Responsorial Psalm"
+    // group with each OT psalm appearing as a spurious "alternative".
+    if (lowerPos.contains(' after ')) {
+      return position.split('(').first.trim();
+    }
+
     // Extract base type from positions like "Gospel (alternative)" or "First Reading (alternative 2)"
     if (lowerPos.contains('first reading')) return 'First Reading';
     if (lowerPos.contains('second reading')) return 'Second Reading';
+    if (lowerPos.contains('third reading')) return 'Third Reading';
+    if (lowerPos.contains('fourth reading')) return 'Fourth Reading';
+    if (lowerPos.contains('fifth reading')) return 'Fifth Reading';
+    if (lowerPos.contains('sixth reading')) return 'Sixth Reading';
+    if (lowerPos.contains('seventh reading')) return 'Seventh Reading';
+    if (lowerPos.contains('epistle')) return 'Epistle';
     if (lowerPos.contains('responsorial psalm')) return 'Responsorial Psalm';
     if (lowerPos.contains('alleluia psalm')) return 'Alleluia Psalm';
     if (lowerPos.contains('gospel acclamation')) return 'Gospel Acclamation';
     if (lowerPos.contains('gospel')) return 'Gospel';
+    if (lowerPos.contains('sequence')) return 'Sequence';
 
     return position.split('(').first.trim();
   }
 
   int _getReadingTypeOrder(String type) {
-    switch (type.toLowerCase()) {
-      case 'first reading':
-        return 1;
+    final lower = type.toLowerCase();
+    // Easter Vigil sequence — pair each OT reading with its following psalm.
+    if (lower == 'first reading') return 10;
+    if (lower.contains('after first reading')) return 11;
+    if (lower == 'second reading') return 12;
+    if (lower.contains('after second reading')) return 13;
+    if (lower == 'third reading') return 14;
+    if (lower.contains('after third reading')) return 15;
+    if (lower == 'fourth reading') return 16;
+    if (lower.contains('after fourth reading')) return 17;
+    if (lower == 'fifth reading') return 18;
+    if (lower.contains('after fifth reading')) return 19;
+    if (lower == 'sixth reading') return 20;
+    if (lower.contains('after sixth reading')) return 21;
+    if (lower == 'seventh reading') return 22;
+    if (lower.contains('after seventh reading')) return 23;
+    if (lower == 'epistle') return 24;
+    if (lower.contains('after epistle')) return 25;
+    switch (lower) {
       case 'responsorial psalm':
       case 'alleluia psalm':
-        return 2;
-      case 'second reading':
-        return 3;
+        return 30;
+      case 'sequence':
+        return 40;
       case 'gospel acclamation':
-        return 4;
+        return 50;
       case 'gospel':
-        return 5;
+        return 60;
       default:
         return 999;
     }
@@ -1177,7 +1245,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (verse.number != null)
+          if (verse.number != null && _showVerseNumbers)
             Container(
               width: 32,
               height: 32,
@@ -1294,7 +1362,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
       final line = lines[i].trim();
       if (line.isEmpty) continue;
 
-      final match = RegExp(r'^(\d+)\s+(.+)$').firstMatch(line);
+      final match = RegExp(r'^(\d+)\.?\s+(.+)$').firstMatch(line);
       if (match != null) {
         final number = int.tryParse(match.group(1) ?? '');
         final text = match.group(2) ?? '';

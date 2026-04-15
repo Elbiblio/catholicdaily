@@ -85,8 +85,9 @@ class _HymnDetailScreenState extends State<HymnDetailScreen> {
         }
       } catch (e) {
         if (mounted) {
+          final errorState = _midiService.state;
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Audio file not available for this hymn')),
+            SnackBar(content: Text(errorState.errorMessage ?? 'Audio file not available for this hymn')),
           );
         }
       }

@@ -879,52 +879,78 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
 
   List<ReadingGroup> get _groupedReadings {
     final groups = <String, ReadingGroup>{};
-    
+    final insertionOrder = <String>[];
+
     for (final reading in _readings) {
       final baseType = _getBaseReadingType(reading.position ?? 'Reading');
       final existingGroup = groups[baseType];
-      
+
       if (existingGroup == null) {
         groups[baseType] = ReadingGroup(
           baseType: baseType,
           mainReading: reading,
           alternatives: [],
         );
+        insertionOrder.add(baseType);
       } else {
-        // Check if this is an alternative
-        if (reading.position?.contains('alternative') == true) {
-          existingGroup.alternatives.add(reading);
-        } else {
-          // This shouldn't happen in normal flow, but handle it
-          existingGroup.alternatives.add(reading);
-        }
+        // Any additional reading with the same base type is an alternative.
+        existingGroup.alternatives.add(reading);
       }
     }
-    
-    return groups.values.toList()
-      ..sort((a, b) => _getReadingTypeOrder(a.baseType).compareTo(_getReadingTypeOrder(b.baseType)));
+
+    // Preserve natural ordering from the resolver for Easter Vigil / vigils
+    // where positions like "Responsorial Psalm after Third Reading" are unique
+    // per slot and must stay in sequence. Only apply the priority order for
+    // standard positions so alternatives still group cleanly.
+    final ordered = groups.values.toList();
+    ordered.sort((a, b) {
+      final orderA = _getReadingTypeOrder(a.baseType);
+      final orderB = _getReadingTypeOrder(b.baseType);
+      if (orderA != orderB) return orderA.compareTo(orderB);
+      // Same priority bucket — fall back to insertion order.
+      return insertionOrder.indexOf(a.baseType).compareTo(insertionOrder.indexOf(b.baseType));
+    });
+    return ordered;
   }
-  
+
   String _getBaseReadingType(String? position) {
     if (position == null) return 'Reading';
-    
+
     // Extract base type from positions like "Gospel (alternative)" or "First Reading (alternative 2)"
     final alternativeMatch = RegExp(r'^(.+?)\s*\(').firstMatch(position);
     if (alternativeMatch != null) {
       return alternativeMatch.group(1)!;
     }
-    
+
     return position;
   }
-  
+
   int _getReadingTypeOrder(String type) {
-    switch (type.toLowerCase()) {
-      case 'first reading': return 1;
-      case 'responsorial psalm': return 2;
-      case 'second reading': return 3;
-      case 'gospel acclamation': return 4;
-      case 'gospel': return 5;
-      case 'gospel at procession': return 6;
+    final lower = type.toLowerCase();
+    // Easter Vigil pairs each OT reading with its psalm; preserve sequence.
+    if (lower.contains('after first reading')) return 11;
+    if (lower.contains('second reading') && !lower.contains('after')) return 12;
+    if (lower.contains('after second reading')) return 13;
+    if (lower.contains('third reading')) return 14;
+    if (lower.contains('after third reading')) return 15;
+    if (lower.contains('fourth reading')) return 16;
+    if (lower.contains('after fourth reading')) return 17;
+    if (lower.contains('fifth reading')) return 18;
+    if (lower.contains('after fifth reading')) return 19;
+    if (lower.contains('sixth reading')) return 20;
+    if (lower.contains('after sixth reading')) return 21;
+    if (lower.contains('seventh reading')) return 22;
+    if (lower.contains('after seventh reading')) return 23;
+    if (lower == 'epistle') return 24;
+    if (lower.contains('after epistle')) return 25;
+    switch (lower) {
+      case 'first reading': return 10;
+      case 'responsorial psalm': return 30;
+      case 'alleluia psalm': return 30;
+      case 'sequence': return 40;
+      case 'gospel acclamation': return 50;
+      case 'gospel': return 60;
+      case 'gospel at procession': return 5;
       default: return 999;
     }
   }
@@ -1206,31 +1232,32 @@ class _PremiumReadingGroupCardState extends State<_PremiumReadingGroupCard>
     });
   }
   
-  Color _getReadingTypeColor(String type, BuildContext context) {
-    return ReadingTypeColors.forType(
-      type,
-      context,
-      liturgicalColor: widget.liturgicalColor,
-    );
-  }
-  
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final color = _getReadingTypeColor(widget.group.baseType, context);
     final isLight = theme.brightness == Brightness.light;
-    
+
+    // Compute the card background first so ReadingTypeColors can ensure contrast
+    final cardBackground = widget.liturgicalColor != null
+        ? Color.alphaBlend(
+            isLight
+                ? Colors.white.withValues(alpha: 0.94)
+                : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.92),
+            widget.liturgicalColor!.withValues(alpha: isLight ? 0.14 : 0.24),
+          )
+        : theme.colorScheme.surface;
+
+    final color = ReadingTypeColors.forType(
+      widget.group.baseType,
+      context,
+      liturgicalColor: widget.liturgicalColor,
+      background: cardBackground,
+    );
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6),
       decoration: BoxDecoration(
-        color: widget.liturgicalColor != null
-            ? Color.alphaBlend(
-                isLight
-                    ? Colors.white.withValues(alpha: 0.94)
-                    : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.92),
-                widget.liturgicalColor!.withValues(alpha: isLight ? 0.14 : 0.24),
-              )
-            : theme.colorScheme.surface,
+        color: cardBackground,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: color.withValues(alpha: 0.3),
