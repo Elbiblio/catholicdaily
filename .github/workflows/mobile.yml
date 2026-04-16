@@ -590,6 +590,8 @@ jobs:
       - verify
       - version_info
     if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    permissions:
+      contents: write
     env:
       VERSION_NAME: ${{ needs.version_info.outputs.version_name }}
       VERSION_CODE: ${{ needs.version_info.outputs.version_code }}
