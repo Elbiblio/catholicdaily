@@ -3,6 +3,8 @@ import '../../data/models/bible_version.dart';
 import '../../data/services/theme_preferences.dart';
 import '../../data/services/bible_version_preference.dart';
 import '../../data/services/offline_bible_service.dart';
+import '../../data/services/feast_reminder_preferences.dart';
+import 'feast_reminder_settings_sheet.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'dart:io' show Platform;
@@ -35,6 +37,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   String _selectedThemeStyle = 'standard';
   String _appVersion = '1.0.0';
   BibleVersionType? _currentBibleVersion;
+  FeastReminderPreferences? _reminderPrefs;
   static const _androidPackageName = 'com.elbiblio.catholicdaily';
   static const _iosAppStoreId = '';
   static const _iosSearchTerm = 'Catholic Daily Missal';
@@ -46,12 +49,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _selectedThemeStyle = _themeStyleToValue(widget.themeStyle);
     _loadAppInfo();
     _loadCurrentBibleVersion();
+    _loadReminderPrefs();
   }
 
   Future<void> _loadCurrentBibleVersion() async {
     final pref = await BibleVersionPreference.getInstance();
     if (!mounted) return;
     setState(() => _currentBibleVersion = pref.currentVersion);
+  }
+
+  Future<void> _loadReminderPrefs() async {
+    final prefs = await FeastReminderPreferences.getInstance();
+    if (!mounted) return;
+    setState(() => _reminderPrefs = prefs);
+  }
+
+  String _reminderSubtitle() {
+    final prefs = _reminderPrefs;
+    if (prefs == null || !prefs.isEnabled) return 'Off';
+    return '${prefs.rank.label} · ${prefs.timeLabel}';
   }
 
   @override
@@ -352,6 +368,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   onTap: () => _showThemeStyleDialog(context),
                 ),
               ],
+            ),
+          ),
+          const SizedBox(height: 24),
+          _SectionHeader(title: 'Reminders'),
+          Card(
+            child: _SettingsTile(
+              icon: Icons.notifications_outlined,
+              title: 'Feast Day Reminders',
+              subtitle: _reminderSubtitle(),
+              onTap: () async {
+                await FeastReminderSettingsSheet.show(context);
+                _loadReminderPrefs();
+              },
             ),
           ),
           const SizedBox(height: 24),

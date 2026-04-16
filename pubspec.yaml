@@ -21,7 +21,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # To skip a platform build, add exactly one of these as its own line above the version:
 #   # CI_SKIP_ANDROID
 #   # CI_SKIP_IOS
-version: 1.5.0+22
+version: 1.5.1+23
 
 environment:
   sdk: ^3.9.0
@@ -54,6 +54,8 @@ dependencies:
   permission_handler: ^11.3.1
   google_maps_webservice: ^0.0.20-nullsafety.5
   audioplayers: ^6.1.0
+  flutter_local_notifications: ^18.0.1
+  timezone: ^0.9.4
 
 dev_dependencies:
   flutter_test:

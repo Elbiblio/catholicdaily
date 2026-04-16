@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'data/services/theme_preferences.dart';
 import 'data/services/app_navigation_service.dart';
+import 'data/services/feast_reminder_service.dart';
+import 'data/services/feast_reminder_preferences.dart';
 import 'ui/screens/home_screen.dart';
 import 'ui/screens/onboarding_screen.dart';
 
@@ -23,6 +25,11 @@ void main() async {
   );
 
   final themePreferences = await ThemePreferences.getInstance();
+
+  // Initialize notification service and reschedule feast reminders if needed
+  await FeastReminderService.instance.initialize();
+  final reminderPrefs = await FeastReminderPreferences.getInstance();
+  await FeastReminderService.instance.rescheduleIfNeeded(reminderPrefs);
 
   runApp(CatholicDailyApp(themePreferences: themePreferences));
 }

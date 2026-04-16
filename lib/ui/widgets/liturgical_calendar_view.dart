@@ -32,8 +32,8 @@ class _LiturgicalCalendarViewState extends State<LiturgicalCalendarView> {
   Map<String, String>? _feastByMonthDay;
 
   static const _minDate = 2020;
-  static const _maxDate = 2030;
-  // Total months from Jan 2020 to Dec 2030
+  static const _maxDate = 2038;
+  // Total months from Jan 2020 to Dec 2038
   static const _totalMonths = ((_maxDate - _minDate) + 1) * 12;
 
   @override

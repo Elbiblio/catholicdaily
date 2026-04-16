@@ -49,6 +49,8 @@
 	</dict>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSUserNotificationUsageDescription</key>
+	<string>Catholic Daily sends you reminders on feasts and solemnities so you never miss a major celebration.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs location access to find nearby Catholic churches for Mass times and directions.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
