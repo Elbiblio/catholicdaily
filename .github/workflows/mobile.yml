@@ -582,3 +582,58 @@ jobs:
           name: ios-release-artifacts
           path: build/ios-artifacts
           if-no-files-found: error
+
+  windows:
+    name: Windows Release Build
+    runs-on: windows-latest
+    needs:
+      - verify
+      - version_info
+    if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    env:
+      VERSION_NAME: ${{ needs.version_info.outputs.version_name }}
+      VERSION_CODE: ${{ needs.version_info.outputs.version_code }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build Windows release
+        run: flutter build windows --release --build-name="${{ env.VERSION_NAME }}" --build-number="${{ env.VERSION_CODE }}"
+
+      - name: Zip Windows build
+        shell: pwsh
+        run: |
+          $src = "build\windows\x64\runner\Release"
+          $dest = "catholic-daily-windows-${{ env.VERSION_NAME }}.zip"
+          Compress-Archive -Path "$src\*" -DestinationPath $dest
+          echo "WINDOWS_ZIP=$dest" >> $env:GITHUB_ENV
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-release-artifacts
+          path: catholic-daily-windows-${{ env.VERSION_NAME }}.zip
+          if-no-files-found: error
+
+      - name: Create or update GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ env.VERSION_NAME }}
+          name: Catholic Daily ${{ env.VERSION_NAME }}
+          draft: false
+          prerelease: false
+          files: catholic-daily-windows-${{ env.VERSION_NAME }}.zip
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
