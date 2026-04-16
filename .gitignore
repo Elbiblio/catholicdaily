@@ -12,9 +12,7 @@
 .swiftpm/
 migrate_working_dir/
 node_modules
-windows/
 web/
-macos/
 linux/
 recycle_bin/
 
