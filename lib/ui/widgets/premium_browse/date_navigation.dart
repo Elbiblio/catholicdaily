@@ -45,7 +45,7 @@ class DateNavigation extends StatelessWidget {
     final foregroundColor = _resolveHeaderForeground(theme, buttonColor);
 
     return Container(
-      margin: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: containerColor,
@@ -76,7 +76,7 @@ class DateNavigation extends StatelessWidget {
             child: GestureDetector(
               onTap: onDateTap,
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12),
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

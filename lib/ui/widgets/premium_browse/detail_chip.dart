@@ -23,7 +23,7 @@ class DetailChip extends StatelessWidget {
     final effectiveLiturgicalColor = liturgicalColor ?? theme.colorScheme.primary;
     
     final chip = Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: isLight
             ? Color.alphaBlend(
