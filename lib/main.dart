@@ -26,10 +26,15 @@ void main() async {
 
   final themePreferences = await ThemePreferences.getInstance();
 
-  // Initialize notification service and reschedule feast reminders if needed
-  await FeastReminderService.instance.initialize();
-  final reminderPrefs = await FeastReminderPreferences.getInstance();
-  await FeastReminderService.instance.rescheduleIfNeeded(reminderPrefs);
+  // Initialize notification service and reschedule feast reminders if needed.
+  // Wrapped in try/catch — a notification failure must never block app launch.
+  try {
+    await FeastReminderService.instance.initialize();
+    final reminderPrefs = await FeastReminderPreferences.getInstance();
+    await FeastReminderService.instance.rescheduleIfNeeded(reminderPrefs);
+  } catch (e, st) {
+    debugPrint('[FeastReminder] Startup init failed: $e\n$st');
+  }
 
   runApp(CatholicDailyApp(themePreferences: themePreferences));
 }
