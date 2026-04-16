@@ -49,7 +49,6 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
   bool _isLoading = true;
   LiturgicalDay? _liturgicalDay;
   OrdoYearVariables? _ordoYearVariables;
-  bool _showLiturgicalDetails = false;
   List<OptionalCelebration> _optionalCelebrations = [];
   int _selectedCelebrationIndex = -1; // -1 = ferial/default
   bool _celebrationsSuppressed = false;
@@ -271,9 +270,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
   Widget _buildPremiumAppBar(ThemeData theme) {
     final isLight = theme.brightness == Brightness.light;
     return SliverAppBar(
-      expandedHeight: _showLiturgicalDetails
-          ? (isLight ? 340 : 310)
-          : (isLight ? 190 : 170),
+      expandedHeight: isLight ? 190 : 170,
       pinned: true,
       backgroundColor: theme.colorScheme.surface.withValues(alpha: 0.96),
       surfaceTintColor: Colors.transparent,
@@ -394,68 +391,6 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
 
                     _buildLiturgicalSummaryRow(theme, headerForeground),
 
-                    const SizedBox(height: 10),
-
-                    GestureDetector(
-                      onTap: () => setState(
-                        () => _showLiturgicalDetails = !_showLiturgicalDetails,
-                      ),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: headerForeground.withValues(alpha: 0.10),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: headerForeground.withValues(alpha: 0.15),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              _showLiturgicalDetails ? 'Less' : 'More',
-                              style: theme.textTheme.labelSmall?.copyWith(
-                                color: headerForeground.withValues(alpha: 0.9),
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 0.3,
-                              ),
-                            ),
-                            const SizedBox(width: 4),
-                            AnimatedRotation(
-                              turns: _showLiturgicalDetails ? 0.5 : 0,
-                              duration: const Duration(milliseconds: 300),
-                              child: Icon(
-                                Icons.expand_more,
-                                color: headerForeground.withValues(alpha: 0.85),
-                                size: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    AnimatedSize(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                      child: _showLiturgicalDetails
-                          ? Container(
-                              margin: const EdgeInsets.only(top: 12),
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(14),
-                              decoration: BoxDecoration(
-                                color: theme.colorScheme.surface.withValues(alpha: 0.78),
-                                borderRadius: BorderRadius.circular(14),
-                                border: Border.all(
-                                  color: headerForeground.withValues(alpha: 0.14),
-                                ),
-                              ),
-                              child: SingleChildScrollView(
-                                child: _buildLiturgicalDetailsContent(theme),
-                              ),
-                            )
-                          : const SizedBox.shrink(),
-                    ),
                 ],
               ),
             ),
@@ -801,144 +736,6 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
     return false;
   }
 
-  Widget _buildLiturgicalDetailsContent(ThemeData theme) {
-    final textColor = theme.colorScheme.onSurface;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Liturgical color — first item
-        if (_liturgicalDay != null)
-          Row(
-            children: [
-              Container(
-                width: 18,
-                height: 18,
-                decoration: BoxDecoration(
-                  color: _liturgicalDay!.colorValue,
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: textColor.withValues(alpha: 0.2),
-                    width: 1,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: _liturgicalDay!.colorValue.withValues(alpha: 0.35),
-                      blurRadius: 6,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 10),
-              Text(
-                'Liturgical Color',
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: textColor.withValues(alpha: 0.55),
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: 0.4,
-                ),
-              ),
-              const SizedBox(width: 6),
-              Text(
-                _liturgicalDay!.color.name[0].toUpperCase() +
-                    _liturgicalDay!.color.name.substring(1),
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: textColor.withValues(alpha: 0.95),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-
-        // Saint of the day
-        if (_optionalCelebrations.isNotEmpty) ...[
-          const SizedBox(height: 12),
-          Divider(height: 1, color: textColor.withValues(alpha: 0.1)),
-          const SizedBox(height: 12),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(
-                Icons.auto_awesome_rounded,
-                size: 16,
-                color: textColor.withValues(alpha: 0.55),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _celebrationsSuppressed ? 'Commemoration' : 'Saint of the Day',
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: textColor.withValues(alpha: 0.55),
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 0.4,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    ..._optionalCelebrations.map((c) => Padding(
-                      padding: const EdgeInsets.only(bottom: 2),
-                      child: Text(
-                        c.title,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: textColor.withValues(alpha: 0.95),
-                          fontWeight: FontWeight.w600,
-                          height: 1.3,
-                        ),
-                      ),
-                    )),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-
-        // Ordo year variables
-        if (_ordoYearVariables != null) ...[
-          const SizedBox(height: 12),
-          Divider(height: 1, color: textColor.withValues(alpha: 0.1)),
-          const SizedBox(height: 12),
-          Wrap(
-            spacing: 16,
-            runSpacing: 8,
-            children: [
-              _buildDetailPair(theme, 'Golden Number', '${_ordoYearVariables!.goldenNumber}'),
-              _buildDetailPair(theme, 'Epact', '${_ordoYearVariables!.epact}'),
-              _buildDetailPair(theme, 'Solar Cycle', '${_ordoYearVariables!.solarCycle}'),
-              _buildDetailPair(theme, 'Indiction', '${_ordoYearVariables!.indiction}'),
-            ],
-          ),
-        ],
-      ],
-    );
-  }
-
-  Widget _buildDetailPair(ThemeData theme, String label, String value) {
-    final textColor = theme.colorScheme.onSurface;
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          '$label: ',
-          style: theme.textTheme.labelSmall?.copyWith(
-            color: textColor.withValues(alpha: 0.55),
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        Text(
-          value,
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: textColor.withValues(alpha: 0.95),
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _buildLiturgicalSummaryRow(ThemeData theme, Color foregroundColor) {
     final countdown = _buildCountdownLabel();
     
@@ -952,6 +749,145 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
       countdownLabel: countdown?.$1,
       countdownValue: countdown?.$2,
       onCountdownTap: countdown != null ? () => _jumpToDate(countdown.$3, openFirstReading: true) : null,
+      onInfoTap: () => _showLiturgicalDetailsSheet(),
+    );
+  }
+
+  void _showLiturgicalDetailsSheet() {
+    final theme = Theme.of(context);
+    final textColor = theme.colorScheme.onSurface;
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: theme.colorScheme.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Handle bar
+                Center(
+                  child: Container(
+                    width: 36,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: textColor.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // Liturgical color
+                if (_liturgicalDay != null) ...[
+                  Row(
+                    children: [
+                      Container(
+                        width: 16,
+                        height: 16,
+                        decoration: BoxDecoration(
+                          color: _liturgicalDay!.colorValue,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: textColor.withValues(alpha: 0.15),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        'Liturgical Color',
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: textColor.withValues(alpha: 0.5),
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.4,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        _liturgicalDay!.color.name[0].toUpperCase() +
+                            _liturgicalDay!.color.name.substring(1),
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                ],
+
+                // Saint of the day
+                if (_optionalCelebrations.isNotEmpty) ...[
+                  Text(
+                    _celebrationsSuppressed ? 'Commemoration' : 'Saint of the Day',
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: textColor.withValues(alpha: 0.5),
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.4,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  ..._optionalCelebrations.map((c) => Padding(
+                    padding: const EdgeInsets.only(bottom: 2),
+                    child: Text(
+                      c.title,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  )),
+                  const SizedBox(height: 16),
+                ],
+
+                // Ordo year variables
+                if (_ordoYearVariables != null) ...[
+                  Divider(height: 1, color: textColor.withValues(alpha: 0.08)),
+                  const SizedBox(height: 14),
+                  Wrap(
+                    spacing: 24,
+                    runSpacing: 10,
+                    children: [
+                      _buildSheetDetailPair(theme, 'Golden Number', '${_ordoYearVariables!.goldenNumber}'),
+                      _buildSheetDetailPair(theme, 'Epact', '${_ordoYearVariables!.epact}'),
+                      _buildSheetDetailPair(theme, 'Solar Cycle', '${_ordoYearVariables!.solarCycle}'),
+                      _buildSheetDetailPair(theme, 'Indiction', '${_ordoYearVariables!.indiction}'),
+                    ],
+                  ),
+                ],
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildSheetDetailPair(ThemeData theme, String label, String value) {
+    final textColor = theme.colorScheme.onSurface;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: textColor.withValues(alpha: 0.5),
+            fontWeight: FontWeight.w500,
+            letterSpacing: 0.3,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          value,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ],
     );
   }
 

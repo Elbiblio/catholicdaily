@@ -11,6 +11,7 @@ class LiturgicalSummaryRow extends StatelessWidget {
   final String? countdownLabel;
   final String? countdownValue;
   final VoidCallback? onCountdownTap;
+  final VoidCallback? onInfoTap;
 
   const LiturgicalSummaryRow({
     super.key,
@@ -23,6 +24,7 @@ class LiturgicalSummaryRow extends StatelessWidget {
     this.countdownLabel,
     this.countdownValue,
     this.onCountdownTap,
+    this.onInfoTap,
   });
 
   @override
@@ -70,16 +72,40 @@ class LiturgicalSummaryRow extends StatelessWidget {
         ),
     ];
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          for (int index = 0; index < chips.length; index++) ...[
-            chips[index],
-            if (index < chips.length - 1) const SizedBox(width: 8),
-          ],
+    return Row(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                for (int index = 0; index < chips.length; index++) ...[
+                  chips[index],
+                  if (index < chips.length - 1) const SizedBox(width: 8),
+                ],
+              ],
+            ),
+          ),
+        ),
+        if (onInfoTap != null) ...[  
+          const SizedBox(width: 8),
+          GestureDetector(
+            onTap: onInfoTap,
+            child: Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: foregroundColor.withValues(alpha: isLight ? 0.08 : 0.12),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.info_outline_rounded,
+                size: 16,
+                color: foregroundColor.withValues(alpha: isLight ? 0.55 : 0.65),
+              ),
+            ),
+          ),
         ],
-      ),
+      ],
     );
   }
 }
