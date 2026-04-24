@@ -291,9 +291,13 @@ class ReadingsBackendIo implements ReadingsBackend {
     // Pass 0 — rule lookup. A matched rule is authoritative: its wording is
     // used as-is and only Pass 3 dedupe runs (no Pass 1 normalization, no
     // Pass 2 subset-expansion that would substitute a generic book prefix).
+    // Locale is read from IncipitPreferenceService — future-proofs per-region
+    // variants (en-US, en-GB, en-IE) without requiring a code change.
+    final locale = await _incipitPreference.getLocale();
     final ruleMatch = await _incipitRules.matchForText(
       reference: reference,
       fullText: fullText,
+      locale: locale,
     );
     if (ruleMatch != null) {
       return _incipitProcessor.processWithAuthoritativeIncipit(

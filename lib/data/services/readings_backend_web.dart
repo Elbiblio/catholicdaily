@@ -76,9 +76,11 @@ class ReadingsBackendWeb implements ReadingsBackend {
       return fullText;
     }
 
+    final locale = await _incipitPreference.getLocale();
     final ruleMatch = await _incipitRules.matchForText(
       reference: reference,
       fullText: fullText,
+      locale: locale,
     );
     if (ruleMatch != null) {
       return _incipitService.processWithAuthoritativeIncipit(
