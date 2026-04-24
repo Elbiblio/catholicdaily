@@ -114,6 +114,7 @@ flutter:
     - assets/data/hymn_categories.json
     - assets/data/prayer_of_faithful_mapped.csv
     - assets/data/cpl_prayer_faithful_spanish.csv
+    - assets/incipit_rules.csv
     - assets/prayers/
     - assets/midi/
     - scripts/prayer_of_faithful_mapped.csv

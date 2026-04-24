@@ -4,6 +4,7 @@ import '../../data/services/theme_preferences.dart';
 import '../../data/services/bible_version_preference.dart';
 import '../../data/services/offline_bible_service.dart';
 import '../../data/services/feast_reminder_preferences.dart';
+import '../../data/services/incipit_preference_service.dart';
 import 'feast_reminder_settings_sheet.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -38,6 +39,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   String _appVersion = '1.0.0';
   BibleVersionType? _currentBibleVersion;
   FeastReminderPreferences? _reminderPrefs;
+  bool _showIncipit = true;
   static const _androidPackageName = 'com.elbiblio.catholicdaily';
   static const _iosAppStoreId = '';
   static const _iosSearchTerm = 'Catholic Daily Missal';
@@ -50,6 +52,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _loadAppInfo();
     _loadCurrentBibleVersion();
     _loadReminderPrefs();
+    _loadIncipitPreference();
+  }
+
+  Future<void> _loadIncipitPreference() async {
+    final show = await IncipitPreferenceService().getShowIncipit();
+    if (!mounted) return;
+    setState(() => _showIncipit = show);
+  }
+
+  Future<void> _setIncipitPreference(bool value) async {
+    setState(() => _showIncipit = value);
+    await IncipitPreferenceService().setShowIncipit(value);
   }
 
   Future<void> _loadCurrentBibleVersion() async {
@@ -340,6 +354,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   onTap: () => _showRsvceInfo(context),
                 ),
               ],
+            ),
+          ),
+          const SizedBox(height: 24),
+          _SectionHeader(title: 'Readings'),
+          Card(
+            child: SwitchListTile(
+              secondary: Icon(
+                Icons.auto_stories_outlined,
+                color: theme.colorScheme.primary,
+              ),
+              title: const Text('Show liturgical opening'),
+              subtitle: const Text(
+                "Replace the first line with traditional missal wording "
+                "(e.g. 'At that time, Jesus said…').",
+              ),
+              value: _showIncipit,
+              onChanged: _setIncipitPreference,
             ),
           ),
           const SizedBox(height: 24),

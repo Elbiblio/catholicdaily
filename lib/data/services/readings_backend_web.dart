@@ -5,7 +5,9 @@ import 'package:flutter/services.dart' show rootBundle;
 import '../models/bible_book.dart';
 import '../models/daily_reading.dart';
 import 'csv_readings_resolver_service.dart';
+import 'incipit_preference_service.dart';
 import 'incipit_processing_service.dart';
+import 'incipit_rules_service.dart';
 import 'reading_reference_parser.dart';
 import 'readings_backend.dart';
 import 'shared_service_utils.dart';
@@ -21,6 +23,8 @@ class ReadingsBackendWeb implements ReadingsBackend {
   BibleVersionPreference? _versionPreference;
   
   final IncipitProcessingService _incipitService = IncipitProcessingService();
+  final IncipitRulesService _incipitRules = IncipitRulesService();
+  final IncipitPreferenceService _incipitPreference = IncipitPreferenceService();
   final CsvReadingsResolverService _csvResolver = CsvReadingsResolverService.instance;
 
   @override
@@ -67,12 +71,29 @@ class ReadingsBackendWeb implements ReadingsBackend {
       return fullText;
     }
 
+    final showIncipit = await _incipitPreference.getShowIncipit();
+    if (!showIncipit) {
+      return fullText;
+    }
+
+    final ruleMatch = await _incipitRules.matchForText(
+      reference: reference,
+      fullText: fullText,
+    );
+    if (ruleMatch != null) {
+      return _incipitService.processWithAuthoritativeIncipit(
+        reference,
+        fullText,
+        ruleMatch.transformed,
+      );
+    }
+
     final processed = _incipitService.process(
       reference,
       fullText,
       csvIncipit: incipit,
     );
-    
+
     return processed;
   }
 

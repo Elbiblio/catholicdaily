@@ -82,6 +82,56 @@ class IncipitProcessingService {
     return _pass3Assemble(correctedText, cleanIncipit);
   }
 
+  /// Assembles a reading using [incipit] as the authoritative opening.
+  ///
+  /// Used for rule-derived incipits (IncipitRulesService hits). Wording is
+  /// treated as final: Pass 1 normalization and Pass 2 subset-verse expansion
+  /// are skipped (the latter can substitute generic book-based prefixes like
+  /// "At that time" even when the rule specified exact wording).
+  ///
+  /// Join semantics mirror Pass 2c:
+  ///   • Dedupe consumes part of the first verse → comma-join (verse flows
+  ///     naturally as a continuation of the incipit, case preserved).
+  ///   • No overlap → colon-join, first letter of remainder capitalized.
+  ///   • Whole first verse was the incipit → drop it, return incipit alone
+  ///     with following verses appended.
+  String processWithAuthoritativeIncipit(
+    String reference,
+    String rawText,
+    String incipit,
+  ) {
+    final correctedText = _cleanVerseText(rawText);
+    final cleaned = incipit.trim().replaceAll(RegExp(r'[,:;]\s*$'), '');
+    if (cleaned.isEmpty) return correctedText;
+
+    final lines = correctedText.split('\n');
+    final firstIdx = lines.indexWhere((l) => l.trim().isNotEmpty);
+    if (firstIdx == -1) return cleaned;
+
+    var firstLine = lines[firstIdx].trim();
+    firstLine = firstLine.replaceFirst(RegExp(r'^\d+[a-z]?\.\s*'), '');
+    firstLine = firstLine.replaceFirst(RegExp(r'^\d+[a-z]?\s+'), '');
+
+    final deduped = _pass3DeduplicateFirstLine(firstLine, cleaned);
+
+    // Whole line was the incipit — drop it, prepend incipit to remaining lines.
+    if (deduped.isEmpty) {
+      lines[firstIdx] = '';
+      final tail = lines.join('\n').trimLeft();
+      return tail.isEmpty ? cleaned : '$cleaned: $tail';
+    }
+
+    // No overlap consumed — colon-join with capitalized remainder.
+    if (deduped == firstLine) {
+      lines[firstIdx] = deduped;
+      return _joinWithColon(cleaned, lines.join('\n'));
+    }
+
+    // Partial overlap — comma-join, preserve remainder's casing.
+    lines[firstIdx] = deduped;
+    return _joinWithComma(cleaned, lines.join('\n'));
+  }
+
   // ─────────────────────────────────────────────────────────────────────────
   // Pass 1 — Normalize raw CSV incipit
   // ─────────────────────────────────────────────────────────────────────────

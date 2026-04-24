@@ -7,7 +7,9 @@ import '../models/bible_book.dart';
 import '../models/daily_reading.dart';
 import 'csv_readings_resolver_service.dart';
 import 'daniel_verse_mapper.dart' show DeuterocanonicalVerseMapper;
+import 'incipit_preference_service.dart';
 import 'incipit_processing_service.dart';
+import 'incipit_rules_service.dart';
 import 'lectionary_psalm_catalog_service.dart';
 import 'reading_reference_parser.dart';
 import 'readings_backend.dart';
@@ -27,6 +29,8 @@ class ReadingsBackendIo implements ReadingsBackend {
   }
 
   final IncipitProcessingService _incipitProcessor = IncipitProcessingService();
+  final IncipitRulesService _incipitRules = IncipitRulesService();
+  final IncipitPreferenceService _incipitPreference = IncipitPreferenceService();
   final CsvReadingsResolverService _csvResolver = CsvReadingsResolverService.instance;
   final LectionaryPsalmCatalogService _psalmCatalog =
       LectionaryPsalmCatalogService.instance;
@@ -278,7 +282,32 @@ class ReadingsBackendIo implements ReadingsBackend {
       return fullText;
     }
 
-    return _incipitProcessor.process(reference, fullText, csvIncipit: incipit);
+    // User toggle: "Show liturgical opening" — OFF returns raw scripture.
+    final showIncipit = await _incipitPreference.getShowIncipit();
+    if (!showIncipit) {
+      return fullText;
+    }
+
+    // Pass 0 — rule lookup. A matched rule is authoritative: its wording is
+    // used as-is and only Pass 3 dedupe runs (no Pass 1 normalization, no
+    // Pass 2 subset-expansion that would substitute a generic book prefix).
+    final ruleMatch = await _incipitRules.matchForText(
+      reference: reference,
+      fullText: fullText,
+    );
+    if (ruleMatch != null) {
+      return _incipitProcessor.processWithAuthoritativeIncipit(
+        reference,
+        fullText,
+        ruleMatch.transformed,
+      );
+    }
+
+    return _incipitProcessor.process(
+      reference,
+      fullText,
+      csvIncipit: incipit,
+    );
   }
   
   /// Check if a reference is a responsorial psalm with complex notation
