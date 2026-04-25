@@ -425,25 +425,31 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
           20,
           20,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(
-              'Daily Readings',
-              style: theme.textTheme.headlineSmall?.copyWith(
-                color: theme.colorScheme.onPrimary,
-                fontWeight: FontWeight.w700,
+        // ClampingScrollPhysics + NeverScrollable: lets the SliverAppBar
+        // collapse without producing a "RenderFlex overflowing" yellow-stripe
+        // when the header height drops below the column's natural size.
+        child: SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                'Daily Readings',
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  color: theme.colorScheme.onPrimary,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Offline-first daily Mass readings with clear liturgical context.',
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onPrimary.withValues(alpha: 0.84),
+              const SizedBox(height: 8),
+              Text(
+                'Offline-first daily Mass readings with clear liturgical context.',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onPrimary.withValues(alpha: 0.84),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -666,15 +672,17 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
       }
     }
     
-    // Solemnities — use title case
-    if (liturgicalDay.rank != null && 
-        liturgicalDay.rank!.toLowerCase().contains('solemnity')) {
-      if (liturgicalDay.title.isNotEmpty) {
-        return _toTitleCase(liturgicalDay.title);
-      }
-      return 'Solemnity';
+    // Solemnities, Feasts, and Memorials — show the celebration title.
+    // Without this, fixed-date feasts like "Saint Mark, Evangelist" (April 25)
+    // were falling through to the "Nth Week of Season" branch below.
+    final rank = liturgicalDay.rank?.toLowerCase() ?? '';
+    final isCelebration = rank.contains('solemnity') ||
+        rank.contains('feast') ||
+        rank.contains('memorial');
+    if (isCelebration && liturgicalDay.title.isNotEmpty) {
+      return _toTitleCase(liturgicalDay.title);
     }
-    
+
     // Regular weekdays — compact: "2nd Week of Easter" (day name is in the date label above)
     if (liturgicalDay.weekNumber > 0) {
       return '${_ordinalFull(liturgicalDay.weekNumber)} Week of ${liturgicalDay.seasonName}';
@@ -721,6 +729,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
     };
     return dayNames.contains(lower);
   }
+
 
   bool _shouldUseCanterburyFont(LiturgicalDay liturgicalDay) {
     // Use Canterbury font for Sundays and solemnities

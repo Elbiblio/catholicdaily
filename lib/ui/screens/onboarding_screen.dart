@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../data/services/feast_reminder_preferences.dart';
+import '../../data/services/feast_reminder_service.dart';
+
 class OnboardingScreen extends StatefulWidget {
   final VoidCallback onComplete;
 
@@ -22,6 +25,28 @@ class OnboardingScreen extends StatefulWidget {
   State<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
+/// Notification slot options. Day-before slots fire the EVENING BEFORE the
+/// celebration; day-of slots fire on the actual feast day.
+class _NotificationSlot {
+  final int hour;
+  final int minute;
+  final bool dayBefore;
+  final String label;
+  const _NotificationSlot(this.hour, this.minute, this.dayBefore, this.label);
+}
+
+const _kNotificationSlots = <_NotificationSlot>[
+  _NotificationSlot(20, 0, true, '8:00 PM'),
+  _NotificationSlot(21, 0, true, '9:00 PM'),
+  _NotificationSlot(22, 0, true, '10:00 PM'),
+  _NotificationSlot(23, 0, true, '11:00 PM'),
+  _NotificationSlot(6, 0, false, '6:00 AM'),
+  _NotificationSlot(9, 0, false, '9:00 AM'),
+  _NotificationSlot(12, 0, false, '12:00 PM'),
+  _NotificationSlot(15, 0, false, '3:00 PM'),
+  _NotificationSlot(18, 0, false, '6:00 PM'),
+];
+
 class _OnboardingScreenState extends State<OnboardingScreen>
     with TickerProviderStateMixin {
   final PageController _pageController = PageController();
@@ -30,6 +55,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   late AnimationController _slideController;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
+
+  /// Selected notification slot. null = user skipped (no reminders).
+  _NotificationSlot? _selectedSlot;
 
   static const _pages = [
     _OnboardingPage(
@@ -74,6 +102,11 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     ),
   ];
 
+  // The notifications step is appended after the generic intro pages.
+  // _pages.length == 5; the notifications step is at index `_pages.length`.
+  int get _totalPages => _pages.length + 1;
+  bool _isNotificationsStep(int index) => index == _pages.length;
+
   @override
   void initState() {
     super.initState();
@@ -117,12 +150,38 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   }
 
   Future<void> _complete() async {
+    // Persist notification choice, if any. Skipping leaves reminders disabled.
+    try {
+      final prefs = await FeastReminderPreferences.getInstance();
+      final svc = FeastReminderService.instance;
+      await svc.initialize();
+      if (_selectedSlot != null) {
+        final slot = _selectedSlot!;
+        await prefs.setEnabled(true);
+        await prefs.setRank(FeastReminderRank.feastsDays);
+        await prefs.setTime(slot.hour, slot.minute);
+        await prefs.setNotifyDayBefore(slot.dayBefore);
+        try {
+          await svc.requestPermission();
+        } catch (_) {}
+        await svc.scheduleAheadMonths(15, prefs);
+      } else {
+        // User explicitly chose not to enable notifications.
+        await prefs.setEnabled(false);
+      }
+      // Mark auto-setup done so main.dart doesn't override the user's choice.
+      await prefs.markAutoSetupCompleted();
+    } catch (e) {
+      // Non-fatal — onboarding completes regardless of notification setup.
+      debugPrint('[Onboarding] Notification setup failed: $e');
+    }
+
     await OnboardingScreen.markComplete();
     widget.onComplete();
   }
 
   void _next() {
-    if (_currentPage < _pages.length - 1) {
+    if (_currentPage < _totalPages - 1) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 400),
         curve: Curves.easeInOutCubic,
@@ -136,7 +195,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final isLastPage = _currentPage == _pages.length - 1;
+    final isLastPage = _currentPage == _totalPages - 1;
+    final isNotificationsStep = _isNotificationsStep(_currentPage);
     final bottomPadding = MediaQuery.of(context).padding.bottom;
 
     return Scaffold(
@@ -184,10 +244,12 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                   child: PageView.builder(
                     controller: _pageController,
                     onPageChanged: _onPageChanged,
-                    itemCount: _pages.length,
+                    itemCount: _totalPages,
                     itemBuilder: (context, index) {
-                      final page = _pages[index];
-                      return _buildPage(page, index);
+                      if (_isNotificationsStep(index)) {
+                        return _buildNotificationsStep(index);
+                      }
+                      return _buildPage(_pages[index], index);
                     },
                   ),
                 ),
@@ -206,7 +268,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: List.generate(
-                          _pages.length,
+                          _totalPages,
                           (index) => _buildDot(index, colorScheme),
                         ),
                       ),
@@ -227,8 +289,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                           child: AnimatedSwitcher(
                             duration: const Duration(milliseconds: 200),
                             child: Text(
-                              isLastPage ? 'Begin Your Journey' : 'Continue',
-                              key: ValueKey(isLastPage),
+                              _buttonLabel(isLastPage, isNotificationsStep),
+                              key: ValueKey('$isLastPage-$isNotificationsStep-${_selectedSlot?.label}'),
                               style: const TextStyle(
                                 fontSize: 17,
                                 fontWeight: FontWeight.w700,
@@ -365,6 +427,240 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
               const Spacer(flex: 2),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _buttonLabel(bool isLastPage, bool isNotificationsStep) {
+    if (!isLastPage) return 'Continue';
+    if (isNotificationsStep) {
+      return _selectedSlot != null ? 'Begin Your Journey' : 'Skip Reminders';
+    }
+    return 'Begin Your Journey';
+  }
+
+  Widget _buildNotificationsStep(int index) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return FadeTransition(
+      opacity: _currentPage == index
+          ? _fadeAnimation
+          : const AlwaysStoppedAnimation(1.0),
+      child: SlideTransition(
+        position: _currentPage == index
+            ? _slideAnimation
+            : const AlwaysStoppedAnimation(Offset.zero),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 12),
+
+              // Header icon
+              Container(
+                width: 84,
+                height: 84,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: colorScheme.primaryContainer.withValues(alpha: 0.5),
+                  border: Border.all(
+                    color: colorScheme.primary.withValues(alpha: 0.18),
+                    width: 2,
+                  ),
+                ),
+                child: Icon(
+                  Icons.notifications_active_outlined,
+                  size: 38,
+                  color: colorScheme.primary,
+                ),
+              ),
+
+              const SizedBox(height: 18),
+
+              Text(
+                'Feast Day Reminders',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w800,
+                  color: colorScheme.onSurface,
+                ),
+              ),
+
+              const SizedBox(height: 6),
+
+              Text(
+                'When should we let you know?',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
+
+              const SizedBox(height: 18),
+
+              // Two grouped sections: evening before / day of.
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _buildSlotGroup(
+                        theme,
+                        title: 'Evening before',
+                        subtitle: 'A quiet preview, the night prior',
+                        slots: _kNotificationSlots
+                            .where((s) => s.dayBefore)
+                            .toList(),
+                      ),
+                      const SizedBox(height: 18),
+                      _buildSlotGroup(
+                        theme,
+                        title: 'On the day',
+                        subtitle: 'A reminder during the celebration itself',
+                        slots: _kNotificationSlots
+                            .where((s) => !s.dayBefore)
+                            .toList(),
+                      ),
+                      const SizedBox(height: 14),
+                      // None / skip option
+                      InkWell(
+                        borderRadius: BorderRadius.circular(12),
+                        onTap: () => setState(() => _selectedSlot = null),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: _selectedSlot == null
+                                  ? colorScheme.primary.withValues(alpha: 0.5)
+                                  : colorScheme.outline.withValues(alpha: 0.25),
+                              width: _selectedSlot == null ? 2 : 1,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                _selectedSlot == null
+                                    ? Icons.radio_button_checked
+                                    : Icons.radio_button_off,
+                                size: 20,
+                                color: _selectedSlot == null
+                                    ? colorScheme.primary
+                                    : colorScheme.onSurfaceVariant,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'No reminders for now',
+                                      style: theme.textTheme.bodyMedium
+                                          ?.copyWith(
+                                              fontWeight: FontWeight.w600),
+                                    ),
+                                    Text(
+                                      'You can enable them later in Settings',
+                                      style: theme.textTheme.bodySmall
+                                          ?.copyWith(
+                                        color: colorScheme.onSurfaceVariant,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSlotGroup(
+    ThemeData theme, {
+    required String title,
+    required String subtitle,
+    required List<_NotificationSlot> slots,
+  }) {
+    final colorScheme = theme.colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 6),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                title,
+                style: theme.textTheme.labelLarge?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: colorScheme.onSurface,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  subtitle,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: slots.map((slot) => _buildSlotChip(theme, slot)).toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSlotChip(ThemeData theme, _NotificationSlot slot) {
+    final colorScheme = theme.colorScheme;
+    final selected = _selectedSlot != null &&
+        _selectedSlot!.hour == slot.hour &&
+        _selectedSlot!.dayBefore == slot.dayBefore;
+    return GestureDetector(
+      onTap: () => setState(() => _selectedSlot = slot),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          color: selected
+              ? colorScheme.primary
+              : colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
+          border: Border.all(
+            color: selected
+                ? colorScheme.primary
+                : colorScheme.outline.withValues(alpha: 0.25),
+            width: 1,
+          ),
+        ),
+        child: Text(
+          slot.label,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            fontWeight: FontWeight.w600,
+            color: selected ? colorScheme.onPrimary : colorScheme.onSurface,
           ),
         ),
       ),

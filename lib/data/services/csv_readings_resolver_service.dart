@@ -291,10 +291,19 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
   }) {
     final normalizedTitle = _normalizeTitle(celebrationTitle);
 
-    for (final entry in memorialEntries) {
-      if (_normalizeTitle(entry.title) == normalizedTitle) {
-        if (_isMemorialEntryWellFormed(entry)) return entry;
-        return null;
+    // Only run the title-match loop when the ordo actually supplied a title.
+    // Without this guard, an empty `celebrationTitle` would match any
+    // malformed memorial row that happens to have an empty `title` field —
+    // returning null and skipping the date-match fallback that would
+    // correctly resolve fixed-date feasts (e.g. Saint Mark, April 25).
+    if (normalizedTitle.isNotEmpty) {
+      for (final entry in memorialEntries) {
+        final entryTitle = _normalizeTitle(entry.title);
+        if (entryTitle.isEmpty) continue;
+        if (entryTitle == normalizedTitle) {
+          if (_isMemorialEntryWellFormed(entry)) return entry;
+          return null;
+        }
       }
     }
 

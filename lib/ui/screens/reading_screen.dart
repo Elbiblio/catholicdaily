@@ -397,25 +397,32 @@ class _ReadingScreenState extends State<ReadingScreen> {
                             16,
                             16,
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                widget.liturgicalDay!.fullDescription,
-                                style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: onOrdoColor,
-                                  fontWeight: FontWeight.w600,
+                          // Wrap in non-scrollable scroll view so collapsing
+                          // SliverAppBar doesn't trigger a yellow-stripe
+                          // overflow when the column's natural height exceeds
+                          // the collapsed flexible-space height.
+                          child: SingleChildScrollView(
+                            physics: const NeverScrollableScrollPhysics(),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.liturgicalDay!.fullDescription,
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    color: onOrdoColor,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                widget.liturgicalDay!.weekDescription,
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: onOrdoColor.withValues(alpha: 0.82),
+                                const SizedBox(height: 4),
+                                Text(
+                                  widget.liturgicalDay!.weekDescription,
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color:
+                                        onOrdoColor.withValues(alpha: 0.82),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),

@@ -23,6 +23,8 @@ class FeastReminderPreferences {
   static const String _minuteKey = 'feast_reminder_minute';
   static const String _rankKey = 'feast_reminder_rank';
   static const String _lastScheduledYearKey = 'feast_reminder_last_year';
+  static const String _autoSetupCompletedKey = 'feast_reminder_auto_setup_done';
+  static const String _dayBeforeKey = 'feast_reminder_day_before';
 
   static FeastReminderPreferences? _instance;
   final SharedPreferences _prefs;
@@ -38,11 +40,28 @@ class FeastReminderPreferences {
   }
 
   bool get isEnabled => _prefs.getBool(_enabledKey) ?? false;
-  int get hour => _prefs.getInt(_hourKey) ?? 7;
+  int get hour => _prefs.getInt(_hourKey) ?? 0;
   int get minute => _prefs.getInt(_minuteKey) ?? 0;
   FeastReminderRank get rank =>
       FeastReminderRank.fromKey(_prefs.getString(_rankKey) ?? '');
   int get lastScheduledYear => _prefs.getInt(_lastScheduledYearKey) ?? 0;
+
+  /// When true, the notification fires the EVENING BEFORE the feast at
+  /// [hour]:[minute] (e.g. 8pm/9pm/10pm/11pm). When false, fires on the
+  /// DAY OF the feast at [hour]:[minute] (e.g. 6am/12pm/6pm).
+  bool get notifyDayBefore => _prefs.getBool(_dayBeforeKey) ?? false;
+
+  Future<void> setNotifyDayBefore(bool value) =>
+      _prefs.setBool(_dayBeforeKey, value);
+
+  /// True once the first-run auto-setup has run. After that, the user's
+  /// explicit preference is authoritative — we never re-enable behind their
+  /// back if they later turn reminders off.
+  bool get autoSetupCompleted =>
+      _prefs.getBool(_autoSetupCompletedKey) ?? false;
+
+  Future<void> markAutoSetupCompleted() =>
+      _prefs.setBool(_autoSetupCompletedKey, true);
 
   Future<void> setEnabled(bool value) =>
       _prefs.setBool(_enabledKey, value);
@@ -64,5 +83,11 @@ class FeastReminderPreferences {
     final period = h >= 12 ? 'PM' : 'AM';
     final displayHour = h == 0 ? 12 : (h > 12 ? h - 12 : h);
     return '$displayHour:$m $period';
+  }
+
+  /// Human-readable summary including the day-before suffix.
+  /// E.g. "9:00 PM (day before)" or "6:00 AM".
+  String get slotLabel {
+    return notifyDayBefore ? '$timeLabel (day before)' : timeLabel;
   }
 }

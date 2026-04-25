@@ -503,8 +503,14 @@ class IncipitProcessingService {
       return lines.join('\n').trimLeft();
     }
 
-    // No redundancy detected.
-    if (stripped == firstLine) return text;
+    // No redundancy detected — keep the verse-number-stripped first line so
+    // the rendered output reads "Incipit: Clothe yourselves…" rather than
+    // "Incipit: 5. Clothe yourselves…". Subsequent verses retain their
+    // numbers because they aren't being prefixed by an incipit.
+    if (stripped == firstLine) {
+      lines[firstIdx] = firstLine;
+      return lines.join('\n');
+    }
 
     // Post-strip connector cleanup.
     var result = stripped;
@@ -827,6 +833,9 @@ class IncipitProcessingService {
       if (keyPhrase.isNotEmpty) {
         return 'Brethren: $keyPhrase';
       }
+      // Bare opener fallback when keyPhrase comes back empty (e.g. the first
+      // sentence-split fragment was just a leading verse number).
+      return 'Brethren';
     }
     
     // Acts - use narrative style
@@ -852,14 +861,18 @@ class IncipitProcessingService {
     // Catholic Epistles (Peter, James, John, Jude)
     if (RegExp(r'^(1 Pet|2 Pet|1 John|2 John|3 John|James|Jude)', caseSensitive: false).hasMatch(reference)) {
       final keyPhrase = _extractKeyPhrase(firstSentence);
+      final isPeterOrJohn = reference.contains('John') || reference.contains('Pet');
       if (keyPhrase.isNotEmpty) {
         // For letters, use "Beloved:" or "Brethren:"
-        if (reference.contains('John') || reference.contains('Pet')) {
+        if (isPeterOrJohn) {
           return 'Beloved: $keyPhrase';
         } else {
           return 'Brethren: $keyPhrase';
         }
       }
+      // Empty keyPhrase — fall back to the bare lectionary opener so the
+      // verse text continues naturally after Pass 3 dedupe.
+      return isPeterOrJohn ? 'Beloved' : 'Brethren';
     }
     
     // Revelation
@@ -876,10 +889,21 @@ class IncipitProcessingService {
   /// Extracts the key phrase from a sentence, removing verse numbers and introductory phrases
   String _extractKeyPhrase(String sentence) {
     var cleaned = sentence.trim();
-    
+
+    // Drop sentence fragments that are just a leading verse number with no
+    // real content — these arise when the input text is split on `[.!?]+`
+    // and the FIRST split is the verse-number fragment ("5" from "5. Clothe…").
+    // Without this guard, `_getBookSpecificIncipit` builds "Beloved: 5" which
+    // produces a duplicated "5: 5." prefix once joined with the verse text.
+    if (RegExp(r'^\d+[a-z]?$').hasMatch(cleaned)) return '';
+
     // Remove verse numbers at the start
     cleaned = cleaned.replaceFirst(RegExp(r'^\d+[a-z]?\.\s*'), '');
-    
+
+    // After stripping the verse number, if nothing usable remains, give up
+    // (caller will fall through to a safer derivation).
+    if (cleaned.isEmpty || RegExp(r'^[\d\s]+$').hasMatch(cleaned)) return '';
+
     // Remove introductory conjunctions if they appear right after the prefix
     cleaned = cleaned.replaceFirst(RegExp(r'^(and|but)\s+', caseSensitive: false), '');
 

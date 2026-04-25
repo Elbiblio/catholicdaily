@@ -26,11 +26,16 @@ void main() async {
 
   final themePreferences = await ThemePreferences.getInstance();
 
-  // Initialize notification service and reschedule feast reminders if needed.
-  // Wrapped in try/catch — a notification failure must never block app launch.
+  // Initialize notification service and (a) auto-schedule the next 15 months
+  // of feast reminders on first install, or (b) reschedule when crossing a
+  // year boundary on subsequent launches. Wrapped in try/catch — a
+  // notification failure must never block app launch.
   try {
     await FeastReminderService.instance.initialize();
     final reminderPrefs = await FeastReminderPreferences.getInstance();
+    // First-run auto-setup is idempotent: runs once after install, then is a
+    // no-op. Reschedule covers year-rollover refresh on every launch.
+    await FeastReminderService.instance.autoSetupOnFirstRun(reminderPrefs);
     await FeastReminderService.instance.rescheduleIfNeeded(reminderPrefs);
   } catch (e, st) {
     debugPrint('[FeastReminder] Startup init failed: $e\n$st');

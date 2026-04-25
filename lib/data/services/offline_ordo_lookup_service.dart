@@ -177,9 +177,41 @@ class OfflineOrdoLookupService {
         'The Annunciation of the Lord',
         LiturgicalColor.white,
       ),
+      DateTime(year, 4, 25): _feast(
+        'Saint Mark, Evangelist',
+        LiturgicalColor.red,
+      ),
+      DateTime(year, 5, 3): _feast(
+        'Saints Philip and James, Apostles',
+        LiturgicalColor.red,
+      ),
+      DateTime(year, 5, 14): _feast(
+        'Saint Matthias, Apostle',
+        LiturgicalColor.red,
+      ),
+      DateTime(year, 5, 31): _feast(
+        'The Visitation of the Blessed Virgin Mary',
+        LiturgicalColor.white,
+      ),
+      DateTime(year, 6, 24): _solemnity(
+        'The Nativity of Saint John the Baptist',
+        LiturgicalColor.white,
+      ),
+      DateTime(year, 6, 29): _solemnity(
+        'Saints Peter and Paul, Apostles',
+        LiturgicalColor.red,
+      ),
       DateTime(year, 7, 3): _feast(
         'Saint Thomas, Apostle',
         LiturgicalColor.red,
+      ),
+      DateTime(year, 8, 10): _feast(
+        'Saint Lawrence, Deacon and Martyr',
+        LiturgicalColor.red,
+      ),
+      DateTime(year, 8, 15): _solemnity(
+        'The Assumption of the Blessed Virgin Mary',
+        LiturgicalColor.white,
       ),
       DateTime(year, 7, 22): _feast(
         'Saint Mary Magdalene',
@@ -221,6 +253,15 @@ class OfflineOrdoLookupService {
         'Saints Simon and Jude, Apostles',
         LiturgicalColor.red,
       ),
+      DateTime(year, 11, 1): _solemnity(
+        'All Saints',
+        LiturgicalColor.white,
+      ),
+      DateTime(year, 11, 2): _day(
+        'The Commemoration of All the Faithful Departed (All Souls)',
+        LiturgicalColor.purple,
+        'Day',
+      ),
       DateTime(year, 11, 9): _feast(
         'The Dedication of the Lateran Basilica',
         LiturgicalColor.white,
@@ -228,6 +269,10 @@ class OfflineOrdoLookupService {
       DateTime(year, 11, 30): _feast(
         'Saint Andrew, Apostle',
         LiturgicalColor.red,
+      ),
+      DateTime(year, 12, 8): _solemnity(
+        'The Immaculate Conception of the Blessed Virgin Mary',
+        LiturgicalColor.white,
       ),
       DateTime(year, 12, 26): _feast(
         'Saint Stephen, the First Martyr',

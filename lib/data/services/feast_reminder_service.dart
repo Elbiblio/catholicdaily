@@ -2,6 +2,7 @@ import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' show Color;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'feast_reminder_preferences.dart';
@@ -12,11 +13,13 @@ class _FeastEvent {
   final DateTime date;
   final String title;
   final String rank;
+  final Color? liturgicalColor;
 
   const _FeastEvent({
     required this.date,
     required this.title,
     required this.rank,
+    this.liturgicalColor,
   });
 }
 
@@ -99,82 +102,117 @@ class FeastReminderService {
     await _plugin.cancelAll();
   }
 
-  /// Schedule reminders for feasts in [year] based on current preferences.
+  /// DEPRECATED: kept as a thin wrapper around [scheduleAheadMonths] for
+  /// callers that still pass a single year. Schedules a 15-month rolling
+  /// window starting today regardless of [year].
   Future<void> scheduleForYear(
     int year,
     FeastReminderPreferences prefs,
   ) async {
-    await initialize();
-    await _plugin.cancelAll();
-
-    if (!prefs.isEnabled) return;
-
-    final events = _buildFeastEvents(year, prefs.rank);
-    final now = DateTime.now();
-    int notifId = 1000;
-    int scheduled = 0;
-    const maxNotifications = 64;
-
-    for (final event in events) {
-      if (scheduled >= maxNotifications) break;
-      final scheduledTime = DateTime(
-        event.date.year,
-        event.date.month,
-        event.date.day,
-        prefs.hour,
-        prefs.minute,
-      );
-      if (scheduledTime.isBefore(now)) continue;
-
-      final tzScheduled = tz.TZDateTime.from(scheduledTime, tz.local);
-
-      try {
-        await _plugin.zonedSchedule(
-          notifId++,
-          _notificationTitle(event),
-          _notificationBody(event),
-          tzScheduled,
-          _buildNotificationDetails(event),
-          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-          uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime,
-          payload: 'feast:${event.date.toIso8601String()}',
-        );
-        scheduled++;
-      } catch (e) {
-        debugPrint('[FeastReminder] Failed to schedule ${event.title}: $e');
-      }
-    }
-
-    await prefs.setLastScheduledYear(year);
-    debugPrint('[FeastReminder] Scheduled $scheduled reminders for $year (${events.length} total feasts found)');
+    await scheduleAheadMonths(15, prefs);
   }
 
-  String _notificationTitle(_FeastEvent event) {
-    if (event.rank == 'Solemnity') return 'Today is a Solemnity';
-    if (event.rank == 'Feast') return 'Today is a Feast Day';
+  // ── Notification copywriting ───────────────────────────────────────────
+  // Wording is intentionally restrained — short, dignified, contemplative.
+  // The intent is to feel like a quiet reminder from a faithful companion,
+  // not a marketing nudge.
+
+  String _notificationTitle(_FeastEvent event, {required bool dayBefore}) {
+    final rank = event.rank;
+    if (dayBefore) {
+      if (rank == 'Solemnity') return 'Tomorrow — A Solemnity';
+      if (rank == 'Feast') return 'Tomorrow — A Feast';
+      if (rank.toLowerCase().contains('memorial')) {
+        return 'Tomorrow — A Memorial';
+      }
+      return 'Tomorrow\'s Celebration';
+    }
+    if (rank == 'Solemnity') return 'Today — A Solemnity';
+    if (rank == 'Feast') return 'Today — A Feast';
+    if (rank.toLowerCase().contains('memorial')) {
+      return 'Today — A Memorial';
+    }
     return 'Today\'s Celebration';
   }
 
-  String _notificationBody(_FeastEvent event) => event.title;
+  String _notificationBody(_FeastEvent event, {required bool dayBefore}) {
+    return event.title;
+  }
 
-  NotificationDetails _buildNotificationDetails(_FeastEvent event) {
+  /// Long-form body shown on Android's expanded notification and used as the
+  /// iOS body when subtitle is the title. Adds a brief, reverent reflection
+  /// keyed to the rank — never embellishing the saint's identity itself.
+  String _expandedBody(_FeastEvent event, {required bool dayBefore}) {
+    final rank = event.rank;
+    final lead = dayBefore ? 'Tomorrow' : 'Today';
+    if (rank == 'Solemnity') {
+      return '$lead the Church celebrates a Solemnity:\n${event.title}.';
+    }
+    if (rank == 'Feast') {
+      return '$lead the Church keeps a Feast:\n${event.title}.';
+    }
+    if (rank.toLowerCase().contains('memorial')) {
+      return '$lead the Church remembers:\n${event.title}.';
+    }
+    return '${event.title}\n$lead in the Sacred Liturgy.';
+  }
+
+  NotificationDetails _buildNotificationDetails(
+    _FeastEvent event, {
+    required bool dayBefore,
+  }) {
     final isSolemnity = event.rank == 'Solemnity';
+    final isFeast = event.rank == 'Feast';
+    final isMajor = isSolemnity || isFeast;
+
+    // Liturgical accent color, falling back to the app's deep crimson.
+    final accent = event.liturgicalColor ?? const Color(0xFF8C1D2F);
+
     return NotificationDetails(
       android: AndroidNotificationDetails(
         _channelId,
         _channelName,
         channelDescription: _channelDesc,
-        importance: isSolemnity ? Importance.high : Importance.defaultImportance,
-        priority: isSolemnity ? Priority.high : Priority.defaultPriority,
+        // Solemnity = high priority + heads-up; Feast = default; Memorial = low.
+        importance: isSolemnity
+            ? Importance.high
+            : (isFeast ? Importance.defaultImportance : Importance.low),
+        priority: isSolemnity
+            ? Priority.high
+            : (isFeast ? Priority.defaultPriority : Priority.low),
         enableVibration: isSolemnity,
+        playSound: isMajor,
         icon: '@mipmap/ic_launcher',
-        color: const Color(0xFF8C1D2F),
+        color: accent,
+        colorized: isMajor,
+        category: AndroidNotificationCategory.event,
+        // Expandable rich text — shows the full reflection when the user
+        // pulls down the notification or sees it in the shade.
+        styleInformation: BigTextStyleInformation(
+          _expandedBody(event, dayBefore: dayBefore),
+          contentTitle: _notificationTitle(event, dayBefore: dayBefore),
+          summaryText: 'Catholic Daily',
+        ),
+        // Group all feast notifications under a single bundle on Android.
+        groupKey: 'feast_reminders_group',
+        subText: dayBefore
+            ? 'Eve of the celebration'
+            : 'On the day of the celebration',
+        ticker: event.title,
       ),
-      iOS: const DarwinNotificationDetails(
+      iOS: DarwinNotificationDetails(
         presentAlert: true,
         presentBadge: false,
-        presentSound: true,
+        presentSound: isMajor,
+        // The subtitle line — Apple's mid-tier hierarchy slot.
+        subtitle: dayBefore
+            ? 'Tomorrow in the Sacred Liturgy'
+            : 'Today in the Sacred Liturgy',
+        // iOS allows interruption-level customization for Focus modes.
+        interruptionLevel: isSolemnity
+            ? InterruptionLevel.timeSensitive
+            : InterruptionLevel.active,
+        threadIdentifier: 'feast_reminders',
         categoryIdentifier: 'feast_reminder',
       ),
     );
@@ -199,6 +237,7 @@ class FeastReminderService {
               date: d,
               title: day.title,
               rank: day.rank ?? '',
+              liturgicalColor: day.colorValue,
             ),
           );
         }
@@ -230,7 +269,130 @@ class FeastReminderService {
     if (!prefs.isEnabled) return;
     final now = DateTime.now();
     if (prefs.lastScheduledYear != now.year) {
-      await scheduleForYear(now.year, prefs);
+      await scheduleAheadMonths(15, prefs);
     }
+  }
+
+  /// First-launch auto-setup: enables feast reminders by default and
+  /// schedules the upcoming 15 months of feasts/solemnities so the user
+  /// gets midnight notifications without needing to open the app.
+  ///
+  /// Idempotent — runs only the first time after install. If the user later
+  /// disables reminders, this method is a no-op.
+  ///
+  /// Permission prompt: best-effort. iOS shows the system prompt; Android 13+
+  /// shows the POST_NOTIFICATIONS prompt. If the user denies, scheduling
+  /// silently fails and we leave isEnabled=true so they can flip it on later
+  /// in Settings without re-prompting.
+  Future<void> autoSetupOnFirstRun(FeastReminderPreferences prefs) async {
+    if (prefs.autoSetupCompleted) return;
+
+    // If onboarding hasn't completed yet, defer entirely — the onboarding
+    // notifications step will collect the user's preferred time and call
+    // the appropriate setters/scheduler. Running auto-setup here would
+    // overwrite the user's choice with midnight defaults.
+    final sp = await SharedPreferences.getInstance();
+    final onboardingComplete = sp.getBool('onboarding_complete') ?? false;
+    if (!onboardingComplete) return;
+
+    await initialize();
+
+    // Defaults: every Feast & Solemnity, midnight (00:00) of the day itself.
+    await prefs.setEnabled(true);
+    await prefs.setRank(FeastReminderRank.feastsDays);
+    await prefs.setTime(0, 0);
+
+    // Best-effort permission request. Failure is non-fatal — user can grant
+    // later via the OS settings or our Settings screen.
+    try {
+      await requestPermission();
+    } catch (e) {
+      debugPrint('[FeastReminder] Permission request failed: $e');
+    }
+
+    try {
+      await scheduleAheadMonths(15, prefs);
+    } catch (e, st) {
+      debugPrint('[FeastReminder] First-run schedule failed: $e\n$st');
+    }
+
+    await prefs.markAutoSetupCompleted();
+  }
+
+  /// Schedule reminders for every qualifying feast in the next [monthsAhead]
+  /// months. Crosses year boundaries cleanly so users don't need to open the
+  /// app on Jan 1 to keep getting reminders.
+  ///
+  /// Cancels existing notifications first and reschedules in one pass — safer
+  /// than scheduling two years separately (which would have wiped year 1 on
+  /// the year 2 call).
+  Future<void> scheduleAheadMonths(
+    int monthsAhead,
+    FeastReminderPreferences prefs,
+  ) async {
+    await initialize();
+    await _plugin.cancelAll();
+
+    if (!prefs.isEnabled) return;
+
+    final now = DateTime.now();
+    final endDate = DateTime(now.year, now.month + monthsAhead, now.day);
+
+    // Walk every year touched by the window and pull qualifying events.
+    final allEvents = <_FeastEvent>[];
+    for (var y = now.year; y <= endDate.year; y++) {
+      allEvents.addAll(_buildFeastEvents(y, prefs.rank));
+    }
+    allEvents.sort((a, b) => a.date.compareTo(b.date));
+
+    int notifId = 1000;
+    int scheduled = 0;
+    const maxNotifications = 64;
+
+    for (final event in allEvents) {
+      if (scheduled >= maxNotifications) break;
+      if (event.date.isBefore(DateTime(now.year, now.month, now.day))) continue;
+      if (event.date.isAfter(endDate)) break;
+
+      // Compute delivery time: either the evening before (8-11pm choices)
+      // or the day-of (6am-6pm choices).
+      final deliveryDate = prefs.notifyDayBefore
+          ? event.date.subtract(const Duration(days: 1))
+          : event.date;
+      final scheduledTime = DateTime(
+        deliveryDate.year,
+        deliveryDate.month,
+        deliveryDate.day,
+        prefs.hour,
+        prefs.minute,
+      );
+      if (scheduledTime.isBefore(now)) continue;
+
+      final tzScheduled = tz.TZDateTime.from(scheduledTime, tz.local);
+
+      try {
+        await _plugin.zonedSchedule(
+          notifId++,
+          _notificationTitle(event, dayBefore: prefs.notifyDayBefore),
+          _notificationBody(event, dayBefore: prefs.notifyDayBefore),
+          tzScheduled,
+          _buildNotificationDetails(event,
+              dayBefore: prefs.notifyDayBefore),
+          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+          uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.absoluteTime,
+          payload: 'feast:${event.date.toIso8601String()}',
+        );
+        scheduled++;
+      } catch (e) {
+        debugPrint('[FeastReminder] Failed to schedule ${event.title}: $e');
+      }
+    }
+
+    // Persist the last fully-scheduled year so rescheduleIfNeeded can detect
+    // a year-rollover and refresh well before notifications run out.
+    await prefs.setLastScheduledYear(endDate.year);
+    debugPrint('[FeastReminder] Scheduled $scheduled reminders across '
+        '${now.year}-${endDate.year} (${allEvents.length} candidates)');
   }
 }
