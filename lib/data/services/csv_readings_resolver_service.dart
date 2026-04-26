@@ -2079,54 +2079,6 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
     return date.isAfter(ashWednesday) && date.isBefore(firstLentSunday);
   }
 
-  bool _isCalculatedCelebrationDate(DateTime date) {
-    final easter = _calculateEasterSunday(date.year);
-    final ashWednesday = easter.subtract(const Duration(days: 46));
-    final palmSunday = easter.subtract(const Duration(days: 7));
-    final holyThursday = easter.subtract(const Duration(days: 3));
-    final goodFriday = easter.subtract(const Duration(days: 2));
-    final holySaturday = easter.subtract(const Duration(days: 1));
-    final pentecost = easter.add(const Duration(days: 49));
-    final trinitySunday = pentecost.add(const Duration(days: 7));
-    final corpusChristi = pentecost.add(const Duration(days: 14));
-    final sacredHeart = pentecost.add(const Duration(days: 19));
-    final immaculateHeart = pentecost.add(const Duration(days: 20));
-    final adventStart = _calculateAdventStart(date.year);
-    final christTheKing = adventStart.subtract(const Duration(days: 7));
-    final holyFamily = _calculateHolyFamily(date.year);
-
-    return _isSameDate(date, ashWednesday) ||
-        _isSameDate(date, palmSunday) ||
-        _isSameDate(date, holyThursday) ||
-        _isSameDate(date, goodFriday) ||
-        _isSameDate(date, holySaturday) ||
-        _isSameDate(date, easter) ||
-        _isSameDate(date, pentecost) ||
-        _isSameDate(date, trinitySunday) ||
-        _isSameDate(date, corpusChristi) ||
-        _isSameDate(date, sacredHeart) ||
-        _isSameDate(date, immaculateHeart) ||
-        _isSameDate(date, christTheKing) ||
-        _isSameDate(date, holyFamily);
-  }
-
-  DateTime _calculateHolyFamily(int year) {
-    for (var day = 26; day <= 31; day++) {
-      final candidate = DateTime(year, 12, day);
-      if (candidate.weekday == DateTime.sunday) {
-        return candidate;
-      }
-    }
-    return DateTime(year, 12, 30);
-  }
-
-  DateTime _calculateAdventStart(int year) {
-    final christmas = DateTime(year, 12, 25);
-    final daysUntilSunday = (DateTime.sunday - christmas.weekday + 7) % 7;
-    final sundayOnOrAfterChristmas = christmas.add(Duration(days: daysUntilSunday));
-    return sundayOnOrAfterChristmas.subtract(const Duration(days: 28));
-  }
-
   bool _isSameDate(DateTime left, DateTime right) {
     return left.year == right.year &&
         left.month == right.month &&
