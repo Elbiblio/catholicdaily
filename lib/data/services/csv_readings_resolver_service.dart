@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 import '../models/daily_reading.dart';
@@ -26,12 +27,15 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
     final resolvedDay = await _ordoResolver.resolveDay(normalizedDate);
     final yearVariables = await _ordoResolver.resolveYearVariables(normalizedDate);
 
+    debugPrint('CSV Resolver: date=$normalizedDate, ordoTitle="${resolvedDay.title}"');
+
     final authoritativeOverride = _buildAuthoritativeCelebrationOverride(
       date: normalizedDate,
       celebrationTitle: resolvedDay.title,
       sundayCycle: yearVariables.sundayCycle,
     );
     if (authoritativeOverride != null) {
+      debugPrint('CSV Resolver: Using authoritative override');
       return authoritativeOverride;
     }
 
@@ -48,12 +52,15 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
       date: normalizedDate,
       celebrationTitle: resolvedDay.title,
     );
+    debugPrint('CSV Resolver: celebrationEntry=${celebrationEntry?.title ?? "null"}');
     if (celebrationEntry != null &&
         (celebrationEntry.firstReading.isNotEmpty ||
             celebrationEntry.gospel.isNotEmpty)) {
+      debugPrint('CSV Resolver: Using celebration readings for ${celebrationEntry.title}');
       return _buildCelebrationReadings(normalizedDate, celebrationEntry);
     }
 
+    debugPrint('CSV Resolver: No celebration entry, falling back to standard readings');
     final standardEntries = await _catalog.loadStandardEntries();
     final matches = standardEntries.where((entry) {
       return _matchesStandardEntry(
@@ -307,7 +314,10 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
       }
     }
 
-    if (_isCalculatedCelebrationDate(date) || date.weekday == DateTime.sunday) {
+    // Skip date-based lookup for Sundays (they have their own cycle)
+    // and calculated liturgical dates (Easter, Ash Wednesday, etc.)
+    // But allow fixed-date feasts like St. Mark (April 25) to be found
+    if (date.weekday == DateTime.sunday) {
       return null;
     }
 
@@ -461,6 +471,8 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
     MemorialFeastEntry entry,
   ) {
     final readings = <DailyReading>[];
+    debugPrint('_buildCelebrationReadings: title=${entry.title}, psalmResponse=${entry.psalmResponse}');
+    
     if (entry.firstReading.isNotEmpty) {
       readings.add(DailyReading(
         reading: _normalizeReferenceStyle(entry.firstReading),
@@ -484,6 +496,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
     }
     if (entry.psalmReference.isNotEmpty) {
       final cleanedResponse = _stripLectionaryNoise(entry.psalmResponse);
+      debugPrint('  Psalm: ref=${entry.psalmReference}, response=$cleanedResponse');
       readings.add(DailyReading(
         reading: _normalizeReferenceStyle(entry.psalmReference),
         position: 'Responsorial Psalm',
@@ -778,6 +791,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         psalmResponse: 'My God, my God, why have you abandoned me?',
         secondReading: 'Phil 2:6-11',
         gospelAcclamation: 'Phil 2:8-9',
+        feastTitle: celebrationTitle,
       );
     }
 
@@ -805,6 +819,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         gospel: gospel,
         gospelAlternate: gospelAlt,
         gospelAcclamation: 'Come, Holy Spirit, fill the hearts of your faithful and kindle in them the fire of your love.',
+        feastTitle: celebrationTitle,
       );
     }
 
@@ -847,6 +862,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         secondReading: secondReading,
         gospel: gospel,
         gospelAcclamation: 'Glory to the Father, the Son, and the Holy Spirit; to God who is, who was, and who is to come.',
+        feastTitle: celebrationTitle,
       );
     }
 
@@ -889,6 +905,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         secondReading: secondReading,
         gospel: gospel,
         gospelAcclamation: 'I am the living bread that came down from heaven, says the Lord; whoever eats this bread will live forever.',
+        feastTitle: celebrationTitle,
       );
     }
 
@@ -931,6 +948,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         secondReading: secondReading,
         gospel: gospel,
         gospelAcclamation: 'Take my yoke upon you, says the Lord, and learn from me, for I am meek and humble of heart.',
+        feastTitle: celebrationTitle,
       );
     }
 
@@ -973,6 +991,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         secondReading: secondReading,
         gospel: gospel,
         gospelAcclamation: 'Blessed is he who comes in the name of the Lord! Blessed is the kingdom of our father David that is to come!',
+        feastTitle: celebrationTitle,
       );
     }
 
@@ -985,6 +1004,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         secondReading: 'Gal 4:4-7',
         gospel: 'Luke 2:16-21',
         gospelAcclamation: 'Heb 1:1-2',
+        feastTitle: celebrationTitle,
       );
     }
 
@@ -997,6 +1017,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         secondReading: 'Eph 1:3-6, 11-12',
         gospel: 'Luke 1:26-38',
         gospelAcclamation: 'Hail, Mary, full of grace, the Lord is with you; blessed are you among women.',
+        feastTitle: celebrationTitle,
       );
     }
 
@@ -1009,6 +1030,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         secondReading: 'Heb 10:4-10',
         gospel: 'Luke 1:26-38',
         gospelAcclamation: 'The Word of God became flesh and dwelt among us, and we saw his glory.',
+        feastTitle: celebrationTitle,
       );
     }
 
@@ -1022,6 +1044,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         gospel: 'Matt 1:16, 18-21, 24a',
         gospelAlternate: 'Luke 2:41-51a',
         gospelAcclamation: 'Ps 84:5',
+        feastTitle: celebrationTitle,
       );
     }
 
@@ -1034,6 +1057,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         secondReading: '2 Tim 4:6-8, 17-18',
         gospel: 'Matt 16:13-19',
         gospelAcclamation: 'You are Peter, and upon this rock I will build my Church, and the gates of the netherworld shall not prevail against it.',
+        feastTitle: celebrationTitle,
       );
     }
 
@@ -1046,6 +1070,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         secondReading: 'Phil 2:6-11',
         gospel: 'John 3:13-17',
         gospelAcclamation: 'We adore you, O Christ, and we bless you, because by your Cross you have redeemed the world.',
+        feastTitle: celebrationTitle,
       );
     }
 
@@ -1064,6 +1089,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         secondReading: '2 Pet 1:16-19',
         gospel: gospel,
         gospelAcclamation: 'This is my beloved Son, with whom I am well pleased; listen to him.',
+        feastTitle: celebrationTitle,
       );
     }
 
@@ -1076,6 +1102,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         secondReading: 'Heb 2:14-18',
         gospel: 'Luke 2:22-40',
         gospelAcclamation: 'A light of revelation to the Gentiles, and the glory of your people Israel.',
+        feastTitle: celebrationTitle,
       );
     }
 
@@ -1089,6 +1116,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         secondReading: '1 Cor 15:20-27',
         gospel: 'Luke 1:39-56',
         gospelAcclamation: 'Mary is taken up to heaven; the host of angels rejoices.',
+        feastTitle: celebrationTitle,
       );
     }
 
@@ -1101,6 +1129,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         secondReading: '1 John 3:1-3',
         gospel: 'Matt 5:1-12a',
         gospelAcclamation: 'Come to me, all you who labor and are burdened, and I will give you rest.',
+        feastTitle: celebrationTitle,
       );
     }
 
@@ -1114,6 +1143,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         secondReading: 'Rom 5:5-11',
         gospel: 'John 6:37-40',
         gospelAcclamation: 'This is the will of my Father, says the Lord: that I should not lose anything of what he gave me, but that I should raise it on the last day.',
+        feastTitle: celebrationTitle,
       );
     }
 
@@ -1126,6 +1156,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         secondReading: '1 Cor 3:9c-11, 16-17',
         gospel: 'John 2:13-22',
         gospelAcclamation: 'I have chosen and consecrated this house, says the Lord, that my name may be there forever.',
+        feastTitle: celebrationTitle,
       );
     }
 
@@ -1138,6 +1169,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         secondReading: 'Acts 13:22-26',
         gospel: 'Luke 1:57-66, 80',
         gospelAcclamation: 'You, child, will be called prophet of the Most High, for you will go before the Lord to prepare his ways.',
+        feastTitle: celebrationTitle,
       );
     }
 
@@ -1181,6 +1213,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         secondReading: secondReading,
         gospel: gospel,
         gospelAcclamation: 'Let the peace of Christ control your hearts; let the word of Christ dwell in you richly.',
+        feastTitle: celebrationTitle,
       );
     }
 
@@ -1193,6 +1226,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         secondReading: 'Col 3:1-4',
         gospel: 'John 20:1-9',
         gospelAcclamation: 'Christ, our paschal lamb, has been sacrificed; let us then feast with joy in the Lord.',
+        feastTitle: celebrationTitle,
       );
     }
 
@@ -1215,7 +1249,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
       _normalizeTitle('Saint Mark, Evangelist'): _ApostleFeast(
         firstReading: '1 Pet 5:5b-14',
         psalm: 'Ps 89:2-3, 6-7, 16-17',
-        psalmResponse: 'For ever I will sing the goodness of the Lord.',
+        psalmResponse: 'For ever I will sing the goodness of the Lord. (R. 2a)',
         gospel: 'Mark 16:15-20',
         gospelAcclamation: 'We proclaim Christ crucified; Christ is the power of God and the wisdom of God.',
       ),
@@ -1336,6 +1370,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         secondReading: null,
         gospel: feast.gospel,
         gospelAcclamation: feast.gospelAcclamation,
+        feastTitle: celebrationTitle,
       );
     }
 
@@ -1352,17 +1387,20 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
     required String gospel,
     String? gospelAlternate,
     String? gospelAcclamation,
+    String? feastTitle,
   }) {
     final readings = <DailyReading>[
       DailyReading(
         reading: _normalizeReferenceStyle(firstReading),
         position: 'First Reading',
         date: date,
+        feast: feastTitle,
       ),
       DailyReading(
         reading: _normalizeReferenceStyle(psalm),
         position: 'Responsorial Psalm',
         date: date,
+        feast: feastTitle,
         psalmResponse: psalmResponse,
       ),
     ];
@@ -1372,6 +1410,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         reading: _normalizeReferenceStyle(secondReading),
         position: 'Second Reading',
         date: date,
+        feast: feastTitle,
       ));
     }
 
@@ -1380,12 +1419,14 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
       reading: sequence,
       position: 'Sequence',
       date: date,
+      feast: feastTitle,
     ));
 
     readings.add(DailyReading(
       reading: _normalizeReferenceStyle(gospel),
       position: 'Gospel',
       date: date,
+      feast: feastTitle,
       gospelAcclamation: gospelAcclamation,
     ));
 
@@ -1394,6 +1435,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         reading: _normalizeReferenceStyle(gospelAlternate),
         position: 'Gospel (alternative)',
         date: date,
+        feast: feastTitle,
         gospelAcclamation: gospelAcclamation,
       ));
     }
@@ -1410,33 +1452,39 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
     required String psalmResponse,
     required String secondReading,
     String? gospelAcclamation,
+    String? feastTitle,
   }) {
     return <DailyReading>[
       DailyReading(
         reading: _normalizeReferenceStyle(gospelAtProcession),
         position: 'Gospel at Procession',
         date: date,
+        feast: feastTitle,
       ),
       DailyReading(
         reading: _normalizeReferenceStyle(firstReading),
         position: 'First Reading',
         date: date,
+        feast: feastTitle,
       ),
       DailyReading(
         reading: _normalizeReferenceStyle(psalm),
         position: 'Responsorial Psalm',
         date: date,
+        feast: feastTitle,
         psalmResponse: psalmResponse,
       ),
       DailyReading(
         reading: _normalizeReferenceStyle(secondReading),
         position: 'Second Reading',
         date: date,
+        feast: feastTitle,
       ),
       DailyReading(
         reading: _normalizeReferenceStyle(passionGospel),
         position: 'Gospel',
         date: date,
+        feast: feastTitle,
         gospelAcclamation: gospelAcclamation,
       ),
     ];
@@ -1451,17 +1499,20 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
     required String gospel,
     String? gospelAlternate,
     String? gospelAcclamation,
+    String? feastTitle,
   }) {
     final readings = <DailyReading>[
       DailyReading(
         reading: _normalizeReferenceStyle(firstReading),
         position: 'First Reading',
         date: date,
+        feast: feastTitle,
       ),
       DailyReading(
         reading: _normalizeReferenceStyle(psalm),
         position: 'Responsorial Psalm',
         date: date,
+        feast: feastTitle,
         psalmResponse: psalmResponse,
       ),
     ];
@@ -1471,6 +1522,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
         reading: _normalizeReferenceStyle(secondReading),
         position: 'Second Reading',
         date: date,
+        feast: feastTitle,
       ));
     }
 
@@ -1478,6 +1530,7 @@ class CsvReadingsResolverService extends BaseService<CsvReadingsResolverService>
       reading: _normalizeReferenceStyle(gospel),
       position: 'Gospel',
       date: date,
+      feast: feastTitle,
       gospelAcclamation: gospelAcclamation,
     ));
 

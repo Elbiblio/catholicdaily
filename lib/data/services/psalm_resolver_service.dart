@@ -6,6 +6,7 @@ import 'readings_service.dart';
 import 'gospel_acclamation_service.dart';
 import 'ultimate_gospel_acclamation_mapper.dart';
 import 'responsorial_psalm_mapper.dart';
+import 'bible_version_preference.dart';
 import 'base_service.dart';
 
 /// On-demand psalm response resolver that fetches from USCCB when missing
@@ -23,6 +24,7 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
   final ResponsorialPsalmMapper _psalmMapper = ResponsorialPsalmMapper.instance;
   final LectionaryPsalmCatalogService _catalogService =
       LectionaryPsalmCatalogService.instance;
+  BibleVersionPreference? _bibleVersionPreference;
 
   /// Resolve psalm response for a given date and psalm reference
   /// Returns cached value if available, otherwise fetches from USCCB
@@ -32,8 +34,13 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
     String? positionLabel,
     int? psalmSequence,
   }) async {
-    final cacheKey = '${date.toIso8601String().split('T')[0]}|psalm|$psalmReference';
-    
+    // Get bible version preference first (needed for cache key)
+    _bibleVersionPreference ??= await BibleVersionPreference.getInstance();
+    final bibleVersion = _bibleVersionPreference!.currentDbName;
+
+    // Include Bible version in cache key so different versions have separate caches
+    final cacheKey = '${date.toIso8601String().split('T')[0]}|psalm|$psalmReference|$bibleVersion';
+
     // Check memory cache first
     if (_cache.containsKey(cacheKey)) {
       return _cache[cacheKey];
@@ -45,6 +52,7 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
       psalmReference: psalmReference,
       positionLabel: positionLabel,
       psalmSequence: psalmSequence,
+      bibleVersion: bibleVersion,
     );
     if (catalogResponse != null && catalogResponse.trim().isNotEmpty) {
       _cache[cacheKey] = catalogResponse;
@@ -78,6 +86,10 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
     final catalogEntries = await _catalogService.getEntriesForDate(date);
     var psalmOrdinal = 0;
 
+    // Get bible version preference
+    _bibleVersionPreference ??= await BibleVersionPreference.getInstance();
+    final bibleVersion = _bibleVersionPreference!.currentDbName;
+
     for (final reading in readings) {
       final position = (reading.position ?? '').toLowerCase();
       String? psalmResponse = reading.psalmResponse;
@@ -89,17 +101,32 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
 
       if (position.contains('psalm')) {
         psalmOrdinal += 1;
-        if (!hasExplicitPsalmResponse) {
+        debugPrint('Psalm processing: ref=${reading.reading}, feast=${reading.feast}, hasExplicit=$hasExplicitPsalmResponse, initialResponse=$psalmResponse');
+        
+        // For feast days (reading.feast is set), use the hardcoded response
+        // Feast days have proper readings with their own psalm responses
+        // Do NOT enrich from catalog - feast day responses are authoritative
+        if (reading.feast != null && reading.feast!.isNotEmpty) {
+          // Feast day: keep the hardcoded response from proper readings
+          debugPrint('FEAST DAY - keeping hardcoded response: $psalmResponse');
+        } else {
+          // Ferial day: try catalog enrichment to get R notation
+          debugPrint('FERIAL DAY - trying catalog enrichment');
           final catalogResponse = _catalogService.resolvePsalmResponseFromEntries(
             entries: catalogEntries,
             psalmReference: reading.reading,
             positionLabel: reading.position,
             psalmSequence: psalmOrdinal,
+            bibleVersion: bibleVersion,
           );
 
           if (catalogResponse != null && catalogResponse.trim().isNotEmpty) {
+            // Use catalog response (has R notation) instead of hardcoded response
+            debugPrint('Catalog response found: $catalogResponse');
             psalmResponse = catalogResponse.trim();
-          } else if (psalmResponse == null || psalmResponse.trim().isEmpty) {
+          } else if (!hasExplicitPsalmResponse) {
+            // Fallback to USCCB if no catalog response and no hardcoded response
+            debugPrint('No catalog response, falling back to USCCB');
             psalmResponse = await resolvePsalmResponse(
               date: date,
               psalmReference: reading.reading,
@@ -107,14 +134,8 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
               psalmSequence: psalmOrdinal,
             );
           }
-        } else if (psalmResponse.trim().startsWith('Reading text unavailable')) {
-          psalmResponse = await resolvePsalmResponse(
-            date: date,
-            psalmReference: reading.reading,
-            positionLabel: reading.position,
-            psalmSequence: psalmOrdinal,
-          );
         }
+        debugPrint('Final psalm response: $psalmResponse');
       }
 
       if (position.contains('gospel')) {

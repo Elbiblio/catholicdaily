@@ -189,7 +189,7 @@ class OptionalMemorialService {
     // ───── FEASTS WITH PROPER READINGS ─────
     'conversion_of_saint_paul': const ProperReadingSet(
       firstReading: 'Acts 22:3-16', psalm: 'Ps 117:1-2',
-      psalmResponse: 'Go out to all the world and tell the Good News.',
+      psalmResponse: 'Go out to all the world and tell the Good News. (R. 1)',
       gospel: 'Mark 16:15-18', gospelAcclamation: 'Jn 15:16',
     ),
     'presentation_of_the_lord': const ProperReadingSet(
@@ -200,18 +200,18 @@ class OptionalMemorialService {
     ),
     'holy_family': const ProperReadingSet(
       firstReading: 'Sirach 3:2-6, 12-14', psalm: 'Ps 128:1-5',
-      psalmResponse: 'Blessed are those who fear the Lord and walk in his ways.',
+      psalmResponse: 'Blessed are those who fear the Lord and walk in his ways. (R. cf. 1)',
       secondReading: 'Col 3:12-21', gospel: 'Matt 2:13-15, 19-23',
       gospelAcclamation: 'Lk 2:51', alternativeFirstReading: 'Col 3:12-17',
     ),
     'chair_of_saint_peter': const ProperReadingSet(
       firstReading: '1 Pet 5:1-4', psalm: 'Ps 23:1-6',
-      psalmResponse: 'The Lord is my shepherd; there is nothing I shall want.',
+      psalmResponse: 'The Lord is my shepherd; there is nothing I shall want. (R. 1)',
       gospel: 'Matt 16:13-19', gospelAcclamation: 'Mt 16:18',
     ),
     'mark_evangelist': const ProperReadingSet(
       firstReading: '1 Pet 5:5b-14', psalm: 'Ps 89:2-3, 6-7, 16-17',
-      psalmResponse: 'For ever I will sing the goodness of the Lord.',
+      psalmResponse: 'For ever I will sing the goodness of the Lord. (R. 2a)',
       gospel: 'Mark 16:15-20', gospelAcclamation: '1 Cor 1:23-24',
     ),
     'philip_and_james_apostles': const ProperReadingSet(
@@ -252,12 +252,12 @@ class OptionalMemorialService {
     ),
     'lawrence_of_rome_deacon': const ProperReadingSet(
       firstReading: '2 Cor 9:6-10', psalm: 'Ps 112:1-2, 5-9',
-      psalmResponse: 'Blessed the man who is gracious and lends to those in need.',
+      psalmResponse: 'Blessed the man who is gracious and lends to those in need. (R. 8)',
       gospel: 'John 12:24-26', gospelAcclamation: 'Jn 8:12',
     ),
     'bartholomew_apostle': const ProperReadingSet(
       firstReading: 'Rev 21:9b-14', psalm: 'Ps 145:10-13, 17-18',
-      psalmResponse: 'Your friends make known, O Lord, the glorious splendor of your kingdom.',
+      psalmResponse: 'Your friends make known, O Lord, the glorious splendor of your kingdom. (R. 18a)',
       gospel: 'John 1:45-51', gospelAcclamation: 'Jn 1:49',
     ),
     'nativity_of_blessed_virgin_mary': const ProperReadingSet(
@@ -283,7 +283,7 @@ class OptionalMemorialService {
     ),
     'luke_evangelist': const ProperReadingSet(
       firstReading: '2 Tim 4:10-17b', psalm: 'Ps 145:10-13, 17-18',
-      psalmResponse: 'Your friends make known, O Lord, the glorious splendor of your kingdom.',
+      psalmResponse: 'Your friends make known, O Lord, the glorious splendor of your kingdom. (R. 18a)',
       gospel: 'Luke 10:1-9', gospelAcclamation: 'Jn 15:16',
     ),
     'simon_and_jude_apostles': const ProperReadingSet(
@@ -309,19 +309,19 @@ class OptionalMemorialService {
     ),
     'john_apostle': const ProperReadingSet(
       firstReading: '1 John 1:1-4', psalm: 'Ps 97:1-2, 5-6, 11-12',
-      psalmResponse: 'Rejoice in the Lord, you just!',
+      psalmResponse: 'Rejoice in the Lord, you just! (R. 12a)',
       gospel: 'John 20:2-8', gospelAcclamation: 'Te Deum',
     ),
     'holy_innocents': const ProperReadingSet(
       firstReading: '1 John 1:5—2:2', psalm: 'Ps 124:2-5, 7b-8',
-      psalmResponse: 'Our soul has been rescued like a bird from the fowler\'s snare.',
+      psalmResponse: 'Our soul has been rescued like a bird from the fowler\'s snare. (R. 7)',
       gospel: 'Matt 2:13-18', gospelAcclamation: 'Te Deum',
     ),
 
     // ───── OBLIGATORY MEMORIALS WITH PROPER READINGS ─────
     'immaculate_heart_of_mary': const ProperReadingSet(
       firstReading: 'Isa 61:9-11', psalm: '1 Sam 2:1, 4-8',
-      psalmResponse: 'My heart exults in the Lord, my Savior.',
+      psalmResponse: 'My heart exults in the Lord, my Savior. (R. 1)',
       gospel: 'Luke 2:41-51', gospelAcclamation: 'Lk 2:19',
     ),
     'our_lady_of_sorrows': const ProperReadingSet(
@@ -331,12 +331,12 @@ class OptionalMemorialService {
     ),
     'our_lady_of_the_rosary': const ProperReadingSet(
       firstReading: 'Acts 1:12-14', psalm: 'Luke 1:46-55',
-      psalmResponse: 'Blessed are you, Virgin Mary, who bore the Son of the eternal Father.',
+      psalmResponse: 'Blessed are you, Virgin Mary, who bore the Son of the eternal Father. (R. 49)',
       gospel: 'Luke 1:26-38', gospelAcclamation: 'Lk 1:28',
     ),
     'presentation_of_blessed_virgin_mary': const ProperReadingSet(
       firstReading: 'Zech 2:14-17', psalm: 'Luke 1:46-55',
-      psalmResponse: 'Blessed are you, Virgin Mary, who bore the Son of the eternal Father.',
+      psalmResponse: 'Blessed are you, Virgin Mary, who bore the Son of the eternal Father. (R. 49)',
       gospel: 'Matt 12:46-50', gospelAcclamation: 'Lk 11:28',
     ),
     'passion_of_john_the_baptist': const ProperReadingSet(
@@ -363,7 +363,7 @@ class OptionalMemorialService {
     ),
     'our_lady_of_mount_carmel': const ProperReadingSet(
       firstReading: 'Zech 2:14-17', psalm: 'Ps 15:1-5',
-      psalmResponse: 'Who shall dwell on your holy mountain, O Lord?',
+      psalmResponse: 'Who shall dwell on your holy mountain, O Lord? (R. 1)',
       gospel: 'Matt 12:46-50', gospelAcclamation: 'Lk 11:28',
     ),
     'our_lady_of_fatima': const ProperReadingSet(
@@ -389,7 +389,7 @@ class OptionalMemorialService {
     ),
     'most_holy_name_of_mary': const ProperReadingSet(
       firstReading: 'Gal 4:4-7', psalm: 'Ps 87:1-3, 5-7',
-      psalmResponse: 'Glorious things are told of you, O city of God.',
+      psalmResponse: 'Glorious things are told of you, O city of God. (R. 7)',
       gospel: 'Luke 1:39-47', gospelAcclamation: 'Lk 1:28',
     ),
     'queenship_of_blessed_virgin_mary': const ProperReadingSet(
@@ -402,7 +402,7 @@ class OptionalMemorialService {
     // These saints have readings commonly assigned in lectionaries
     'patrick_of_ireland': const ProperReadingSet(
       firstReading: '1 Pet 4:7b-11', psalm: 'Ps 96:1-3, 7-8, 10',
-      psalmResponse: 'Proclaim God\'s marvelous deeds to all the nations.',
+      psalmResponse: 'Proclaim God\'s marvelous deeds to all the nations. (R. 10)',
       gospel: 'Luke 5:1-11', gospelAcclamation: 'Mk 1:17',
     ),
     'teresa_of_calcutta': const ProperReadingSet(
@@ -437,7 +437,7 @@ class OptionalMemorialService {
     ),
     'thomas_becket': const ProperReadingSet(
       firstReading: '2 Tim 2:8-13; 3:10-12', psalm: 'Ps 34:2-9',
-      psalmResponse: 'The Lord delivered me from all my fears.',
+      psalmResponse: 'The Lord delivered me from all my fears. (R. 4)',
       gospel: 'Matt 16:24-27', gospelAcclamation: 'Mt 5:10',
     ),
     'teresa_benedicta_of_the_cross': const ProperReadingSet(
@@ -452,7 +452,7 @@ class OptionalMemorialService {
     ),
     'hildegard_of_bingen': const ProperReadingSet(
       firstReading: 'Wis 7:7-14', psalm: 'Ps 119:89-91, 130, 135, 175',
-      psalmResponse: 'Your word is a lamp for my feet, a light for my path.',
+      psalmResponse: 'Your word is a lamp for my feet, a light for my path. (R. 97a)',
       gospel: 'John 17:20-26', gospelAcclamation: 'Jn 15:9',
     ),
     'catherine_of_alexandria': const ProperReadingSet(

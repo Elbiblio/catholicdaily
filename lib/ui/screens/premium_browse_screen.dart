@@ -122,10 +122,49 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
       _celebrationsSuppressed = optionalMemorialService.isSuppressedDate(
         _selectedDate,
       );
+      
+      debugPrint('Celebrations for date: ${_optionalCelebrations.map((c) => '${c.title} (${c.rank})').join(', ')}');
+      debugPrint('Celebrations suppressed: $_celebrationsSuppressed');
+      
+      // Auto-select feast or solemnity with proper readings over ferial
+      // This ensures feast days like St. Mark show their proper readings
+      List<DailyReading> readingsToLoad = rawReadings;
       _selectedCelebrationIndex = -1;
+      
+      if (!_celebrationsSuppressed) {
+        // Find feasts or solemnities with proper readings
+        final feastWithReadings = _optionalCelebrations.indexWhere(
+          (c) => (c.rank == CelebrationRank.feast || c.rank == CelebrationRank.solemnity) 
+                  && c.hasProperReadings
+        );
+        
+        debugPrint('Feast with proper readings index: $feastWithReadings');
+        
+        if (feastWithReadings >= 0) {
+          // Load the feast readings instead of ferial
+          final celebration = _optionalCelebrations[feastWithReadings];
+          debugPrint('Loading feast readings for: ${celebration.title}');
+          final readingSet = optionalMemorialService.getProperReadings(celebration.id);
+          if (readingSet != null) {
+            final alternateService = AlternateReadingsService.instance;
+            final sets = await alternateService.getAvailableReadingSets(_selectedDate);
+            debugPrint('Available reading sets: ${sets.map((s) => '${s.label} (isFerial: ${s.isFerial})').join(', ')}');
+            final matching = sets.where((s) => s.celebration?.id == celebration.id);
+            final matchingSet = matching.isEmpty ? null : matching.first;
+            if (matchingSet != null && matchingSet.readings.isNotEmpty) {
+              readingsToLoad = matchingSet.readings;
+              _selectedCelebrationIndex = feastWithReadings;
+              debugPrint('Using feast readings, feast field on first reading: ${readingsToLoad[0].feast}');
+            }
+          }
+        }
+      }
+      
+      debugPrint('Readings to load count: ${readingsToLoad.length}, feast field on psalm: ${readingsToLoad.where((r) => r.position?.toLowerCase().contains('psalm') ?? false).map((r) => r.feast).join(', ')}');
+      
       final hydrated = await _readingFlow.hydrateReadingSet(
         date: _selectedDate,
-        readings: rawReadings,
+        readings: readingsToLoad,
       );
       _applyHydratedReadings(hydrated);
 
@@ -843,13 +882,46 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                   const SizedBox(height: 4),
                   ..._optionalCelebrations.map((c) => Padding(
                     padding: const EdgeInsets.only(bottom: 2),
-                    child: Text(
-                      c.title,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            color: _colorForLiturgicalColor(c.color),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            c.title,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   )),
+                  const SizedBox(height: 16),
+                ] else ...[
+                  Text(
+                    'Saint of the Day',
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: textColor.withValues(alpha: 0.5),
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.4,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'No celebrations today',
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: textColor.withValues(alpha: 0.6),
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
                   const SizedBox(height: 16),
                 ],
 
@@ -898,6 +970,23 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
         ),
       ],
     );
+  }
+
+  Color _colorForLiturgicalColor(LiturgicalColor color) {
+    switch (color) {
+      case LiturgicalColor.green:
+        return const Color(0xFF228B22);
+      case LiturgicalColor.purple:
+        return const Color(0xFF6B3FA0);
+      case LiturgicalColor.red:
+        return const Color(0xFFB22222);
+      case LiturgicalColor.pink:
+        return const Color(0xFFFF69B4);
+      case LiturgicalColor.white:
+        return const Color(0xFFF5F5F5);
+      case LiturgicalColor.gold:
+        return const Color(0xFFD4AF37);
+    }
   }
 
   (String, String, DateTime)? _buildCountdownLabel() {

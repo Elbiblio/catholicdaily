@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum BibleVersionType {
@@ -18,10 +19,10 @@ enum BibleVersionType {
   }
 }
 
-class BibleVersionPreference {
+class BibleVersionPreference extends ChangeNotifier {
   static const String _key = 'preferred_bible_version';
   static BibleVersionPreference? _instance;
-  
+
   final SharedPreferences _prefs;
   BibleVersionType _currentVersion = BibleVersionType.rsvce;
 
@@ -43,8 +44,11 @@ class BibleVersionPreference {
   BibleVersionType get currentVersion => _currentVersion;
 
   Future<void> setVersion(BibleVersionType version) async {
-    _currentVersion = version;
-    await _prefs.setString(_key, version.dbName);
+    if (_currentVersion != version) {
+      _currentVersion = version;
+      await _prefs.setString(_key, version.dbName);
+      notifyListeners();
+    }
   }
 
   String get currentDbName => _currentVersion.dbName;

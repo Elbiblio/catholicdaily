@@ -12,6 +12,7 @@ import 'missal_rites_service.dart';
 import 'divinum_officium_loader_service.dart';
 import 'prayer_of_the_faithful_service.dart';
 import 'prayer_service.dart';
+import 'order_of_mass_preference_service.dart';
 
 class ResolvedOrderOfMassItem {
   final String id;
@@ -136,10 +137,16 @@ class OrderOfMassService {
         final config = await _loadConfig();
     final liturgicalDay = await _ordoResolver.resolveDay(date);
     final dateStr = date.toIso8601String().split('T').first;
+    final showPrayerOfFaithful = await OrderOfMassPreferenceService().getShowPrayerOfFaithful();
 
     final resolvedItems = <ResolvedOrderOfMassItem>[];
     for (final item in config) {
       if (_matchesAnyCondition(item.conditions, liturgicalDay)) {
+        // Skip prayer_of_the_faithful if preference is disabled
+        if (item.id == 'prayer_of_the_faithful' && !showPrayerOfFaithful) {
+          continue;
+        }
+
         // Skip readings-based variable items (scripture text lives in the lectionary flow).
         // Keep items that also ship inline liturgical text (e.g. Gospel dialogue before the reading).
         if (item.type == 'variable' && item.source == 'readings') {

@@ -7,6 +7,7 @@ import '../../data/models/navigable_item.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
 import '../../data/services/readings_service.dart';
 import '../../data/services/bible_version_preference.dart';
+import '../../data/services/scroll_position_service.dart';
 import '../widgets/parchment_background.dart';
 import '../widgets/psalm_response_widget.dart';
 import '../widgets/gospel_acclamation_widget.dart';
@@ -16,6 +17,7 @@ import '../utils/reading_title_formatter.dart';
 import '../utils/bible_reference_helper.dart';
 import '../../data/services/bible_cache_service.dart';
 import 'church_locator_screen.dart';
+import 'dart:async';
 
 class ReadingScreen extends StatefulWidget {
   final String reference;
@@ -92,6 +94,9 @@ class _ReadingScreenState extends State<ReadingScreen> {
   bool _hasNextChapter = false;
   bool _isFullScreen = false;
   bool _showVerseNumbers = true;
+  
+  final ScrollPositionService _scrollPositionService = ScrollPositionService();
+  Timer? _scrollDebounceTimer;
 
   String get _readingLabel {
     final position = widget.readingData?.position?.trim();
@@ -152,9 +157,13 @@ class _ReadingScreenState extends State<ReadingScreen> {
     _currentContent = widget.content;
     _loadBookmarkStatus();
     _loadVerseNumberPref();
+    _scrollPositionService.initialize();
+    _restoreScrollPosition();
     if (widget.isBibleSearch) {
       _checkChapterAvailability();
     }
+    
+    _scrollController.addListener(_onScrollChanged);
   }
 
   Future<void> _loadVerseNumberPref() async {
@@ -189,6 +198,33 @@ class _ReadingScreenState extends State<ReadingScreen> {
         _hasNextChapter = hasNext;
       });
     }
+  }
+
+  Future<void> _restoreScrollPosition() async {
+    final savedPosition = _scrollPositionService.getScrollPosition(widget.reference);
+    if (savedPosition != null && savedPosition > 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _scrollController.hasClients) {
+          _scrollController.animateTo(
+            savedPosition,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        }
+      });
+    }
+  }
+
+  void _onScrollChanged() {
+    _scrollDebounceTimer?.cancel();
+    _scrollDebounceTimer = Timer(const Duration(milliseconds: 500), () {
+      if (_scrollController.hasClients) {
+        _scrollPositionService.saveScrollPosition(
+          widget.reference,
+          _scrollController.offset,
+        );
+      }
+    });
   }
 
   @override
@@ -1424,6 +1460,17 @@ class _ReadingScreenState extends State<ReadingScreen> {
       SystemUiMode.manual,
       overlays: SystemUiOverlay.values,
     );
+    _scrollDebounceTimer?.cancel();
+    _scrollController.removeListener(_onScrollChanged);
+    
+    // Save final scroll position
+    if (_scrollController.hasClients) {
+      _scrollPositionService.saveScrollPosition(
+        widget.reference,
+        _scrollController.offset,
+      );
+    }
+    
     _scrollController.dispose();
     super.dispose();
   }

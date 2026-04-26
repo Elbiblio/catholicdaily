@@ -307,9 +307,8 @@
     "sourceField": "prayers_of_the_faithful",
     "availableLanguages": ["en", "la", "es", "pt", "fr", "tl", "it", "pl", "vi", "ko"],
     "conditions": ["sunday_or_solemnity"],
-    "isOptional": true,
-    "role": "deacon",
-    "isResponsive": true
+    "isOptional": false,
+    "role": "deacon"
   },
   {
     "id": "presentation_of_gifts",

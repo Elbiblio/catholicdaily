@@ -55,7 +55,7 @@ class PrayerOfTheFaithfulService {
   String _generateFromTemplate(LiturgicalDay liturgicalDay) {
     final season = _getSeasonName(liturgicalDay.season);
     final occasion = liturgicalDay.title;
-    
+
     final buffer = StringBuffer();
     buffer.writeln('Prayer of the Faithful');
     buffer.writeln('(Universal Prayer)');
@@ -66,15 +66,14 @@ class PrayerOfTheFaithfulService {
     buffer.writeln('');
     buffer.writeln('Response: $_standardResponse');
     buffer.writeln('');
-    
+
     // Generate season-appropriate petitions following GIRM categories
     final petitions = _getSeasonalPetitions(season, occasion);
     for (var i = 0; i < petitions.length; i++) {
       buffer.writeln('${i + 1}. ${petitions[i]}');
-      buffer.writeln('   R. $_standardResponse');
       if (i < petitions.length - 1) buffer.writeln('');
     }
-    
+
     return buffer.toString();
   }
 

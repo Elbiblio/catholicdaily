@@ -5,6 +5,7 @@ class AppNavigationService {
   static const String _lastScreenKey = 'last_screen';
   static const String _lastBibleChapterKey = 'last_bible_chapter';
   static const String _lastNavigationTimeKey = 'last_navigation_time';
+  static const int _expirationHours = 30 * 24; // 30 days in hours
   
   static final AppNavigationService _instance = AppNavigationService._internal();
   factory AppNavigationService() => _instance;
@@ -85,7 +86,7 @@ class AppNavigationService {
   bool get shouldResumeToBibleChapter {
     // Only resume to Bible chapter if:
     // 1. Last screen was a Bible chapter
-    // 2. It was accessed within the last 24 hours
+    // 2. It was accessed within the last 30 days
     // 3. We have valid chapter data
     
     if (_lastScreen != _screenBibleChapter || _lastBibleChapter == null) {
@@ -97,7 +98,7 @@ class AppNavigationService {
     }
     
     final hoursSinceLastNavigation = DateTime.now().difference(_lastNavigationTime!).inHours;
-    return hoursSinceLastNavigation < 24;
+    return hoursSinceLastNavigation < _expirationHours;
   }
 
   Map<String, dynamic>? get lastBibleChapter => _lastBibleChapter;

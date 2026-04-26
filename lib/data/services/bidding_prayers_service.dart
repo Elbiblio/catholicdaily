@@ -211,7 +211,6 @@ class BiddingPrayersService {
 
     for (var i = 0; i < petitions.length; i++) {
       buffer.writeln('${i + 1}. ${petitions[i]}');
-      buffer.writeln('   R. $response');
       if (i < petitions.length - 1) buffer.writeln();
     }
 

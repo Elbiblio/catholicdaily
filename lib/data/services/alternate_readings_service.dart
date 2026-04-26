@@ -129,6 +129,8 @@ class AlternateReadingsService {
     }
 
     // Responsorial Psalm
+    // Set the hardcoded response for feast days (they're not in lectionary catalog)
+    // PsalmResolverService will check reading.feast and skip catalog enrichment
     readings.add(DailyReading(
       reading: readingSet.psalm,
       position: 'Responsorial Psalm',
@@ -167,6 +169,7 @@ class AlternateReadingsService {
       ));
     }
 
+    debugPrint('_buildReadingsFromProperSet: feast=${celebration.title}, psalmResponse=${readingSet.psalmResponse}');
     return readings;
   }
 

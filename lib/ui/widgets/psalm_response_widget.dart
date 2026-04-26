@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../data/models/daily_reading.dart';
 import '../utils/contrast_helper.dart';
 import '../../data/services/psalm_resolver_service.dart';
+import '../../data/services/bible_version_preference.dart';
 
 /// Widget that displays psalm response with on-demand fetching for missing responses
 class PsalmResponseWidget extends StatefulWidget {
@@ -20,14 +21,41 @@ class PsalmResponseWidget extends StatefulWidget {
 
 class _PsalmResponseWidgetState extends State<PsalmResponseWidget> {
   final PsalmResolverService _resolver = PsalmResolverService.instance;
+  BibleVersionPreference? _bibleVersionPref;
   String? _fetchedResponse;
+  String? _currentVersionDbName;
   bool _isFetching = false;
   bool _fetchFailed = false;
 
   @override
   void initState() {
     super.initState();
-    if (_needsFetch) {
+    _initializeVersionListener();
+  }
+
+  Future<void> _initializeVersionListener() async {
+    _bibleVersionPref = await BibleVersionPreference.getInstance();
+    _currentVersionDbName = _bibleVersionPref!.currentDbName;
+    _bibleVersionPref!.addListener(_onVersionChanged);
+
+    if (_needsFetch || _hasRNotationThatNeedsDecoding) {
+      _fetchResponse();
+    }
+  }
+
+  @override
+  void dispose() {
+    _bibleVersionPref?.removeListener(_onVersionChanged);
+    super.dispose();
+  }
+
+  void _onVersionChanged() {
+    final newVersion = _bibleVersionPref?.currentDbName;
+    if (newVersion != null && newVersion != _currentVersionDbName) {
+      setState(() {
+        _currentVersionDbName = newVersion;
+      });
+      // Re-fetch the psalm response when Bible version changes
       _fetchResponse();
     }
   }
@@ -35,6 +63,12 @@ class _PsalmResponseWidgetState extends State<PsalmResponseWidget> {
   bool get _needsFetch {
     final existing = widget.reading.psalmResponse?.trim();
     return existing == null || existing.isEmpty;
+  }
+
+  /// Check if the psalm response has R notation that needs decoding from Bible
+  bool get _hasRNotationThatNeedsDecoding {
+    final response = widget.reading.psalmResponse?.trim() ?? '';
+    return response.contains('(R.');
   }
 
   Future<void> _fetchResponse() async {

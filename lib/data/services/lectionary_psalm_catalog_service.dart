@@ -14,6 +14,8 @@ class LectionaryPsalmCatalogEntry {
   final String sundayCycle;
   final String fullReference;
   final String refrainText;
+  final String refrainTextRsvce;
+  final String refrainTextNabre;
   final String acclamationRef;
   final String acclamationText;
   final String lectionaryNumber;
@@ -26,6 +28,8 @@ class LectionaryPsalmCatalogEntry {
     required this.sundayCycle,
     required this.fullReference,
     required this.refrainText,
+    this.refrainTextRsvce = '',
+    this.refrainTextNabre = '',
     required this.acclamationRef,
     required this.acclamationText,
     required this.lectionaryNumber,
@@ -76,6 +80,7 @@ class LectionaryPsalmCatalogService extends BaseService<LectionaryPsalmCatalogSe
     required String psalmReference,
     String? positionLabel,
     int? psalmSequence,
+    String bibleVersion = 'rsvce',
   }) {
     final match = _resolvePsalmEntry(
       entries: entries,
@@ -83,8 +88,20 @@ class LectionaryPsalmCatalogService extends BaseService<LectionaryPsalmCatalogSe
       positionLabel: positionLabel,
       psalmSequence: psalmSequence,
     );
-    final response = match?.refrainText.trim();
-    if (response == null || response.isEmpty) {
+    if (match == null) return null;
+
+    // Try version-specific response first
+    String? response;
+    if (bibleVersion == 'rsvce' && match.refrainTextRsvce.isNotEmpty) {
+      response = match.refrainTextRsvce.trim();
+    } else if (bibleVersion == 'nabre' && match.refrainTextNabre.isNotEmpty) {
+      response = match.refrainTextNabre.trim();
+    } else {
+      // Fallback to generic response
+      response = match.refrainText.trim();
+    }
+
+    if (response.isEmpty) {
       return null;
     }
     return response;
@@ -129,6 +146,8 @@ class LectionaryPsalmCatalogService extends BaseService<LectionaryPsalmCatalogSe
           sundayCycle: entry.sundayCycle,
           fullReference: entry.psalmReference,
           refrainText: entry.psalmResponse,
+          refrainTextRsvce: '', // Standard entries don't have version-specific data yet
+          refrainTextNabre: '', // Standard entries don't have version-specific data yet
           acclamationRef: entry.acclamationRef,
           acclamationText: entry.acclamationText,
           lectionaryNumber: entry.lectionaryNumber,
@@ -169,9 +188,11 @@ class LectionaryPsalmCatalogService extends BaseService<LectionaryPsalmCatalogSe
 
       final out = <LectionaryPsalmCatalogEntry>[];
       // Header: Season,Week,Day,Weekday Cycle,Sunday Cycle,Full Reference,
-      //         Refrain Text,Acclamation Ref,Acclamation Text,Lectionary Number
+      //         Refrain Text,Refrain Text RSVCE,Refrain Text NABRE,
+      //         Acclamation Ref,Acclamation Text,Lectionary Number
       for (var i = 1; i < lines.length; i++) {
-        final cols = _readingCatalogService.parseCsvLineWithPadding(lines[i], 10);
+        final cols = _readingCatalogService.parseCsvLineWithPadding(lines[i], 12);
+        final hasVersionSpecific = cols.length >= 12;
         out.add(
           LectionaryPsalmCatalogEntry(
             season: cols[0].trim(),
@@ -181,9 +202,11 @@ class LectionaryPsalmCatalogService extends BaseService<LectionaryPsalmCatalogSe
             sundayCycle: cols[4].trim(),
             fullReference: cols[5].trim(),
             refrainText: cols[6].trim(),
-            acclamationRef: cols[7].trim(),
-            acclamationText: cols[8].trim(),
-            lectionaryNumber: cols[9].trim(),
+            refrainTextRsvce: hasVersionSpecific ? cols[7].trim() : '',
+            refrainTextNabre: hasVersionSpecific ? cols[8].trim() : '',
+            acclamationRef: hasVersionSpecific ? cols[9].trim() : cols[7].trim(),
+            acclamationText: hasVersionSpecific ? cols[10].trim() : cols[8].trim(),
+            lectionaryNumber: hasVersionSpecific ? cols[11].trim() : cols[9].trim(),
           ),
         );
       }
@@ -379,6 +402,8 @@ class LectionaryPsalmCatalogService extends BaseService<LectionaryPsalmCatalogSe
     }
 
     final normalizedReference = _normalizeReference(psalmReference);
+    
+    // First try exact match on normalized references (preserves R. notation)
     final exactMatches = entries
         .where((entry) => _normalizeReference(entry.fullReference) == normalizedReference)
         .toList();
@@ -386,13 +411,31 @@ class LectionaryPsalmCatalogService extends BaseService<LectionaryPsalmCatalogSe
       return exactMatches.first;
     }
 
-    final looseMatches = entries.where((entry) {
-      final candidate = _normalizeReference(entry.fullReference);
-      return candidate.contains(normalizedReference) ||
-          normalizedReference.contains(candidate);
-    }).toList();
-    if (looseMatches.isNotEmpty) {
-      return looseMatches.first;
+    // Extract R. notation from both query and entries for precise matching
+    final queryRNotation = _extractRNotation(normalizedReference);
+    
+    // Try to match entries with the same R. notation
+    if (queryRNotation != null) {
+      final rNotationMatches = entries.where((entry) {
+        final entryRNotation = _extractRNotation(_normalizeReference(entry.fullReference));
+        return entryRNotation == queryRNotation;
+      }).toList();
+      if (rNotationMatches.isNotEmpty) {
+        return rNotationMatches.first;
+      }
+    }
+
+    // Fallback to loose matching only if no R. notation is involved
+    // This prevents false matches like R.7 matching R.7a
+    if (queryRNotation == null) {
+      final looseMatches = entries.where((entry) {
+        final candidate = _normalizeReference(entry.fullReference);
+        return candidate.contains(normalizedReference) ||
+            normalizedReference.contains(candidate);
+      }).toList();
+      if (looseMatches.isNotEmpty) {
+        return looseMatches.first;
+      }
     }
 
     final psalmEntries = entries
@@ -415,15 +458,28 @@ class LectionaryPsalmCatalogService extends BaseService<LectionaryPsalmCatalogSe
     return entries.first;
   }
 
+  /// Extracts the (R. ...) notation from a normalized reference
+  /// Returns null if no notation is present
+  String? _extractRNotation(String normalizedReference) {
+    final match = RegExp(r'\(r\.[^)]*\)', caseSensitive: false).firstMatch(normalizedReference);
+    return match?.group(0);
+  }
+
   String _normalizeReference(String value) {
-    return value
+    var normalized = value
         .toLowerCase()
         .replaceAll('psalm', 'ps')
         .replaceAll('see ', '')
         .replaceAll('cf. ', '')
-        .replaceAll('cf ', '')
-        .replaceAll(RegExp(r'\(r\.[^)]*\)'), '')
-        .replaceAll(RegExp(r'[^a-z0-9]+'), '');
+        .replaceAll('cf ', '');
+    
+    // DO NOT remove (R. ...) notation - it's critical for distinguishing response verses
+    // R.7, R.7a, R.7ac are different and must be preserved
+    // Only remove spaces, but keep commas, colons, semicolons, hyphens, and periods
+    // These are needed to distinguish verse ranges (e.g., 2-3, 6-7 vs 2-3, 16-17)
+    normalized = normalized.replaceAll(RegExp(r'\s+'), '');
+    
+    return normalized;
   }
 
   bool _isDecember17To24(DateTime date) {

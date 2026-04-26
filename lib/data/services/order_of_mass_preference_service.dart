@@ -8,6 +8,8 @@ class OrderOfMassPreferenceService {
 
   static const String _preferredLanguageKey = 'preferred_order_of_mass_language';
   static const String _defaultLanguage = 'en';
+  static const String _showPrayerOfFaithfulKey = 'show_prayer_of_faithful';
+  static const bool _defaultShowPrayerOfFaithful = false;
 
   // Language codes
   static const String english = 'en';
@@ -79,5 +81,21 @@ class OrderOfMassPreferenceService {
 
   void resetCache() {
     _cachedLanguage = null;
+  }
+
+  Future<bool> getShowPrayerOfFaithful() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getBool(_showPrayerOfFaithfulKey) ?? _defaultShowPrayerOfFaithful;
+    } catch (_) {
+      return _defaultShowPrayerOfFaithful;
+    }
+  }
+
+  Future<void> setShowPrayerOfFaithful(bool value) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(_showPrayerOfFaithfulKey, value);
+    } catch (_) {}
   }
 }

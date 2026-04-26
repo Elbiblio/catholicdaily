@@ -5,6 +5,7 @@ import '../../data/services/bible_version_preference.dart';
 import '../../data/services/offline_bible_service.dart';
 import '../../data/services/feast_reminder_preferences.dart';
 import '../../data/services/incipit_preference_service.dart';
+import '../../data/services/order_of_mass_preference_service.dart';
 import 'feast_reminder_settings_sheet.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -40,6 +41,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   BibleVersionType? _currentBibleVersion;
   FeastReminderPreferences? _reminderPrefs;
   bool _showIncipit = true;
+  bool _showPrayerOfFaithful = false;
   static const _androidPackageName = 'com.elbiblio.catholicdaily';
   static const _iosAppStoreId = '';
   static const _iosSearchTerm = 'Catholic Daily Missal';
@@ -53,6 +55,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _loadCurrentBibleVersion();
     _loadReminderPrefs();
     _loadIncipitPreference();
+    _loadPrayerOfFaithfulPreference();
   }
 
   Future<void> _loadIncipitPreference() async {
@@ -64,6 +67,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _setIncipitPreference(bool value) async {
     setState(() => _showIncipit = value);
     await IncipitPreferenceService().setShowIncipit(value);
+  }
+
+  Future<void> _loadPrayerOfFaithfulPreference() async {
+    final show = await OrderOfMassPreferenceService().getShowPrayerOfFaithful();
+    if (!mounted) return;
+    setState(() => _showPrayerOfFaithful = show);
+  }
+
+  Future<void> _setPrayerOfFaithfulPreference(bool value) async {
+    setState(() => _showPrayerOfFaithful = value);
+    await OrderOfMassPreferenceService().setShowPrayerOfFaithful(value);
   }
 
   Future<void> _loadCurrentBibleVersion() async {
@@ -371,6 +385,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               value: _showIncipit,
               onChanged: _setIncipitPreference,
+            ),
+          ),
+          const SizedBox(height: 24),
+          _SectionHeader(title: 'Order of Mass'),
+          Card(
+            child: SwitchListTile(
+              secondary: Icon(
+                Icons.people_outline,
+                color: theme.colorScheme.primary,
+              ),
+              title: const Text('Show Prayer of the Faithful'),
+              subtitle: const Text(
+                'Display Universal Prayer in Order of Mass',
+              ),
+              value: _showPrayerOfFaithful,
+              onChanged: _setPrayerOfFaithfulPreference,
             ),
           ),
           const SizedBox(height: 24),

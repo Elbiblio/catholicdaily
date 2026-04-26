@@ -5,6 +5,7 @@ class BibleCacheService {
   static const String _recentlyOpenedKey = 'recently_opened_passages';
   static const String _bookmarkedKey = 'bookmarked_passages';
   static const String _insightsKey = 'cached_insights';
+  static const int _expirationDays = 30;
   
   static final BibleCacheService _instance = BibleCacheService._internal();
   factory BibleCacheService() => _instance;
@@ -16,6 +17,7 @@ class BibleCacheService {
 
   Future<void> initialize() async {
     await _loadData();
+    await _clearExpiredRecentlyOpened();
   }
 
   Future<void> _loadData() async {
@@ -37,6 +39,20 @@ class BibleCacheService {
       _insights = insightsMap.map((key, value) => 
           MapEntry(key, value as Map<String, dynamic>));
     }
+  }
+
+  Future<void> _clearExpiredRecentlyOpened() async {
+    final now = DateTime.now();
+    final cutoffDate = now.subtract(Duration(days: _expirationDays));
+    
+    _recentlyOpened = _recentlyOpened.where((item) {
+      final timestamp = item['timestamp'] as int?;
+      if (timestamp == null) return false;
+      final itemDate = DateTime.fromMillisecondsSinceEpoch(timestamp);
+      return itemDate.isAfter(cutoffDate);
+    }).toList();
+    
+    await _saveData();
   }
 
   Future<void> _saveData() async {

@@ -76,40 +76,55 @@ class ReadingsBackendIo implements ReadingsBackend {
 
       if (position.contains('psalm')) {
         psalmOrdinal += 1;
-        // Step 1: enrich the reading's reference with "(R. Xx)" notation
-        // when available in the supplementary lectionary_psalms[_weekday].csv.
-        final bestEntry = await _psalmCatalog.getBestPsalmEntryForDate(
-          date: date,
-          psalmReference: updated.reading,
-          positionLabel: updated.position,
-          psalmSequence: psalmOrdinal,
-        );
-        String enrichedReference = updated.reading;
-        if (bestEntry != null &&
-            RegExp(r'\(R\.', caseSensitive: false)
-                .hasMatch(bestEntry.fullReference)) {
-          enrichedReference = _mergeRNotation(
-            base: updated.reading,
-            enriched: bestEntry.fullReference,
+        
+        // For feast days (reading.feast is set), use the hardcoded response from CSV
+        // Do NOT enrich from catalog - feast days have their own proper readings
+        if (r.feast != null && r.feast!.isNotEmpty) {
+          debugPrint('Feast day psalm: ${r.reading}, feast: ${r.feast}, response: ${r.psalmResponse}');
+          // Still decode the response if it has R notation
+          if (r.psalmResponse != null && r.psalmResponse!.contains('(R.')) {
+            final decodedFromR = await _decodeRefrainFromRNotation(r.reading + ' ' + r.psalmResponse!);
+            if (decodedFromR != null && decodedFromR.trim().isNotEmpty) {
+              updated = updated.copyWith(psalmResponse: decodedFromR);
+            }
+          }
+        } else {
+          // Ferial day: enrich from catalog
+          // Step 1: enrich the reading's reference with "(R. Xx)" notation
+          // when available in the supplementary lectionary_psalms[_weekday].csv.
+          final bestEntry = await _psalmCatalog.getBestPsalmEntryForDate(
+            date: date,
+            psalmReference: updated.reading,
+            positionLabel: updated.position,
+            psalmSequence: psalmOrdinal,
           );
-        }
-        if (enrichedReference != updated.reading) {
-          updated = updated.copyWith(reading: enrichedReference);
-        }
+          String enrichedReference = updated.reading;
+          if (bestEntry != null &&
+              RegExp(r'\(R\.', caseSensitive: false)
+                  .hasMatch(bestEntry.fullReference)) {
+            enrichedReference = _mergeRNotation(
+              base: updated.reading,
+              enriched: bestEntry.fullReference,
+            );
+          }
+          if (enrichedReference != updated.reading) {
+            updated = updated.copyWith(reading: enrichedReference);
+          }
 
-        // Step 2: decode the refrain text from RSVCE using the (R. Xx)
-        // notation. This is the authoritative source the user expects so
-        // the displayed refrain matches the RSVCE verse text verbatim.
-        final decodedFromR = await _decodeRefrainFromRNotation(
-          enrichedReference,
-        );
-        if (decodedFromR != null && decodedFromR.trim().isNotEmpty) {
-          updated = updated.copyWith(psalmResponse: decodedFromR);
-        } else if (r.psalmResponse != null) {
-          final decoded =
-              await _decodePsalmResponseRef(r.psalmResponse!, updated.reading);
-          if (decoded != r.psalmResponse) {
-            updated = updated.copyWith(psalmResponse: decoded);
+          // Step 2: decode the refrain text from RSVCE using the (R. Xx)
+          // notation. This is the authoritative source the user expects so
+          // the displayed refrain matches the RSVCE verse text verbatim.
+          final decodedFromR = await _decodeRefrainFromRNotation(
+            enrichedReference,
+          );
+          if (decodedFromR != null && decodedFromR.trim().isNotEmpty) {
+            updated = updated.copyWith(psalmResponse: decodedFromR);
+          } else if (r.psalmResponse != null) {
+            final decoded =
+                await _decodePsalmResponseRef(r.psalmResponse!, updated.reading);
+            if (decoded != r.psalmResponse) {
+              updated = updated.copyWith(psalmResponse: decoded);
+            }
           }
         }
       } else if (r.psalmResponse != null) {
@@ -138,26 +153,80 @@ class ReadingsBackendIo implements ReadingsBackend {
     return '$base ${rMatch.group(0)!}';
   }
 
-  /// Reads "(R. 7a)" / "(R. see 7)" / "(R. cf. 30)" style notation from a
+  /// Reads "(R. 7a)" / "(R. see 7)" / "(R. cf. 30)" / "(R. Isa 35.4d)" style notation from a
   /// psalm [reference] and fetches the corresponding verse text from the
   /// currently selected Bible database. Returns null when no notation is
   /// present or the verse cannot be fetched.
+  /// 
+  /// Supports:
+  /// - Simple verse numbers: (R. 7), (R. 2a)
+  /// - Compound parts: (R. 6cd), (R. 7c+10c)
+  /// - Bible references: (R. Isa 35.4d), (R. Lk 21.28)
+  /// - With prefixes: (R. see 7), (R. cf. 30), (R. see Jn 8.12)
   Future<String?> _decodeRefrainFromRNotation(String reference) async {
+    debugPrint('_decodeRefrainFromRNotation: input=$reference');
+
+    // Extract the R notation from the reference
+    final rNotationMatch = RegExp(
+      r'\(R\.\s*(?:see\s+|cf\.?\s*)?([^)]+)\)',
+      caseSensitive: false,
+    ).firstMatch(reference);
+    if (rNotationMatch == null) {
+      debugPrint('_decodeRefrainFromRNotation: no R notation found');
+      return null;
+    }
+
+    final rContent = rNotationMatch.group(1)!.trim();
+    debugPrint('_decodeRefrainFromRNotation: R content=$rContent');
+
+    // Try to match as a Bible reference (e.g., "Isa 35.4d", "Lk 21.28", "see Jn 8.12")
+    final bibleRefMatch = RegExp(
+      r'^(?:see\s+|cf\.?\s*)?([A-Za-z]+)\s+(\d+)\.(\d+)([a-d])?$',
+      caseSensitive: false,
+    ).firstMatch(rContent);
+
+    if (bibleRefMatch != null) {
+      debugPrint('_decodeRefrainFromRNotation: Bible reference detected');
+      return _fetchBibleVerse(
+        bookAbbr: bibleRefMatch.group(1)!,
+        chapter: int.parse(bibleRefMatch.group(2)!),
+        verse: int.parse(bibleRefMatch.group(3)!),
+        partLetter: bibleRefMatch.group(4),
+      );
+    }
+
+    // Try to match as a simple psalm verse (e.g., "7", "2a", "6cd", "see 7", "cf. 1")
+    // Also handle compound parts (e.g., "7c+10c", "1a+3a", "7-8")
+    final psalmRefMatch = RegExp(
+      r'^(?:see\s+|cf\.?\s*)?(\d+)([a-d]+)?(?:[\+\-]\d+[a-d]*)*$',
+      caseSensitive: false,
+    ).firstMatch(rContent);
+
+    if (psalmRefMatch == null) {
+      debugPrint('_decodeRefrainFromRNotation: cannot parse R content');
+      return null;
+    }
+
+    // Get the psalm chapter from the reference
     final chapterMatch =
         RegExp(r'(?:Ps|Psalm)\s+(\d+)', caseSensitive: false)
             .firstMatch(reference);
-    if (chapterMatch == null) return null;
-
-    final rMatch = RegExp(
-      r'\(R\.\s*(?:see\s+|cf\.?\s*)?(\d+)([a-d])?\s*\)',
-      caseSensitive: false,
-    ).firstMatch(reference);
-    if (rMatch == null) return null;
+    if (chapterMatch == null) {
+      debugPrint('_decodeRefrainFromRNotation: no psalm chapter found in reference');
+      return null;
+    }
 
     final chapter = int.parse(chapterMatch.group(1)!);
-    final verseNum = int.parse(rMatch.group(1)!);
-    final partLetter = rMatch.group(2);
+    final verseNum = int.parse(psalmRefMatch.group(1)!);
+    final partLetter = psalmRefMatch.group(2);
 
+    debugPrint('_decodeRefrainFromRNotation: Psalm $chapter:$verseNum${partLetter ?? ''}');
+
+    return _fetchPsalmVerse(chapter, verseNum, partLetter);
+  }
+
+  /// Fetch a verse from the Psalms book
+  Future<String?> _fetchPsalmVerse(int chapter, int verse, String? partLetter) async {
     try {
       final db = await _currentBibleDatabase;
       final rows = await db.rawQuery('''
@@ -165,18 +234,151 @@ class ReadingsBackendIo implements ReadingsBackend {
         FROM verses v
         JOIN books b ON b._id = v.book_id
         WHERE b.shortname = 'Ps' AND v.chapter_id = ? AND v.verse_id = ?
-      ''', [chapter, verseNum]);
+      ''', [chapter, verse]);
 
-      if (rows.isEmpty) return null;
+      if (rows.isEmpty) {
+        debugPrint('_fetchPsalmVerse: no verse found for Psalm $chapter:$verse');
+        return null;
+      }
       final verseText = rows.first['text'] as String;
 
       if (partLetter != null) {
-        return PsalmVerseSplitter.getVersePart(verseText, partLetter);
+        final result = PsalmVerseSplitter.getVersePart(verseText, partLetter);
+        debugPrint('_fetchPsalmVerse: extracted part $partLetter');
+        return result;
       }
-      return verseText.replaceFirst(RegExp(r'^\d+\.\s*'), '').trim();
-    } catch (_) {
+      final result = verseText.replaceFirst(RegExp(r'^\d+\.\s*'), '').trim();
+      debugPrint('_fetchPsalmVerse: full verse');
+      return result;
+    } catch (e) {
+      debugPrint('_fetchPsalmVerse: error - $e');
       return null;
     }
+  }
+
+  /// Fetch a verse from any Bible book using abbreviation
+  Future<String?> _fetchBibleVerse({
+    required String bookAbbr,
+    required int chapter,
+    required int verse,
+    String? partLetter,
+  }) async {
+    debugPrint('_fetchBibleVerse: $bookAbbr $chapter:$verse${partLetter ?? ''}');
+
+    // Map common abbreviations to full names
+    final bookName = _mapBookAbbreviation(bookAbbr);
+    if (bookName == null) {
+      debugPrint('_fetchBibleVerse: unknown book abbreviation $bookAbbr');
+      return null;
+    }
+
+    try {
+      final db = await _currentBibleDatabase;
+      final rows = await db.rawQuery('''
+        SELECT v.text
+        FROM verses v
+        JOIN books b ON b._id = v.book_id
+        WHERE b.name = ? AND v.chapter_id = ? AND v.verse_id = ?
+      ''', [bookName, chapter, verse]);
+
+      if (rows.isEmpty) {
+        debugPrint('_fetchBibleVerse: no verse found for $bookName $chapter:$verse');
+        return null;
+      }
+      final verseText = rows.first['text'] as String;
+
+      if (partLetter != null) {
+        final result = PsalmVerseSplitter.getVersePart(verseText, partLetter);
+        debugPrint('_fetchBibleVerse: extracted part $partLetter');
+        return result;
+      }
+      final result = verseText.replaceFirst(RegExp(r'^\d+\.\s*'), '').trim();
+      debugPrint('_fetchBibleVerse: full verse');
+      return result;
+    } catch (e) {
+      debugPrint('_fetchBibleVerse: error - $e');
+      return null;
+    }
+  }
+
+  /// Map book abbreviation to full name
+  String? _mapBookAbbreviation(String abbr) {
+    const mapping = {
+      'Gen': 'Genesis',
+      'Exod': 'Exodus',
+      'Lev': 'Leviticus',
+      'Num': 'Numbers',
+      'Deut': 'Deuteronomy',
+      'Josh': 'Joshua',
+      'Judg': 'Judges',
+      'Ruth': 'Ruth',
+      '1 Sam': '1 Samuel',
+      '2 Sam': '2 Samuel',
+      '1 Kgs': '1 Kings',
+      '2 Kgs': '2 Kings',
+      '1 Chr': '1 Chronicles',
+      '2 Chr': '2 Chronicles',
+      'Ezra': 'Ezra',
+      'Neh': 'Nehemiah',
+      'Tob': 'Tobit',
+      'Jdt': 'Judith',
+      'Esth': 'Esther',
+      '1 Macc': '1 Maccabees',
+      '2 Macc': '2 Maccabees',
+      'Job': 'Job',
+      'Ps': 'Psalms',
+      'Prov': 'Proverbs',
+      'Eccles': 'Ecclesiastes',
+      'Song': 'Song of Songs',
+      'Wis': 'Wisdom',
+      'Sir': 'Sirach',
+      'Isa': 'Isaiah',
+      'Jer': 'Jeremiah',
+      'Lam': 'Lamentations',
+      'Bar': 'Baruch',
+      'Ezek': 'Ezekiel',
+      'Dan': 'Daniel',
+      'Hos': 'Hosea',
+      'Joel': 'Joel',
+      'Amos': 'Amos',
+      'Obad': 'Obadiah',
+      'Jonah': 'Jonah',
+      'Mic': 'Micah',
+      'Nah': 'Nahum',
+      'Hab': 'Habakkuk',
+      'Zeph': 'Zephaniah',
+      'Hagg': 'Haggai',
+      'Zech': 'Zechariah',
+      'Mal': 'Malachi',
+      'Matt': 'Matthew',
+      'Mark': 'Mark',
+      'Lk': 'Luke',
+      'Jn': 'John',
+      'Acts': 'Acts of the Apostles',
+      'Rom': 'Romans',
+      '1 Cor': '1 Corinthians',
+      '2 Cor': '2 Corinthians',
+      'Gal': 'Galatians',
+      'Eph': 'Ephesians',
+      'Phil': 'Philippians',
+      'Col': 'Colossians',
+      '1 Thess': '1 Thessalonians',
+      '2 Thess': '2 Thessalonians',
+      '1 Tim': '1 Timothy',
+      '2 Tim': '2 Timothy',
+      'Titus': 'Titus',
+      'Phlm': 'Philemon',
+      'Heb': 'Hebrews',
+      'James': 'James',
+      '1 Pet': '1 Peter',
+      '2 Pet': '2 Peter',
+      '1 John': '1 John',
+      '2 John': '2 John',
+      '3 John': '3 John',
+      'Jude': 'Jude',
+      'Rev': 'Revelation',
+    };
+    return mapping[abbr];
   }
 
   /// If [response] looks like a verse reference (e.g. "Ps 147:12" or "Ps 145:8a"),
