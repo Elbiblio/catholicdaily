@@ -97,9 +97,13 @@ void main() {
   final cleanup = mockMethodChannels();
   tearDownAll(() => cleanup());
 
+  final externalFile = File('scripts/active/external_sundays.json');
+
   test('App output agrees with USCCB on 2026 Sunday openings',
+      skip: !externalFile.existsSync()
+          ? 'External data not found. Run: python scripts/active/scrape_external_sundays.py'
+          : null,
       timeout: const Timeout(Duration(minutes: 8)), () async {
-    final externalFile = File('scripts/active/external_sundays.json');
     expect(externalFile.existsSync(), isTrue,
         reason: 'Run: python scripts/active/scrape_external_sundays.py');
 
