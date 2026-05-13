@@ -7,9 +7,9 @@ import '../models/bible_book.dart';
 import '../models/daily_reading.dart';
 import 'csv_readings_resolver_service.dart';
 import 'daniel_verse_mapper.dart' show DeuterocanonicalVerseMapper;
+import 'incipit_decision_service.dart';
 import 'incipit_preference_service.dart';
 import 'incipit_processing_service.dart';
-import 'incipit_rules_service.dart';
 import 'lectionary_psalm_catalog_service.dart';
 import 'reading_reference_parser.dart';
 import 'readings_backend.dart';
@@ -29,9 +29,11 @@ class ReadingsBackendIo implements ReadingsBackend {
   }
 
   final IncipitProcessingService _incipitProcessor = IncipitProcessingService();
-  final IncipitRulesService _incipitRules = IncipitRulesService();
-  final IncipitPreferenceService _incipitPreference = IncipitPreferenceService();
-  final CsvReadingsResolverService _csvResolver = CsvReadingsResolverService.instance;
+  final IncipitDecisionService _incipitDecision = IncipitDecisionService();
+  final IncipitPreferenceService _incipitPreference =
+      IncipitPreferenceService();
+  final CsvReadingsResolverService _csvResolver =
+      CsvReadingsResolverService.instance;
   final LectionaryPsalmCatalogService _psalmCatalog =
       LectionaryPsalmCatalogService.instance;
 
@@ -51,11 +53,10 @@ class ReadingsBackendIo implements ReadingsBackend {
     return _nabreDb!;
   }
 
-
   Future<Database> get _currentBibleDatabase async {
     _versionPreference ??= await BibleVersionPreference.getInstance();
     final version = _versionPreference!.currentVersion;
-    
+
     switch (version) {
       case BibleVersionType.nabre:
         return _nabreDatabase;
@@ -76,14 +77,18 @@ class ReadingsBackendIo implements ReadingsBackend {
 
       if (position.contains('psalm')) {
         psalmOrdinal += 1;
-        
+
         // For feast days (reading.feast is set), use the hardcoded response from CSV
         // Do NOT enrich from catalog - feast days have their own proper readings
         if (r.feast != null && r.feast!.isNotEmpty) {
-          debugPrint('Feast day psalm: ${r.reading}, feast: ${r.feast}, response: ${r.psalmResponse}');
+          debugPrint(
+            'Feast day psalm: ${r.reading}, feast: ${r.feast}, response: ${r.psalmResponse}',
+          );
           // Still decode the response if it has R notation
           if (r.psalmResponse != null && r.psalmResponse!.contains('(R.')) {
-            final decodedFromR = await _decodeRefrainFromRNotation(r.reading + ' ' + r.psalmResponse!);
+            final decodedFromR = await _decodeRefrainFromRNotation(
+              r.reading + ' ' + r.psalmResponse!,
+            );
             if (decodedFromR != null && decodedFromR.trim().isNotEmpty) {
               updated = updated.copyWith(psalmResponse: decodedFromR);
             }
@@ -100,8 +105,10 @@ class ReadingsBackendIo implements ReadingsBackend {
           );
           String enrichedReference = updated.reading;
           if (bestEntry != null &&
-              RegExp(r'\(R\.', caseSensitive: false)
-                  .hasMatch(bestEntry.fullReference)) {
+              RegExp(
+                r'\(R\.',
+                caseSensitive: false,
+              ).hasMatch(bestEntry.fullReference)) {
             enrichedReference = _mergeRNotation(
               base: updated.reading,
               enriched: bestEntry.fullReference,
@@ -120,16 +127,20 @@ class ReadingsBackendIo implements ReadingsBackend {
           if (decodedFromR != null && decodedFromR.trim().isNotEmpty) {
             updated = updated.copyWith(psalmResponse: decodedFromR);
           } else if (r.psalmResponse != null) {
-            final decoded =
-                await _decodePsalmResponseRef(r.psalmResponse!, updated.reading);
+            final decoded = await _decodePsalmResponseRef(
+              r.psalmResponse!,
+              updated.reading,
+            );
             if (decoded != r.psalmResponse) {
               updated = updated.copyWith(psalmResponse: decoded);
             }
           }
         }
       } else if (r.psalmResponse != null) {
-        final decoded =
-            await _decodePsalmResponseRef(r.psalmResponse!, r.reading);
+        final decoded = await _decodePsalmResponseRef(
+          r.psalmResponse!,
+          r.reading,
+        );
         if (decoded != r.psalmResponse) {
           updated = updated.copyWith(psalmResponse: decoded);
         }
@@ -146,8 +157,10 @@ class ReadingsBackendIo implements ReadingsBackend {
   /// Appends the "(R. Xx)" refrain notation from [enriched] onto [base]
   /// when the two references point to the same psalm passage.
   String _mergeRNotation({required String base, required String enriched}) {
-    final rMatch =
-        RegExp(r'\(R\.[^)]+\)', caseSensitive: false).firstMatch(enriched);
+    final rMatch = RegExp(
+      r'\(R\.[^)]+\)',
+      caseSensitive: false,
+    ).firstMatch(enriched);
     if (rMatch == null) return base;
     if (RegExp(r'\(R\.', caseSensitive: false).hasMatch(base)) return base;
     return '$base ${rMatch.group(0)!}';
@@ -157,7 +170,7 @@ class ReadingsBackendIo implements ReadingsBackend {
   /// psalm [reference] and fetches the corresponding verse text from the
   /// currently selected Bible database. Returns null when no notation is
   /// present or the verse cannot be fetched.
-  /// 
+  ///
   /// Supports:
   /// - Simple verse numbers: (R. 7), (R. 2a)
   /// - Compound parts: (R. 6cd), (R. 7c+10c)
@@ -208,11 +221,14 @@ class ReadingsBackendIo implements ReadingsBackend {
     }
 
     // Get the psalm chapter from the reference
-    final chapterMatch =
-        RegExp(r'(?:Ps|Psalm)\s+(\d+)', caseSensitive: false)
-            .firstMatch(reference);
+    final chapterMatch = RegExp(
+      r'(?:Ps|Psalm)\s+(\d+)',
+      caseSensitive: false,
+    ).firstMatch(reference);
     if (chapterMatch == null) {
-      debugPrint('_decodeRefrainFromRNotation: no psalm chapter found in reference');
+      debugPrint(
+        '_decodeRefrainFromRNotation: no psalm chapter found in reference',
+      );
       return null;
     }
 
@@ -220,24 +236,35 @@ class ReadingsBackendIo implements ReadingsBackend {
     final verseNum = int.parse(psalmRefMatch.group(1)!);
     final partLetter = psalmRefMatch.group(2);
 
-    debugPrint('_decodeRefrainFromRNotation: Psalm $chapter:$verseNum${partLetter ?? ''}');
+    debugPrint(
+      '_decodeRefrainFromRNotation: Psalm $chapter:$verseNum${partLetter ?? ''}',
+    );
 
     return _fetchPsalmVerse(chapter, verseNum, partLetter);
   }
 
   /// Fetch a verse from the Psalms book
-  Future<String?> _fetchPsalmVerse(int chapter, int verse, String? partLetter) async {
+  Future<String?> _fetchPsalmVerse(
+    int chapter,
+    int verse,
+    String? partLetter,
+  ) async {
     try {
       final db = await _currentBibleDatabase;
-      final rows = await db.rawQuery('''
+      final rows = await db.rawQuery(
+        '''
         SELECT v.text
         FROM verses v
         JOIN books b ON b._id = v.book_id
         WHERE b.shortname = 'Ps' AND v.chapter_id = ? AND v.verse_id = ?
-      ''', [chapter, verse]);
+      ''',
+        [chapter, verse],
+      );
 
       if (rows.isEmpty) {
-        debugPrint('_fetchPsalmVerse: no verse found for Psalm $chapter:$verse');
+        debugPrint(
+          '_fetchPsalmVerse: no verse found for Psalm $chapter:$verse',
+        );
         return null;
       }
       final verseText = rows.first['text'] as String;
@@ -263,7 +290,9 @@ class ReadingsBackendIo implements ReadingsBackend {
     required int verse,
     String? partLetter,
   }) async {
-    debugPrint('_fetchBibleVerse: $bookAbbr $chapter:$verse${partLetter ?? ''}');
+    debugPrint(
+      '_fetchBibleVerse: $bookAbbr $chapter:$verse${partLetter ?? ''}',
+    );
 
     // Map common abbreviations to full names
     final bookName = _mapBookAbbreviation(bookAbbr);
@@ -274,15 +303,20 @@ class ReadingsBackendIo implements ReadingsBackend {
 
     try {
       final db = await _currentBibleDatabase;
-      final rows = await db.rawQuery('''
+      final rows = await db.rawQuery(
+        '''
         SELECT v.text
         FROM verses v
         JOIN books b ON b._id = v.book_id
         WHERE b.name = ? AND v.chapter_id = ? AND v.verse_id = ?
-      ''', [bookName, chapter, verse]);
+      ''',
+        [bookName, chapter, verse],
+      );
 
       if (rows.isEmpty) {
-        debugPrint('_fetchBibleVerse: no verse found for $bookName $chapter:$verse');
+        debugPrint(
+          '_fetchBibleVerse: no verse found for $bookName $chapter:$verse',
+        );
         return null;
       }
       final verseText = rows.first['text'] as String;
@@ -384,10 +418,13 @@ class ReadingsBackendIo implements ReadingsBackend {
   /// If [response] looks like a verse reference (e.g. "Ps 147:12" or "Ps 145:8a"),
   /// fetch the verse text from the RSVCE database and return it.
   /// Otherwise return the original string unchanged.
-  Future<String> _decodePsalmResponseRef(String response, String reading) async {
+  Future<String> _decodePsalmResponseRef(
+    String response,
+    String reading,
+  ) async {
     // Only decode if it looks like a verse reference (short, starts with Ps/Psalm)
     if (!_looksLikePsalmReference(response)) return response;
-    
+
     final match = RegExp(
       r'^(?:Ps|Psalm)\s*\.?\s*(\d+):(\d+)([a-d])?$',
       caseSensitive: false,
@@ -400,18 +437,24 @@ class ReadingsBackendIo implements ReadingsBackend {
 
     try {
       final db = await _currentBibleDatabase;
-      final rows = await db.rawQuery('''
+      final rows = await db.rawQuery(
+        '''
         SELECT v.text
         FROM verses v
         JOIN books b ON b._id = v.book_id
         WHERE b.shortname = 'Ps' AND v.chapter_id = ? AND v.verse_id = ?
-      ''', [chapter, verseNum]);
+      ''',
+        [chapter, verseNum],
+      );
 
       if (rows.isEmpty) return response;
       final verseText = rows.first['text'] as String;
 
       if (partLetter != null) {
-        final extracted = PsalmVerseSplitter.getVersePart(verseText, partLetter);
+        final extracted = PsalmVerseSplitter.getVersePart(
+          verseText,
+          partLetter,
+        );
         return extracted ?? response;
       }
 
@@ -426,8 +469,11 @@ class ReadingsBackendIo implements ReadingsBackend {
   bool _looksLikePsalmReference(String text) {
     final trimmed = text.trim();
     // Must be short and start with Ps/Psalm followed by chapter:verse
-    return trimmed.length < 30 && 
-           RegExp(r'^(?:Ps|Psalm)\s*\.?\s*\d+:\d+', caseSensitive: false).hasMatch(trimmed);
+    return trimmed.length < 30 &&
+        RegExp(
+          r'^(?:Ps|Psalm)\s*\.?\s*\d+:\d+',
+          caseSensitive: false,
+        ).hasMatch(trimmed);
   }
 
   @override
@@ -435,10 +481,14 @@ class ReadingsBackendIo implements ReadingsBackend {
     String reference, {
     String? psalmResponse,
     String? incipit,
+    String? readingType,
   }) async {
     // Check if this is a responsorial psalm that needs special formatting
     if (_isResponsorialPsalm(reference)) {
-      return await _getResponsorialPsalmText(reference, psalmResponse: psalmResponse);
+      return await _getResponsorialPsalmText(
+        reference,
+        psalmResponse: psalmResponse,
+      );
     }
 
     // Strip "see" / "cf." / "cf" prefixes so allusive acclamation references
@@ -490,83 +540,92 @@ class ReadingsBackendIo implements ReadingsBackend {
       return fullText;
     }
 
-    // Pass 0 — rule lookup. A matched rule is authoritative: its wording is
-    // used as-is and only Pass 3 dedupe runs (no Pass 1 normalization, no
-    // Pass 2 subset-expansion that would substitute a generic book prefix).
-    // Locale is read from IncipitPreferenceService — future-proofs per-region
-    // variants (en-US, en-GB, en-IE) without requiring a code change.
+    // Locale-aware incipit decision. The decision service ranks exact source
+    // evidence, validated legacy rules, CSV incipits, conservative generated
+    // cleanup, then raw text.
     final locale = await _incipitPreference.getLocale();
-    final ruleMatch = await _incipitRules.matchForText(
+    final decision = await _incipitDecision.decide(
       reference: reference,
       fullText: fullText,
+      csvIncipit: incipit,
       locale: locale,
+      readingType: readingType,
     );
-    if (ruleMatch != null) {
-      return _incipitProcessor.processWithAuthoritativeIncipit(
-        reference,
-        fullText,
-        ruleMatch.transformed,
-      );
+    if (!decision.usesOpening) {
+      return fullText;
     }
 
-    return _incipitProcessor.process(
+    if (decision.operation == 'generatedFallback' ||
+        decision.rejectedAlternatives.isNotEmpty ||
+        decision.warnings.isNotEmpty) {
+      debugPrint('INCIPIT_AUDIT ${decision.auditRow}');
+    }
+
+    return _incipitProcessor.processWithAuthoritativeIncipit(
       reference,
       fullText,
-      csvIncipit: incipit,
+      decision.opening,
+      joinStyle: decision.joinStyle,
     );
   }
-  
+
   /// Check if a reference is a responsorial psalm with complex notation
   bool _isResponsorialPsalm(String reference) {
     final normalized = reference.toLowerCase().trim();
-    
+
     // Must start with Ps or Psalm
     if (!normalized.startsWith('ps ') && !normalized.startsWith('psalm ')) {
       return false;
     }
-    
+
     // Check for patterns that indicate lectionary-style psalm formatting:
     // - Letter parts: "4bc-5ab", "13cd-14"
     // - "and" notation: "6 and 7bc"
     // - Refrain notation: "(R. 6a)"
     // - Comma-separated ranges: "12-13, 15-16, 19-20"
     return normalized.contains(RegExp(r'\d+[a-d]')) ||
-           normalized.contains(' and ') ||
-           normalized.contains(RegExp(r'\(r\.\s*\d+[a-d]?\)')) ||
-           normalized.contains(','); // Comma-separated stanza groups
+        normalized.contains(' and ') ||
+        normalized.contains(RegExp(r'\(r\.\s*\d+[a-d]?\)')) ||
+        normalized.contains(','); // Comma-separated stanza groups
   }
-  
+
   /// Get responsorial psalm text with lectionary formatting
-  Future<String> _getResponsorialPsalmText(String reference, {String? psalmResponse}) async {
+  Future<String> _getResponsorialPsalmText(
+    String reference, {
+    String? psalmResponse,
+  }) async {
     try {
       // Extract psalm chapter number
-      final chapterMatch = RegExp(r'(?:Ps|Psalm)\s+(\d+)', caseSensitive: false).firstMatch(reference);
+      final chapterMatch = RegExp(
+        r'(?:Ps|Psalm)\s+(\d+)',
+        caseSensitive: false,
+      ).firstMatch(reference);
       if (chapterMatch == null) {
         return 'Psalm text unavailable for $reference.';
       }
-      
+
       final chapter = int.parse(chapterMatch.group(1)!);
-      
+
       // Extract verse range to know which verses to fetch
       final verseMatch = RegExp(r'[:\.](.+?)(?:\(|$)').firstMatch(reference);
       if (verseMatch == null) {
         return 'Psalm text unavailable for $reference.';
       }
-      
+
       final versePart = verseMatch.group(1)!.trim();
-      
+
       // Determine which verses we need
       final versesToFetch = _extractVerseNumbers(versePart);
       if (versesToFetch.isEmpty) {
         return 'Psalm text unavailable for $reference.';
       }
-      
+
       // If psalmResponse is a verse reference, include that verse in the fetch range
       int? refrainVerseNum;
       int? refrainChapter;
       String? refrainPart;
       bool refrainIsVerseRef = false;
-      
+
       if (psalmResponse != null) {
         final verseRefMatch = RegExp(
           r'(?:Ps|Psalm)\s*\.?\s*(\d+):(\d+)([a-d])?',
@@ -583,64 +642,78 @@ class ReadingsBackendIo implements ReadingsBackend {
           }
         }
       }
-      
+
       // Fetch only the verses that are actually referenced — use IN (…) rather
       // than a >= min AND <= max range, which would over-fetch skipped verses.
       final sortedVerses = versesToFetch.toList()..sort();
       final placeholders = sortedVerses.map((_) => '?').join(', ');
 
-      final rows = await (await _currentBibleDatabase).rawQuery('''
+      final rows = await (await _currentBibleDatabase).rawQuery(
+        '''
         SELECT v.verse_id, v.text
         FROM verses v
         JOIN books b ON b._id = v.book_id
         WHERE b.shortname = 'Ps' AND v.chapter_id = ? 
           AND v.verse_id IN ($placeholders)
         ORDER BY v.verse_id
-      ''', [chapter, ...sortedVerses]);
-      
+      ''',
+        [chapter, ...sortedVerses],
+      );
+
       if (rows.isEmpty) {
         return 'Psalm text unavailable for $reference.';
       }
-      
+
       // Build verse map
       final verses = <int, String>{};
       for (var row in rows) {
         verses[row['verse_id'] as int] = row['text'] as String;
       }
-      
+
       // Resolve the refrain text
       String refrain = 'Lord, hear our prayer.';
       String? refrainVerseLabel;
-      
+
       if (psalmResponse != null) {
         if (refrainIsVerseRef && refrainVerseNum != null) {
           // psalmResponse is a verse reference – decode to actual text
           refrainVerseLabel = '$refrainVerseNum${refrainPart ?? ""}';
-          
+
           // Fetch from a different chapter if needed
           Map<int, String> refrainSource = verses;
           if (refrainChapter != null && refrainChapter != chapter) {
-            final refrainRows = await (await _currentBibleDatabase).rawQuery('''
+            final refrainRows = await (await _currentBibleDatabase).rawQuery(
+              '''
               SELECT v.verse_id, v.text
               FROM verses v
               JOIN books b ON b._id = v.book_id
               WHERE b.shortname = 'Ps' AND v.chapter_id = ? AND v.verse_id = ?
-            ''', [refrainChapter, refrainVerseNum]);
+            ''',
+              [refrainChapter, refrainVerseNum],
+            );
             if (refrainRows.isNotEmpty) {
-              refrainSource = {refrainRows.first['verse_id'] as int: refrainRows.first['text'] as String};
+              refrainSource = {
+                refrainRows.first['verse_id'] as int:
+                    refrainRows.first['text'] as String,
+              };
             }
           }
-          
+
           if (refrainSource.containsKey(refrainVerseNum)) {
             final refrainText = refrainSource[refrainVerseNum]!;
             if (refrainPart != null) {
-              final extracted = PsalmVerseSplitter.getVersePart(refrainText, refrainPart);
+              final extracted = PsalmVerseSplitter.getVersePart(
+                refrainText,
+                refrainPart,
+              );
               if (extracted != null) {
                 refrain = extracted;
               }
             } else {
               // Use the full verse text (cleaned) as the refrain
-              refrain = refrainText.replaceFirst(RegExp(r'^\d+\.\s*'), '').trim();
+              refrain = refrainText
+                  .replaceFirst(RegExp(r'^\d+\.\s*'), '')
+                  .trim();
             }
           }
         } else {
@@ -649,26 +722,34 @@ class ReadingsBackendIo implements ReadingsBackend {
         }
       } else {
         // Try to extract from (R. N) notation in the reference
-        final refrainMatch = RegExp(r'\(R\.\s*(\d+)([a-d])?\)', caseSensitive: false).firstMatch(reference);
+        final refrainMatch = RegExp(
+          r'\(R\.\s*(\d+)([a-d])?\)',
+          caseSensitive: false,
+        ).firstMatch(reference);
         if (refrainMatch != null) {
           final rVerseNum = int.parse(refrainMatch.group(1)!);
           final rPart = refrainMatch.group(2);
           refrainVerseLabel = '${refrainMatch.group(1)}${rPart ?? ""}';
-          
+
           if (verses.containsKey(rVerseNum)) {
             final refrainText = verses[rVerseNum]!;
             if (rPart != null) {
-              final extracted = PsalmVerseSplitter.getVersePart(refrainText, rPart);
+              final extracted = PsalmVerseSplitter.getVersePart(
+                refrainText,
+                rPart,
+              );
               if (extracted != null) {
                 refrain = extracted;
               }
             } else {
-              refrain = refrainText.replaceFirst(RegExp(r'^\d+\.\s*'), '').trim();
+              refrain = refrainText
+                  .replaceFirst(RegExp(r'^\d+\.\s*'), '')
+                  .trim();
             }
           }
         }
       }
-      
+
       // Format with lectionary style
       return LectionaryPsalmFormatter.format(
         reference: reference,
@@ -681,20 +762,20 @@ class ReadingsBackendIo implements ReadingsBackend {
       return 'Psalm text unavailable for $reference. Error: $e';
     }
   }
-  
+
   /// Extract all verse numbers from a verse notation string
   Set<int> _extractVerseNumbers(String versePart) {
     final verses = <int>{};
-    
+
     // Remove refrain notation
     versePart = versePart.replaceAll(RegExp(r'\(R\.\s*[^)]+\)'), '').trim();
-    
+
     // Split on commas
     final segments = versePart.split(',');
-    
+
     for (var segment in segments) {
       segment = segment.trim();
-      
+
       // Handle "and" notation
       if (segment.contains(' and ')) {
         final andParts = segment.split(' and ');
@@ -705,10 +786,10 @@ class ReadingsBackendIo implements ReadingsBackend {
         verses.addAll(_extractVerseNumbersFromSegment(segment));
       }
     }
-    
+
     return verses;
   }
-  
+
   /// Extract verse numbers from a single segment.
   ///
   /// Handles `+` and `&` as discrete-verse separators (e.g. "2+6", "3&5").
@@ -850,7 +931,7 @@ class ReadingsBackendIo implements ReadingsBackend {
         chapter,
         startVerse,
       );
-      
+
       if (needsTranslation) {
         // Translate NAB verse numbers to RSVCE verse numbers
         startVerse = DeuterocanonicalVerseMapper.nabToRsvce(
@@ -876,7 +957,7 @@ class ReadingsBackendIo implements ReadingsBackend {
         where.write(' AND v.verse_id <= ?');
         args.add(endVerse);
       }
-      
+
       // For deuterocanonical additions, restrict to the specific section
       // to avoid picking up duplicate verse numbers
       if (needsTranslation) {
@@ -884,8 +965,8 @@ class ReadingsBackendIo implements ReadingsBackend {
           shortName,
           chapter,
         );
-        if (constraints != null && 
-            constraints.startRow != null && 
+        if (constraints != null &&
+            constraints.startRow != null &&
             constraints.endRow != null) {
           where.write(' AND v._id >= ? AND v._id < ?');
           args.add(constraints.startRow);
@@ -928,7 +1009,8 @@ class ReadingsBackendIo implements ReadingsBackend {
             chapter == range.endChapter && verseId == range.endVerse;
 
         if (isStartVerse && range.startVerseParts != null) {
-          verseText = PsalmVerseSplitter.getVerseParts(
+          verseText =
+              PsalmVerseSplitter.getVerseParts(
                 verseText,
                 range.startVerseParts!,
               ) ??
@@ -938,7 +1020,8 @@ class ReadingsBackendIo implements ReadingsBackend {
         if (isEndVerse &&
             range.endVerseParts != null &&
             !(isStartVerse && range.startVerseParts == range.endVerseParts)) {
-          verseText = PsalmVerseSplitter.getVerseParts(
+          verseText =
+              PsalmVerseSplitter.getVerseParts(
                 row['text'] as String,
                 range.endVerseParts!,
               ) ??
@@ -952,8 +1035,13 @@ class ReadingsBackendIo implements ReadingsBackend {
     return lines;
   }
 
-  Future<Database> _openAssetDatabase(String dbName, {bool readOnly = false}) async {
-    return await SharedServiceUtils.openValidatedAssetDatabase(dbName, readOnly: readOnly);
+  Future<Database> _openAssetDatabase(
+    String dbName, {
+    bool readOnly = false,
+  }) async {
+    return await SharedServiceUtils.openValidatedAssetDatabase(
+      dbName,
+      readOnly: readOnly,
+    );
   }
-
 }

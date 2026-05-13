@@ -109,7 +109,9 @@ class IncipitRulesService {
     for (final r in rules) {
       if (r.matchBookNormalized != bookNorm) continue;
       if (r.matchChapter != null && r.matchChapter != chapter) continue;
-      if (locale != null && r.locale.isNotEmpty && r.locale != locale) {
+      if (locale != null &&
+          r.locale.isNotEmpty &&
+          !_localeMatches(locale, r.locale)) {
         continue;
       }
       if (r.matchOpeningRegex != null &&
@@ -148,6 +150,15 @@ class IncipitRulesService {
     _rules = null;
   }
 
+  bool _localeMatches(String requested, String ruleLocale) {
+    final req = requested.toLowerCase().replaceAll('_', '-').trim();
+    final rule = ruleLocale.toLowerCase().replaceAll('_', '-').trim();
+    if (req == rule) return true;
+    if (rule == 'en' && req.startsWith('en-')) return true;
+    if (rule == 'fr' && req.startsWith('fr-')) return true;
+    return false;
+  }
+
   // ─── Helpers ──────────────────────────────────────────────────────────────
 
   /// Returns (normalizedBook, startChapter) or null if unparseable.
@@ -167,39 +178,74 @@ class IncipitRulesService {
   // Mirrors BOOK_ALIASES in scripts/active/grammatical_rule_master.py. Keep
   // the two in sync: rules CSV stores the canonical long form.
   static const Map<String, String> _bookAliases = {
-    'matt': 'matthew', 'mt': 'matthew',
+    'matt': 'matthew',
+    'mt': 'matthew',
     'mk': 'mark',
     'lk': 'luke',
     'jn': 'john',
-    'gen': 'genesis', 'gn': 'genesis',
-    'exod': 'exodus', 'ex': 'exodus',
+    'gen': 'genesis',
+    'gn': 'genesis',
+    'exod': 'exodus',
+    'ex': 'exodus',
     'lev': 'leviticus',
     'num': 'numbers',
-    'deut': 'deuteronomy', 'dt': 'deuteronomy',
+    'deut': 'deuteronomy',
+    'dt': 'deuteronomy',
     'josh': 'joshua',
-    'judg': 'judges', 'jdg': 'judges',
-    '1 sam': '1 samuel', '2 sam': '2 samuel',
-    '1 kgs': '1 kings', '2 kgs': '2 kings',
-    '1 chr': '1 chronicles', '2 chr': '2 chronicles',
+    'judg': 'judges',
+    'jdg': 'judges',
+    '1 sam': '1 samuel',
+    '2 sam': '2 samuel',
+    '1 kgs': '1 kings',
+    '2 kgs': '2 kings',
+    '1 chr': '1 chronicles',
+    '2 chr': '2 chronicles',
     'neh': 'nehemiah',
-    'tob': 'tobit', 'jdt': 'judith', 'esth': 'esther',
-    '1 macc': '1 maccabees', '2 macc': '2 maccabees',
-    'ps': 'psalm', 'prov': 'proverbs', 'eccl': 'ecclesiastes',
-    'song': 'song of songs', 'wis': 'wisdom', 'sir': 'sirach',
-    'isa': 'isaiah', 'jer': 'jeremiah', 'lam': 'lamentations',
-    'bar': 'baruch', 'ezek': 'ezekiel', 'dan': 'daniel',
-    'hos': 'hosea', 'obad': 'obadiah', 'mic': 'micah',
-    'nah': 'nahum', 'hab': 'habakkuk', 'zeph': 'zephaniah',
-    'hag': 'haggai', 'zech': 'zechariah', 'mal': 'malachi',
+    'tob': 'tobit',
+    'jdt': 'judith',
+    'esth': 'esther',
+    '1 macc': '1 maccabees',
+    '2 macc': '2 maccabees',
+    'ps': 'psalm',
+    'prov': 'proverbs',
+    'eccl': 'ecclesiastes',
+    'song': 'song of songs',
+    'wis': 'wisdom',
+    'sir': 'sirach',
+    'isa': 'isaiah',
+    'jer': 'jeremiah',
+    'lam': 'lamentations',
+    'bar': 'baruch',
+    'ezek': 'ezekiel',
+    'dan': 'daniel',
+    'hos': 'hosea',
+    'obad': 'obadiah',
+    'mic': 'micah',
+    'nah': 'nahum',
+    'hab': 'habakkuk',
+    'zeph': 'zephaniah',
+    'hag': 'haggai',
+    'zech': 'zechariah',
+    'mal': 'malachi',
     'rom': 'romans',
-    '1 cor': '1 corinthians', '2 cor': '2 corinthians',
-    'gal': 'galatians', 'eph': 'ephesians', 'phil': 'philippians',
+    '1 cor': '1 corinthians',
+    '2 cor': '2 corinthians',
+    'gal': 'galatians',
+    'eph': 'ephesians',
+    'phil': 'philippians',
     'col': 'colossians',
-    '1 thess': '1 thessalonians', '2 thess': '2 thessalonians',
-    '1 tim': '1 timothy', '2 tim': '2 timothy', 'philem': 'philemon',
-    'heb': 'hebrews', 'jas': 'james',
-    '1 pet': '1 peter', '2 pet': '2 peter',
-    '1 jn': '1 john', '2 jn': '2 john', '3 jn': '3 john',
+    '1 thess': '1 thessalonians',
+    '2 thess': '2 thessalonians',
+    '1 tim': '1 timothy',
+    '2 tim': '2 timothy',
+    'philem': 'philemon',
+    'heb': 'hebrews',
+    'jas': 'james',
+    '1 pet': '1 peter',
+    '2 pet': '2 peter',
+    '1 jn': '1 john',
+    '2 jn': '2 john',
+    '3 jn': '3 john',
     'rev': 'revelation',
   };
 
@@ -230,8 +276,9 @@ class IncipitRulesService {
           IncipitRule(
             ruleId: cols[0].trim(),
             matchBookNormalized: _normalizeBook(cols[1]),
-            matchChapter:
-                matchChapterStr.isEmpty ? null : int.tryParse(matchChapterStr),
+            matchChapter: matchChapterStr.isEmpty
+                ? null
+                : int.tryParse(matchChapterStr),
             matchOpeningRegex: openingRegexStr.isEmpty
                 ? null
                 : RegExp(openingRegexStr, caseSensitive: false),

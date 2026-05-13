@@ -1,13 +1,14 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:flutter/services.dart' show rootBundle;
 
 import '../models/bible_book.dart';
 import '../models/daily_reading.dart';
 import 'csv_readings_resolver_service.dart';
+import 'incipit_decision_service.dart';
 import 'incipit_preference_service.dart';
 import 'incipit_processing_service.dart';
-import 'incipit_rules_service.dart';
 import 'reading_reference_parser.dart';
 import 'readings_backend.dart';
 import 'shared_service_utils.dart';
@@ -21,11 +22,13 @@ class ReadingsBackendWeb implements ReadingsBackend {
   Map<String, String> _aliases = const {};
   Map<String, Map<int, Map<int, String>>> _versesByBook = const {};
   BibleVersionPreference? _versionPreference;
-  
+
   final IncipitProcessingService _incipitService = IncipitProcessingService();
-  final IncipitRulesService _incipitRules = IncipitRulesService();
-  final IncipitPreferenceService _incipitPreference = IncipitPreferenceService();
-  final CsvReadingsResolverService _csvResolver = CsvReadingsResolverService.instance;
+  final IncipitDecisionService _incipitDecision = IncipitDecisionService();
+  final IncipitPreferenceService _incipitPreference =
+      IncipitPreferenceService();
+  final CsvReadingsResolverService _csvResolver =
+      CsvReadingsResolverService.instance;
 
   @override
   Future<List<DailyReading>> getReadingsForDate(DateTime date) async {
@@ -37,6 +40,7 @@ class ReadingsBackendWeb implements ReadingsBackend {
     String reference, {
     String? psalmResponse,
     String? incipit,
+    String? readingType,
   }) async {
     await _ensureLoaded();
 
@@ -77,30 +81,31 @@ class ReadingsBackendWeb implements ReadingsBackend {
     }
 
     final locale = await _incipitPreference.getLocale();
-    final ruleMatch = await _incipitRules.matchForText(
+    final decision = await _incipitDecision.decide(
       reference: reference,
       fullText: fullText,
+      csvIncipit: incipit,
       locale: locale,
+      readingType: readingType,
     );
-    if (ruleMatch != null) {
-      return _incipitService.processWithAuthoritativeIncipit(
-        reference,
-        fullText,
-        ruleMatch.transformed,
-      );
+    if (!decision.usesOpening) {
+      return fullText;
     }
 
-    final processed = _incipitService.process(
+    if (decision.operation == 'generatedFallback' ||
+        decision.rejectedAlternatives.isNotEmpty ||
+        decision.warnings.isNotEmpty) {
+      debugPrint('INCIPIT_AUDIT ${decision.auditRow}');
+    }
+
+    return _incipitService.processWithAuthoritativeIncipit(
       reference,
       fullText,
-      csvIncipit: incipit,
+      decision.opening,
+      joinStyle: decision.joinStyle,
     );
-
-    return processed;
   }
 
-
-  
   @override
   Future<List<Book>> getBooks() async {
     await _ensureLoaded();
@@ -137,7 +142,7 @@ class ReadingsBackendWeb implements ReadingsBackend {
 
     _versionPreference ??= await BibleVersionPreference.getInstance();
     final currentVersion = _versionPreference!.currentVersion;
-    
+
     // Try to load version-specific verses data, fall back to default
     String versesJson;
     try {
@@ -146,9 +151,7 @@ class ReadingsBackendWeb implements ReadingsBackend {
       );
     } catch (e) {
       // Fall back to default verses file if version-specific one doesn't exist
-      versesJson = await rootBundle.loadString(
-        'assets/data/verses_rows.json',
-      );
+      versesJson = await rootBundle.loadString('assets/data/verses_rows.json');
     }
 
     // Load books data (same for all versions)

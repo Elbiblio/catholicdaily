@@ -21,8 +21,9 @@ class HydratedReadingSet {
 }
 
 class ReadingFlowService extends BaseService<ReadingFlowService> {
-  static ReadingFlowService get instance => BaseService.init(() => ReadingFlowService._());
-  
+  static ReadingFlowService get instance =>
+      BaseService.init(() => ReadingFlowService._());
+
   ReadingFlowService._();
 
   final PsalmResolverService _psalmResolver = PsalmResolverService.instance;
@@ -47,6 +48,7 @@ class ReadingFlowService extends BaseService<ReadingFlowService> {
           reading.reading,
           psalmResponse: reading.psalmResponse,
           incipit: reading.incipit,
+          readingType: reading.position,
         );
         // Text is already processed by IncipitProcessingService in ReadingsService
         final text = rawText;
@@ -72,6 +74,7 @@ class ReadingFlowService extends BaseService<ReadingFlowService> {
       reading.reading,
       psalmResponse: reading.psalmResponse,
       incipit: reading.incipit,
+      readingType: reading.position,
     );
   }
 
@@ -86,7 +89,9 @@ class ReadingFlowService extends BaseService<ReadingFlowService> {
       readings: List<DailyReading>.from(readings),
       readingTexts: Map<String, String>.from(readingTexts),
       currentIndex: selectedIndex,
-      navigableItems: navigableItems ?? readings.map((r) => NavigableItem.fromReading(r)).toList(),
+      navigableItems:
+          navigableItems ??
+          readings.map((r) => NavigableItem.fromReading(r)).toList(),
       navigableIndex: navigableIndex ?? selectedIndex,
     );
   }
@@ -115,5 +120,4 @@ class ReadingFlowService extends BaseService<ReadingFlowService> {
     // Order of Mass is now accessed separately via the Mass screen
     return readings.map((r) => NavigableItem.fromReading(r)).toList();
   }
-
 }

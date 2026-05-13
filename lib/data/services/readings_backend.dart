@@ -7,6 +7,7 @@ abstract class ReadingsBackend {
     String reference, {
     String? psalmResponse,
     String? incipit,
+    String? readingType,
   });
   Future<List<Book>> getBooks();
   Future<String> getChapterText({

@@ -49,16 +49,11 @@ class IncipitProcessingService {
   /// "Incipit: verse content" string ready for display.
   ///
   /// [csvIncipit] — optional incipit value from the CSV lectionary data.
-  String process(
-    String reference,
-    String rawText, {
-    String? csvIncipit,
-  }) {
+  String process(String reference, String rawText, {String? csvIncipit}) {
     // ── Pass 1: Normalize CSV incipit ────────────────────────────────────────
-    final cleanedCsvIncipit =
-        csvIncipit != null && csvIncipit.trim().isNotEmpty
-            ? _pass1Normalize(csvIncipit.trim())
-            : null;
+    final cleanedCsvIncipit = csvIncipit != null && csvIncipit.trim().isNotEmpty
+        ? _pass1Normalize(csvIncipit.trim())
+        : null;
 
     // ── Pass 2: Clean text and derive incipit ───────────────────────────────────
     final correctedText = _cleanVerseText(rawText);
@@ -66,8 +61,11 @@ class IncipitProcessingService {
 
     if (cleanedCsvIncipit != null && cleanedCsvIncipit.isNotEmpty) {
       // CSV incipit provided — merge it against the corrected text.
-      return _pass2MergeCsvIncipit(correctedText, cleanedCsvIncipit,
-          reference: reference);
+      return _pass2MergeCsvIncipit(
+        correctedText,
+        cleanedCsvIncipit,
+        reference: reference,
+      );
     }
 
     if (derivedIncipit == null || derivedIncipit.trim().isEmpty) {
@@ -98,8 +96,9 @@ class IncipitProcessingService {
   String processWithAuthoritativeIncipit(
     String reference,
     String rawText,
-    String incipit,
-  ) {
+    String incipit, {
+    String joinStyle = 'auto',
+  }) {
     final correctedText = _cleanVerseText(rawText);
     final cleaned = incipit.trim().replaceAll(RegExp(r'[,:;]\s*$'), '');
     if (cleaned.isEmpty) return correctedText;
@@ -112,24 +111,36 @@ class IncipitProcessingService {
     firstLine = firstLine.replaceFirst(RegExp(r'^\d+[a-z]?\.\s*'), '');
     firstLine = firstLine.replaceFirst(RegExp(r'^\d+[a-z]?\s+'), '');
 
-    final deduped = _pass3DeduplicateFirstLine(firstLine, cleaned);
+    final deduped =
+        _dedupeKnownFormulaEcho(firstLine, cleaned) ??
+        _pass3DeduplicateFirstLine(firstLine, cleaned);
 
     // Whole line was the incipit — drop it, prepend incipit to remaining lines.
     if (deduped.isEmpty) {
       lines[firstIdx] = '';
       final tail = lines.join('\n').trimLeft();
-      return tail.isEmpty ? cleaned : '$cleaned: $tail';
+      return tail.isEmpty
+          ? cleaned
+          : _joinByStyle(cleaned, tail, _resolvedJoinStyle(joinStyle, 'colon'));
     }
 
     // No overlap consumed — colon-join with capitalized remainder.
     if (deduped == firstLine) {
-      lines[firstIdx] = deduped;
-      return _joinWithColon(cleaned, lines.join('\n'));
+      lines[firstIdx] = _prepareDecisionRemainder(deduped, cleaned, joinStyle);
+      return _joinByStyle(
+        cleaned,
+        lines.join('\n'),
+        _resolvedJoinStyle(joinStyle, 'colon'),
+      );
     }
 
     // Partial overlap — comma-join, preserve remainder's casing.
     lines[firstIdx] = deduped;
-    return _joinWithComma(cleaned, lines.join('\n'));
+    return _joinByStyle(
+      cleaned,
+      lines.join('\n'),
+      _resolvedJoinStyle(joinStyle, 'comma'),
+    );
   }
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -203,8 +214,7 @@ class IncipitProcessingService {
       }
 
       // "At that time" context: resolve opening pronouns to "Jesus".
-      if (prefix.toLowerCase().startsWith('at that time') &&
-          after.isNotEmpty) {
+      if (prefix.toLowerCase().startsWith('at that time') && after.isNotEmpty) {
         after = after.replaceFirstMapped(
           RegExp(
             r'^(?:(While|As|When|After)\s+)(?:he|him)\b',
@@ -243,15 +253,19 @@ class IncipitProcessingService {
   ///      epistles). Preserves words like "rose up" that CSV partials drop.
   ///   3. Token-alignment dedupe (right-to-left): finds the closing incipit
   ///      token in the verse and appends the verse remainder with a comma.
-  String _pass2MergeCsvIncipit(String text, String csvIncipit,
-      {String reference = ''}) {
+  String _pass2MergeCsvIncipit(
+    String text,
+    String csvIncipit, {
+    String reference = '',
+  }) {
     final lines = text.split('\n');
     for (var i = 0; i < lines.length; i++) {
       if (lines[i].trim().isEmpty) continue;
 
       final originalLine = lines[i].trim();
-      final verseMatch =
-          RegExp(r'^(\d+[a-z]?)\.\s*(.*)$').firstMatch(originalLine);
+      final verseMatch = RegExp(
+        r'^(\d+[a-z]?)\.\s*(.*)$',
+      ).firstMatch(originalLine);
       final versePrefix = verseMatch?.group(1);
       final verseBody = (verseMatch?.group(2) ?? originalLine).trim();
 
@@ -269,8 +283,11 @@ class IncipitProcessingService {
     return csvIncipit;
   }
 
-  String _mergeCsvIncipitWithVerse(String csvIncipit, String verseText,
-      {String reference = ''}) {
+  String _mergeCsvIncipitWithVerse(
+    String csvIncipit,
+    String verseText, {
+    String reference = '',
+  }) {
     final cleanedVerse = verseText.trim();
     if (csvIncipit.isEmpty || cleanedVerse.isEmpty) {
       return csvIncipit.isEmpty ? cleanedVerse : csvIncipit;
@@ -336,7 +353,10 @@ class IncipitProcessingService {
   /// Returns true when [incipit] is a single-word lectionary opener such as
   /// "BELOVED", "BRETHREN", "BEHOLD", "MY SON", "MY BROTHERS".
   bool _isSingleOpener(String incipit) {
-    final trimmed = incipit.trim().toLowerCase().replaceAll(RegExp(r'[,:;]$'), '');
+    final trimmed = incipit.trim().toLowerCase().replaceAll(
+      RegExp(r'[,:;]$'),
+      '',
+    );
     const openers = {
       'beloved',
       'brethren',
@@ -403,9 +423,23 @@ class IncipitProcessingService {
     }
     // Pauline epistles
     const pauline = {
-      'rom', 'cor', '1cor', '2cor', 'gal', 'eph', 'phil',
-      'col', 'thess', '1thess', '2thess', 'tim', '1tim', '2tim',
-      'titus', 'phlm', 'heb',
+      'rom',
+      'cor',
+      '1cor',
+      '2cor',
+      'gal',
+      'eph',
+      'phil',
+      'col',
+      'thess',
+      '1thess',
+      '2thess',
+      'tim',
+      '1tim',
+      '2tim',
+      'titus',
+      'phlm',
+      'heb',
     };
     final normalizedBook = lower.replaceAll(' ', '');
     for (final p in pauline) {
@@ -415,8 +449,15 @@ class IncipitProcessingService {
     }
     // Catholic epistles
     const catholic = {
-      'jas', 'james', '1pet', '2pet', 'pet',
-      '1john', '2john', '3john', 'jude',
+      'jas',
+      'james',
+      '1pet',
+      '2pet',
+      'pet',
+      '1john',
+      '2john',
+      '3john',
+      'jude',
     };
     for (final c in catholic) {
       if (normalizedBook == c || normalizedBook.endsWith(c)) {
@@ -425,10 +466,31 @@ class IncipitProcessingService {
     }
     // OT historical / narrative
     const otHistorical = {
-      'gen', 'exod', 'lev', 'num', 'deut', 'josh', 'judg', 'ruth',
-      '1sam', '2sam', 'sam', '1kgs', '2kgs', 'kgs',
-      '1chr', '2chr', 'chr', 'ezra', 'neh', 'tob', 'jud', 'esth',
-      '1macc', '2macc', 'macc',
+      'gen',
+      'exod',
+      'lev',
+      'num',
+      'deut',
+      'josh',
+      'judg',
+      'ruth',
+      '1sam',
+      '2sam',
+      'sam',
+      '1kgs',
+      '2kgs',
+      'kgs',
+      '1chr',
+      '2chr',
+      'chr',
+      'ezra',
+      'neh',
+      'tob',
+      'jud',
+      'esth',
+      '1macc',
+      '2macc',
+      'macc',
     };
     for (final o in otHistorical) {
       if (normalizedBook == o || normalizedBook.endsWith(o)) {
@@ -566,8 +628,10 @@ class IncipitProcessingService {
     final incipitTokens = _tokenize(incipitPrefix);
     if (incipitTokens.length < 2) return firstLine;
 
-    final lowerLine =
-        firstLine.toLowerCase().replaceAll(RegExp(r"[^\w\s']"), ' ');
+    final lowerLine = firstLine.toLowerCase().replaceAll(
+      RegExp(r"[^\w\s']"),
+      ' ',
+    );
 
     int matchedCount = 0;
     for (final token in incipitTokens) {
@@ -578,7 +642,8 @@ class IncipitProcessingService {
 
     final ratio = matchedCount / incipitTokens.length;
 
-    final isProphetic = _isPropheticIncipit(incipitPrefix) &&
+    final isProphetic =
+        _isPropheticIncipit(incipitPrefix) &&
         _startsWithPropheticRedundancy(firstLine);
 
     if (!isProphetic && ratio < 0.5) return firstLine;
@@ -588,9 +653,9 @@ class IncipitProcessingService {
     int lastMatchEnd = -1;
     for (var i = incipitTokens.length - 1; i >= 0; i--) {
       final token = incipitTokens[i];
-      final matches = RegExp('\\b${RegExp.escape(token)}\\b')
-          .allMatches(lowerLine)
-          .toList();
+      final matches = RegExp(
+        '\\b${RegExp.escape(token)}\\b',
+      ).allMatches(lowerLine).toList();
       if (matches.isNotEmpty) {
         lastMatchEnd = matches.last.end;
         break;
@@ -607,9 +672,10 @@ class IncipitProcessingService {
 
     // Prophetic extension: strip "spoke to X, saying, …" → keep only the word.
     if (isProphetic) {
-      final sayingM =
-          RegExp(r'\bsaying\b[,;:]?\s*', caseSensitive: false)
-              .firstMatch(remainder);
+      final sayingM = RegExp(
+        r'\bsaying\b[,;:]?\s*',
+        caseSensitive: false,
+      ).firstMatch(remainder);
       if (sayingM != null) {
         remainder = remainder.substring(sayingM.end).trimLeft();
       } else {
@@ -707,6 +773,105 @@ class IncipitProcessingService {
     return '$i, $joined';
   }
 
+  String _resolvedJoinStyle(String requested, String fallback) {
+    final normalized = requested.toLowerCase().trim();
+    switch (normalized) {
+      case 'colon':
+      case 'comma':
+      case 'period':
+        return normalized;
+      default:
+        return fallback;
+    }
+  }
+
+  String _joinByStyle(String incipit, String verse, String joinStyle) {
+    switch (joinStyle.toLowerCase().trim()) {
+      case 'comma':
+        return _joinWithComma(incipit, verse);
+      case 'period':
+        return _joinWithPeriod(incipit, verse);
+      case 'colon':
+      default:
+        return _joinWithColon(incipit, verse);
+    }
+  }
+
+  String _prepareDecisionRemainder(
+    String remainder,
+    String incipit,
+    String joinStyle,
+  ) {
+    var result = _stripLeadingRepeatedOpener(remainder, incipit);
+    if (_isSingleOpener(incipit)) {
+      result = _stripLeadingNarrativeOpener(result);
+    }
+    return result;
+  }
+
+  String? _dedupeKnownFormulaEcho(String firstLine, String incipit) {
+    final repeated = _stripLeadingRepeatedOpener(firstLine, incipit);
+    if (repeated != firstLine) return repeated;
+
+    if (_isPropheticIncipit(incipit)) {
+      final propheticMatch = RegExp(
+        r'^(?:Thus says the LORD|Thus says the Lord|Thus says the Lord GOD|Thus says the LORD GOD)[:,]?\s*',
+        caseSensitive: false,
+      ).firstMatch(firstLine);
+      if (propheticMatch != null) {
+        return firstLine.substring(propheticMatch.end).trimLeft();
+      }
+    }
+
+    final incipitLower = incipit.toLowerCase();
+    if ((incipitLower.contains('jesus said') ||
+            incipitLower.contains('jesus spoke') ||
+            incipitLower.contains('jesus told')) &&
+        RegExp(
+          r'^(?:on that day|at that time|when evening had come|that day|then|now)\b',
+          caseSensitive: false,
+        ).hasMatch(firstLine)) {
+      final speechMatch = RegExp(
+        r'^(?:[^"\u201C]*?\b(?:he|jesus)\s+(?:said|spoke|told)\s*(?:to\s+(?:them|his disciples|the disciples|the apostles|the crowd|the crowds))?[:,]?\s*)',
+        caseSensitive: false,
+      ).firstMatch(firstLine);
+      if (speechMatch != null) {
+        return firstLine.substring(speechMatch.end).trimLeft();
+      }
+    }
+
+    return null;
+  }
+
+  String _stripLeadingRepeatedOpener(String text, String incipit) {
+    final opener = _singleOpenerName(incipit);
+    if (opener == null) return text;
+
+    final pattern = switch (opener) {
+      'brothers and sisters' =>
+        r'^(?:Brothers and sisters|Brother and sisters|Brethren)[:,]?\s*',
+      'brethren' => r'^(?:Brethren|Brothers and sisters)[:,]?\s*',
+      'beloved' => r'^(?:Beloved)[:,]?\s*',
+      _ => null,
+    };
+    if (pattern == null) return text;
+
+    final match = RegExp(pattern, caseSensitive: false).firstMatch(text);
+    if (match == null) return text;
+    return text.substring(match.end).trimLeft();
+  }
+
+  String? _singleOpenerName(String incipit) {
+    final lower = incipit.trim().toLowerCase().replaceAll(
+      RegExp(r'[,:;]$'),
+      '',
+    );
+    if (lower == 'beloved') return 'beloved';
+    if (lower == 'brethren') return 'brethren';
+    if (lower == 'brothers and sisters') return 'brothers and sisters';
+    return null;
+  }
+
   /// Extracts the part of an incipit that comes after the first colon.
   /// E.g. "Thus says the LORD: The LORD spoke" → "The LORD spoke".
   /// Returns the whole string if no colon is present.
@@ -791,22 +956,22 @@ class IncipitProcessingService {
   /// Returns null if no suitable incipit can be identified.
   String? _deriveIncipit(String text, String reference) {
     if (text.isEmpty) return null;
-    
+
     // Check for book-specific incipit formulas first
     final bookIncipit = _getBookSpecificIncipit(reference, text);
     if (bookIncipit != null) return bookIncipit;
-    
+
     final sentences = text.split(RegExp(r'[.!?]+'));
     if (sentences.isEmpty) return null;
-    
+
     final firstSentence = sentences.first.trim();
     if (firstSentence.isEmpty) return null;
-    
+
     // Check if the first sentence looks like an incipit
     if (_looksLikeIncipit(firstSentence)) {
       return _fixPropheticIncipit(firstSentence);
     }
-    
+
     // Try to extract a shorter incipit from the first sentence
     final words = firstSentence.split(' ');
     if (words.length >= 3) {
@@ -816,7 +981,7 @@ class IncipitProcessingService {
         return _fixPropheticIncipit(incipitWords);
       }
     }
-    
+
     return null;
   }
 
@@ -825,9 +990,12 @@ class IncipitProcessingService {
     final sentences = text.split(RegExp(r'[.!?]+'));
     if (sentences.isEmpty) return null;
     final firstSentence = sentences.first.trim();
-    
+
     // Paul's letters - use "Brethren:" prefix
-    if (RegExp(r'^(Rom|1 Cor|2 Cor|Gal|Eph|Phil|Col|1 Thess|2 Thess|1 Tim|2 Tim|Titus|Philem|Heb)', caseSensitive: false).hasMatch(reference)) {
+    if (RegExp(
+      r'^(Rom|1 Cor|2 Cor|Gal|Eph|Phil|Col|1 Thess|2 Thess|1 Tim|2 Tim|Titus|Philem|Heb)',
+      caseSensitive: false,
+    ).hasMatch(reference)) {
       // Extract the key phrase from the first sentence
       final keyPhrase = _extractKeyPhrase(firstSentence);
       if (keyPhrase.isNotEmpty) {
@@ -837,7 +1005,7 @@ class IncipitProcessingService {
       // sentence-split fragment was just a leading verse number).
       return 'Brethren';
     }
-    
+
     // Acts - use narrative style
     if (reference.startsWith('Acts')) {
       if (firstSentence.toLowerCase().startsWith('in those days') ||
@@ -857,11 +1025,15 @@ class IncipitProcessingService {
         return keyPhrase;
       }
     }
-    
+
     // Catholic Epistles (Peter, James, John, Jude)
-    if (RegExp(r'^(1 Pet|2 Pet|1 John|2 John|3 John|James|Jude)', caseSensitive: false).hasMatch(reference)) {
+    if (RegExp(
+      r'^(1 Pet|2 Pet|1 John|2 John|3 John|James|Jude)',
+      caseSensitive: false,
+    ).hasMatch(reference)) {
       final keyPhrase = _extractKeyPhrase(firstSentence);
-      final isPeterOrJohn = reference.contains('John') || reference.contains('Pet');
+      final isPeterOrJohn =
+          reference.contains('John') || reference.contains('Pet');
       if (keyPhrase.isNotEmpty) {
         // For letters, use "Beloved:" or "Brethren:"
         if (isPeterOrJohn) {
@@ -874,7 +1046,7 @@ class IncipitProcessingService {
       // verse text continues naturally after Pass 3 dedupe.
       return isPeterOrJohn ? 'Beloved' : 'Brethren';
     }
-    
+
     // Revelation
     if (reference.startsWith('Rev')) {
       final keyPhrase = _extractKeyPhrase(firstSentence);
@@ -882,7 +1054,7 @@ class IncipitProcessingService {
         return keyPhrase; // Revelation usually stands alone
       }
     }
-    
+
     return null;
   }
 
@@ -905,19 +1077,34 @@ class IncipitProcessingService {
     if (cleaned.isEmpty || RegExp(r'^[\d\s]+$').hasMatch(cleaned)) return '';
 
     // Remove introductory conjunctions if they appear right after the prefix
-    cleaned = cleaned.replaceFirst(RegExp(r'^(and|but)\s+', caseSensitive: false), '');
+    cleaned = cleaned.replaceFirst(
+      RegExp(r'^(and|but)\s+', caseSensitive: false),
+      '',
+    );
 
     // Remove "I write", "We write", "Therefore", "Now", "Thus", "For", "Since", "Because" type phrases
-    cleaned = cleaned.replaceFirst(RegExp(r'^(I write|We write|Therefore|Now|Thus|For|Since|Because)\s+', caseSensitive: false), '');
-    
+    cleaned = cleaned.replaceFirst(
+      RegExp(
+        r'^(I write|We write|Therefore|Now|Thus|For|Since|Because)\s+',
+        caseSensitive: false,
+      ),
+      '',
+    );
+
     // Remove "I want you to know" type phrases
-    cleaned = cleaned.replaceFirst(RegExp(r'^(I want you to know|I do not want you to be unaware|We do not want you to be unaware)\s+', caseSensitive: false), '');
-    
+    cleaned = cleaned.replaceFirst(
+      RegExp(
+        r'^(I want you to know|I do not want you to be unaware|We do not want you to be unaware)\s+',
+        caseSensitive: false,
+      ),
+      '',
+    );
+
     // Capitalize the first letter
     if (cleaned.isNotEmpty) {
       cleaned = cleaned[0].toUpperCase() + cleaned.substring(1);
     }
-    
+
     return cleaned.trim();
   }
 
@@ -925,35 +1112,50 @@ class IncipitProcessingService {
   String _fixPropheticIncipit(String incipit) {
     var fixed = incipit.trim();
     final lower = fixed.toLowerCase();
-    
+
     // Fix "Again the Lord" patterns
     if (lower.startsWith('again the lord')) {
-      fixed = fixed.replaceFirst(RegExp(r'^Again\s+', caseSensitive: false), 'The ');
+      fixed = fixed.replaceFirst(
+        RegExp(r'^Again\s+', caseSensitive: false),
+        'The ',
+      );
     }
-    
-    // Fix "Then the Lord said again" patterns  
+
+    // Fix "Then the Lord said again" patterns
     if (lower.contains('the lord') && lower.contains('again')) {
       if (lower.startsWith('then')) {
-        fixed = fixed.replaceFirst(RegExp(r'^Then\s+', caseSensitive: false), '');
+        fixed = fixed.replaceFirst(
+          RegExp(r'^Then\s+', caseSensitive: false),
+          '',
+        );
       }
       // Remove "again" from middle of sentence
-      fixed = fixed.replaceFirst(RegExp(r'\s+again\s+', caseSensitive: false), ' ');
+      fixed = fixed.replaceFirst(
+        RegExp(r'\s+again\s+', caseSensitive: false),
+        ' ',
+      );
     }
-    
+
     // Fix "And the Lord spoke again" patterns
     if (lower.startsWith('and the lord') && lower.contains('again')) {
       fixed = fixed.replaceFirst(RegExp(r'^And\s+', caseSensitive: false), '');
-      fixed = fixed.replaceFirst(RegExp(r'\s+again\s+', caseSensitive: false), ' ');
+      fixed = fixed.replaceFirst(
+        RegExp(r'\s+again\s+', caseSensitive: false),
+        ' ',
+      );
     }
-    
+
     // Fix "The Lord spoke again" patterns
     if (lower.startsWith('the lord') && lower.contains('again')) {
-      fixed = fixed.replaceFirst(RegExp(r'\s+again\s+', caseSensitive: false), ' ');
+      fixed = fixed.replaceFirst(
+        RegExp(r'\s+again\s+', caseSensitive: false),
+        ' ',
+      );
     }
-    
+
     // Clean up any double spaces
     fixed = fixed.replaceAll(RegExp(r'\s+'), ' ');
-    
+
     return fixed.trim();
   }
 
@@ -961,9 +1163,9 @@ class IncipitProcessingService {
   /// Checks for common incipit patterns and appropriate length.
   bool _looksLikeIncipit(String text) {
     if (text.length < 10 || text.length > 100) return false;
-    
+
     final lowerText = text.toLowerCase();
-    
+
     // Common incipit indicators
     final incipitPatterns = [
       'at that time',
@@ -979,41 +1181,82 @@ class IncipitProcessingService {
       'behold',
       'thus',
     ];
-    
+
     // Check if text starts with any incipit pattern
     for (final pattern in incipitPatterns) {
       if (lowerText.startsWith(pattern)) {
         return true;
       }
     }
-    
+
     // Check for prophetic speech patterns
-    if (lowerText.contains('saying') || 
-        lowerText.contains('spoke') || 
+    if (lowerText.contains('saying') ||
+        lowerText.contains('spoke') ||
         lowerText.contains('declared')) {
       return true;
     }
-    
+
     // Check if it's a complete sentence with appropriate structure
     if (RegExp(r'^[A-Z][a-z].*[.!?]$').hasMatch(text)) {
       return true;
     }
-    
+
     return false;
   }
 }
 
-  // ─────────────────────────────────────────────────────────────────────────
-  // Constants
-  // ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────
+// Constants
+// ─────────────────────────────────────────────────────────────────────────────
 
 const Set<String> _kStopWords = {
-  'a', 'an', 'the', 'to', 'of', 'in', 'on', 'at', 'by', 'for', 'with',
-  'and', 'or', 'but', 'so', 'that', 'this', 'these', 'those',
-  'is', 'are', 'was', 'were', 'be', 'been', 'being',
-  'from', 'as', 'it', 'its', 'into', 'than', 'while',
-  'after', 'before', 'once', 'when', 'there', 'here',
-  'because', 'even', 'also', 'yet', 'still', 'again', 'then', 'now',
+  'a',
+  'an',
+  'the',
+  'to',
+  'of',
+  'in',
+  'on',
+  'at',
+  'by',
+  'for',
+  'with',
+  'and',
+  'or',
+  'but',
+  'so',
+  'that',
+  'this',
+  'these',
+  'those',
+  'is',
+  'are',
+  'was',
+  'were',
+  'be',
+  'been',
+  'being',
+  'from',
+  'as',
+  'it',
+  'its',
+  'into',
+  'than',
+  'while',
+  'after',
+  'before',
+  'once',
+  'when',
+  'there',
+  'here',
+  'because',
+  'even',
+  'also',
+  'yet',
+  'still',
+  'again',
+  'then',
+  'now',
 };
 
 const List<String> _kPropheticIndicators = [

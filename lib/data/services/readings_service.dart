@@ -9,11 +9,12 @@ import 'readings_backend_io.dart'
 
 /// Canonical service for readings + Bible text across all supported platforms.
 class ReadingsService extends BaseService<ReadingsService> {
-  static ReadingsService get instance => BaseService.init(() => ReadingsService._());
-  
+  static ReadingsService get instance =>
+      BaseService.init(() => ReadingsService._());
+
   /// Factory constructor for backward compatibility
   factory ReadingsService() => instance;
-  
+
   ReadingsService._();
 
   final ReadingsBackend _backend = backend_factory.createReadingsBackend();
@@ -31,12 +32,14 @@ class ReadingsService extends BaseService<ReadingsService> {
     String reference, {
     String? psalmResponse,
     String? incipit,
+    String? readingType,
   }) async {
     try {
       return await _backend.getReadingText(
         reference,
         psalmResponse: psalmResponse,
         incipit: incipit,
+        readingType: readingType,
       );
     } catch (e) {
       debugPrint('Error getting reading text: $e');
