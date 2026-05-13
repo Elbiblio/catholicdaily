@@ -285,7 +285,7 @@ jobs:
 
   ios:
     name: iOS Release Build
-    runs-on: macos-latest
+    runs-on: macos-26
     needs:
       - verify
       - version_info
