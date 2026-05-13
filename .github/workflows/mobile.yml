@@ -258,24 +258,12 @@ jobs:
 
       - name: Upload Android app bundle to Google Play
         if: env.HAS_ANDROID_SIGNING == 'true' && env.HAS_PLAY_UPLOAD == 'true'
-        id: play_upload
-        uses: r0adkll/upload-google-play@v1
-        continue-on-error: true
-        with:
-          serviceAccountJson: ${{ env.PLAY_SERVICE_ACCOUNT_PATH }}
-          packageName: ${{ env.PLAY_PACKAGE_NAME }}
-          releaseFiles: build/app/outputs/bundle/release/app-release.aab
-          track: ${{ env.PLAY_TRACK }}
-          status: draft
-
-      - name: Retry Google Play upload (with changesNotSentForReview)
-        if: env.HAS_ANDROID_SIGNING == 'true' && env.HAS_PLAY_UPLOAD == 'true' && steps.play_upload.outcome == 'failure'
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJson: ${{ env.PLAY_SERVICE_ACCOUNT_PATH }}
           packageName: ${{ env.PLAY_PACKAGE_NAME }}
           releaseFiles: build/app/outputs/bundle/release/app-release.aab
-          track: ${{ env.PLAY_TRACK }}
+          tracks: ${{ env.PLAY_TRACK }}
           changesNotSentForReview: true
           status: draft
 
