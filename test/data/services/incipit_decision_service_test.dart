@@ -95,6 +95,32 @@ void main() {
     );
   });
 
+  test('Acts 5 source evidence overrides incomplete CSV incipit', () async {
+    const raw =
+        '17. But the high priest rose up and all who were with him, '
+        'that is, the party of the Sadducees, and filled with jealousy';
+
+    final decision = await decisionService.decide(
+      reference: 'Acts 5:17-26',
+      fullText: raw,
+      csvIncipit: 'The high priest and all who were with him',
+      locale: 'en',
+      readingType: 'first reading',
+    );
+
+    expect(decision.opening, 'In those days');
+    expect(decision.sourceIds.single, 'local_easter2_wed_acts5');
+    expect(
+      processor.processWithAuthoritativeIncipit(
+        'Acts 5:17-26',
+        raw,
+        decision.opening,
+        joinStyle: decision.joinStyle,
+      ),
+      startsWith('In those days: The high priest rose up'),
+    );
+  });
+
   test(
     'Matthew 4 keeps contextual biblical opening instead of adding formula',
     () async {

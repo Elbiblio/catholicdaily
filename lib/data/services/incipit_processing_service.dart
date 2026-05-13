@@ -803,10 +803,21 @@ class IncipitProcessingService {
     String joinStyle,
   ) {
     var result = _stripLeadingRepeatedOpener(remainder, incipit);
-    if (_isSingleOpener(incipit)) {
+    if (_isSingleOpener(incipit) ||
+        _shouldStripNarrativeOpenerAfterIncipit(incipit)) {
       result = _stripLeadingNarrativeOpener(result);
     }
     return result;
+  }
+
+  bool _shouldStripNarrativeOpenerAfterIncipit(String incipit) {
+    final normalized = incipit.trim().toLowerCase().replaceAll(
+      RegExp(r'[,:;]$'),
+      '',
+    );
+    return normalized == 'in those days' ||
+        normalized == 'at that time' ||
+        normalized == 'on that day';
   }
 
   String? _dedupeKnownFormulaEcho(String firstLine, String incipit) {
