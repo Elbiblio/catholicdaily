@@ -264,7 +264,6 @@ jobs:
           packageName: ${{ env.PLAY_PACKAGE_NAME }}
           releaseFiles: build/app/outputs/bundle/release/app-release.aab
           tracks: ${{ env.PLAY_TRACK }}
-          changesNotSentForReview: true
           status: draft
 
       - name: Skip Google Play upload when service account is unavailable
