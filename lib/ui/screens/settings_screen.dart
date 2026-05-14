@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import '../../data/models/bible_version.dart';
+import '../../data/models/liturgical_region.dart';
 import '../../data/services/theme_preferences.dart';
 import '../../data/services/bible_version_preference.dart';
 import '../../data/services/offline_bible_service.dart';
 import '../../data/services/feast_reminder_preferences.dart';
+import '../../data/services/feast_reminder_service.dart';
 import '../../data/services/incipit_preference_service.dart';
+import '../../data/services/liturgical_region_preference_service.dart';
 import '../../data/services/order_of_mass_preference_service.dart';
 import 'feast_reminder_settings_sheet.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -40,6 +43,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   String _appVersion = '1.0.0';
   BibleVersionType? _currentBibleVersion;
   FeastReminderPreferences? _reminderPrefs;
+  LiturgicalRegion _liturgicalRegion = LiturgicalRegion.generalRoman;
   bool _showIncipit = true;
   bool _showPrayerOfFaithful = false;
   static const _androidPackageName = 'com.elbiblio.catholicdaily';
@@ -54,6 +58,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _loadAppInfo();
     _loadCurrentBibleVersion();
     _loadReminderPrefs();
+    _loadLiturgicalRegion();
     _loadIncipitPreference();
     _loadPrayerOfFaithfulPreference();
   }
@@ -92,11 +97,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() => _reminderPrefs = prefs);
   }
 
+  Future<void> _loadLiturgicalRegion() async {
+    final prefs = await LiturgicalRegionPreferenceService.getInstance();
+    if (!mounted) return;
+    setState(() => _liturgicalRegion = prefs.currentRegion);
+  }
+
+  Future<void> _setLiturgicalRegion(LiturgicalRegion region) async {
+    final prefs = await LiturgicalRegionPreferenceService.getInstance();
+    await prefs.setRegion(region);
+    await IncipitPreferenceService().clearLocaleOverride();
+    if (!mounted) return;
+    setState(() => _liturgicalRegion = region);
+
+    final reminderPrefs = _reminderPrefs;
+    if (reminderPrefs != null && reminderPrefs.isEnabled) {
+      await FeastReminderService.instance.scheduleAheadMonths(
+        15,
+        reminderPrefs,
+      );
+    }
+  }
+
   String _reminderSubtitle() {
     final prefs = _reminderPrefs;
     if (prefs == null || !prefs.isEnabled) return 'Off';
     return '${prefs.rank.label} · ${prefs.timeLabel}';
   }
+
+  String _liturgicalRegionSubtitle() =>
+      '${_liturgicalRegion.label} - ${_liturgicalRegion.subtitle}';
 
   @override
   void didUpdateWidget(covariant SettingsScreen oldWidget) {
@@ -119,8 +149,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
-
-
   Future<void> _requestReview() async {
     final InAppReview inAppReview = InAppReview.instance;
     if (await inAppReview.isAvailable()) {
@@ -137,12 +165,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _openStoreFallback() async {
     final uri = Platform.isIOS
-        ? Uri.parse('https://apps.apple.com/us/search?term=${Uri.encodeComponent(_iosSearchTerm)}')
-        : Uri.parse('https://play.google.com/store/apps/details?id=$_androidPackageName');
+        ? Uri.parse(
+            'https://apps.apple.com/us/search?term=${Uri.encodeComponent(_iosSearchTerm)}',
+          )
+        : Uri.parse(
+            'https://play.google.com/store/apps/details?id=$_androidPackageName',
+          );
 
-    if (!await launchUrl(uri, mode: LaunchMode.externalApplication) && mounted) {
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication) &&
+        mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Unable to open the store listing right now.')),
+        const SnackBar(
+          content: Text('Unable to open the store listing right now.'),
+        ),
       );
     }
   }
@@ -256,8 +291,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   initialValue: feedbackType,
                   isExpanded: true,
                   items: const [
-                    DropdownMenuItem(value: 'general', child: Text('General Feedback')),
-                    DropdownMenuItem(value: 'feature', child: Text('Feature Request')),
+                    DropdownMenuItem(
+                      value: 'general',
+                      child: Text('General Feedback'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'feature',
+                      child: Text('Feature Request'),
+                    ),
                     DropdownMenuItem(value: 'bug', child: Text('Report a Bug')),
                   ],
                   onChanged: (val) {
@@ -295,10 +336,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ? null
                   : () async {
                       if (textController.text.trim().isEmpty) return;
-                      
+
                       setState(() => isSubmitting = true);
                       try {
-                        final platform = Platform.isAndroid ? 'android' : (Platform.isIOS ? 'ios' : 'other');
+                        final platform = Platform.isAndroid
+                            ? 'android'
+                            : (Platform.isIOS ? 'ios' : 'other');
                         final response = await http.post(
                           Uri.parse('https://api.elbiblio.com/api/feedback'),
                           headers: {'Content-Type': 'application/json'},
@@ -311,27 +354,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           }),
                         );
 
-                        if (response.statusCode < 200 || response.statusCode >= 300) {
-                          throw Exception('service_error_${response.statusCode}');
+                        if (response.statusCode < 200 ||
+                            response.statusCode >= 300) {
+                          throw Exception(
+                            'service_error_${response.statusCode}',
+                          );
                         }
-                        
+
                         if (context.mounted) {
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Thank you for your feedback!')),
+                            const SnackBar(
+                              content: Text('Thank you for your feedback!'),
+                            ),
                           );
                         }
                       } catch (e) {
                         setState(() => isSubmitting = false);
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Failed to send feedback. Please try again.')),
+                            const SnackBar(
+                              content: Text(
+                                'Failed to send feedback. Please try again.',
+                              ),
+                            ),
                           );
                         }
                       }
                     },
-              child: isSubmitting 
-                  ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+              child: isSubmitting
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
                   : const Text('Send'),
             ),
           ],
@@ -362,12 +418,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 const Divider(height: 1),
                 _SettingsTile(
                   icon: Icons.info_outline,
-                  title: 'About ${_currentBibleVersion?.abbreviation ?? 'RSVCE'}',
-                  subtitle: _currentBibleVersion?.fullName ??
+                  title:
+                      'About ${_currentBibleVersion?.abbreviation ?? 'RSVCE'}',
+                  subtitle:
+                      _currentBibleVersion?.fullName ??
                       'Revised Standard Version Catholic Edition',
                   onTap: () => _showRsvceInfo(context),
                 ),
               ],
+            ),
+          ),
+          const SizedBox(height: 24),
+          _SectionHeader(title: 'Calendar'),
+          Card(
+            child: _SettingsTile(
+              icon: Icons.public,
+              title: 'Liturgical Region',
+              subtitle: _liturgicalRegionSubtitle(),
+              onTap: () => _showLiturgicalRegionDialog(context),
             ),
           ),
           const SizedBox(height: 24),
@@ -396,9 +464,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 color: theme.colorScheme.primary,
               ),
               title: const Text('Show Prayer of the Faithful'),
-              subtitle: const Text(
-                'Display Universal Prayer in Order of Mass',
-              ),
+              subtitle: const Text('Display Universal Prayer in Order of Mass'),
               value: _showPrayerOfFaithful,
               onChanged: _setPrayerOfFaithfulPreference,
             ),
@@ -474,7 +540,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   icon: Icons.description_outlined,
                   title: 'Terms of Service',
                   subtitle: 'Usage terms and conditions',
-                  onTap: () => _openLegalUrl('https://elbiblio.com/catholic-daily/terms'),
+                  onTap: () => _openLegalUrl(
+                    'https://elbiblio.com/catholic-daily/terms',
+                  ),
                 ),
                 const Divider(height: 1),
                 _SettingsTile(
@@ -523,15 +591,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _showDataManagementDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (ctx) => _DataManagementDialog(),
-    );
+    showDialog(context: context, builder: (ctx) => _DataManagementDialog());
   }
 
   Future<void> _openLegalUrl(String url) async {
     final uri = Uri.parse(url);
-    if (!await launchUrl(uri, mode: LaunchMode.externalApplication) && mounted) {
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication) &&
+        mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Unable to open the page right now.')),
       );
@@ -622,6 +688,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
+  void _showLiturgicalRegionDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Liturgical Region'),
+        contentPadding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: LiturgicalRegion.selectable.map((region) {
+            return _buildSelectionTile(
+              context,
+              title: region.label,
+              subtitle: region.subtitle,
+              selected: _liturgicalRegion == region,
+              onTap: () async {
+                await _setLiturgicalRegion(region);
+                if (context.mounted) Navigator.pop(context);
+              },
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+
   void _showThemeStyleDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -634,7 +725,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             _buildSelectionTile(
               context,
               title: 'Standard Missal',
-              subtitle: 'Balanced liturgical colors with a clean reference-first look.',
+              subtitle:
+                  'Balanced liturgical colors with a clean reference-first look.',
               selected: _selectedThemeStyle == 'standard',
               onTap: () {
                 _applyThemeStyle('standard');
@@ -644,7 +736,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             _buildSelectionTile(
               context,
               title: 'Classic Parchment',
-              subtitle: 'Uses the logo palette more often and softens seasonal color intensity.',
+              subtitle:
+                  'Uses the logo palette more often and softens seasonal color intensity.',
               selected: _selectedThemeStyle == 'parchment',
               onTap: () {
                 _applyThemeStyle('parchment');
@@ -683,9 +776,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-        color: selected
-            ? selectedBackground
-            : unselectedBackground,
+        color: selected ? selectedBackground : unselectedBackground,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: selected
@@ -713,10 +804,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         subtitle: Text(
           subtitle,
-          style: TextStyle(
-            color: subtitleColor,
-            height: 1.35,
-          ),
+          style: TextStyle(color: subtitleColor, height: 1.35),
         ),
         trailing: selected
             ? Icon(Icons.check_circle, color: colorScheme.primary)
@@ -747,14 +835,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           'Your daily companion for Catholic liturgical readings. Includes the complete RSV Catholic Edition Bible and daily Mass readings.',
         ),
         SizedBox(height: 16),
-        Text(
-          'Attributions',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+        Text('Attributions', style: TextStyle(fontWeight: FontWeight.bold)),
         SizedBox(height: 4),
-        Text(
-          'Prayer of the Faithful sourced from BiddingPrayers.com.',
-        ),
+        Text('Prayer of the Faithful sourced from BiddingPrayers.com.'),
       ],
     );
   }
@@ -808,14 +891,21 @@ class _DataManagementDialogState extends State<_DataManagementDialog> {
   Future<void> _loadVersions() async {
     try {
       final versions = await _service.fetchAvailableVersions();
-      if (mounted) setState(() { _versions = versions; _isLoading = false; });
+      if (mounted)
+        setState(() {
+          _versions = versions;
+          _isLoading = false;
+        });
     } catch (_) {
       if (mounted) setState(() => _isLoading = false);
     }
   }
 
   Future<void> _download(BibleVersion version) async {
-    setState(() { _downloading[version.id] = true; _downloadProgress[version.id] = 0; });
+    setState(() {
+      _downloading[version.id] = true;
+      _downloadProgress[version.id] = 0;
+    });
     try {
       await _service.downloadVersion(version, (progress) {
         if (mounted) setState(() => _downloadProgress[version.id] = progress);
@@ -824,10 +914,15 @@ class _DataManagementDialogState extends State<_DataManagementDialog> {
         setState(() {
           _downloading[version.id] = false;
           final idx = _versions.indexWhere((v) => v.id == version.id);
-          if (idx >= 0) _versions[idx] = BibleVersion(
-            id: version.id, name: version.name, abbreviation: version.abbreviation,
-            isDownloaded: true, size: version.size, downloadUrl: version.downloadUrl,
-          );
+          if (idx >= 0)
+            _versions[idx] = BibleVersion(
+              id: version.id,
+              name: version.name,
+              abbreviation: version.abbreviation,
+              isDownloaded: true,
+              size: version.size,
+              downloadUrl: version.downloadUrl,
+            );
         });
       }
     } catch (_) {
@@ -852,24 +947,42 @@ class _DataManagementDialogState extends State<_DataManagementDialog> {
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
                   ),
                   const SizedBox(height: 8),
-                  ..._versions.where((v) => _builtInIds.contains(v.id)).map((v) => _VersionTile(
-                    version: v, isBuiltIn: true,
-                    isDownloading: false, progress: 0,
-                    onDownload: null,
-                  )),
+                  ..._versions
+                      .where((v) => _builtInIds.contains(v.id))
+                      .map(
+                        (v) => _VersionTile(
+                          version: v,
+                          isBuiltIn: true,
+                          isDownloading: false,
+                          progress: 0,
+                          onDownload: null,
+                        ),
+                      ),
                   if (_versions.any((v) => !_builtInIds.contains(v.id))) ...[
                     const SizedBox(height: 16),
                     const Text(
                       'Additional translations',
-                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
                     ),
                     const SizedBox(height: 8),
-                    ..._versions.where((v) => !_builtInIds.contains(v.id)).map((v) => _VersionTile(
-                      version: v, isBuiltIn: false,
-                      isDownloading: _downloading[v.id] ?? false,
-                      progress: _downloadProgress[v.id] ?? 0,
-                      onDownload: (v.isDownloaded || (_downloading[v.id] ?? false)) ? null : () => _download(v),
-                    )),
+                    ..._versions
+                        .where((v) => !_builtInIds.contains(v.id))
+                        .map(
+                          (v) => _VersionTile(
+                            version: v,
+                            isBuiltIn: false,
+                            isDownloading: _downloading[v.id] ?? false,
+                            progress: _downloadProgress[v.id] ?? 0,
+                            onDownload:
+                                (v.isDownloaded ||
+                                    (_downloading[v.id] ?? false))
+                                ? null
+                                : () => _download(v),
+                          ),
+                        ),
                   ],
                   if (_versions.isEmpty)
                     const Padding(
@@ -915,11 +1028,22 @@ class _VersionTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(version.abbreviation, style: const TextStyle(fontWeight: FontWeight.w600)),
-                Text(version.name, style: TextStyle(fontSize: 12, color: colorScheme.onSurfaceVariant)),
+                Text(
+                  version.abbreviation,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+                Text(
+                  version.name,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
                 if (isDownloading) ...[
                   const SizedBox(height: 4),
-                  LinearProgressIndicator(value: progress > 0 ? progress : null),
+                  LinearProgressIndicator(
+                    value: progress > 0 ? progress : null,
+                  ),
                 ],
               ],
             ),
@@ -928,7 +1052,11 @@ class _VersionTile extends StatelessWidget {
           if (isBuiltIn || version.isDownloaded)
             Icon(Icons.check_circle, color: Colors.green.shade600, size: 20)
           else if (isDownloading)
-            const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+            const SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            )
           else
             IconButton(
               icon: const Icon(Icons.download_outlined),
@@ -972,4 +1100,3 @@ class _SettingsTile extends StatelessWidget {
     );
   }
 }
-

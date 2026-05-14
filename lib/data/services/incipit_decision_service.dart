@@ -959,4 +959,8 @@ const Map<String, String> _bookAliases = {
   'mal': 'malachi',
   'wis': 'wisdom',
   'sir': 'sirach',
+  'esth': 'esther',
+  'est': 'esther',
+  'jdt': 'judith',
+  'jud': 'judith',
 };

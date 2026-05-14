@@ -23,6 +23,8 @@ class FeastReminderPreferences {
   static const String _minuteKey = 'feast_reminder_minute';
   static const String _rankKey = 'feast_reminder_rank';
   static const String _lastScheduledYearKey = 'feast_reminder_last_year';
+  static const String _scheduleSchemaVersionKey =
+      'feast_reminder_schedule_schema_version';
   static const String _autoSetupCompletedKey = 'feast_reminder_auto_setup_done';
   static const String _dayBeforeKey = 'feast_reminder_day_before';
 
@@ -45,6 +47,8 @@ class FeastReminderPreferences {
   FeastReminderRank get rank =>
       FeastReminderRank.fromKey(_prefs.getString(_rankKey) ?? '');
   int get lastScheduledYear => _prefs.getInt(_lastScheduledYearKey) ?? 0;
+  int get scheduleSchemaVersion =>
+      _prefs.getInt(_scheduleSchemaVersionKey) ?? 0;
 
   /// When true, the notification fires the EVENING BEFORE the feast at
   /// [hour]:[minute] (e.g. 8pm/9pm/10pm/11pm). When false, fires on the
@@ -76,6 +80,9 @@ class FeastReminderPreferences {
 
   Future<void> setLastScheduledYear(int year) =>
       _prefs.setInt(_lastScheduledYearKey, year);
+
+  Future<void> setScheduleSchemaVersion(int version) =>
+      _prefs.setInt(_scheduleSchemaVersionKey, version);
 
   String get timeLabel {
     final h = hour;

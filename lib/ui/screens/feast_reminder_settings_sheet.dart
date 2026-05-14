@@ -1,7 +1,10 @@
 import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
+import '../../data/models/liturgical_region.dart';
 import '../../data/services/feast_reminder_preferences.dart';
 import '../../data/services/feast_reminder_service.dart';
+import '../../data/services/liturgical_region_preference_service.dart';
+import '../../data/services/offline_ordo_lookup_service.dart';
 
 /// Beautiful bottom-sheet UI for configuring feast/solemnity reminders.
 class FeastReminderSettingsSheet extends StatefulWidget {
@@ -32,6 +35,7 @@ class _FeastReminderSettingsSheetState
   int _hour = 7;
   int _minute = 0;
   FeastReminderRank _rank = FeastReminderRank.solemnities;
+  LiturgicalRegion _region = LiturgicalRegion.generalRoman;
 
   @override
   void initState() {
@@ -41,6 +45,11 @@ class _FeastReminderSettingsSheetState
 
   Future<void> _loadPrefs() async {
     final prefs = await FeastReminderPreferences.getInstance();
+    var region = LiturgicalRegion.generalRoman;
+    try {
+      final regionPrefs = await LiturgicalRegionPreferenceService.getInstance();
+      region = regionPrefs.currentRegion;
+    } catch (_) {}
     if (!mounted) return;
     setState(() {
       _prefs = prefs;
@@ -48,6 +57,7 @@ class _FeastReminderSettingsSheetState
       _hour = prefs.hour;
       _minute = prefs.minute;
       _rank = prefs.rank;
+      _region = region;
       _loading = false;
     });
   }
@@ -219,10 +229,7 @@ class _FeastReminderSettingsSheetState
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         value: _enabled,
         onChanged: _saving ? null : _toggleEnabled,
-        title: Text(
-          'Enable Reminders',
-          style: theme.textTheme.titleSmall,
-        ),
+        title: Text('Enable Reminders', style: theme.textTheme.titleSmall),
         subtitle: Text(
           _enabled
               ? 'You\'ll receive notifications on feast days'
@@ -239,7 +246,9 @@ class _FeastReminderSettingsSheetState
                 ),
               )
             : Icon(
-                _enabled ? Icons.notifications_active : Icons.notifications_off_outlined,
+                _enabled
+                    ? Icons.notifications_active
+                    : Icons.notifications_off_outlined,
                 color: _enabled
                     ? colorScheme.primary
                     : colorScheme.onSurfaceVariant,
@@ -260,8 +269,11 @@ class _FeastReminderSettingsSheetState
         ),
         child: Row(
           children: [
-            Icon(Icons.warning_amber_rounded,
-                color: colorScheme.onErrorContainer, size: 18),
+            Icon(
+              Icons.warning_amber_rounded,
+              color: colorScheme.onErrorContainer,
+              size: 18,
+            ),
             const SizedBox(width: 10),
             Expanded(
               child: Text(
@@ -375,18 +387,23 @@ class _FeastReminderSettingsSheetState
           children: [
             Row(
               children: [
-                Icon(Icons.calendar_today,
-                    color: colorScheme.primary, size: 18),
+                Icon(
+                  Icons.calendar_today,
+                  color: colorScheme.primary,
+                  size: 18,
+                ),
                 const SizedBox(width: 10),
                 Text('Upcoming Reminders', style: theme.textTheme.titleSmall),
               ],
             ),
             const SizedBox(height: 10),
-            ...upcoming.map((e) => _UpcomingTile(
-                  event: e,
-                  colorScheme: colorScheme,
-                  theme: theme,
-                )),
+            ...upcoming.map(
+              (e) => _UpcomingTile(
+                event: e,
+                colorScheme: colorScheme,
+                theme: theme,
+              ),
+            ),
           ],
         ),
       ),
@@ -408,12 +425,13 @@ class _FeastReminderSettingsSheetState
   List<_PreviewEvent> _buildUpcomingFeastDates() {
     final now = DateTime.now();
     final results = <_PreviewEvent>[];
-    final lookup = _StaticFeastPreview();
+    final lookup = OfflineOrdoLookupService.instance;
 
     for (var d = now; d.year == now.year; d = d.add(const Duration(days: 1))) {
-      final info = lookup.check(d);
-      if (info != null && _shouldIncludeRank(info.rank)) {
-        results.add(info);
+      final info = lookup.resolve(d, region: _region);
+      final rank = info.rank;
+      if (rank != null && info.title.isNotEmpty && _shouldIncludeRank(rank)) {
+        results.add(_PreviewEvent(info.date, info.title, rank));
       }
     }
     return results;
@@ -491,8 +509,7 @@ class _RankOption extends StatelessWidget {
                   Text(
                     rank.label,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      fontWeight:
-                          selected ? FontWeight.w700 : FontWeight.w500,
+                      fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
                       color: selected
                           ? colorScheme.onSurface
                           : colorScheme.onSurfaceVariant,
@@ -537,12 +554,14 @@ class _UpcomingTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
-    final daysAway = event.date.difference(DateTime(now.year, now.month, now.day)).inDays;
+    final daysAway = event.date
+        .difference(DateTime(now.year, now.month, now.day))
+        .inDays;
     final daysLabel = daysAway == 0
         ? 'Today'
         : daysAway == 1
-            ? 'Tomorrow'
-            : 'In $daysAway days';
+        ? 'Tomorrow'
+        : 'In $daysAway days';
 
     final isSolemnity = event.rank == 'Solemnity';
     final dotColor = isSolemnity ? colorScheme.primary : colorScheme.secondary;
@@ -585,7 +604,9 @@ class _UpcomingTile extends StatelessWidget {
                     const SizedBox(width: 6),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 6, vertical: 1),
+                        horizontal: 6,
+                        vertical: 1,
+                      ),
                       decoration: BoxDecoration(
                         color: dotColor.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(4),
@@ -611,8 +632,18 @@ class _UpcomingTile extends StatelessWidget {
 
   String _formatDate(DateTime d) {
     const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
     return '${months[d.month - 1]} ${d.day}';
   }
@@ -627,10 +658,9 @@ class _SheetHandle extends StatelessWidget {
         width: 36,
         height: 4,
         decoration: BoxDecoration(
-          color: Theme.of(context)
-              .colorScheme
-              .onSurfaceVariant
-              .withValues(alpha: 0.3),
+          color: Theme.of(
+            context,
+          ).colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
           borderRadius: BorderRadius.circular(2),
         ),
       ),
@@ -647,63 +677,4 @@ class _PreviewEvent {
   final String title;
   final String rank;
   const _PreviewEvent(this.date, this.title, this.rank);
-}
-
-class _StaticFeastPreview {
-  _PreviewEvent? check(DateTime d) {
-    final m = d.month;
-    final day = d.day;
-    final easter = _easter(d.year);
-
-    // Movable
-    final diffE = d.difference(easter).inDays;
-    if (diffE == -46) return _PreviewEvent(d, 'Ash Wednesday', 'Day');
-    if (diffE == -7) return _PreviewEvent(d, 'Palm Sunday', 'Solemnity');
-    if (diffE == -3) return _PreviewEvent(d, 'Holy Thursday', 'Solemnity');
-    if (diffE == -2) return _PreviewEvent(d, 'Good Friday', 'Day');
-    if (diffE == 0) return _PreviewEvent(d, 'Easter Sunday', 'Solemnity');
-    if (diffE == 39) return _PreviewEvent(d, 'Ascension Thursday', 'Solemnity');
-    if (diffE == 49) return _PreviewEvent(d, 'Pentecost Sunday', 'Solemnity');
-    if (diffE == 56) return _PreviewEvent(d, 'The Most Holy Trinity', 'Solemnity');
-    if (diffE == 63) return _PreviewEvent(d, 'The Most Holy Body and Blood of Christ', 'Solemnity');
-
-    // Fixed solemnities
-    if (m == 1 && day == 1) return _PreviewEvent(d, 'Mary, the Holy Mother of God', 'Solemnity');
-    if (m == 3 && day == 19) return _PreviewEvent(d, 'Saint Joseph', 'Solemnity');
-    if (m == 3 && day == 25) return _PreviewEvent(d, 'The Annunciation of the Lord', 'Solemnity');
-    if (m == 6 && day == 24) return _PreviewEvent(d, 'The Nativity of Saint John the Baptist', 'Solemnity');
-    if (m == 6 && day == 29) return _PreviewEvent(d, 'Saints Peter and Paul', 'Solemnity');
-    if (m == 8 && day == 15) return _PreviewEvent(d, 'The Assumption of the Blessed Virgin Mary', 'Solemnity');
-    if (m == 11 && day == 1) return _PreviewEvent(d, 'All Saints', 'Solemnity');
-    if (m == 12 && day == 8) return _PreviewEvent(d, 'The Immaculate Conception', 'Solemnity');
-    if (m == 12 && day == 25) return _PreviewEvent(d, 'The Nativity of the Lord', 'Solemnity');
-
-    // Feasts
-    if (m == 1 && day == 6) return _PreviewEvent(d, 'The Epiphany of the Lord', 'Feast');
-    if (m == 2 && day == 2) return _PreviewEvent(d, 'The Presentation of the Lord', 'Feast');
-    if (m == 7 && day == 22) return _PreviewEvent(d, 'Saint Mary Magdalene', 'Feast');
-    if (m == 8 && day == 6) return _PreviewEvent(d, 'The Transfiguration of the Lord', 'Feast');
-    if (m == 9 && day == 14) return _PreviewEvent(d, 'The Exaltation of the Holy Cross', 'Feast');
-    if (m == 9 && day == 29) return _PreviewEvent(d, 'Saints Michael, Gabriel, and Raphael', 'Feast');
-
-    return null;
-  }
-
-  DateTime _easter(int year) {
-    final a = year % 19;
-    final b = year ~/ 100;
-    final c = year % 100;
-    final d = b ~/ 4;
-    final e = b % 4;
-    final f = (b + 8) ~/ 25;
-    final g = (b - f + 1) ~/ 3;
-    final h = (19 * a + b - d - g + 15) % 30;
-    final i = c ~/ 4;
-    final k = c % 4;
-    final l = (32 + 2 * e + 2 * i - h - k) % 7;
-    final m = (a + 11 * h + 22 * l) ~/ 451;
-    final month = (h + l - 7 * m + 114) ~/ 31;
-    final day = ((h + l - 7 * m + 114) % 31) + 1;
-    return DateTime(year, month, day);
-  }
 }

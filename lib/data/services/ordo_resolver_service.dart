@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
+import '../models/liturgical_region.dart';
 import 'improved_liturgical_calendar_service.dart';
+import 'liturgical_region_preference_service.dart';
 import 'offline_ordo_lookup_service.dart';
 
 class OrdoResolverService {
@@ -18,6 +20,8 @@ class OrdoResolverService {
   final Map<String, LiturgicalDay> _dayCache = {};
   final Map<int, OrdoYearVariables> _yearVarCache = {};
   final OfflineOrdoLookupService _offline = OfflineOrdoLookupService.instance;
+  LiturgicalRegion _lastKnownRegion = LiturgicalRegion.generalRoman;
+  bool _regionPreferencesUnavailable = false;
 
   void setCalendarId(String calendarId) {
     final cleaned = calendarId.trim();
@@ -33,13 +37,14 @@ class OrdoResolverService {
   }
 
   Future<LiturgicalDay> resolveDay(DateTime date) async {
+    final region = await _resolveRegion();
     final key =
-        '${_preferOffline ? 'offline' : 'api'}_${_calendarId}_${date.year}-${date.month}-${date.day}';
+        '${_preferOffline ? 'offline' : 'api'}_${_calendarId}_${region.code}_${date.year}-${date.month}-${date.day}';
     if (_dayCache.containsKey(key)) return _dayCache[key]!;
 
     try {
       if (_preferOffline) {
-        final offlineDay = _offline.resolve(date);
+        final offlineDay = _offline.resolve(date, region: region);
         _dayCache[key] = offlineDay;
         return offlineDay;
       }
@@ -49,7 +54,7 @@ class OrdoResolverService {
       return resolved;
     } catch (_) {
       try {
-        final offlineDay = _offline.resolve(date);
+        final offlineDay = _offline.resolve(date, region: region);
         _dayCache[key] = offlineDay;
         return offlineDay;
       } catch (_) {
@@ -58,6 +63,24 @@ class OrdoResolverService {
         _dayCache[key] = fallback;
         return fallback;
       }
+    }
+  }
+
+  Future<LiturgicalRegion> _resolveRegion() async {
+    if (_regionPreferencesUnavailable) return _lastKnownRegion;
+
+    try {
+      final regionPrefs = await LiturgicalRegionPreferenceService.getInstance();
+      final region = regionPrefs.currentRegion;
+      if (region != _lastKnownRegion) {
+        _lastKnownRegion = region;
+        _dayCache.clear();
+      }
+      return region;
+    } catch (_) {
+      // Unit tests and early startup paths may not have SharedPreferences wired.
+      _regionPreferencesUnavailable = true;
+      return _lastKnownRegion;
     }
   }
 
@@ -202,7 +225,9 @@ class OrdoResolverService {
   DateTime _calculateAdventStart(int year) {
     final christmas = DateTime(year, 12, 25);
     final daysUntilSunday = (DateTime.sunday - christmas.weekday + 7) % 7;
-    final sundayOnOrAfterChristmas = christmas.add(Duration(days: daysUntilSunday));
+    final sundayOnOrAfterChristmas = christmas.add(
+      Duration(days: daysUntilSunday),
+    );
     return sundayOnOrAfterChristmas.subtract(const Duration(days: 28));
   }
 

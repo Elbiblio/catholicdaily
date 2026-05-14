@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import '../../data/models/liturgical_region.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
+import '../../data/services/liturgical_region_preference_service.dart';
+import '../../data/services/offline_ordo_lookup_service.dart';
 import '../../data/services/reading_catalog_service.dart';
 
 /// A month-view liturgical calendar showing liturgical colors and feast days.
@@ -23,7 +26,8 @@ class LiturgicalCalendarView extends StatefulWidget {
 class _LiturgicalCalendarViewState extends State<LiturgicalCalendarView> {
   late DateTime _displayedMonth;
   late PageController _pageController;
-  final _calendarService = ImprovedLiturgicalCalendarService.instance;
+  final _calendarService = OfflineOrdoLookupService.instance;
+  LiturgicalRegion _region = LiturgicalRegion.generalRoman;
 
   // Cache liturgical days per month to avoid recomputation
   final Map<String, List<LiturgicalDay>> _cache = {};
@@ -39,15 +43,29 @@ class _LiturgicalCalendarViewState extends State<LiturgicalCalendarView> {
   @override
   void initState() {
     super.initState();
-    _displayedMonth = DateTime(widget.selectedDate.year, widget.selectedDate.month);
+    _displayedMonth = DateTime(
+      widget.selectedDate.year,
+      widget.selectedDate.month,
+    );
     final initialPage = _monthToIndex(_displayedMonth);
     _pageController = PageController(initialPage: initialPage);
+    _loadRegion();
     _loadFeastData();
+  }
+
+  Future<void> _loadRegion() async {
+    final prefs = await LiturgicalRegionPreferenceService.getInstance();
+    if (!mounted) return;
+    setState(() {
+      _region = prefs.currentRegion;
+      _cache.clear();
+    });
   }
 
   Future<void> _loadFeastData() async {
     try {
-      final entries = await ReadingCatalogService.instance.loadMemorialEntries();
+      final entries = await ReadingCatalogService.instance
+          .loadMemorialEntries();
       final map = <String, String>{};
       for (final e in entries) {
         if (e.month.isEmpty || e.day.isEmpty || e.title.isEmpty) continue;
@@ -93,7 +111,12 @@ class _LiturgicalCalendarViewState extends State<LiturgicalCalendarView> {
     final daysInMonth = DateUtils.getDaysInMonth(month.year, month.month);
     final days = <LiturgicalDay>[];
     for (int d = 1; d <= daysInMonth; d++) {
-      days.add(_calendarService.getLiturgicalDay(DateTime(month.year, month.month, d)));
+      days.add(
+        _calendarService.resolve(
+          DateTime(month.year, month.month, d),
+          region: _region,
+        ),
+      );
     }
     _cache[key] = days;
     return days;
@@ -234,12 +257,14 @@ class _LiturgicalCalendarViewState extends State<LiturgicalCalendarView> {
                 final todayMark = isToday(date);
                 final litColor = litDay.colorValue;
                 final hasFeast = litDay.title.isNotEmpty;
-                final isHighRank = litDay.rank == 'Solemnity' ||
+                final isHighRank =
+                    litDay.rank == 'Solemnity' ||
                     litDay.rank == 'Feast' ||
                     litDay.rank == 'Sunday';
                 final isSunday = date.weekday == DateTime.sunday;
-                final feastLabel = _getFeastLabel(date.month, date.day) ??
-                    (hasFeast && isHighRank ? litDay.title : null);
+                final feastLabel = hasFeast && isHighRank
+                    ? litDay.title
+                    : _getFeastLabel(date.month, date.day);
 
                 return Expanded(
                   child: GestureDetector(
@@ -253,8 +278,10 @@ class _LiturgicalCalendarViewState extends State<LiturgicalCalendarView> {
                         color: selected
                             ? theme.colorScheme.primary
                             : todayMark
-                                ? theme.colorScheme.primaryContainer.withValues(alpha: 0.5)
-                                : null,
+                            ? theme.colorScheme.primaryContainer.withValues(
+                                alpha: 0.5,
+                              )
+                            : null,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Column(
@@ -270,8 +297,8 @@ class _LiturgicalCalendarViewState extends State<LiturgicalCalendarView> {
                               color: selected
                                   ? theme.colorScheme.onPrimary
                                   : isSunday
-                                      ? const Color(0xFFB22222)
-                                      : theme.colorScheme.onSurface,
+                                  ? const Color(0xFFB22222)
+                                  : theme.colorScheme.onSurface,
                               fontSize: 13,
                             ),
                           ),
@@ -282,22 +309,29 @@ class _LiturgicalCalendarViewState extends State<LiturgicalCalendarView> {
                             height: hasFeast ? 8 : 5,
                             decoration: BoxDecoration(
                               color: selected
-                                  ? theme.colorScheme.onPrimary.withValues(alpha: 0.8)
+                                  ? theme.colorScheme.onPrimary.withValues(
+                                      alpha: 0.8,
+                                    )
                                   : _resolveCalendarDotColor(litColor, isDark),
                               shape: BoxShape.circle,
-                              border: litDay.color == LiturgicalColor.white && !selected
+                              border:
+                                  litDay.color == LiturgicalColor.white &&
+                                      !selected
                                   ? Border.all(
-                                      color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
+                                      color: theme.colorScheme.onSurface
+                                          .withValues(alpha: 0.3),
                                       width: 0.5,
                                     )
                                   : null,
                             ),
                           ),
                           // Feast / memorial label
-                          if (feastLabel != null) ...[  
+                          if (feastLabel != null) ...[
                             const SizedBox(height: 2),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 1),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 1,
+                              ),
                               child: Text(
                                 feastLabel,
                                 maxLines: 2,
@@ -306,10 +340,16 @@ class _LiturgicalCalendarViewState extends State<LiturgicalCalendarView> {
                                 style: TextStyle(
                                   fontSize: 7,
                                   height: 1.1,
-                                  fontWeight: isHighRank ? FontWeight.w600 : FontWeight.w400,
+                                  fontWeight: isHighRank
+                                      ? FontWeight.w600
+                                      : FontWeight.w400,
                                   color: selected
-                                      ? theme.colorScheme.onPrimary.withValues(alpha: 0.85)
-                                      : theme.colorScheme.onSurface.withValues(alpha: 0.72),
+                                      ? theme.colorScheme.onPrimary.withValues(
+                                          alpha: 0.85,
+                                        )
+                                      : theme.colorScheme.onSurface.withValues(
+                                          alpha: 0.72,
+                                        ),
                                 ),
                               ),
                             ),
@@ -354,7 +394,9 @@ class _LiturgicalCalendarViewState extends State<LiturgicalCalendarView> {
                     shape: BoxShape.circle,
                     border: item.$1 == 'White'
                         ? Border.all(
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
+                            color: theme.colorScheme.onSurface.withValues(
+                              alpha: 0.3,
+                            ),
                             width: 0.5,
                           )
                         : null,

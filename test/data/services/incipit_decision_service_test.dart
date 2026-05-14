@@ -1,6 +1,9 @@
+import 'package:catholic_daily/data/models/liturgical_region.dart';
 import 'package:catholic_daily/data/services/incipit_decision_service.dart';
+import 'package:catholic_daily/data/services/incipit_preference_service.dart';
 import 'package:catholic_daily/data/services/incipit_processing_service.dart';
 import 'package:catholic_daily/data/services/incipit_rules_service.dart';
+import 'package:catholic_daily/data/services/liturgical_region_preference_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../helpers/test_helpers.dart';
@@ -16,6 +19,108 @@ void main() {
 
   final decisionService = IncipitDecisionService();
   final processor = IncipitProcessingService();
+
+  test(
+    'incipit locale follows liturgical region unless explicitly overridden',
+    () async {
+      final regionPrefs = await LiturgicalRegionPreferenceService.getInstance();
+      final incipitPrefs = IncipitPreferenceService();
+
+      await incipitPrefs.clearLocaleOverride();
+      await regionPrefs.setRegion(LiturgicalRegion.englandWales);
+      incipitPrefs.resetCache();
+      expect(await incipitPrefs.getLocale(), 'en-GB');
+
+      await regionPrefs.setRegion(LiturgicalRegion.nigeria);
+      incipitPrefs.resetCache();
+      expect(await incipitPrefs.getLocale(), 'en-NG');
+
+      await regionPrefs.setRegion(LiturgicalRegion.unitedStates);
+      incipitPrefs.resetCache();
+      expect(await incipitPrefs.getLocale(), 'en-US');
+
+      await regionPrefs.setRegion(LiturgicalRegion.brazil);
+      incipitPrefs.resetCache();
+      expect(await incipitPrefs.getLocale(), 'en');
+
+      await regionPrefs.setRegion(LiturgicalRegion.mexico);
+      incipitPrefs.resetCache();
+      expect(await incipitPrefs.getLocale(), 'en');
+
+      await incipitPrefs.setLocale('en-GB');
+      await regionPrefs.setRegion(LiturgicalRegion.nigeria);
+      incipitPrefs.resetCache();
+      expect(await incipitPrefs.getLocale(), 'en-GB');
+
+      await incipitPrefs.clearLocaleOverride();
+      incipitPrefs.resetCache();
+      expect(await incipitPrefs.getLocale(), 'en-NG');
+
+      await regionPrefs.setRegion(LiturgicalRegion.generalRoman);
+      await incipitPrefs.clearLocaleOverride();
+      incipitPrefs.resetCache();
+    },
+  );
+
+  test(
+    'Brazil and Mexico source evidence captures local incipit patterns',
+    () async {
+      final aparecidaGospel = await decisionService.decide(
+        reference: 'John 2:1-11',
+        fullText:
+            '1. houve um casamento em Caná da Galileia. '
+            'A mãe de Jesus estava presente.',
+        locale: 'pt-BR',
+        readingType: 'gospel',
+      );
+      expect(
+        aparecidaGospel.opening,
+        'Naquele tempo, houve um casamento em Caná da Galileia',
+      );
+      expect(aparecidaGospel.joinStyle, 'comma');
+      expect(aparecidaGospel.sourceIds.single, 'cnbb_aparecida_john2');
+
+      final aparecidaFirst = await decisionService.decide(
+        reference: 'Esth 5:1b-2; 7:2b-3',
+        fullText:
+            '1b. Ester revestiu-se com vestes de rainha e foi colocar-se '
+            'no vestíbulo interno do palácio real.',
+        locale: 'pt-BR',
+        readingType: 'first reading',
+      );
+      expect(aparecidaFirst.opening, 'Ester revestiu-se com vestes de rainha');
+      expect(aparecidaFirst.sourceIds.single, 'cnbb_aparecida_esth5');
+
+      final guadalupeGospel = await decisionService.decide(
+        reference: 'Luke 1:26-38',
+        fullText:
+            '26. el ángel Gabriel fue enviado por Dios a una ciudad '
+            'de Galilea, llamada Nazaret.',
+        locale: 'es-MX',
+        readingType: 'gospel',
+      );
+      expect(
+        guadalupeGospel.opening,
+        'En aquel tiempo, el ángel Gabriel fue enviado por Dios',
+      );
+      expect(guadalupeGospel.joinStyle, 'comma');
+      expect(guadalupeGospel.sourceIds.single, 'cem_guadalupe_luke1_26');
+
+      final guadalupeAlternative = await decisionService.decide(
+        reference: 'Luke 1:39-47',
+        fullText:
+            '39. María se encaminó presurosa a un pueblo de las montañas '
+            'de Judea.',
+        locale: 'es-MX',
+        readingType: 'gospel',
+      );
+      expect(
+        guadalupeAlternative.opening,
+        'En aquellos días, María se encaminó presurosa',
+      );
+      expect(guadalupeAlternative.sourceIds.single, 'cem_guadalupe_luke1_39');
+    },
+  );
 
   test('John 16:12-15 uses locale-specific source-backed openings', () async {
     const raw =

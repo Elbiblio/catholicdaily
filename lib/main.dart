@@ -4,6 +4,8 @@ import 'data/services/theme_preferences.dart';
 import 'data/services/app_navigation_service.dart';
 import 'data/services/feast_reminder_service.dart';
 import 'data/services/feast_reminder_preferences.dart';
+import 'data/services/incipit_preference_service.dart';
+import 'data/services/liturgical_region_preference_service.dart';
 import 'ui/screens/home_screen.dart';
 import 'ui/screens/onboarding_screen.dart';
 
@@ -25,6 +27,14 @@ void main() async {
   );
 
   final themePreferences = await ThemePreferences.getInstance();
+
+  try {
+    final regionPrefs = await LiturgicalRegionPreferenceService.getInstance();
+    await regionPrefs.detectAndSetIfUnset();
+    IncipitPreferenceService().resetCache();
+  } catch (e, st) {
+    debugPrint('[LiturgicalRegion] Startup detection failed: $e\n$st');
+  }
 
   // Initialize notification service and (a) auto-schedule the next 15 months
   // of feast reminders on first install, or (b) reschedule when crossing a
@@ -75,9 +85,7 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
 
     // Always start with onboarding or home screen
     if (_showOnboarding) {
-      _initialScreen = OnboardingScreen(
-        onComplete: _onOnboardingComplete,
-      );
+      _initialScreen = OnboardingScreen(onComplete: _onOnboardingComplete);
     } else {
       _initialScreen = _buildHomeScreen();
     }
@@ -127,7 +135,10 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
     await widget.themePreferences.setThemeStyle(style);
   }
 
-  ThemeData _buildPremiumTheme(Brightness brightness, AppThemeStyle themeStyle) {
+  ThemeData _buildPremiumTheme(
+    Brightness brightness,
+    AppThemeStyle themeStyle,
+  ) {
     final colorScheme = _buildPremiumColorScheme(brightness, themeStyle);
     final textTheme = _buildPremiumTextTheme(brightness);
 
@@ -345,7 +356,10 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
     );
   }
 
-  ColorScheme _buildPremiumColorScheme(Brightness brightness, AppThemeStyle themeStyle) {
+  ColorScheme _buildPremiumColorScheme(
+    Brightness brightness,
+    AppThemeStyle themeStyle,
+  ) {
     final primaryColor = themeStyle == AppThemeStyle.parchment
         ? const Color(0xFF8C1D2F)
         : const Color(0xFF8C1D2F);

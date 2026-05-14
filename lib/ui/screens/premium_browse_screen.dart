@@ -59,7 +59,8 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
   late Animation<Offset> _slideAnimation;
 
   final OrdoResolverService _ordoResolver = OrdoResolverService.instance;
-  final ReadingsBackend _readingsBackend = backend_factory.createReadingsBackend();
+  final ReadingsBackend _readingsBackend = backend_factory
+      .createReadingsBackend();
   final ReadingFlowService _readingFlow = ReadingFlowService.instance;
 
   @override
@@ -122,46 +123,63 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
       _celebrationsSuppressed = optionalMemorialService.isSuppressedDate(
         _selectedDate,
       );
-      
-      debugPrint('Celebrations for date: ${_optionalCelebrations.map((c) => '${c.title} (${c.rank})').join(', ')}');
+
+      debugPrint(
+        'Celebrations for date: ${_optionalCelebrations.map((c) => '${c.title} (${c.rank})').join(', ')}',
+      );
       debugPrint('Celebrations suppressed: $_celebrationsSuppressed');
-      
+
       // Auto-select feast or solemnity with proper readings over ferial
       // This ensures feast days like St. Mark show their proper readings
       List<DailyReading> readingsToLoad = rawReadings;
       _selectedCelebrationIndex = -1;
-      
-      if (!_celebrationsSuppressed) {
+
+      final primaryIsSolemnity = _liturgicalDay?.rank == 'Solemnity';
+      if (!_celebrationsSuppressed && !primaryIsSolemnity) {
         // Find feasts or solemnities with proper readings
         final feastWithReadings = _optionalCelebrations.indexWhere(
-          (c) => (c.rank == CelebrationRank.feast || c.rank == CelebrationRank.solemnity) 
-                  && c.hasProperReadings
+          (c) =>
+              (c.rank == CelebrationRank.feast ||
+                  c.rank == CelebrationRank.solemnity) &&
+              c.hasProperReadings,
         );
-        
+
         debugPrint('Feast with proper readings index: $feastWithReadings');
-        
+
         if (feastWithReadings >= 0) {
           // Load the feast readings instead of ferial
           final celebration = _optionalCelebrations[feastWithReadings];
           debugPrint('Loading feast readings for: ${celebration.title}');
-          final readingSet = optionalMemorialService.getProperReadings(celebration.id);
+          final readingSet = optionalMemorialService.getProperReadings(
+            celebration.id,
+          );
           if (readingSet != null) {
             final alternateService = AlternateReadingsService.instance;
-            final sets = await alternateService.getAvailableReadingSets(_selectedDate);
-            debugPrint('Available reading sets: ${sets.map((s) => '${s.label} (isFerial: ${s.isFerial})').join(', ')}');
-            final matching = sets.where((s) => s.celebration?.id == celebration.id);
+            final sets = await alternateService.getAvailableReadingSets(
+              _selectedDate,
+            );
+            debugPrint(
+              'Available reading sets: ${sets.map((s) => '${s.label} (isFerial: ${s.isFerial})').join(', ')}',
+            );
+            final matching = sets.where(
+              (s) => s.celebration?.id == celebration.id,
+            );
             final matchingSet = matching.isEmpty ? null : matching.first;
             if (matchingSet != null && matchingSet.readings.isNotEmpty) {
               readingsToLoad = matchingSet.readings;
               _selectedCelebrationIndex = feastWithReadings;
-              debugPrint('Using feast readings, feast field on first reading: ${readingsToLoad[0].feast}');
+              debugPrint(
+                'Using feast readings, feast field on first reading: ${readingsToLoad[0].feast}',
+              );
             }
           }
         }
       }
-      
-      debugPrint('Readings to load count: ${readingsToLoad.length}, feast field on psalm: ${readingsToLoad.where((r) => r.position?.toLowerCase().contains('psalm') ?? false).map((r) => r.feast).join(', ')}');
-      
+
+      debugPrint(
+        'Readings to load count: ${readingsToLoad.length}, feast field on psalm: ${readingsToLoad.where((r) => r.position?.toLowerCase().contains('psalm') ?? false).map((r) => r.feast).join(', ')}',
+      );
+
       final hydrated = await _readingFlow.hydrateReadingSet(
         date: _selectedDate,
         readings: readingsToLoad,
@@ -201,7 +219,10 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
     _loadReadings();
   }
 
-  Future<void> _jumpToDate(DateTime date, {bool openFirstReading = false}) async {
+  Future<void> _jumpToDate(
+    DateTime date, {
+    bool openFirstReading = false,
+  }) async {
     final normalizedDate = DateTime(date.year, date.month, date.day);
     HapticFeedback.mediumImpact();
     setState(() => _selectedDate = normalizedDate);
@@ -258,7 +279,9 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                   width: 36,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.2),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -373,7 +396,9 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
           child: Padding(
             padding: EdgeInsets.fromLTRB(
               20,
-              MediaQuery.of(context).padding.top + kToolbarHeight + (isLight ? 0 : 4),
+              MediaQuery.of(context).padding.top +
+                  kToolbarHeight +
+                  (isLight ? 0 : 4),
               20,
               isLight ? 14 : 10,
             ),
@@ -383,53 +408,56 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                    // Rank badge (skip generic day names that duplicate the title)
-                    if (_liturgicalDay!.rank != null &&
-                        !_isGenericDayRank(_liturgicalDay!.rank!))
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 5,
-                        ),
-                        margin: const EdgeInsets.only(bottom: 6),
-                        decoration: BoxDecoration(
-                          color: headerForeground.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: headerForeground.withValues(alpha: 0.20),
-                            width: 1,
-                          ),
-                        ),
-                        child: Text(
-                          _liturgicalDay!.rank!.toUpperCase(),
-                          style: theme.textTheme.labelSmall?.copyWith(
-                            color: headerForeground.withValues(alpha: 0.85),
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 1.0,
-                          ),
+                  // Rank badge (skip generic day names that duplicate the title)
+                  if (_liturgicalDay!.rank != null &&
+                      !_isGenericDayRank(_liturgicalDay!.rank!))
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 5,
+                      ),
+                      margin: const EdgeInsets.only(bottom: 6),
+                      decoration: BoxDecoration(
+                        color: headerForeground.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: headerForeground.withValues(alpha: 0.20),
+                          width: 1,
                         ),
                       ),
-
-                    // Main liturgical title
-                    Text(
-                      _buildConciseHeader(_liturgicalDay!),
-                      style: (_shouldUseCanterburyFont(_liturgicalDay!)
-                          ? theme.textTheme.headlineSmall
-                          : theme.textTheme.titleLarge
-                      )?.copyWith(
-                        color: headerForeground,
-                        fontFamily: _shouldUseCanterburyFont(_liturgicalDay!) ? 'Canterbury' : null,
-                        fontWeight: FontWeight.w700,
-                        height: 1.18,
+                      child: Text(
+                        _liturgicalDay!.rank!.toUpperCase(),
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: headerForeground.withValues(alpha: 0.85),
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1.0,
+                        ),
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
                     ),
 
-                    const SizedBox(height: 10),
+                  // Main liturgical title
+                  Text(
+                    _buildConciseHeader(_liturgicalDay!),
+                    style:
+                        (_shouldUseCanterburyFont(_liturgicalDay!)
+                                ? theme.textTheme.headlineSmall
+                                : theme.textTheme.titleLarge)
+                            ?.copyWith(
+                              color: headerForeground,
+                              fontFamily:
+                                  _shouldUseCanterburyFont(_liturgicalDay!)
+                                  ? 'Canterbury'
+                                  : null,
+                              fontWeight: FontWeight.w700,
+                              height: 1.18,
+                            ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
 
-                    _buildLiturgicalSummaryRow(theme, headerForeground),
+                  const SizedBox(height: 10),
 
+                  _buildLiturgicalSummaryRow(theme, headerForeground),
                 ],
               ),
             ),
@@ -589,7 +617,9 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
             DailyMassAtAGlanceCard(
               liturgicalDay: _liturgicalDay,
               readingGroups: _groupedReadings
-                  .map((g) => (baseType: g.baseType, mainReading: g.mainReading))
+                  .map(
+                    (g) => (baseType: g.baseType, mainReading: g.mainReading),
+                  )
                   .toList(),
               onBeginMass: () {
                 HapticFeedback.mediumImpact();
@@ -620,7 +650,9 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
             // Optional celebrations selector
             if (_optionalCelebrations.isNotEmpty)
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                ).copyWith(top: 16),
                 child: _buildOptionalCelebrationSelector(theme),
               ),
 
@@ -637,7 +669,9 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                         width: 3,
                         height: 22,
                         decoration: BoxDecoration(
-                          color: _liturgicalDay?.colorValue ?? theme.colorScheme.primary,
+                          color:
+                              _liturgicalDay?.colorValue ??
+                              theme.colorScheme.primary,
                           borderRadius: BorderRadius.circular(2),
                         ),
                       ),
@@ -700,22 +734,23 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
   String _buildConciseHeader(LiturgicalDay liturgicalDay) {
     // Sunday with special title (Palm Sunday, Easter Sunday, etc.)
     if (liturgicalDay.dayOfWeek.name == 'sunday') {
-      if (liturgicalDay.title.isNotEmpty && 
+      if (liturgicalDay.title.isNotEmpty &&
           !liturgicalDay.title.toLowerCase().contains('of lent')) {
         return liturgicalDay.title;
-      } else if (liturgicalDay.title.isNotEmpty && 
-                 liturgicalDay.title.toLowerCase().contains('sunday')) {
+      } else if (liturgicalDay.title.isNotEmpty &&
+          liturgicalDay.title.toLowerCase().contains('sunday')) {
         return liturgicalDay.title;
       } else {
         return '${liturgicalDay.weekNumber}${_getOrdinalSuffix(liturgicalDay.weekNumber)} Sunday of ${liturgicalDay.seasonName}';
       }
     }
-    
+
     // Solemnities, Feasts, and Memorials — show the celebration title.
     // Without this, fixed-date feasts like "Saint Mark, Evangelist" (April 25)
     // were falling through to the "Nth Week of Season" branch below.
     final rank = liturgicalDay.rank?.toLowerCase() ?? '';
-    final isCelebration = rank.contains('solemnity') ||
+    final isCelebration =
+        rank.contains('solemnity') ||
         rank.contains('feast') ||
         rank.contains('memorial');
     if (isCelebration && liturgicalDay.title.isNotEmpty) {
@@ -728,65 +763,82 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
     }
 
     // Fallback for edge cases (Christmas season day names, etc.)
-    return liturgicalDay.title.isNotEmpty ? liturgicalDay.title : liturgicalDay.seasonName;
+    return liturgicalDay.title.isNotEmpty
+        ? liturgicalDay.title
+        : liturgicalDay.seasonName;
   }
 
   String _ordinalFull(int n) {
     if (n >= 11 && n <= 13) return '${n}th';
     switch (n % 10) {
-      case 1: return '${n}st';
-      case 2: return '${n}nd';
-      case 3: return '${n}rd';
-      default: return '${n}th';
+      case 1:
+        return '${n}st';
+      case 2:
+        return '${n}nd';
+      case 3:
+        return '${n}rd';
+      default:
+        return '${n}th';
     }
   }
-  
+
   String _getOrdinalSuffix(int number) {
     if (number >= 11 && number <= 13) return 'th';
     switch (number % 10) {
-      case 1: return 'st';
-      case 2: return 'nd';
-      case 3: return 'rd';
-      default: return 'th';
+      case 1:
+        return 'st';
+      case 2:
+        return 'nd';
+      case 3:
+        return 'rd';
+      default:
+        return 'th';
     }
   }
-  
+
   String _toTitleCase(String text) {
     if (text.isEmpty) return text;
-    
-    return text.split(' ').map((word) {
-      if (word.isEmpty) return word;
-      return '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}';
-    }).join(' ');
+
+    return text
+        .split(' ')
+        .map((word) {
+          if (word.isEmpty) return word;
+          return '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}';
+        })
+        .join(' ');
   }
-  
+
   bool _isGenericDayRank(String rank) {
     final lower = rank.toLowerCase().trim();
     const dayNames = {
-      'sunday', 'monday', 'tuesday', 'wednesday',
-      'thursday', 'friday', 'saturday',
+      'sunday',
+      'monday',
+      'tuesday',
+      'wednesday',
+      'thursday',
+      'friday',
+      'saturday',
     };
     return dayNames.contains(lower);
   }
-
 
   bool _shouldUseCanterburyFont(LiturgicalDay liturgicalDay) {
     // Use Canterbury font for Sundays and solemnities
     if (liturgicalDay.dayOfWeek.name == 'sunday') {
       return true;
     }
-    
-    if (liturgicalDay.rank != null && 
+
+    if (liturgicalDay.rank != null &&
         liturgicalDay.rank!.toLowerCase().contains('solemnity')) {
       return true;
     }
-    
+
     return false;
   }
 
   Widget _buildLiturgicalSummaryRow(ThemeData theme, Color foregroundColor) {
     final countdown = _buildCountdownLabel();
-    
+
     return LiturgicalSummaryRow(
       seasonName: _liturgicalDay!.seasonName,
       weekNumber: _liturgicalDay!.weekNumber,
@@ -796,7 +848,9 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
       liturgicalColor: _liturgicalDay?.colorValue,
       countdownLabel: countdown?.$1,
       countdownValue: countdown?.$2,
-      onCountdownTap: countdown != null ? () => _jumpToDate(countdown.$3, openFirstReading: true) : null,
+      onCountdownTap: countdown != null
+          ? () => _jumpToDate(countdown.$3, openFirstReading: true)
+          : null,
       onInfoTap: () => _showLiturgicalDetailsSheet(),
     );
   }
@@ -872,7 +926,9 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                 // Saint of the day
                 if (_optionalCelebrations.isNotEmpty) ...[
                   Text(
-                    _celebrationsSuppressed ? 'Commemoration' : 'Saint of the Day',
+                    _celebrationsSuppressed
+                        ? 'Commemoration'
+                        : 'Saint of the Day',
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: textColor.withValues(alpha: 0.5),
                       fontWeight: FontWeight.w500,
@@ -880,30 +936,32 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                     ),
                   ),
                   const SizedBox(height: 4),
-                  ..._optionalCelebrations.map((c) => Padding(
-                    padding: const EdgeInsets.only(bottom: 2),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: _colorForLiturgicalColor(c.color),
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            c.title,
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
+                  ..._optionalCelebrations.map(
+                    (c) => Padding(
+                      padding: const EdgeInsets.only(bottom: 2),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                              color: _colorForLiturgicalColor(c.color),
+                              shape: BoxShape.circle,
                             ),
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              c.title,
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  )),
+                  ),
                   const SizedBox(height: 16),
                 ] else ...[
                   Text(
@@ -933,10 +991,26 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                     spacing: 24,
                     runSpacing: 10,
                     children: [
-                      _buildSheetDetailPair(theme, 'Golden Number', '${_ordoYearVariables!.goldenNumber}'),
-                      _buildSheetDetailPair(theme, 'Epact', '${_ordoYearVariables!.epact}'),
-                      _buildSheetDetailPair(theme, 'Solar Cycle', '${_ordoYearVariables!.solarCycle}'),
-                      _buildSheetDetailPair(theme, 'Indiction', '${_ordoYearVariables!.indiction}'),
+                      _buildSheetDetailPair(
+                        theme,
+                        'Golden Number',
+                        '${_ordoYearVariables!.goldenNumber}',
+                      ),
+                      _buildSheetDetailPair(
+                        theme,
+                        'Epact',
+                        '${_ordoYearVariables!.epact}',
+                      ),
+                      _buildSheetDetailPair(
+                        theme,
+                        'Solar Cycle',
+                        '${_ordoYearVariables!.solarCycle}',
+                      ),
+                      _buildSheetDetailPair(
+                        theme,
+                        'Indiction',
+                        '${_ordoYearVariables!.indiction}',
+                      ),
                     ],
                   ),
                 ],
@@ -996,11 +1070,11 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
     }
 
     final feastDate = nextFeast.$2;
-    final difference = DateTime(
-      feastDate.year,
-      feastDate.month,
-      feastDate.day,
-    ).difference(DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day)).inDays;
+    final difference = DateTime(feastDate.year, feastDate.month, feastDate.day)
+        .difference(
+          DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day),
+        )
+        .inDays;
 
     if (difference <= 0) {
       return ('Today', nextFeast.$1, feastDate);
@@ -1027,7 +1101,9 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
     ];
 
     for (final candidate in candidates) {
-      if (!candidate.$2.isBefore(DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day))) {
+      if (!candidate.$2.isBefore(
+        DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day),
+      )) {
         return candidate;
       }
     }
@@ -1057,14 +1133,17 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
   DateTime _calculateAdventStart(int year) {
     final christmas = DateTime(year, 12, 25);
     final daysUntilSunday = (DateTime.sunday - christmas.weekday + 7) % 7;
-    final sundayOnOrAfterChristmas = christmas.add(Duration(days: daysUntilSunday));
+    final sundayOnOrAfterChristmas = christmas.add(
+      Duration(days: daysUntilSunday),
+    );
     return sundayOnOrAfterChristmas.subtract(const Duration(days: 28));
   }
 
   Color _resolveHeaderColor(ThemeData theme) {
     final seasonal = _liturgicalDay?.colorValue ?? theme.colorScheme.primary;
     final blendAmount = theme.brightness == Brightness.light ? 0.18 : 0.42;
-    return Color.lerp(seasonal, theme.colorScheme.primary, blendAmount) ?? theme.colorScheme.primary;
+    return Color.lerp(seasonal, theme.colorScheme.primary, blendAmount) ??
+        theme.colorScheme.primary;
   }
 
   Color _resolveHeaderForeground(ThemeData theme, Color backgroundColor) {
@@ -1108,7 +1187,9 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
       final orderB = _getReadingTypeOrder(b.baseType);
       if (orderA != orderB) return orderA.compareTo(orderB);
       // Same priority bucket — fall back to insertion order.
-      return insertionOrder.indexOf(a.baseType).compareTo(insertionOrder.indexOf(b.baseType));
+      return insertionOrder
+          .indexOf(a.baseType)
+          .compareTo(insertionOrder.indexOf(b.baseType));
     });
     return ordered;
   }
@@ -1144,14 +1225,22 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
     if (lower == 'epistle') return 24;
     if (lower.contains('after epistle')) return 25;
     switch (lower) {
-      case 'first reading': return 10;
-      case 'responsorial psalm': return 30;
-      case 'alleluia psalm': return 30;
-      case 'sequence': return 40;
-      case 'gospel acclamation': return 50;
-      case 'gospel': return 60;
-      case 'gospel at procession': return 5;
-      default: return 999;
+      case 'first reading':
+        return 10;
+      case 'responsorial psalm':
+        return 30;
+      case 'alleluia psalm':
+        return 30;
+      case 'sequence':
+        return 40;
+      case 'gospel acclamation':
+        return 50;
+      case 'gospel':
+        return 60;
+      case 'gospel at procession':
+        return 5;
+      default:
+        return 999;
     }
   }
 
@@ -1165,14 +1254,10 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
   Widget _buildOptionalCelebrationSelector(ThemeData theme) {
     final isDark = theme.brightness == Brightness.dark;
     final baseBorderColor = _celebrationsSuppressed
-        ? (isDark
-            ? const Color(0xFFE7C27A)
-            : const Color(0xFFD9A441))
+        ? (isDark ? const Color(0xFFE7C27A) : const Color(0xFFD9A441))
         : theme.colorScheme.tertiary;
     final baseBackgroundColor = _celebrationsSuppressed
-        ? (isDark
-            ? const Color(0xFF2B2117)
-            : const Color(0xFF3A2B1A))
+        ? (isDark ? const Color(0xFF2B2117) : const Color(0xFF3A2B1A))
         : theme.colorScheme.tertiaryContainer.withValues(alpha: 0.3);
 
     return Container(
@@ -1181,9 +1266,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
       decoration: BoxDecoration(
         color: baseBackgroundColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: baseBorderColor.withValues(alpha: 0.35),
-        ),
+        border: Border.all(color: baseBorderColor.withValues(alpha: 0.35)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1241,36 +1324,38 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                 final isDark = theme.brightness == Brightness.dark;
                 final chipForeground = _celebrationsSuppressed
                     ? (isDark
-                        ? const Color(0xFFE7C27A)
-                        : const Color(0xFFD9A441))
+                          ? const Color(0xFFE7C27A)
+                          : const Color(0xFFD9A441))
                     : (hasProper
-                        ? theme.colorScheme.tertiary
-                        : theme.colorScheme.onSurfaceVariant);
+                          ? theme.colorScheme.tertiary
+                          : theme.colorScheme.onSurfaceVariant);
                 return ChoiceChip(
                   label: Text(
                     _shortenTitle(celebration.title),
                     style: TextStyle(
                       fontSize: 12,
-                      color: selected ? theme.colorScheme.onPrimary : chipForeground,
+                      color: selected
+                          ? theme.colorScheme.onPrimary
+                          : chipForeground,
                       fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
                     ),
                   ),
                   selected: selected,
                   selectedColor: _celebrationsSuppressed
                       ? (isDark
-                          ? const Color(0xFF8B5E1A)
-                          : const Color(0xFFD9A441))
+                            ? const Color(0xFF8B5E1A)
+                            : const Color(0xFFD9A441))
                       : theme.colorScheme.primary,
                   backgroundColor: _celebrationsSuppressed
                       ? (isDark
-                          ? const Color(0xFF2B2117)
-                          : const Color(0xFF3A2B1A))
+                            ? const Color(0xFF2B2117)
+                            : const Color(0xFF3A2B1A))
                       : theme.colorScheme.surface,
                   side: BorderSide(
                     color: selected
                         ? (_celebrationsSuppressed
-                            ? const Color(0xFFE7C27A)
-                            : theme.colorScheme.primary)
+                              ? const Color(0xFFE7C27A)
+                              : theme.colorScheme.primary)
                         : chipForeground.withValues(alpha: 0.35),
                   ),
                   onSelected: (_) {
@@ -1281,14 +1366,14 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                   },
                   avatar: hasProper
                       ? (_celebrationsSuppressed
-                          ? Icon(
-                              Icons.info_outline,
-                              size: 14,
-                              color: selected
-                                  ? theme.colorScheme.onPrimary
-                                  : const Color(0xFFE7C27A),
-                            )
-                          : null)
+                            ? Icon(
+                                Icons.info_outline,
+                                size: 14,
+                                color: selected
+                                    ? theme.colorScheme.onPrimary
+                                    : const Color(0xFFE7C27A),
+                              )
+                            : null)
                       : Icon(
                           Icons.link,
                           size: 14,
@@ -1300,11 +1385,11 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   tooltip: _celebrationsSuppressed
                       ? (hasProper
-                          ? 'Tap to view commemorated feast readings'
-                          : 'Uses weekday readings unless local usage provides otherwise')
+                            ? 'Tap to view commemorated feast readings'
+                            : 'Uses weekday readings unless local usage provides otherwise')
                       : hasProper
-                          ? 'Tap to view proper readings'
-                          : 'Uses weekday readings',
+                      ? 'Tap to view proper readings'
+                      : 'Uses weekday readings',
                 );
               }),
             ],
@@ -1342,7 +1427,9 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
       );
       if (readingSet != null) {
         final alternateService = AlternateReadingsService.instance;
-        final sets = await alternateService.getAvailableReadingSets(_selectedDate);
+        final sets = await alternateService.getAvailableReadingSets(
+          _selectedDate,
+        );
         // Find the matching set
         final matching = sets.where((s) => s.celebration?.id == celebration.id);
         final matchingSet = matching.isEmpty ? null : matching.first;
@@ -1367,13 +1454,13 @@ class ReadingGroup {
   final String baseType;
   final DailyReading mainReading;
   final List<DailyReading> alternatives;
-  
+
   ReadingGroup({
     required this.baseType,
     required this.mainReading,
     required this.alternatives,
   });
-  
+
   bool get hasAlternatives => alternatives.isNotEmpty;
   List<DailyReading> get allReadings => [mainReading, ...alternatives];
 }
@@ -1384,16 +1471,17 @@ class _PremiumReadingGroupCard extends StatefulWidget {
   final Color? liturgicalColor;
   final Map<String, String> readingPreviews;
   final Function(DailyReading) onReadingSelected;
-  
+
   const _PremiumReadingGroupCard({
     required this.group,
     this.liturgicalColor,
     required this.readingPreviews,
     required this.onReadingSelected,
   });
-  
+
   @override
-  State<_PremiumReadingGroupCard> createState() => _PremiumReadingGroupCardState();
+  State<_PremiumReadingGroupCard> createState() =>
+      _PremiumReadingGroupCardState();
 }
 
 class _PremiumReadingGroupCardState extends State<_PremiumReadingGroupCard>
@@ -1401,7 +1489,7 @@ class _PremiumReadingGroupCardState extends State<_PremiumReadingGroupCard>
   late AnimationController _controller;
   late Animation<double> _expandAnimation;
   bool _isExpanded = false;
-  
+
   @override
   void initState() {
     super.initState();
@@ -1414,13 +1502,13 @@ class _PremiumReadingGroupCardState extends State<_PremiumReadingGroupCard>
       curve: Curves.easeInOut,
     );
   }
-  
+
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
-  
+
   void _toggleExpanded() {
     setState(() {
       _isExpanded = !_isExpanded;
@@ -1431,7 +1519,7 @@ class _PremiumReadingGroupCardState extends State<_PremiumReadingGroupCard>
       }
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -1442,7 +1530,9 @@ class _PremiumReadingGroupCardState extends State<_PremiumReadingGroupCard>
         ? Color.alphaBlend(
             isLight
                 ? Colors.white.withValues(alpha: 0.94)
-                : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.92),
+                : theme.colorScheme.surfaceContainerHighest.withValues(
+                    alpha: 0.92,
+                  ),
             widget.liturgicalColor!.withValues(alpha: isLight ? 0.14 : 0.24),
           )
         : theme.colorScheme.surface;
@@ -1459,10 +1549,7 @@ class _PremiumReadingGroupCardState extends State<_PremiumReadingGroupCard>
       decoration: BoxDecoration(
         color: cardBackground,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: color.withValues(alpha: 0.3),
-          width: 1.5,
-        ),
+        border: Border.all(color: color.withValues(alpha: 0.3), width: 1.5),
         boxShadow: [
           BoxShadow(
             color: color.withValues(alpha: 0.1),
@@ -1476,21 +1563,24 @@ class _PremiumReadingGroupCardState extends State<_PremiumReadingGroupCard>
         children: [
           // Main reading
           _buildMainReading(theme, color, isLight),
-          
+
           // Alternatives section
           if (widget.group.hasAlternatives) ...[
-            Divider(height: 1, color: theme.colorScheme.outline.withValues(alpha: 0.3)),
+            Divider(
+              height: 1,
+              color: theme.colorScheme.outline.withValues(alpha: 0.3),
+            ),
             _buildAlternativesSection(theme, color, isLight),
           ],
         ],
       ),
     );
   }
-  
+
   Widget _buildMainReading(ThemeData theme, Color color, bool isLight) {
     final group = widget.group;
     final reading = group.mainReading;
-    
+
     return MainReading(
       reading: reading,
       baseType: group.baseType,
@@ -1500,10 +1590,10 @@ class _PremiumReadingGroupCardState extends State<_PremiumReadingGroupCard>
       onTap: () => widget.onReadingSelected(reading),
     );
   }
-  
+
   Widget _buildAlternativesSection(ThemeData theme, Color color, bool isLight) {
     final group = widget.group;
-    
+
     return AlternativesSection(
       alternatives: group.alternatives,
       readingPreviews: widget.readingPreviews,

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../data/models/liturgical_region.dart';
 import '../../data/services/feast_reminder_preferences.dart';
 import '../../data/services/feast_reminder_service.dart';
+import '../../data/services/incipit_preference_service.dart';
+import '../../data/services/liturgical_region_preference_service.dart';
 
 class OnboardingScreen extends StatefulWidget {
   final VoidCallback onComplete;
@@ -58,6 +61,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
   /// Selected notification slot. null = user skipped (no reminders).
   _NotificationSlot? _selectedSlot;
+  LiturgicalRegion _selectedRegion = LiturgicalRegion.generalRoman;
+  bool _isRegionLoading = true;
 
   static const _pages = [
     _OnboardingPage(
@@ -102,10 +107,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     ),
   ];
 
-  // The notifications step is appended after the generic intro pages.
-  // _pages.length == 5; the notifications step is at index `_pages.length`.
-  int get _totalPages => _pages.length + 1;
-  bool _isNotificationsStep(int index) => index == _pages.length;
+  // Region and notification steps are appended after the generic intro pages.
+  int get _totalPages => _pages.length + 2;
+  bool _isRegionStep(int index) => index == _pages.length;
+  bool _isNotificationsStep(int index) => index == _pages.length + 1;
 
   @override
   void initState() {
@@ -122,15 +127,13 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       parent: _fadeController,
       curve: Curves.easeOut,
     );
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.15),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _slideController,
-      curve: Curves.easeOutCubic,
-    ));
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0, 0.15), end: Offset.zero).animate(
+          CurvedAnimation(parent: _slideController, curve: Curves.easeOutCubic),
+        );
     _fadeController.forward();
     _slideController.forward();
+    _loadRegion();
   }
 
   @override
@@ -149,7 +152,30 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     _slideController.forward();
   }
 
+  Future<void> _loadRegion() async {
+    try {
+      final prefs = await LiturgicalRegionPreferenceService.getInstance();
+      final region = await prefs.detectAndSetIfUnset();
+      if (!mounted) return;
+      setState(() {
+        _selectedRegion = region;
+        _isRegionLoading = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _isRegionLoading = false);
+    }
+  }
+
   Future<void> _complete() async {
+    try {
+      final regionPrefs = await LiturgicalRegionPreferenceService.getInstance();
+      await regionPrefs.setRegion(_selectedRegion);
+      await IncipitPreferenceService().clearLocaleOverride();
+    } catch (e) {
+      debugPrint('[Onboarding] Liturgical region setup failed: $e');
+    }
+
     // Persist notification choice, if any. Skipping leaves reminders disabled.
     try {
       final prefs = await FeastReminderPreferences.getInstance();
@@ -249,6 +275,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       if (_isNotificationsStep(index)) {
                         return _buildNotificationsStep(index);
                       }
+                      if (_isRegionStep(index)) {
+                        return _buildRegionStep(index);
+                      }
                       return _buildPage(_pages[index], index);
                     },
                   ),
@@ -290,7 +319,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                             duration: const Duration(milliseconds: 200),
                             child: Text(
                               _buttonLabel(isLastPage, isNotificationsStep),
-                              key: ValueKey('$isLastPage-$isNotificationsStep-${_selectedSlot?.label}'),
+                              key: ValueKey(
+                                '$isLastPage-$isNotificationsStep-${_selectedSlot?.label}',
+                              ),
                               style: const TextStyle(
                                 fontSize: 17,
                                 fontWeight: FontWeight.w700,
@@ -316,9 +347,13 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     final colorScheme = theme.colorScheme;
 
     return FadeTransition(
-      opacity: _currentPage == index ? _fadeAnimation : const AlwaysStoppedAnimation(1.0),
+      opacity: _currentPage == index
+          ? _fadeAnimation
+          : const AlwaysStoppedAnimation(1.0),
       child: SlideTransition(
-        position: _currentPage == index ? _slideAnimation : const AlwaysStoppedAnimation(Offset.zero),
+        position: _currentPage == index
+            ? _slideAnimation
+            : const AlwaysStoppedAnimation(Offset.zero),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           child: Column(
@@ -348,7 +383,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                     height: 110,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: colorScheme.primaryContainer.withValues(alpha: 0.5),
+                      color: colorScheme.primaryContainer.withValues(
+                        alpha: 0.5,
+                      ),
                     ),
                     child: Icon(
                       page.icon,
@@ -398,7 +435,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
               // Subtitle badge
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: colorScheme.primaryContainer.withValues(alpha: 0.4),
                   borderRadius: BorderRadius.circular(20),
@@ -439,6 +479,91 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       return _selectedSlot != null ? 'Begin Your Journey' : 'Skip Reminders';
     }
     return 'Begin Your Journey';
+  }
+
+  Widget _buildRegionStep(int index) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return FadeTransition(
+      opacity: _currentPage == index
+          ? _fadeAnimation
+          : const AlwaysStoppedAnimation(1.0),
+      child: SlideTransition(
+        position: _currentPage == index
+            ? _slideAnimation
+            : const AlwaysStoppedAnimation(Offset.zero),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 28),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 96,
+                height: 96,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: colorScheme.primaryContainer.withValues(alpha: 0.5),
+                  border: Border.all(
+                    color: colorScheme.primary.withValues(alpha: 0.18),
+                    width: 2,
+                  ),
+                ),
+                child: Icon(Icons.public, size: 42, color: colorScheme.primary),
+              ),
+              const SizedBox(height: 28),
+              Text(
+                'Liturgical Calendar',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w800,
+                  color: colorScheme.onSurface,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Choose the calendar used for holy days and feast reminders.',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  height: 1.45,
+                ),
+              ),
+              const SizedBox(height: 28),
+              DropdownButtonFormField<LiturgicalRegion>(
+                key: ValueKey(_selectedRegion),
+                initialValue: _selectedRegion,
+                isExpanded: true,
+                decoration: const InputDecoration(
+                  labelText: 'Country or region',
+                  border: OutlineInputBorder(),
+                ),
+                items: LiturgicalRegion.selectable.map((region) {
+                  return DropdownMenuItem(
+                    value: region,
+                    child: Text(region.label, overflow: TextOverflow.ellipsis),
+                  );
+                }).toList(),
+                onChanged: _isRegionLoading
+                    ? null
+                    : (region) {
+                        if (region == null) return;
+                        setState(() => _selectedRegion = region);
+                      },
+              ),
+              const SizedBox(height: 12),
+              Text(
+                _selectedRegion.subtitle,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildNotificationsStep(int index) {
@@ -532,7 +657,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                         onTap: () => setState(() => _selectedSlot = null),
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 12),
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
@@ -556,21 +683,21 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                               const SizedBox(width: 12),
                               Expanded(
                                 child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       'No reminders for now',
                                       style: theme.textTheme.bodyMedium
                                           ?.copyWith(
-                                              fontWeight: FontWeight.w600),
+                                            fontWeight: FontWeight.w600,
+                                          ),
                                     ),
                                     Text(
                                       'You can enable them later in Settings',
                                       style: theme.textTheme.bodySmall
                                           ?.copyWith(
-                                        color: colorScheme.onSurfaceVariant,
-                                      ),
+                                            color: colorScheme.onSurfaceVariant,
+                                          ),
                                     ),
                                   ],
                                 ),
@@ -636,7 +763,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
   Widget _buildSlotChip(ThemeData theme, _NotificationSlot slot) {
     final colorScheme = theme.colorScheme;
-    final selected = _selectedSlot != null &&
+    final selected =
+        _selectedSlot != null &&
         _selectedSlot!.hour == slot.hour &&
         _selectedSlot!.dayBefore == slot.dayBefore;
     return GestureDetector(

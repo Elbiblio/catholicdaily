@@ -1,26 +1,35 @@
+import '../models/liturgical_region.dart';
 import 'improved_liturgical_calendar_service.dart';
 
 class OfflineOrdoLookupService {
   static final OfflineOrdoLookupService instance = OfflineOrdoLookupService._();
   OfflineOrdoLookupService._();
 
-  LiturgicalDay resolve(DateTime date) {
+  LiturgicalDay resolve(
+    DateTime date, {
+    LiturgicalRegion region = LiturgicalRegion.generalRoman,
+  }) {
     final day = DateTime(date.year, date.month, date.day);
     final easter = _calculateEasterSunday(day.year);
     final adventStart = _calculateAdventStart(day.year);
     final previousAdventStart = _calculateAdventStart(day.year - 1);
     final christmas = DateTime(day.year, 12, 25);
 
-    final epiphany = _calculateEpiphany(day.year);
+    final epiphany = _calculateEpiphany(day.year, region);
     final baptism = _calculateBaptismOfTheLord(day.year, epiphany);
     final ashWednesday = easter.subtract(const Duration(days: 46));
     final palmSunday = easter.subtract(const Duration(days: 7));
     final holyThursday = easter.subtract(const Duration(days: 3));
     final goodFriday = easter.subtract(const Duration(days: 2));
     final holySaturday = easter.subtract(const Duration(days: 1));
+    final ascension = region.celebratesAscensionOnThursday
+        ? easter.add(const Duration(days: 39))
+        : easter.add(const Duration(days: 42));
     final pentecost = easter.add(const Duration(days: 49));
     final trinitySunday = pentecost.add(const Duration(days: 7));
-    final corpusChristi = pentecost.add(const Duration(days: 14));
+    final corpusChristi = region.celebratesCorpusChristiOnSunday
+        ? pentecost.add(const Duration(days: 14))
+        : pentecost.add(const Duration(days: 11));
     final sacredHeart = pentecost.add(const Duration(days: 19));
     final immaculateHeart = pentecost.add(const Duration(days: 20));
     final divineMercySunday = easter.add(const Duration(days: 7));
@@ -29,6 +38,18 @@ class OfflineOrdoLookupService {
     final annunciation = _transferAnnunciation(day.year, easter);
     final joseph = _transferStJoseph(day.year, easter);
     final holyFamily = _calculateHolyFamilySunday(day.year);
+    final peterAndPaul = _transferFixedSolemnity(
+      DateTime(day.year, 6, 29),
+      region,
+    );
+    final assumption = _transferFixedSolemnity(
+      DateTime(day.year, 8, 15),
+      region,
+    );
+    final allSaints = _transferFixedSolemnity(
+      DateTime(day.year, 11, 1),
+      region,
+    );
 
     final movable = <DateTime, _Celebration>{
       DateTime(day.year, 1, 1): _solemnity(
@@ -68,6 +89,7 @@ class OfflineOrdoLookupService {
         'Second Sunday of Easter (Divine Mercy)',
         LiturgicalColor.white,
       ),
+      ascension: _solemnity('The Ascension of the Lord', LiturgicalColor.white),
       pentecost: _solemnity('Pentecost Sunday', LiturgicalColor.red),
       trinitySunday: _solemnity('The Most Holy Trinity', LiturgicalColor.white),
       corpusChristi: _solemnity(
@@ -94,18 +116,15 @@ class OfflineOrdoLookupService {
         'The Nativity of Saint John the Baptist',
         LiturgicalColor.white,
       ),
-      DateTime(day.year, 6, 29): _solemnity(
+      peterAndPaul: _solemnity(
         'Saints Peter and Paul, Apostles',
         LiturgicalColor.red,
       ),
-      DateTime(day.year, 8, 15): _solemnity(
+      assumption: _solemnity(
         'The Assumption of the Blessed Virgin Mary',
         LiturgicalColor.white,
       ),
-      DateTime(day.year, 11, 1): _solemnity(
-        'All Saints',
-        LiturgicalColor.white,
-      ),
+      allSaints: _solemnity('All Saints', LiturgicalColor.white),
       DateTime(day.year, 11, 2): _day(
         'The Commemoration of All the Faithful Departed',
         LiturgicalColor.purple,
@@ -120,8 +139,9 @@ class OfflineOrdoLookupService {
         LiturgicalColor.white,
       ),
     };
+    _addRegionCelebrations(movable, day.year, region);
 
-    final fixed = _fixedCelebrations(day.year);
+    final fixed = _fixedCelebrations(day.year, region);
     final candidate = movable[day] ?? fixed[day];
 
     final seasonData = _seasonForDay(
@@ -159,8 +179,44 @@ class OfflineOrdoLookupService {
     );
   }
 
-  Map<DateTime, _Celebration> _fixedCelebrations(int year) {
-    return {
+  void _addRegionCelebrations(
+    Map<DateTime, _Celebration> celebrations,
+    int year,
+    LiturgicalRegion region,
+  ) {
+    switch (region) {
+      case LiturgicalRegion.brazil:
+        celebrations[DateTime(year, 10, 12)] = _solemnity(
+          'Our Lady of Aparecida',
+          LiturgicalColor.white,
+        );
+        break;
+      case LiturgicalRegion.mexico:
+        celebrations[DateTime(year, 12, 12)] = _solemnity(
+          'Our Lady of Guadalupe',
+          LiturgicalColor.white,
+        );
+        break;
+      case LiturgicalRegion.nigeria:
+        celebrations[DateTime(year, 4, 30)] = _feast(
+          'Our Lady Mother of Africa',
+          LiturgicalColor.white,
+        );
+        celebrations[DateTime(year, 10, 1)] = _solemnity(
+          'Our Lady, Queen of Nigeria',
+          LiturgicalColor.white,
+        );
+        break;
+      case LiturgicalRegion.generalRoman:
+      case LiturgicalRegion.unitedStates:
+      case LiturgicalRegion.unitedStatesAscensionThursday:
+      case LiturgicalRegion.englandWales:
+        break;
+    }
+  }
+
+  Map<DateTime, _Celebration> _fixedCelebrations(int year, LiturgicalRegion _) {
+    final celebrations = <DateTime, _Celebration>{
       DateTime(year, 1, 25): _feast(
         'The Conversion of Saint Paul, Apostle',
         LiturgicalColor.white,
@@ -193,14 +249,6 @@ class OfflineOrdoLookupService {
         'The Visitation of the Blessed Virgin Mary',
         LiturgicalColor.white,
       ),
-      DateTime(year, 6, 24): _solemnity(
-        'The Nativity of Saint John the Baptist',
-        LiturgicalColor.white,
-      ),
-      DateTime(year, 6, 29): _solemnity(
-        'Saints Peter and Paul, Apostles',
-        LiturgicalColor.red,
-      ),
       DateTime(year, 7, 3): _feast(
         'Saint Thomas, Apostle',
         LiturgicalColor.red,
@@ -208,10 +256,6 @@ class OfflineOrdoLookupService {
       DateTime(year, 8, 10): _feast(
         'Saint Lawrence, Deacon and Martyr',
         LiturgicalColor.red,
-      ),
-      DateTime(year, 8, 15): _solemnity(
-        'The Assumption of the Blessed Virgin Mary',
-        LiturgicalColor.white,
       ),
       DateTime(year, 7, 22): _feast(
         'Saint Mary Magdalene',
@@ -253,10 +297,6 @@ class OfflineOrdoLookupService {
         'Saints Simon and Jude, Apostles',
         LiturgicalColor.red,
       ),
-      DateTime(year, 11, 1): _solemnity(
-        'All Saints',
-        LiturgicalColor.white,
-      ),
       DateTime(year, 11, 2): _day(
         'The Commemoration of All the Faithful Departed (All Souls)',
         LiturgicalColor.purple,
@@ -287,6 +327,8 @@ class OfflineOrdoLookupService {
         LiturgicalColor.red,
       ),
     };
+
+    return celebrations;
   }
 
   _SeasonData _seasonForDay({
@@ -312,13 +354,12 @@ class OfflineOrdoLookupService {
 
     final januaryOrdinaryStart = baptism.add(const Duration(days: 1));
     if (!day.isBefore(januaryOrdinaryStart) && day.isBefore(ashWednesday)) {
-      final week =
-          ((day
-                  .difference(_firstOrdinarySunday(januaryOrdinaryStart))
-                  .inDays) ~/
-              7) +
-          1;
-      return _SeasonData(LiturgicalSeason.ordinaryTime, week.clamp(1, 9));
+      final week = ((day.difference(januaryOrdinaryStart).inDays) ~/ 7) + 1;
+      final adjustedWeek = week + (day.weekday == DateTime.sunday ? 1 : 0);
+      return _SeasonData(
+        LiturgicalSeason.ordinaryTime,
+        adjustedWeek.clamp(1, 9),
+      );
     }
 
     if (!day.isBefore(ashWednesday) && day.isBefore(easter)) {
@@ -338,9 +379,11 @@ class OfflineOrdoLookupService {
     final ordinary2Start = pentecost.add(const Duration(days: 1));
     final endOfYear = adventStart.subtract(const Duration(days: 1));
     if (!day.isBefore(ordinary2Start) && !day.isAfter(endOfYear)) {
-      final week =
-          ((day.difference(_firstOrdinarySunday(ordinary2Start)).inDays) ~/ 7) +
-          10;
+      final christTheKing = adventStart.subtract(const Duration(days: 7));
+      final daysToSubtract = day.weekday == DateTime.sunday ? 0 : day.weekday;
+      final weekStart = day.subtract(Duration(days: daysToSubtract));
+      final weeksBack = christTheKing.difference(weekStart).inDays ~/ 7;
+      final week = 34 - weeksBack;
       return _SeasonData(LiturgicalSeason.ordinaryTime, week.clamp(10, 34));
     }
 
@@ -432,16 +475,23 @@ class OfflineOrdoLookupService {
   DateTime _calculateAdventStart(int year) {
     final christmas = DateTime(year, 12, 25);
     final daysUntilSunday = (DateTime.sunday - christmas.weekday + 7) % 7;
-    final sundayOnOrAfterChristmas = christmas.add(Duration(days: daysUntilSunday));
+    final sundayOnOrAfterChristmas = christmas.add(
+      Duration(days: daysUntilSunday),
+    );
     return sundayOnOrAfterChristmas.subtract(const Duration(days: 28));
   }
 
-  DateTime _calculateEpiphany(int year) {
+  DateTime _calculateEpiphany(int year, LiturgicalRegion region) {
+    final fixed = DateTime(year, 1, 6);
+    if (region.celebratesEpiphanyOnFixedDate) {
+      return _transferSaturdayMondayHolyday(fixed, region);
+    }
+
     for (var day = 2; day <= 8; day++) {
       final date = DateTime(year, 1, day);
       if (date.weekday == DateTime.sunday) return date;
     }
-    return DateTime(year, 1, 6);
+    return fixed;
   }
 
   DateTime _calculateBaptismOfTheLord(int year, DateTime epiphany) {
@@ -481,6 +531,29 @@ class OfflineOrdoLookupService {
     return base;
   }
 
+  DateTime _transferSaturdayMondayHolyday(
+    DateTime date,
+    LiturgicalRegion region,
+  ) {
+    if (!region.transfersSaturdayMondayHolydaysToSunday) return date;
+    if (date.weekday == DateTime.saturday) {
+      return date.add(const Duration(days: 1));
+    }
+    if (date.weekday == DateTime.monday) {
+      return date.subtract(const Duration(days: 1));
+    }
+    return date;
+  }
+
+  DateTime _transferFixedSolemnity(DateTime date, LiturgicalRegion region) {
+    if (!region.transfersFixedSolemnitiesToFollowingSunday) {
+      return _transferSaturdayMondayHolyday(date, region);
+    }
+    if (date.weekday == DateTime.sunday) return date;
+    final delta = (DateTime.sunday - date.weekday + 7) % 7;
+    return date.add(Duration(days: delta == 0 ? 7 : delta));
+  }
+
   DateTime _nextSunday(DateTime from) {
     final delta = (7 - from.weekday) % 7;
     return from.add(Duration(days: delta == 0 ? 7 : delta));
@@ -488,11 +561,6 @@ class OfflineOrdoLookupService {
 
   DateTime _lastSundayBefore(DateTime day) {
     return day.subtract(Duration(days: day.weekday % 7 == 0 ? 7 : day.weekday));
-  }
-
-  DateTime _firstOrdinarySunday(DateTime date) {
-    final daysUntilSunday = (DateTime.sunday - date.weekday) % 7;
-    return date.add(Duration(days: daysUntilSunday));
   }
 
   DayOfWeek _toDayOfWeek(int weekday) {

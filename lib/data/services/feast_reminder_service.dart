@@ -5,7 +5,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tzdata;
+import '../models/liturgical_region.dart';
 import 'feast_reminder_preferences.dart';
+import 'liturgical_region_preference_service.dart';
 import 'offline_ordo_lookup_service.dart';
 
 /// Represents a feast/solemnity event that can trigger a reminder.
@@ -20,6 +22,19 @@ class _FeastEvent {
     required this.title,
     required this.rank,
     this.liturgicalColor,
+  });
+}
+
+@visibleForTesting
+class FeastReminderPreviewEvent {
+  final DateTime date;
+  final String title;
+  final String rank;
+
+  const FeastReminderPreviewEvent({
+    required this.date,
+    required this.title,
+    required this.rank,
   });
 }
 
@@ -38,14 +53,16 @@ class FeastReminderService {
   static const _channelName = 'Feast & Solemnity Reminders';
   static const _channelDesc =
       'Daily reminders for Catholic feasts and solemnities';
+  static const _scheduleSchemaVersion = 2;
 
   Future<void> initialize() async {
     if (_initialized) return;
 
     tzdata.initializeTimeZones();
 
-    const androidSettings =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+    const androidSettings = AndroidInitializationSettings(
+      '@mipmap/ic_launcher',
+    );
     const iosSettings = DarwinInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
@@ -66,13 +83,16 @@ class FeastReminderService {
     if (Platform.isIOS) {
       final result = await _plugin
           .resolvePlatformSpecificImplementation<
-              IOSFlutterLocalNotificationsPlugin>()
+            IOSFlutterLocalNotificationsPlugin
+          >()
           ?.requestPermissions(alert: true, badge: true, sound: true);
       return result ?? false;
     }
     if (Platform.isAndroid) {
-      final androidPlugin = _plugin.resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>();
+      final androidPlugin = _plugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
       final result = await androidPlugin?.requestNotificationsPermission();
       return result ?? false;
     }
@@ -83,13 +103,17 @@ class FeastReminderService {
   Future<bool> hasPermission() async {
     await initialize();
     if (Platform.isAndroid) {
-      final androidPlugin = _plugin.resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>();
+      final androidPlugin = _plugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
       return (await androidPlugin?.areNotificationsEnabled()) ?? false;
     }
     if (Platform.isIOS) {
-      final iosPlugin = _plugin.resolvePlatformSpecificImplementation<
-          IOSFlutterLocalNotificationsPlugin>();
+      final iosPlugin = _plugin
+          .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin
+          >();
       final settings = await iosPlugin?.checkPermissions();
       return settings?.isEnabled ?? false;
     }
@@ -105,10 +129,7 @@ class FeastReminderService {
   /// DEPRECATED: kept as a thin wrapper around [scheduleAheadMonths] for
   /// callers that still pass a single year. Schedules a 15-month rolling
   /// window starting today regardless of [year].
-  Future<void> scheduleForYear(
-    int year,
-    FeastReminderPreferences prefs,
-  ) async {
+  Future<void> scheduleForYear(int year, FeastReminderPreferences prefs) async {
     await scheduleAheadMonths(15, prefs);
   }
 
@@ -219,18 +240,28 @@ class FeastReminderService {
   }
 
   /// Build the list of feast events for [year] filtered by [rank].
-  List<_FeastEvent> _buildFeastEvents(int year, FeastReminderRank rank) {
+  Future<List<_FeastEvent>> _buildFeastEvents(
+    int year,
+    FeastReminderRank rank, {
+    LiturgicalRegion? regionOverride,
+  }) async {
     final lookup = OfflineOrdoLookupService.instance;
+    var region = regionOverride ?? LiturgicalRegion.generalRoman;
+    if (regionOverride == null) {
+      try {
+        final regionPrefs =
+            await LiturgicalRegionPreferenceService.getInstance();
+        region = regionPrefs.currentRegion;
+      } catch (_) {}
+    }
     final events = <_FeastEvent>[];
 
     final start = DateTime(year, 1, 1);
     final end = DateTime(year, 12, 31);
 
-    for (var d = start;
-        !d.isAfter(end);
-        d = d.add(const Duration(days: 1))) {
+    for (var d = start; !d.isAfter(end); d = d.add(const Duration(days: 1))) {
       try {
-        final day = lookup.resolve(d);
+        final day = lookup.resolve(d, region: region);
         if (_shouldInclude(day.rank, rank)) {
           events.add(
             _FeastEvent(
@@ -247,6 +278,24 @@ class FeastReminderService {
     }
 
     return events;
+  }
+
+  @visibleForTesting
+  Future<List<FeastReminderPreviewEvent>> buildPreviewEventsForTesting(
+    int year,
+    FeastReminderRank rank, {
+    LiturgicalRegion? region,
+  }) async {
+    final events = await _buildFeastEvents(year, rank, regionOverride: region);
+    return events
+        .map(
+          (event) => FeastReminderPreviewEvent(
+            date: event.date,
+            title: event.title,
+            rank: event.rank,
+          ),
+        )
+        .toList();
   }
 
   bool _shouldInclude(String? dayRank, FeastReminderRank filter) {
@@ -268,7 +317,8 @@ class FeastReminderService {
   Future<void> rescheduleIfNeeded(FeastReminderPreferences prefs) async {
     if (!prefs.isEnabled) return;
     final now = DateTime.now();
-    if (prefs.lastScheduledYear != now.year) {
+    if (prefs.lastScheduledYear != now.year ||
+        prefs.scheduleSchemaVersion < _scheduleSchemaVersion) {
       await scheduleAheadMonths(15, prefs);
     }
   }
@@ -341,7 +391,7 @@ class FeastReminderService {
     // Walk every year touched by the window and pull qualifying events.
     final allEvents = <_FeastEvent>[];
     for (var y = now.year; y <= endDate.year; y++) {
-      allEvents.addAll(_buildFeastEvents(y, prefs.rank));
+      allEvents.addAll(await _buildFeastEvents(y, prefs.rank));
     }
     allEvents.sort((a, b) => a.date.compareTo(b.date));
 
@@ -376,8 +426,7 @@ class FeastReminderService {
           _notificationTitle(event, dayBefore: prefs.notifyDayBefore),
           _notificationBody(event, dayBefore: prefs.notifyDayBefore),
           tzScheduled,
-          _buildNotificationDetails(event,
-              dayBefore: prefs.notifyDayBefore),
+          _buildNotificationDetails(event, dayBefore: prefs.notifyDayBefore),
           androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
           uiLocalNotificationDateInterpretation:
               UILocalNotificationDateInterpretation.absoluteTime,
@@ -392,7 +441,10 @@ class FeastReminderService {
     // Persist the last fully-scheduled year so rescheduleIfNeeded can detect
     // a year-rollover and refresh well before notifications run out.
     await prefs.setLastScheduledYear(endDate.year);
-    debugPrint('[FeastReminder] Scheduled $scheduled reminders across '
-        '${now.year}-${endDate.year} (${allEvents.length} candidates)');
+    await prefs.setScheduleSchemaVersion(_scheduleSchemaVersion);
+    debugPrint(
+      '[FeastReminder] Scheduled $scheduled reminders across '
+      '${now.year}-${endDate.year} (${allEvents.length} candidates)',
+    );
   }
 }
