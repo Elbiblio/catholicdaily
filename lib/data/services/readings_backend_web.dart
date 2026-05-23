@@ -1,14 +1,11 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:flutter/services.dart' show rootBundle;
 
 import '../models/bible_book.dart';
 import '../models/daily_reading.dart';
 import 'csv_readings_resolver_service.dart';
-import 'incipit_decision_service.dart';
-import 'incipit_preference_service.dart';
-import 'incipit_processing_service.dart';
+import 'lectionary_text_override_service.dart';
 import 'reading_reference_parser.dart';
 import 'readings_backend.dart';
 import 'shared_service_utils.dart';
@@ -23,12 +20,10 @@ class ReadingsBackendWeb implements ReadingsBackend {
   Map<String, Map<int, Map<int, String>>> _versesByBook = const {};
   BibleVersionPreference? _versionPreference;
 
-  final IncipitProcessingService _incipitService = IncipitProcessingService();
-  final IncipitDecisionService _incipitDecision = IncipitDecisionService();
-  final IncipitPreferenceService _incipitPreference =
-      IncipitPreferenceService();
   final CsvReadingsResolverService _csvResolver =
       CsvReadingsResolverService.instance;
+  final LectionaryTextOverrideService _lectionaryTextOverrides =
+      LectionaryTextOverrideService.instance;
 
   @override
   Future<List<DailyReading>> getReadingsForDate(DateTime date) async {
@@ -43,6 +38,17 @@ class ReadingsBackendWeb implements ReadingsBackend {
     String? readingType,
   }) async {
     await _ensureLoaded();
+
+    if (!SharedServiceUtils.isPsalmLikeReference(reference)) {
+      final lectionaryText = await _lectionaryTextOverrides.lookup(
+        reference: reference,
+        readingType: readingType,
+        incipit: incipit,
+      );
+      if (lectionaryText != null) {
+        return lectionaryText;
+      }
+    }
 
     final ranges = ReadingReferenceParser.parse(reference);
     if (ranges.isEmpty) {
@@ -75,35 +81,7 @@ class ReadingsBackendWeb implements ReadingsBackend {
       return fullText;
     }
 
-    final showIncipit = await _incipitPreference.getShowIncipit();
-    if (!showIncipit) {
-      return fullText;
-    }
-
-    final locale = await _incipitPreference.getLocale();
-    final decision = await _incipitDecision.decide(
-      reference: reference,
-      fullText: fullText,
-      csvIncipit: incipit,
-      locale: locale,
-      readingType: readingType,
-    );
-    if (!decision.usesOpening) {
-      return fullText;
-    }
-
-    if (decision.operation == 'generatedFallback' ||
-        decision.rejectedAlternatives.isNotEmpty ||
-        decision.warnings.isNotEmpty) {
-      debugPrint('INCIPIT_AUDIT ${decision.auditRow}');
-    }
-
-    return _incipitService.processWithAuthoritativeIncipit(
-      reference,
-      fullText,
-      decision.opening,
-      joinStyle: decision.joinStyle,
-    );
+    return fullText;
   }
 
   @override

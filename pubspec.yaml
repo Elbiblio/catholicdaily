@@ -112,6 +112,7 @@ flutter:
     - assets/data/order_of_mass.json
     - assets/data/hymns.json
     - assets/data/hymn_categories.json
+    - assets/data/lectionary_text_overrides.json
     - assets/data/prayer_of_faithful_mapped.csv
     - assets/data/cpl_prayer_faithful_spanish.csv
     - assets/incipit_rules.csv

@@ -377,11 +377,11 @@ bool _hasDoubledFormula(String normalized) {
     'in those days',
     'on that day',
     'thus says the lord',
-    'beloved',
     'brethren',
     'brothers and sisters',
   ];
   for (final formula in formulas) {
+    if (!normalized.startsWith(formula)) continue;
     final count = RegExp(
       '\\b${RegExp.escape(formula)}\\b',
     ).allMatches(normalized).length;

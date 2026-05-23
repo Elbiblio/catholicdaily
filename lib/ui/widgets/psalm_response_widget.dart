@@ -54,9 +54,12 @@ class _PsalmResponseWidgetState extends State<PsalmResponseWidget> {
     if (newVersion != null && newVersion != _currentVersionDbName) {
       setState(() {
         _currentVersionDbName = newVersion;
+        _fetchedResponse = null;
+        _fetchFailed = false;
       });
-      // Re-fetch the psalm response when Bible version changes
-      _fetchResponse();
+      if (_needsFetch || _hasRNotationThatNeedsDecoding) {
+        _fetchResponse();
+      }
     }
   }
 
@@ -68,7 +71,7 @@ class _PsalmResponseWidgetState extends State<PsalmResponseWidget> {
   /// Check if the psalm response has R notation that needs decoding from Bible
   bool get _hasRNotationThatNeedsDecoding {
     final response = widget.reading.psalmResponse?.trim() ?? '';
-    return response.contains('(R.');
+    return RegExp(r'^\(?\s*R\.', caseSensitive: false).hasMatch(response);
   }
 
   Future<void> _fetchResponse() async {
@@ -104,7 +107,7 @@ class _PsalmResponseWidgetState extends State<PsalmResponseWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final response = widget.reading.psalmResponse ?? _fetchedResponse;
+    final response = _fetchedResponse ?? widget.reading.psalmResponse;
 
     if (response != null && response.trim().isNotEmpty) {
       return _buildResponseCard(context, response);
@@ -132,7 +135,9 @@ class _PsalmResponseWidgetState extends State<PsalmResponseWidget> {
         color: theme.colorScheme.primary.withValues(alpha: isDark ? 0.1 : 0.05),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: theme.colorScheme.primary.withValues(alpha: isDark ? 0.3 : 0.2),
+          color: theme.colorScheme.primary.withValues(
+            alpha: isDark ? 0.3 : 0.2,
+          ),
         ),
       ),
       child: Column(
@@ -144,7 +149,9 @@ class _PsalmResponseWidgetState extends State<PsalmResponseWidget> {
                 Icons.music_note_rounded,
                 size: 16,
                 color: ContrastHelper.getContrastColor(
-                  theme.colorScheme.primary.withValues(alpha: isDark ? 0.1 : 0.05),
+                  theme.colorScheme.primary.withValues(
+                    alpha: isDark ? 0.1 : 0.05,
+                  ),
                   theme,
                 ),
               ),
@@ -153,7 +160,9 @@ class _PsalmResponseWidgetState extends State<PsalmResponseWidget> {
                 'Response',
                 style: theme.textTheme.labelMedium?.copyWith(
                   color: ContrastHelper.getContrastColor(
-                    theme.colorScheme.primary.withValues(alpha: isDark ? 0.1 : 0.05),
+                    theme.colorScheme.primary.withValues(
+                      alpha: isDark ? 0.1 : 0.05,
+                    ),
                     theme,
                   ),
                   fontWeight: FontWeight.w600,
@@ -188,9 +197,7 @@ class _PsalmResponseWidgetState extends State<PsalmResponseWidget> {
             ? Colors.grey.withValues(alpha: 0.1)
             : Colors.grey.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: Colors.grey.withValues(alpha: 0.2),
-        ),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.2)),
       ),
       child: Row(
         children: [
@@ -231,9 +238,7 @@ class _PsalmResponseWidgetState extends State<PsalmResponseWidget> {
             ? Colors.orange.withValues(alpha: 0.1)
             : Colors.orange.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: Colors.orange.withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: Colors.orange.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
@@ -251,10 +256,7 @@ class _PsalmResponseWidgetState extends State<PsalmResponseWidget> {
               ),
             ),
           ),
-          TextButton(
-            onPressed: _fetchResponse,
-            child: const Text('Retry'),
-          ),
+          TextButton(onPressed: _fetchResponse, child: const Text('Retry')),
         ],
       ),
     );

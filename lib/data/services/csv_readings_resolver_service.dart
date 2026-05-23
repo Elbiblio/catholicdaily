@@ -51,6 +51,17 @@ class CsvReadingsResolverService
       );
     }
 
+    final nigeriaObservedOverride = await _buildNigeriaObservedOverride(
+      date: normalizedDate,
+      liturgicalDay: liturgicalDay,
+      sundayCycle: yearVariables.sundayCycle,
+      weekdayCycle: yearVariables.weekdayCycle,
+    );
+    if (nigeriaObservedOverride != null) {
+      debugPrint('CSV Resolver: Using Nigeria observed override');
+      return nigeriaObservedOverride;
+    }
+
     final memorialEntries = await _catalog.loadMemorialEntries();
     final celebrationEntry = _findCelebrationEntry(
       memorialEntries: memorialEntries,
@@ -391,6 +402,105 @@ class CsvReadingsResolverService
       if (!validGospelPrefix.hasMatch(gospel)) return false;
     }
     return true;
+  }
+
+  Future<List<DailyReading>?> _buildNigeriaObservedOverride({
+    required DateTime date,
+    required LiturgicalDay liturgicalDay,
+    required String sundayCycle,
+    required String weekdayCycle,
+  }) async {
+    if (_isMondayAfterPentecost(date)) {
+      return _buildOverrideReadings(
+        date: date,
+        firstReading: 'Gen 3:9-15, 20',
+        firstReadingIncipit: 'The offspring of the woman will crush your head.',
+        psalm: 'Ps 87:1-2, 3, 5, 6-7',
+        psalmResponse: 'Of you are told glorious things, O city of God!',
+        gospel: 'John 19:25-34',
+        gospelIncipit: 'Behold your son. Behold your mother.',
+        feastTitle: 'Mary, Mother of the Church',
+      );
+    }
+
+    if (_isCorpusChristiObservedInNigeria(date)) {
+      return _buildAuthoritativeCelebrationOverride(
+        date: date,
+        celebrationTitle: 'The Most Holy Body and Blood of Christ',
+        sundayCycle: sundayCycle,
+      );
+    }
+
+    if (_isSaintBarnabas(date)) {
+      return _buildOverrideReadings(
+        date: date,
+        firstReading: 'Acts 11:21b-26; 13:1-3',
+        firstReadingIncipit:
+            'He was a good man, full of the Holy Spirit and of faith.',
+        psalm: 'Ps 98:1, 2-3ab, 3cd-4, 5-6',
+        psalmResponse: 'The Lord has shown his deliverance to the nations.',
+        gospel: 'Matt 10:7-13',
+        gospelIncipit: 'You received without pay, give without pay.',
+        feastTitle: 'Saint Barnabas, Apostle',
+      );
+    }
+
+    if (_isImmaculateHeartAfterSacredHeart(date)) {
+      return _buildNigeriaImmaculateHeartReadings(
+        date: date,
+        liturgicalDay: liturgicalDay,
+        sundayCycle: sundayCycle,
+        weekdayCycle: weekdayCycle,
+      );
+    }
+
+    return null;
+  }
+
+  Future<List<DailyReading>> _buildNigeriaImmaculateHeartReadings({
+    required DateTime date,
+    required LiturgicalDay liturgicalDay,
+    required String sundayCycle,
+    required String weekdayCycle,
+  }) async {
+    final standardEntries = await _catalog.loadStandardEntries();
+    final matches = standardEntries.where((entry) {
+      return _matchesStandardEntry(
+        entry: entry,
+        date: date,
+        liturgicalDay: liturgicalDay,
+        sundayCycle: sundayCycle,
+        weekdayCycle: weekdayCycle,
+      );
+    }).toList();
+    final standardReadings = _buildStandardReadings(date, matches);
+
+    DailyReading? firstReading;
+    DailyReading? psalm;
+    for (final reading in standardReadings) {
+      final position = (reading.position ?? '').toLowerCase();
+      if (firstReading == null && position.contains('first reading')) {
+        firstReading = reading.copyWith(
+          feast: 'The Immaculate Heart of the Blessed Virgin Mary',
+        );
+      } else if (psalm == null && position.contains('psalm')) {
+        psalm = reading.copyWith(
+          feast: 'The Immaculate Heart of the Blessed Virgin Mary',
+        );
+      }
+    }
+
+    return <DailyReading>[
+      if (firstReading != null) firstReading,
+      if (psalm != null) psalm,
+      DailyReading(
+        reading: 'Luke 2:41-51',
+        position: 'Gospel',
+        date: date,
+        feast: 'The Immaculate Heart of the Blessed Virgin Mary',
+        incipit: 'She kept all these things in her heart.',
+      ),
+    ];
   }
 
   bool _matchesStandardEntry({
@@ -1005,7 +1115,9 @@ class CsvReadingsResolverService
     }
 
     if (normalizedTitle ==
-        _normalizeTitle('The Most Holy Body and Blood of Christ')) {
+            _normalizeTitle('The Most Holy Body and Blood of Christ') ||
+        normalizedTitle ==
+            _normalizeTitle('The Most Holy Body and Blood of Jesus Christ')) {
       final firstReading = switch (cycle) {
         'A' => 'Deut 8:2-3, 14b-16a',
         'B' => 'Exod 24:3-8',
@@ -1019,7 +1131,7 @@ class CsvReadingsResolverService
         _ => 'Ps 147:12-13, 14-15, 19-20',
       };
       final psalmResponse = switch (cycle) {
-        'A' => 'Praise the Lord, Jerusalem.',
+        'A' => 'O Jerusalem, glorify the Lord!',
         'B' =>
           'I will take the cup of salvation, and call on the name of the Lord.',
         'C' => 'You are a priest for ever, in the line of Melchizedek.',
@@ -1148,6 +1260,27 @@ class CsvReadingsResolverService
         secondReading: 'Gal 4:4-7',
         gospel: 'Luke 2:16-21',
         gospelAcclamation: 'Heb 1:1-2',
+        feastTitle: celebrationTitle,
+      );
+    }
+
+    if (normalizedTitle == _normalizeTitle('The Nativity of the Lord') ||
+        normalizedTitle == _normalizeTitle('Christmas')) {
+      return _buildOverrideReadings(
+        date: date,
+        firstReading: 'Isa 52:7-10',
+        firstReadingIncipit:
+            'All the ends of the earth shall see the salvation of our God.',
+        psalm: 'Ps 98:1, 2-3ab, 3cd-4, 5-6',
+        psalmResponse:
+            'All the ends of the earth have seen the salvation of our God.',
+        secondReading: 'Heb 1:1-6',
+        secondReadingIncipit:
+            'God has spoken to us by a Son.',
+        gospel: 'John 1:1-18',
+        gospelIncipit: 'The Word became flesh and dwelt among us.',
+        gospelAcclamation:
+            'A hallowed day has shone upon us: come, O nations, and adore the Lord; for today a great light has come down to earth.',
         feastTitle: celebrationTitle,
       );
     }
@@ -1515,7 +1648,7 @@ class CsvReadingsResolverService
             'You believe in me, Thomas, because you have seen me, says the Lord; blessed are they who have not seen me, but still believe!',
       ),
       _normalizeTitle('Saint Mary Magdalene'): _ApostleFeast(
-        firstReading: 'Song 3:1-4b',
+        firstReading: '2 Cor 5:14-17',
         psalm: 'Ps 63:2, 3-4, 5-6, 8-9',
         psalmResponse: 'My soul is thirsting for you, O Lord my God.',
         gospel: 'John 20:1-2, 11-18',
@@ -1759,10 +1892,13 @@ class CsvReadingsResolverService
   List<DailyReading> _buildOverrideReadings({
     required DateTime date,
     required String firstReading,
+    String? firstReadingIncipit,
     required String psalm,
     required String psalmResponse,
     String? secondReading,
+    String? secondReadingIncipit,
     required String gospel,
+    String? gospelIncipit,
     String? gospelAlternate,
     String? gospelAcclamation,
     String? feastTitle,
@@ -1773,6 +1909,7 @@ class CsvReadingsResolverService
         position: 'First Reading',
         date: date,
         feast: feastTitle,
+        incipit: firstReadingIncipit,
       ),
       DailyReading(
         reading: _normalizeReferenceStyle(psalm),
@@ -1790,6 +1927,7 @@ class CsvReadingsResolverService
           position: 'Second Reading',
           date: date,
           feast: feastTitle,
+          incipit: secondReadingIncipit,
         ),
       );
     }
@@ -1801,6 +1939,7 @@ class CsvReadingsResolverService
         date: date,
         feast: feastTitle,
         gospelAcclamation: gospelAcclamation,
+        incipit: gospelIncipit,
       ),
     );
 
@@ -2186,6 +2325,12 @@ class CsvReadingsResolverService
     // Trailing rubric "-R." / "- R." / ".—R." (response marker artifact).
     cleaned = cleaned.replaceFirst(RegExp(r'\s*[-–—]\s*R\.?\s*$'), '');
 
+    cleaned = cleaned.replaceFirst(
+      RegExp(r'\s*\(R\.[^)]+\)\s*$', caseSensitive: false),
+      '',
+    );
+    cleaned = cleaned.replaceAll('++', '');
+
     return cleaned.trim();
   }
 
@@ -2400,6 +2545,25 @@ class CsvReadingsResolverService
     final easter = _calculateEasterSunday(date.year);
     final palmSunday = easter.subtract(const Duration(days: 7));
     return _isSameDate(date, palmSunday);
+  }
+
+  bool _isMondayAfterPentecost(DateTime date) {
+    final easter = _calculateEasterSunday(date.year);
+    return _isSameDate(date, easter.add(const Duration(days: 50)));
+  }
+
+  bool _isCorpusChristiObservedInNigeria(DateTime date) {
+    final easter = _calculateEasterSunday(date.year);
+    return _isSameDate(date, easter.add(const Duration(days: 63)));
+  }
+
+  bool _isImmaculateHeartAfterSacredHeart(DateTime date) {
+    final easter = _calculateEasterSunday(date.year);
+    return _isSameDate(date, easter.add(const Duration(days: 69)));
+  }
+
+  bool _isSaintBarnabas(DateTime date) {
+    return date.weekday != DateTime.sunday && date.month == 6 && date.day == 11;
   }
 
   bool _isHolyThursday(DateTime date) {

@@ -7,6 +7,7 @@ import '../../data/models/navigable_item.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
 import '../../data/services/readings_service.dart';
 import '../../data/services/bible_version_preference.dart';
+import '../../data/services/incipit_preference_service.dart';
 import '../../data/services/scroll_position_service.dart';
 import '../widgets/parchment_background.dart';
 import '../widgets/psalm_response_widget.dart';
@@ -94,7 +95,8 @@ class _ReadingScreenState extends State<ReadingScreen> {
   bool _hasNextChapter = false;
   bool _isFullScreen = false;
   bool _showVerseNumbers = true;
-  
+  bool _showIncipit = true;
+
   final ScrollPositionService _scrollPositionService = ScrollPositionService();
   Timer? _scrollDebounceTimer;
 
@@ -126,8 +128,10 @@ class _ReadingScreenState extends State<ReadingScreen> {
   }
 
   String _formatPosition(String position) {
-    final match = RegExp(r'\(alternative(?:\s+(\d+))?\)$', caseSensitive: false)
-        .firstMatch(position);
+    final match = RegExp(
+      r'\(alternative(?:\s+(\d+))?\)$',
+      caseSensitive: false,
+    ).firstMatch(position);
     if (match == null) {
       return position;
     }
@@ -140,7 +144,9 @@ class _ReadingScreenState extends State<ReadingScreen> {
     final nextIndex = widget.currentNavigableIndex + 1;
     if (nextIndex >= widget.navigableItems.length) return null;
     final nextItem = widget.navigableItems[nextIndex];
-    return nextItem.isOrderOfMass ? nextItem.orderOfMassItem?.title : nextItem.reading?.position;
+    return nextItem.isOrderOfMass
+        ? nextItem.orderOfMassItem?.title
+        : nextItem.reading?.position;
   }
 
   String? get _prevItemLabel {
@@ -148,7 +154,9 @@ class _ReadingScreenState extends State<ReadingScreen> {
     final prevIndex = widget.currentNavigableIndex - 1;
     if (prevIndex < 0) return null;
     final prevItem = widget.navigableItems[prevIndex];
-    return prevItem.isOrderOfMass ? prevItem.orderOfMassItem?.title : prevItem.reading?.position;
+    return prevItem.isOrderOfMass
+        ? prevItem.orderOfMassItem?.title
+        : prevItem.reading?.position;
   }
 
   @override
@@ -157,12 +165,13 @@ class _ReadingScreenState extends State<ReadingScreen> {
     _currentContent = widget.content;
     _loadBookmarkStatus();
     _loadVerseNumberPref();
+    _loadIncipitPref();
     _scrollPositionService.initialize();
     _restoreScrollPosition();
     if (widget.isBibleSearch) {
       _checkChapterAvailability();
     }
-    
+
     _scrollController.addListener(_onScrollChanged);
   }
 
@@ -171,6 +180,15 @@ class _ReadingScreenState extends State<ReadingScreen> {
     if (mounted) {
       setState(() {
         _showVerseNumbers = prefs.getBool(_verseNumbersKey) ?? true;
+      });
+    }
+  }
+
+  Future<void> _loadIncipitPref() async {
+    final show = await IncipitPreferenceService().getShowIncipit();
+    if (mounted) {
+      setState(() {
+        _showIncipit = show;
       });
     }
   }
@@ -188,10 +206,12 @@ class _ReadingScreenState extends State<ReadingScreen> {
 
   Future<void> _checkChapterAvailability() async {
     if (!widget.isBibleSearch) return;
-    
-    final hasPrevious = await BibleReferenceHelper.hasPreviousChapter(widget.reference);
+
+    final hasPrevious = await BibleReferenceHelper.hasPreviousChapter(
+      widget.reference,
+    );
     final hasNext = await BibleReferenceHelper.hasNextChapter(widget.reference);
-    
+
     if (mounted) {
       setState(() {
         _hasPreviousChapter = hasPrevious;
@@ -201,7 +221,9 @@ class _ReadingScreenState extends State<ReadingScreen> {
   }
 
   Future<void> _restoreScrollPosition() async {
-    final savedPosition = _scrollPositionService.getScrollPosition(widget.reference);
+    final savedPosition = _scrollPositionService.getScrollPosition(
+      widget.reference,
+    );
     if (savedPosition != null && savedPosition > 0) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted && _scrollController.hasClients) {
@@ -249,9 +271,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
 
   void _openChurchLocator() {
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const ChurchLocatorScreen(),
-      ),
+      MaterialPageRoute(builder: (context) => const ChurchLocatorScreen()),
     );
   }
 
@@ -289,11 +309,13 @@ class _ReadingScreenState extends State<ReadingScreen> {
 
   Future<void> _goToPreviousChapter() async {
     if (!widget.isBibleSearch || _isNavigating) return;
-    
+
     setState(() => _isNavigating = true);
-    
+
     try {
-      final prevChapter = await BibleReferenceHelper.getPreviousChapter(widget.reference);
+      final prevChapter = await BibleReferenceHelper.getPreviousChapter(
+        widget.reference,
+      );
       if (prevChapter != null) {
         if (mounted) {
           Navigator.of(context).push(
@@ -311,7 +333,9 @@ class _ReadingScreenState extends State<ReadingScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Unable to load the previous chapter right now.')),
+          const SnackBar(
+            content: Text('Unable to load the previous chapter right now.'),
+          ),
         );
       }
     } finally {
@@ -323,11 +347,13 @@ class _ReadingScreenState extends State<ReadingScreen> {
 
   Future<void> _goToNextChapter() async {
     if (!widget.isBibleSearch || _isNavigating) return;
-    
+
     setState(() => _isNavigating = true);
-    
+
     try {
-      final nextChapter = await BibleReferenceHelper.getNextChapter(widget.reference);
+      final nextChapter = await BibleReferenceHelper.getNextChapter(
+        widget.reference,
+      );
       if (nextChapter != null) {
         if (mounted) {
           Navigator.of(context).push(
@@ -345,7 +371,9 @@ class _ReadingScreenState extends State<ReadingScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Unable to load the next chapter right now.')),
+          const SnackBar(
+            content: Text('Unable to load the next chapter right now.'),
+          ),
         );
       }
     } finally {
@@ -409,8 +437,9 @@ class _ReadingScreenState extends State<ReadingScreen> {
                     : onOrdoColor,
               ),
               backgroundColor: Color.alphaBlend(
-                (isLight ? Colors.white : colorScheme.surface)
-                    .withValues(alpha: isLight ? 0.94 : 0.84),
+                (isLight ? Colors.white : colorScheme.surface).withValues(
+                  alpha: isLight ? 0.94 : 0.84,
+                ),
                 ordoColor.withValues(alpha: isLight ? 0.06 : 0.12),
               ),
               surfaceTintColor: Colors.transparent,
@@ -421,10 +450,12 @@ class _ReadingScreenState extends State<ReadingScreen> {
                   ? FlexibleSpaceBar(
                       background: Container(
                         color: Color.alphaBlend(
-                          colorScheme.surface
-                              .withValues(alpha: isLight ? 0.42 : 0.3),
-                          widget.liturgicalDay!.colorValue
-                              .withValues(alpha: isLight ? 0.96 : 1),
+                          colorScheme.surface.withValues(
+                            alpha: isLight ? 0.42 : 0.3,
+                          ),
+                          widget.liturgicalDay!.colorValue.withValues(
+                            alpha: isLight ? 0.96 : 1,
+                          ),
                         ),
                         child: Padding(
                           padding: EdgeInsets.fromLTRB(
@@ -453,8 +484,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
                                 Text(
                                   widget.liturgicalDay!.weekDescription,
                                   style: theme.textTheme.bodySmall?.copyWith(
-                                    color:
-                                        onOrdoColor.withValues(alpha: 0.82),
+                                    color: onOrdoColor.withValues(alpha: 0.82),
                                   ),
                                 ),
                               ],
@@ -470,7 +500,8 @@ class _ReadingScreenState extends State<ReadingScreen> {
                   button: true,
                   child: IconButton(
                     icon: Icon(
-                        _isBookmarked ? Icons.bookmark : Icons.bookmark_border),
+                      _isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+                    ),
                     onPressed: _toggleBookmark,
                     tooltip: _isBookmarked ? 'Remove bookmark' : 'Add bookmark',
                   ),
@@ -510,9 +541,17 @@ class _ReadingScreenState extends State<ReadingScreen> {
                       value: 'verse_numbers',
                       child: Row(
                         children: [
-                          Icon(_showVerseNumbers ? Icons.format_list_numbered : Icons.format_list_numbered_rtl),
+                          Icon(
+                            _showVerseNumbers
+                                ? Icons.format_list_numbered
+                                : Icons.format_list_numbered_rtl,
+                          ),
                           const SizedBox(width: 12),
-                          Text(_showVerseNumbers ? 'Hide verse numbers' : 'Show verse numbers'),
+                          Text(
+                            _showVerseNumbers
+                                ? 'Hide verse numbers'
+                                : 'Show verse numbers',
+                          ),
                         ],
                       ),
                     ),
@@ -540,9 +579,15 @@ class _ReadingScreenState extends State<ReadingScreen> {
                       value: 'fullscreen',
                       child: Row(
                         children: [
-                          Icon(_isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen),
+                          Icon(
+                            _isFullScreen
+                                ? Icons.fullscreen_exit
+                                : Icons.fullscreen,
+                          ),
                           const SizedBox(width: 12),
-                          Text(_isFullScreen ? 'Exit Fullscreen' : 'Fullscreen'),
+                          Text(
+                            _isFullScreen ? 'Exit Fullscreen' : 'Fullscreen',
+                          ),
                         ],
                       ),
                     ),
@@ -559,13 +604,11 @@ class _ReadingScreenState extends State<ReadingScreen> {
                 ),
               ),
             ),
-            SliverToBoxAdapter(
-              child: _buildHeader(theme),
-            ),
-            if (widget.sessionReadings.length > 1 && !widget.isBibleSearch)
-              SliverToBoxAdapter(
-                child: _buildVariantSwitcher(theme),
-              ),
+            SliverToBoxAdapter(child: _buildHeader(theme)),
+            if (_hasSeparateIncipit)
+              SliverToBoxAdapter(child: _buildIncipitCard(theme)),
+            if (_currentVariantReadings.isNotEmpty && !widget.isBibleSearch)
+              SliverToBoxAdapter(child: _buildVariantSwitcher(theme)),
             if (widget.readingData?.psalmResponse != null)
               SliverToBoxAdapter(
                 child: PsalmResponseWidget(
@@ -580,20 +623,15 @@ class _ReadingScreenState extends State<ReadingScreen> {
                   date: widget.liturgicalDay?.date ?? DateTime.now(),
                 ),
               ),
-            SliverToBoxAdapter(
-              child: _buildContent(theme),
-            ),
-            SliverToBoxAdapter(
-              child: _buildVersionFooter(theme),
-            ),
+            SliverToBoxAdapter(child: _buildContent(theme)),
+            SliverToBoxAdapter(child: _buildVersionFooter(theme)),
             if (widget.hasNext || widget.hasPrev)
-              SliverToBoxAdapter(
-                child: _buildNavigation(theme),
-              ),
+              SliverToBoxAdapter(child: _buildNavigation(theme)),
           ],
         ),
       ),
-      floatingActionButton: widget.liturgicalDay != null
+      floatingActionButton:
+          widget.liturgicalDay != null && !widget.hasNext && !widget.hasPrev
           ? Semantics(
               label: 'Open church locator',
               button: true,
@@ -607,6 +645,17 @@ class _ReadingScreenState extends State<ReadingScreen> {
             )
           : null,
     );
+  }
+
+  bool get _hasSeparateIncipit {
+    if (!_showIncipit) return false;
+    if (widget.isBibleSearch) return false;
+    final incipit = widget.readingData?.incipit?.trim();
+    if (incipit == null || incipit.isEmpty) return false;
+    final position = widget.readingData?.position?.toLowerCase() ?? '';
+    return !position.contains('psalm') &&
+        !position.contains('acclamation') &&
+        !position.contains('sequence');
   }
 
   Widget _buildNavigation(ThemeData theme) {
@@ -635,14 +684,17 @@ class _ReadingScreenState extends State<ReadingScreen> {
                           ),
                         )
                       : const Icon(Icons.arrow_back),
-                  label: Text(_isNavigating ? 'Loading...' : 'Previous Chapter'),
+                  label: Text(
+                    _isNavigating ? 'Loading...' : 'Previous Chapter',
+                  ),
                   style: FilledButton.styleFrom(
                     backgroundColor: ordoColor,
                     foregroundColor: buttonForeground,
                   ),
                 ),
               ),
-            if (_hasPreviousChapter && _hasNextChapter) const SizedBox(width: 12),
+            if (_hasPreviousChapter && _hasNextChapter)
+              const SizedBox(width: 12),
             if (_hasNextChapter)
               Expanded(
                 child: FilledButton.icon(
@@ -713,7 +765,8 @@ class _ReadingScreenState extends State<ReadingScreen> {
                               setState(() => _isNavigating = true);
                               try {
                                 await Future.delayed(
-                                    const Duration(milliseconds: 100));
+                                  const Duration(milliseconds: 100),
+                                );
                                 widget.onPrevReading?.call();
                               } finally {
                                 if (mounted) {
@@ -734,9 +787,11 @@ class _ReadingScreenState extends State<ReadingScreen> {
                       label: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(_isNavigating && widget.hasPrev && !widget.hasNext
-                              ? 'Loading...'
-                              : 'Previous'),
+                          Text(
+                            _isNavigating && widget.hasPrev && !widget.hasNext
+                                ? 'Loading...'
+                                : 'Previous',
+                          ),
                           if (_prevItemLabel != null)
                             Text(
                               _prevItemLabel!,
@@ -765,7 +820,8 @@ class _ReadingScreenState extends State<ReadingScreen> {
                               setState(() => _isNavigating = true);
                               try {
                                 await Future.delayed(
-                                    const Duration(milliseconds: 100));
+                                  const Duration(milliseconds: 100),
+                                );
                                 widget.onNextReading?.call();
                               } finally {
                                 if (mounted) {
@@ -786,9 +842,11 @@ class _ReadingScreenState extends State<ReadingScreen> {
                       label: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(_isNavigating && widget.hasNext && !widget.hasPrev
-                              ? 'Loading...'
-                              : 'Next'),
+                          Text(
+                            _isNavigating && widget.hasNext && !widget.hasPrev
+                                ? 'Loading...'
+                                : 'Next',
+                          ),
                           if (_nextItemLabel != null)
                             Text(
                               _nextItemLabel!,
@@ -851,7 +909,8 @@ class _ReadingScreenState extends State<ReadingScreen> {
                             setState(() => _isNavigating = true);
                             try {
                               await Future.delayed(
-                                  const Duration(milliseconds: 100));
+                                const Duration(milliseconds: 100),
+                              );
                               widget.onPrevReading?.call();
                             } finally {
                               if (mounted) {
@@ -870,11 +929,12 @@ class _ReadingScreenState extends State<ReadingScreen> {
                           )
                         : const Icon(Icons.arrow_back),
                     label: Text(
-                        widget.isBibleSearch 
-                            ? 'Previous Chapter'
-                            : (_isNavigating && widget.hasPrev && !widget.hasNext
+                      widget.isBibleSearch
+                          ? 'Previous Chapter'
+                          : (_isNavigating && widget.hasPrev && !widget.hasNext
                                 ? 'Loading...'
-                                : 'Previous')),
+                                : 'Previous'),
+                    ),
                     style: FilledButton.styleFrom(
                       backgroundColor: ordoColor,
                       foregroundColor: buttonForeground,
@@ -891,7 +951,8 @@ class _ReadingScreenState extends State<ReadingScreen> {
                             setState(() => _isNavigating = true);
                             try {
                               await Future.delayed(
-                                  const Duration(milliseconds: 100));
+                                const Duration(milliseconds: 100),
+                              );
                               widget.onNextReading?.call();
                             } finally {
                               if (mounted) {
@@ -910,11 +971,12 @@ class _ReadingScreenState extends State<ReadingScreen> {
                           )
                         : const Icon(Icons.arrow_forward),
                     label: Text(
-                        widget.isBibleSearch 
-                            ? 'Next Chapter'
-                            : (_isNavigating && widget.hasNext && !widget.hasPrev
+                      widget.isBibleSearch
+                          ? 'Next Chapter'
+                          : (_isNavigating && widget.hasNext && !widget.hasPrev
                                 ? 'Loading...'
-                                : 'Next')),
+                                : 'Next'),
+                    ),
                     style: FilledButton.styleFrom(
                       backgroundColor: ordoColor,
                       foregroundColor: buttonForeground,
@@ -929,8 +991,9 @@ class _ReadingScreenState extends State<ReadingScreen> {
                       'No more readings in this session',
                       textAlign: TextAlign.center,
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color:
-                            theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.6,
+                        ),
                       ),
                     ),
                   ),
@@ -946,8 +1009,8 @@ class _ReadingScreenState extends State<ReadingScreen> {
     final ordoColor =
         widget.liturgicalDay?.colorValue ?? theme.colorScheme.primary;
 
-    final headerAccent = ThemeData.estimateBrightnessForColor(ordoColor) ==
-            Brightness.dark
+    final headerAccent =
+        ThemeData.estimateBrightnessForColor(ordoColor) == Brightness.dark
         ? ordoColor
         : theme.colorScheme.onSurface;
 
@@ -985,6 +1048,50 @@ class _ReadingScreenState extends State<ReadingScreen> {
     );
   }
 
+  Widget _buildIncipitCard(ThemeData theme) {
+    final incipit = widget.readingData?.incipit?.trim() ?? '';
+    final ordoColor =
+        widget.liturgicalDay?.colorValue ?? theme.colorScheme.primary;
+    final isLight = theme.brightness == Brightness.light;
+
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Color.alphaBlend(
+          theme.colorScheme.surface.withValues(alpha: isLight ? 0.88 : 0.72),
+          ordoColor.withValues(alpha: isLight ? 0.08 : 0.18),
+        ),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: ordoColor.withValues(alpha: isLight ? 0.18 : 0.28),
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            Icons.format_quote_rounded,
+            color: ordoColor.withValues(alpha: 0.82),
+            size: 22,
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              incipit,
+              style: theme.textTheme.bodyLarge?.copyWith(
+                height: 1.35,
+                fontStyle: FontStyle.italic,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.88),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildVariantSwitcher(ThemeData theme) {
     final ordoColor =
         widget.liturgicalDay?.colorValue ?? theme.colorScheme.primary;
@@ -992,9 +1099,10 @@ class _ReadingScreenState extends State<ReadingScreen> {
     final labelColor = theme.colorScheme.onSurface;
     final unselectedTextColor = theme.colorScheme.onSurface;
     final selectedTextColor = _contrastColor(ordoColor);
-
-    // Group alternatives by their base reading type
-    final groupedReadings = _groupAlternativesByType();
+    final readings = _currentVariantReadings;
+    if (readings.isEmpty) {
+      return const SizedBox.shrink();
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1009,76 +1117,52 @@ class _ReadingScreenState extends State<ReadingScreen> {
             ),
           ),
         ),
-        ...groupedReadings.entries.map((entry) {
-          final typeLabel = entry.key;
-          final readings = entry.value;
-          final hasMultipleAlternatives = readings.length > 1;
-
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (hasMultipleAlternatives)
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
-                  child: Text(
-                    typeLabel,
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              SizedBox(
-                height: hasMultipleAlternatives ? 80 : 0,
-                child: hasMultipleAlternatives
-                    ? ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        itemCount: readings.length,
-                        itemBuilder: (context, index) {
-                          final reading = readings[index];
-                          final globalIndex = widget.sessionReadings.indexOf(reading);
-                          final isSelected = globalIndex == widget.currentReadingIndex;
-                          return _buildAlternativeCard(
-                            reading: reading,
-                            isSelected: isSelected,
-                            theme: theme,
-                            ordoColor: ordoColor,
-                            selectedTextColor: selectedTextColor,
-                            unselectedTextColor: unselectedTextColor,
-                            showTypeLabel: !hasMultipleAlternatives,
-                          );
-                        },
-                      )
-                    : null,
-              ),
-            ],
-          );
-        }),
+        SizedBox(
+          height: 80,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemCount: readings.length,
+            itemBuilder: (context, index) {
+              final reading = readings[index];
+              final globalIndex = widget.sessionReadings.indexOf(reading);
+              final isSelected = globalIndex == widget.currentReadingIndex;
+              return _buildAlternativeCard(
+                reading: reading,
+                isSelected: isSelected,
+                theme: theme,
+                ordoColor: ordoColor,
+                selectedTextColor: selectedTextColor,
+                unselectedTextColor: unselectedTextColor,
+                showTypeLabel: false,
+              );
+            },
+          ),
+        ),
       ],
     );
   }
 
-  Map<String, List<DailyReading>> _groupAlternativesByType() {
-    final grouped = <String, List<DailyReading>>{};
-
-    for (final reading in widget.sessionReadings) {
-      final position = reading.position ?? 'Reading';
-      final baseType = _getBaseReadingType(position);
-
-      if (!grouped.containsKey(baseType)) {
-        grouped[baseType] = [];
-      }
-      grouped[baseType]!.add(reading);
+  List<DailyReading> get _currentVariantReadings {
+    final current =
+        widget.readingData ??
+        (widget.currentReadingIndex >= 0 &&
+                widget.currentReadingIndex < widget.sessionReadings.length
+            ? widget.sessionReadings[widget.currentReadingIndex]
+            : null);
+    if (current == null) {
+      return const [];
     }
 
-    // Sort by reading type order
-    final sortedKeys = grouped.keys.toList()
-      ..sort((a, b) => _getReadingTypeOrder(a).compareTo(_getReadingTypeOrder(b)));
+    final currentType = _getBaseReadingType(current.position ?? 'Reading');
+    final variants = widget.sessionReadings
+        .where(
+          (reading) =>
+              _getBaseReadingType(reading.position ?? 'Reading') == currentType,
+        )
+        .toList();
 
-    return Map.fromEntries(
-      sortedKeys.map((key) => MapEntry(key, grouped[key]!)),
-    );
+    return variants.length > 1 ? variants : const [];
   }
 
   String _getBaseReadingType(String position) {
@@ -1107,40 +1191,6 @@ class _ReadingScreenState extends State<ReadingScreen> {
     if (lowerPos.contains('sequence')) return 'Sequence';
 
     return position.split('(').first.trim();
-  }
-
-  int _getReadingTypeOrder(String type) {
-    final lower = type.toLowerCase();
-    // Easter Vigil sequence — pair each OT reading with its following psalm.
-    if (lower == 'first reading') return 10;
-    if (lower.contains('after first reading')) return 11;
-    if (lower == 'second reading') return 12;
-    if (lower.contains('after second reading')) return 13;
-    if (lower == 'third reading') return 14;
-    if (lower.contains('after third reading')) return 15;
-    if (lower == 'fourth reading') return 16;
-    if (lower.contains('after fourth reading')) return 17;
-    if (lower == 'fifth reading') return 18;
-    if (lower.contains('after fifth reading')) return 19;
-    if (lower == 'sixth reading') return 20;
-    if (lower.contains('after sixth reading')) return 21;
-    if (lower == 'seventh reading') return 22;
-    if (lower.contains('after seventh reading')) return 23;
-    if (lower == 'epistle') return 24;
-    if (lower.contains('after epistle')) return 25;
-    switch (lower) {
-      case 'responsorial psalm':
-      case 'alleluia psalm':
-        return 30;
-      case 'sequence':
-        return 40;
-      case 'gospel acclamation':
-        return 50;
-      case 'gospel':
-        return 60;
-      default:
-        return 999;
-    }
   }
 
   Widget _buildAlternativeCard({
@@ -1249,8 +1299,9 @@ class _ReadingScreenState extends State<ReadingScreen> {
     final ordoColor =
         widget.liturgicalDay?.colorValue ?? theme.colorScheme.primary;
     final containerColor = Color.alphaBlend(
-      (isLight ? Colors.white : theme.colorScheme.surfaceContainer)
-          .withValues(alpha: isLight ? 0.92 : 0.52),
+      (isLight ? Colors.white : theme.colorScheme.surfaceContainer).withValues(
+        alpha: isLight ? 0.92 : 0.52,
+      ),
       ordoColor.withValues(alpha: isLight ? 0.06 : 0.16),
     );
 
@@ -1312,8 +1363,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
               verse.text,
               style: theme.textTheme.bodyLarge?.copyWith(
                 height: 1.6,
-                fontSize:
-                    theme.textTheme.bodyLarge!.fontSize! * _textScale,
+                fontSize: theme.textTheme.bodyLarge!.fontSize! * _textScale,
               ),
             ),
           ),
@@ -1336,19 +1386,21 @@ class _ReadingScreenState extends State<ReadingScreen> {
   Future<void> _reloadContentForNewVersion() async {
     if (!mounted) return;
     setState(() => _isReloading = true);
-    
+
     try {
       final readingsService = ReadingsService.instance;
       await readingsService.reloadForVersionChange();
-      
+
       if (widget.isBibleSearch) {
         final cacheService = BibleCacheService();
         final preference = await BibleVersionPreference.getInstance();
-        await cacheService.refreshContentForVersionChange(preference.currentVersion.dbName);
+        await cacheService.refreshContentForVersionChange(
+          preference.currentVersion.dbName,
+        );
       }
-      
+
       String newContent;
-      
+
       if (widget.isBibleSearch) {
         final parsed = BibleReferenceHelper.parseReference(widget.reference);
         if (parsed == null) {
@@ -1357,18 +1409,18 @@ class _ReadingScreenState extends State<ReadingScreen> {
           }
           return;
         }
-        
+
         final bookName = parsed['bookName'] as String;
         final chapter = parsed['chapter'] as int;
         final shortName = await BibleReferenceHelper.getBookShortName(bookName);
-        
+
         if (shortName == null) {
           if (mounted) {
             setState(() => _isReloading = false);
           }
           return;
         }
-        
+
         newContent = await readingsService.getChapterText(
           bookShortName: shortName,
           chapter: chapter,
@@ -1380,7 +1432,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
           incipit: widget.readingData?.incipit,
         );
       }
-      
+
       if (mounted) {
         setState(() {
           _currentContent = newContent;
@@ -1391,7 +1443,9 @@ class _ReadingScreenState extends State<ReadingScreen> {
       if (mounted) {
         setState(() => _isReloading = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Unable to refresh content for this Bible version.')),
+          const SnackBar(
+            content: Text('Unable to refresh content for this Bible version.'),
+          ),
         );
       }
     }
@@ -1435,7 +1489,8 @@ class _ReadingScreenState extends State<ReadingScreen> {
   }
 
   void _shareText() {
-    final shareText = '${widget.reference}\n\n$_currentContent\n\nShared from Catholic Daily app';
+    final shareText =
+        '${widget.reference}\n\n$_currentContent\n\nShared from Catholic Daily app';
     Share.share(shareText, subject: widget.reference);
   }
 
@@ -1443,7 +1498,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
     setState(() {
       _isFullScreen = !_isFullScreen;
     });
-    
+
     if (_isFullScreen) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     } else {
@@ -1462,7 +1517,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
     );
     _scrollDebounceTimer?.cancel();
     _scrollController.removeListener(_onScrollChanged);
-    
+
     // Save final scroll position
     if (_scrollController.hasClients) {
       _scrollPositionService.saveScrollPosition(
@@ -1470,7 +1525,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
         _scrollController.offset,
       );
     }
-    
+
     _scrollController.dispose();
     super.dispose();
   }
@@ -1480,18 +1535,9 @@ class _Verse {
   final int? number;
   final String text;
 
-  const _Verse({
-    required this.number,
-    required this.text,
-  });
+  const _Verse({required this.number, required this.text});
 
-  _Verse copyWith({
-    int? number,
-    String? text,
-  }) {
-    return _Verse(
-      number: number ?? this.number,
-      text: text ?? this.text,
-    );
+  _Verse copyWith({int? number, String? text}) {
+    return _Verse(number: number ?? this.number, text: text ?? this.text);
   }
 }

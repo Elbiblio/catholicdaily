@@ -7,7 +7,7 @@ import 'dart:io';
 /// Shared utilities used across multiple services to reduce duplication
 class SharedServiceUtils {
   SharedServiceUtils._();
-  
+
   /// Check if a reference is psalm-like
   static bool isPsalmLikeReference(String reference) {
     final normalized = reference.trim().toLowerCase();
@@ -28,6 +28,18 @@ class SharedServiceUtils {
         normalized.startsWith('john ');
   }
 
+  /// Clean minor spacing artifacts from bundled Bible text without changing
+  /// wording or verse structure.
+  static String cleanBibleText(String text) {
+    var cleaned = text.replaceAll('\u00A0', ' ');
+    cleaned = cleaned.replaceAllMapped(
+      RegExp(r'([,;:.!?])(?=[A-Za-z])'),
+      (match) => '${match.group(1)} ',
+    );
+    cleaned = cleaned.replaceAll(RegExp(r'[ \t]+'), ' ');
+    return cleaned.trim();
+  }
+
   /// Open asset database with validation and recopy if needed
   static Future<Database> openValidatedAssetDatabase(
     String assetPath, {
@@ -41,7 +53,7 @@ class SharedServiceUtils {
       final databasesPath = await getDatabasesPath();
       path = join(databasesPath, assetPath);
     }
-    
+
     // Copy from assets if doesn't exist
     if (!await databaseExists(path)) {
       final data = await rootBundle.load('assets/$assetPath');

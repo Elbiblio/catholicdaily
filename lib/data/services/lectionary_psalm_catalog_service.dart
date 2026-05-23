@@ -36,20 +36,25 @@ class LectionaryPsalmCatalogEntry {
   });
 }
 
-class LectionaryPsalmCatalogService extends BaseService<LectionaryPsalmCatalogService> {
-  static LectionaryPsalmCatalogService get instance => BaseService.init(() => LectionaryPsalmCatalogService._());
+class LectionaryPsalmCatalogService
+    extends BaseService<LectionaryPsalmCatalogService> {
+  static LectionaryPsalmCatalogService get instance =>
+      BaseService.init(() => LectionaryPsalmCatalogService._());
 
   LectionaryPsalmCatalogService._();
 
   final ImprovedLiturgicalCalendarService _calendarService =
       ImprovedLiturgicalCalendarService.instance;
   final OrdoResolverService _ordoResolver = OrdoResolverService.instance;
-  final ReadingCatalogService _readingCatalogService = ReadingCatalogService.instance;
+  final ReadingCatalogService _readingCatalogService =
+      ReadingCatalogService.instance;
 
   List<LectionaryPsalmCatalogEntry>? _entries;
   final Map<String, List<LectionaryPsalmCatalogEntry>> _dateCache = {};
 
-  Future<List<LectionaryPsalmCatalogEntry>> getEntriesForDate(DateTime date) async {
+  Future<List<LectionaryPsalmCatalogEntry>> getEntriesForDate(
+    DateTime date,
+  ) async {
     final key = _dateKey(date);
     if (_dateCache.containsKey(key)) {
       return _dateCache[key]!;
@@ -146,8 +151,10 @@ class LectionaryPsalmCatalogService extends BaseService<LectionaryPsalmCatalogSe
           sundayCycle: entry.sundayCycle,
           fullReference: entry.psalmReference,
           refrainText: entry.psalmResponse,
-          refrainTextRsvce: '', // Standard entries don't have version-specific data yet
-          refrainTextNabre: '', // Standard entries don't have version-specific data yet
+          refrainTextRsvce:
+              '', // Standard entries don't have version-specific data yet
+          refrainTextNabre:
+              '', // Standard entries don't have version-specific data yet
           acclamationRef: entry.acclamationRef,
           acclamationText: entry.acclamationText,
           lectionaryNumber: entry.lectionaryNumber,
@@ -159,12 +166,8 @@ class LectionaryPsalmCatalogService extends BaseService<LectionaryPsalmCatalogSe
     // lectionary_psalms_weekday.csv. These files preserve the lectionary
     // "(R. Xx)" verse refrain notation and cleaner acclamation text that
     // the primary CSV drops/pollutes.
-    parsed.addAll(
-      await _loadSupplementary('lectionary_psalms.csv'),
-    );
-    parsed.addAll(
-      await _loadSupplementary('lectionary_psalms_weekday.csv'),
-    );
+    parsed.addAll(await _loadSupplementary('lectionary_psalms.csv'));
+    parsed.addAll(await _loadSupplementary('lectionary_psalms_weekday.csv'));
 
     final filtered = parsed.where((entry) {
       return entry.fullReference.trim().isNotEmpty ||
@@ -191,8 +194,12 @@ class LectionaryPsalmCatalogService extends BaseService<LectionaryPsalmCatalogSe
       //         Refrain Text,Refrain Text RSVCE,Refrain Text NABRE,
       //         Acclamation Ref,Acclamation Text,Lectionary Number
       for (var i = 1; i < lines.length; i++) {
-        final cols = _readingCatalogService.parseCsvLineWithPadding(lines[i], 12);
-        final hasVersionSpecific = cols.length >= 12;
+        final rawCols = _readingCatalogService.parseCsvLine(lines[i]);
+        final hasVersionSpecific = rawCols.length >= 12;
+        final cols = List<String>.from(rawCols);
+        while (cols.length < 12) {
+          cols.add('');
+        }
         out.add(
           LectionaryPsalmCatalogEntry(
             season: cols[0].trim(),
@@ -204,9 +211,15 @@ class LectionaryPsalmCatalogService extends BaseService<LectionaryPsalmCatalogSe
             refrainText: cols[6].trim(),
             refrainTextRsvce: hasVersionSpecific ? cols[7].trim() : '',
             refrainTextNabre: hasVersionSpecific ? cols[8].trim() : '',
-            acclamationRef: hasVersionSpecific ? cols[9].trim() : cols[7].trim(),
-            acclamationText: hasVersionSpecific ? cols[10].trim() : cols[8].trim(),
-            lectionaryNumber: hasVersionSpecific ? cols[11].trim() : cols[9].trim(),
+            acclamationRef: hasVersionSpecific
+                ? cols[9].trim()
+                : cols[7].trim(),
+            acclamationText: hasVersionSpecific
+                ? cols[10].trim()
+                : cols[8].trim(),
+            lectionaryNumber: hasVersionSpecific
+                ? cols[11].trim()
+                : cols[9].trim(),
           ),
         );
       }
@@ -232,7 +245,10 @@ class LectionaryPsalmCatalogService extends BaseService<LectionaryPsalmCatalogSe
 
     // Prefer matches whose fullReference carries "(R. Xx)" notation.
     final rBearing = matches
-        .where((e) => RegExp(r'\(R\.', caseSensitive: false).hasMatch(e.fullReference))
+        .where(
+          (e) =>
+              RegExp(r'\(R\.', caseSensitive: false).hasMatch(e.fullReference),
+        )
         .toList();
     final pool = rBearing.isNotEmpty ? rBearing : matches;
     return _resolvePsalmEntry(
@@ -277,7 +293,8 @@ class LectionaryPsalmCatalogService extends BaseService<LectionaryPsalmCatalogSe
     }
 
     if (_isSameDate(date, easterSunday.subtract(const Duration(days: 3)))) {
-      return normalizedSeason == 'holy week' && normalizedDay == 'holy thursday';
+      return normalizedSeason == 'holy week' &&
+          normalizedDay == 'holy thursday';
     }
 
     if (_isSameDate(date, easterSunday.subtract(const Duration(days: 2)))) {
@@ -335,7 +352,8 @@ class LectionaryPsalmCatalogService extends BaseService<LectionaryPsalmCatalogSe
     final week = entry.week.trim().toLowerCase();
 
     if (_isSameDate(date, easterSunday.subtract(const Duration(days: 7)))) {
-      return season == 'holy week' && entry.day.trim().toLowerCase() == 'palm sunday';
+      return season == 'holy week' &&
+          entry.day.trim().toLowerCase() == 'palm sunday';
     }
 
     final seasonName = liturgicalDay.seasonName.toLowerCase();
@@ -402,10 +420,13 @@ class LectionaryPsalmCatalogService extends BaseService<LectionaryPsalmCatalogSe
     }
 
     final normalizedReference = _normalizeReference(psalmReference);
-    
+
     // First try exact match on normalized references (preserves R. notation)
     final exactMatches = entries
-        .where((entry) => _normalizeReference(entry.fullReference) == normalizedReference)
+        .where(
+          (entry) =>
+              _normalizeReference(entry.fullReference) == normalizedReference,
+        )
         .toList();
     if (exactMatches.isNotEmpty) {
       return exactMatches.first;
@@ -413,11 +434,13 @@ class LectionaryPsalmCatalogService extends BaseService<LectionaryPsalmCatalogSe
 
     // Extract R. notation from both query and entries for precise matching
     final queryRNotation = _extractRNotation(normalizedReference);
-    
+
     // Try to match entries with the same R. notation
     if (queryRNotation != null) {
       final rNotationMatches = entries.where((entry) {
-        final entryRNotation = _extractRNotation(_normalizeReference(entry.fullReference));
+        final entryRNotation = _extractRNotation(
+          _normalizeReference(entry.fullReference),
+        );
         return entryRNotation == queryRNotation;
       }).toList();
       if (rNotationMatches.isNotEmpty) {
@@ -461,7 +484,10 @@ class LectionaryPsalmCatalogService extends BaseService<LectionaryPsalmCatalogSe
   /// Extracts the (R. ...) notation from a normalized reference
   /// Returns null if no notation is present
   String? _extractRNotation(String normalizedReference) {
-    final match = RegExp(r'\(r\.[^)]*\)', caseSensitive: false).firstMatch(normalizedReference);
+    final match = RegExp(
+      r'\(r\.[^)]*\)',
+      caseSensitive: false,
+    ).firstMatch(normalizedReference);
     return match?.group(0);
   }
 
@@ -472,13 +498,13 @@ class LectionaryPsalmCatalogService extends BaseService<LectionaryPsalmCatalogSe
         .replaceAll('see ', '')
         .replaceAll('cf. ', '')
         .replaceAll('cf ', '');
-    
+
     // DO NOT remove (R. ...) notation - it's critical for distinguishing response verses
     // R.7, R.7a, R.7ac are different and must be preserved
     // Only remove spaces, but keep commas, colons, semicolons, hyphens, and periods
     // These are needed to distinguish verse ranges (e.g., 2-3, 6-7 vs 2-3, 16-17)
     normalized = normalized.replaceAll(RegExp(r'\s+'), '');
-    
+
     return normalized;
   }
 
@@ -531,7 +557,9 @@ class LectionaryPsalmCatalogService extends BaseService<LectionaryPsalmCatalogSe
   }
 
   bool _isSameDate(DateTime left, DateTime right) {
-    return left.year == right.year && left.month == right.month && left.day == right.day;
+    return left.year == right.year &&
+        left.month == right.month &&
+        left.day == right.day;
   }
 
   DateTime _calculateEasterSunday(int year) {

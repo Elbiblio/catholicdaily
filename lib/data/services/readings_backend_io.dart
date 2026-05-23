@@ -7,9 +7,7 @@ import '../models/bible_book.dart';
 import '../models/daily_reading.dart';
 import 'csv_readings_resolver_service.dart';
 import 'daniel_verse_mapper.dart' show DeuterocanonicalVerseMapper;
-import 'incipit_decision_service.dart';
-import 'incipit_preference_service.dart';
-import 'incipit_processing_service.dart';
+import 'lectionary_text_override_service.dart';
 import 'lectionary_psalm_catalog_service.dart';
 import 'reading_reference_parser.dart';
 import 'readings_backend.dart';
@@ -28,14 +26,12 @@ class ReadingsBackendIo implements ReadingsBackend {
     }
   }
 
-  final IncipitProcessingService _incipitProcessor = IncipitProcessingService();
-  final IncipitDecisionService _incipitDecision = IncipitDecisionService();
-  final IncipitPreferenceService _incipitPreference =
-      IncipitPreferenceService();
   final CsvReadingsResolverService _csvResolver =
       CsvReadingsResolverService.instance;
   final LectionaryPsalmCatalogService _psalmCatalog =
       LectionaryPsalmCatalogService.instance;
+  final LectionaryTextOverrideService _lectionaryTextOverrides =
+      LectionaryTextOverrideService.instance;
 
   Database? _rsvceDb;
   Database? _nabreDb;
@@ -84,8 +80,11 @@ class ReadingsBackendIo implements ReadingsBackend {
           debugPrint(
             'Feast day psalm: ${r.reading}, feast: ${r.feast}, response: ${r.psalmResponse}',
           );
-          // Still decode the response if it has R notation
-          if (r.psalmResponse != null && r.psalmResponse!.contains('(R.')) {
+          // Decode only missing/reference-only responses. Proper feast
+          // refrains can include an "(R. ...)" source marker in CSV input,
+          // but the displayed response should remain the lectionary text.
+          if (!_hasUsableLectionaryResponse(r.psalmResponse) &&
+              r.psalmResponse != null) {
             final decodedFromR = await _decodeRefrainFromRNotation(
               r.reading + ' ' + r.psalmResponse!,
             );
@@ -118,21 +117,23 @@ class ReadingsBackendIo implements ReadingsBackend {
             updated = updated.copyWith(reading: enrichedReference);
           }
 
-          // Step 2: decode the refrain text from RSVCE using the (R. Xx)
-          // notation. This is the authoritative source the user expects so
-          // the displayed refrain matches the RSVCE verse text verbatim.
-          final decodedFromR = await _decodeRefrainFromRNotation(
-            enrichedReference,
-          );
-          if (decodedFromR != null && decodedFromR.trim().isNotEmpty) {
-            updated = updated.copyWith(psalmResponse: decodedFromR);
-          } else if (r.psalmResponse != null) {
-            final decoded = await _decodePsalmResponseRef(
-              r.psalmResponse!,
-              updated.reading,
+          // Step 2: keep proper lectionary refrains when the CSV supplies
+          // them. Decode only missing/reference-only responses; many missal
+          // refrains are liturgical adaptations rather than verbatim verses.
+          if (!_hasUsableLectionaryResponse(r.psalmResponse)) {
+            final decodedFromR = await _decodeRefrainFromRNotation(
+              enrichedReference,
             );
-            if (decoded != r.psalmResponse) {
-              updated = updated.copyWith(psalmResponse: decoded);
+            if (decodedFromR != null && decodedFromR.trim().isNotEmpty) {
+              updated = updated.copyWith(psalmResponse: decodedFromR);
+            } else if (r.psalmResponse != null) {
+              final decoded = await _decodePsalmResponseRef(
+                r.psalmResponse!,
+                updated.reading,
+              );
+              if (decoded != r.psalmResponse) {
+                updated = updated.copyWith(psalmResponse: decoded);
+              }
             }
           }
         }
@@ -308,9 +309,10 @@ class ReadingsBackendIo implements ReadingsBackend {
         SELECT v.text
         FROM verses v
         JOIN books b ON b._id = v.book_id
-        WHERE b.name = ? AND v.chapter_id = ? AND v.verse_id = ?
+        WHERE (b.text = ? COLLATE NOCASE OR b.shortname = ? COLLATE NOCASE)
+          AND v.chapter_id = ? AND v.verse_id = ?
       ''',
-        [bookName, chapter, verse],
+        [bookName, bookAbbr, chapter, verse],
       );
 
       if (rows.isEmpty) {
@@ -412,7 +414,14 @@ class ReadingsBackendIo implements ReadingsBackend {
       'Jude': 'Jude',
       'Rev': 'Revelation',
     };
-    return mapping[abbr];
+    final normalized = abbr.trim();
+    final direct = mapping[normalized];
+    if (direct != null) return direct;
+    final lower = normalized.toLowerCase();
+    for (final entry in mapping.entries) {
+      if (entry.key.toLowerCase() == lower) return entry.value;
+    }
+    return null;
   }
 
   /// If [response] looks like a verse reference (e.g. "Ps 147:12" or "Ps 145:8a"),
@@ -476,6 +485,20 @@ class ReadingsBackendIo implements ReadingsBackend {
         ).hasMatch(trimmed);
   }
 
+  bool _hasUsableLectionaryResponse(String? text) {
+    final trimmed = text?.trim();
+    if (trimmed == null || trimmed.isEmpty) {
+      return false;
+    }
+    if (_looksLikePsalmReference(trimmed)) {
+      return false;
+    }
+    if (RegExp(r'^\(?\s*R\.', caseSensitive: false).hasMatch(trimmed)) {
+      return false;
+    }
+    return true;
+  }
+
   @override
   Future<String> getReadingText(
     String reference, {
@@ -499,6 +522,17 @@ class ReadingsBackendIo implements ReadingsBackend {
           '',
         )
         .trim();
+
+    if (!SharedServiceUtils.isPsalmLikeReference(reference)) {
+      final lectionaryText = await _lectionaryTextOverrides.lookup(
+        reference: cleanReference,
+        readingType: readingType,
+        incipit: incipit,
+      );
+      if (lectionaryText != null) {
+        return lectionaryText;
+      }
+    }
 
     final ranges = ReadingReferenceParser.parse(cleanReference);
     if (ranges.isEmpty) {
@@ -534,39 +568,7 @@ class ReadingsBackendIo implements ReadingsBackend {
       return fullText;
     }
 
-    // User toggle: "Show liturgical opening" — OFF returns raw scripture.
-    final showIncipit = await _incipitPreference.getShowIncipit();
-    if (!showIncipit) {
-      return fullText;
-    }
-
-    // Locale-aware incipit decision. The decision service ranks exact source
-    // evidence, validated legacy rules, CSV incipits, conservative generated
-    // cleanup, then raw text.
-    final locale = await _incipitPreference.getLocale();
-    final decision = await _incipitDecision.decide(
-      reference: reference,
-      fullText: fullText,
-      csvIncipit: incipit,
-      locale: locale,
-      readingType: readingType,
-    );
-    if (!decision.usesOpening) {
-      return fullText;
-    }
-
-    if (decision.operation == 'generatedFallback' ||
-        decision.rejectedAlternatives.isNotEmpty ||
-        decision.warnings.isNotEmpty) {
-      debugPrint('INCIPIT_AUDIT ${decision.auditRow}');
-    }
-
-    return _incipitProcessor.processWithAuthoritativeIncipit(
-      reference,
-      fullText,
-      decision.opening,
-      joinStyle: decision.joinStyle,
-    );
+    return fullText;
   }
 
   /// Check if a reference is a responsorial psalm with complex notation

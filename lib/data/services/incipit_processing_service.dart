@@ -769,8 +769,15 @@ class IncipitProcessingService {
       ),
       '',
     );
-    final joined = cleanedV.isEmpty ? v : cleanedV;
+    final joined = cleanedV.isEmpty ? v : _lowercaseTemporalConnector(cleanedV);
     return '$i, $joined';
+  }
+
+  String _lowercaseTemporalConnector(String value) {
+    return value.replaceFirstMapped(
+      RegExp(r'^(When|As|After|Before|While)\b'),
+      (match) => match.group(1)!.toLowerCase(),
+    );
   }
 
   String _resolvedJoinStyle(String requested, String fallback) {

@@ -2,6 +2,17 @@ name: Mobile CI
 
 on:
   workflow_dispatch:
+    inputs:
+      play_track:
+        description: Google Play track for Android upload
+        required: false
+        default: production
+        type: choice
+        options:
+          - production
+          - internal
+          - alpha
+          - beta
   pull_request:
     branches:
       - main
@@ -20,7 +31,7 @@ env:
   APPSTORE_API_KEY_OBJECT_KEY: 'AuthKey_4WKTZ9VTBH_ConnectKey.p8'
   PLAY_SERVICE_ACCOUNT_OBJECT_KEY: 'pc-api-8544579711642974481-790-f1fa1d5f9f3c.json'
   PLAY_PACKAGE_NAME: 'com.elbiblio.catholicdaily'
-  PLAY_TRACK: 'internal'
+  PLAY_TRACK: ${{ github.event.inputs.play_track || 'production' }}
   APPLE_TEAM_ID: '24QSYQPJLT'
   APPSTORE_ISSUER_ID: 'e9c47880-5d59-4555-ad9b-e0908960e3da'
   APPSTORE_KEY_ID: '4WKTZ9VTBH'

@@ -226,6 +226,34 @@ void main() {
     );
   });
 
+  test('contextual Acts incipit joins without dangling And', () async {
+    const raw =
+        '16. And when we came into Rome, Paul was allowed to stay by himself, '
+        'with the soldier that guarded him.';
+
+    final decision = await decisionService.decide(
+      reference: 'Acts 28:16-20, 30-31',
+      fullText: raw,
+      csvIncipit: 'Since Paul had appealed to the emperor',
+      locale: 'en',
+      readingType: 'first reading',
+    );
+
+    expect(decision.opening, 'Since Paul had appealed to the emperor');
+    expect(decision.joinStyle, 'comma');
+    expect(
+      processor.processWithAuthoritativeIncipit(
+        'Acts 28:16-20, 30-31',
+        raw,
+        decision.opening,
+        joinStyle: decision.joinStyle,
+      ),
+      startsWith(
+        'Since Paul had appealed to the emperor, when we came into Rome',
+      ),
+    );
+  });
+
   test(
     'Matthew 4 keeps contextual biblical opening instead of adding formula',
     () async {

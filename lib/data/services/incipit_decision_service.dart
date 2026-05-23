@@ -570,6 +570,14 @@ class IncipitDecisionService {
         lower.contains(' saying')) {
       return 'colon';
     }
+    if (lower.startsWith('since ') ||
+        lower.startsWith('when ') ||
+        lower.startsWith('after ') ||
+        lower.startsWith('before ') ||
+        lower.startsWith('while ') ||
+        lower.startsWith('as ')) {
+      return 'comma';
+    }
     return parsed.readingType == 'gospel' ? 'comma' : 'auto';
   }
 
