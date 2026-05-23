@@ -1430,6 +1430,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
           widget.reference,
           psalmResponse: widget.readingData?.psalmResponse,
           incipit: widget.readingData?.incipit,
+          readingType: widget.readingData?.position,
         );
       }
 

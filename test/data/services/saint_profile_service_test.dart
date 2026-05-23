@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:catholic_daily/data/services/improved_liturgical_calendar_service.dart';
 import 'package:catholic_daily/data/services/optional_memorial_service.dart';
+import 'package:catholic_daily/data/services/reading_catalog_service.dart';
+import 'package:catholic_daily/data/services/saint_calendar_service.dart';
 import 'package:catholic_daily/data/services/saint_profile_service.dart';
 
 void main() {
@@ -35,6 +37,162 @@ void main() {
         'Saint Bede the Venerable, Priest and Doctor of the Church',
       ),
       SaintProfileService.normalizeTitle('Bede the Venerable'),
+    );
+  });
+
+  test(
+    'all saint-like memorial, optional, and observed rows are curated',
+    () async {
+      final entries = await ReadingCatalogService.instance
+          .loadMemorialEntries();
+      final saintEntries = entries.where(
+        (entry) => SaintProfileService.isSaintLikeTitle(entry.title),
+      );
+
+      expect(saintEntries.length, greaterThan(100));
+
+      final missing = <String>[];
+      for (final entry in saintEntries) {
+        final profile = await SaintProfileService.instance
+            .findCuratedForCelebration(
+              OptionalCelebration(
+                id: entry.id,
+                title: entry.title,
+                rank: CelebrationRank.optionalMemorial,
+                color: LiturgicalColor.white,
+                month: int.tryParse(entry.month) ?? 1,
+                day: int.tryParse(entry.day) ?? 1,
+                commonType: entry.commonType.isEmpty ? null : entry.commonType,
+              ),
+            );
+        if (profile == null) {
+          missing.add('${entry.id}: ${entry.title}');
+        }
+      }
+
+      const extraCelebrations = [
+        OptionalCelebration(
+          id: 'vincent_of_saragossa',
+          title: 'Saint Vincent, Deacon and Martyr',
+          rank: CelebrationRank.optionalMemorial,
+          color: LiturgicalColor.red,
+          month: 1,
+          day: 22,
+          commonType: 'Martyrs',
+        ),
+        OptionalCelebration(
+          id: 'mary_mother_of_god',
+          title: 'Mary, Mother of God',
+          rank: CelebrationRank.solemnity,
+          color: LiturgicalColor.white,
+          month: 1,
+          day: 1,
+          commonType: 'BlessedVirginMary',
+        ),
+        OptionalCelebration(
+          id: 'mary_mother_of_the_church',
+          title: 'Mary, Mother of the Church',
+          rank: CelebrationRank.obligatoryMemorial,
+          color: LiturgicalColor.white,
+          month: 5,
+          day: 25,
+          commonType: 'BlessedVirginMary',
+        ),
+        OptionalCelebration(
+          id: 'saint_barnabas_apostle',
+          title: 'Saint Barnabas, Apostle',
+          rank: CelebrationRank.feast,
+          color: LiturgicalColor.red,
+          month: 6,
+          day: 11,
+          commonType: 'Apostles',
+        ),
+        OptionalCelebration(
+          id: 'the_assumption',
+          title: 'The Assumption',
+          rank: CelebrationRank.solemnity,
+          color: LiturgicalColor.white,
+          month: 8,
+          day: 15,
+          commonType: 'BlessedVirginMary',
+        ),
+        OptionalCelebration(
+          id: 'the_immaculate_conception',
+          title: 'The Immaculate Conception',
+          rank: CelebrationRank.solemnity,
+          color: LiturgicalColor.white,
+          month: 12,
+          day: 8,
+          commonType: 'BlessedVirginMary',
+        ),
+      ];
+
+      for (final celebration in extraCelebrations) {
+        final profile = await SaintProfileService.instance
+            .findCuratedForCelebration(celebration);
+        if (profile == null) {
+          missing.add('${celebration.id}: ${celebration.title}');
+        }
+      }
+
+      expect(missing, isEmpty);
+    },
+  );
+
+  test('curated profiles contain offline profile body data', () async {
+    final profiles = await SaintProfileService.instance.loadProfiles();
+
+    expect(profiles.length, greaterThanOrEqualTo(150));
+    expect(
+      profiles.where((profile) => profile.briefBio.trim().isEmpty),
+      isEmpty,
+    );
+    expect(profiles.where((profile) => profile.patronage.isEmpty), isEmpty);
+    expect(
+      profiles.where(
+        (profile) => profile.briefBio.contains('fuller curated biography'),
+      ),
+      isEmpty,
+    );
+  });
+
+  test(
+    'saint calendar exposes fixed feast days as clickable celebrations',
+    () async {
+      final celebrations = await SaintCalendarService.instance
+          .getSaintCelebrationsForDate(date: DateTime(2026, 4, 25));
+
+      expect(
+        celebrations.map((celebration) => celebration.id),
+        contains('mark_evangelist'),
+      );
+      expect(
+        celebrations.map((celebration) => celebration.title),
+        contains('Saint Mark, Evangelist'),
+      );
+    },
+  );
+
+  test('saint calendar exposes Nigeria observed saint days', () async {
+    final maryMother = await SaintCalendarService.instance
+        .getSaintCelebrationsForDate(date: DateTime(2026, 5, 25));
+    expect(
+      maryMother.map((celebration) => celebration.id),
+      contains('mary_mother_of_the_church'),
+    );
+
+    final barnabas = await SaintCalendarService.instance
+        .getSaintCelebrationsForDate(date: DateTime(2026, 6, 11));
+    expect(
+      barnabas.map((celebration) => celebration.id),
+      contains('saint_barnabas_apostle'),
+    );
+
+    final immaculateHeart = await SaintCalendarService.instance
+        .getSaintCelebrationsForDate(date: DateTime(2026, 6, 13));
+    expect(
+      immaculateHeart.map((celebration) => celebration.id),
+      contains('immaculate_heart_of_mary'),
     );
   });
 }

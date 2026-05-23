@@ -144,8 +144,50 @@ void main() {
       expect(await svc.getShowIncipit(), isFalse);
 
       await svc.setShowIncipit(true);
+      await svc.setUseReadingIntroReplacements(false);
       svc.resetCache();
       expect(await svc.getShowIncipit(), isTrue);
+      expect(await svc.getUseReadingIntroReplacements(), isFalse);
+
+      await svc.setUseReadingIntroReplacements(true);
+      svc.resetCache();
+      expect(await svc.getUseReadingIntroReplacements(), isTrue);
+    },
+  );
+
+  test(
+    'First-line replacement toggle can show raw Bible range text',
+    timeout: const Timeout(Duration(minutes: 2)),
+    () async {
+      final readings = await CsvReadingsResolverService.instance.resolve(
+        DateTime(2026, 5, 23),
+      );
+      final first = readings.firstWhere((r) => r.position == 'First Reading');
+      final service = ReadingsService.instance;
+      final prefs = IncipitPreferenceService();
+
+      await prefs.setUseReadingIntroReplacements(true);
+      prefs.resetCache();
+      final missalText = await service.getReadingText(
+        first.reading,
+        incipit: first.incipit,
+        readingType: first.position,
+      );
+
+      await prefs.setUseReadingIntroReplacements(false);
+      prefs.resetCache();
+      final rawText = await service.getReadingText(
+        first.reading,
+        incipit: first.incipit,
+        readingType: first.position,
+      );
+
+      await prefs.setUseReadingIntroReplacements(true);
+      prefs.resetCache();
+
+      expect(missalText, isNot(equals(rawText)));
+      expect(_normalize(missalText), startsWith('16 when we came into rome'));
+      expect(_normalize(rawText), startsWith('16 and when we came into rome'));
     },
   );
 

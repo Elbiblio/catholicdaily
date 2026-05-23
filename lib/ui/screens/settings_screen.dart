@@ -45,6 +45,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   FeastReminderPreferences? _reminderPrefs;
   LiturgicalRegion _liturgicalRegion = LiturgicalRegion.generalRoman;
   bool _showIncipit = true;
+  bool _useReadingIntroReplacements = true;
   bool _showPrayerOfFaithful = false;
   static const _androidPackageName = 'com.elbiblio.catholicdaily';
   static const _iosAppStoreId = '';
@@ -60,6 +61,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _loadReminderPrefs();
     _loadLiturgicalRegion();
     _loadIncipitPreference();
+    _loadReadingIntroReplacementPreference();
     _loadPrayerOfFaithfulPreference();
   }
 
@@ -72,6 +74,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _setIncipitPreference(bool value) async {
     setState(() => _showIncipit = value);
     await IncipitPreferenceService().setShowIncipit(value);
+  }
+
+  Future<void> _loadReadingIntroReplacementPreference() async {
+    final useReplacements = await IncipitPreferenceService()
+        .getUseReadingIntroReplacements();
+    if (!mounted) return;
+    setState(() => _useReadingIntroReplacements = useReplacements);
+  }
+
+  Future<void> _setReadingIntroReplacementPreference(bool value) async {
+    setState(() => _useReadingIntroReplacements = value);
+    await IncipitPreferenceService().setUseReadingIntroReplacements(value);
   }
 
   Future<void> _loadPrayerOfFaithfulPreference() async {
@@ -448,11 +462,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               title: const Text('Show liturgical opening'),
               subtitle: const Text(
-                "Replace the first line with traditional missal wording "
+                "Show the traditional missal opening separately "
                 "(e.g. 'At that time, Jesus said…').",
               ),
               value: _showIncipit,
               onChanged: _setIncipitPreference,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Card(
+            child: SwitchListTile(
+              secondary: Icon(
+                Icons.find_replace_outlined,
+                color: theme.colorScheme.primary,
+              ),
+              title: const Text('Use missal first-line wording'),
+              subtitle: const Text(
+                'Apply curated first-line corrections. Turn off to show '
+                'the raw Bible range text.',
+              ),
+              value: _useReadingIntroReplacements,
+              onChanged: _setReadingIntroReplacementPreference,
             ),
           ),
           const SizedBox(height: 24),

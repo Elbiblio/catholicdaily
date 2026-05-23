@@ -6,6 +6,7 @@ import '../models/bible_book.dart';
 import '../models/daily_reading.dart';
 import 'csv_readings_resolver_service.dart';
 import 'lectionary_text_override_service.dart';
+import 'incipit_preference_service.dart';
 import 'reading_reference_parser.dart';
 import 'readings_backend.dart';
 import 'shared_service_utils.dart';
@@ -39,7 +40,10 @@ class ReadingsBackendWeb implements ReadingsBackend {
   }) async {
     await _ensureLoaded();
 
-    if (!SharedServiceUtils.isPsalmLikeReference(reference)) {
+    final useReadingIntroReplacements = await IncipitPreferenceService()
+        .getUseReadingIntroReplacements();
+    if (useReadingIntroReplacements &&
+        !SharedServiceUtils.isPsalmLikeReference(reference)) {
       final lectionaryText = await _lectionaryTextOverrides.lookup(
         reference: reference,
         readingType: readingType,

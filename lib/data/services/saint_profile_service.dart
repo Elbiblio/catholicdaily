@@ -19,6 +19,15 @@ class SaintProfileService {
   Future<SaintProfile?> findForCelebration(
     OptionalCelebration celebration,
   ) async {
+    final curated = await findCuratedForCelebration(celebration);
+    if (curated != null) return curated;
+    if (!isSaintLikeTitle(celebration.title)) return null;
+    return buildFallbackProfile(celebration);
+  }
+
+  Future<SaintProfile?> findCuratedForCelebration(
+    OptionalCelebration celebration,
+  ) async {
     final byId = await _celebrationIndex();
     final directMatch = byId[celebration.id];
     if (directMatch != null) return directMatch;
@@ -31,6 +40,27 @@ class SaintProfileService {
       }
     }
     return null;
+  }
+
+  Future<SaintProfile?> findByCelebrationId(String celebrationId) async {
+    final byId = await _celebrationIndex();
+    return byId[celebrationId];
+  }
+
+  SaintProfile buildFallbackProfile(OptionalCelebration celebration) {
+    return SaintProfile(
+      id: celebration.id,
+      celebrationIds: [celebration.id],
+      name: cleanDisplayName(celebration.title),
+      lifeSpan: '',
+      lifeLength: '',
+      patronage: const [],
+      briefBio:
+          'This feast or memorial is included in the app calendar. A fuller '
+          'curated biography has not yet been added offline.',
+      feastDates: [_formatFeastDate(celebration.month, celebration.day)],
+      sources: const ['Catholic Daily calendar'],
+    );
   }
 
   Future<List<SaintProfile>> loadProfiles() async {
@@ -68,7 +98,6 @@ class SaintProfileService {
         .toList(growable: false);
   }
 
-  @visibleForTesting
   static String normalizeTitle(String value) {
     return value
         .toLowerCase()
@@ -85,5 +114,57 @@ class SaintProfileService {
         .replaceAll(RegExp(r'\band\b'), '')
         .replaceAll(RegExp(r'[^a-z0-9]+'), ' ')
         .trim();
+  }
+
+  static bool isSaintLikeTitle(String title) {
+    final normalized = title.toLowerCase();
+    return RegExp(r'\bsaints?\b').hasMatch(normalized) ||
+        normalized.contains('our lady') ||
+        normalized.contains('blessed virgin mary') ||
+        normalized.contains('virgin mary') ||
+        normalized.contains('mother of god') ||
+        normalized.contains('mother of the church') ||
+        normalized.contains('immaculate conception') ||
+        normalized.contains('immaculate heart') ||
+        normalized.contains('holy innocents') ||
+        normalized.contains('holy founders') ||
+        normalized.contains('archangels') ||
+        normalized.contains('apostle') ||
+        normalized.contains('evangelist') ||
+        normalized.contains('martyr') ||
+        RegExp(r'\bmary\b').hasMatch(normalized);
+  }
+
+  static String idFromTitle(String title) {
+    final normalized = title
+        .toLowerCase()
+        .replaceAll('&', ' and ')
+        .replaceAll(RegExp(r'[^a-z0-9]+'), '_')
+        .replaceAll(RegExp(r'_+'), '_')
+        .replaceAll(RegExp(r'^_|_$'), '');
+    return normalized.isEmpty ? 'saint_profile' : normalized;
+  }
+
+  static String cleanDisplayName(String title) {
+    return title.replaceFirst(RegExp(r'\s*\([^)]*\)\s*$'), '').trim();
+  }
+
+  static String _formatFeastDate(int month, int day) {
+    const names = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    if (month < 1 || month > names.length || day < 1) return 'Date varies';
+    return '${names[month - 1]} $day';
   }
 }

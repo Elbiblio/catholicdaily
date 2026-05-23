@@ -11,6 +11,7 @@ import '../../data/models/daily_reading.dart';
 import '../../data/services/optional_memorial_service.dart';
 import '../../data/services/alternate_readings_service.dart';
 import '../../data/services/reading_flow_service.dart';
+import '../../data/services/saint_calendar_service.dart';
 import '../widgets/premium_browse/date_navigation.dart';
 import '../widgets/premium_browse/liturgical_summary_row.dart';
 import '../widgets/premium_browse/main_reading.dart';
@@ -51,6 +52,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
   LiturgicalDay? _liturgicalDay;
   OrdoYearVariables? _ordoYearVariables;
   List<OptionalCelebration> _optionalCelebrations = [];
+  List<OptionalCelebration> _saintCelebrations = [];
   int _selectedCelebrationIndex = -1; // -1 = ferial/default
   bool _celebrationsSuppressed = false;
 
@@ -63,6 +65,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
   final ReadingsBackend _readingsBackend = backend_factory
       .createReadingsBackend();
   final ReadingFlowService _readingFlow = ReadingFlowService.instance;
+  final SaintCalendarService _saintCalendar = SaintCalendarService.instance;
 
   @override
   void initState() {
@@ -124,9 +127,17 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
       _celebrationsSuppressed = optionalMemorialService.isSuppressedDate(
         _selectedDate,
       );
+      _saintCelebrations = await _saintCalendar.getSaintCelebrationsForDate(
+        date: _selectedDate,
+        liturgicalDay: _liturgicalDay,
+        optionalCelebrations: _optionalCelebrations,
+      );
 
       debugPrint(
         'Celebrations for date: ${_optionalCelebrations.map((c) => '${c.title} (${c.rank})').join(', ')}',
+      );
+      debugPrint(
+        'Saint profiles for date: ${_saintCelebrations.map((c) => c.title).join(', ')}',
       );
       debugPrint('Celebrations suppressed: $_celebrationsSuppressed');
 
@@ -193,6 +204,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
       debugPrint('Error loading readings: $e');
       _readings = [];
       _ordoYearVariables = null;
+      _saintCelebrations = [];
       _readingTexts = {};
       _readingPreviews = {};
     }
@@ -651,9 +663,9 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
             ),
 
             // Today's Saint card
-            if (_optionalCelebrations.isNotEmpty)
+            if (_saintCelebrations.isNotEmpty)
               TodaysSaintCard(
-                celebrations: _optionalCelebrations,
+                celebrations: _saintCelebrations,
                 liturgicalDay: _liturgicalDay,
                 isSuppressed: _celebrationsSuppressed,
                 onCelebrationTap: _openSaintProfile,
@@ -936,7 +948,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                 ],
 
                 // Saint of the day
-                if (_optionalCelebrations.isNotEmpty) ...[
+                if (_saintCelebrations.isNotEmpty) ...[
                   Text(
                     _celebrationsSuppressed
                         ? 'Commemoration'
@@ -948,7 +960,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                     ),
                   ),
                   const SizedBox(height: 4),
-                  ..._optionalCelebrations.map(
+                  ..._saintCelebrations.map(
                     (c) => Material(
                       color: Colors.transparent,
                       child: InkWell(

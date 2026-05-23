@@ -1,262 +1,3997 @@
 [
   {
-    "id": "rita_of_cascia",
-    "celebrationIds": ["rita_of_cascia"],
-    "name": "Saint Rita of Cascia",
-    "lifeSpan": "1381-1457",
-    "lifeLength": "about 76 years",
-    "patronage": ["impossible causes", "abused wives", "widows", "difficult marriages"],
-    "briefBio": "Rita was an Italian wife, mother, widow, and Augustinian nun whose life became associated with patience, forgiveness, and prayer through family suffering and religious life. Her devotion to Christ's Passion made her one of the Church's most loved saints of perseverance.",
-    "wikipediaUrl": "https://en.wikipedia.org/wiki/Rita_of_Cascia",
-    "wikidataId": "Q235462",
-    "feastDates": ["May 22"],
-    "sources": ["Wikipedia", "Wikidata"]
+    "id": "mary_mother_of_god",
+    "celebrationIds": [
+      "mary_mother_of_god",
+      "mary_the_holy_mother_of_god"
+    ],
+    "name": "Mary, Mother of God",
+    "lifeSpan": "1st century",
+    "lifeLength": "",
+    "patronage": [
+      "the Church",
+      "mothers",
+      "families"
+    ],
+    "briefBio": "This solemnity honors Mary under the title Mother of God, confessing that the child she bore is truly Jesus Christ, true God and true man. It is celebrated on January 1 at the octave of Christmas.",
+    "feastDates": [
+      "January 1"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Mary%2C_mother_of_Jesus",
+    "wikidataId": "Q345"
   },
   {
-    "id": "bede_the_venerable",
-    "celebrationIds": ["bede_the_venerable"],
-    "name": "Saint Bede the Venerable",
-    "lifeSpan": "c. 673-735",
-    "lifeLength": "about 62 years",
-    "patronage": ["scholars", "historians", "English writers"],
-    "briefBio": "Bede was an English Benedictine monk, priest, theologian, and historian. His careful biblical commentaries and his Ecclesiastical History of the English People made him one of the great teachers of the early medieval Church.",
-    "wikipediaUrl": "https://en.wikipedia.org/wiki/Bede",
-    "wikidataId": "Q179715",
-    "feastDates": ["May 25"],
-    "sources": ["Wikipedia", "Wikidata"]
+    "id": "raymond_of_penyafort",
+    "celebrationIds": [
+      "raymond_of_penyafort",
+      "saint_raymond_of_penyafort_priest"
+    ],
+    "name": "Saint Raymond of Penyafort, Priest",
+    "lifeSpan": "1175-1275",
+    "lifeLength": "about 100 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Saint Raymond of Penyafort, Priest is commemorated in the Church calendar as optional memorial. 1367–1439). The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "January 7"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Raymond_of_Pe%C3%B1afort",
+    "wikidataId": "Q318980"
   },
   {
-    "id": "gregory_vii_pope",
-    "celebrationIds": ["gregory_vii_pope"],
-    "name": "Saint Gregory VII",
-    "lifeSpan": "c. 1015-1085",
-    "lifeLength": "about 70 years",
-    "patronage": [],
-    "briefBio": "Gregory VII was pope from 1073 to 1085 and a central figure in the Gregorian Reform. He defended the freedom of the Church from secular control and is remembered for his courage during the Investiture Controversy.",
-    "wikipediaUrl": "https://en.wikipedia.org/wiki/Pope_Gregory_VII",
-    "wikidataId": "Q153223",
-    "feastDates": ["May 25"],
-    "sources": ["Wikipedia", "Wikidata"]
+    "id": "hilary_of_poitiers",
+    "celebrationIds": [
+      "hilary_of_poitiers",
+      "saint_hilary_bishop_and_doctor_of_the_church"
+    ],
+    "name": "Saint Hilary of Poitiers",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "theologians",
+      "teachers of the faith"
+    ],
+    "briefBio": "Hilary of Poitiers was a fourth-century bishop and Doctor of the Church remembered for defending the Nicene faith and teaching clearly on the Trinity. His memorial honors courage, learning, and pastoral fidelity during doctrinal conflict.",
+    "feastDates": [
+      "January 13"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Hilary_of_Poitiers"
   },
   {
-    "id": "mary_magdalene_de_pazzi",
-    "celebrationIds": ["mary_magdalene_de_pazzi"],
-    "name": "Saint Mary Magdalene de' Pazzi",
-    "lifeSpan": "1566-1607",
-    "lifeLength": "41 years",
-    "patronage": ["sick people", "against bodily illness"],
-    "briefBio": "Mary Magdalene de' Pazzi was a Carmelite nun from Florence known for intense prayer, mystical experiences, and a disciplined love for renewal in the Church. Her writings and witness emphasize charity, humility, and union with Christ.",
-    "wikipediaUrl": "https://en.wikipedia.org/wiki/Mary_Magdalene_de%27_Pazzi",
-    "wikidataId": "Q236611",
-    "feastDates": ["May 25"],
-    "sources": ["Wikipedia", "Wikidata"]
+    "id": "fabian_i_pope",
+    "celebrationIds": [
+      "fabian_i_pope",
+      "saint_fabian_pope_and_martyr"
+    ],
+    "name": "Saint Fabian, Pope and Martyr",
+    "lifeSpan": "200-250",
+    "lifeLength": "about 50 years",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Saint Fabian, Pope and Martyr is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "January 20"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Pope_Fabian",
+    "wikidataId": "Q131159"
   },
   {
-    "id": "augustine_of_canterbury",
-    "celebrationIds": ["augustine_of_canterbury"],
-    "name": "Saint Augustine of Canterbury",
-    "lifeSpan": "early 6th century-604",
-    "lifeLength": "exact age unknown",
-    "patronage": ["England", "the English Church"],
-    "briefBio": "Augustine was a monk sent by Pope Gregory the Great to evangelize the Anglo-Saxons. He became the first Archbishop of Canterbury and laid enduring foundations for Christianity in England.",
-    "wikipediaUrl": "https://en.wikipedia.org/wiki/Augustine_of_Canterbury",
-    "wikidataId": "Q313230",
-    "feastDates": ["May 27"],
-    "sources": ["Wikipedia", "Wikidata"]
+    "id": "sebastian_of_milan",
+    "celebrationIds": [
+      "sebastian_of_milan",
+      "saint_sebastian_martyr"
+    ],
+    "name": "Saint Sebastian, Martyr",
+    "lifeSpan": "255-287",
+    "lifeLength": "about 32 years",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Saint Sebastian, Martyr is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "January 20"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Saint_Sebastian",
+    "wikidataId": "Q183332"
   },
   {
-    "id": "paul_vi_pope",
-    "celebrationIds": ["paul_vi_pope"],
-    "name": "Saint Paul VI",
-    "lifeSpan": "1897-1978",
-    "lifeLength": "80 years",
-    "patronage": [],
-    "briefBio": "Paul VI guided the later sessions of the Second Vatican Council and oversaw its early implementation. His pontificate emphasized evangelization, peace, dialogue, and fidelity to the Church's teaching.",
-    "wikipediaUrl": "https://en.wikipedia.org/wiki/Pope_Paul_VI",
-    "wikidataId": "Q16975",
-    "feastDates": ["May 29"],
-    "sources": ["Wikipedia", "Wikidata"]
+    "id": "vincent_of_saragossa",
+    "celebrationIds": [
+      "vincent_of_saragossa",
+      "saint_vincent_deacon_and_martyr"
+    ],
+    "name": "Saint Vincent, Deacon and Martyr",
+    "lifeSpan": "300-304",
+    "lifeLength": "about 4 years",
+    "patronage": [
+      "vine dressers",
+      "winegrowers",
+      "deacons",
+      "winemaker",
+      "Portugal",
+      "Lisbon",
+      "Valencia",
+      "Archdiocese of Valencia in Spain"
+    ],
+    "briefBio": "Saint Vincent, Deacon and Martyr is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "January 22"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Vincent_of_Saragossa",
+    "wikidataId": "Q318974"
   },
   {
-    "id": "norbert_of_xanten",
-    "celebrationIds": ["norbert_of_xanten"],
-    "name": "Saint Norbert of Xanten",
-    "lifeSpan": "c. 1080-1134",
-    "lifeLength": "about 54 years",
-    "patronage": ["Bohemia", "the Premonstratensian order"],
-    "briefBio": "Norbert was a reforming bishop and founder of the Premonstratensians. After a deep conversion, he became a preacher of renewal, reverence for the Eucharist, and reconciliation.",
-    "wikipediaUrl": "https://en.wikipedia.org/wiki/Norbert_of_Xanten",
-    "wikidataId": "Q317412",
-    "feastDates": ["June 6"],
-    "sources": ["Wikipedia", "Wikidata"]
-  },
-  {
-    "id": "ephrem_the_syrian",
-    "celebrationIds": ["ephrem_the_syrian"],
-    "name": "Saint Ephrem the Syrian",
-    "lifeSpan": "c. 306-373",
-    "lifeLength": "about 67 years",
-    "patronage": ["spiritual directors", "Syriac Christians"],
-    "briefBio": "Ephrem was a deacon, theologian, hymn writer, and Doctor of the Church. His poetry and hymns taught the faith with unusual beauty and earned him the title Harp of the Holy Spirit.",
-    "wikipediaUrl": "https://en.wikipedia.org/wiki/Ephrem_the_Syrian",
-    "wikidataId": "Q182179",
-    "feastDates": ["June 9"],
-    "sources": ["Wikipedia", "Wikidata"]
-  },
-  {
-    "id": "patrick_of_ireland",
-    "celebrationIds": ["patrick_of_ireland"],
-    "name": "Saint Patrick",
-    "lifeSpan": "5th century",
-    "lifeLength": "exact dates unknown",
-    "patronage": ["Ireland", "engineers", "against snakes"],
-    "briefBio": "Patrick was a missionary bishop whose preaching helped establish Christianity in Ireland. His Confession presents a humble, prayerful servant shaped by captivity, conversion, and mission.",
-    "wikipediaUrl": "https://en.wikipedia.org/wiki/Saint_Patrick",
-    "wikidataId": "Q176741",
-    "feastDates": ["March 17"],
-    "sources": ["Wikipedia", "Wikidata"]
-  },
-  {
-    "id": "josephine_bakhita",
-    "celebrationIds": ["josephine_bakhita"],
-    "name": "Saint Josephine Bakhita",
-    "lifeSpan": "c. 1869-1947",
-    "lifeLength": "about 78 years",
-    "patronage": ["Sudan", "human trafficking survivors"],
-    "briefBio": "Josephine Bakhita was kidnapped and enslaved as a child in Sudan before finding freedom and becoming a Canossian sister in Italy. Her life witnesses to forgiveness, dignity, and hope after profound suffering.",
-    "wikipediaUrl": "https://en.wikipedia.org/wiki/Josephine_Bakhita",
-    "wikidataId": "Q233984",
-    "feastDates": ["February 8"],
-    "sources": ["Wikipedia", "Wikidata"]
-  },
-  {
-    "id": "blaise_of_sebaste",
-    "celebrationIds": ["blaise_of_sebaste"],
-    "name": "Saint Blaise",
-    "lifeSpan": "died c. 316",
-    "lifeLength": "birth year unknown",
-    "patronage": ["throat illnesses", "wool combers", "wild animals"],
-    "briefBio": "Blaise was a bishop and martyr of Sebaste. Devotion to him is especially tied to the blessing of throats, recalling the tradition that he healed a child choking on a fish bone.",
-    "wikipediaUrl": "https://en.wikipedia.org/wiki/Saint_Blaise",
-    "wikidataId": "Q220684",
-    "feastDates": ["February 3"],
-    "sources": ["Wikipedia", "Wikidata"]
+    "id": "conversion_of_saint_paul",
+    "celebrationIds": [
+      "conversion_of_saint_paul",
+      "the_conversion_of_saint_paul_apostle"
+    ],
+    "name": "The Conversion of Saint Paul, Apostle",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "missionaries",
+      "evangelization"
+    ],
+    "briefBio": "The Conversion of Saint Paul, Apostle is honored as an apostolic witness to Christ and the early mission of the Church. The celebration remembers the preaching, testimony, and faith handed on from the first generation of believers.",
+    "feastDates": [
+      "January 25"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Conversion_of_Paul_the_Apostle",
+    "wikidataId": "Q901397"
   },
   {
     "id": "angela_merici",
-    "celebrationIds": ["angela_merici"],
+    "celebrationIds": [
+      "angela_merici",
+      "saint_angela_merici_virgin"
+    ],
     "name": "Saint Angela Merici",
     "lifeSpan": "1474-1540",
     "lifeLength": "65 years",
-    "patronage": ["sickness", "disabled people", "those grieving parents"],
+    "patronage": [
+      "sickness",
+      "disabled people",
+      "those grieving parents",
+      "consecrated life"
+    ],
     "briefBio": "Angela Merici founded the Company of Saint Ursula, a new form of consecrated life dedicated especially to the education and formation of girls. Her work shaped the later Ursuline tradition.",
+    "feastDates": [
+      "January 27"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
     "wikipediaUrl": "https://en.wikipedia.org/wiki/Angela_Merici",
-    "wikidataId": "Q233753",
-    "feastDates": ["January 27"],
-    "sources": ["Wikipedia", "Wikidata"]
+    "wikidataId": "Q236216"
+  },
+  {
+    "id": "ansgar_of_hamburg",
+    "celebrationIds": [
+      "ansgar_of_hamburg",
+      "saint_ansgar_bishop"
+    ],
+    "name": "Saint Ansgar, Bishop",
+    "lifeSpan": "801-865",
+    "lifeLength": "about 64 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Saint Ansgar, Bishop is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "February 3"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Ansgar",
+    "wikidataId": "Q110299"
+  },
+  {
+    "id": "blaise_of_sebaste",
+    "celebrationIds": [
+      "blaise_of_sebaste",
+      "saint_blaise_bishop_and_martyr"
+    ],
+    "name": "Saint Blaise",
+    "lifeSpan": "died c. 316",
+    "lifeLength": "birth year unknown",
+    "patronage": [
+      "throat illnesses",
+      "wool combers",
+      "wild animals",
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Blaise was a bishop and martyr of Sebaste. Devotion to him is especially tied to the blessing of throats, recalling the tradition that he healed a child choking on a fish bone.",
+    "feastDates": [
+      "February 3"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Saint_Blaise",
+    "wikidataId": "Q151967"
+  },
+  {
+    "id": "jerome_emiliani",
+    "celebrationIds": [
+      "jerome_emiliani",
+      "saint_jerome_emiliani"
+    ],
+    "name": "Saint Jerome Emiliani",
+    "lifeSpan": "1486-1537",
+    "lifeLength": "about 51 years",
+    "patronage": [
+      "teachers",
+      "students"
+    ],
+    "briefBio": "Saint Jerome Emiliani is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "February 8"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Gerolamo_Emiliani",
+    "wikidataId": "Q451914"
+  },
+  {
+    "id": "josephine_bakhita",
+    "celebrationIds": [
+      "josephine_bakhita",
+      "saint_josephine_bakhita_virgin"
+    ],
+    "name": "Saint Josephine Bakhita",
+    "lifeSpan": "c. 1869-1947",
+    "lifeLength": "about 78 years",
+    "patronage": [
+      "Sudan",
+      "human trafficking survivors",
+      "slave",
+      "consecrated life"
+    ],
+    "briefBio": "Josephine Bakhita was kidnapped and enslaved as a child in Sudan before finding freedom and becoming a Canossian sister in Italy. Her life witnesses to forgiveness, dignity, and hope after profound suffering.",
+    "feastDates": [
+      "February 8"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Josephine_Bakhita",
+    "wikidataId": "Q236030"
+  },
+  {
+    "id": "our_lady_of_lourdes",
+    "celebrationIds": [
+      "our_lady_of_lourdes"
+    ],
+    "name": "Our Lady of Lourdes",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "the sick",
+      "pilgrims",
+      "bodily healing",
+      "Lourdes",
+      "Quezon City",
+      "Tagaytay",
+      "illness",
+      "Granada"
+    ],
+    "briefBio": "Our Lady of Lourdes honors Mary under this feast, title, or mystery in the Church calendar. It invites devotion to her place in the life of Christ and her maternal care for the Church.",
+    "feastDates": [
+      "February 11"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Our_Lady_of_Lourdes",
+    "wikidataId": "Q21532387"
+  },
+  {
+    "id": "seven_holy_founders_of_servites",
+    "celebrationIds": [
+      "seven_holy_founders_of_servites",
+      "the_seven_holy_founders_of_the_servite_order"
+    ],
+    "name": "The Seven Holy Founders of the Servite Order",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "religious life",
+      "contemplative prayer"
+    ],
+    "briefBio": "The Seven Holy Founders of the Servite Order is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "February 17"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Seven_Holy_Founders_of_the_Servite_Order",
+    "wikidataId": "Q1057218"
+  },
+  {
+    "id": "peter_damian",
+    "celebrationIds": [
+      "peter_damian",
+      "saint_peter_damian_bishop_and_doctor_of_the_church"
+    ],
+    "name": "Saint Peter Damian, Bishop and Doctor of the Church",
+    "lifeSpan": "1007-1072",
+    "lifeLength": "about 65 years",
+    "patronage": [
+      "theologians",
+      "teachers of the faith"
+    ],
+    "briefBio": "Saint Peter Damian, Bishop and Doctor of the Church is honored as a teacher of the faith whose writings helped hand on Catholic doctrine. The memorial highlights the union of learning, prayer, and holiness.",
+    "feastDates": [
+      "February 21"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Peter_Damian",
+    "wikidataId": "Q258369"
+  },
+  {
+    "id": "chair_of_saint_peter",
+    "celebrationIds": [
+      "chair_of_saint_peter",
+      "the_chair_of_saint_peter_apostle"
+    ],
+    "name": "The Chair of Saint Peter, Apostle",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "missionaries",
+      "evangelization"
+    ],
+    "briefBio": "The Chair of Saint Peter, Apostle is honored as an apostolic witness to Christ and the early mission of the Church. Peter's Basilica in Vatican City. The celebration remembers the preaching, testimony, and faith handed on from the first generation of believers.",
+    "feastDates": [
+      "February 22"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Chair_of_Saint_Peter",
+    "wikidataId": "Q733893"
+  },
+  {
+    "id": "gregory_of_narek",
+    "celebrationIds": [
+      "gregory_of_narek",
+      "saint_gregory_of_narek_abbot_and_doctor_of_the_church"
+    ],
+    "name": "Saint Gregory of Narek, Abbot and Doctor of the Church",
+    "lifeSpan": "951-1003",
+    "lifeLength": "about 52 years",
+    "patronage": [
+      "theologians",
+      "teachers of the faith"
+    ],
+    "briefBio": "Saint Gregory of Narek, Abbot and Doctor of the Church is honored as a teacher of the faith whose writings helped hand on Catholic doctrine. 950 – 1003/1011). The memorial highlights the union of learning, prayer, and holiness.",
+    "feastDates": [
+      "February 27"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Gregory_of_Narek",
+    "wikidataId": "Q969758"
+  },
+  {
+    "id": "casimir_of_poland",
+    "celebrationIds": [
+      "casimir_of_poland",
+      "saint_casimir"
+    ],
+    "name": "Saint Casimir",
+    "lifeSpan": "1458-1484",
+    "lifeLength": "about 26 years",
+    "patronage": [
+      "growth in holiness"
+    ],
+    "briefBio": "Saint Casimir is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "March 4"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Saint_Casimir",
+    "wikidataId": "Q312057"
   },
   {
     "id": "john_of_god",
-    "celebrationIds": ["john_of_god"],
+    "celebrationIds": [
+      "john_of_god",
+      "saint_john_of_god_religious"
+    ],
     "name": "Saint John of God",
     "lifeSpan": "1495-1550",
     "lifeLength": "55 years",
-    "patronage": ["hospitals", "the sick", "nurses", "booksellers"],
+    "patronage": [
+      "hospitals",
+      "the sick",
+      "nurses",
+      "booksellers",
+      "religious life",
+      "contemplative prayer"
+    ],
     "briefBio": "John of God served the poor and sick in Granada with radical charity. His work inspired the Brothers Hospitallers and made him a model of practical mercy.",
+    "feastDates": [
+      "March 8"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
     "wikipediaUrl": "https://en.wikipedia.org/wiki/John_of_God",
-    "wikidataId": "Q314547",
-    "feastDates": ["March 8"],
-    "sources": ["Wikipedia", "Wikidata"]
+    "wikidataId": "Q320171"
+  },
+  {
+    "id": "frances_of_rome",
+    "celebrationIds": [
+      "frances_of_rome",
+      "saint_frances_of_rome_religious"
+    ],
+    "name": "Saint Frances of Rome, Religious",
+    "lifeSpan": "1384-1440",
+    "lifeLength": "about 56 years",
+    "patronage": [
+      "religious life",
+      "contemplative prayer"
+    ],
+    "briefBio": "Saint Frances of Rome, Religious is remembered for consecrated life and spiritual witness. The memorial points to prayer, discipline, and charity as paths to holiness.",
+    "feastDates": [
+      "March 9"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Frances_of_Rome",
+    "wikidataId": "Q239129"
+  },
+  {
+    "id": "patrick_of_ireland",
+    "celebrationIds": [
+      "patrick_of_ireland",
+      "saint_patrick_bishop"
+    ],
+    "name": "Saint Patrick",
+    "lifeSpan": "5th century",
+    "lifeLength": "exact dates unknown",
+    "patronage": [
+      "Ireland",
+      "engineers",
+      "against snakes",
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Patrick was a missionary bishop whose preaching helped establish Christianity in Ireland. His Confession presents a humble, prayerful servant shaped by captivity, conversion, and mission.",
+    "feastDates": [
+      "March 17"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Saint_Patrick",
+    "wikidataId": "Q165479"
+  },
+  {
+    "id": "cyril_of_jerusalem",
+    "celebrationIds": [
+      "cyril_of_jerusalem",
+      "saint_cyril_of_jerusalem_bishop_and_doctor_of_the_church"
+    ],
+    "name": "Saint Cyril of Jerusalem, Bishop and Doctor of the Church",
+    "lifeSpan": "313-386",
+    "lifeLength": "about 73 years",
+    "patronage": [
+      "theologians",
+      "teachers of the faith"
+    ],
+    "briefBio": "Saint Cyril of Jerusalem, Bishop and Doctor of the Church is honored as a teacher of the faith whose writings helped hand on Catholic doctrine. 313 – 386). The memorial highlights the union of learning, prayer, and holiness.",
+    "feastDates": [
+      "March 18"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Cyril_of_Jerusalem",
+    "wikidataId": "Q298654"
+  },
+  {
+    "id": "saint_joseph_spouse_of_blessed_virgin_mary",
+    "celebrationIds": [
+      "saint_joseph_spouse_of_blessed_virgin_mary",
+      "saint_joseph_spouse_of_the_blessed_virgin_mary"
+    ],
+    "name": "Saint Joseph, Spouse of the Blessed Virgin Mary",
+    "lifeSpan": "-30-20",
+    "lifeLength": "about 50 years",
+    "patronage": [
+      "the universal Church",
+      "workers",
+      "fathers",
+      "families"
+    ],
+    "briefBio": "Saint Joseph, Spouse of the Blessed Virgin Mary honors Mary under this feast, title, or mystery in the Church calendar. It invites devotion to her place in the life of Christ and her maternal care for the Church.",
+    "feastDates": [
+      "March 19"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Saint_Joseph",
+    "wikidataId": "Q128267"
+  },
+  {
+    "id": "turibius_of_mogrovejo",
+    "celebrationIds": [
+      "turibius_of_mogrovejo",
+      "saint_turibius_of_mogrovejo_bishop"
+    ],
+    "name": "Saint Turibius of Mogrovejo, Bishop",
+    "lifeSpan": "1538-1606",
+    "lifeLength": "about 68 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Saint Turibius of Mogrovejo, Bishop is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "March 23"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Turibius_of_Mogrovejo",
+    "wikidataId": "Q467993"
+  },
+  {
+    "id": "francis_of_paola",
+    "celebrationIds": [
+      "francis_of_paola",
+      "saint_francis_of_paola_hermit"
+    ],
+    "name": "Saint Francis of Paola, Hermit",
+    "lifeSpan": "1416-1507",
+    "lifeLength": "about 91 years",
+    "patronage": [
+      "religious life",
+      "contemplative prayer"
+    ],
+    "briefBio": "Saint Francis of Paola, Hermit is remembered for consecrated life and spiritual witness. The memorial points to prayer, discipline, and charity as paths to holiness.",
+    "feastDates": [
+      "April 2"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Francis_of_Paola",
+    "wikidataId": "Q315640"
+  },
+  {
+    "id": "isidore_of_seville",
+    "celebrationIds": [
+      "isidore_of_seville",
+      "saint_isidore_bishop_and_doctor_of_the_church"
+    ],
+    "name": "Saint Isidore of Seville",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "theologians",
+      "teachers of the faith"
+    ],
+    "briefBio": "Isidore of Seville was a bishop and Doctor of the Church whose learning helped preserve and organize Christian scholarship in the early medieval West. His memorial honors study, teaching, and faithful pastoral leadership.",
+    "feastDates": [
+      "April 4"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Isidore_of_Seville"
+  },
+  {
+    "id": "vincent_ferrer",
+    "celebrationIds": [
+      "vincent_ferrer",
+      "saint_vincent_ferrer_priest"
+    ],
+    "name": "Saint Vincent Ferrer, Priest",
+    "lifeSpan": "1350-1419",
+    "lifeLength": "about 69 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Saint Vincent Ferrer, Priest is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "April 5"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Vincent_Ferrer",
+    "wikidataId": "Q317131"
+  },
+  {
+    "id": "martin_i_pope",
+    "celebrationIds": [
+      "martin_i_pope",
+      "saint_martin_i_pope_and_martyr"
+    ],
+    "name": "Saint Martin I, Pope and Martyr",
+    "lifeSpan": "598-655",
+    "lifeLength": "about 57 years",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Saint Martin I, Pope and Martyr is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "April 13"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Pope_Martin_I",
+    "wikidataId": "Q172390"
+  },
+  {
+    "id": "anselm_of_canterbury",
+    "celebrationIds": [
+      "anselm_of_canterbury",
+      "saint_anselm_bishop_and_doctor_of_the_church"
+    ],
+    "name": "Saint Anselm, Bishop and Doctor of the Church",
+    "lifeSpan": "1033-1109",
+    "lifeLength": "about 76 years",
+    "patronage": [
+      "theologians",
+      "teachers of the faith"
+    ],
+    "briefBio": "Saint Anselm, Bishop and Doctor of the Church is honored as a teacher of the faith whose writings helped hand on Catholic doctrine. The memorial highlights the union of learning, prayer, and holiness.",
+    "feastDates": [
+      "April 21"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Anselm_of_Canterbury",
+    "wikidataId": "Q43939"
+  },
+  {
+    "id": "adalbert_of_prague",
+    "celebrationIds": [
+      "adalbert_of_prague",
+      "saint_adalbert_bishop_and_martyr"
+    ],
+    "name": "Saint Adalbert of Prague",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Adalbert of Prague was a bishop and missionary who sought reform among his people and died as a martyr while preaching the Gospel. His memorial recalls missionary courage and fidelity in the face of opposition.",
+    "feastDates": [
+      "April 23"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Adalbert_of_Prague"
+  },
+  {
+    "id": "george_of_lydda",
+    "celebrationIds": [
+      "george_of_lydda",
+      "saint_george_martyr"
+    ],
+    "name": "Saint George, Martyr",
+    "lifeSpan": "died 303",
+    "lifeLength": "birth year unknown",
+    "patronage": [
+      "Aragon",
+      "Kingdom of Aragon",
+      "Crown of Aragon",
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Saint George, Martyr is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "April 23"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Saint_George",
+    "wikidataId": "Q48438"
+  },
+  {
+    "id": "fidelis_of_sigmaringen",
+    "celebrationIds": [
+      "fidelis_of_sigmaringen",
+      "saint_fidelis_of_sigmaringen_priest_and_martyr"
+    ],
+    "name": "Saint Fidelis of Sigmaringen, Priest and Martyr",
+    "lifeSpan": "1577-1622",
+    "lifeLength": "about 45 years",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Saint Fidelis of Sigmaringen, Priest and Martyr is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "April 24"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Fidelis_of_Sigmaringen",
+    "wikidataId": "Q470613"
+  },
+  {
+    "id": "mark_evangelist",
+    "celebrationIds": [
+      "mark_evangelist",
+      "saint_mark_evangelist"
+    ],
+    "name": "Saint Mark, Evangelist",
+    "lifeSpan": "12-68",
+    "lifeLength": "about 56 years",
+    "patronage": [
+      "missionaries",
+      "evangelization"
+    ],
+    "briefBio": "Saint Mark, Evangelist is honored as an apostolic witness to Christ and the early mission of the Church. The celebration remembers the preaching, testimony, and faith handed on from the first generation of believers.",
+    "feastDates": [
+      "April 25"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Mark_the_Evangelist",
+    "wikidataId": "Q31966"
+  },
+  {
+    "id": "louis_grignion_de_montfort",
+    "celebrationIds": [
+      "louis_grignion_de_montfort",
+      "saint_louis_grignion_de_montfort_priest"
+    ],
+    "name": "Saint Louis Grignion de Montfort, Priest",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Louis Grignion de Montfort was a French priest and missionary known for preaching Marian devotion and renewal of baptismal promises. His memorial honors evangelical zeal, love for the poor, and confidence in Jesus through Mary.",
+    "feastDates": [
+      "April 28"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Louis_de_Montfort"
+  },
+  {
+    "id": "peter_chanel",
+    "celebrationIds": [
+      "peter_chanel",
+      "saint_peter_chanel_priest_and_martyr"
+    ],
+    "name": "Saint Peter Chanel, Priest and Martyr",
+    "lifeSpan": "1803-1841",
+    "lifeLength": "about 38 years",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Saint Peter Chanel, Priest and Martyr is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "April 28"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Peter_Chanel",
+    "wikidataId": "Q380651"
+  },
+  {
+    "id": "our_lady_mother_of_africa",
+    "celebrationIds": [
+      "our_lady_mother_of_africa"
+    ],
+    "name": "Our Lady Mother of Africa",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "Africa"
+    ],
+    "briefBio": "Our Lady Mother of Africa honors Mary under this feast, title, or mystery in the Church calendar. It invites devotion to her place in the life of Christ and her maternal care for the Church.",
+    "feastDates": [
+      "April 30"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Our_Lady_of_Sorrows",
+    "wikidataId": "Q1196075"
+  },
+  {
+    "id": "pius_v_pope",
+    "celebrationIds": [
+      "pius_v_pope",
+      "saint_pius_v_pope"
+    ],
+    "name": "Saint Pius V, Pope",
+    "lifeSpan": "1504-1572",
+    "lifeLength": "about 68 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Saint Pius V, Pope is honored for pastoral service to the Church as Bishop of Rome. The celebration recalls a life spent guarding faith, worship, and communion.",
+    "feastDates": [
+      "April 30"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Pope_Pius_V",
+    "wikidataId": "Q131945"
+  },
+  {
+    "id": "joseph_the_worker",
+    "celebrationIds": [
+      "joseph_the_worker",
+      "saint_joseph_the_worker"
+    ],
+    "name": "Saint Joseph the Worker",
+    "lifeSpan": "-30-20",
+    "lifeLength": "about 50 years",
+    "patronage": [
+      "workers",
+      "carpenters",
+      "fathers",
+      "the universal Church"
+    ],
+    "briefBio": "Saint Joseph the Worker is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "May 1"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Saint_Joseph",
+    "wikidataId": "Q128267"
+  },
+  {
+    "id": "philip_and_james_apostles",
+    "celebrationIds": [
+      "philip_and_james_apostles",
+      "saints_philip_and_james_apostles"
+    ],
+    "name": "Saints Philip and James, Apostles",
+    "lifeSpan": "5-80",
+    "lifeLength": "about 75 years",
+    "patronage": [
+      "missionaries",
+      "evangelization"
+    ],
+    "briefBio": "Saints Philip and James, Apostles is honored as an apostolic witness to Christ and the early mission of the Church. The celebration remembers the preaching, testimony, and faith handed on from the first generation of believers.",
+    "feastDates": [
+      "May 3"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Philip_the_Apostle",
+    "wikidataId": "Q43675"
+  },
+  {
+    "id": "john_of_avila",
+    "celebrationIds": [
+      "john_of_avila",
+      "saint_john_of_vila_priest_and_doctor_of_the_church"
+    ],
+    "name": "Saint John of Ávila, Priest and Doctor of the Church",
+    "lifeSpan": "1499-1569",
+    "lifeLength": "about 70 years",
+    "patronage": [
+      "theologians",
+      "teachers of the faith"
+    ],
+    "briefBio": "Saint John of Ávila, Priest and Doctor of the Church is honored as a teacher of the faith whose writings helped hand on Catholic doctrine. The memorial highlights the union of learning, prayer, and holiness.",
+    "feastDates": [
+      "May 10"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/John_of_%C3%81vila",
+    "wikidataId": "Q320160"
+  },
+  {
+    "id": "nereus_and_achilleus",
+    "celebrationIds": [
+      "nereus_and_achilleus",
+      "saints_nereus_and_achilleus_martyrs"
+    ],
+    "name": "Saints Nereus and Achilleus, Martyrs",
+    "lifeSpan": "died 290",
+    "lifeLength": "birth year unknown",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Saints Nereus and Achilleus, Martyrs is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "May 12"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Nereus_and_Achilleus",
+    "wikidataId": "Q721711"
+  },
+  {
+    "id": "pancras_of_rome",
+    "celebrationIds": [
+      "pancras_of_rome",
+      "saint_pancras_martyr"
+    ],
+    "name": "Saint Pancras",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Pancras was venerated in Rome as a young martyr of the early Church. His memorial keeps before the faithful the courage of youthful witness and steadfast trust in Christ.",
+    "feastDates": [
+      "May 12"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Pancras_of_Rome"
+  },
+  {
+    "id": "our_lady_of_fatima",
+    "celebrationIds": [
+      "our_lady_of_fatima"
+    ],
+    "name": "Our Lady of Fatima",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "Portugal",
+      "peace",
+      "the rosary"
+    ],
+    "briefBio": "Our Lady of Fatima honors Mary under this feast, title, or mystery in the Church calendar. It invites devotion to her place in the life of Christ and her maternal care for the Church.",
+    "feastDates": [
+      "May 13"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Our_Lady_of_F%C3%A1tima",
+    "wikidataId": "Q719524"
+  },
+  {
+    "id": "matthias_apostle",
+    "celebrationIds": [
+      "matthias_apostle",
+      "saint_matthias_apostle"
+    ],
+    "name": "Saint Matthias, Apostle",
+    "lifeSpan": "1-80",
+    "lifeLength": "about 79 years",
+    "patronage": [
+      "missionaries",
+      "evangelization"
+    ],
+    "briefBio": "Saint Matthias, Apostle is honored as an apostolic witness to Christ and the early mission of the Church. The celebration remembers the preaching, testimony, and faith handed on from the first generation of believers.",
+    "feastDates": [
+      "May 14"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Matthias_the_Apostle",
+    "wikidataId": "Q44020"
+  },
+  {
+    "id": "john_i_pope",
+    "celebrationIds": [
+      "john_i_pope",
+      "saint_john_i_pope_and_martyr"
+    ],
+    "name": "Saint John I, Pope and Martyr",
+    "lifeSpan": "470-526",
+    "lifeLength": "about 56 years",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Saint John I, Pope and Martyr is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "May 18"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Pope_John_I",
+    "wikidataId": "Q160916"
+  },
+  {
+    "id": "bernardine_of_siena",
+    "celebrationIds": [
+      "bernardine_of_siena",
+      "saint_bernardine_of_siena_priest"
+    ],
+    "name": "Saint Bernardine of Siena, Priest",
+    "lifeSpan": "1380-1444",
+    "lifeLength": "about 64 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Saint Bernardine of Siena, Priest is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "May 20"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Bernardino_of_Siena",
+    "wikidataId": "Q316295"
+  },
+  {
+    "id": "christopher_magallanes",
+    "celebrationIds": [
+      "christopher_magallanes",
+      "saint_christopher_magallanes_priest_and_companions_martyrs"
+    ],
+    "name": "Saint Christopher Magallanes, Priest, and Companions, Martyrs",
+    "lifeSpan": "1869-1927",
+    "lifeLength": "about 58 years",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Saint Christopher Magallanes, Priest, and Companions, Martyrs is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "May 21"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Crist%C3%B3bal_Magallanes",
+    "wikidataId": "Q1152723"
+  },
+  {
+    "id": "rita_of_cascia",
+    "celebrationIds": [
+      "rita_of_cascia",
+      "saint_rita_of_cascia_religious"
+    ],
+    "name": "Saint Rita of Cascia",
+    "lifeSpan": "1381-1457",
+    "lifeLength": "about 76 years",
+    "patronage": [
+      "impossible causes",
+      "abused wives",
+      "widows",
+      "difficult marriages",
+      "incorrigibility",
+      "wound",
+      "illness",
+      "abuse"
+    ],
+    "briefBio": "Rita was an Italian wife, mother, widow, and Augustinian nun whose life became associated with patience, forgiveness, and prayer through family suffering and religious life. Her devotion to Christ's Passion made her one of the Church's most loved saints of perseverance.",
+    "feastDates": [
+      "May 22"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Rita_of_Cascia",
+    "wikidataId": "Q153024"
+  },
+  {
+    "id": "bede_the_venerable",
+    "celebrationIds": [
+      "bede_the_venerable",
+      "saint_bede_the_venerable_priest_and_doctor_of_the_church"
+    ],
+    "name": "Saint Bede the Venerable",
+    "lifeSpan": "c. 673-735",
+    "lifeLength": "about 62 years",
+    "patronage": [
+      "scholars",
+      "historians",
+      "English writers",
+      "theologians",
+      "teachers of the faith"
+    ],
+    "briefBio": "Bede was an English Benedictine monk, priest, theologian, and historian. His careful biblical commentaries and his Ecclesiastical History of the English People made him one of the great teachers of the early medieval Church.",
+    "feastDates": [
+      "May 25"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Bede",
+    "wikidataId": "Q154938"
+  },
+  {
+    "id": "gregory_vii_pope",
+    "celebrationIds": [
+      "gregory_vii_pope",
+      "saint_gregory_vii_pope"
+    ],
+    "name": "Saint Gregory VII",
+    "lifeSpan": "c. 1015-1085",
+    "lifeLength": "about 70 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Gregory VII was pope from 1073 to 1085 and a central figure in the Gregorian Reform. He defended the freedom of the Church from secular control and is remembered for his courage during the Investiture Controversy.",
+    "feastDates": [
+      "May 25"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Pope_Gregory_VII",
+    "wikidataId": "Q133063"
+  },
+  {
+    "id": "mary_magdalene_de_pazzi",
+    "celebrationIds": [
+      "mary_magdalene_de_pazzi",
+      "saint_mary_magdalene_de_pazzi_virgin"
+    ],
+    "name": "Saint Mary Magdalene de' Pazzi",
+    "lifeSpan": "1566-1607",
+    "lifeLength": "41 years",
+    "patronage": [
+      "sick people",
+      "against bodily illness",
+      "Marian devotion"
+    ],
+    "briefBio": "Mary Magdalene de' Pazzi was a Carmelite nun from Florence known for intense prayer, mystical experiences, and a disciplined love for renewal in the Church. Her writings and witness emphasize charity, humility, and union with Christ.",
+    "feastDates": [
+      "May 25"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Mary_Magdalene_de'_Pazzi",
+    "wikidataId": "Q242040"
+  },
+  {
+    "id": "augustine_of_canterbury",
+    "celebrationIds": [
+      "augustine_of_canterbury",
+      "saint_augustine_of_canterbury_bishop"
+    ],
+    "name": "Saint Augustine of Canterbury",
+    "lifeSpan": "early 6th century-604",
+    "lifeLength": "exact age unknown",
+    "patronage": [
+      "England",
+      "the English Church",
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Augustine was a monk sent by Pope Gregory the Great to evangelize the Anglo-Saxons. He became the first Archbishop of Canterbury and laid enduring foundations for Christianity in England.",
+    "feastDates": [
+      "May 27"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Augustine_of_Canterbury",
+    "wikidataId": "Q32520"
+  },
+  {
+    "id": "paul_vi_pope",
+    "celebrationIds": [
+      "paul_vi_pope",
+      "saint_paul_vi_pope"
+    ],
+    "name": "Saint Paul VI",
+    "lifeSpan": "1897-1978",
+    "lifeLength": "80 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Paul VI guided the later sessions of the Second Vatican Council and oversaw its early implementation. His pontificate emphasized evangelization, peace, dialogue, and fidelity to the Church's teaching.",
+    "feastDates": [
+      "May 29"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Pope_Paul_VI",
+    "wikidataId": "Q16975"
+  },
+  {
+    "id": "visitation_of_mary",
+    "celebrationIds": [
+      "visitation_of_mary",
+      "the_visitation_of_the_blessed_virgin_mary"
+    ],
+    "name": "The Visitation of the Blessed Virgin Mary",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "Marian devotion"
+    ],
+    "briefBio": "The Visitation of the Blessed Virgin Mary honors Mary under this feast, title, or mystery in the Church calendar. It invites devotion to her place in the life of Christ and her maternal care for the Church.",
+    "feastDates": [
+      "May 31"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Visitation_(Christianity)",
+    "wikidataId": "Q691810"
+  },
+  {
+    "id": "marcellinus_and_peter",
+    "celebrationIds": [
+      "marcellinus_and_peter",
+      "saints_marcellinus_and_peter_martyrs"
+    ],
+    "name": "Saints Marcellinus and Peter, Martyrs",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Saints Marcellinus and Peter, Martyrs is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "June 2"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Marcellinus_and_Peter",
+    "wikidataId": "Q449701"
+  },
+  {
+    "id": "norbert_of_xanten",
+    "celebrationIds": [
+      "norbert_of_xanten",
+      "saint_norbert_bishop"
+    ],
+    "name": "Saint Norbert of Xanten",
+    "lifeSpan": "c. 1080-1134",
+    "lifeLength": "about 54 years",
+    "patronage": [
+      "Bohemia",
+      "the Premonstratensian order",
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Norbert was a reforming bishop and founder of the Premonstratensians. After a deep conversion, he became a preacher of renewal, reverence for the Eucharist, and reconciliation.",
+    "feastDates": [
+      "June 6"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Norbert_of_Xanten",
+    "wikidataId": "Q160374"
+  },
+  {
+    "id": "ephrem_the_syrian",
+    "celebrationIds": [
+      "ephrem_the_syrian",
+      "saint_ephrem_deacon_and_doctor_of_the_church"
+    ],
+    "name": "Saint Ephrem the Syrian",
+    "lifeSpan": "c. 306-373",
+    "lifeLength": "about 67 years",
+    "patronage": [
+      "spiritual directors",
+      "Syriac Christians",
+      "theologians",
+      "teachers of the faith"
+    ],
+    "briefBio": "Ephrem was a deacon, theologian, hymn writer, and Doctor of the Church. His poetry and hymns taught the faith with unusual beauty and earned him the title Harp of the Holy Spirit.",
+    "feastDates": [
+      "June 9"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Ephrem_the_Syrian",
+    "wikidataId": "Q200608"
+  },
+  {
+    "id": "saint_barnabas_apostle",
+    "celebrationIds": [
+      "saint_barnabas_apostle",
+      "barnabas_apostle"
+    ],
+    "name": "Saint Barnabas, Apostle",
+    "lifeSpan": "1-61",
+    "lifeLength": "about 60 years",
+    "patronage": [
+      "Cyprus",
+      "Antioch",
+      "peacemakers",
+      "missionaries"
+    ],
+    "briefBio": "Saint Barnabas, Apostle is honored as an apostolic witness to Christ and the early mission of the Church. The celebration remembers the preaching, testimony, and faith handed on from the first generation of believers.",
+    "feastDates": [
+      "June 11"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Barnabas",
+    "wikidataId": "Q185856"
+  },
+  {
+    "id": "romuald_of_ravenna",
+    "celebrationIds": [
+      "romuald_of_ravenna",
+      "saint_romuald_abbot"
+    ],
+    "name": "Saint Romuald, Abbot",
+    "lifeSpan": "951-1027",
+    "lifeLength": "about 76 years",
+    "patronage": [
+      "religious life",
+      "contemplative prayer"
+    ],
+    "briefBio": "Saint Romuald, Abbot is remembered for consecrated life and spiritual witness. The memorial points to prayer, discipline, and charity as paths to holiness.",
+    "feastDates": [
+      "June 19"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Romuald",
+    "wikidataId": "Q379691"
+  },
+  {
+    "id": "john_fisher_and_thomas_more",
+    "celebrationIds": [
+      "john_fisher_and_thomas_more",
+      "saints_john_fisher_bishop_and_thomas_more_martyrs"
+    ],
+    "name": "Saints John Fisher, Bishop, and Thomas More, Martyrs",
+    "lifeSpan": "1469-1535",
+    "lifeLength": "about 66 years",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Saints John Fisher, Bishop, and Thomas More, Martyrs is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "June 22"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/John_Fisher",
+    "wikidataId": "Q317149"
+  },
+  {
+    "id": "paulinus_of_nola",
+    "celebrationIds": [
+      "paulinus_of_nola",
+      "saint_paulinus_of_nola_bishop"
+    ],
+    "name": "Saint Paulinus of Nola, Bishop",
+    "lifeSpan": "354-431",
+    "lifeLength": "about 77 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Saint Paulinus of Nola, Bishop is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "June 22"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Paulinus_of_Nola",
+    "wikidataId": "Q132473"
+  },
+  {
+    "id": "the_nativity_of_saint_john_the_baptist",
+    "celebrationIds": [
+      "the_nativity_of_saint_john_the_baptist",
+      "nativity_of_saint_john_the_baptist"
+    ],
+    "name": "The Nativity of Saint John the Baptist",
+    "lifeSpan": "-6-30",
+    "lifeLength": "about 36 years",
+    "patronage": [
+      "converts",
+      "preachers"
+    ],
+    "briefBio": "The Nativity of Saint John the Baptist is commemorated in the Church calendar as solemnity. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "June 24"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/John_the_Baptist",
+    "wikidataId": "Q40662"
+  },
+  {
+    "id": "cyril_of_alexandria",
+    "celebrationIds": [
+      "cyril_of_alexandria",
+      "saint_cyril_of_alexandria_bishop_and_doctor_of_the_church"
+    ],
+    "name": "Saint Cyril of Alexandria, Bishop and Doctor of the Church",
+    "lifeSpan": "376-444",
+    "lifeLength": "about 68 years",
+    "patronage": [
+      "theologians",
+      "teachers of the faith"
+    ],
+    "briefBio": "Saint Cyril of Alexandria, Bishop and Doctor of the Church is honored as a teacher of the faith whose writings helped hand on Catholic doctrine. The memorial highlights the union of learning, prayer, and holiness.",
+    "feastDates": [
+      "June 27"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Cyril_of_Alexandria",
+    "wikidataId": "Q44079"
+  },
+  {
+    "id": "saints_peter_and_paul_apostles",
+    "celebrationIds": [
+      "saints_peter_and_paul_apostles"
+    ],
+    "name": "Saints Peter and Paul, Apostles",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "missionaries",
+      "evangelization"
+    ],
+    "briefBio": "This solemnity honors Peter and Paul, the chief apostolic witnesses associated with the Church of Rome. Peter is remembered for his pastoral leadership, and Paul for his missionary preaching to the nations.",
+    "feastDates": [
+      "June 29"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Feast_of_Saints_Peter_and_Paul"
+  },
+  {
+    "id": "first_martyrs_of_rome",
+    "celebrationIds": [
+      "first_martyrs_of_rome",
+      "the_first_martyrs_of_the_holy_roman_church"
+    ],
+    "name": "The First Martyrs of the Holy Roman Church",
+    "lifeSpan": "died 64",
+    "lifeLength": "birth year unknown",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "The First Martyrs of the Holy Roman Church is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "June 30"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/First_Martyrs_of_the_Church_of_Rome",
+    "wikidataId": "Q640666"
+  },
+  {
+    "id": "thomas_apostle",
+    "celebrationIds": [
+      "thomas_apostle",
+      "saint_thomas_apostle"
+    ],
+    "name": "Saint Thomas, Apostle",
+    "lifeSpan": "1-72",
+    "lifeLength": "about 71 years",
+    "patronage": [
+      "missionaries",
+      "evangelization"
+    ],
+    "briefBio": "Saint Thomas, Apostle is honored as an apostolic witness to Christ and the early mission of the Church. The celebration remembers the preaching, testimony, and faith handed on from the first generation of believers.",
+    "feastDates": [
+      "July 3"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Thomas_the_Apostle",
+    "wikidataId": "Q43669"
+  },
+  {
+    "id": "elizabeth_of_portugal",
+    "celebrationIds": [
+      "elizabeth_of_portugal",
+      "saint_elizabeth_of_portugal"
+    ],
+    "name": "Saint Elizabeth of Portugal",
+    "lifeSpan": "1271-1336",
+    "lifeLength": "about 65 years",
+    "patronage": [
+      "the sick and poor",
+      "works of mercy"
+    ],
+    "briefBio": "Saint Elizabeth of Portugal is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "July 4"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Elizabeth_of_Portugal",
+    "wikidataId": "Q235857"
+  },
+  {
+    "id": "anthony_zaccaria",
+    "celebrationIds": [
+      "anthony_zaccaria",
+      "saint_anthony_zaccaria_priest"
+    ],
+    "name": "Saint Anthony Zaccaria, Priest",
+    "lifeSpan": "1502-1539",
+    "lifeLength": "about 37 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Saint Anthony Zaccaria, Priest is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "July 5"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Anthony_Zaccaria",
+    "wikidataId": "Q380099"
   },
   {
     "id": "maria_goretti",
-    "celebrationIds": ["maria_goretti"],
+    "celebrationIds": [
+      "maria_goretti",
+      "saint_maria_goretti_virgin_and_martyr"
+    ],
     "name": "Saint Maria Goretti",
     "lifeSpan": "1890-1902",
     "lifeLength": "11 years",
-    "patronage": ["young women", "purity", "victims of sexual assault", "forgiveness"],
+    "patronage": [
+      "young women",
+      "purity",
+      "victims of sexual assault",
+      "forgiveness",
+      "persecuted Christians",
+      "courage in witness"
+    ],
     "briefBio": "Maria Goretti was an Italian girl who died after resisting assault and forgiving her attacker. Her witness is often remembered as a sign of purity, mercy, and Christian forgiveness.",
+    "feastDates": [
+      "July 6"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
     "wikipediaUrl": "https://en.wikipedia.org/wiki/Maria_Goretti",
-    "wikidataId": "Q234374",
-    "feastDates": ["July 6"],
-    "sources": ["Wikipedia", "Wikidata"]
+    "wikidataId": "Q234697"
+  },
+  {
+    "id": "augustine_zhao_rong",
+    "celebrationIds": [
+      "augustine_zhao_rong",
+      "saint_augustine_zhao_rong_priest_and_companions_martyrs"
+    ],
+    "name": "Saint Augustine Zhao Rong, Priest, and Companions, Martyrs",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Saint Augustine Zhao Rong, Priest, and Companions, Martyrs is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "July 9"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Augustine_Zhao_Rong",
+    "wikidataId": "Q552659"
+  },
+  {
+    "id": "henry_ii_emperor",
+    "celebrationIds": [
+      "henry_ii_emperor",
+      "saint_henry"
+    ],
+    "name": "Saint Henry",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "growth in holiness"
+    ],
+    "briefBio": "Henry II was Holy Roman Emperor and is honored for using public authority in service of the Church, reform, and works of charity. His memorial points to holiness lived within civic responsibility.",
+    "feastDates": [
+      "July 13"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Henry_II,_Holy_Roman_Emperor"
+  },
+  {
+    "id": "camillus_de_lellis",
+    "celebrationIds": [
+      "camillus_de_lellis",
+      "saint_camillus_de_lellis_priest"
+    ],
+    "name": "Saint Camillus de Lellis, Priest",
+    "lifeSpan": "1550-1614",
+    "lifeLength": "about 64 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Saint Camillus de Lellis, Priest is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "July 14"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Camillus_de_Lellis",
+    "wikidataId": "Q332656"
+  },
+  {
+    "id": "our_lady_of_mount_carmel",
+    "celebrationIds": [
+      "our_lady_of_mount_carmel"
+    ],
+    "name": "Our Lady of Mount Carmel",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "Carmelites",
+      "those who wear the scapular"
+    ],
+    "briefBio": "Our Lady of Mount Carmel honors Mary under this feast, title, or mystery in the Church calendar. It invites devotion to her place in the life of Christ and her maternal care for the Church.",
+    "feastDates": [
+      "July 16"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Our_Lady_of_Mount_Carmel",
+    "wikidataId": "Q1065053"
+  },
+  {
+    "id": "apollinaris_of_ravenna",
+    "celebrationIds": [
+      "apollinaris_of_ravenna",
+      "saint_apollinaris_bishop_and_martyr"
+    ],
+    "name": "Saint Apollinaris of Ravenna",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Apollinaris is venerated as an early bishop of Ravenna and martyr. His memorial recalls the apostolic roots of local churches and the perseverance of early Christian witness.",
+    "feastDates": [
+      "July 20"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Apollinaris_of_Ravenna"
+  },
+  {
+    "id": "lawrence_of_brindisi",
+    "celebrationIds": [
+      "lawrence_of_brindisi",
+      "saint_lawrence_of_brindisi_priest_and_doctor_of_the_church"
+    ],
+    "name": "Saint Lawrence of Brindisi, Priest and Doctor of the Church",
+    "lifeSpan": "1559-1619",
+    "lifeLength": "about 60 years",
+    "patronage": [
+      "theologians",
+      "teachers of the faith"
+    ],
+    "briefBio": "Saint Lawrence of Brindisi, Priest and Doctor of the Church is honored as a teacher of the faith whose writings helped hand on Catholic doctrine. The memorial highlights the union of learning, prayer, and holiness.",
+    "feastDates": [
+      "July 21"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Lawrence_of_Brindisi",
+    "wikidataId": "Q313803"
+  },
+  {
+    "id": "mary_magdalene",
+    "celebrationIds": [
+      "mary_magdalene",
+      "saint_mary_magdalene"
+    ],
+    "name": "Saint Mary Magdalene",
+    "lifeSpan": "died 100",
+    "lifeLength": "birth year unknown",
+    "patronage": [
+      "Marian devotion"
+    ],
+    "briefBio": "Saint Mary Magdalene honors Mary under this feast, title, or mystery in the Church calendar. It invites devotion to her place in the life of Christ and her maternal care for the Church.",
+    "feastDates": [
+      "July 22"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Mary_Magdalene",
+    "wikidataId": "Q63070"
+  },
+  {
+    "id": "bridget_of_sweden",
+    "celebrationIds": [
+      "bridget_of_sweden",
+      "saint_bridget_religious"
+    ],
+    "name": "Saint Bridget of Sweden",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "religious life",
+      "contemplative prayer"
+    ],
+    "briefBio": "Bridget of Sweden was a wife, mother, religious founder, and mystic whose life joined family responsibility, reforming zeal, and contemplative prayer. Her memorial honors charity, pilgrimage, and renewal in the Church.",
+    "feastDates": [
+      "July 23"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Bridget_of_Sweden"
+  },
+  {
+    "id": "sharbel_makhluf",
+    "celebrationIds": [
+      "sharbel_makhluf",
+      "saint_sharbel_makhl_f_priest"
+    ],
+    "name": "Saint Sharbel Makhlūf, Priest",
+    "lifeSpan": "1828-1898",
+    "lifeLength": "about 70 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Saint Sharbel Makhlūf, Priest is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "July 24"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Charbel_Makhlouf",
+    "wikidataId": "Q331876"
+  },
+  {
+    "id": "james_apostle",
+    "celebrationIds": [
+      "james_apostle",
+      "saint_james_apostle"
+    ],
+    "name": "Saint James, Apostle",
+    "lifeSpan": "died 44",
+    "lifeLength": "birth year unknown",
+    "patronage": [
+      "equestrian",
+      "furrier",
+      "tanner",
+      "Spain",
+      "Galicia",
+      "Order of Santiago",
+      "Cavalry of Spanish Army",
+      "Academia de Caballería de Valladolid"
+    ],
+    "briefBio": "Saint James, Apostle is honored as an apostolic witness to Christ and the early mission of the Church. The celebration remembers the preaching, testimony, and faith handed on from the first generation of believers.",
+    "feastDates": [
+      "July 25"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/James_the_Great",
+    "wikidataId": "Q43999"
+  },
+  {
+    "id": "peter_chrysologus",
+    "celebrationIds": [
+      "peter_chrysologus",
+      "saint_peter_chrysologus_bishop_and_doctor_of_the_church"
+    ],
+    "name": "Saint Peter Chrysologus, Bishop and Doctor of the Church",
+    "lifeSpan": "380-450",
+    "lifeLength": "about 70 years",
+    "patronage": [
+      "theologians",
+      "teachers of the faith"
+    ],
+    "briefBio": "Saint Peter Chrysologus, Bishop and Doctor of the Church is honored as a teacher of the faith whose writings helped hand on Catholic doctrine. The memorial highlights the union of learning, prayer, and holiness.",
+    "feastDates": [
+      "July 30"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Peter_Chrysologus",
+    "wikidataId": "Q328742"
+  },
+  {
+    "id": "eusebius_of_vercelli",
+    "celebrationIds": [
+      "eusebius_of_vercelli",
+      "saint_eusebius_of_vercelli_bishop"
+    ],
+    "name": "Saint Eusebius of Vercelli, Bishop",
+    "lifeSpan": "283-371",
+    "lifeLength": "about 88 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Saint Eusebius of Vercelli, Bishop is commemorated in the Church calendar as optional memorial. 283–371). The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "August 2"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Eusebius_of_Vercelli",
+    "wikidataId": "Q181489"
+  },
+  {
+    "id": "peter_julian_eymard",
+    "celebrationIds": [
+      "peter_julian_eymard",
+      "saint_peter_julian_eymard_priest"
+    ],
+    "name": "Saint Peter Julian Eymard, Priest",
+    "lifeSpan": "1811-1868",
+    "lifeLength": "about 57 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Saint Peter Julian Eymard, Priest is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "August 2"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Peter_Julian_Eymard",
+    "wikidataId": "Q560994"
+  },
+  {
+    "id": "dedication_of_basilica_of_saint_mary_major",
+    "celebrationIds": [
+      "dedication_of_basilica_of_saint_mary_major",
+      "the_dedication_of_the_basilica_of_saint_mary_major"
+    ],
+    "name": "The Dedication of the Basilica of Saint Mary Major",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "Rome",
+      "devotion to Mary"
+    ],
+    "briefBio": "This memorial honors the Basilica of Saint Mary Major in Rome, one of the major papal basilicas and an ancient church dedicated to the Mother of God. It celebrates Marian devotion expressed in the Church's sacred places.",
+    "feastDates": [
+      "August 5"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Santa_Maria_Maggiore",
+    "wikidataId": "Q186282"
+  },
+  {
+    "id": "cajetan_of_thiene",
+    "celebrationIds": [
+      "cajetan_of_thiene",
+      "saint_cajetan_priest"
+    ],
+    "name": "Saint Cajetan, Priest",
+    "lifeSpan": "1480-1547",
+    "lifeLength": "about 67 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Saint Cajetan, Priest is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "August 7"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Saint_Cajetan",
+    "wikidataId": "Q379914"
+  },
+  {
+    "id": "sixtus_ii_pope",
+    "celebrationIds": [
+      "sixtus_ii_pope",
+      "saint_sixtus_ii_pope_and_companions_martyrs"
+    ],
+    "name": "Saint Sixtus II, Pope, and Companions, Martyrs",
+    "lifeSpan": "215-258",
+    "lifeLength": "about 43 years",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Saint Sixtus II, Pope, and Companions, Martyrs is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "August 7"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Pope_Sixtus_II",
+    "wikidataId": "Q127385"
+  },
+  {
+    "id": "teresa_benedicta_of_the_cross",
+    "celebrationIds": [
+      "teresa_benedicta_of_the_cross",
+      "saint_teresa_benedicta_of_the_cross_virgin_and_martyr"
+    ],
+    "name": "Saint Teresa Benedicta of the Cross, Virgin and Martyr",
+    "lifeSpan": "1891-1942",
+    "lifeLength": "about 51 years",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Saint Teresa Benedicta of the Cross, Virgin and Martyr is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "August 9"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Edith_Stein",
+    "wikidataId": "Q76749"
+  },
+  {
+    "id": "lawrence_of_rome_deacon",
+    "celebrationIds": [
+      "lawrence_of_rome_deacon",
+      "saint_lawrence_deacon_and_martyr"
+    ],
+    "name": "Saint Lawrence, Deacon and Martyr",
+    "lifeSpan": "225-258",
+    "lifeLength": "about 33 years",
+    "patronage": [
+      "Huesca",
+      "San Lorenzo de El Escorial",
+      "San Lorenzo",
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Saint Lawrence, Deacon and Martyr is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "August 10"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Saint_Lawrence",
+    "wikidataId": "Q17590"
+  },
+  {
+    "id": "jane_frances_de_chantal",
+    "celebrationIds": [
+      "jane_frances_de_chantal",
+      "saint_jane_frances_de_chantal_religious"
+    ],
+    "name": "Saint Jane Frances de Chantal, Religious",
+    "lifeSpan": "1572-1641",
+    "lifeLength": "about 69 years",
+    "patronage": [
+      "religious life",
+      "contemplative prayer"
+    ],
+    "briefBio": "Saint Jane Frances de Chantal, Religious is remembered for consecrated life and spiritual witness. The memorial points to prayer, discipline, and charity as paths to holiness.",
+    "feastDates": [
+      "August 12"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Jane_Frances_de_Chantal",
+    "wikidataId": "Q234521"
+  },
+  {
+    "id": "pontian_and_hippolytus",
+    "celebrationIds": [
+      "pontian_and_hippolytus",
+      "saints_pontian_pope_and_hippolytus_priest_martyrs"
+    ],
+    "name": "Saints Pontian, Pope, and Hippolytus, Priest, Martyrs",
+    "lifeSpan": "died 235",
+    "lifeLength": "birth year unknown",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Saints Pontian, Pope, and Hippolytus, Priest, Martyrs is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "August 13"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Pope_Pontian",
+    "wikidataId": "Q132113"
+  },
+  {
+    "id": "maximilian_mary_kolbe",
+    "celebrationIds": [
+      "maximilian_mary_kolbe",
+      "saint_maximilian_mary_kolbe_priest_and_martyr"
+    ],
+    "name": "Saint Maximilian Mary Kolbe, Priest and Martyr",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Saint Maximilian Mary Kolbe, Priest and Martyr honors Mary under this feast, title, or mystery in the Church calendar. It invites devotion to her place in the life of Christ and her maternal care for the Church.",
+    "feastDates": [
+      "August 14"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Maximilian_Kolbe",
+    "wikidataId": "Q153850"
+  },
+  {
+    "id": "the_assumption_of_the_blessed_virgin_mary",
+    "celebrationIds": [
+      "the_assumption_of_the_blessed_virgin_mary",
+      "the_assumption"
+    ],
+    "name": "The Assumption of the Blessed Virgin Mary",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "the hope of resurrection"
+    ],
+    "briefBio": "The Assumption of the Blessed Virgin Mary honors Mary under this feast, title, or mystery in the Church calendar. It invites devotion to her place in the life of Christ and her maternal care for the Church.",
+    "feastDates": [
+      "August 15"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Assumption_of_Mary",
+    "wikidataId": "Q162691"
+  },
+  {
+    "id": "stephen_of_hungary",
+    "celebrationIds": [
+      "stephen_of_hungary",
+      "saint_stephen_of_hungary"
+    ],
+    "name": "Saint Stephen of Hungary",
+    "lifeSpan": "969-1038",
+    "lifeLength": "about 69 years",
+    "patronage": [
+      "growth in holiness"
+    ],
+    "briefBio": "Saint Stephen of Hungary is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "August 16"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Stephen_I_of_Hungary",
+    "wikidataId": "Q177903"
+  },
+  {
+    "id": "john_eudes",
+    "celebrationIds": [
+      "john_eudes",
+      "saint_john_eudes_priest"
+    ],
+    "name": "Saint John Eudes, Priest",
+    "lifeSpan": "1601-1680",
+    "lifeLength": "about 79 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Saint John Eudes, Priest is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "August 19"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/John_Eudes",
+    "wikidataId": "Q441714"
+  },
+  {
+    "id": "queenship_of_blessed_virgin_mary",
+    "celebrationIds": [
+      "queenship_of_blessed_virgin_mary",
+      "the_queenship_of_the_blessed_virgin_mary"
+    ],
+    "name": "The Queenship of the Blessed Virgin Mary",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "Marian devotion"
+    ],
+    "briefBio": "The Queenship of the Blessed Virgin Mary honors Mary under this feast, title, or mystery in the Church calendar. It invites devotion to her place in the life of Christ and her maternal care for the Church.",
+    "feastDates": [
+      "August 22"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Queen_of_Heaven",
+    "wikidataId": "Q1358870"
+  },
+  {
+    "id": "rose_of_lima",
+    "celebrationIds": [
+      "rose_of_lima",
+      "saint_rose_of_lima_virgin"
+    ],
+    "name": "Saint Rose of Lima, Virgin",
+    "lifeSpan": "1586-1617",
+    "lifeLength": "about 31 years",
+    "patronage": [
+      "consecrated life"
+    ],
+    "briefBio": "Saint Rose of Lima, Virgin is remembered for consecrated life and spiritual witness. The memorial points to prayer, discipline, and charity as paths to holiness.",
+    "feastDates": [
+      "August 23"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Rose_of_Lima",
+    "wikidataId": "Q244383"
+  },
+  {
+    "id": "bartholomew_apostle",
+    "celebrationIds": [
+      "bartholomew_apostle",
+      "saint_bartholomew_apostle"
+    ],
+    "name": "Saint Bartholomew, Apostle",
+    "lifeSpan": "-100-100",
+    "lifeLength": "about 200 years",
+    "patronage": [
+      "Contrada Sovrana dell'Istrice",
+      "Roman Catholic Archdiocese of Messina-Lipari-Santa Lucia del Mela",
+      "Roman Catholic Diocese of Patti",
+      "Roman Catholic Archdiocese of Campobasso–Boiano",
+      "Roman Catholic Archdiocese of Benevento",
+      "Aeolian Islands",
+      "Armenia",
+      "Anghiari"
+    ],
+    "briefBio": "Saint Bartholomew, Apostle is honored as an apostolic witness to Christ and the early mission of the Church. The celebration remembers the preaching, testimony, and faith handed on from the first generation of believers.",
+    "feastDates": [
+      "August 24"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Bartholomew_the_Apostle",
+    "wikidataId": "Q43982"
+  },
+  {
+    "id": "joseph_of_calasanz",
+    "celebrationIds": [
+      "joseph_of_calasanz",
+      "saint_joseph_of_calasanz_priest"
+    ],
+    "name": "Saint Joseph of Calasanz, Priest",
+    "lifeSpan": "1556-1648",
+    "lifeLength": "about 92 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Saint Joseph of Calasanz, Priest is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "August 25"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Joseph_Calasanz",
+    "wikidataId": "Q360589"
+  },
+  {
+    "id": "louis_ix_of_france",
+    "celebrationIds": [
+      "louis_ix_of_france",
+      "saint_louis"
+    ],
+    "name": "Saint Louis",
+    "lifeSpan": "1214-1270",
+    "lifeLength": "about 56 years",
+    "patronage": [
+      "growth in holiness"
+    ],
+    "briefBio": "Saint Louis is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "August 25"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Louis_IX_of_France",
+    "wikidataId": "Q346"
+  },
+  {
+    "id": "passion_of_john_the_baptist",
+    "celebrationIds": [
+      "passion_of_john_the_baptist",
+      "the_passion_of_saint_john_the_baptist"
+    ],
+    "name": "The Passion of Saint John the Baptist",
+    "lifeSpan": "-6-30",
+    "lifeLength": "about 36 years",
+    "patronage": [
+      "converts",
+      "truth-telling",
+      "baptism"
+    ],
+    "briefBio": "The Passion of Saint John the Baptist is commemorated in the Church calendar as obligatory memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "August 29"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/John_the_Baptist",
+    "wikidataId": "Q40662"
   },
   {
     "id": "teresa_of_calcutta",
-    "celebrationIds": ["teresa_of_calcutta"],
+    "celebrationIds": [
+      "teresa_of_calcutta",
+      "saint_teresa_of_calcutta_virgin"
+    ],
     "name": "Saint Teresa of Calcutta",
     "lifeSpan": "1910-1997",
     "lifeLength": "87 years",
-    "patronage": ["World Youth Day", "Missionaries of Charity"],
+    "patronage": [
+      "World Youth Day",
+      "Missionaries of Charity",
+      "consecrated life"
+    ],
     "briefBio": "Teresa of Calcutta founded the Missionaries of Charity and served the poorest and most abandoned with direct, personal care. Her life made the works of mercy visible to the modern world.",
+    "feastDates": [
+      "September 5"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
     "wikipediaUrl": "https://en.wikipedia.org/wiki/Mother_Teresa",
-    "wikidataId": "Q30547",
-    "feastDates": ["September 5"],
-    "sources": ["Wikipedia", "Wikidata"]
+    "wikidataId": "Q30547"
+  },
+  {
+    "id": "nativity_of_blessed_virgin_mary",
+    "celebrationIds": [
+      "nativity_of_blessed_virgin_mary",
+      "the_nativity_of_the_blessed_virgin_mary"
+    ],
+    "name": "The Nativity of the Blessed Virgin Mary",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "Marian devotion"
+    ],
+    "briefBio": "The Nativity of the Blessed Virgin Mary honors Mary under this feast, title, or mystery in the Church calendar. It invites devotion to her place in the life of Christ and her maternal care for the Church.",
+    "feastDates": [
+      "September 8"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Nativity_of_Mary",
+    "wikidataId": "Q501107"
+  },
+  {
+    "id": "peter_claver",
+    "celebrationIds": [
+      "peter_claver",
+      "saint_peter_claver_priest"
+    ],
+    "name": "Saint Peter Claver, Priest",
+    "lifeSpan": "1580-1654",
+    "lifeLength": "about 74 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Saint Peter Claver, Priest is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "September 9"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Peter_Claver",
+    "wikidataId": "Q167458"
+  },
+  {
+    "id": "most_holy_name_of_mary",
+    "celebrationIds": [
+      "most_holy_name_of_mary",
+      "the_most_holy_name_of_mary"
+    ],
+    "name": "The Most Holy Name of Mary",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "Marian devotion"
+    ],
+    "briefBio": "The Most Holy Name of Mary honors Mary under this feast, title, or mystery in the Church calendar. It invites devotion to her place in the life of Christ and her maternal care for the Church.",
+    "feastDates": [
+      "September 12"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Most_Holy_Name_of_the_Blessed_Virgin_Mary",
+    "wikidataId": "Q1537037"
+  },
+  {
+    "id": "our_lady_of_sorrows",
+    "celebrationIds": [
+      "our_lady_of_sorrows"
+    ],
+    "name": "Our Lady of Sorrows",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "Marian devotion"
+    ],
+    "briefBio": "Our Lady of Sorrows honors Mary under this feast, title, or mystery in the Church calendar. It invites devotion to her place in the life of Christ and her maternal care for the Church.",
+    "feastDates": [
+      "September 15"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Our_Lady_of_Sorrows",
+    "wikidataId": "Q1196075"
+  },
+  {
+    "id": "hildegard_of_bingen",
+    "celebrationIds": [
+      "hildegard_of_bingen",
+      "saint_hildegard_of_bingen_abbess_and_doctor_of_the_church"
+    ],
+    "name": "Saint Hildegard of Bingen, Abbess and Doctor of the Church",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "theologians",
+      "teachers of the faith"
+    ],
+    "briefBio": "Saint Hildegard of Bingen, Abbess and Doctor of the Church is honored as a teacher of the faith whose writings helped hand on Catholic doctrine. The memorial highlights the union of learning, prayer, and holiness.",
+    "feastDates": [
+      "September 17"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Hildegard_of_Bingen",
+    "wikidataId": "Q70991"
+  },
+  {
+    "id": "robert_bellarmine",
+    "celebrationIds": [
+      "robert_bellarmine",
+      "saint_robert_bellarmine_bishop_and_doctor_of_the_church"
+    ],
+    "name": "Saint Robert Bellarmine, Bishop and Doctor of the Church",
+    "lifeSpan": "1542-1621",
+    "lifeLength": "about 79 years",
+    "patronage": [
+      "theologians",
+      "teachers of the faith"
+    ],
+    "briefBio": "Saint Robert Bellarmine, Bishop and Doctor of the Church is honored as a teacher of the faith whose writings helped hand on Catholic doctrine. The memorial highlights the union of learning, prayer, and holiness.",
+    "feastDates": [
+      "September 17"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Robert_Bellarmine",
+    "wikidataId": "Q298664"
+  },
+  {
+    "id": "januarius_of_benevento",
+    "celebrationIds": [
+      "januarius_of_benevento",
+      "saint_januarius_bishop_and_martyr"
+    ],
+    "name": "Saint Januarius, Bishop and Martyr",
+    "lifeSpan": "272-305",
+    "lifeLength": "about 33 years",
+    "patronage": [
+      "Naples",
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Saint Januarius, Bishop and Martyr is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "September 19"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Januarius",
+    "wikidataId": "Q315312"
+  },
+  {
+    "id": "matthew_apostle",
+    "celebrationIds": [
+      "matthew_apostle",
+      "saint_matthew_apostle_and_evangelist"
+    ],
+    "name": "Saint Matthew, Apostle and Evangelist",
+    "lifeSpan": "10-74",
+    "lifeLength": "about 64 years",
+    "patronage": [
+      "missionaries",
+      "evangelization"
+    ],
+    "briefBio": "Saint Matthew, Apostle and Evangelist is honored as an apostolic witness to Christ and the early mission of the Church. The celebration remembers the preaching, testimony, and faith handed on from the first generation of believers.",
+    "feastDates": [
+      "September 21"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Matthew_the_Apostle",
+    "wikidataId": "Q43600"
+  },
+  {
+    "id": "cosmas_and_damian",
+    "celebrationIds": [
+      "cosmas_and_damian",
+      "saints_cosmas_and_damian_martyrs"
+    ],
+    "name": "Saints Cosmas and Damian, Martyrs",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Cosmas and Damian are venerated as physician martyrs who served the sick and bore witness to Christ. Their memorial honors healing charity, professional service, and courage under persecution.",
+    "feastDates": [
+      "September 26"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Saints_Cosmas_and_Damian"
+  },
+  {
+    "id": "lawrence_ruiz",
+    "celebrationIds": [
+      "lawrence_ruiz",
+      "saint_lawrence_ruiz_and_companions_martyrs"
+    ],
+    "name": "Saint Lawrence Ruiz and Companions, Martyrs",
+    "lifeSpan": "1594-1637",
+    "lifeLength": "about 43 years",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Saint Lawrence Ruiz and Companions, Martyrs is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "September 28"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Lorenzo_Ruiz",
+    "wikidataId": "Q369793"
+  },
+  {
+    "id": "wenceslaus_of_bohemia",
+    "celebrationIds": [
+      "wenceslaus_of_bohemia",
+      "saint_wenceslaus_martyr"
+    ],
+    "name": "Saint Wenceslaus, Martyr",
+    "lifeSpan": "907-935",
+    "lifeLength": "about 28 years",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Saint Wenceslaus, Martyr is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "September 28"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Wenceslaus_I%2C_Duke_of_Bohemia",
+    "wikidataId": "Q196527"
+  },
+  {
+    "id": "michael_gabriel_raphael_archangels",
+    "celebrationIds": [
+      "michael_gabriel_raphael_archangels",
+      "saints_michael_gabriel_and_raphael_archangels"
+    ],
+    "name": "Saints Michael, Gabriel, and Raphael, Archangels",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "protection",
+      "messengers of God",
+      "spiritual combat"
+    ],
+    "briefBio": "This feast honors Michael, Gabriel, and Raphael, the archangels named in Scripture. The celebration remembers angelic service in worship, protection, healing, and the announcement of God's saving work.",
+    "feastDates": [
+      "September 29"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Archangel"
+  },
+  {
+    "id": "our_lady_queen_of_nigeria",
+    "celebrationIds": [
+      "our_lady_queen_of_nigeria"
+    ],
+    "name": "Our Lady, Queen of Nigeria",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "Nigeria"
+    ],
+    "briefBio": "Our Lady, Queen of Nigeria honors Mary under a local Nigerian title of patronage and prayer. The celebration entrusts the nation, its families, and the Church in Nigeria to her maternal intercession.",
+    "feastDates": [
+      "October 1"
+    ],
+    "sources": [
+      "Catholic Daily calendar"
+    ]
   },
   {
     "id": "faustina_kowalska",
-    "celebrationIds": ["faustina_kowalska"],
+    "celebrationIds": [
+      "faustina_kowalska",
+      "saint_faustina_kowalska_virgin"
+    ],
     "name": "Saint Faustina Kowalska",
     "lifeSpan": "1905-1938",
     "lifeLength": "33 years",
-    "patronage": ["mercy", "the Divine Mercy devotion"],
+    "patronage": [
+      "mercy",
+      "the Divine Mercy devotion",
+      "consecrated life"
+    ],
     "briefBio": "Faustina Kowalska was a Polish sister whose diary helped spread devotion to Divine Mercy. Her message centers on trust in Jesus and mercy toward others.",
+    "feastDates": [
+      "October 5"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
     "wikipediaUrl": "https://en.wikipedia.org/wiki/Faustina_Kowalska",
-    "wikidataId": "Q235008",
-    "feastDates": ["October 5"],
-    "sources": ["Wikipedia", "Wikidata"]
+    "wikidataId": "Q18978"
+  },
+  {
+    "id": "bruno_of_cologne",
+    "celebrationIds": [
+      "bruno_of_cologne",
+      "saint_bruno_priest"
+    ],
+    "name": "Saint Bruno",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Bruno of Cologne founded the Carthusian order and became a model of silence, solitude, and contemplative prayer. His memorial honors a life turned toward God in disciplined hiddenness.",
+    "feastDates": [
+      "October 6"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Bruno_of_Cologne"
+  },
+  {
+    "id": "our_lady_of_the_rosary",
+    "celebrationIds": [
+      "our_lady_of_the_rosary"
+    ],
+    "name": "Our Lady of the Rosary",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "the rosary",
+      "Dominicans"
+    ],
+    "briefBio": "Our Lady of the Rosary honors Mary under this feast, title, or mystery in the Church calendar. It invites devotion to her place in the life of Christ and her maternal care for the Church.",
+    "feastDates": [
+      "October 7"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Our_Lady_of_the_Rosary",
+    "wikidataId": "Q54875"
+  },
+  {
+    "id": "denis_of_paris",
+    "celebrationIds": [
+      "denis_of_paris",
+      "saint_denis_bishop_and_companions_martyrs"
+    ],
+    "name": "Saint Denis and Companions",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Denis is venerated as a bishop of Paris and martyr, remembered with his companions for witness to Christ in early Gaul. His memorial honors missionary faith and courage under persecution.",
+    "feastDates": [
+      "October 9"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Denis_of_Paris"
+  },
+  {
+    "id": "john_leonardi",
+    "celebrationIds": [
+      "john_leonardi",
+      "saint_john_leonardi_priest"
+    ],
+    "name": "Saint John Leonardi, Priest",
+    "lifeSpan": "1541-1609",
+    "lifeLength": "about 68 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Saint John Leonardi, Priest is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "October 9"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/John_Leonardi",
+    "wikidataId": "Q1355472"
+  },
+  {
+    "id": "john_xxiii_pope",
+    "celebrationIds": [
+      "john_xxiii_pope",
+      "saint_john_xxiii_pope"
+    ],
+    "name": "Saint John XXIII, Pope",
+    "lifeSpan": "1881-1963",
+    "lifeLength": "about 82 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Saint John XXIII, Pope is honored for pastoral service to the Church as Bishop of Rome. The celebration recalls a life spent guarding faith, worship, and communion.",
+    "feastDates": [
+      "October 11"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Pope_John_XXIII",
+    "wikidataId": "Q23873"
+  },
+  {
+    "id": "our_lady_of_aparecida",
+    "celebrationIds": [
+      "our_lady_of_aparecida"
+    ],
+    "name": "Our Lady of Aparecida",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "Brazil"
+    ],
+    "briefBio": "Our Lady of Aparecida honors Mary under this feast, title, or mystery in the Church calendar. It invites devotion to her place in the life of Christ and her maternal care for the Church.",
+    "feastDates": [
+      "October 12"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Our_Lady_of_Aparecida",
+    "wikidataId": "Q2469225"
+  },
+  {
+    "id": "callistus_i_pope",
+    "celebrationIds": [
+      "callistus_i_pope",
+      "saint_callistus_i_pope_and_martyr"
+    ],
+    "name": "Saint Callistus I, Pope and Martyr",
+    "lifeSpan": "died 222",
+    "lifeLength": "birth year unknown",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Saint Callistus I, Pope and Martyr is remembered as a witness to Christ unto death. 218 to c. 223. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "October 14"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Pope_Callixtus_I",
+    "wikidataId": "Q122376"
+  },
+  {
+    "id": "hedwig_of_silesia",
+    "celebrationIds": [
+      "hedwig_of_silesia",
+      "saint_hedwig_religious"
+    ],
+    "name": "Saint Hedwig of Silesia",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "religious life",
+      "contemplative prayer"
+    ],
+    "briefBio": "Hedwig of Silesia was a duchess and religious woman remembered for prayer, simplicity, and generous care for the poor. Her memorial honors holiness expressed through family life, public responsibility, and charity.",
+    "feastDates": [
+      "October 16"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Hedwig_of_Silesia"
+  },
+  {
+    "id": "margaret_mary_alacoque",
+    "celebrationIds": [
+      "margaret_mary_alacoque",
+      "saint_margaret_mary_alacoque_virgin"
+    ],
+    "name": "Saint Margaret Mary Alacoque, Virgin",
+    "lifeSpan": "1647-1690",
+    "lifeLength": "about 43 years",
+    "patronage": [
+      "Marian devotion"
+    ],
+    "briefBio": "Saint Margaret Mary Alacoque, Virgin honors Mary under this feast, title, or mystery in the Church calendar. It invites devotion to her place in the life of Christ and her maternal care for the Church.",
+    "feastDates": [
+      "October 16"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Margaret_Mary_Alacoque",
+    "wikidataId": "Q235853"
+  },
+  {
+    "id": "luke_evangelist",
+    "celebrationIds": [
+      "luke_evangelist",
+      "saint_luke_evangelist"
+    ],
+    "name": "Saint Luke, Evangelist",
+    "lifeSpan": "died 84",
+    "lifeLength": "birth year unknown",
+    "patronage": [
+      "missionaries",
+      "evangelization"
+    ],
+    "briefBio": "Saint Luke, Evangelist is honored as an apostolic witness to Christ and the early mission of the Church. The celebration remembers the preaching, testimony, and faith handed on from the first generation of believers.",
+    "feastDates": [
+      "October 18"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Luke_the_Evangelist",
+    "wikidataId": "Q128538"
+  },
+  {
+    "id": "john_de_brebeuf_and_isaac_jogues",
+    "celebrationIds": [
+      "john_de_brebeuf_and_isaac_jogues",
+      "saints_john_de_br_beuf_and_isaac_jogues_priests_and_companions_martyrs"
+    ],
+    "name": "Saints John de Brébeuf and Isaac Jogues, Priests, and Companions, Martyrs",
+    "lifeSpan": "died 1640",
+    "lifeLength": "birth year unknown",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Saints John de Brébeuf and Isaac Jogues, Priests, and Companions, Martyrs is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "October 19"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Canadian_Martyrs",
+    "wikidataId": "Q2653872"
+  },
+  {
+    "id": "paul_of_the_cross",
+    "celebrationIds": [
+      "paul_of_the_cross",
+      "saint_paul_of_the_cross_priest"
+    ],
+    "name": "Saint Paul of the Cross, Priest",
+    "lifeSpan": "1694-1775",
+    "lifeLength": "about 81 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Saint Paul of the Cross, Priest is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "October 19"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Paul_of_the_Cross",
+    "wikidataId": "Q370261"
   },
   {
     "id": "john_paul_ii_pope",
-    "celebrationIds": ["john_paul_ii_pope"],
+    "celebrationIds": [
+      "john_paul_ii_pope",
+      "saint_john_paul_ii_pope"
+    ],
     "name": "Saint John Paul II",
     "lifeSpan": "1920-2005",
     "lifeLength": "84 years",
-    "patronage": ["World Youth Day", "families", "young Catholics"],
+    "patronage": [
+      "World Youth Day",
+      "families",
+      "young Catholics",
+      "clergy",
+      "pastoral ministry"
+    ],
     "briefBio": "John Paul II served as pope from 1978 to 2005. His long pontificate emphasized human dignity, evangelization, the family, and the call to holiness in ordinary life.",
+    "feastDates": [
+      "October 22"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
     "wikipediaUrl": "https://en.wikipedia.org/wiki/Pope_John_Paul_II",
-    "wikidataId": "Q989",
-    "feastDates": ["October 22"],
-    "sources": ["Wikipedia", "Wikidata"]
+    "wikidataId": "Q989"
+  },
+  {
+    "id": "john_of_capistrano",
+    "celebrationIds": [
+      "john_of_capistrano",
+      "saint_john_of_capistrano_priest"
+    ],
+    "name": "Saint John of Capistrano, Priest",
+    "lifeSpan": "1386-1456",
+    "lifeLength": "about 70 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Saint John of Capistrano, Priest is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "October 23"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/John_of_Capistrano",
+    "wikidataId": "Q310359"
+  },
+  {
+    "id": "anthony_mary_claret",
+    "celebrationIds": [
+      "anthony_mary_claret",
+      "saint_anthony_mary_claret_bishop"
+    ],
+    "name": "Saint Anthony Mary Claret, Bishop",
+    "lifeSpan": "1807-1870",
+    "lifeLength": "about 63 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Saint Anthony Mary Claret, Bishop honors Mary under this feast, title, or mystery in the Church calendar. It invites devotion to her place in the life of Christ and her maternal care for the Church.",
+    "feastDates": [
+      "October 24"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Anthony_Mary_Claret",
+    "wikidataId": "Q162973"
+  },
+  {
+    "id": "simon_and_jude_apostles",
+    "celebrationIds": [
+      "simon_and_jude_apostles",
+      "saints_simon_and_jude_apostles"
+    ],
+    "name": "Saints Simon and Jude, Apostles",
+    "lifeSpan": "100-107",
+    "lifeLength": "about 7 years",
+    "patronage": [
+      "missionaries",
+      "evangelization"
+    ],
+    "briefBio": "Saints Simon and Jude, Apostles is honored as an apostolic witness to Christ and the early mission of the Church. The celebration remembers the preaching, testimony, and faith handed on from the first generation of believers.",
+    "feastDates": [
+      "October 28"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Simon_the_Zealot",
+    "wikidataId": "Q12871"
+  },
+  {
+    "id": "all_saints",
+    "celebrationIds": [
+      "all_saints"
+    ],
+    "name": "All Saints",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "the communion of saints",
+      "all Christians seeking holiness"
+    ],
+    "briefBio": "All Saints gathers the whole communion of the blessed, known and unknown, into one solemn celebration. The feast turns the Church's eyes toward the vocation to holiness shared by every Christian.",
+    "feastDates": [
+      "November 1"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/All_Saints'_Day",
+    "wikidataId": "Q587"
   },
   {
     "id": "martin_de_porres",
-    "celebrationIds": ["martin_de_porres"],
+    "celebrationIds": [
+      "martin_de_porres",
+      "saint_martin_de_porres_religious"
+    ],
     "name": "Saint Martin de Porres",
     "lifeSpan": "1579-1639",
     "lifeLength": "59 years",
-    "patronage": ["mixed-race people", "barbers", "public health workers", "racial harmony"],
+    "patronage": [
+      "mixed-race people",
+      "barbers",
+      "public health workers",
+      "racial harmony",
+      "religious life",
+      "contemplative prayer"
+    ],
     "briefBio": "Martin de Porres was a Dominican lay brother in Lima known for humility, healing care, and love for the poor. His holiness crossed the social and racial barriers of his time.",
+    "feastDates": [
+      "November 3"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
     "wikipediaUrl": "https://en.wikipedia.org/wiki/Martin_de_Porres",
-    "wikidataId": "Q315195",
-    "feastDates": ["November 3"],
-    "sources": ["Wikipedia", "Wikidata"]
+    "wikidataId": "Q313293"
+  },
+  {
+    "id": "albert_the_great",
+    "celebrationIds": [
+      "albert_the_great",
+      "saint_albert_the_great_bishop_and_doctor_of_the_church"
+    ],
+    "name": "Saint Albert the Great, Bishop and Doctor of the Church",
+    "lifeSpan": "1193-1280",
+    "lifeLength": "about 87 years",
+    "patronage": [
+      "theologians",
+      "teachers of the faith"
+    ],
+    "briefBio": "Saint Albert the Great, Bishop and Doctor of the Church is honored as a teacher of the faith whose writings helped hand on Catholic doctrine. 1200 – 1280). The memorial highlights the union of learning, prayer, and holiness.",
+    "feastDates": [
+      "November 15"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Albertus_Magnus",
+    "wikidataId": "Q60059"
+  },
+  {
+    "id": "gertrude_the_great",
+    "celebrationIds": [
+      "gertrude_the_great",
+      "saint_gertrude_virgin"
+    ],
+    "name": "Saint Gertrude the Great",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "consecrated life"
+    ],
+    "briefBio": "Gertrude the Great was a Benedictine nun and mystic whose writings helped nourish devotion to the Sacred Heart and the love of Christ. Her memorial honors contemplative prayer and confidence in divine mercy.",
+    "feastDates": [
+      "November 16"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Gertrude_the_Great"
+  },
+  {
+    "id": "margaret_of_scotland",
+    "celebrationIds": [
+      "margaret_of_scotland",
+      "saint_margaret_of_scotland"
+    ],
+    "name": "Saint Margaret of Scotland",
+    "lifeSpan": "1045-1093",
+    "lifeLength": "about 48 years",
+    "patronage": [
+      "the sick and poor",
+      "works of mercy"
+    ],
+    "briefBio": "Saint Margaret of Scotland is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "November 16"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Saint_Margaret_of_Scotland",
+    "wikidataId": "Q230507"
+  },
+  {
+    "id": "dedication_of_basilicas_of_peter_and_paul",
+    "celebrationIds": [
+      "dedication_of_basilicas_of_peter_and_paul",
+      "the_dedication_of_the_basilicas_of_saints_peter_and_paul_apostles"
+    ],
+    "name": "The Dedication of the Basilicas of Saints Peter and Paul, Apostles",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "Rome",
+      "the apostolic Church"
+    ],
+    "briefBio": "This memorial honors the Roman basilicas associated with Saints Peter and Paul, the apostles whose witness anchors the Church of Rome. It connects the dedication of sacred churches with gratitude for apostolic faith.",
+    "feastDates": [
+      "November 18"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/St._Peter's_Basilica",
+    "wikidataId": "Q12512"
+  },
+  {
+    "id": "presentation_of_blessed_virgin_mary",
+    "celebrationIds": [
+      "presentation_of_blessed_virgin_mary",
+      "the_presentation_of_the_blessed_virgin_mary"
+    ],
+    "name": "The Presentation of the Blessed Virgin Mary",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "Marian devotion"
+    ],
+    "briefBio": "The Presentation of the Blessed Virgin Mary honors Mary under this feast, title, or mystery in the Church calendar. It invites devotion to her place in the life of Christ and her maternal care for the Church.",
+    "feastDates": [
+      "November 21"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Presentation_of_Mary",
+    "wikidataId": "Q1124234"
+  },
+  {
+    "id": "clement_i_pope",
+    "celebrationIds": [
+      "clement_i_pope",
+      "saint_clement_i_pope_and_martyr"
+    ],
+    "name": "Saint Clement I, Pope and Martyr",
+    "lifeSpan": "died 99",
+    "lifeLength": "birth year unknown",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Saint Clement I, Pope and Martyr is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "November 23"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Clement_of_Rome",
+    "wikidataId": "Q42887"
+  },
+  {
+    "id": "columban_of_luxeuil",
+    "celebrationIds": [
+      "columban_of_luxeuil",
+      "saint_columban_abbot"
+    ],
+    "name": "Saint Columban, Abbot",
+    "lifeSpan": "540-615",
+    "lifeLength": "about 75 years",
+    "patronage": [
+      "religious life",
+      "contemplative prayer"
+    ],
+    "briefBio": "Saint Columban, Abbot is remembered for consecrated life and spiritual witness. The memorial points to prayer, discipline, and charity as paths to holiness.",
+    "feastDates": [
+      "November 23"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Columbanus",
+    "wikidataId": "Q319653"
+  },
+  {
+    "id": "catherine_of_alexandria",
+    "celebrationIds": [
+      "catherine_of_alexandria",
+      "saint_catherine_of_alexandria_virgin_and_martyr"
+    ],
+    "name": "Saint Catherine of Alexandria, Virgin and Martyr",
+    "lifeSpan": "287-305",
+    "lifeLength": "about 18 years",
+    "patronage": [
+      "Dnipro",
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Saint Catherine of Alexandria, Virgin and Martyr is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "November 25"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Catherine_of_Alexandria",
+    "wikidataId": "Q179718"
+  },
+  {
+    "id": "andrew_apostle",
+    "celebrationIds": [
+      "andrew_apostle",
+      "saint_andrew_apostle"
+    ],
+    "name": "Saint Andrew, Apostle",
+    "lifeSpan": "-6-60",
+    "lifeLength": "about 66 years",
+    "patronage": [
+      "Russia",
+      "Imperial Russian Navy",
+      "Russian Navy",
+      "fishery",
+      "sea shipping",
+      "Scotland",
+      "Greece",
+      "Romania"
+    ],
+    "briefBio": "Saint Andrew, Apostle is honored as an apostolic witness to Christ and the early mission of the Church. The celebration remembers the preaching, testimony, and faith handed on from the first generation of believers.",
+    "feastDates": [
+      "November 30"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Andrew_the_Apostle",
+    "wikidataId": "Q43399"
+  },
+  {
+    "id": "john_damascene",
+    "celebrationIds": [
+      "john_damascene",
+      "saint_john_damascene_priest_and_doctor_of_the_church"
+    ],
+    "name": "Saint John Damascene, Priest and Doctor of the Church",
+    "lifeSpan": "675-749",
+    "lifeLength": "about 74 years",
+    "patronage": [
+      "theologians",
+      "teachers of the faith"
+    ],
+    "briefBio": "Saint John Damascene, Priest and Doctor of the Church is honored as a teacher of the faith whose writings helped hand on Catholic doctrine. The memorial highlights the union of learning, prayer, and holiness.",
+    "feastDates": [
+      "December 4"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/John_of_Damascus",
+    "wikidataId": "Q51884"
   },
   {
     "id": "nicholas_of_myra",
-    "celebrationIds": ["nicholas_of_myra"],
+    "celebrationIds": [
+      "nicholas_of_myra",
+      "saint_nicholas_bishop"
+    ],
     "name": "Saint Nicholas",
     "lifeSpan": "c. 270-c. 343",
     "lifeLength": "about 73 years",
-    "patronage": ["children", "sailors", "merchants", "students"],
+    "patronage": [
+      "children",
+      "sailors",
+      "merchants",
+      "students",
+      "child",
+      "cooper",
+      "sailor",
+      "fisher"
+    ],
     "briefBio": "Nicholas was bishop of Myra and became famous for generosity, defense of the vulnerable, and pastoral care. Many later traditions about gift-giving grew from devotion to him.",
+    "feastDates": [
+      "December 6"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
     "wikipediaUrl": "https://en.wikipedia.org/wiki/Saint_Nicholas",
-    "wikidataId": "Q44262",
-    "feastDates": ["December 6"],
-    "sources": ["Wikipedia", "Wikidata"]
+    "wikidataId": "Q44269"
+  },
+  {
+    "id": "the_immaculate_conception_of_the_blessed_virgin_mary",
+    "celebrationIds": [
+      "the_immaculate_conception_of_the_blessed_virgin_mary",
+      "the_immaculate_conception"
+    ],
+    "name": "The Immaculate Conception of the Blessed Virgin Mary",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "the United States",
+      "purity",
+      "Spain",
+      "Korea",
+      "Macau",
+      "Nicaragua",
+      "Paraguay",
+      "Philippines"
+    ],
+    "briefBio": "The Immaculate Conception of the Blessed Virgin Mary honors Mary under this feast, title, or mystery in the Church calendar. It invites devotion to her place in the life of Christ and her maternal care for the Church.",
+    "feastDates": [
+      "December 8"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Immaculate_Conception",
+    "wikidataId": "Q185606"
+  },
+  {
+    "id": "juan_diego",
+    "celebrationIds": [
+      "juan_diego",
+      "saint_juan_diego_cuauhtlatoatzin"
+    ],
+    "name": "Saint Juan Diego Cuauhtlatoatzin",
+    "lifeSpan": "1474-1548",
+    "lifeLength": "about 74 years",
+    "patronage": [
+      "indigenous people",
+      "growth in holiness"
+    ],
+    "briefBio": "Saint Juan Diego Cuauhtlatoatzin is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "December 9"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Juan_Diego",
+    "wikidataId": "Q335539"
+  },
+  {
+    "id": "our_lady_of_loreto",
+    "celebrationIds": [
+      "our_lady_of_loreto"
+    ],
+    "name": "Our Lady of Loreto",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "Marian devotion"
+    ],
+    "briefBio": "Our Lady of Loreto honors Mary in connection with the Holy House tradition and the mystery of the Incarnation lived in the home of Nazareth. The memorial invites prayer for households, pilgrims, and all who seek Christ with Mary.",
+    "feastDates": [
+      "December 10"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Our_Lady_of_Loreto"
+  },
+  {
+    "id": "damasus_i_pope",
+    "celebrationIds": [
+      "damasus_i_pope",
+      "saint_damasus_i_pope"
+    ],
+    "name": "Saint Damasus I, Pope",
+    "lifeSpan": "305-384",
+    "lifeLength": "about 79 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Saint Damasus I, Pope is honored for pastoral service to the Church as Bishop of Rome. The celebration recalls a life spent guarding faith, worship, and communion.",
+    "feastDates": [
+      "December 11"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Pope_Damasus_I",
+    "wikidataId": "Q130997"
+  },
+  {
+    "id": "our_lady_of_guadalupe",
+    "celebrationIds": [
+      "our_lady_of_guadalupe"
+    ],
+    "name": "Our Lady of Guadalupe",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "Mexico",
+      "the Americas",
+      "unborn children",
+      "Hispanic America"
+    ],
+    "briefBio": "Our Lady of Guadalupe honors Mary under this feast, title, or mystery in the Church calendar. It invites devotion to her place in the life of Christ and her maternal care for the Church.",
+    "feastDates": [
+      "December 12"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Our_Lady_of_Guadalupe",
+    "wikidataId": "Q31877"
+  },
+  {
+    "id": "peter_canisius",
+    "celebrationIds": [
+      "peter_canisius",
+      "saint_peter_canisius_priest_and_doctor_of_the_church"
+    ],
+    "name": "Saint Peter Canisius, Priest and Doctor of the Church",
+    "lifeSpan": "1521-1597",
+    "lifeLength": "about 76 years",
+    "patronage": [
+      "Roman Catholic Diocese of Innsbruck",
+      "theologians",
+      "teachers of the faith"
+    ],
+    "briefBio": "Saint Peter Canisius, Priest and Doctor of the Church is honored as a teacher of the faith whose writings helped hand on Catholic doctrine. The memorial highlights the union of learning, prayer, and holiness.",
+    "feastDates": [
+      "December 21"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Peter_Canisius",
+    "wikidataId": "Q44624"
+  },
+  {
+    "id": "john_of_kanty",
+    "celebrationIds": [
+      "john_of_kanty",
+      "saint_john_of_kanty_priest"
+    ],
+    "name": "Saint John of Kanty, Priest",
+    "lifeSpan": "1390-1473",
+    "lifeLength": "about 83 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Saint John of Kanty, Priest is commemorated in the Church calendar as optional memorial. The profile is available offline so the celebration can be opened directly from the Saint of the Day UI.",
+    "feastDates": [
+      "December 23"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/John_Cantius",
+    "wikidataId": "Q275624"
+  },
+  {
+    "id": "stephen_first_martyr",
+    "celebrationIds": [
+      "stephen_first_martyr",
+      "saint_stephen_the_first_martyr"
+    ],
+    "name": "Saint Stephen, the First Martyr",
+    "lifeSpan": "1-36",
+    "lifeLength": "about 35 years",
+    "patronage": [
+      "persecuted Christians",
+      "courage in witness"
+    ],
+    "briefBio": "Saint Stephen, the First Martyr is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "December 26"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Saint_Stephen",
+    "wikidataId": "Q161775"
+  },
+  {
+    "id": "john_apostle",
+    "celebrationIds": [
+      "john_apostle",
+      "saint_john_apostle_and_evangelist"
+    ],
+    "name": "Saint John, Apostle and Evangelist",
+    "lifeSpan": "11-99",
+    "lifeLength": "about 88 years",
+    "patronage": [
+      "missionaries",
+      "evangelization"
+    ],
+    "briefBio": "Saint John, Apostle and Evangelist is honored as an apostolic witness to Christ and the early mission of the Church. The celebration remembers the preaching, testimony, and faith handed on from the first generation of believers.",
+    "feastDates": [
+      "December 27"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/John_the_Apostle",
+    "wikidataId": "Q44015"
+  },
+  {
+    "id": "holy_innocents",
+    "celebrationIds": [
+      "holy_innocents",
+      "the_holy_innocents_martyrs"
+    ],
+    "name": "The Holy Innocents, Martyrs",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "children",
+      "infants",
+      "victims of violence"
+    ],
+    "briefBio": "The Holy Innocents, Martyrs is remembered as a witness to Christ unto death. The memorial keeps before the Church the courage of fidelity under persecution.",
+    "feastDates": [
+      "December 28"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Massacre_of_the_Innocents",
+    "wikidataId": "Q643474"
   },
   {
     "id": "thomas_becket",
-    "celebrationIds": ["thomas_becket"],
+    "celebrationIds": [
+      "thomas_becket",
+      "saint_thomas_becket_bishop_and_martyr"
+    ],
     "name": "Saint Thomas Becket",
     "lifeSpan": "c. 1119-1170",
     "lifeLength": "about 51 years",
-    "patronage": ["secular clergy", "Portsmouth", "Exeter College Oxford"],
+    "patronage": [
+      "secular clergy",
+      "Portsmouth",
+      "Exeter College Oxford",
+      "persecuted Christians",
+      "courage in witness"
+    ],
     "briefBio": "Thomas Becket was Archbishop of Canterbury and a martyr for the freedom of the Church. His conflict with King Henry II ended with his murder in Canterbury Cathedral.",
+    "feastDates": [
+      "December 29"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
     "wikipediaUrl": "https://en.wikipedia.org/wiki/Thomas_Becket",
-    "wikidataId": "Q170545",
-    "feastDates": ["December 29"],
-    "sources": ["Wikipedia", "Wikidata"]
+    "wikidataId": "Q192236"
+  },
+  {
+    "id": "sylvester_i_pope",
+    "celebrationIds": [
+      "sylvester_i_pope",
+      "saint_sylvester_i_pope"
+    ],
+    "name": "Saint Sylvester I, Pope",
+    "lifeSpan": "300-335",
+    "lifeLength": "about 35 years",
+    "patronage": [
+      "clergy",
+      "pastoral ministry"
+    ],
+    "briefBio": "Saint Sylvester I, Pope is honored for pastoral service to the Church as Bishop of Rome. The celebration recalls a life spent guarding faith, worship, and communion.",
+    "feastDates": [
+      "December 31"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Pope_Sylvester_I",
+    "wikidataId": "Q47149"
+  },
+  {
+    "id": "holy_family",
+    "celebrationIds": [
+      "holy_family",
+      "the_holy_family_of_jesus_mary_and_joseph"
+    ],
+    "name": "The Holy Family of Jesus, Mary, and Joseph",
+    "lifeSpan": "1st century",
+    "lifeLength": "",
+    "patronage": [
+      "families",
+      "households",
+      "parents and children"
+    ],
+    "briefBio": "This feast honors Jesus, Mary, and Joseph as the Holy Family of Nazareth. It invites Christian families to contemplate hidden fidelity, work, prayer, and mutual love in ordinary domestic life.",
+    "feastDates": [
+      "Sunday within the Octave of Christmas, or December 30 if no Sunday occurs"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Holy_Family",
+    "wikidataId": "Q618057"
+  },
+  {
+    "id": "immaculate_heart_of_mary",
+    "celebrationIds": [
+      "immaculate_heart_of_mary",
+      "the_immaculate_heart_of_the_blessed_virgin_mary"
+    ],
+    "name": "The Immaculate Heart of the Blessed Virgin Mary",
+    "lifeSpan": "",
+    "lifeLength": "",
+    "patronage": [
+      "families",
+      "conversion",
+      "peace"
+    ],
+    "briefBio": "The Immaculate Heart of the Blessed Virgin Mary honors Mary under this feast, title, or mystery in the Church calendar. It invites devotion to her place in the life of Christ and her maternal care for the Church.",
+    "feastDates": [
+      "Saturday after the Solemnity of the Most Sacred Heart of Jesus"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Immaculate_Heart_of_Mary",
+    "wikidataId": "Q748124"
+  },
+  {
+    "id": "mary_mother_of_the_church",
+    "celebrationIds": [
+      "mary_mother_of_the_church"
+    ],
+    "name": "Mary, Mother of the Church",
+    "lifeSpan": "1st century",
+    "lifeLength": "",
+    "patronage": [
+      "the Church",
+      "mothers",
+      "Christian families"
+    ],
+    "briefBio": "This memorial honors Mary as Mother of the Church, a title rooted in her motherhood of Christ and her presence with the disciples at the birth of the Church. In Nigeria the readings are observed on the Monday after Pentecost.",
+    "feastDates": [
+      "Monday after Pentecost"
+    ],
+    "sources": [
+      "Catholic Daily calendar",
+      "Wikipedia",
+      "Wikidata"
+    ],
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Mother_of_the_Church",
+    "wikidataId": "Q305502"
   }
 ]
