@@ -8,12 +8,14 @@ class TodaysSaintCard extends StatelessWidget {
   final List<OptionalCelebration> celebrations;
   final LiturgicalDay? liturgicalDay;
   final bool isSuppressed;
+  final ValueChanged<OptionalCelebration>? onCelebrationTap;
 
   const TodaysSaintCard({
     super.key,
     required this.celebrations,
     required this.liturgicalDay,
     this.isSuppressed = false,
+    this.onCelebrationTap,
   });
 
   @override
@@ -58,11 +60,7 @@ class TodaysSaintCard extends StatelessWidget {
             // Header row
             Row(
               children: [
-                Icon(
-                  Icons.auto_awesome_rounded,
-                  color: accentColor,
-                  size: 16,
-                ),
+                Icon(Icons.auto_awesome_rounded, color: accentColor, size: 16),
                 const SizedBox(width: 6),
                 Text(
                   isSuppressed ? 'Commemoration' : 'Today\'s Saints',
@@ -105,10 +103,9 @@ class TodaysSaintCard extends StatelessWidget {
   ) {
     final celebColor = _colorForLiturgicalColor(celebration.color);
 
-    return Row(
+    final row = Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // Liturgical color dot
         Container(
           width: 8,
           height: 8,
@@ -124,7 +121,6 @@ class TodaysSaintCard extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 10),
-        // Title and rank
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,7 +150,33 @@ class TodaysSaintCard extends StatelessWidget {
             ],
           ),
         ),
+        if (onCelebrationTap != null) ...[
+          const SizedBox(width: 8),
+          Icon(
+            Icons.chevron_right_rounded,
+            size: 20,
+            color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+          ),
+        ],
       ],
+    );
+
+    if (onCelebrationTap == null) return row;
+
+    return Semantics(
+      button: true,
+      label: celebration.title,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(8),
+          onTap: () => onCelebrationTap?.call(celebration),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: row,
+          ),
+        ),
+      ),
     );
   }
 

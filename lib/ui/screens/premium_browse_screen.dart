@@ -21,6 +21,7 @@ import '../widgets/premium_browse/daily_mass_at_a_glance_card.dart';
 import '../widgets/premium_browse/todays_saint_card.dart';
 import '../widgets/liturgical_calendar_view.dart';
 import 'mass_flow_screen.dart';
+import 'saint_detail_screen.dart';
 
 /// Premium Browse Screen with modern 2026 design principles
 class PremiumBrowseScreen extends StatefulWidget {
@@ -255,6 +256,16 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
       reading,
       _readings,
       index,
+    );
+  }
+
+  void _openSaintProfile(OptionalCelebration celebration) {
+    HapticFeedback.lightImpact();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SaintDetailScreen(celebration: celebration),
+      ),
     );
   }
 
@@ -645,6 +656,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                 celebrations: _optionalCelebrations,
                 liturgicalDay: _liturgicalDay,
                 isSuppressed: _celebrationsSuppressed,
+                onCelebrationTap: _openSaintProfile,
               ),
 
             // Optional celebrations selector
@@ -937,28 +949,43 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                   ),
                   const SizedBox(height: 4),
                   ..._optionalCelebrations.map(
-                    (c) => Padding(
-                      padding: const EdgeInsets.only(bottom: 2),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 8,
-                            height: 8,
-                            decoration: BoxDecoration(
-                              color: _colorForLiturgicalColor(c.color),
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              c.title,
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                fontWeight: FontWeight.w600,
+                    (c) => Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(8),
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          _openSaintProfile(c);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 8,
+                                height: 8,
+                                decoration: BoxDecoration(
+                                  color: _colorForLiturgicalColor(c.color),
+                                  shape: BoxShape.circle,
+                                ),
                               ),
-                            ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  c.title,
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                              Icon(
+                                Icons.chevron_right_rounded,
+                                size: 20,
+                                color: textColor.withValues(alpha: 0.45),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
