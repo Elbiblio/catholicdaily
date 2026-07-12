@@ -20,9 +20,27 @@ The script resolves the repository root relative to its own location, creates th
 
 ```powershell
 flutter test test/data/services/comprehensive_resolver_audit_test.dart
+flutter test test/data/services/displayed_readings_source_sample_test.dart
+flutter test test/demo_launch_config_test.dart
+flutter test test/widgets/mass_flow_region_header_test.dart
 ```
 
-and writes a timestamped log such as `resolver-20260712-143000.log`.
+and writes timestamped logs such as `resolver-20260712-143000.log`, `displayed-samples-20260712-143000.log`, `demo-config-20260712-143000.log`, and `mass-flow-region-20260712-143000.log`.
+
+## Run a Demo Launch
+
+To open the app directly to a dated Mass/readings screen, run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File C:\dev\catholicdaily-flutter\scripts\active\run_readings_demo.ps1 -Date 2026-10-01 -Region NG -BibleVersion rsvce
+```
+
+The script passes these dart defines to Flutter:
+
+- `CATHOLIC_DAILY_DEMO_SCREEN=mass`
+- `CATHOLIC_DAILY_DEMO_DATE=YYYY-MM-DD`
+- `CATHOLIC_DAILY_DEMO_REGION=NG`, `US`, `US_ASC_THU`, `GB_EW`, or `general`
+- `CATHOLIC_DAILY_DEMO_BIBLE_VERSION=rsvce` or `nabre`
 
 ## Current Coverage
 
@@ -32,6 +50,8 @@ The resolver audit currently verifies:
 - Required regions: General Roman, United States, United States with Ascension Thursday, England/Wales, and Nigeria.
 - Regional sentinels for Nigeria on October 1 and United States Ascension transfer behavior.
 - Resolver output shape: non-empty readings, first reading, responsorial psalm, gospel, and well-formed references.
+- Displayed/hydrated reading samples for US/NABRE, England-Wales/RSVCE, and Nigeria/RSVCE, including Bible text availability for the references the UI would render.
+- Mass Flow regional display: the Nigeria demo date must render `Solemnity: Our Lady, Queen of Nigeria` as the primary Mass header.
 - Bible backend source switching is covered separately by the Bible text backend/version tests.
 
 ## Manual Online Comparison

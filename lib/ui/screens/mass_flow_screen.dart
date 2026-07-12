@@ -5,6 +5,7 @@ import '../../data/services/improved_liturgical_calendar_service.dart';
 import '../../data/services/order_of_mass_service.dart';
 import '../../data/services/order_of_mass_preference_service.dart';
 import '../../data/services/language_preference_service.dart';
+import '../../data/services/ordo_resolver_service.dart';
 import '../../data/services/readings_service.dart';
 import '../../data/services/readings_backend_io.dart';
 import '../../data/services/reading_flow_service.dart';
@@ -14,10 +15,7 @@ import '../utils/contrast_helper.dart';
 class MassFlowScreen extends StatefulWidget {
   final DateTime? date;
 
-  const MassFlowScreen({
-    super.key,
-    this.date,
-  });
+  const MassFlowScreen({super.key, this.date});
 
   @override
   State<MassFlowScreen> createState() => _MassFlowScreenState();
@@ -25,10 +23,12 @@ class MassFlowScreen extends StatefulWidget {
 
 class _MassFlowScreenState extends State<MassFlowScreen> {
   final OrderOfMassService _orderOfMassService = OrderOfMassService();
-  final OrderOfMassPreferenceService _orderOfMassPreference = OrderOfMassPreferenceService();
-  final LanguagePreferenceService _languageService = LanguagePreferenceService();
-  final ImprovedLiturgicalCalendarService _calendarService = ImprovedLiturgicalCalendarService.instance;
-    final ReadingsBackendIo _readingsBackend = ReadingsBackendIo();
+  final OrderOfMassPreferenceService _orderOfMassPreference =
+      OrderOfMassPreferenceService();
+  final LanguagePreferenceService _languageService =
+      LanguagePreferenceService();
+  final OrdoResolverService _ordoResolver = OrdoResolverService.instance;
+  final ReadingsBackendIo _readingsBackend = ReadingsBackendIo();
 
   late DateTime _selectedDate;
   String _primaryLanguage = 'en';
@@ -63,9 +63,9 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
     setState(() => _isLoading = true);
 
     try {
-      final liturgicalDay = await _calendarService.getLiturgicalDay(date);
-      final lectionaryReadings =
-          await ReadingsService.instance.getReadingsForDate(date);
+      final liturgicalDay = await _ordoResolver.resolveDay(date);
+      final lectionaryReadings = await ReadingsService.instance
+          .getReadingsForDate(date);
       final sections = await _orderOfMassService.getSectionsForDate(
         date,
         languageCode: _secondaryLanguage,
@@ -118,7 +118,6 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
     await _loadMassForDate(_selectedDate);
   }
 
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -143,14 +142,17 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
                 ),
               ),
               ..._orderOfMassPreference.availableLanguages.map((lang) {
-                final displayName = _orderOfMassPreference.getLanguageDisplayName(lang);
+                final displayName = _orderOfMassPreference
+                    .getLanguageDisplayName(lang);
                 return PopupMenuItem(
                   value: lang,
                   onTap: () => _onSecondaryLanguageChanged(lang),
                   child: Row(
                     children: [
                       Icon(
-                        lang == _secondaryLanguage ? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                        lang == _secondaryLanguage
+                            ? Icons.radio_button_checked
+                            : Icons.radio_button_unchecked,
                         color: theme.colorScheme.primary,
                       ),
                       const SizedBox(width: 12),
@@ -171,14 +173,18 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
                 ),
               ),
               ..._languageService.availableLanguages.map((lang) {
-                final displayName = _languageService.getLanguageDisplayName(lang);
+                final displayName = _languageService.getLanguageDisplayName(
+                  lang,
+                );
                 return PopupMenuItem(
                   value: lang,
                   onTap: () => _onPrimaryLanguageChanged(lang),
                   child: Row(
                     children: [
                       Icon(
-                        lang == _primaryLanguage ? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                        lang == _primaryLanguage
+                            ? Icons.radio_button_checked
+                            : Icons.radio_button_unchecked,
                         color: theme.colorScheme.primary,
                       ),
                       const SizedBox(width: 12),
@@ -200,8 +206,8 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
         child: _isLoading
             ? const Center(child: CircularProgressIndicator())
             : _sections == null || _sections!.isEmpty
-                ? _buildEmptyState()
-                : _buildMassContent(theme),
+            ? _buildEmptyState()
+            : _buildMassContent(theme),
       ),
     );
   }
@@ -225,8 +231,8 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
           Text(
             'Try selecting a different date',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
         ],
       ),
@@ -235,7 +241,8 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
 
   Widget _buildMassContent(ThemeData theme) {
     final bool isLight = theme.brightness == Brightness.light;
-    final Color sectionColor = _liturgicalDay?.colorValue ?? theme.colorScheme.primary;
+    final Color sectionColor =
+        _liturgicalDay?.colorValue ?? theme.colorScheme.primary;
     // Use higher alpha for better contrast in light mode (must match _buildLiturgicalHeader bgAlpha)
     final double bgAlpha = isLight ? 0.35 : 0.15;
     final Color headerBg = Color.alphaBlend(
@@ -243,11 +250,15 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
       theme.colorScheme.surface,
     );
     // Guarantee readable text against the actual blended header background
-    final Color readableColor = ContrastHelper.getContrastColor(headerBg, theme);
+    final Color readableColor = ContrastHelper.getContrastColor(
+      headerBg,
+      theme,
+    );
 
     return CustomScrollView(
       slivers: [
-        if (_liturgicalDay != null) _buildLiturgicalHeader(theme, readableColor),
+        if (_liturgicalDay != null)
+          _buildLiturgicalHeader(theme, readableColor),
         // Introductory Rites
         ..._getSectionsForInsertionPoint('introductory_rites'),
         // Liturgy of the Word
@@ -317,7 +328,10 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
             Text(
               _liturgicalDay!.weekDescription,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: ContrastHelper.getSecondaryContrastColor(headerBg, theme),
+                color: ContrastHelper.getSecondaryContrastColor(
+                  headerBg,
+                  theme,
+                ),
               ),
             ),
           ],
@@ -327,7 +341,8 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
   }
 
   Widget _buildReadingsSection(ThemeData theme, Color sectionColor) {
-    if (_readings == null || _readings!.isEmpty) return const SliverToBoxAdapter();
+    if (_readings == null || _readings!.isEmpty)
+      return const SliverToBoxAdapter();
 
     return SliverToBoxAdapter(
       child: Padding(
@@ -340,7 +355,6 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
     );
   }
 
-  
   Widget _buildSection(ResolvedOrderOfMassSection section) {
     return SliverToBoxAdapter(
       child: Padding(
@@ -397,7 +411,9 @@ class _MassFlowSectionWidgetState extends State<_MassFlowSectionWidget> {
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: sectionColor.withValues(alpha: 0.18),
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(16),
+                ),
               ),
               child: Row(
                 children: [
@@ -419,7 +435,10 @@ class _MassFlowSectionWidgetState extends State<_MassFlowSectionWidget> {
                         Text(
                           '${widget.section.items.length} part${widget.section.items.length == 1 ? '' : 's'}',
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: ContrastHelper.getSecondaryContrastColor(sectionColor.withValues(alpha: 0.18), theme),
+                            color: ContrastHelper.getSecondaryContrastColor(
+                              sectionColor.withValues(alpha: 0.18),
+                              theme,
+                            ),
                           ),
                         ),
                       ],
@@ -477,7 +496,7 @@ class _MassFlowItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final content = item.getContentForLanguage(language) ?? const <String>[];
-    
+
     if (content.isEmpty) {
       return const SizedBox.shrink();
     }
@@ -489,9 +508,7 @@ class _MassFlowItemCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: sectionColor.withValues(alpha: 0.2),
-        ),
+        border: Border.all(color: sectionColor.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -503,13 +520,19 @@ class _MassFlowItemCard extends StatelessWidget {
                   item.title,
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w700,
-                    color: ContrastHelper.getContrastColor(theme.colorScheme.surface, theme),
+                    color: ContrastHelper.getContrastColor(
+                      theme.colorScheme.surface,
+                      theme,
+                    ),
                   ),
                 ),
               ),
               if (item.isOptional)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.secondaryContainer,
                     borderRadius: BorderRadius.circular(999),
@@ -522,13 +545,18 @@ class _MassFlowItemCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                          if (item.role != null) ...[
+              if (item.role != null) ...[
                 const SizedBox(width: 8),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     // Higher contrast for light mode
-                    color: sectionColor.withValues(alpha: theme.brightness == Brightness.light ? 0.35 : 0.15),
+                    color: sectionColor.withValues(
+                      alpha: theme.brightness == Brightness.light ? 0.35 : 0.15,
+                    ),
                     borderRadius: BorderRadius.circular(999),
                   ),
                   child: Text(
@@ -545,40 +573,41 @@ class _MassFlowItemCard extends StatelessWidget {
               ],
             ],
           ),
-                  const SizedBox(height: 12),
-          ...content.asMap().entries.map(
-            (entry) {
-              final index = entry.key;
-              final line = entry.value;
-              // Prefix lines with V or R markers for dialogue/responsive prayers
-              final String prefix = _getLinePrefix(item, index, line);
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 6),
-                child: RichText(
-                  text: TextSpan(
-                    children: [
-                      if (prefix.isNotEmpty)
-                        TextSpan(
-                          text: prefix,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            height: 1.5,
-                            fontWeight: FontWeight.w700,
-                            color: ContrastHelper.getContrastColor(theme.colorScheme.surface, theme),
-                          ),
-                        ),
+          const SizedBox(height: 12),
+          ...content.asMap().entries.map((entry) {
+            final index = entry.key;
+            final line = entry.value;
+            // Prefix lines with V or R markers for dialogue/responsive prayers
+            final String prefix = _getLinePrefix(item, index, line);
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 6),
+              child: RichText(
+                text: TextSpan(
+                  children: [
+                    if (prefix.isNotEmpty)
                       TextSpan(
-                        text: line,
+                        text: prefix,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           height: 1.5,
-                          color: theme.colorScheme.onSurface,
+                          fontWeight: FontWeight.w700,
+                          color: ContrastHelper.getContrastColor(
+                            theme.colorScheme.surface,
+                            theme,
+                          ),
                         ),
                       ),
-                    ],
-                  ),
+                    TextSpan(
+                      text: line,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        height: 1.5,
+                        color: theme.colorScheme.onSurface,
+                      ),
+                    ),
+                  ],
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          }),
         ],
       ),
     );
@@ -587,7 +616,9 @@ class _MassFlowItemCard extends StatelessWidget {
   String _formatRole(String role, bool isDialogue, bool isResponsive) {
     // Return V/R markers based on role and dialogue/responsive flags
     final roleLower = role.toLowerCase();
-    if (roleLower == 'priest' || roleLower == 'deacon' || roleLower == 'deacon_or_priest') {
+    if (roleLower == 'priest' ||
+        roleLower == 'deacon' ||
+        roleLower == 'deacon_or_priest') {
       return 'V.';
     }
     if (roleLower == 'all' || isResponsive) {
@@ -606,14 +637,18 @@ class _MassFlowItemCard extends StatelessWidget {
     }
   }
 
-  String _getLinePrefix(ResolvedOrderOfMassItem item, int lineIndex, String line) {
+  String _getLinePrefix(
+    ResolvedOrderOfMassItem item,
+    int lineIndex,
+    String line,
+  ) {
     if (!item.isDialogue && !item.isResponsive) return '';
 
     // Use structured dialogue data if available
     if (item.dialogueStructure != null && item.dialogueStructure!.isNotEmpty) {
       // Get the current language (fallback to English if not available)
       final language = this.language;
-      
+
       final dialogueLines = item.dialogueStructure![language];
       if (dialogueLines != null && lineIndex < dialogueLines.length) {
         final dialogueLine = dialogueLines[lineIndex];
@@ -629,7 +664,10 @@ class _MassFlowItemCard extends StatelessWidget {
     final lineLower = line.trim().toLowerCase();
 
     // Priest/Deacon lines get V
-    if (role == 'priest' || role == 'deacon' || role == 'deacon_or_priest' || role == 'lector') {
+    if (role == 'priest' ||
+        role == 'deacon' ||
+        role == 'deacon_or_priest' ||
+        role == 'lector') {
       return 'V. ';
     }
 
@@ -709,7 +747,9 @@ class _ReadingsSectionWidgetState extends State<_ReadingsSectionWidget> {
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: sectionColor.withValues(alpha: isLight ? 0.15 : 0.1),
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(16),
+                ),
               ),
               child: Row(
                 children: [
@@ -722,16 +762,19 @@ class _ReadingsSectionWidgetState extends State<_ReadingsSectionWidget> {
                           style: theme.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.w700,
                             color: ContrastHelper.getContrastColor(
-                      sectionColor.withValues(alpha: 0.18),
-                      theme,
-                    ),
+                              sectionColor.withValues(alpha: 0.18),
+                              theme,
+                            ),
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           '${widget.readings.length} reading${widget.readings.length == 1 ? '' : 's'}',
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: ContrastHelper.getSecondaryContrastColor(sectionColor.withValues(alpha: 0.15), theme),
+                            color: ContrastHelper.getSecondaryContrastColor(
+                              sectionColor.withValues(alpha: 0.15),
+                              theme,
+                            ),
                           ),
                         ),
                       ],
@@ -810,9 +853,9 @@ class _ReadingCardState extends State<_ReadingCard> {
 
   String get _readingLabel {
     final position = widget.reading.position?.toLowerCase() ?? '';
-    
+
     // Handle Gospel Acclamation - this appears before the Gospel
-    if (widget.reading.gospelAcclamation != null && 
+    if (widget.reading.gospelAcclamation != null &&
         widget.reading.gospelAcclamation!.trim().isNotEmpty) {
       // Check if this reading has a gospel acclamation but isn't the gospel itself
       final isGospel = position.contains('gospel');
@@ -821,7 +864,7 @@ class _ReadingCardState extends State<_ReadingCard> {
         return 'Gospel Acclamation';
       }
     }
-    
+
     if (position.contains('gospel')) return 'Gospel';
     if (position.contains('first')) return 'First Reading';
     if (position.contains('second')) return 'Second Reading';
@@ -833,16 +876,18 @@ class _ReadingCardState extends State<_ReadingCard> {
   void didUpdateWidget(_ReadingCard oldWidget) {
     super.didUpdateWidget(oldWidget);
     // Fetch reading text when expanded and not already loaded
-    if (widget.isExpanded && !oldWidget.isExpanded && _fullReadingText == null) {
+    if (widget.isExpanded &&
+        !oldWidget.isExpanded &&
+        _fullReadingText == null) {
       _fetchReadingText();
     }
   }
 
   Future<void> _fetchReadingText() async {
     if (_fullReadingText != null) return;
-    
+
     setState(() => _isLoadingText = true);
-    
+
     try {
       final text = await _readingFlow.getReadingText(widget.reading);
       if (mounted) {
@@ -869,9 +914,7 @@ class _ReadingCardState extends State<_ReadingCard> {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: widget.sectionColor.withValues(alpha: 0.2),
-        ),
+        border: Border.all(color: widget.sectionColor.withValues(alpha: 0.2)),
       ),
       child: Column(
         children: [
@@ -901,7 +944,10 @@ class _ReadingCardState extends State<_ReadingCard> {
                         Text(
                           widget.reading.reading,
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: ContrastHelper.getSecondaryContrastColor(widget.sectionColor.withValues(alpha: 0.3), theme),
+                            color: ContrastHelper.getSecondaryContrastColor(
+                              widget.sectionColor.withValues(alpha: 0.3),
+                              theme,
+                            ),
                           ),
                         ),
                       ],
@@ -938,7 +984,10 @@ class _ReadingCardState extends State<_ReadingCard> {
                     Text(
                       'Loading reading...',
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: ContrastHelper.getSecondaryContrastColor(widget.sectionColor.withValues(alpha: 0.3), theme),
+                        color: ContrastHelper.getSecondaryContrastColor(
+                          widget.sectionColor.withValues(alpha: 0.3),
+                          theme,
+                        ),
                       ),
                     ),
                   ],
@@ -950,7 +999,10 @@ class _ReadingCardState extends State<_ReadingCard> {
                 child: Text(
                   _fullReadingText!,
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: ContrastHelper.getSecondaryContrastColor(widget.sectionColor.withValues(alpha: 0.3), theme),
+                    color: ContrastHelper.getSecondaryContrastColor(
+                      widget.sectionColor.withValues(alpha: 0.3),
+                      theme,
+                    ),
                     height: 1.5,
                   ),
                 ),
@@ -962,7 +1014,10 @@ class _ReadingCardState extends State<_ReadingCard> {
                   widget.reading.incipit!,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     fontStyle: FontStyle.italic,
-                    color: ContrastHelper.getSecondaryContrastColor(widget.sectionColor.withValues(alpha: 0.3), theme),
+                    color: ContrastHelper.getSecondaryContrastColor(
+                      widget.sectionColor.withValues(alpha: 0.3),
+                      theme,
+                    ),
                   ),
                 ),
               ),

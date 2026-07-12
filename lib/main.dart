@@ -6,8 +6,12 @@ import 'data/services/feast_reminder_service.dart';
 import 'data/services/feast_reminder_preferences.dart';
 import 'data/services/incipit_preference_service.dart';
 import 'data/services/liturgical_region_preference_service.dart';
+import 'data/services/bible_version_preference.dart';
+import 'demo_launch_config.dart';
 import 'ui/screens/home_screen.dart';
+import 'ui/screens/mass_flow_screen.dart';
 import 'ui/screens/onboarding_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,13 +31,27 @@ void main() async {
   );
 
   final themePreferences = await ThemePreferences.getInstance();
+  final demoLaunchConfig = DemoLaunchConfig.fromEnvironment();
 
   try {
     final regionPrefs = await LiturgicalRegionPreferenceService.getInstance();
     await regionPrefs.detectAndSetIfUnset();
+    if (demoLaunchConfig.region != null) {
+      await regionPrefs.setRegion(demoLaunchConfig.region!);
+    }
     IncipitPreferenceService().resetCache();
   } catch (e, st) {
     debugPrint('[LiturgicalRegion] Startup detection failed: $e\n$st');
+  }
+
+  if (demoLaunchConfig.bibleVersion != null) {
+    final versionPrefs = await BibleVersionPreference.getInstance();
+    await versionPrefs.setVersion(demoLaunchConfig.bibleVersion!);
+  }
+
+  if (demoLaunchConfig.enabled) {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('onboarding_complete', true);
   }
 
   // Initialize notification service and (a) auto-schedule the next 15 months
@@ -51,14 +69,24 @@ void main() async {
     debugPrint('[FeastReminder] Startup init failed: $e\n$st');
   }
 
-  runApp(CatholicDailyApp(themePreferences: themePreferences));
+  runApp(
+    CatholicDailyApp(
+      themePreferences: themePreferences,
+      demoLaunchConfig: demoLaunchConfig,
+    ),
+  );
 }
 
 /// Premium Catholic Daily App with 2026 design standards
 class CatholicDailyApp extends StatefulWidget {
-  const CatholicDailyApp({super.key, required this.themePreferences});
+  const CatholicDailyApp({
+    super.key,
+    required this.themePreferences,
+    required this.demoLaunchConfig,
+  });
 
   final ThemePreferences themePreferences;
+  final DemoLaunchConfig demoLaunchConfig;
 
   @override
   State<CatholicDailyApp> createState() => _CatholicDailyAppState();
@@ -82,6 +110,13 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
   Future<void> _initializeNavigation() async {
     await _navigationService.initialize();
     _showOnboarding = await OnboardingScreen.shouldShow();
+
+    if (widget.demoLaunchConfig.enabled) {
+      _showOnboarding = false;
+      _initialScreen = _buildDemoScreen(widget.demoLaunchConfig);
+      setState(() {});
+      return;
+    }
 
     // Always start with onboarding or home screen
     if (_showOnboarding) {
@@ -107,6 +142,15 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
       onThemeModeChanged: _handleThemeModeChanged,
       onThemeStyleChanged: _handleThemeStyleChanged,
     );
+  }
+
+  Widget _buildDemoScreen(DemoLaunchConfig config) {
+    switch (config.screen) {
+      case DemoLaunchScreen.mass:
+        return MassFlowScreen(date: config.date ?? DateTime.now());
+      case DemoLaunchScreen.home:
+        return _buildHomeScreen();
+    }
   }
 
   @override
