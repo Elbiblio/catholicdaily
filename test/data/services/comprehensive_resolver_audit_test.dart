@@ -1,7 +1,9 @@
+import 'package:catholic_daily/data/models/daily_reading.dart';
 import 'package:catholic_daily/data/services/csv_readings_resolver_service.dart';
 import 'package:catholic_daily/data/services/liturgical_region_preference_service.dart';
 import 'package:catholic_daily/data/models/liturgical_region.dart';
 import 'package:catholic_daily/data/services/ordo_resolver_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../helpers/test_helpers.dart';
@@ -225,98 +227,318 @@ void main() {
     );
 
     test(
+      'regional resolver sentinels prove selected region changes readings',
+      () async {
+        final prefs = await LiturgicalRegionPreferenceService.getInstance();
+        final resolver = CsvReadingsResolverService.instance;
+        final failures = <ResolverAuditFailure>[];
+
+        Future<List<DailyReading>> resolveForRegion({
+          required DateTime date,
+          required LiturgicalRegion region,
+        }) async {
+          await prefs.setRegion(region);
+          return resolver.resolve(date);
+        }
+
+        void expectReadingsContain({
+          required DateTime date,
+          required LiturgicalRegion region,
+          required List<DailyReading> readings,
+          required String expected,
+          required AuditFailureKind kind,
+        }) {
+          if (!_readingsContain(readings, expected)) {
+            failures.add(
+              ResolverAuditFailure(
+                date: date,
+                region: region,
+                kind: kind,
+                message:
+                    'Expected readings containing "$expected", got '
+                    '${_readingSummary(readings)}',
+              ),
+            );
+          }
+        }
+
+        void expectReadingsDoNotContain({
+          required DateTime date,
+          required LiturgicalRegion region,
+          required List<DailyReading> readings,
+          required String unexpected,
+          required AuditFailureKind kind,
+        }) {
+          if (_readingsContain(readings, unexpected)) {
+            failures.add(
+              ResolverAuditFailure(
+                date: date,
+                region: region,
+                kind: kind,
+                message:
+                    'Expected readings not containing "$unexpected", got '
+                    '${_readingSummary(readings)}',
+              ),
+            );
+          }
+        }
+
+        void expectReferenceSetContainsAll({
+          required DateTime date,
+          required LiturgicalRegion region,
+          required List<DailyReading> readings,
+          required Set<String> expected,
+          required AuditFailureKind kind,
+        }) {
+          final references = _readingReferences(readings);
+          if (!references.containsAll(expected)) {
+            failures.add(
+              ResolverAuditFailure(
+                date: date,
+                region: region,
+                kind: kind,
+                message: 'Expected references $expected, got $references',
+              ),
+            );
+          }
+        }
+
+        void expectReferenceSetsDiffer({
+          required DateTime date,
+          required LiturgicalRegion region,
+          required Set<String> left,
+          required Set<String> right,
+          required String message,
+          required AuditFailureKind kind,
+        }) {
+          if (left.length == right.length && left.containsAll(right)) {
+            failures.add(
+              ResolverAuditFailure(
+                date: date,
+                region: region,
+                kind: kind,
+                message: message,
+              ),
+            );
+          }
+        }
+
+        final nigeriaDate = DateTime(2026, 10, 1);
+        final nigeriaReadings = await resolveForRegion(
+          date: nigeriaDate,
+          region: LiturgicalRegion.nigeria,
+        );
+        final generalRomanReadings = await resolveForRegion(
+          date: nigeriaDate,
+          region: LiturgicalRegion.generalRoman,
+        );
+        expectReadingsContain(
+          date: nigeriaDate,
+          region: LiturgicalRegion.nigeria,
+          readings: nigeriaReadings,
+          expected: 'Our Lady, Queen of Nigeria',
+          kind: AuditFailureKind.region,
+        );
+        expectReferenceSetContainsAll(
+          date: nigeriaDate,
+          region: LiturgicalRegion.nigeria,
+          readings: nigeriaReadings,
+          expected: const {
+            'Isa 11:1-10',
+            'Ps 72:1-2, 7-8, 12-13, 17',
+            'Eph 2:13-22',
+            'Matt 2:13-15, 19-23',
+          },
+          kind: AuditFailureKind.region,
+        );
+        expectReadingsDoNotContain(
+          date: nigeriaDate,
+          region: LiturgicalRegion.generalRoman,
+          readings: generalRomanReadings,
+          unexpected: 'Our Lady, Queen of Nigeria',
+          kind: AuditFailureKind.region,
+        );
+        expectReferenceSetsDiffer(
+          date: nigeriaDate,
+          region: LiturgicalRegion.generalRoman,
+          left: _readingReferences(generalRomanReadings),
+          right: _readingReferences(nigeriaReadings),
+          message: 'General Roman readings unexpectedly match Nigeria propers',
+          kind: AuditFailureKind.region,
+        );
+
+        final ascensionThursdayDate = DateTime(2028, 5, 25);
+        final usThursdayReadings = await resolveForRegion(
+          date: ascensionThursdayDate,
+          region: LiturgicalRegion.unitedStatesAscensionThursday,
+        );
+        final usRegularThursdayReadings = await resolveForRegion(
+          date: ascensionThursdayDate,
+          region: LiturgicalRegion.unitedStates,
+        );
+        expectReadingsContain(
+          date: ascensionThursdayDate,
+          region: LiturgicalRegion.unitedStatesAscensionThursday,
+          readings: usThursdayReadings,
+          expected: 'The Ascension of the Lord',
+          kind: AuditFailureKind.calendar,
+        );
+        expectReferenceSetContainsAll(
+          date: ascensionThursdayDate,
+          region: LiturgicalRegion.unitedStatesAscensionThursday,
+          readings: usThursdayReadings,
+          expected: const {'Acts 1:1-11', 'Ps 47:2-3, 6-7, 8-9'},
+          kind: AuditFailureKind.calendar,
+        );
+        expectReadingsDoNotContain(
+          date: ascensionThursdayDate,
+          region: LiturgicalRegion.unitedStates,
+          readings: usRegularThursdayReadings,
+          unexpected: 'The Ascension of the Lord',
+          kind: AuditFailureKind.calendar,
+        );
+        expectReferenceSetsDiffer(
+          date: ascensionThursdayDate,
+          region: LiturgicalRegion.unitedStates,
+          left: _readingReferences(usRegularThursdayReadings),
+          right: _readingReferences(usThursdayReadings),
+          message:
+              'US regular Thursday readings unexpectedly match Ascension propers',
+          kind: AuditFailureKind.calendar,
+        );
+
+        final transferredAscensionDate = DateTime(2028, 5, 28);
+        final usTransferredReadings = await resolveForRegion(
+          date: transferredAscensionDate,
+          region: LiturgicalRegion.unitedStates,
+        );
+        expectReadingsContain(
+          date: transferredAscensionDate,
+          region: LiturgicalRegion.unitedStates,
+          readings: usTransferredReadings,
+          expected: 'The Ascension of the Lord',
+          kind: AuditFailureKind.calendar,
+        );
+        expectReferenceSetContainsAll(
+          date: transferredAscensionDate,
+          region: LiturgicalRegion.unitedStates,
+          readings: usTransferredReadings,
+          expected: const {'Acts 1:1-11', 'Ps 47:2-3, 6-7, 8-9'},
+          kind: AuditFailureKind.calendar,
+        );
+
+        if (failures.isNotEmpty) {
+          // ignore: avoid_print
+          print('\nRegional readings resolver audit failures:');
+          for (final failure in failures) {
+            // ignore: avoid_print
+            print('  $failure');
+          }
+        }
+
+        expect(failures, isEmpty);
+      },
+    );
+
+    test(
       'resolves non-empty well-formed readings for every matrix date and region',
       timeout: const Timeout(Duration(minutes: 8)),
       () async {
         final resolver = CsvReadingsResolverService.instance;
         final prefs = await LiturgicalRegionPreferenceService.getInstance();
         final failures = <ResolverAuditFailure>[];
+        final previousDebugPrint = debugPrint;
 
-        for (final region in comprehensiveAuditRegions) {
-          await prefs.setRegion(region);
-          for (final date in comprehensiveAuditDates) {
-            final readings = await resolver.resolve(date);
+        debugPrint = (String? message, {int? wrapWidth}) {};
+        try {
+          for (final region in comprehensiveAuditRegions) {
+            await prefs.setRegion(region);
+            for (final date in comprehensiveAuditDates) {
+              final readings = await resolver.resolve(date);
 
-            if (readings.isEmpty) {
-              failures.add(
-                ResolverAuditFailure(
-                  date: date,
-                  region: region,
-                  kind: AuditFailureKind.reference,
-                  message: 'No readings resolved',
+              if (readings.isEmpty) {
+                failures.add(
+                  ResolverAuditFailure(
+                    date: date,
+                    region: region,
+                    kind: AuditFailureKind.reference,
+                    message: 'No readings resolved',
+                  ),
+                );
+                continue;
+              }
+
+              final hasFirst = readings.any(
+                (reading) => (reading.position ?? '').toLowerCase().contains(
+                  'first reading',
                 ),
               );
-              continue;
-            }
-
-            final hasFirst = readings.any(
-              (reading) => (reading.position ?? '').toLowerCase().contains(
-                'first reading',
-              ),
-            );
-            final hasPsalm = readings.any(
-              (reading) =>
-                  (reading.position ?? '').toLowerCase().contains('psalm'),
-            );
-            final hasGospel = readings.any((reading) {
-              final position = (reading.position ?? '').toLowerCase();
-              return position.contains('gospel') &&
-                  !position.contains('acclamation');
-            });
-
-            if (!hasFirst) {
-              failures.add(
-                ResolverAuditFailure(
-                  date: date,
-                  region: region,
-                  kind: AuditFailureKind.reference,
-                  message:
-                      'No first reading in ${readings.map((r) => r.position).join(', ')}',
-                ),
+              final hasPsalm = readings.any(
+                (reading) =>
+                    (reading.position ?? '').toLowerCase().contains('psalm'),
               );
-            }
-            if (!hasPsalm) {
-              failures.add(
-                ResolverAuditFailure(
-                  date: date,
-                  region: region,
-                  kind: AuditFailureKind.psalmResponse,
-                  message:
-                      'No responsorial psalm in ${readings.map((r) => r.position).join(', ')}',
-                ),
-              );
-            }
-            if (!hasGospel) {
-              failures.add(
-                ResolverAuditFailure(
-                  date: date,
-                  region: region,
-                  kind: AuditFailureKind.reference,
-                  message:
-                      'No gospel in ${readings.map((r) => r.position).join(', ')}',
-                ),
-              );
-            }
+              final hasGospel = readings.any((reading) {
+                final position = (reading.position ?? '').toLowerCase();
+                return position.contains('gospel') &&
+                    !position.contains('acclamation');
+              });
 
-            for (final reading in readings) {
-              if (reading.position == 'Sequence') continue;
-              final reference = reading.reading.trim();
-              final valid = RegExp(
-                r'^[A-Za-z]|^\d+\s+[A-Za-z]',
-              ).hasMatch(reference);
-              if (!valid) {
+              if (!hasFirst) {
                 failures.add(
                   ResolverAuditFailure(
                     date: date,
                     region: region,
                     kind: AuditFailureKind.reference,
                     message:
-                        '${reading.position}: malformed reference "$reference"',
+                        'No first reading in ${readings.map((r) => r.position).join(', ')}',
                   ),
                 );
               }
+              if (!hasPsalm) {
+                failures.add(
+                  ResolverAuditFailure(
+                    date: date,
+                    region: region,
+                    kind: AuditFailureKind.psalmResponse,
+                    message:
+                        'No responsorial psalm in ${readings.map((r) => r.position).join(', ')}',
+                  ),
+                );
+              }
+              if (!hasGospel) {
+                failures.add(
+                  ResolverAuditFailure(
+                    date: date,
+                    region: region,
+                    kind: AuditFailureKind.reference,
+                    message:
+                        'No gospel in ${readings.map((r) => r.position).join(', ')}',
+                  ),
+                );
+              }
+
+              for (final reading in readings) {
+                if (reading.position == 'Sequence') continue;
+                final reference = reading.reading.trim();
+                final valid = RegExp(
+                  r'^[A-Za-z]|^\d+\s+[A-Za-z]',
+                ).hasMatch(reference);
+                if (!valid) {
+                  failures.add(
+                    ResolverAuditFailure(
+                      date: date,
+                      region: region,
+                      kind: AuditFailureKind.reference,
+                      message:
+                          '${reading.position}: malformed reference "$reference"',
+                    ),
+                  );
+                }
+              }
             }
           }
+        } finally {
+          debugPrint = previousDebugPrint;
         }
 
         if (failures.isNotEmpty) {
@@ -333,3 +555,29 @@ void main() {
     );
   });
 }
+
+bool _readingsContain(List<DailyReading> readings, String expected) =>
+    _readingSearchText(readings).contains(expected);
+
+Set<String> _readingReferences(List<DailyReading> readings) =>
+    readings.map((reading) => reading.reading).toSet();
+
+String _readingSearchText(List<DailyReading> readings) => readings
+    .map(
+      (reading) => <String?>[
+        reading.position,
+        reading.feast,
+        reading.reading,
+        reading.psalmResponse,
+        reading.gospelAcclamation,
+        reading.incipit,
+        reading.source,
+      ].whereType<String>().join(' | '),
+    )
+    .join('\n');
+
+String _readingSummary(List<DailyReading> readings) => readings
+    .map(
+      (reading) => '${reading.position}: ${reading.reading} (${reading.feast})',
+    )
+    .join('; ');
