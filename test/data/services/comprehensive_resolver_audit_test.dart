@@ -1,9 +1,16 @@
+import 'package:catholic_daily/data/services/csv_readings_resolver_service.dart';
+import 'package:catholic_daily/data/services/liturgical_region_preference_service.dart';
 import 'package:catholic_daily/data/models/liturgical_region.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../helpers/test_helpers.dart';
 import 'comprehensive_audit_matrix.dart';
 
 void main() {
+  setupFlutterTestEnvironment();
+  final cleanup = mockMethodChannels();
+  tearDownAll(() => cleanup());
+
   group('ComprehensiveAuditMatrix', () {
     test(
       'contains required regions and at least 75 deterministic future dates',
@@ -121,5 +128,113 @@ void main() {
         throwsUnsupportedError,
       );
     });
+
+    test(
+      'resolves non-empty well-formed readings for every matrix date and region',
+      timeout: const Timeout(Duration(minutes: 8)),
+      () async {
+        final resolver = CsvReadingsResolverService.instance;
+        final prefs = await LiturgicalRegionPreferenceService.getInstance();
+        final failures = <ResolverAuditFailure>[];
+
+        for (final region in comprehensiveAuditRegions) {
+          await prefs.setRegion(region);
+          for (final date in comprehensiveAuditDates) {
+            final readings = await resolver.resolve(date);
+
+            if (readings.isEmpty) {
+              failures.add(
+                ResolverAuditFailure(
+                  date: date,
+                  region: region,
+                  kind: AuditFailureKind.reference,
+                  message: 'No readings resolved',
+                ),
+              );
+              continue;
+            }
+
+            final hasFirst = readings.any(
+              (reading) => (reading.position ?? '').toLowerCase().contains(
+                'first reading',
+              ),
+            );
+            final hasPsalm = readings.any(
+              (reading) =>
+                  (reading.position ?? '').toLowerCase().contains('psalm'),
+            );
+            final hasGospel = readings.any((reading) {
+              final position = (reading.position ?? '').toLowerCase();
+              return position.contains('gospel') &&
+                  !position.contains('acclamation');
+            });
+
+            if (!hasFirst) {
+              failures.add(
+                ResolverAuditFailure(
+                  date: date,
+                  region: region,
+                  kind: AuditFailureKind.reference,
+                  message:
+                      'No first reading in ${readings.map((r) => r.position).join(', ')}',
+                ),
+              );
+            }
+            if (!hasPsalm) {
+              failures.add(
+                ResolverAuditFailure(
+                  date: date,
+                  region: region,
+                  kind: AuditFailureKind.psalmResponse,
+                  message:
+                      'No responsorial psalm in ${readings.map((r) => r.position).join(', ')}',
+                ),
+              );
+            }
+            if (!hasGospel) {
+              failures.add(
+                ResolverAuditFailure(
+                  date: date,
+                  region: region,
+                  kind: AuditFailureKind.reference,
+                  message:
+                      'No gospel in ${readings.map((r) => r.position).join(', ')}',
+                ),
+              );
+            }
+
+            for (final reading in readings) {
+              if (reading.position == 'Sequence') continue;
+              final reference = reading.reading.trim();
+              final valid = RegExp(
+                r'^[A-Za-z]|^\d+\s+[A-Za-z]',
+              ).hasMatch(reference);
+              if (!valid) {
+                failures.add(
+                  ResolverAuditFailure(
+                    date: date,
+                    region: region,
+                    kind: AuditFailureKind.reference,
+                    message:
+                        '${reading.position}: malformed reference "$reference"',
+                  ),
+                );
+              }
+            }
+          }
+        }
+
+        if (failures.isNotEmpty) {
+          // ignore: avoid_print
+          print('\nComprehensive resolver audit failures:');
+          for (final failure in failures.take(80)) {
+            // ignore: avoid_print
+            print('  $failure');
+          }
+        }
+
+        expect(failures, isEmpty);
+      },
+    );
   });
 }

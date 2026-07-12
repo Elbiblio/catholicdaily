@@ -94,3 +94,33 @@ String isoDate(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-'
     '${date.month.toString().padLeft(2, '0')}-'
     '${date.day.toString().padLeft(2, '0')}';
+
+enum AuditFailureKind {
+  calendar,
+  reference,
+  priority,
+  cycle,
+  region,
+  textMissing,
+  textVersion,
+  incipit,
+  psalmResponse,
+  ui,
+}
+
+class ResolverAuditFailure {
+  final DateTime date;
+  final LiturgicalRegion region;
+  final AuditFailureKind kind;
+  final String message;
+
+  const ResolverAuditFailure({
+    required this.date,
+    required this.region,
+    required this.kind,
+    required this.message,
+  });
+
+  @override
+  String toString() => '${isoDate(date)} ${region.code} ${kind.name}: $message';
+}
