@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 import 'base_service.dart';
+import 'lectionary_opening_adapter.dart';
 
 class LocalLectionaryExtractTextService
     extends BaseService<LocalLectionaryExtractTextService> {
@@ -17,6 +18,7 @@ class LocalLectionaryExtractTextService
 
   List<_LocalExtractTextSource>? _sources;
   final Map<String, Future<String?>> _textCache = <String, Future<String?>>{};
+  final LectionaryOpeningAdapter _openingAdapter = LectionaryOpeningAdapter();
 
   Future<String?> lookup({
     required DateTime date,
@@ -34,7 +36,13 @@ class LocalLectionaryExtractTextService
       position: position,
     );
 
-    final match = sources.where((source) => source.matchKey == key).toList();
+    final match = sources
+        .where(
+          (source) =>
+              source.matchKey == key &&
+              source.strategy == _LocalExtractTextStrategy.fullText,
+        )
+        .toList();
     if (match.length != 1) {
       return null;
     }
@@ -42,6 +50,53 @@ class LocalLectionaryExtractTextService
     return _textCache.putIfAbsent(
       match.single.id,
       () => _extractSourceText(match.single),
+    );
+  }
+
+  Future<LectionaryOpeningAdaptation?> adaptOpening({
+    required DateTime date,
+    required String regionCode,
+    required String bibleVersionId,
+    required String reference,
+    required String? position,
+    required String renderedText,
+  }) async {
+    final sources = await _loadSources();
+    final key = _matchKey(
+      date: date,
+      regionCode: regionCode,
+      bibleVersionId: bibleVersionId,
+      reference: reference,
+      position: position,
+    );
+
+    final match = sources
+        .where(
+          (source) =>
+              source.matchKey == key &&
+              source.strategy == _LocalExtractTextStrategy.surgicalOpening,
+        )
+        .toList();
+    if (match.length != 1) {
+      return null;
+    }
+
+    final sourceText = await _textCache.putIfAbsent(
+      match.single.id,
+      () => _extractSourceText(match.single),
+    );
+    if (sourceText == null) {
+      return const LectionaryOpeningAdaptation(
+        text: '',
+        applied: false,
+        reason: 'source-unavailable',
+        anchorCharacters: 0,
+      );
+    }
+
+    return _openingAdapter.adapt(
+      sourceOpening: sourceText,
+      renderedText: renderedText,
     );
   }
 
@@ -178,6 +233,7 @@ class _LocalExtractTextSource {
   final String startMarker;
   final String contentStartMarker;
   final String endMarker;
+  final _LocalExtractTextStrategy strategy;
 
   const _LocalExtractTextSource({
     required this.id,
@@ -190,6 +246,7 @@ class _LocalExtractTextSource {
     required this.startMarker,
     required this.contentStartMarker,
     required this.endMarker,
+    required this.strategy,
   });
 
   factory _LocalExtractTextSource.fromJson(Map<String, dynamic> json) {
@@ -204,6 +261,7 @@ class _LocalExtractTextSource {
       startMarker: json['startMarker'] as String,
       contentStartMarker: json['contentStartMarker'] as String,
       endMarker: json['endMarker'] as String,
+      strategy: _LocalExtractTextStrategy.fromJson(json['strategy']),
     );
   }
 
@@ -214,4 +272,16 @@ class _LocalExtractTextSource {
     reference: reference,
     position: position,
   );
+}
+
+enum _LocalExtractTextStrategy {
+  fullText,
+  surgicalOpening;
+
+  static _LocalExtractTextStrategy fromJson(Object? value) {
+    return switch ('$value'.trim()) {
+      'surgicalOpening' => _LocalExtractTextStrategy.surgicalOpening,
+      _ => _LocalExtractTextStrategy.fullText,
+    };
+  }
 }

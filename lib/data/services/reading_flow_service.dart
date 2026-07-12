@@ -51,20 +51,30 @@ class ReadingFlowService extends BaseService<ReadingFlowService> {
 
     await Future.wait(
       enrichedReadings.map((reading) async {
-        final rawText =
-            await _localExtractText.lookup(
-              date: date,
-              regionCode: regionPrefs.currentRegion.code,
-              bibleVersionId: versionPrefs.currentDbName,
-              reference: reading.reading,
-              position: reading.position,
-            ) ??
-            await _readingsService.getReadingText(
-              reading.reading,
-              psalmResponse: reading.psalmResponse,
-              incipit: reading.incipit,
-              readingType: reading.position,
-            );
+        var rawText = await _localExtractText.lookup(
+          date: date,
+          regionCode: regionPrefs.currentRegion.code,
+          bibleVersionId: versionPrefs.currentDbName,
+          reference: reading.reading,
+          position: reading.position,
+        );
+        rawText ??= await _readingsService.getReadingText(
+          reading.reading,
+          psalmResponse: reading.psalmResponse,
+          incipit: reading.incipit,
+          readingType: reading.position,
+        );
+        final openingAdaptation = await _localExtractText.adaptOpening(
+          date: date,
+          regionCode: regionPrefs.currentRegion.code,
+          bibleVersionId: versionPrefs.currentDbName,
+          reference: reading.reading,
+          position: reading.position,
+          renderedText: rawText,
+        );
+        if (openingAdaptation?.applied == true) {
+          rawText = openingAdaptation!.text;
+        }
         // Text is already processed by IncipitProcessingService in ReadingsService
         final text = rawText;
         titles[reading.reading] = ReadingTitleFormatter.build(
