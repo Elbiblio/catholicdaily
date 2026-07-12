@@ -31,12 +31,15 @@ The audit should use source rules rather than assumptions:
 - Universalis exposes local calendars, including Nigeria, England, Wales, and the United States, and can be used to compare dates, celebrations, and references.
 - The Nigerian missal app store listing says it uses the Daily Readings Ordo approved by the Catholic Bishops' Conference of Nigeria, but the exact Nigerian scripture translation must be verified before claiming it as official.
 - Bible translation quotation permissions are not equivalent to permission to bundle an entire offline Bible database. Full downloadable text can be used only when there is a reasonable permission basis: public domain, open license, publisher terms, explicit permission, or user-provided source with rights.
+- Exact source-text fixtures should prefer source-location metadata over duplicating long copyrighted text. Generated reports may include short mismatch snippets for diagnosis, but should not become a redistributed source-text store.
 
 ## Definitions
 
 **Reference correctness:** the app resolves the correct date, celebration title, rank, color where applicable, scripture references, psalm reference/response, gospel acclamation reference/text, and alternatives.
 
 **Text correctness:** the app renders the selected local Bible text for a resolved reference and version, including incipits where the app has lectionary-introduction data.
+
+**Exact displayed text correctness:** the app's final displayed text for a resolved reading matches a source text word-for-word after only conservative presentation normalization such as line endings, repeated whitespace, quote-style equivalence, and verse-number punctuation. Exact matching is valid only when the source text and selected app text backend are intended to be the same translation/source.
 
 **Bundled Bible text:** a full or substantial Bible database shipped in `assets/` or otherwise redistributed with the app.
 
@@ -87,6 +90,8 @@ Automated audits must prove:
 - Special days and feasts use proper readings over the ferial fallback when the region requires it.
 - Region-specific transfers are honored, especially Ascension, Corpus Christi, Epiphany, All Saints, and Nigeria-specific celebrations.
 - RSVCE and NABRE text rendering both work for the same resolved references.
+- Opt-in exact-text audits can compare final displayed content against source fixtures and fail on word-for-word drift.
+- Exact-text failures must be classified separately from resolver failures; if the app is rendering RSVCE while the source fixture is ESV/JB/NRSV/NABRE-style text, the failure is a `text-version` backend mismatch.
 - Missing text is reported as a text-backend gap, not as a resolver failure.
 - ESV-CE/JB sources are either validly bundled, excluded from assets, or marked user-provided/external-only with clear metadata.
 - Emulator validation reproduces the audited date/version/region matrix for a representative subset.
@@ -154,6 +159,19 @@ Text tests should call `ReadingsService.getReadingText` or backend-specific APIs
 - no stale cache between RSVCE and NABRE;
 - graceful missing-text output for absent references;
 - selected version is reflected in psalm response resolution where version-specific data exists.
+
+### Exact Displayed Text Validation
+
+Add an opt-in exact-text validation layer for source fixtures that provide trustworthy full text. This layer should:
+
+- hydrate readings through `ReadingFlowService`, so it validates the same final text used by the UI;
+- extract expected text from source-location fixtures or source adapters, not from duplicated long text blocks where avoidable;
+- compare normalized full content, not just references, incipits, or openings;
+- write a structured mismatch report under `verification/comprehensive-readings-audit/`;
+- fail when run explicitly if any fixture differs;
+- remain separate from the normal resolver audit until source/backend translation parity is complete.
+
+The first exact-text fixture set should target local extract-backed England/Wales samples. Expected early failures should be treated as evidence that the current RSVCE display backend does not exactly match those extract texts.
 
 ### Bible Source Registry
 
@@ -238,7 +256,7 @@ The deterministic random sampler should add at least 60 more dates across 2027-2
 - Shipping a full ESV-CE or Jerusalem Bible DB without a verified redistribution basis.
 - Rewriting all UI screens.
 - Refactoring unrelated hymn, prayer, or saint profile systems unless they block reading validation.
-- Exact text equality across different Bible translations.
+- Claiming exact text equality across different Bible translations. Exact-text audits are in scope only when the selected source and app backend are intended to be text-identical, or when the expected result is a documented `text-version` mismatch.
 
 ## Approval
 
@@ -248,3 +266,13 @@ This design was prepared after the user confirmed:
 - text should be checked through the selected local Bible DB;
 - Nigeria should be included comprehensively;
 - questionable downloadable Bible text should not be bundled unless there is a reasonable permission basis, but import/external support should be planned.
+
+## Exact Text Audit Addendum
+
+After the initial reference/text-availability audit was implemented, the user clarified that the desired verification is word-for-word comparison of the final displayed reading contents against online or local source texts. The approved follow-up design is:
+
+- keep the existing resolver/display-availability audit as the fast baseline;
+- add an explicit exact-text audit that is run with `RUN_EXACT_TEXT_AUDIT=true`;
+- store source-location fixtures under `verification/exact-reading-fixtures/`;
+- compare full hydrated app text against extracted source text and write mismatch reports;
+- use failures to decide whether to import/compile the correct text backend, add source-specific lectionary overrides, or reclassify the sample as a translation mismatch.

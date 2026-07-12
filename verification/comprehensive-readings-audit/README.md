@@ -42,6 +42,39 @@ The script passes these dart defines to Flutter:
 - `CATHOLIC_DAILY_DEMO_REGION=NG`, `US`, `US_ASC_THU`, `GB_EW`, or `general`
 - `CATHOLIC_DAILY_DEMO_BIBLE_VERSION=rsvce` or `nabre`
 
+## Run Exact Text Audit
+
+The normal audit verifies resolved references and that display text is available.
+To verify word-for-word displayed reading content against source extract text, run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File C:\dev\catholicdaily-flutter\scripts\active\run_exact_text_readings_audit.ps1
+```
+
+This runs:
+
+```powershell
+flutter test --dart-define=RUN_EXACT_TEXT_AUDIT=true test/data/services/displayed_readings_exact_text_audit_test.dart
+```
+
+The fixture file is:
+
+```text
+verification/exact-reading-fixtures/local_extract_exact_text_samples.json
+```
+
+The latest mismatch report is written to:
+
+```text
+verification/comprehensive-readings-audit/exact-text-local-extract-report.json
+```
+
+This audit is intentionally opt-in because it is expected to fail whenever the
+app displays a different Bible text backend from the source extract translation.
+For example, an RSVCE-rendered app reading should not be expected to match a
+local extract with ESV/JB/NRSV-style wording. Those failures are classified as
+real `text-version` work, not as resolver failures.
+
 ## Current Coverage
 
 The resolver audit currently verifies:
@@ -52,6 +85,7 @@ The resolver audit currently verifies:
 - Resolver output shape: non-empty readings, first reading, responsorial psalm, gospel, and well-formed references.
 - Displayed/hydrated reading samples for US/NABRE, England-Wales/RSVCE, and Nigeria/RSVCE, including Bible text availability for the references the UI would render.
 - Mass Flow regional display: the Nigeria demo date must render `Solemnity: Our Lady, Queen of Nigeria` as the primary Mass header.
+- Opt-in exact-text fixtures compare full displayed content against local extract ranges for selected England-Wales weekday and solemnity samples.
 - Bible backend source switching is covered separately by the Bible text backend/version tests.
 
 ## Manual Online Comparison
