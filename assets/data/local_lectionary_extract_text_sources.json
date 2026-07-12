@@ -1,0 +1,80 @@
+[
+  {
+    "id": "gb-ew-2026-07-15-first-reading",
+    "date": "2026-07-15",
+    "region": "GB_EW",
+    "bibleVersion": "rsvce",
+    "reference": "Isa 10:5-7, 13-16",
+    "position": "First Reading",
+    "sourceLabel": "local weekday extract, Wednesday of Ordinary Time 15, Year II",
+    "sourcePath": "scripts/weekday_b_full.txt",
+    "startMarker": "FIRST READING Isaiah 10.5-7, 13-16",
+    "contentStartMarker": "Thus says the Lord:",
+    "endMarker": "The word of the Lord."
+  },
+  {
+    "id": "gb-ew-2026-07-15-psalm",
+    "date": "2026-07-15",
+    "region": "GB_EW",
+    "bibleVersion": "rsvce",
+    "reference": "Ps 94:5-6, 7-8, 9-10, 14-15",
+    "position": "Responsorial Psalm",
+    "sourceLabel": "local weekday extract, Wednesday of Ordinary Time 15, Year II",
+    "sourcePath": "scripts/weekday_b_full.txt",
+    "startMarker": "RESPONSORIAL PSALM Psalm 94.5-6, 7-8, 9-10, 14-15 (R.14a)",
+    "contentStartMarker": "R. The Lord will not abandon his people.",
+    "endMarker": "GOSPEL ACCLAMATI O N Matthew 11.25"
+  },
+  {
+    "id": "gb-ew-2026-07-15-gospel",
+    "date": "2026-07-15",
+    "region": "GB_EW",
+    "bibleVersion": "rsvce",
+    "reference": "Matt 11:25-27",
+    "position": "Gospel",
+    "sourceLabel": "local weekday extract, Wednesday of Ordinary Time 15, Year II",
+    "sourcePath": "scripts/weekday_b_full.txt",
+    "startMarker": "GO S P E L Matthew 11.25-27",
+    "contentStartMarker": "25 At that time Jesus said,",
+    "endMarker": "The gospel of the Lord."
+  },
+  {
+    "id": "gb-ew-2030-12-25-second-reading",
+    "date": "2030-12-25",
+    "region": "GB_EW",
+    "bibleVersion": "rsvce",
+    "reference": "Heb 1:1-6",
+    "position": "Second Reading",
+    "sourceLabel": "local solemnity extract, Christmas Day beyond 2026",
+    "sourcePath": "scripts/weekday_a_full.txt",
+    "startMarker": "FIRST READING Hebrews 1.1-6",
+    "contentStartMarker": "1 Long ago God spoke to our ancestors",
+    "endMarker": "The word of the Lord."
+  },
+  {
+    "id": "gb-ew-2030-12-25-psalm",
+    "date": "2030-12-25",
+    "region": "GB_EW",
+    "bibleVersion": "rsvce",
+    "reference": "Ps 98:1, 2-3ab, 3cd-4, 5-6",
+    "position": "Responsorial Psalm",
+    "sourceLabel": "local solemnity extract, Christmas Day beyond 2026",
+    "sourcePath": "scripts/weekday_a_full.txt",
+    "startMarker": "RESPONSORIAL PSALM Psalm 98.1, 2-3ab, 3cd-4, 5-6 (R.1a)",
+    "contentStartMarker": "R. Sing to the Lord a new song,",
+    "endMarker": "GOSPEL ACCLAMATI O N 2 Timothy 1.10b"
+  },
+  {
+    "id": "gb-ew-2030-12-25-gospel",
+    "date": "2030-12-25",
+    "region": "GB_EW",
+    "bibleVersion": "rsvce",
+    "reference": "John 1:1-18",
+    "position": "Gospel",
+    "sourceLabel": "local solemnity extract, Christmas Day beyond 2026",
+    "sourcePath": "scripts/weekday_a_full.txt",
+    "startMarker": "GO S P E L John 1.1-18",
+    "contentStartMarker": "1 In the beginning was the Word,",
+    "endMarker": "The gospel of the Lord."
+  }
+]

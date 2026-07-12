@@ -113,6 +113,7 @@ flutter:
     - assets/data/hymns.json
     - assets/data/hymn_categories.json
     - assets/data/lectionary_text_overrides.json
+    - assets/data/local_lectionary_extract_text_sources.json
     - assets/data/saints_profiles.json
     - assets/data/prayer_of_faithful_mapped.csv
     - assets/data/cpl_prayer_faithful_spanish.csv
@@ -127,6 +128,8 @@ flutter:
     - special_period_readings.csv
     - lectionary_psalms.csv
     - lectionary_psalms_weekday.csv
+    - scripts/weekday_a_full.txt
+    - scripts/weekday_b_full.txt
 
   fonts:
     - family: Canterbury

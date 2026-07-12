@@ -2,6 +2,9 @@ import '../models/daily_reading.dart';
 import '../models/reading_session.dart';
 import '../models/navigable_item.dart';
 import '../../ui/utils/reading_title_formatter.dart';
+import 'bible_version_preference.dart';
+import 'liturgical_region_preference_service.dart';
+import 'local_lectionary_extract_text_service.dart';
 import 'psalm_resolver_service.dart';
 import 'readings_service.dart';
 import 'base_service.dart';
@@ -28,6 +31,8 @@ class ReadingFlowService extends BaseService<ReadingFlowService> {
 
   final PsalmResolverService _psalmResolver = PsalmResolverService.instance;
   final ReadingsService _readingsService = ReadingsService.instance;
+  final LocalLectionaryExtractTextService _localExtractText =
+      LocalLectionaryExtractTextService.instance;
 
   Future<HydratedReadingSet> hydrateReadingSet({
     required DateTime date,
@@ -41,15 +46,25 @@ class ReadingFlowService extends BaseService<ReadingFlowService> {
     final titles = <String, String>{};
     final previews = <String, String>{};
     final texts = <String, String>{};
+    final regionPrefs = await LiturgicalRegionPreferenceService.getInstance();
+    final versionPrefs = await BibleVersionPreference.getInstance();
 
     await Future.wait(
       enrichedReadings.map((reading) async {
-        final rawText = await _readingsService.getReadingText(
-          reading.reading,
-          psalmResponse: reading.psalmResponse,
-          incipit: reading.incipit,
-          readingType: reading.position,
-        );
+        final rawText =
+            await _localExtractText.lookup(
+              date: date,
+              regionCode: regionPrefs.currentRegion.code,
+              bibleVersionId: versionPrefs.currentDbName,
+              reference: reading.reading,
+              position: reading.position,
+            ) ??
+            await _readingsService.getReadingText(
+              reading.reading,
+              psalmResponse: reading.psalmResponse,
+              incipit: reading.incipit,
+              readingType: reading.position,
+            );
         // Text is already processed by IncipitProcessingService in ReadingsService
         final text = rawText;
         titles[reading.reading] = ReadingTitleFormatter.build(
