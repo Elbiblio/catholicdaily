@@ -17,8 +17,14 @@ Write-Host "Running: flutter test $testPath"
 
 Push-Location $repoRoot
 try {
-  flutter test $testPath 2>&1 | Tee-Object -FilePath $resolverLog
-  $exitCode = $LASTEXITCODE
+  $previousErrorActionPreference = $ErrorActionPreference
+  try {
+    $ErrorActionPreference = "Continue"
+    flutter test $testPath 2>&1 | Tee-Object -FilePath $resolverLog
+    $exitCode = $LASTEXITCODE
+  } finally {
+    $ErrorActionPreference = $previousErrorActionPreference
+  }
 
   if ($exitCode -eq 0) {
     Write-Host "Audit passed. Log written to $resolverLog"

@@ -28,7 +28,7 @@ and writes a timestamped log such as `resolver-20260712-143000.log`.
 
 The resolver audit currently verifies:
 
-- 75 deterministic future and past dates across configured audit regions.
+- 75 deterministic future dates across configured audit regions.
 - Required regions: General Roman, United States, United States with Ascension Thursday, England/Wales, and Nigeria.
 - Regional sentinels for Nigeria on October 1 and United States Ascension transfer behavior.
 - Resolver output shape: non-empty readings, first reading, responsorial psalm, gospel, and well-formed references.
