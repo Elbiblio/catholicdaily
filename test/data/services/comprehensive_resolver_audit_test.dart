@@ -1,6 +1,7 @@
 import 'package:catholic_daily/data/services/csv_readings_resolver_service.dart';
 import 'package:catholic_daily/data/services/liturgical_region_preference_service.dart';
 import 'package:catholic_daily/data/models/liturgical_region.dart';
+import 'package:catholic_daily/data/services/ordo_resolver_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../helpers/test_helpers.dart';
@@ -128,6 +129,100 @@ void main() {
         throwsUnsupportedError,
       );
     });
+
+    test(
+      'regional ordo sentinels prove selected region changes titles',
+      () async {
+        final prefs = await LiturgicalRegionPreferenceService.getInstance();
+        final ordo = OrdoResolverService.instance;
+        final failures = <ResolverAuditFailure>[];
+
+        Future<void> expectTitleContains({
+          required DateTime date,
+          required LiturgicalRegion region,
+          required String expected,
+          required AuditFailureKind kind,
+        }) async {
+          await prefs.setRegion(region);
+          final day = await ordo.resolveDay(date);
+          if (!day.title.contains(expected)) {
+            failures.add(
+              ResolverAuditFailure(
+                date: date,
+                region: region,
+                kind: kind,
+                message:
+                    'Expected title containing "$expected", got "${day.title}"',
+              ),
+            );
+          }
+        }
+
+        Future<void> expectTitleDoesNotContain({
+          required DateTime date,
+          required LiturgicalRegion region,
+          required String unexpected,
+          required AuditFailureKind kind,
+        }) async {
+          await prefs.setRegion(region);
+          final day = await ordo.resolveDay(date);
+          if (day.title.contains(unexpected)) {
+            failures.add(
+              ResolverAuditFailure(
+                date: date,
+                region: region,
+                kind: kind,
+                message:
+                    'Expected title not containing "$unexpected", got "${day.title}"',
+              ),
+            );
+          }
+        }
+
+        await expectTitleContains(
+          date: DateTime(2026, 10, 1),
+          region: LiturgicalRegion.nigeria,
+          expected: 'Our Lady, Queen of Nigeria',
+          kind: AuditFailureKind.region,
+        );
+        await expectTitleDoesNotContain(
+          date: DateTime(2026, 10, 1),
+          region: LiturgicalRegion.generalRoman,
+          unexpected: 'Our Lady, Queen of Nigeria',
+          kind: AuditFailureKind.region,
+        );
+
+        await expectTitleContains(
+          date: DateTime(2028, 5, 25),
+          region: LiturgicalRegion.unitedStatesAscensionThursday,
+          expected: 'Ascension',
+          kind: AuditFailureKind.calendar,
+        );
+        await expectTitleDoesNotContain(
+          date: DateTime(2028, 5, 25),
+          region: LiturgicalRegion.unitedStates,
+          unexpected: 'Ascension',
+          kind: AuditFailureKind.calendar,
+        );
+        await expectTitleContains(
+          date: DateTime(2028, 5, 28),
+          region: LiturgicalRegion.unitedStates,
+          expected: 'Ascension',
+          kind: AuditFailureKind.calendar,
+        );
+
+        if (failures.isNotEmpty) {
+          // ignore: avoid_print
+          print('\nRegional resolver audit failures:');
+          for (final failure in failures) {
+            // ignore: avoid_print
+            print('  $failure');
+          }
+        }
+
+        expect(failures, isEmpty);
+      },
+    );
 
     test(
       'resolves non-empty well-formed readings for every matrix date and region',
