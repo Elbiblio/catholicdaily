@@ -1,4 +1,5 @@
 import 'package:catholic_daily/data/services/bible_source_registry.dart';
+import 'package:catholic_daily/data/services/bible_version_preference.dart';
 import 'package:catholic_daily/data/models/bible_source.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -30,22 +31,39 @@ void main() {
       final jerusalem = registry.requireById('jerusalem');
 
       expect(esvce.storage, BibleSourceStorage.externalOnly);
-      expect(esvce.redistribution, isNot(BibleSourceRedistribution.bundledAllowed));
+      expect(
+        esvce.redistribution,
+        isNot(BibleSourceRedistribution.bundledAllowed),
+      );
       expect(esvce.regionAffinityCodes, contains('GB_EW'));
 
       expect(jerusalem.storage, BibleSourceStorage.externalOnly);
-      expect(jerusalem.redistribution, isNot(BibleSourceRedistribution.bundledAllowed));
+      expect(
+        jerusalem.redistribution,
+        isNot(BibleSourceRedistribution.bundledAllowed),
+      );
       expect(jerusalem.regionAffinityCodes, contains('NG'));
     });
 
-    test('selectableBundledSources only returns locally renderable sources', () {
-      final ids = BibleSourceRegistry.instance.selectableBundledSources
-          .map((source) => source.id)
-          .toList();
+    test(
+      'selectableBundledSources only returns locally renderable sources',
+      () {
+        final ids = BibleSourceRegistry.instance.selectableBundledSources
+            .map((source) => source.id)
+            .toList();
 
-      expect(ids, containsAll(<String>['rsvce', 'nabre']));
-      expect(ids, isNot(contains('esvce')));
-      expect(ids, isNot(contains('jerusalem')));
+        expect(ids, containsAll(<String>['rsvce', 'nabre']));
+        expect(ids, isNot(contains('esvce')));
+        expect(ids, isNot(contains('jerusalem')));
+      },
+    );
+
+    test('BibleVersionType remains compatible with bundled registry ids', () {
+      for (final version in BibleVersionType.values) {
+        final source = BibleSourceRegistry.instance.requireById(version.dbName);
+        expect(version.fullName, source.displayName);
+        expect(version.abbreviation, source.abbreviation);
+      }
     });
   });
 }

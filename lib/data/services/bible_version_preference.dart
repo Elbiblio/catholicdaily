@@ -1,15 +1,21 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'bible_source_registry.dart';
+
 enum BibleVersionType {
-  rsvce('rsvce', 'Revised Standard Version Catholic Edition', 'RSVCE'),
-  nabre('nabre', 'New American Bible Revised Edition', 'NABRE');
+  rsvce('rsvce'),
+  nabre('nabre');
 
   final String dbName;
-  final String fullName;
-  final String abbreviation;
 
-  const BibleVersionType(this.dbName, this.fullName, this.abbreviation);
+  const BibleVersionType(this.dbName);
+
+  String get fullName =>
+      BibleSourceRegistry.instance.requireById(dbName).displayName;
+
+  String get abbreviation =>
+      BibleSourceRegistry.instance.requireById(dbName).abbreviation;
 
   static BibleVersionType fromDbName(String dbName) {
     return BibleVersionType.values.firstWhere(
