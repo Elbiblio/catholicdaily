@@ -4,7 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import '../models/bible_book.dart';
+import '../models/bible_source.dart';
 import '../models/daily_reading.dart';
+import 'bible_source_registry.dart';
 import 'csv_readings_resolver_service.dart';
 import 'daniel_verse_mapper.dart' show DeuterocanonicalVerseMapper;
 import 'lectionary_text_override_service.dart';
@@ -34,32 +36,33 @@ class ReadingsBackendIo implements ReadingsBackend {
   final LectionaryTextOverrideService _lectionaryTextOverrides =
       LectionaryTextOverrideService.instance;
 
-  Database? _rsvceDb;
-  Database? _nabreDb;
+  final Map<String, Database> _databaseCache = <String, Database>{};
   List<Book>? _booksCache;
   Map<String, String>? _aliasesCache;
   BibleVersionPreference? _versionPreference;
 
-  Future<Database> get _rsvceDatabase async {
-    _rsvceDb ??= await _openAssetDatabase('rsvce.db', readOnly: true);
-    return _rsvceDb!;
-  }
-
-  Future<Database> get _nabreDatabase async {
-    _nabreDb ??= await _openAssetDatabase('nabre.db', readOnly: true);
-    return _nabreDb!;
+  Future<Database> _databaseForSource(BibleSource source) async {
+    if (!source.isBundledRenderable) {
+      throw StateError(
+        'Bible source ${source.id} is not a bundled local database.',
+      );
+    }
+    final cached = _databaseCache[source.id];
+    if (cached != null) return cached;
+    final opened = await _openAssetDatabase(
+      source.assetDbName!,
+      readOnly: true,
+    );
+    _databaseCache[source.id] = opened;
+    return opened;
   }
 
   Future<Database> get _currentBibleDatabase async {
     _versionPreference ??= await BibleVersionPreference.getInstance();
-    final version = _versionPreference!.currentVersion;
-
-    switch (version) {
-      case BibleVersionType.nabre:
-        return _nabreDatabase;
-      case BibleVersionType.rsvce:
-        return _rsvceDatabase;
-    }
+    final source = BibleSourceRegistry.instance.requireById(
+      _versionPreference!.currentDbName,
+    );
+    return _databaseForSource(source);
   }
 
   @override
@@ -894,8 +897,12 @@ class ReadingsBackendIo implements ReadingsBackend {
   @override
   Future<void> close() async {
     try {
-      await _rsvceDb?.close();
-      await _nabreDb?.close();
+      for (final db in _databaseCache.values) {
+        await db.close();
+      }
+      _databaseCache.clear();
+      _booksCache = null;
+      _aliasesCache = null;
     } catch (e) {
       debugPrint('Error closing readings backend: $e');
     }
@@ -903,9 +910,8 @@ class ReadingsBackendIo implements ReadingsBackend {
 
   @override
   Future<void> reloadForVersionChange() async {
-    // For IO backend, the version preference is checked on each call,
-    // so no explicit reload is needed. The databases are cached and
-    // switched based on current version automatically.
+    _booksCache = null;
+    _aliasesCache = null;
   }
 
   Future<Map<String, String>> get _bookAliases async {
