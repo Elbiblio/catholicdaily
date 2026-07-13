@@ -3,12 +3,14 @@ class LectionaryOpeningAdaptation {
   final bool applied;
   final String reason;
   final int anchorCharacters;
+  final int anchorTokens;
 
   const LectionaryOpeningAdaptation({
     required this.text,
     required this.applied,
     required this.reason,
     required this.anchorCharacters,
+    this.anchorTokens = 0,
   });
 }
 
@@ -16,6 +18,7 @@ class LectionaryOpeningAdapter {
   static const int defaultSourceLimit = 220;
   static const int defaultSearchWindow = 250;
   static const int defaultMinimumAnchorCharacters = 50;
+  static const int defaultMinimumAnchorTokens = 10;
 
   LectionaryOpeningAdaptation adapt({
     required String sourceOpening,
@@ -23,6 +26,7 @@ class LectionaryOpeningAdapter {
     int sourceLimit = defaultSourceLimit,
     int searchWindow = defaultSearchWindow,
     int minimumAnchorCharacters = defaultMinimumAnchorCharacters,
+    int minimumAnchorTokens = defaultMinimumAnchorTokens,
   }) {
     final sourcePrefixWindow = _takePrefix(sourceOpening, sourceLimit);
     final renderedPrefixWindow = _takePrefix(renderedText, searchWindow);
@@ -37,12 +41,14 @@ class LectionaryOpeningAdapter {
       sourceTokens: sourceTokens,
       renderedTokens: renderedTokens,
       minimumAnchorCharacters: minimumAnchorCharacters,
+      minimumAnchorTokens: minimumAnchorTokens,
     );
     if (anchor == null) {
       final fullAnchor = _findBestAnchor(
         sourceTokens: sourceTokens,
         renderedTokens: _tokenize(renderedText),
         minimumAnchorCharacters: minimumAnchorCharacters,
+        minimumAnchorTokens: minimumAnchorTokens,
       );
       return _unchanged(
         renderedText,
@@ -66,6 +72,7 @@ class LectionaryOpeningAdapter {
       applied: true,
       reason: 'adapted',
       anchorCharacters: anchor.normalizedCharacters,
+      anchorTokens: anchor.tokenCount,
     );
   }
 
@@ -82,6 +89,7 @@ class LectionaryOpeningAdapter {
     required List<_Token> sourceTokens,
     required List<_Token> renderedTokens,
     required int minimumAnchorCharacters,
+    required int minimumAnchorTokens,
   }) {
     _Anchor? best;
     var bestCount = 0;
@@ -110,7 +118,10 @@ class LectionaryOpeningAdapter {
           sourceIndex,
           length,
         );
-        if (normalizedCharacters < minimumAnchorCharacters) continue;
+        if (normalizedCharacters < minimumAnchorCharacters &&
+            length < minimumAnchorTokens) {
+          continue;
+        }
 
         if (length > bestCount) {
           bestCount = length;

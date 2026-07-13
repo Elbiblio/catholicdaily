@@ -43,6 +43,33 @@ class OpeningFormulaEvaluatorTest(unittest.TestCase):
 
         self.assertEqual(result["decision"], "catalog_only_short_opening")
 
+    def test_catalog_formula_accepts_five_word_opening_under_twenty_five_chars(self):
+        evaluator = load_evaluator()
+
+        result = evaluator.evaluate_pair(
+            source_opening="Jesus loves all of us",
+            rendered_text="The rendered translation starts differently.",
+        )
+
+        self.assertEqual(result["decision"], "catalog_only_short_opening")
+
+    def test_surgical_formula_accepts_ten_word_anchor_under_fifty_chars(self):
+        evaluator = load_evaluator()
+
+        result = evaluator.evaluate_pair(
+            source_opening=(
+                "At that time Jesus said to his disciples, "
+                "I am vine you are branches my father loves me."
+            ),
+            rendered_text=(
+                "5 I am vine you are branches my father loves me. "
+                "By this my Father is glorified, that you bear much fruit."
+            ),
+        )
+
+        self.assertEqual(result["decision"], "surgical_replace")
+        self.assertGreaterEqual(result["anchorTokens"], 10)
+
     def test_surgical_formula_rejects_translation_mismatch(self):
         evaluator = load_evaluator()
 

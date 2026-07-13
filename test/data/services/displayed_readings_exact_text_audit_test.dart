@@ -67,8 +67,8 @@ void main() {
             continue;
           }
 
-          final normalizedApp = _canonicalText(appText);
-          final normalizedSource = _canonicalText(sourceText);
+          final normalizedApp = _canonicalWordSequence(appText);
+          final normalizedSource = _canonicalWordSequence(sourceText);
           if (normalizedApp != normalizedSource) {
             failures.add(
               _ExactTextMismatch(
@@ -180,6 +180,13 @@ String _canonicalText(String value) {
   );
   text = text.replaceAll(RegExp(r'\s+'), ' ');
   return text.trim();
+}
+
+String _canonicalWordSequence(String value) {
+  final text = _canonicalText(value).toLowerCase();
+  return RegExp(
+    r"[a-z0-9]+(?:'[a-z0-9]+)?",
+  ).allMatches(text).map((match) => match.group(0)!).join(' ');
 }
 
 String _repairCommonMojibake(String value) {

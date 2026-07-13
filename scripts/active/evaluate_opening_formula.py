@@ -136,19 +136,23 @@ def evaluate_pair(
     source_limit: int = 220,
     rendered_window: int = 250,
     catalog_min_chars: int = 25,
+    catalog_min_tokens: int = 5,
     surgical_min_chars: int = 50,
+    surgical_min_tokens: int = 10,
     min_source_chars_for_surgery: int = 50,
 ) -> dict[str, Any]:
     source_prefix = source_opening[:source_limit]
     rendered_prefix = rendered_text[:rendered_window]
     source_norm = normalize_text(source_prefix)
     rendered_norm = normalize_text(rendered_prefix)
+    source_token_count = len(tokenize(source_prefix))
 
-    if len(source_norm) < catalog_min_chars:
+    if len(source_norm) < catalog_min_chars and source_token_count < catalog_min_tokens:
         return _result(
             "reject_too_short",
             source_norm,
             rendered_norm,
+            source_token_count=source_token_count,
             anchor=None,
         )
 
@@ -156,12 +160,17 @@ def evaluate_pair(
         source_prefix,
         rendered_prefix,
         minimum_characters=surgical_min_chars,
+        minimum_tokens=surgical_min_tokens,
     )
-    if len(source_norm) < min_source_chars_for_surgery:
+    if (
+        len(source_norm) < min_source_chars_for_surgery
+        and source_token_count < surgical_min_tokens
+    ):
         return _result(
             "catalog_only_short_opening",
             source_norm,
             rendered_norm,
+            source_token_count=source_token_count,
             anchor=anchor,
         )
     if anchor is None:
@@ -169,18 +178,38 @@ def evaluate_pair(
             source_prefix,
             rendered_text,
             minimum_characters=surgical_min_chars,
+            minimum_tokens=surgical_min_tokens,
         )
         return _result(
             "no_surgical_anchor" if full_anchor is None else "anchor_not_early",
             source_norm,
             rendered_norm,
+            source_token_count=source_token_count,
             anchor=full_anchor,
         )
     if anchor["ambiguous"]:
-        return _result("ambiguous_anchor", source_norm, rendered_norm, anchor=anchor)
+        return _result(
+            "ambiguous_anchor",
+            source_norm,
+            rendered_norm,
+            source_token_count=source_token_count,
+            anchor=anchor,
+        )
     if anchor["sourceStartChar"] == 0:
-        return _result("catalog_only_no_source_prefix", source_norm, rendered_norm, anchor=anchor)
-    return _result("surgical_replace", source_norm, rendered_norm, anchor=anchor)
+        return _result(
+            "catalog_only_no_source_prefix",
+            source_norm,
+            rendered_norm,
+            source_token_count=source_token_count,
+            anchor=anchor,
+        )
+    return _result(
+        "surgical_replace",
+        source_norm,
+        rendered_norm,
+        source_token_count=source_token_count,
+        anchor=anchor,
+    )
 
 
 def _result(
@@ -188,11 +217,13 @@ def _result(
     source_norm: str,
     rendered_norm: str,
     *,
+    source_token_count: int,
     anchor: dict[str, Any] | None,
 ) -> dict[str, Any]:
     return {
         "decision": decision,
         "sourceNormalizedLength": len(source_norm),
+        "sourceTokenCount": source_token_count,
         "renderedNormalizedLength": len(rendered_norm),
         "anchorCharacters": anchor["characters"] if anchor else 0,
         "anchorTokens": anchor["tokens"] if anchor else 0,
@@ -207,6 +238,7 @@ def find_best_anchor(
     rendered: str,
     *,
     minimum_characters: int,
+    minimum_tokens: int,
 ) -> dict[str, Any] | None:
     source_tokens = tokenize(source)
     rendered_tokens = tokenize(rendered)
@@ -230,7 +262,8 @@ def find_best_anchor(
                 length,
             )
             if characters < minimum_characters:
-                continue
+                if length < minimum_tokens:
+                    continue
             candidate = {
                 "sourceStart": source_index,
                 "renderedStart": rendered_index,

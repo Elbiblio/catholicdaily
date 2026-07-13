@@ -25,7 +25,7 @@ void main() {
       expect(result.text, contains('You are my friends'));
     });
 
-    test('refuses to adapt when there is no 50-character anchor', () {
+    test('refuses to adapt when there is no strong word-sequence anchor', () {
       final result = LectionaryOpeningAdapter().adapt(
         sourceOpening:
             'At that time Jesus said, I thank you, Father, Lord of heaven '
@@ -38,6 +38,22 @@ void main() {
       expect(result.applied, isFalse);
       expect(result.reason, 'no-strong-anchor');
       expect(result.text, startsWith('25 At that time'));
+    });
+
+    test('patches when a strong word sequence is shorter than 50 characters', () {
+      final result = LectionaryOpeningAdapter().adapt(
+        sourceOpening:
+            'At that time Jesus said to his disciples, '
+            'I am vine you are branches my father loves me.',
+        renderedText:
+            '5 I am vine you are branches my father loves me. '
+            'By this my Father is glorified, that you bear much fruit.',
+      );
+
+      expect(result.applied, isTrue);
+      expect(result.reason, 'adapted');
+      expect(result.anchorTokens, greaterThanOrEqualTo(10));
+      expect(result.text, startsWith('At that time Jesus said to his disciples'));
     });
 
     test('refuses to adapt when the anchor is outside the early window', () {
