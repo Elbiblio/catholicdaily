@@ -144,6 +144,9 @@ Use:
 - Helpful comparator for Jerusalem/New Jerusalem family (`NJB1985`) and NRSV Catholic (`NRSVCE`).
 - Quick probes matched Bolls `RSV2CE` to bundled `rsvce.db` on 4 of 5 sampled verses, with the exception looking like token splitting around a name.
 - Quick probes matched Bolls `NABRE` to bundled `nabre.db` on 4 of 5 sampled verses, with the exception caused by a local DB heading preceding the verse words.
+- A deterministic 24-random-reading probe from local lectionary references produced:
+  - `RSV2CE` vs bundled `rsvce.db`: 21/24 compatible by normalized word-sequence comparison.
+  - `NABRE` vs bundled `nabre.db`: 24/24 compatible by normalized word-sequence comparison.
 - Not a lectionary API: it does not provide regional incipits, psalm refrains, feast choices, or USCCB/GB lectionary adaptations.
 - Treat as online/external source, not bundled asset, unless we separately verify copyright/redistribution terms for each translation.
 - Strip HTML tags, superscript footnotes, note markers, and headings before normalized word-sequence comparison.
@@ -239,6 +242,12 @@ Fix path:
 5. Add `abbey_psalms` as a separate psalm text-family requirement.
 6. Until licensed/user-provided ESV-CE exists, mark GB/EW exact-text rendering as unavailable/external-only rather than pretending RSVCE is exact.
 
+Abbey Psalms note:
+
+- GIA publishes purchasable/downloadable Abbey Psalms responsorial psalm resources and individual PDFs.
+- I found public product/download pages and previews, not a complete free public corpus that should be bundled.
+- Treat Abbey Psalm text as licensed/user-provided or cached audit-only unless explicit permission is obtained.
+
 ### United States
 
 Implementation target:
@@ -291,9 +300,9 @@ Fix path:
 
 The final working strategy is hybrid, not one API:
 
-- Nigeria: ship/work from RSVCE locally, use Bolls `RSV2CE` as external comparator, verify aggressively.
+- Nigeria: ship/work from RSVCE locally, use Bolls `RSV2CE` as external comparator and fallback passage source, verify aggressively.
 - United States: use local NABRE plus Bolls `NABRE` as Bible backend/comparator, USCCB pages for exact lectionary audit/source.
-- England/Wales: require ESV-CE + Abbey Psalms; do not claim exactness until an API/license/user-provided source is connected.
+- England/Wales: use Bolls/Crossway `ESV` only as approximate comparator; require ESV-CE + Abbey Psalms from licensed/user-provided/cached sources before claiming exactness.
 
 This gives us reliable behavior per region without falsely treating public Bible APIs as complete lectionary APIs.
 
@@ -311,6 +320,8 @@ This gives us reliable behavior per region without falsely treating public Bible
 - Bolls translation list endpoint: `https://bolls.life/static/bolls/app/views/languages.json`
 - Bolls RSV2CE chapter example: `https://bolls.life/get-text/RSV2CE/John/3/`
 - Bolls NABRE chapter example: `https://bolls.life/get-text/NABRE/John/3/`
+- GIA Abbey Psalms product example: `https://giamusic.com/resource/lectionary-psalms-michel-guimont-print-g10374`
+- GIA Psalter resources: `https://giamusic.com/resources-psalters`
 - API.Bible plans and non-commercial limits: `https://api.bible/`
 - API.Bible authentication docs: `https://scripture.api.bible/docs`
 - bible-api.com translation docs: `https://bible-api.com/`

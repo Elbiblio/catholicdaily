@@ -9,7 +9,27 @@ import re
 import sqlite3
 from html import unescape
 from pathlib import Path
+from urllib.parse import quote
 from urllib.request import Request, urlopen
+
+
+BOOK_ALIASES = {
+    "1 Samuel": ("I Samuel", "1 Sam"),
+    "2 Samuel": ("II Samuel", "2 Sam"),
+    "1 Kings": ("I Kings", "1 Kgs"),
+    "2 Kings": ("II Kings", "2 Kgs"),
+    "1 Corinthians": ("I Corinthians", "1 Cor"),
+    "2 Corinthians": ("II Corinthians", "2 Cor"),
+    "1 Thessalonians": ("I Thessalonians", "1 Thess"),
+    "2 Thessalonians": ("II Thessalonians", "2 Thess"),
+    "1 Timothy": ("I Timothy", "1 Tim"),
+    "2 Timothy": ("II Timothy", "2 Tim"),
+    "1 Peter": ("I Peter", "1 Pet"),
+    "2 Peter": ("II Peter", "2 Pet"),
+    "1 John": ("I John", "1 John"),
+    "2 John": ("II John", "2 John"),
+    "3 John": ("III John", "3 John"),
+}
 
 
 BOLLS_TRANSLATIONS_URL = "https://bolls.life/static/bolls/app/views/languages.json"
@@ -61,7 +81,7 @@ def list_bolls_candidates() -> list[dict[str, str]]:
 
 
 def bolls_verse(version: str, book: str, chapter: int, verse: int) -> str:
-    url = f"https://bolls.life/get-verse/{version}/{book}/{chapter}/{verse}/"
+    url = f"https://bolls.life/get-verse/{version}/{quote(book)}/{chapter}/{verse}/"
     data = fetch_json(url)
     if not isinstance(data, dict):
         return ""
@@ -71,9 +91,11 @@ def bolls_verse(version: str, book: str, chapter: int, verse: int) -> str:
 def local_verse(db_path: Path, book: str, chapter: int, verse: int) -> str:
     conn = sqlite3.connect(db_path)
     try:
+        names = [book, *BOOK_ALIASES.get(book, ())]
+        placeholders = ",".join("?" for _ in names)
         row = conn.execute(
-            "select _id from books where text = ? or shortname = ?",
-            (book, book),
+            f"select _id from books where text in ({placeholders}) or shortname in ({placeholders})",
+            (*names, *names),
         ).fetchone()
         if row is None:
             return ""
@@ -91,6 +113,8 @@ def local_verse(db_path: Path, book: str, chapter: int, verse: int) -> str:
 
 def normalized_words(value: str) -> str:
     text = re.sub(r"<[^>]+>", " ", unescape(value or ""))
+    text = text.replace("\u2018", "'").replace("\u2019", "'")
+    text = text.replace("\u201c", '"').replace("\u201d", '"')
     text = re.sub(r"\[[A-Z0-9]+\]", " ", text)
     return " ".join(re.findall(r"[a-z0-9]+(?:'[a-z0-9]+)?", text.lower()))
 
