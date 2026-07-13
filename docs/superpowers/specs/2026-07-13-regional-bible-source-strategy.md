@@ -25,10 +25,11 @@ Implication:
 Working strategy:
 
 1. Keep `nabre.db` as the bundled US-local rendering backend.
-2. Add/keep a USCCB daily-reading source adapter for online/cached exact-text audits.
-3. Use normalized word-sequence comparison for exactness.
-4. Use surgical opening replacement only when a USCCB/cached source has the same reference and a unique 10-word or 50-character early anchor.
-5. Track future US transition: public reporting says a new `Catholic American Bible` is intended to replace NABRE/US lectionary text in future liturgical use, so the source registry should support future US text-family versioning.
+2. Add Bolls `NABRE` as an online Bible-text comparator/source, stripping HTML/footnote markers before normalized word-sequence comparison.
+3. Add/keep a USCCB daily-reading source adapter for online/cached exact-text audits, because USCCB pages are lectionary text and include liturgical context beyond generic NABRE chapter text.
+4. Use normalized word-sequence comparison for exactness.
+5. Use surgical opening replacement only when a USCCB/cached/Bolls source has the same reference and a unique 10-word or 50-character early anchor.
+6. Track future US transition: public reporting says a new `Catholic American Bible` is intended to replace NABRE/US lectionary text in future liturgical use, so the source registry should support future US text-family versioning.
 
 ### England and Wales
 
@@ -42,6 +43,7 @@ API/source reality:
 
 - Crossway provides an official ESV API for non-commercial use with an API key.
 - That API is for `ESV`; it should not be assumed to be exact `ESV-CE`, and it does not solve Abbey Psalm text.
+- Bolls exposes keyless `ESV`, but I did not find `ESV-CE` there.
 - Universalis states that on the web its Mass readings are from the Jerusalem Bible, while downloadable versions use ESV in Great Britain. Its public web site is also limited to yesterday, today, and the week ahead.
 
 Implication:
@@ -58,8 +60,8 @@ Working strategy:
 
 1. Keep `esvce` as an external/user-provided source family in the registry.
 2. Do not claim RSVCE output is exact for GB/EW after Advent 2024.
-3. Use Crossway ESV API only as a diagnostic comparator, not as exact GB/EW text, unless ESV-CE access is separately verified.
-4. Use cached extracts or a licensed local DB for exact GB/EW rendering.
+3. Use Crossway ESV API or Bolls `ESV` only as diagnostic comparators, not as exact GB/EW text, unless ESV-CE access is separately verified.
+4. Use cached extracts or a licensed/user-provided local ESV-CE DB for exact GB/EW rendering.
 5. Treat Abbey Psalms separately from Bible passage APIs.
 
 ### Nigeria
@@ -68,6 +70,7 @@ Official/current source status:
 
 - I did not find a clean, authoritative public Nigerian bishops' source that states the exact English Bible text family for the Nigerian lectionary.
 - Practical evidence from the app/user reports indicates `RSVCE` matches Nigerian readings very well, reportedly above 95%.
+- Bolls exposes `RSV2CE` publicly and quick sample checks matched the bundled `rsvce.db` on 4 of 5 sampled verses. The remaining sample mismatch appeared to be a tokenization/format artifact around a name rather than a clear translation-family mismatch. Bolls `RSV2CE` is therefore a strong comparator, but every automated use should still be verified row-by-row with normalized word-sequence checks.
 - Universalis says its web Mass readings are Jerusalem Bible, and downloadable versions use Jerusalem Bible outside the USA and Great Britain, but that is a Universalis product/text policy, not proof of the Nigerian bishops' exact printed lectionary text.
 
 Implication:
@@ -83,10 +86,11 @@ Implication:
 Working strategy:
 
 1. Make Nigeria default to `rsvce.db`.
-2. Validate using Nigerian calendar samples and normalized word-sequence comparison.
-3. Build a Nigeria exact-text fixture set from reliable local/user-provided extracts or official missal pages when available.
-4. Use surgical opening replacement for Nigeria only when the RSVCE-rendered text and source opening share a unique early anchor of at least 10 words or 50 normalized characters.
-5. Use Universalis/Jerusalem Bible only as secondary calendar/reference comparison, not as proof of exact Nigerian rendered text.
+2. Add Bolls `RSV2CE` as an online comparator/source for Nigeria, with row-level normalized word-sequence verification against bundled `rsvce.db`.
+3. Validate using Nigerian calendar samples and normalized word-sequence comparison.
+4. Build a Nigeria exact-text fixture set from reliable local/user-provided extracts or official missal pages when available.
+5. Use surgical opening replacement for Nigeria only when the RSVCE-rendered text and source opening share a unique early anchor of at least 10 words or 50 normalized characters.
+6. Use Universalis/Jerusalem Bible only as secondary calendar/reference comparison, not as proof of exact Nigerian rendered text.
 
 ## Public API Assessment
 
@@ -114,6 +118,35 @@ Use:
 
 - Potential online source if we can get a token and confirm it exposes `RSVCE`, `NABRE`/NAB lectionary-relevant text, and/or ESV-CE.
 - Do not depend on it for runtime until access and exact text-family coverage are verified.
+
+### Bolls Bible API
+
+Status:
+
+- Keyless public API.
+- Translation list includes important Catholic/near-Catholic candidates:
+  - `RSV2CE`
+  - `NABRE`
+  - `NRSVCE`
+  - `NJB1985`
+  - `DRB`
+  - `ESV`
+- Chapter endpoint shape works, for example:
+  - `https://bolls.life/get-text/RSV2CE/John/3/`
+  - `https://bolls.life/get-text/NABRE/John/3/`
+  - `https://bolls.life/get-text/NRSVCE/John/3/`
+  - `https://bolls.life/get-text/NJB1985/John/3/`
+
+Use:
+
+- Best discovered keyless online Bible source for our Catholic text-family comparisons.
+- Good external comparator for Nigeria (`RSV2CE`) and US (`NABRE`).
+- Helpful comparator for Jerusalem/New Jerusalem family (`NJB1985`) and NRSV Catholic (`NRSVCE`).
+- Quick probes matched Bolls `RSV2CE` to bundled `rsvce.db` on 4 of 5 sampled verses, with the exception looking like token splitting around a name.
+- Quick probes matched Bolls `NABRE` to bundled `nabre.db` on 4 of 5 sampled verses, with the exception caused by a local DB heading preceding the verse words.
+- Not a lectionary API: it does not provide regional incipits, psalm refrains, feast choices, or USCCB/GB lectionary adaptations.
+- Treat as online/external source, not bundled asset, unless we separately verify copyright/redistribution terms for each translation.
+- Strip HTML tags, superscript footnotes, note markers, and headings before normalized word-sequence comparison.
 
 ### API.Bible
 
@@ -182,10 +215,11 @@ Implementation target:
 Fix path:
 
 1. Keep RSVCE as the Nigeria default.
-2. Expand Nigeria fixtures across ordinary time, Sundays, solemnities, and Nigerian proper celebrations.
-3. Classify mismatches as calendar/reference, incipit-only, psalm-refrain, or translation mismatch.
-4. Use surgical opening adapter only for anchored incipit differences.
-5. Do not import Jerusalem Bible as Nigeria default unless source evidence beats RSVCE.
+2. Use Bolls `RSV2CE` as the first online comparator for Bible passage words.
+3. Expand Nigeria fixtures across ordinary time, Sundays, solemnities, and Nigerian proper celebrations.
+4. Classify mismatches as calendar/reference, incipit-only, psalm-refrain, or translation mismatch.
+5. Use surgical opening adapter only for anchored incipit differences.
+6. Do not import Jerusalem Bible as Nigeria default unless source evidence beats RSVCE.
 
 ### England/Wales
 
@@ -201,8 +235,9 @@ Fix path:
 1. Stop treating RSVCE as exact for GB/EW current lectionary.
 2. Keep RSVCE only as a fallback/legacy comparator if exposed at all.
 3. Add `esvce` as user-provided/API-backed renderable source.
-4. Add `abbey_psalms` as a separate psalm text-family requirement.
-5. Until licensed/user-provided ESV-CE exists, mark GB/EW exact-text rendering as unavailable/external-only rather than pretending RSVCE is exact.
+4. Use Bolls/Crossway `ESV` only for approximate comparator checks, not exact claims.
+5. Add `abbey_psalms` as a separate psalm text-family requirement.
+6. Until licensed/user-provided ESV-CE exists, mark GB/EW exact-text rendering as unavailable/external-only rather than pretending RSVCE is exact.
 
 ### United States
 
@@ -215,10 +250,11 @@ Implementation target:
 Fix path:
 
 1. Keep NABRE local backend as useful and close.
-2. Do not call local NABRE exact for every US lectionary reading.
-3. Add USCCB page adapter for exact audit and high-confidence online rendering when online mode is allowed.
-4. Cache extracted USCCB openings/fingerprints for audit-only use.
-5. Keep an upgrade path for the future Catholic American Bible / revised US lectionary text family.
+2. Use Bolls `NABRE` as a keyless online Bible passage comparator/source.
+3. Do not call local NABRE exact for every US lectionary reading.
+4. Add USCCB page adapter for exact audit and high-confidence online rendering when online mode is allowed.
+5. Cache extracted USCCB openings/fingerprints for audit-only use.
+6. Keep an upgrade path for the future Catholic American Bible / revised US lectionary text family.
 
 ## Engineering Changes Implied
 
@@ -237,6 +273,7 @@ Fix path:
 
 3. Add source adapters:
    - `UsccbDailyReadingSourceAdapter`
+   - `BollsBibleSourceAdapter`
    - `UniversalisCurrentWindowSourceAdapter`
    - `ExternalBibleApiSourceAdapter` for key-based APIs
    - `UserProvidedBibleDbSourceAdapter`
@@ -254,8 +291,8 @@ Fix path:
 
 The final working strategy is hybrid, not one API:
 
-- Nigeria: ship/work from RSVCE locally, verify aggressively.
-- United States: use local NABRE as close backend, USCCB pages for exact lectionary audit/source.
+- Nigeria: ship/work from RSVCE locally, use Bolls `RSV2CE` as external comparator, verify aggressively.
+- United States: use local NABRE plus Bolls `NABRE` as Bible backend/comparator, USCCB pages for exact lectionary audit/source.
 - England/Wales: require ESV-CE + Abbey Psalms; do not claim exactness until an API/license/user-provided source is connected.
 
 This gives us reliable behavior per region without falsely treating public Bible APIs as complete lectionary APIs.
@@ -271,6 +308,9 @@ This gives us reliable behavior per region without falsely treating public Bible
 - ESV API overview: `https://api.esv.org/`
 - ESV passage text endpoint docs: `https://api.esv.org/docs/passage-text/`
 - BibleGateway API documentation: `https://www.biblegateway.com/api/documentation`
+- Bolls translation list endpoint: `https://bolls.life/static/bolls/app/views/languages.json`
+- Bolls RSV2CE chapter example: `https://bolls.life/get-text/RSV2CE/John/3/`
+- Bolls NABRE chapter example: `https://bolls.life/get-text/NABRE/John/3/`
 - API.Bible plans and non-commercial limits: `https://api.bible/`
 - API.Bible authentication docs: `https://scripture.api.bible/docs`
 - bible-api.com translation docs: `https://bible-api.com/`
