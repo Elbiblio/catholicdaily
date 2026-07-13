@@ -113,6 +113,80 @@ class OpeningCatalogExtractorTest(unittest.TestCase):
         self.assertEqual(len(lines), 1)
         self.assertEqual(json.loads(lines[0])["opening200"], "Short reading.")
 
+    def test_builds_universalis_entries_from_mass_html(self):
+        extractor = load_extractor()
+
+        html = _universalis_sample_html()
+
+        entries = extractor.build_universalis_entries_from_html(
+            html=html,
+            date="2026-07-15",
+            region="NG",
+            bible_version="jerusalem",
+            source_url="https://universalis.com/africa.nigeria/20260715/mass.htm",
+        )
+
+        self.assertEqual([entry["slot"] for entry in entries], ["first", "gospel"])
+        self.assertEqual(entries[0]["sourceType"], "universalis_web")
+        self.assertEqual(entries[0]["reference"], "Isaiah 10:5-7,13-16")
+        self.assertIn("The Lord of hosts says this", entries[0]["opening200"])
+        self.assertIn("woe to assyria", entries[0]["normalizedFingerprint"])
+        self.assertEqual(entries[1]["reference"], "Matthew 11:25-27")
+        self.assertIn("Jesus exclaimed", entries[1]["opening100"])
+        self.assertEqual(entries[1]["copyrightMode"], "audit_only")
+
+    def test_writes_universalis_jsonl_output(self):
+        extractor = load_extractor()
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            html_path = root / "universalis.html"
+            html_path.write_text(_universalis_sample_html(), encoding="utf-8")
+            output = root / "universalis.jsonl"
+
+            extractor.write_universalis_catalog(
+                html_path=html_path,
+                date="2026-07-15",
+                region="GB_EW",
+                bible_version="jerusalem",
+                source_url="https://universalis.com/20260715/mass.htm",
+                output_path=output,
+            )
+
+            lines = output.read_text(encoding="utf-8").splitlines()
+
+        self.assertEqual(len(lines), 2)
+        self.assertEqual(json.loads(lines[0])["region"], "GB_EW")
+
+
+def _universalis_sample_html():
+    return """
+        <hr class="shortrule"/><table class="each" style="width:100%">
+          <tr><th align="left">First reading</th></tr>
+          <tr><th align="right">Isaiah 10:5-7,13-16</th></tr>
+        </table>
+        <h4 style="text-align:center;">Assyria's arrogance</h4>
+        <div class="p">The Lord of hosts says this:</div>
+        <div class="v gb">Woe to Assyria, the rod of my anger,</div>
+        <div class="v">the club brandished by me in my fury!</div>
+        <hr class="shortrule"/><table class="each" style="width:100%">
+          <tr><th align="left">Responsorial Psalm</th></tr>
+          <tr><th align="right">Psalm 93(94):5-10,14-15</th></tr>
+        </table>
+        <hr class="shortrule"/><table class="each" style="width:100%">
+          <tr><th align="left">Gospel Acclamation</th></tr>
+          <tr><th align="right">Mt11:25</th></tr>
+        </table>
+        <div class="v">Alleluia, alleluia!</div>
+        <hr class="shortrule"/><table class="each" style="width:100%">
+          <tr><th align="left">Gospel</th></tr>
+          <tr><th align="right">Matthew 11:25-27</th></tr>
+        </table>
+        <h4 style="text-align:center;">Hidden from the wise</h4>
+        <div class="p">Jesus exclaimed, &#8216;I bless you, Father, Lord of heaven
+        and of earth, for hiding these things.&#8217;</div>
+        """
+
 
 if __name__ == "__main__":
     unittest.main()
