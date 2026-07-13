@@ -276,3 +276,11 @@ After the initial reference/text-availability audit was implemented, the user cl
 - store source-location fixtures under `verification/exact-reading-fixtures/`;
 - compare full hydrated app text against extracted source text and write mismatch reports;
 - use failures to decide whether to import/compile the correct text backend, add source-specific lectionary overrides, or reclassify the sample as a translation mismatch.
+
+## Opening Catalog Addendum
+
+The next validation layer should reduce reliance on hand-authored incipit rules by deriving openings from source readings. For each source-backed reading slot, extract the first 100 and 200 characters of the source text, plus a normalized fingerprint and hash. These openings are useful because most regional lectionary shaping appears near the start of the reading: speaker attribution, temporal incipits, psalm refrains, and short readings.
+
+Opening catalogs should be generated first as audit-only artifacts under `verification/opening-catalog/`, not as production assets. They may contain source excerpts and must therefore carry `copyrightMode: audit_only` until a source-specific permission review says a subset may be bundled. Production logic can later use approved incipit text, hashes, or short fingerprints without shipping broad excerpt collections.
+
+The catalog schema should include date, region, Bible version/source family, slot, reference, source path or URL, `opening100`, `opening200`, `normalizedFingerprint`, `sha256`, and `copyrightMode`. Local extract fixtures are the first deterministic adapter. Universalis pages are reachable for GB/EW-style, Nigeria, and general calendar checks, but web adapters should emit the same schema and classify missing web psalms as source gaps because Universalis does not display responsorial psalms on the web. USCCB pages are authoritative for US readings, but simple HTTP clients may encounter an anti-bot proof-of-work challenge, so that adapter needs either a browser-backed fetch or a cached/user-provided source.
