@@ -1,4 +1,5 @@
 import importlib.util
+import csv
 import json
 import tempfile
 import unittest
@@ -224,6 +225,142 @@ class OpeningCatalogExtractorTest(unittest.TestCase):
             extractor.parse_date_args("2026-07-15", "2026-08-15, 2026-10-01"),
             ["2026-07-15", "2026-08-15", "2026-10-01"],
         )
+
+    def test_builds_local_authoritative_entries_from_extracted_csv(self):
+        extractor = load_extractor()
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source_csv = root / "all_readings_fixed.csv"
+            with source_csv.open("w", encoding="utf-8", newline="") as handle:
+                writer = csv.DictWriter(
+                    handle,
+                    fieldnames=[
+                        "source_file",
+                        "page",
+                        "season",
+                        "week",
+                        "day",
+                        "day_num",
+                        "reference",
+                        "reading_type",
+                        "first_line",
+                        "db_first_verse",
+                        "raw_header",
+                    ],
+                )
+                writer.writeheader()
+                writer.writerow(
+                    {
+                        "source_file": "weekday_a_full.txt",
+                        "page": "6",
+                        "season": "Advent",
+                        "week": "1",
+                        "day": "MONDAY",
+                        "day_num": "175",
+                        "reference": "Isaiah 2.1-5",
+                        "reading_type": "first_reading",
+                        "first_line": "The Lord will gather the nations.",
+                        "db_first_verse": "",
+                        "raw_header": "FIRST READING Isaiah 2.1-5",
+                    }
+                )
+
+            entries = extractor.build_local_authoritative_entries(source_csv)
+
+        self.assertEqual(len(entries), 1)
+        self.assertEqual(entries[0]["slot"], "first")
+        self.assertEqual(entries[0]["sourceType"], "local_authoritative_opening")
+        self.assertEqual(entries[0]["opening200"], "The Lord will gather the nations.")
+        self.assertEqual(entries[0]["normalizedFingerprint"], "the lord will gather the nations")
+
+    def test_writes_local_authoritative_csv_output(self):
+        extractor = load_extractor()
+
+        entries = [
+            {
+                "id": "row-1",
+                "key": "sample",
+                "sourceType": "local_authoritative_opening",
+                "sourceFile": "weekday_a_full.txt",
+                "page": "6",
+                "season": "Advent",
+                "week": "1",
+                "day": "MONDAY",
+                "dayNum": "175",
+                "slot": "first",
+                "reference": "Isaiah 2.1-5",
+                "opening100": "The Lord will gather the nations.",
+                "opening200": "The Lord will gather the nations.",
+                "openingLength": 33,
+                "normalizedFingerprint": "the lord will gather the nations",
+                "sha256": "0" * 64,
+                "copyrightMode": "audit_only",
+            }
+        ]
+
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp) / "openings.csv"
+            extractor.write_entries_csv(entries, output)
+            with output.open(encoding="utf-8", newline="") as handle:
+                rows = list(csv.DictReader(handle))
+
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["sourceFile"], "weekday_a_full.txt")
+        self.assertEqual(rows[0]["slot"], "first")
+
+    def test_builds_standard_lectionary_opening_entries(self):
+        extractor = load_extractor()
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source_csv = root / "standard_lectionary_complete.csv"
+            with source_csv.open("w", encoding="utf-8", newline="") as handle:
+                writer = csv.DictWriter(
+                    handle,
+                    fieldnames=[
+                        "weekday_cycle",
+                        "source_file",
+                        "season",
+                        "day",
+                        "week",
+                        "sunday_cycle",
+                        "first_reading",
+                        "first_reading_incipit",
+                        "second_reading",
+                        "second_reading_incipit",
+                        "gospel",
+                        "gospel_incipit",
+                        "lectionary_number",
+                        "source_title",
+                    ],
+                )
+                writer.writeheader()
+                writer.writerow(
+                    {
+                        "weekday_cycle": "I",
+                        "source_file": "weekday_a_full.txt",
+                        "season": "Advent",
+                        "day": "MONDAY",
+                        "week": "1",
+                        "sunday_cycle": "",
+                        "first_reading": "Isa 2:1-5",
+                        "first_reading_incipit": "The Lord will gather the nations.",
+                        "second_reading": "",
+                        "second_reading_incipit": "",
+                        "gospel": "Matt 8:5-11",
+                        "gospel_incipit": "Many will come from east and west.",
+                        "lectionary_number": "175",
+                        "source_title": "MONDAY OF THE FIRST WEEK OF ADVENT",
+                    }
+                )
+
+            entries = extractor.build_standard_lectionary_entries(source_csv)
+
+        self.assertEqual([entry["slot"] for entry in entries], ["first", "gospel"])
+        self.assertEqual(entries[0]["sourceType"], "standard_lectionary_opening")
+        self.assertEqual(entries[0]["opening200"], "The Lord will gather the nations.")
+        self.assertEqual(entries[1]["reference"], "Matt 8:5-11")
 
 
 def _universalis_sample_html():

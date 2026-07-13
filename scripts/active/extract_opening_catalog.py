@@ -9,6 +9,7 @@ data unless the relevant source permissions are reviewed separately.
 from __future__ import annotations
 
 import argparse
+import csv
 import hashlib
 import html
 from html.parser import HTMLParser
@@ -23,6 +24,33 @@ UNIVERSALIS_REGION_PATHS = {
     "GB_EW": "",
     "NG": "africa.nigeria",
 }
+
+CSV_FIELDS = [
+    "id",
+    "key",
+    "sourceType",
+    "sourceFile",
+    "sourcePath",
+    "sourceUrl",
+    "page",
+    "date",
+    "region",
+    "bibleVersion",
+    "season",
+    "week",
+    "day",
+    "dayNum",
+    "sourceTitle",
+    "position",
+    "slot",
+    "reference",
+    "opening100",
+    "opening200",
+    "openingLength",
+    "normalizedFingerprint",
+    "sha256",
+    "copyrightMode",
+]
 
 
 def build_catalog_entries(fixture_path: Path, repo_root: Path) -> list[dict[str, Any]]:
@@ -68,8 +96,127 @@ def write_entries(entries: list[dict[str, Any]], output_path: Path) -> None:
             handle.write("\n")
 
 
+def write_entries_csv(entries: list[dict[str, Any]], output_path: Path) -> None:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with output_path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=CSV_FIELDS, extrasaction="ignore")
+        writer.writeheader()
+        for entry in entries:
+            writer.writerow({field: entry.get(field, "") for field in CSV_FIELDS})
+
+
 def write_catalog(fixture_path: Path, repo_root: Path, output_path: Path) -> None:
     write_entries(build_catalog_entries(fixture_path, repo_root), output_path)
+
+
+def write_output(entries: list[dict[str, Any]], output_path: Path, output_format: str) -> None:
+    if output_format == "csv":
+        write_entries_csv(entries, output_path)
+    else:
+        write_entries(entries, output_path)
+
+
+def build_local_authoritative_entries(csv_path: Path) -> list[dict[str, Any]]:
+    with csv_path.open("r", encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+
+    entries: list[dict[str, Any]] = []
+    for index, row in enumerate(rows, start=1):
+        opening = " ".join((row.get("first_line") or "").split())
+        if not opening or opening == "[NOT_FOUND]":
+            continue
+        slot = normalize_slot(row.get("reading_type", ""))
+        if slot not in {"first", "second", "gospel"}:
+            continue
+        opening100 = opening[:100]
+        opening200 = opening[:200]
+        normalized = normalize_fingerprint(opening200)
+        source_file = row.get("source_file", "")
+        season = row.get("season", "")
+        week = row.get("week", "")
+        day = row.get("day", "")
+        day_num = row.get("day_num", "")
+        reference = row.get("reference", "")
+        key = "|".join([source_file, season, week, day, day_num, slot, reference])
+        entries.append(
+            {
+                "id": f"local-authoritative-{index}",
+                "key": key,
+                "sourceType": "local_authoritative_opening",
+                "sourceFile": source_file,
+                "sourcePath": str(csv_path),
+                "page": row.get("page", ""),
+                "season": season,
+                "week": week,
+                "day": day,
+                "dayNum": day_num,
+                "sourceTitle": row.get("raw_header", ""),
+                "position": row.get("reading_type", ""),
+                "slot": slot,
+                "reference": reference,
+                "opening100": opening100,
+                "opening200": opening200,
+                "openingLength": len(opening),
+                "normalizedFingerprint": normalized,
+                "sha256": hashlib.sha256(normalized.encode("utf-8")).hexdigest(),
+                "copyrightMode": "audit_only",
+            }
+        )
+    return entries
+
+
+def build_standard_lectionary_entries(csv_path: Path) -> list[dict[str, Any]]:
+    with csv_path.open("r", encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+
+    entries: list[dict[str, Any]] = []
+    slot_specs = [
+        ("first", "first_reading", "first_reading_incipit"),
+        ("second", "second_reading", "second_reading_incipit"),
+        ("gospel", "gospel", "gospel_incipit"),
+    ]
+    for row_index, row in enumerate(rows, start=1):
+        source_file = row.get("source_file", "")
+        season = row.get("season", "")
+        week = row.get("week", "")
+        day = row.get("day", "")
+        day_num = row.get("lectionary_number", "")
+        cycle = row.get("sunday_cycle") or row.get("weekday_cycle", "")
+        for slot, reference_field, opening_field in slot_specs:
+            reference = " ".join((row.get(reference_field) or "").split())
+            opening = " ".join((row.get(opening_field) or "").split())
+            if not reference or not opening:
+                continue
+            opening100 = opening[:100]
+            opening200 = opening[:200]
+            normalized = normalize_fingerprint(opening200)
+            key = "|".join(
+                [source_file, season, week, day, day_num, cycle, slot, reference]
+            )
+            entries.append(
+                {
+                    "id": f"standard-lectionary-{row_index}-{slot}",
+                    "key": key,
+                    "sourceType": "standard_lectionary_opening",
+                    "sourceFile": source_file,
+                    "sourcePath": str(csv_path),
+                    "season": season,
+                    "week": week,
+                    "day": day,
+                    "dayNum": day_num,
+                    "sourceTitle": row.get("source_title", ""),
+                    "position": slot,
+                    "slot": slot,
+                    "reference": reference,
+                    "opening100": opening100,
+                    "opening200": opening200,
+                    "openingLength": len(opening),
+                    "normalizedFingerprint": normalized,
+                    "sha256": hashlib.sha256(normalized.encode("utf-8")).hexdigest(),
+                    "copyrightMode": "audit_only",
+                }
+            )
+    return entries
 
 
 def write_universalis_catalog(
@@ -361,7 +508,13 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--source",
-        choices=["local", "universalis-html", "universalis-fetch"],
+        choices=[
+            "local",
+            "local-authoritative-csv",
+            "standard-lectionary-csv",
+            "universalis-html",
+            "universalis-fetch",
+        ],
         default="local",
         help="Source adapter to run.",
     )
@@ -372,6 +525,11 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
     )
     parser.add_argument("--repo-root", type=_path_arg, default=Path("."))
     parser.add_argument("--html", type=_path_arg)
+    parser.add_argument(
+        "--input-csv",
+        type=_path_arg,
+        default=Path("scripts/active/all_readings_fixed.csv"),
+    )
     parser.add_argument("--date")
     parser.add_argument("--dates", help="Comma-separated extra dates for batch fetches.")
     parser.add_argument("--region")
@@ -387,6 +545,7 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
         type=_path_arg,
         default=Path("verification/opening-catalog/local-extract-openings.jsonl"),
     )
+    parser.add_argument("--format", choices=["jsonl", "csv"], default="jsonl")
     return parser.parse_args(argv)
 
 
@@ -409,7 +568,7 @@ def main(argv: Iterable[str] | None = None) -> int:
             bible_version=args.bible_version,
             source_url=args.source_url,
         )
-        write_entries(entries, args.output)
+        write_output(entries, args.output, args.format)
     elif args.source == "universalis-fetch":
         if not args.region:
             raise SystemExit("--source universalis-fetch requires --region")
@@ -428,8 +587,13 @@ def main(argv: Iterable[str] | None = None) -> int:
         except ValueError as error:
             raise SystemExit(str(error)) from error
     else:
-        entries = build_catalog_entries(args.fixtures, args.repo_root)
-        write_entries(entries, args.output)
+        if args.source == "local-authoritative-csv":
+            entries = build_local_authoritative_entries(args.input_csv)
+        elif args.source == "standard-lectionary-csv":
+            entries = build_standard_lectionary_entries(args.input_csv)
+        else:
+            entries = build_catalog_entries(args.fixtures, args.repo_root)
+        write_output(entries, args.output, args.format)
     print(f"Wrote {len(entries)} opening catalog entries to {args.output}")
     return 0
 
