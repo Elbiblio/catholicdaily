@@ -16,6 +16,13 @@ import json
 import re
 from pathlib import Path
 from typing import Any, Iterable
+from urllib.request import Request, urlopen
+
+
+UNIVERSALIS_REGION_PATHS = {
+    "GB_EW": "",
+    "NG": "africa.nigeria",
+}
 
 
 def build_catalog_entries(fixture_path: Path, repo_root: Path) -> list[dict[str, Any]]:
@@ -82,6 +89,67 @@ def write_universalis_catalog(
         source_url=source_url,
     )
     write_entries(entries, output_path)
+
+
+def write_universalis_fetch_catalog(
+    *,
+    dates: list[str],
+    region: str,
+    bible_version: str,
+    cache_dir: Path,
+    output_path: Path,
+    fetcher: Any | None = None,
+) -> list[dict[str, Any]]:
+    fetch = fetcher or fetch_url_text
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    entries: list[dict[str, Any]] = []
+    for date in dates:
+        source_url = build_universalis_url(date, region)
+        html_text = fetch(source_url)
+        cache_path = cache_dir / f"universalis-{region.lower()}-{date.replace('-', '')}.html"
+        cache_path.write_text(html_text, encoding="utf-8", newline="\n")
+        date_entries = build_universalis_entries_from_html(
+            html=html_text,
+            date=date,
+            region=region,
+            bible_version=bible_version,
+            source_url=source_url,
+        )
+        if not date_entries:
+            raise ValueError(f"No Universalis readings found for {region} {date}")
+        entries.extend(date_entries)
+    write_entries(entries, output_path)
+    return entries
+
+
+def build_universalis_url(date: str, region: str) -> str:
+    date_slug = re.sub(r"[^0-9]", "", date)
+    if not re.fullmatch(r"\d{8}", date_slug):
+        raise ValueError(f"Universalis date must be YYYY-MM-DD or YYYYMMDD: {date}")
+    region_key = region.upper()
+    if region_key not in UNIVERSALIS_REGION_PATHS:
+        raise ValueError(f"Unsupported Universalis region: {region}")
+    region_path = UNIVERSALIS_REGION_PATHS[region_key]
+    if region_path:
+        return f"https://universalis.com/{region_path}/{date_slug}/mass.htm"
+    return f"https://universalis.com/{date_slug}/mass.htm"
+
+
+def fetch_url_text(url: str) -> str:
+    request = Request(url, headers={"User-Agent": "catholicdaily-audit/1.0"})
+    with urlopen(request, timeout=30) as response:
+        return response.read().decode("utf-8")
+
+
+def parse_date_args(date: str | None, dates: str | None) -> list[str]:
+    values: list[str] = []
+    if date:
+        values.append(date.strip())
+    if dates:
+        values.extend(part.strip() for part in dates.split(",") if part.strip())
+    if not values:
+        raise ValueError("At least one date is required")
+    return values
 
 
 def build_universalis_entries_from_html(
@@ -293,7 +361,7 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--source",
-        choices=["local", "universalis-html"],
+        choices=["local", "universalis-html", "universalis-fetch"],
         default="local",
         help="Source adapter to run.",
     )
@@ -305,9 +373,15 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--repo-root", type=_path_arg, default=Path("."))
     parser.add_argument("--html", type=_path_arg)
     parser.add_argument("--date")
+    parser.add_argument("--dates", help="Comma-separated extra dates for batch fetches.")
     parser.add_argument("--region")
     parser.add_argument("--bible-version", default="jerusalem")
     parser.add_argument("--source-url", default="")
+    parser.add_argument(
+        "--cache-dir",
+        type=_path_arg,
+        default=Path("verification/opening-catalog/source-html"),
+    )
     parser.add_argument(
         "--output",
         type=_path_arg,
@@ -336,6 +410,23 @@ def main(argv: Iterable[str] | None = None) -> int:
             source_url=args.source_url,
         )
         write_entries(entries, args.output)
+    elif args.source == "universalis-fetch":
+        if not args.region:
+            raise SystemExit("--source universalis-fetch requires --region")
+        try:
+            dates = parse_date_args(args.date, args.dates)
+        except ValueError as error:
+            raise SystemExit(str(error)) from error
+        try:
+            entries = write_universalis_fetch_catalog(
+                dates=dates,
+                region=args.region,
+                bible_version=args.bible_version,
+                cache_dir=args.cache_dir,
+                output_path=args.output,
+            )
+        except ValueError as error:
+            raise SystemExit(str(error)) from error
     else:
         entries = build_catalog_entries(args.fixtures, args.repo_root)
         write_entries(entries, args.output)

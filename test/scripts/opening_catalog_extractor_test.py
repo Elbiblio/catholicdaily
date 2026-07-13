@@ -158,6 +158,73 @@ class OpeningCatalogExtractorTest(unittest.TestCase):
         self.assertEqual(len(lines), 2)
         self.assertEqual(json.loads(lines[0])["region"], "GB_EW")
 
+    def test_builds_universalis_urls_for_supported_regions(self):
+        extractor = load_extractor()
+
+        self.assertEqual(
+            extractor.build_universalis_url("2026-07-15", "GB_EW"),
+            "https://universalis.com/20260715/mass.htm",
+        )
+        self.assertEqual(
+            extractor.build_universalis_url("2026-07-15", "NG"),
+            "https://universalis.com/africa.nigeria/20260715/mass.htm",
+        )
+
+    def test_fetches_universalis_catalog_to_cache(self):
+        extractor = load_extractor()
+        fetched_urls = []
+
+        def fake_fetch(url):
+            fetched_urls.append(url)
+            return _universalis_sample_html()
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            output = root / "openings.jsonl"
+            cache_dir = root / "source-html"
+
+            entries = extractor.write_universalis_fetch_catalog(
+                dates=["2026-07-15"],
+                region="NG",
+                bible_version="jerusalem",
+                cache_dir=cache_dir,
+                output_path=output,
+                fetcher=fake_fetch,
+            )
+
+            lines = output.read_text(encoding="utf-8").splitlines()
+
+        self.assertEqual(
+            fetched_urls,
+            ["https://universalis.com/africa.nigeria/20260715/mass.htm"],
+        )
+        self.assertEqual(len(entries), 2)
+        self.assertEqual(len(lines), 2)
+        self.assertEqual(json.loads(lines[0])["date"], "2026-07-15")
+
+    def test_fetch_catalog_fails_when_page_has_no_readings(self):
+        extractor = load_extractor()
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            with self.assertRaisesRegex(ValueError, "No Universalis readings found"):
+                extractor.write_universalis_fetch_catalog(
+                    dates=["2026-08-15"],
+                    region="GB_EW",
+                    bible_version="jerusalem",
+                    cache_dir=root / "source-html",
+                    output_path=root / "openings.jsonl",
+                    fetcher=lambda url: "<html><title>Other dates</title></html>",
+                )
+
+    def test_parses_single_and_comma_separated_dates(self):
+        extractor = load_extractor()
+
+        self.assertEqual(
+            extractor.parse_date_args("2026-07-15", "2026-08-15, 2026-10-01"),
+            ["2026-07-15", "2026-08-15", "2026-10-01"],
+        )
+
 
 def _universalis_sample_html():
     return """
