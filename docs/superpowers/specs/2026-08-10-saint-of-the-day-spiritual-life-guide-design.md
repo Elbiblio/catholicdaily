@@ -263,7 +263,19 @@ Saint of the Day is a separate, explicit opt-in preference from Feast Day Remind
 - When several saints are commemorated, the primary profile opens first and the page lists other eligible commemorations for that day.
 - If a same-day feast reminder for the same celebration would arrive within six hours of the daily saint notification, the app combines the same-day message into the Saint of the Day notification by default. An eve reminder remains distinct.
 - Scheduling is idempotent across restart, time-zone change, locale change, permission change, and content revision.
-- An unavailable or unpublished profile is never advertised; the scheduler uses the next eligible researched profile or omits the daily notification.
+- An unavailable or unpublished profile is never advertised. During the 158-profile release, a date without a researched profile receives no personalized saint notification; complete every-day coverage belongs to the expansion phase rather than a fabricated fallback profile.
+
+### Scheduling capacity and ownership
+
+Saint and feast notifications share one scheduling coordinator because mobile operating systems limit pending local notifications and the current feast scheduler cancels notifications globally. The implementation must not allow one category to erase the other.
+
+- Notification IDs and cancellation are category-scoped; normal rescheduling never calls a global cancel operation.
+- A shared pending-notification budget reserves capacity for both daily saints and ranked feast reminders, with a small margin below the strictest supported platform limit.
+- The app schedules a rolling window of personalized saint notifications and replenishes it on app launch, settings changes, time-zone changes, content revision, and notification interaction.
+- A single generic repeating notification may begin after the personalized window as a continuity fallback. Its payload resolves the saint for the actual open date, so it never names a stale saint. It is cancelled and moved forward whenever the personalized window is replenished.
+- The coordinator records both the intended horizon and the latest successfully scheduled occurrence. Partial or zero scheduling never persists a false healthy horizon.
+- Notification channels remain separate so the user can independently control Saint of the Day and Feast Day Reminders at the operating-system level where supported.
+- Remote push is not required for the first release. If later product requirements demand indefinitely personalized daily copy without periodic app launches, a server-driven notification design requires separate privacy, reliability, and operating-cost review.
 
 ## Offline behavior and failure handling
 
@@ -273,6 +285,8 @@ Saint of the Day is a separate, explicit opt-in preference from Feast Day Remind
 - A profile decoding or validation failure is isolated and reported through a user-safe unavailable state; it does not break the calendar or other profiles.
 - A notification is not scheduled unless its target profile validates and resolves locally.
 - Legacy profiles remain readable during migration, but they are not considered research-complete and cannot drive the flagship notification until upgraded.
+- Notification-tap intent is retained until onboarding and root navigation are ready. A stale, malformed, unpublished, or no-longer-matching payload falls back to the dated saints list rather than a blank or incorrect profile.
+- Content revisions are versioned. A failed asset or schema migration leaves the last validated bundled corpus readable and invalidates any notification targets that no longer resolve.
 
 ## Accessibility and pastoral tone
 
@@ -309,7 +323,7 @@ Research the remaining profiles in controlled batches. Each batch passes the sam
 
 ### Phase 3: Activate daily notifications
 
-Enable the opt-in setting and scheduling only after enough calendar coverage is published to avoid dead days. Complete deep-link lifecycle handling, overlap control with feast reminders, rescheduling, permission education, and emulator verification.
+Enable the opt-in setting once the current 158-profile corpus is published. The setting is checked daily, but personalized notifications occur only on covered calendar dates until expansion supplies complete year-round coverage. Complete root-level deep-link lifecycle handling, shared scheduling capacity, overlap control with feast reminders, rescheduling, permission education, generic continuity fallback, and emulator verification.
 
 ### Phase 4: Ongoing expansion
 
@@ -342,6 +356,9 @@ Automated validation rejects or reports:
 - Exclude draft or invalid profiles from notifications.
 - Persist and restore the daily-notification preference and local time.
 - Reschedule idempotently across time-zone and permission changes.
+- Prove that rescheduling saints does not cancel feasts and rescheduling feasts does not cancel saints.
+- Enforce the shared pending-notification budget and truthful scheduling horizons under partial failures.
+- Resolve the generic continuity payload against the actual tap/open date.
 
 ### Widget and integration tests
 
@@ -349,6 +366,7 @@ Automated validation rejects or reports:
 - Omit non-applicable fields cleanly for groups, angels, and Marian celebrations.
 - Navigate from Today’s Saints and Browse to the same stable profile.
 - Open the correct profile from notification taps on cold start and resumed app states.
+- Retain a notification tap while onboarding or root navigation is still initializing.
 - Present multiple commemorations without losing the primary dated context.
 - Combine overlapping same-day saint and feast reminders while retaining eve reminders.
 - Verify a representative notification and page journey on an Android emulator.
