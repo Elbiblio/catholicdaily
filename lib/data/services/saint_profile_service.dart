@@ -1,21 +1,24 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 
 import '../models/saint_profile.dart';
 import '../models/saint_profile_source.dart';
 import 'optional_memorial_service.dart';
+import 'saint_profile_repository.dart';
 
 class SaintProfileService {
-  static final SaintProfileService instance = SaintProfileService._();
+  static final SaintProfileService instance = SaintProfileService._(
+    SaintProfileRepository(),
+  );
 
-  SaintProfileService._();
+  SaintProfileService._(this._repository);
 
-  static const String _assetPath = 'assets/data/saints_profiles.json';
+  @visibleForTesting
+  SaintProfileService.forTesting(this._repository);
 
+  final SaintProfileRepository _repository;
   List<SaintProfile>? _profiles;
   Map<String, SaintProfile>? _byCelebrationId;
+  Map<String, SaintProfile>? _byId;
 
   Future<SaintProfile?> findForCelebration(
     OptionalCelebration celebration,
@@ -46,6 +49,15 @@ class SaintProfileService {
   Future<SaintProfile?> findByCelebrationId(String celebrationId) async {
     final byId = await _celebrationIndex();
     return byId[celebrationId];
+  }
+
+  Future<SaintProfile?> findById(String profileId) async {
+    final cached = _byId;
+    if (cached != null) return cached[profileId];
+    final profiles = await loadProfiles();
+    final index = {for (final profile in profiles) profile.id: profile};
+    _byId = index;
+    return index[profileId];
   }
 
   SaintProfile buildFallbackProfile(OptionalCelebration celebration) {
@@ -81,10 +93,10 @@ class SaintProfileService {
     final cached = _profiles;
     if (cached != null) return cached;
 
-    final source = await rootBundle.loadString(_assetPath);
-    final parsed = parseProfiles(source);
+    final parsed = await _repository.loadProfiles();
     _profiles = parsed;
     _byCelebrationId = null;
+    _byId = null;
     return parsed;
   }
 
@@ -104,12 +116,7 @@ class SaintProfileService {
 
   @visibleForTesting
   static List<SaintProfile> parseProfiles(String source) {
-    final decoded = jsonDecode(source);
-    if (decoded is! List) return const [];
-    return decoded
-        .whereType<Map<String, dynamic>>()
-        .map(SaintProfile.fromJson)
-        .toList(growable: false);
+    return SaintProfileRepository.parseLegacyProfiles(source);
   }
 
   static String normalizeTitle(String value) {
