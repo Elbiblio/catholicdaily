@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
+import '../../data/services/offline_bible_service.dart';
 import '../../data/services/bible_version_preference.dart';
 
 class BibleVersionSwitcher extends StatefulWidget {
   final VoidCallback? onVersionChanged;
 
-  const BibleVersionSwitcher({
-    super.key,
-    this.onVersionChanged,
-  });
+  const BibleVersionSwitcher({super.key, this.onVersionChanged});
 
   @override
   State<BibleVersionSwitcher> createState() => _BibleVersionSwitcherState();
@@ -37,7 +35,12 @@ class _BibleVersionSwitcherState extends State<BibleVersionSwitcher> {
 
   Future<void> _showVersionPicker() async {
     final theme = Theme.of(context);
-    
+    final installedIds = await OfflineBibleService().installedSourceIds();
+    if (!mounted) return;
+    final availableVersions = BibleVersionType.values
+        .where((version) => installedIds.contains(version.dbName))
+        .toList(growable: false);
+
     final selected = await showDialog<BibleVersionType>(
       context: context,
       builder: (context) => AlertDialog(
@@ -45,7 +48,7 @@ class _BibleVersionSwitcherState extends State<BibleVersionSwitcher> {
         contentPadding: const EdgeInsets.symmetric(vertical: 8),
         content: Column(
           mainAxisSize: MainAxisSize.min,
-          children: BibleVersionType.values.map((version) {
+          children: availableVersions.map((version) {
             final isSelected = version == _currentVersion;
             return ListTile(
               leading: Icon(

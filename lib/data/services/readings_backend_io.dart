@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import '../models/bible_book.dart';
@@ -42,17 +44,29 @@ class ReadingsBackendIo implements ReadingsBackend {
   BibleVersionPreference? _versionPreference;
 
   Future<Database> _databaseForSource(BibleSource source) async {
-    if (!source.isBundledRenderable) {
+    if (!source.isBundledRenderable && !source.isDownloadableLocal) {
       throw StateError(
-        'Bible source ${source.id} is not a bundled local database.',
+        'Bible source ${source.id} is not a renderable local database.',
       );
     }
     final cached = _databaseCache[source.id];
     if (cached != null) return cached;
-    final opened = await _openAssetDatabase(
-      source.assetDbName!,
-      readOnly: true,
-    );
+    final Database opened;
+    if (source.isBundledRenderable) {
+      opened = await _openAssetDatabase(source.assetDbName!, readOnly: true);
+    } else {
+      final documents = await getApplicationDocumentsDirectory();
+      final databasePath = path.join(documents.path, source.assetDbName!);
+      if (!await File(databasePath).exists()) {
+        throw StateError(
+          'Bible source ${source.id} has not been downloaded yet.',
+        );
+      }
+      opened = await databaseFactory.openDatabase(
+        databasePath,
+        options: OpenDatabaseOptions(readOnly: true, singleInstance: false),
+      );
+    }
     _databaseCache[source.id] = opened;
     return opened;
   }

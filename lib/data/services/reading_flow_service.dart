@@ -8,6 +8,7 @@ import 'local_lectionary_extract_text_service.dart';
 import 'psalm_resolver_service.dart';
 import 'readings_service.dart';
 import 'base_service.dart';
+import 'improved_liturgical_calendar_service.dart';
 
 class HydratedReadingSet {
   final List<DailyReading> readings;
@@ -109,6 +110,7 @@ class ReadingFlowService extends BaseService<ReadingFlowService> {
     required int selectedIndex,
     List<NavigableItem>? navigableItems,
     int? navigableIndex,
+    LiturgicalDay? liturgicalDay,
   }) {
     return ReadingSession(
       readings: List<DailyReading>.from(readings),
@@ -118,6 +120,7 @@ class ReadingFlowService extends BaseService<ReadingFlowService> {
           navigableItems ??
           readings.map((r) => NavigableItem.fromReading(r)).toList(),
       navigableIndex: navigableIndex ?? selectedIndex,
+      liturgicalDay: liturgicalDay,
     );
   }
 

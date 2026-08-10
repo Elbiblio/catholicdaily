@@ -109,10 +109,18 @@ class _FeastReminderSettingsSheetState
 
       final service = FeastReminderService.instance;
       if (_enabled) {
-        await service.scheduleForYear(DateTime.now().year, prefs);
+        final result = await service.scheduleForYear(
+          DateTime.now().year,
+          prefs,
+        );
+        if (!result.shouldPersistHorizon) {
+          await prefs.setEnabled(false);
+          if (mounted) setState(() => _enabled = false);
+          throw StateError('No reminders could be scheduled.');
+        }
       } else {
         await service.cancelAll();
-        await prefs.setLastScheduledYear(0);
+        await prefs.invalidateSchedule();
       }
     } catch (e) {
       debugPrint('[FeastReminder] _save error: $e');

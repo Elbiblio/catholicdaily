@@ -31,13 +31,29 @@ class BibleSourceRegistry {
       catholicCanon: true,
     ),
     BibleSource(
+      id: 'douay_rheims',
+      displayName: 'Douay-Rheims Bible',
+      abbreviation: 'DR',
+      storage: BibleSourceStorage.userProvidedLocal,
+      redistribution: BibleSourceRedistribution.userProvidedOnly,
+      assetDbName: 'engdra.db',
+      downloadTableName: 'engdra_vpl',
+      sourceUrl: 'https://api.elbiblio.com/dbs/engdra.db',
+      attribution:
+          'Downloaded on demand from the eBible.org VPL database mirror.',
+      regionAffinityCodes: ['general', 'NG'],
+      catholicCanon: true,
+    ),
+    BibleSource(
       id: 'esvce',
       displayName: 'English Standard Version Catholic Edition',
       abbreviation: 'ESV-CE',
       storage: BibleSourceStorage.externalOnly,
       redistribution: BibleSourceRedistribution.externalOnly,
-      sourceUrl: 'https://www.liturgyoffice.org.uk/Resources/Lectionary/LM-FAQ.shtml',
-      attribution: 'Prepared metadata for England and Wales lectionary comparison. Full text is not bundled without a verified redistribution basis.',
+      sourceUrl:
+          'https://www.liturgyoffice.org.uk/Resources/Lectionary/LM-FAQ.shtml',
+      attribution:
+          'Prepared metadata for England and Wales lectionary comparison. Full text is not bundled without a verified redistribution basis.',
       regionAffinityCodes: ['GB_EW'],
       catholicCanon: true,
     ),
@@ -48,7 +64,8 @@ class BibleSourceRegistry {
       storage: BibleSourceStorage.externalOnly,
       redistribution: BibleSourceRedistribution.externalOnly,
       sourceUrl: 'https://universalis.com/mass.htm',
-      attribution: 'Prepared metadata for reference comparison. Full text is not bundled without a verified redistribution basis.',
+      attribution:
+          'Prepared metadata for reference comparison. Full text is not bundled without a verified redistribution basis.',
       regionAffinityCodes: ['general', 'GB_EW', 'NG'],
       catholicCanon: true,
     ),
@@ -56,8 +73,13 @@ class BibleSourceRegistry {
 
   List<BibleSource> get allSources => List.unmodifiable(_sources);
 
-  List<BibleSource> get selectableBundledSources =>
-      _sources.where((source) => source.isBundledRenderable).toList(growable: false);
+  List<BibleSource> get selectableBundledSources => _sources
+      .where((source) => source.isBundledRenderable)
+      .toList(growable: false);
+
+  List<BibleSource> get downloadableLocalSources => _sources
+      .where((source) => source.isDownloadableLocal && source.catholicCanon)
+      .toList(growable: false);
 
   BibleSource? byId(String id) {
     final normalized = id.trim().toLowerCase();

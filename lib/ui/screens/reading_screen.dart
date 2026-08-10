@@ -35,6 +35,7 @@ class ReadingScreen extends StatefulWidget {
   final bool isBibleSearch;
   final List<NavigableItem> navigableItems;
   final int currentNavigableIndex;
+  final VoidCallback? onRouteDisposed;
 
   const ReadingScreen({
     super.key,
@@ -52,6 +53,7 @@ class ReadingScreen extends StatefulWidget {
     this.isBibleSearch = false,
     this.navigableItems = const [],
     this.currentNavigableIndex = 0,
+    this.onRouteDisposed,
   });
 
   @override
@@ -1512,6 +1514,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
 
   @override
   void dispose() {
+    widget.onRouteDisposed?.call();
     SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.manual,
       overlays: SystemUiOverlay.values,

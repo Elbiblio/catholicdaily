@@ -8,6 +8,7 @@ import 'hymn_list_screen.dart';
 import '../../data/models/bible_version.dart';
 import '../../data/services/theme_preferences.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
+import '../../data/services/ordo_resolver_service.dart';
 import '../../data/models/reading_session.dart';
 import '../../data/services/readings_backend_io.dart';
 import '../../data/services/reading_flow_service.dart';
@@ -20,15 +21,17 @@ import 'dart:convert';
 import 'dart:io' show Platform;
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../core/latest_request_guard.dart';
 
-typedef ReadingSelectionHandler = void Function(
-  String reference,
-  String content,
-  LiturgicalDay? liturgicalDay, [
-  DailyReading? readingData,
-  List<DailyReading>? readingSet,
-  int? selectedIndex,
-]);
+typedef ReadingSelectionHandler =
+    void Function(
+      String reference,
+      String content,
+      LiturgicalDay? liturgicalDay, [
+      DailyReading? readingData,
+      List<DailyReading>? readingSet,
+      int? selectedIndex,
+    ]);
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -61,9 +64,12 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _isLoading = true;
   ReadingSession _readingSession = ReadingSession.empty();
   final DateTime _currentDate = DateTime.now();
-  
+
   final ReadingsBackendIo _readingsBackend = ReadingsBackendIo();
   final ReadingFlowService _readingFlow = ReadingFlowService.instance;
+  final OrdoResolverService _ordoResolver = OrdoResolverService.instance;
+  final LatestRequestGuard _sessionLoadGuard = LatestRequestGuard();
+  final LatestRequestGuard _navigationGuard = LatestRequestGuard();
 
   @override
   void initState() {
@@ -74,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _initialize() async {
     await _navigationService.initialize();
     await _navigationService.trackHomeScreen();
-    
+
     final prefs = await SharedPreferences.getInstance();
     _currentIndex = prefs.getInt(_keyLastTabIndex) ?? 0;
 
@@ -94,10 +100,11 @@ class _HomeScreenState extends State<HomeScreen> {
         size: 0,
       ),
     ];
-    
+
     // Load current day's readings
     await _loadCurrentReadings();
-    
+
+    if (!mounted) return;
     setState(() => _isLoading = false);
 
     // Schedule post-frame callbacks
@@ -112,7 +119,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _loadCurrentReadings() async {
     try {
-      final rawReadings = await _readingsBackend.getReadingsForDate(_currentDate);
+      final results = await Future.wait([
+        _readingsBackend.getReadingsForDate(_currentDate),
+        _ordoResolver.resolveDay(_currentDate),
+      ]);
+      final rawReadings = results[0] as List<DailyReading>;
+      final liturgicalDay = results[1] as LiturgicalDay;
 
       final hydrated = await _readingFlow.hydrateReadingSet(
         date: _currentDate,
@@ -124,12 +136,14 @@ class _HomeScreenState extends State<HomeScreen> {
         readings: hydrated.readings,
       );
 
+      _sessionLoadGuard.begin();
       _readingSession = _readingFlow.buildSession(
         readings: hydrated.readings,
         readingTexts: hydrated.readingTexts,
         selectedIndex: 0,
         navigableItems: navigableItems,
         navigableIndex: 0,
+        liturgicalDay: liturgicalDay,
       );
     } catch (e) {
       debugPrint('Error loading current readings: $e');
@@ -139,13 +153,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _resumeToBibleChapter() {
     final chapter = _navigationService.lastBibleChapter!;
-    
+
     // Switch to Bible tab first
     setState(() {
       _currentIndex = 1; // Bible tab index
     });
     _persistTab(1); // Persist the Bible tab selection
-    
+
     // Then open the bible chapter
     _openBibleReading(
       reference: chapter['reference'] as String,
@@ -162,51 +176,67 @@ class _HomeScreenState extends State<HomeScreen> {
     List<DailyReading>? readingSet,
     int? selectedIndex,
     bool isBibleSearch = false,
+    bool replaceCurrentRoute = false,
   }) {
+    _navigationGuard.begin();
     // For bible search, don't build a reading session
     if (isBibleSearch) {
-      _openBibleReading(reference: reference, content: content, liturgicalDay: liturgicalDay);
+      _openBibleReading(
+        reference: reference,
+        content: content,
+        liturgicalDay: liturgicalDay,
+      );
       return;
     }
-    
+
     // Only build a new session if we don't already have one or if explicitly provided with a different set
-    if (readingSet != null && (_readingSession.isEmpty || !_readingSetsEqual(readingSet, _readingSession.readings))) {
+    if (readingSet != null &&
+        (_readingSession.isEmpty ||
+            !ReadingSession.sameReadingSet(
+              readingSet,
+              _readingSession.readings,
+            ))) {
+      final sessionGeneration = _sessionLoadGuard.begin();
       _readingSession = _readingFlow.buildSession(
         readings: readingSet,
-        readingTexts: {},
+        readingTexts: {reference: content},
         selectedIndex: selectedIndex ?? 0,
+        liturgicalDay: liturgicalDay,
       );
-      _primeReadingTexts(readingSet);
+      _primeReadingTexts(readingSet, sessionGeneration);
+    } else if (readingSet != null) {
+      _readingSession =
+          (selectedIndex == null
+                  ? _readingSession
+                  : _readingSession.selectReading(selectedIndex))
+              .copyWith(liturgicalDay: liturgicalDay);
     }
 
-    if (selectedIndex == null && readingData != null && !_readingSession.isEmpty) {
+    if (selectedIndex == null &&
+        readingData != null &&
+        !_readingSession.isEmpty) {
       final resolvedIndex = _readingSession.readings.indexOf(readingData);
       if (resolvedIndex >= 0) {
-        _readingSession = _readingSession.copyWith(currentIndex: resolvedIndex);
+        _readingSession = _readingSession.selectReading(resolvedIndex);
       }
     }
-    
+
     _openReading(
       reference: reference,
       content: content,
       liturgicalDay: liturgicalDay,
       readingData: readingData,
+      replaceCurrentRoute: replaceCurrentRoute,
     );
   }
 
-  bool _readingSetsEqual(List<DailyReading> set1, List<DailyReading> set2) {
-    if (set1.length != set2.length) return false;
-    for (int i = 0; i < set1.length; i++) {
-      if (set1[i].reading != set2[i].reading || set1[i].position != set2[i].position) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  Future<void> _primeReadingTexts(List<DailyReading> readings) async {
+  Future<void> _primeReadingTexts(
+    List<DailyReading> readings,
+    int sessionGeneration,
+  ) async {
     final updatedTexts = Map<String, String>.from(_readingSession.readingTexts);
     for (final reading in readings) {
+      if (!_sessionLoadGuard.isCurrent(sessionGeneration)) return;
       if (updatedTexts.containsKey(reading.reading)) continue;
       try {
         final text = await _readingFlow.getReadingText(reading);
@@ -216,6 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
 
+    if (!mounted || !_sessionLoadGuard.isCurrent(sessionGeneration)) return;
     _readingSession = _readingSession.copyWith(readingTexts: updatedTexts);
   }
 
@@ -244,27 +275,39 @@ class _HomeScreenState extends State<HomeScreen> {
     required String content,
     required LiturgicalDay? liturgicalDay,
     DailyReading? readingData,
+    bool replaceCurrentRoute = false,
   }) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ReadingScreen(
-          reference: reference,
-          content: content,
-          liturgicalDay: liturgicalDay,
-          readingData: readingData,
-          sessionReadings: _readingSession.readings,
-          currentReadingIndex: _readingSession.currentIndex,
-          hasNext: _readingSession.hasNavigableItems ? _readingSession.hasNextNavigable : _readingSession.hasNext,
-          hasPrev: _readingSession.hasNavigableItems ? _readingSession.hasPrevNavigable : _readingSession.hasPrev,
-          onNextReading: _goToNextReading,
-          onPrevReading: _goToPrevReading,
-          onSelectReadingIndex: _goToReadingAtIndex,
-          navigableItems: _readingSession.navigableItems,
-          currentNavigableIndex: _readingSession.navigableIndex,
-        ),
+    final route = MaterialPageRoute(
+      builder: (context) => ReadingScreen(
+        reference: reference,
+        content: content,
+        liturgicalDay: liturgicalDay,
+        readingData: readingData,
+        sessionReadings: _readingSession.readings,
+        currentReadingIndex: _readingSession.currentIndex,
+        hasNext: _readingSession.hasNavigableItems
+            ? _readingSession.hasNextNavigable
+            : _readingSession.hasNext,
+        hasPrev: _readingSession.hasNavigableItems
+            ? _readingSession.hasPrevNavigable
+            : _readingSession.hasPrev,
+        onNextReading: _goToNextReading,
+        onPrevReading: _goToPrevReading,
+        onSelectReadingIndex: _goToReadingAtIndex,
+        onRouteDisposed: _invalidateReadingNavigation,
+        navigableItems: _readingSession.navigableItems,
+        currentNavigableIndex: _readingSession.navigableIndex,
       ),
     );
+    if (replaceCurrentRoute) {
+      Navigator.pushReplacement(context, route);
+    } else {
+      Navigator.push(context, route);
+    }
+  }
+
+  void _invalidateReadingNavigation() {
+    _navigationGuard.begin();
   }
 
   void _goToReadingAtIndex(int index) {
@@ -274,12 +317,14 @@ class _HomeScreenState extends State<HomeScreen> {
     if (index == _readingSession.currentIndex) {
       return; // Already at this reading
     }
-    
+
     // Find the corresponding navigable index
     final navigableIndex = _readingSession.navigableItems.indexWhere(
-      (item) => item.isReading && item.reading?.reading == _readingSession.readings[index].reading,
+      (item) =>
+          item.isReading &&
+          item.reading?.reading == _readingSession.readings[index].reading,
     );
-    
+
     _readingSession = _readingSession.copyWith(
       currentIndex: index,
       navigableIndex: navigableIndex >= 0 ? navigableIndex : index,
@@ -300,10 +345,10 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!_readingSession.hasNextNavigable) {
       return;
     }
-    
+
     final nextIndex = _readingSession.navigableIndex + 1;
     _readingSession = _readingSession.copyWith(navigableIndex: nextIndex);
-    
+
     // Update current reading index if the next item is a reading
     final nextItem = _readingSession.currentNavigableItem;
     if (nextItem?.isReading == true) {
@@ -314,7 +359,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _readingSession = _readingSession.copyWith(currentIndex: readingIndex);
       }
     }
-    
+
     _openCurrentNavigableItemFromNavigation();
   }
 
@@ -331,10 +376,10 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!_readingSession.hasPrevNavigable) {
       return;
     }
-    
+
     final prevIndex = _readingSession.navigableIndex - 1;
     _readingSession = _readingSession.copyWith(navigableIndex: prevIndex);
-    
+
     // Update current reading index if the previous item is a reading
     final prevItem = _readingSession.currentNavigableItem;
     if (prevItem?.isReading == true) {
@@ -345,7 +390,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _readingSession = _readingSession.copyWith(currentIndex: readingIndex);
       }
     }
-    
+
     _openCurrentNavigableItemFromNavigation();
   }
 
@@ -355,21 +400,23 @@ class _HomeScreenState extends State<HomeScreen> {
       return;
     }
 
+    final navigationGeneration = _navigationGuard.begin();
     final cachedText = _readingSession.textFor(reading.reading);
 
     if (cachedText != null && cachedText.trim().isNotEmpty) {
       _onReadingSelected(
         reading.reading,
         cachedText,
-        null,
+        _readingSession.liturgicalDay,
         readingData: reading,
         readingSet: _readingSession.readings,
         selectedIndex: _readingSession.currentIndex,
+        replaceCurrentRoute: true,
       );
       return;
     }
 
-    _resolveReadingTextAndOpen(reading);
+    _resolveReadingTextAndOpen(reading, navigationGeneration);
   }
 
   void _openCurrentNavigableItemFromNavigation() {
@@ -388,41 +435,55 @@ class _HomeScreenState extends State<HomeScreen> {
         _onReadingSelected(
           reading.reading,
           cachedText ?? reading.reading,
-          null,
+          _readingSession.liturgicalDay,
           readingData: reading,
           readingSet: _readingSession.readings,
           selectedIndex: _readingSession.currentIndex,
+          replaceCurrentRoute: true,
         );
       }
     }
   }
 
-  Future<void> _resolveReadingTextAndOpen(DailyReading reading) async {
+  Future<void> _resolveReadingTextAndOpen(
+    DailyReading reading,
+    int navigationGeneration,
+  ) async {
+    final sessionGeneration = _sessionLoadGuard.capture();
+    final selectedIndex = _readingSession.currentIndex;
+    final liturgicalDay = _readingSession.liturgicalDay;
+    final sessionReadings = _readingSession.readings;
     String text;
     try {
       text = await _readingFlow.getReadingText(reading);
+      if (!_sessionLoadGuard.isCurrent(sessionGeneration) ||
+          !_navigationGuard.isCurrent(navigationGeneration)) {
+        return;
+      }
       _readingSession = _readingSession.copyWith(
-        readingTexts: {
-          ..._readingSession.readingTexts,
-          reading.reading: text,
-        },
+        readingTexts: {..._readingSession.readingTexts, reading.reading: text},
       );
     } catch (_) {
       text = reading.reading;
     }
 
-    if (!mounted) return;
+    if (!mounted ||
+        !_sessionLoadGuard.isCurrent(sessionGeneration) ||
+        !_navigationGuard.isCurrent(navigationGeneration) ||
+        _readingSession.currentIndex != selectedIndex) {
+      return;
+    }
 
     _onReadingSelected(
       reading.reading,
       text,
-      null,
+      liturgicalDay,
       readingData: reading,
-      readingSet: _readingSession.readings,
-      selectedIndex: _readingSession.currentIndex,
+      readingSet: sessionReadings,
+      selectedIndex: selectedIndex,
+      replaceCurrentRoute: true,
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -445,43 +506,71 @@ class _HomeScreenState extends State<HomeScreen> {
             colorScheme.surfaceContainerHighest.withValues(alpha: 0.72),
           )
         : null;
-    final navIconTheme = WidgetStateProperty.resolveWith<IconThemeData>((states) {
+    final navIconTheme = WidgetStateProperty.resolveWith<IconThemeData>((
+      states,
+    ) {
       final selected = states.contains(WidgetState.selected);
       return IconThemeData(
         color: selected
             ? (isDark ? Colors.white : colorScheme.primary)
-            : (isDark ? colorScheme.onSurfaceVariant.withValues(alpha: 0.92) : null),
+            : (isDark
+                  ? colorScheme.onSurfaceVariant.withValues(alpha: 0.92)
+                  : null),
       );
     });
-    final navLabelTextStyle = WidgetStateProperty.resolveWith<TextStyle>((states) {
+    final navLabelTextStyle = WidgetStateProperty.resolveWith<TextStyle>((
+      states,
+    ) {
       final selected = states.contains(WidgetState.selected);
       return theme.textTheme.labelMedium?.copyWith(
             color: selected
                 ? (isDark ? Colors.white : colorScheme.primary)
-                : (isDark ? colorScheme.onSurfaceVariant.withValues(alpha: 0.92) : colorScheme.onSurfaceVariant),
+                : (isDark
+                      ? colorScheme.onSurfaceVariant.withValues(alpha: 0.92)
+                      : colorScheme.onSurfaceVariant),
             fontWeight: selected ? FontWeight.w700 : FontWeight.w600,
           ) ??
           TextStyle(
             color: selected
                 ? (isDark ? Colors.white : colorScheme.primary)
-                : (isDark ? colorScheme.onSurfaceVariant.withValues(alpha: 0.92) : colorScheme.onSurfaceVariant),
+                : (isDark
+                      ? colorScheme.onSurfaceVariant.withValues(alpha: 0.92)
+                      : colorScheme.onSurfaceVariant),
           );
     });
 
     final screens = [
-      PremiumBrowseScreen(onReadingSelected: (reading, content, liturgicalDay, [readingData, readingSet, selectedIndex]) {
-        _onReadingSelected(
-          reading,
-          content,
-          liturgicalDay,
-          readingData: readingData,
-          readingSet: readingSet,
-          selectedIndex: selectedIndex,
-        );
-      }),
-      BibleScreen(onReadingSelected: (reference, content, liturgicalDay, {isBibleSearch = false}) {
-        _onReadingSelected(reference, content, liturgicalDay, isBibleSearch: isBibleSearch);
-      }),
+      PremiumBrowseScreen(
+        onReadingSelected:
+            (
+              reading,
+              content,
+              liturgicalDay, [
+              readingData,
+              readingSet,
+              selectedIndex,
+            ]) {
+              _onReadingSelected(
+                reading,
+                content,
+                liturgicalDay,
+                readingData: readingData,
+                readingSet: readingSet,
+                selectedIndex: selectedIndex,
+              );
+            },
+      ),
+      BibleScreen(
+        onReadingSelected:
+            (reference, content, liturgicalDay, {isBibleSearch = false}) {
+              _onReadingSelected(
+                reference,
+                content,
+                liturgicalDay,
+                isBibleSearch: isBibleSearch,
+              );
+            },
+      ),
       const HymnListScreen(),
       const PrayersScreen(),
       SettingsScreen(
@@ -617,8 +706,12 @@ class _HomeScreenState extends State<HomeScreen> {
       return;
     }
     final uri = Platform.isIOS
-        ? Uri.parse('https://apps.apple.com/us/search?term=${Uri.encodeComponent('Catholic Daily Missal')}')
-        : Uri.parse('https://play.google.com/store/apps/details?id=$_androidPackageName');
+        ? Uri.parse(
+            'https://apps.apple.com/us/search?term=${Uri.encodeComponent('Catholic Daily Missal')}',
+          )
+        : Uri.parse(
+            'https://play.google.com/store/apps/details?id=$_androidPackageName',
+          );
     if (mounted) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
@@ -639,7 +732,9 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("We're sorry to hear that. What could we do better?"),
+                const Text(
+                  "We're sorry to hear that. What could we do better?",
+                ),
                 const SizedBox(height: 16),
                 TextField(
                   controller: emailController,
@@ -679,7 +774,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           final info = await PackageInfo.fromPlatform();
                           appVersion = '${info.version}+${info.buildNumber}';
                         } catch (_) {}
-                        final platform = Platform.isAndroid ? 'android' : (Platform.isIOS ? 'ios' : 'other');
+                        final platform = Platform.isAndroid
+                            ? 'android'
+                            : (Platform.isIOS ? 'ios' : 'other');
                         await http.post(
                           Uri.parse('https://api.elbiblio.com/api/feedback'),
                           headers: {'Content-Type': 'application/json'},
@@ -695,7 +792,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.pop(ctx);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text("Thank you for your feedback! We'll use it to improve the app."),
+                              content: Text(
+                                "Thank you for your feedback! We'll use it to improve the app.",
+                              ),
                             ),
                           );
                         }
@@ -704,7 +803,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       }
                     },
               child: isSubmitting
-                  ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
                   : const Text('Send'),
             ),
           ],

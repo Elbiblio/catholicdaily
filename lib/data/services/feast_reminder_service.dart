@@ -7,6 +7,7 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tzdata;
 import '../models/liturgical_region.dart';
 import 'feast_reminder_preferences.dart';
+import 'feast_reminder_schedule_policy.dart';
 import 'liturgical_region_preference_service.dart';
 import 'offline_ordo_lookup_service.dart';
 
@@ -25,6 +26,34 @@ class _FeastEvent {
   });
 }
 
+class _ReminderSlot {
+  final bool dayBefore;
+  final int hour;
+  final int minute;
+  final bool isAdditionalReminder;
+
+  const _ReminderSlot({
+    required this.dayBefore,
+    required this.hour,
+    required this.minute,
+    this.isAdditionalReminder = false,
+  });
+}
+
+class _ReminderOccurrence {
+  final _FeastEvent event;
+  final DateTime scheduledTime;
+  final bool dayBefore;
+  final bool isAdditionalReminder;
+
+  const _ReminderOccurrence({
+    required this.event,
+    required this.scheduledTime,
+    required this.dayBefore,
+    required this.isAdditionalReminder,
+  });
+}
+
 @visibleForTesting
 class FeastReminderPreviewEvent {
   final DateTime date;
@@ -35,6 +64,25 @@ class FeastReminderPreviewEvent {
     required this.date,
     required this.title,
     required this.rank,
+  });
+}
+
+@visibleForTesting
+class FeastReminderScheduledPreviewEvent {
+  final DateTime celebrationDate;
+  final DateTime scheduledTime;
+  final String title;
+  final String rank;
+  final bool dayBefore;
+  final bool isAdditionalReminder;
+
+  const FeastReminderScheduledPreviewEvent({
+    required this.celebrationDate,
+    required this.scheduledTime,
+    required this.title,
+    required this.rank,
+    required this.dayBefore,
+    required this.isAdditionalReminder,
   });
 }
 
@@ -53,7 +101,16 @@ class FeastReminderService {
   static const _channelName = 'Feast & Solemnity Reminders';
   static const _channelDesc =
       'Daily reminders for Catholic feasts and solemnities';
-  static const _scheduleSchemaVersion = 2;
+  static const _scheduleSchemaVersion = 3;
+  static const _schedulePolicy = FeastReminderSchedulePolicy();
+  static const _majorFeastTitleTokens = <String>[
+    'lord',
+    'holy family',
+    'holy cross',
+    'blessed virgin mary',
+    'our lady',
+    'lateran basilica',
+  ];
 
   Future<void> initialize() async {
     if (_initialized) return;
@@ -94,6 +151,15 @@ class FeastReminderService {
             AndroidFlutterLocalNotificationsPlugin
           >();
       final result = await androidPlugin?.requestNotificationsPermission();
+      if (result == true) {
+        try {
+          await androidPlugin?.requestExactAlarmsPermission();
+        } catch (e) {
+          debugPrint(
+            '[FeastReminder] Exact alarm permission request failed: $e',
+          );
+        }
+      }
       return result ?? false;
     }
     return true;
@@ -129,9 +195,10 @@ class FeastReminderService {
   /// DEPRECATED: kept as a thin wrapper around [scheduleAheadMonths] for
   /// callers that still pass a single year. Schedules a 15-month rolling
   /// window starting today regardless of [year].
-  Future<void> scheduleForYear(int year, FeastReminderPreferences prefs) async {
-    await scheduleAheadMonths(15, prefs);
-  }
+  Future<FeastReminderScheduleResult> scheduleForYear(
+    int year,
+    FeastReminderPreferences prefs,
+  ) => scheduleAheadMonths(15, prefs);
 
   // ── Notification copywriting ───────────────────────────────────────────
   // Wording is intentionally restrained — short, dignified, contemplative.
@@ -298,6 +365,47 @@ class FeastReminderService {
         .toList();
   }
 
+  @visibleForTesting
+  Future<List<FeastReminderScheduledPreviewEvent>>
+  buildScheduledRemindersForTesting({
+    required DateTime now,
+    required int monthsAhead,
+    required FeastReminderRank rank,
+    required int hour,
+    required int minute,
+    required bool notifyDayBefore,
+    LiturgicalRegion? region,
+  }) async {
+    final endDate = DateTime(now.year, now.month + monthsAhead, now.day);
+    final allEvents = <_FeastEvent>[];
+    for (var y = now.year; y <= endDate.year; y++) {
+      allEvents.addAll(
+        await _buildFeastEvents(y, rank, regionOverride: region),
+      );
+    }
+    allEvents.sort((a, b) => a.date.compareTo(b.date));
+
+    return _buildReminderOccurrences(
+          allEvents,
+          now: now,
+          endDate: endDate,
+          hour: hour,
+          minute: minute,
+          notifyDayBefore: notifyDayBefore,
+        )
+        .map(
+          (occurrence) => FeastReminderScheduledPreviewEvent(
+            celebrationDate: occurrence.event.date,
+            scheduledTime: occurrence.scheduledTime,
+            title: occurrence.event.title,
+            rank: occurrence.event.rank,
+            dayBefore: occurrence.dayBefore,
+            isAdditionalReminder: occurrence.isAdditionalReminder,
+          ),
+        )
+        .toList();
+  }
+
   bool _shouldInclude(String? dayRank, FeastReminderRank filter) {
     if (dayRank == null || dayRank.isEmpty) return false;
     switch (filter) {
@@ -313,12 +421,113 @@ class FeastReminderService {
     }
   }
 
+  bool _shouldAddSecondReminder(_FeastEvent event) {
+    if (event.rank == 'Solemnity') return true;
+    if (event.rank != 'Feast') return false;
+
+    final title = event.title.toLowerCase();
+    return _majorFeastTitleTokens.any(title.contains);
+  }
+
+  List<_ReminderSlot> _reminderSlotsForEvent(
+    _FeastEvent event, {
+    required int hour,
+    required int minute,
+    required bool notifyDayBefore,
+  }) {
+    final slots = <_ReminderSlot>[
+      _ReminderSlot(dayBefore: notifyDayBefore, hour: hour, minute: minute),
+    ];
+
+    if (_shouldAddSecondReminder(event)) {
+      slots.add(
+        notifyDayBefore
+            ? const _ReminderSlot(
+                dayBefore: false,
+                hour: 6,
+                minute: 0,
+                isAdditionalReminder: true,
+              )
+            : const _ReminderSlot(
+                dayBefore: true,
+                hour: 20,
+                minute: 0,
+                isAdditionalReminder: true,
+              ),
+      );
+    }
+
+    return slots;
+  }
+
+  List<_ReminderOccurrence> _buildReminderOccurrences(
+    List<_FeastEvent> events, {
+    required DateTime now,
+    required DateTime endDate,
+    required int hour,
+    required int minute,
+    required bool notifyDayBefore,
+  }) {
+    final occurrences = <_ReminderOccurrence>[];
+    final today = DateTime(now.year, now.month, now.day);
+
+    for (final event in events) {
+      if (event.date.isBefore(today)) continue;
+      if (event.date.isAfter(endDate)) break;
+
+      final slots = _reminderSlotsForEvent(
+        event,
+        hour: hour,
+        minute: minute,
+        notifyDayBefore: notifyDayBefore,
+      );
+
+      for (final slot in slots) {
+        final deliveryDate = slot.dayBefore
+            ? event.date.subtract(const Duration(days: 1))
+            : event.date;
+        final scheduledTime = DateTime(
+          deliveryDate.year,
+          deliveryDate.month,
+          deliveryDate.day,
+          slot.hour,
+          slot.minute,
+        );
+        if (scheduledTime.isBefore(now)) continue;
+
+        occurrences.add(
+          _ReminderOccurrence(
+            event: event,
+            scheduledTime: scheduledTime,
+            dayBefore: slot.dayBefore,
+            isAdditionalReminder: slot.isAdditionalReminder,
+          ),
+        );
+      }
+    }
+
+    occurrences.sort((a, b) {
+      final byTime = a.scheduledTime.compareTo(b.scheduledTime);
+      if (byTime != 0) return byTime;
+      final byCelebration = a.event.date.compareTo(b.event.date);
+      if (byCelebration != 0) return byCelebration;
+      return a.isAdditionalReminder == b.isAdditionalReminder
+          ? 0
+          : (a.isAdditionalReminder ? 1 : -1);
+    });
+
+    return occurrences;
+  }
+
   /// Call on app start to reschedule if needed (new year or prefs changed).
   Future<void> rescheduleIfNeeded(FeastReminderPreferences prefs) async {
     if (!prefs.isEnabled) return;
     final now = DateTime.now();
-    if (prefs.lastScheduledYear != now.year ||
-        prefs.scheduleSchemaVersion < _scheduleSchemaVersion) {
+    if (_schedulePolicy.needsReschedule(
+      now: now,
+      scheduledThrough: prefs.scheduledThrough,
+      schemaMatches: prefs.scheduleSchemaVersion == _scheduleSchemaVersion,
+    )) {
       await scheduleAheadMonths(15, prefs);
     }
   }
@@ -376,14 +585,23 @@ class FeastReminderService {
   /// Cancels existing notifications first and reschedules in one pass — safer
   /// than scheduling two years separately (which would have wiped year 1 on
   /// the year 2 call).
-  Future<void> scheduleAheadMonths(
+  Future<FeastReminderScheduleResult> scheduleAheadMonths(
     int monthsAhead,
     FeastReminderPreferences prefs,
   ) async {
     await initialize();
+    await prefs.invalidateSchedule();
     await _plugin.cancelAll();
 
-    if (!prefs.isEnabled) return;
+    if (!prefs.isEnabled) {
+      return const FeastReminderScheduleResult(
+        eligibleCount: 0,
+        scheduledCount: 0,
+        failureCount: 0,
+        scheduledThrough: null,
+        usedExactDelivery: false,
+      );
+    }
 
     final now = DateTime.now();
     final endDate = DateTime(now.year, now.month + monthsAhead, now.day);
@@ -395,56 +613,90 @@ class FeastReminderService {
     }
     allEvents.sort((a, b) => a.date.compareTo(b.date));
 
+    final occurrences = _buildReminderOccurrences(
+      allEvents,
+      now: now,
+      endDate: endDate,
+      hour: prefs.hour,
+      minute: prefs.minute,
+      notifyDayBefore: prefs.notifyDayBefore,
+    );
+
     int notifId = 1000;
     int scheduled = 0;
+    int failures = 0;
+    DateTime? scheduledThrough;
     const maxNotifications = 64;
+    var exactAllowed = false;
+    if (Platform.isAndroid) {
+      final androidPlugin = _plugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
+      try {
+        exactAllowed =
+            (await androidPlugin?.canScheduleExactNotifications()) ?? false;
+      } catch (e) {
+        debugPrint('[FeastReminder] Exact alarm capability check failed: $e');
+      }
+    }
+    final androidScheduleMode = _schedulePolicy.androidMode(
+      exactAllowed: exactAllowed,
+    );
 
-    for (final event in allEvents) {
+    for (final occurrence in occurrences) {
       if (scheduled >= maxNotifications) break;
-      if (event.date.isBefore(DateTime(now.year, now.month, now.day))) continue;
-      if (event.date.isAfter(endDate)) break;
 
-      // Compute delivery time: either the evening before (8-11pm choices)
-      // or the day-of (6am-6pm choices).
-      final deliveryDate = prefs.notifyDayBefore
-          ? event.date.subtract(const Duration(days: 1))
-          : event.date;
-      final scheduledTime = DateTime(
-        deliveryDate.year,
-        deliveryDate.month,
-        deliveryDate.day,
-        prefs.hour,
-        prefs.minute,
+      final event = occurrence.event;
+      final tzScheduled = tz.TZDateTime.from(
+        occurrence.scheduledTime,
+        tz.local,
       );
-      if (scheduledTime.isBefore(now)) continue;
-
-      final tzScheduled = tz.TZDateTime.from(scheduledTime, tz.local);
 
       try {
         await _plugin.zonedSchedule(
           notifId++,
-          _notificationTitle(event, dayBefore: prefs.notifyDayBefore),
-          _notificationBody(event, dayBefore: prefs.notifyDayBefore),
+          _notificationTitle(event, dayBefore: occurrence.dayBefore),
+          _notificationBody(event, dayBefore: occurrence.dayBefore),
           tzScheduled,
-          _buildNotificationDetails(event, dayBefore: prefs.notifyDayBefore),
-          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+          _buildNotificationDetails(event, dayBefore: occurrence.dayBefore),
+          androidScheduleMode: androidScheduleMode,
           uiLocalNotificationDateInterpretation:
               UILocalNotificationDateInterpretation.absoluteTime,
-          payload: 'feast:${event.date.toIso8601String()}',
+          payload:
+              'feast:${event.date.toIso8601String()}:'
+              '${occurrence.dayBefore ? 'eve' : 'day'}',
         );
         scheduled++;
+        scheduledThrough = occurrence.scheduledTime;
       } catch (e) {
+        failures++;
         debugPrint('[FeastReminder] Failed to schedule ${event.title}: $e');
       }
     }
 
-    // Persist the last fully-scheduled year so rescheduleIfNeeded can detect
-    // a year-rollover and refresh well before notifications run out.
-    await prefs.setLastScheduledYear(endDate.year);
-    await prefs.setScheduleSchemaVersion(_scheduleSchemaVersion);
+    final result = FeastReminderScheduleResult(
+      eligibleCount: occurrences.length,
+      scheduledCount: scheduled,
+      failureCount: failures,
+      scheduledThrough: occurrences.isEmpty ? endDate : scheduledThrough,
+      usedExactDelivery: exactAllowed,
+    );
+    if (!result.shouldPersistHorizon) {
+      await _plugin.cancelAll();
+    } else {
+      await prefs.setLastScheduledYear(
+        result.scheduledThrough?.year ?? endDate.year,
+      );
+      await prefs.setScheduledThrough(result.scheduledThrough!);
+      await prefs.setScheduleSchemaVersion(_scheduleSchemaVersion);
+    }
     debugPrint(
       '[FeastReminder] Scheduled $scheduled reminders across '
-      '${now.year}-${endDate.year} (${allEvents.length} candidates)',
+      '${now.year}-${endDate.year} '
+      '(${occurrences.length} occurrences, ${allEvents.length} candidates, '
+      '${exactAllowed ? 'exact' : 'inexact'}, $failures failures)',
     );
+    return result;
   }
 }

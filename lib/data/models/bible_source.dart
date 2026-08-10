@@ -1,8 +1,4 @@
-enum BibleSourceStorage {
-  bundledAsset,
-  userProvidedLocal,
-  externalOnly,
-}
+enum BibleSourceStorage { bundledAsset, userProvidedLocal, externalOnly }
 
 enum BibleSourceRedistribution {
   bundledAllowed,
@@ -17,6 +13,7 @@ class BibleSource {
   final BibleSourceStorage storage;
   final BibleSourceRedistribution redistribution;
   final String? assetDbName;
+  final String? downloadTableName;
   final String sourceUrl;
   final String attribution;
   final List<String> regionAffinityCodes;
@@ -33,6 +30,7 @@ class BibleSource {
     required this.regionAffinityCodes,
     required this.catholicCanon,
     this.assetDbName,
+    this.downloadTableName,
   });
 
   bool get isBundledRenderable =>
@@ -40,4 +38,12 @@ class BibleSource {
       redistribution == BibleSourceRedistribution.bundledAllowed &&
       assetDbName != null &&
       assetDbName!.trim().isNotEmpty;
+
+  bool get isDownloadableLocal =>
+      storage == BibleSourceStorage.userProvidedLocal &&
+      redistribution == BibleSourceRedistribution.userProvidedOnly &&
+      assetDbName != null &&
+      assetDbName!.trim().isNotEmpty &&
+      downloadTableName != null &&
+      downloadTableName!.trim().isNotEmpty;
 }

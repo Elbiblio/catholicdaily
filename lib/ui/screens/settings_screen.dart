@@ -23,6 +23,7 @@ class SettingsScreen extends StatefulWidget {
   final AppThemeStyle themeStyle;
   final ValueChanged<ThemeMode> onThemeModeChanged;
   final ValueChanged<AppThemeStyle> onThemeStyleChanged;
+  final OfflineBibleService? offlineBibleService;
 
   const SettingsScreen({
     super.key,
@@ -31,6 +32,7 @@ class SettingsScreen extends StatefulWidget {
     required this.themeStyle,
     required this.onThemeModeChanged,
     required this.onThemeStyleChanged,
+    this.offlineBibleService,
   });
 
   @override
@@ -47,6 +49,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _showIncipit = true;
   bool _useReadingIntroReplacements = true;
   bool _showPrayerOfFaithful = false;
+  late final OfflineBibleService _offlineBibleService;
   static const _androidPackageName = 'com.elbiblio.catholicdaily';
   static const _iosAppStoreId = '';
   static const _iosSearchTerm = 'Catholic Daily Missal';
@@ -54,6 +57,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   void initState() {
     super.initState();
+    _offlineBibleService = widget.offlineBibleService ?? OfflineBibleService();
     _selectedTheme = _themeModeToValue(widget.themeMode);
     _selectedThemeStyle = _themeStyleToValue(widget.themeStyle);
     _loadAppInfo();
@@ -244,7 +248,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     widget.onThemeStyleChanged(style);
   }
 
-  void _showBibleVersionSelector(BuildContext context) {
+  Future<void> _showBibleVersionSelector(BuildContext context) async {
+    final installedIds = await _offlineBibleService.installedSourceIds();
+    if (!mounted || !context.mounted) return;
+    final availableVersions = BibleVersionType.values
+        .where((version) => installedIds.contains(version.dbName))
+        .toList(growable: false);
     showDialog(
       context: context,
       builder: (context) {
@@ -252,7 +261,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           title: const Text('Select Bible Translation'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
-            children: BibleVersionType.values.map((version) {
+            children: availableVersions.map((version) {
               final isSelected = _currentBibleVersion == version;
               return ListTile(
                 leading: Icon(
@@ -621,7 +630,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _showDataManagementDialog(BuildContext context) {
-    showDialog(context: context, builder: (ctx) => _DataManagementDialog());
+    showDialog(
+      context: context,
+      builder: (ctx) => _DataManagementDialog(service: _offlineBibleService),
+    );
   }
 
   Future<void> _openLegalUrl(String url) async {
@@ -898,12 +910,15 @@ class _SectionHeader extends StatelessWidget {
 }
 
 class _DataManagementDialog extends StatefulWidget {
+  final OfflineBibleService service;
+
+  const _DataManagementDialog({required this.service});
+
   @override
   State<_DataManagementDialog> createState() => _DataManagementDialogState();
 }
 
 class _DataManagementDialogState extends State<_DataManagementDialog> {
-  final _service = OfflineBibleService();
   List<BibleVersion> _versions = [];
   bool _isLoading = true;
   final Map<String, double> _downloadProgress = {};
@@ -920,7 +935,7 @@ class _DataManagementDialogState extends State<_DataManagementDialog> {
 
   Future<void> _loadVersions() async {
     try {
-      final versions = await _service.fetchAvailableVersions();
+      final versions = await widget.service.fetchAvailableVersions();
       if (mounted)
         setState(() {
           _versions = versions;
@@ -937,26 +952,29 @@ class _DataManagementDialogState extends State<_DataManagementDialog> {
       _downloadProgress[version.id] = 0;
     });
     try {
-      await _service.downloadVersion(version, (progress) {
+      await widget.service.downloadVersion(version, (progress) {
         if (mounted) setState(() => _downloadProgress[version.id] = progress);
       });
       if (mounted) {
         setState(() {
           _downloading[version.id] = false;
           final idx = _versions.indexWhere((v) => v.id == version.id);
-          if (idx >= 0)
-            _versions[idx] = BibleVersion(
-              id: version.id,
-              name: version.name,
-              abbreviation: version.abbreviation,
-              isDownloaded: true,
-              size: version.size,
-              downloadUrl: version.downloadUrl,
-            );
+          if (idx >= 0) {
+            _versions[idx] = version.copyWith(isDownloaded: true);
+          }
         });
       }
     } catch (_) {
-      if (mounted) setState(() => _downloading[version.id] = false);
+      if (mounted) {
+        setState(() => _downloading[version.id] = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Download failed. Check your connection and try again.',
+            ),
+          ),
+        );
+      }
     }
   }
 
