@@ -64,8 +64,8 @@
       "url": "https://en.natmus.dk/historical-knowledge/denmark/prehistoric-period-until-1050-ad/the-viking-age/religion-magic-death-and-rituals/the-transition-to-christianity/",
       "accessedDate": "2026-08-10",
       "tier": 2,
-      "reuseBasis": "National historical-museum control for the 826 and c. 830 journeys, Birka, church permissions, Frankish political interests, Ansgar's diplomatic role, and the limits of his biography as evidence",
-      "supports": ["chronology", "denmarkMission", "birka", "politicalContext", "diplomacy", "churchPermissions", "evidenceLimits"]
+      "reuseBasis": "National historical-museum control for the uncertain geographic scope of the 826 effort among Saxons and perhaps Danes, the c. 830 Birka journey, church permissions, Frankish political interests, Ansgar's diplomatic role, gradual Christianization, and the limits of his biography as evidence",
+      "supports": ["chronology", "journey826Context", "birka", "politicalContext", "diplomacy", "churchPermissions", "gradualChristianization", "evidenceLimits"]
     },
     {
       "id": "hamburg-history",
@@ -99,7 +99,7 @@
       {
         "heading": "Mission within a political world",
         "body": "Ansgar's first northern journey followed the baptism and attempted restoration of the exiled Danish ruler Harald Klak. His later journey to Birka followed a request connected with the Swedish court. Frankish rulers saw religious and diplomatic advantage in northern Christianity, while local rulers and assemblies controlled access. This context does not erase Ansgar's faith; it prevents a false picture of mission detached from power, negotiation, and local agency.",
-        "sourceIds": ["rimbert-life", "danish-national-museum", "hamburg-history"]
+        "sourceIds": ["rimbert-life", "hamburg-history"]
       },
       {
         "heading": "Permission, presence, and local choice",
