@@ -26,6 +26,19 @@ enum BibleVersionType {
   }
 }
 
+class BibleVersionRecoveryPolicy {
+  const BibleVersionRecoveryPolicy._();
+
+  static BibleVersionType versionAfterFailure({
+    required BibleVersionType failedVersion,
+    required BibleVersionType currentVersion,
+  }) {
+    return currentVersion == failedVersion
+        ? BibleVersionType.rsvce
+        : currentVersion;
+  }
+}
+
 class BibleVersionPreference extends ChangeNotifier {
   static const String _key = 'preferred_bible_version';
   static BibleVersionPreference? _instance;

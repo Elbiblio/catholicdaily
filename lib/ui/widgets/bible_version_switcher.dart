@@ -24,13 +24,20 @@ class _BibleVersionSwitcherState extends State<BibleVersionSwitcher> {
 
   Future<void> _loadPreference() async {
     final pref = await BibleVersionPreference.getInstance();
-    if (mounted) {
-      setState(() {
-        _preference = pref;
-        _currentVersion = pref.currentVersion;
-        _isLoading = false;
-      });
-    }
+    if (!mounted) return;
+    _preference?.removeListener(_onPreferenceChanged);
+    _preference = pref;
+    _preference!.addListener(_onPreferenceChanged);
+    setState(() {
+      _currentVersion = pref.currentVersion;
+      _isLoading = false;
+    });
+  }
+
+  void _onPreferenceChanged() {
+    if (!mounted || _preference == null) return;
+    setState(() => _currentVersion = _preference!.currentVersion);
+    widget.onVersionChanged?.call();
   }
 
   Future<void> _showVersionPicker() async {
@@ -78,13 +85,13 @@ class _BibleVersionSwitcherState extends State<BibleVersionSwitcher> {
 
     if (selected != null && selected != _currentVersion) {
       await _preference?.setVersion(selected);
-      if (mounted) {
-        setState(() {
-          _currentVersion = selected;
-        });
-        widget.onVersionChanged?.call();
-      }
     }
+  }
+
+  @override
+  void dispose() {
+    _preference?.removeListener(_onPreferenceChanged);
+    super.dispose();
   }
 
   @override

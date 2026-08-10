@@ -36,9 +36,9 @@ class OfflineBibleService {
     final client = _client ?? http.Client();
     try {
       final response = await client.get(Uri.parse(_versionsUrl));
-      if (response.statusCode != 200) return _bundledVersions();
+      if (response.statusCode != 200) return _offlineVersions();
       final decoded = json.decode(response.body);
-      if (decoded is! List<dynamic>) return _bundledVersions();
+      if (decoded is! List<dynamic>) return _offlineVersions();
       return supportedVersionsFromManifest(decoded);
     } catch (error) {
       developer.log(
@@ -46,7 +46,7 @@ class OfflineBibleService {
         error: error,
         name: 'OfflineBibleService',
       );
-      return _bundledVersions();
+      return _offlineVersions();
     } finally {
       if (_client == null) client.close();
     }
@@ -98,11 +98,37 @@ class OfflineBibleService {
       )
       .toList(growable: true);
 
+  Future<List<BibleVersion>> _offlineVersions() async {
+    final versions = _bundledVersions();
+    for (final source
+        in BibleSourceRegistry.instance.downloadableLocalSources) {
+      if (!await _isVersionDownloaded(source.assetDbName!)) continue;
+      versions.add(
+        BibleVersion(
+          id: source.id,
+          name: source.displayName,
+          abbreviation: source.abbreviation,
+          downloadUrl: source.sourceUrl,
+          dbFilename: source.assetDbName,
+          isDownloaded: true,
+        ),
+      );
+    }
+    return versions;
+  }
+
   Future<bool> _isVersionDownloaded(String dbName) async {
     final docsDir = await _documentsDirectoryProvider();
     final file = File(path.join(docsDir.path, dbName));
     await _recoverInterruptedReplacement(file);
     if (!await file.exists()) return false;
+    if (_databaseValidator != null) {
+      try {
+        return await _databaseValidator(file.path);
+      } catch (_) {
+        return false;
+      }
+    }
     return _hasNormalizedSchema(file.path);
   }
 

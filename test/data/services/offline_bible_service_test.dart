@@ -74,6 +74,55 @@ void main() {
     },
   );
 
+  test('offline catalog retains a validated installed translation', () async {
+    File(
+      '${tempDir.path}${Platform.pathSeparator}engdra.db',
+    ).writeAsBytesSync(const [9, 8, 7]);
+    final service = OfflineBibleService(
+      client: MockClient((_) async => http.Response('offline', 503)),
+      documentsDirectoryProvider: () async => tempDir,
+      databaseValidator: (_) async => true,
+    );
+
+    final versions = await service.fetchAvailableVersions();
+    final douayRheims = versions.singleWhere(
+      (version) => version.id == 'douay_rheims',
+    );
+
+    expect(douayRheims.isDownloaded, isTrue);
+    expect(douayRheims.dbFilename, 'engdra.db');
+  });
+
+  test('malformed remote catalog retains a validated install', () async {
+    File(
+      '${tempDir.path}${Platform.pathSeparator}engdra.db',
+    ).writeAsBytesSync(const [9, 8, 7]);
+    final service = OfflineBibleService(
+      client: MockClient((_) async => http.Response('{}', 200)),
+      documentsDirectoryProvider: () async => tempDir,
+      databaseValidator: (_) async => true,
+    );
+
+    final versions = await service.fetchAvailableVersions();
+
+    expect(versions.map((version) => version.id), contains('douay_rheims'));
+  });
+
+  test('thrown catalog request retains a validated install', () async {
+    File(
+      '${tempDir.path}${Platform.pathSeparator}engdra.db',
+    ).writeAsBytesSync(const [9, 8, 7]);
+    final service = OfflineBibleService(
+      client: MockClient((_) => throw const SocketException('offline')),
+      documentsDirectoryProvider: () async => tempDir,
+      databaseValidator: (_) async => true,
+    );
+
+    final versions = await service.fetchAvailableVersions();
+
+    expect(versions.map((version) => version.id), contains('douay_rheims'));
+  });
+
   test('download validates a temporary file before publishing it', () async {
     const bytes = <int>[1, 2, 3, 4, 5];
     final client = MockClient((_) async => http.Response.bytes(bytes, 200));
