@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 2,
+  "id": "angela_merici",
+  "profileKind": "individual",
+  "celebrationIds": [
+    "angela_merici",
+    "saint_angela_merici_virgin"
+  ],
+  "name": "Saint Angela Merici",
+  "alternateNames": ["Angela of Brescia"],
+  "ecclesialTitle": "Virgin and founder of the Company of Saint Ursula",
+  "lifeSpan": "c. 1474-1540",
+  "lifeLength": "about 65 years",
+  "vocation": "Consecrated laywoman, spiritual guide, and founder",
+  "places": ["Desenzano del Garda", "Salò", "Brescia"],
+  "patronage": ["city and Diocese of Brescia"],
+  "symbols": [],
+  "briefBio": "Angela Merici formed the Company of Saint Ursula at Brescia in 1535, offering women a consecrated life of prayer and service while ordinarily remaining in their own social settings. Her Rule, Counsels, and Testament stress Christ-centered perseverance, personal attention, practical care, and leadership that invites rather than coerces.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Angela_Merici",
+  "wikidataId": "Q236216",
+  "feastDates": ["January 27"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {
+      "id": "ursuline-writings",
+      "title": "The Writings of St. Angela Merici",
+      "authorOrInstitution": "Saint Angela Merici; critical transmission and translation by the Ursulines of the Roman Union",
+      "publisher": "Ursulines of the Roman Union",
+      "url": "https://ursulines-roman-union.org/en/writings-angela-merici",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official Ursuline access point to Angela's Rule, Counsels, Testament, early manuscript, and critical editions; used to verify her written formation legacy without reproducing translated passages",
+      "supports": ["rule", "counsels", "testament", "formation", "leadership", "christCenteredSpirituality", "primaryWritings"]
+    },
+    {
+      "id": "company-history",
+      "title": "Our History",
+      "authorOrInstitution": "The Company of Saint Ursula",
+      "publisher": "The Company of Saint Ursula, Canada-United States",
+      "url": "https://companyofstursula.org/who-we-are/our-history/",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official community history used for the 1535 foundation, diocesan and papal approvals, members' service in ordinary settings, and the distinction between the original Company and later monastic teaching orders",
+      "supports": ["foundation", "approval", "layConsecratedService", "companyDevelopment", "laterTeachingOrders", "historicalCategories"]
+    },
+    {
+      "id": "brescia-diocese",
+      "title": "Sant'Angela Merici, Vergine",
+      "authorOrInstitution": "Diocese of Brescia",
+      "publisher": "Diocese of Brescia",
+      "url": "https://www.diocesi.brescia.it/santangela-merici-vergine/",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official local Church source used for feast, Company and Rule, spiritual writings, canonization, secondary patronage, and Angela's counsel to lead through charity and invitation rather than force",
+      "supports": ["identity", "feast", "foundation", "rule", "counsels", "testament", "gentleLeadership", "canonization", "patronage"]
+    },
+    {
+      "id": "treccani-biography",
+      "title": "Angela Merici, santa",
+      "authorOrInstitution": "Nicola Raponi",
+      "publisher": "Dizionario Biografico degli Italiani, Treccani",
+      "url": "https://www.treccani.it/enciclopedia/santa-angela-merici_%28Dizionario-Biografico%29/",
+      "publicationDate": "1961",
+      "accessedDate": "2026-08-10",
+      "tier": 2,
+      "reuseBasis": "Scholarly biographical control for chronology, Franciscan tertiary association, move to Brescia, service and counsel, 1535 Company, Rule, governance, death, and later institutional development",
+      "supports": ["chronology", "places", "franciscanTertiary", "charitableService", "spiritualCounsel", "foundation", "rule", "governance", "death", "laterDevelopment"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-10",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Angela changed women's religious possibilities by forming patiently rather than taking possession. The first members of her Company remained in ordinary social settings, bound by consecration, prayer, mutual support, and service. Her counsel to leaders was concrete: know persons, protect their freedom, correct from charity, and trust Christ to work through gradual formation.",
+  "oneMinuteSummary": "Angela Merici was born near Lake Garda around 1474 and became associated with the Franciscan Third Order. After years in Desenzano and Salò, she settled in Brescia, where people from different social groups sought her prayer and counsel. She served neighbors, accompanied women, and gradually gathered companions rather than beginning with a large institution. On 25 November 1535, twenty-eight women formally entered the Company of Saint Ursula. They embraced consecrated celibacy and a shared spiritual rule while ordinarily remaining with families, in work, and in local neighborhoods. The Company received diocesan approval in 1536; wider approval followed after Angela's death. Angela dictated a Rule for members, Counsels for women entrusted with their formation, and a Testament for the lay governors who protected the community's practical interests. These writings combine demanding fidelity with personal knowledge, gentleness, consultation, and respect for freedom. Angela died in Brescia on 27 January 1540 and was canonized in 1807. Later Ursuline branches developed common life and schools for girls, a major service to Church and society. That later history should not be projected backward as though Angela founded a modern school system or a later-style religious congregation in 1535. Her direct achievement was a durable, Christ-centered form of consecrated life and patient formation for women in the world.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A long formation before founding",
+        "body": "Angela grew up in the Lake Garda region and experienced family loss while young. She became associated with Franciscan lay penitential life, served people in need, and developed a reputation for spiritual counsel. Accounts of visions belong to her received religious biography, but her public work unfolded through years of prayer, relationships, travel, and practical service. She did not rush an inspiration into an institution before a community was ready.",
+        "sourceIds": ["treccani-biography"]
+      },
+      {
+        "heading": "Women consecrated within ordinary life",
+        "body": "In Brescia, Angela gathered women from varied circumstances and formed the Company of Saint Ursula in 1535. Its members were not initially a cloistered order or a network of modern professional schools. They professed a consecrated life centered on Christ while ordinarily remaining in homes, work, parishes, and neighborhoods. Their shared rule and regular gathering made this neither isolated private devotion nor a projection of later canonical categories backward in time.",
+        "sourceIds": ["company-history", "brescia-diocese", "treccani-biography"]
+      },
+      {
+        "heading": "A rule and a network of care",
+        "body": "Angela's Rule gave the members a common spiritual path. Her Counsels addressed women who accompanied smaller groups; her Testament spoke to lay governors responsible for protection and material oversight. This distributed structure made personal attention possible. Formation was relational and concrete: leaders needed to know circumstances, encourage perseverance, care for practical welfare, and keep authority accountable to charity.",
+        "sourceIds": ["ursuline-writings", "brescia-diocese", "treccani-biography"]
+      },
+      {
+        "heading": "Gentleness that respects freedom",
+        "body": "Angela's instruction to leaders rejects force as the ordinary instrument of spiritual formation. She urges invitation, counsel, kindness, and correction governed by charity and adapted to the person's real need. This is not passive leadership. It asks for careful judgment and sometimes firm speech, but never treats another woman's conscience as property. Christ calls; the formator helps a free response mature.",
+        "sourceIds": ["ursuline-writings", "brescia-diocese"]
+      },
+      {
+        "heading": "A wider Ursuline family after Angela",
+        "body": "After Angela's death in 1540, the Company endured division, reunion, and changing Church structures. Some branches remained companies of consecrated women in ordinary settings; others became communities whose schools educated generations of girls. That educational inheritance is real and important, but it developed over time. Honoring Angela accurately means distinguishing her original Company from the later forms that received her spirit.",
+        "sourceIds": ["company-history", "brescia-diocese", "treccani-biography"]
+      }
+    ],
+    "gospelTheme": "Christ forms disciples through a patient love that calls freely, attends to each person, and creates bonds of mutual support for service within ordinary life.",
+    "struggle": "Angela worked amid war, social limits on women's choices, uneven religious institutions, practical vulnerability, and the challenge of building unity without forcing uniformity.",
+    "response": "She spent years accompanying people, founded a Company for consecrated women in the world, wrote a rule and guidance for its leaders, and joined spiritual depth to practical structures of care."
+  },
+  "virtues": [
+    {
+      "name": "Patient formation",
+      "evidence": "Angela gathered and accompanied women over years before the 1535 foundation, then gave different guidance to members, formators, and governors according to their responsibilities.",
+      "imitation": "Before advising someone, ask one careful question about her actual situation. Offer the next faithful step she can own rather than a complete plan you control.",
+      "sourceIds": ["ursuline-writings", "treccani-biography"]
+    },
+    {
+      "name": "Gentle, accountable authority",
+      "evidence": "Her counsel joined real leadership and occasional correction to charity, kindness, consultation, and respect for the freedom of those being formed.",
+      "imitation": "Review one responsibility you hold over another person. Replace pressure, public shame, or vague control with a clear expectation, a private conversation, and room for a truthful response.",
+      "sourceIds": ["ursuline-writings", "brescia-diocese"]
+    },
+    {
+      "name": "Consecrated presence in ordinary places",
+      "evidence": "The first Company members lived their commitment within families, work, parishes, and neighborhoods rather than withdrawing into a single common institution.",
+      "imitation": "Choose one ordinary setting—work, home, school, or neighborhood—and make Christ's care tangible there through reliable attention to a person usually overlooked.",
+      "sourceIds": ["company-history", "brescia-diocese", "treccani-biography"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray with John 15:4-5, naming the people you are responsible to accompany. Ask Jesus for the patience to help fruit grow without pulling at the branch.",
+    "action": "Give one woman or girl a concrete formation resource she has asked for—time, tutoring, transport, professional feedback, or a safe introduction—and let her goals guide the help rather than taking over."
+  },
+  "reflectionQuestions": [
+    "When I guide someone, do I listen closely enough to serve her vocation rather than reproduce my own preferences?",
+    "What ordinary relationship or workplace could become a place of steady consecrated service instead of waiting for a grand project?"
+  ],
+  "scripture": {
+    "reference": "John 15:4-5",
+    "connection": "Angela's Company endured because formation began in abiding in Christ and then spread through relationships of mutual encouragement. Fruit is received through communion with the vine, not manufactured by controlling another person."
+  },
+  "prayer": "Lord Jesus Christ, true vine and faithful teacher, you called Saint Angela Merici to form women for consecrated service in the midst of ordinary life. Keep us rooted in you. Give formators patience, leaders gentleness and clarity, and every woman freedom to answer your call truthfully. Make our homes, workplaces, and parishes places of wise accompaniment, practical care, and lasting communion. Amen."
+}

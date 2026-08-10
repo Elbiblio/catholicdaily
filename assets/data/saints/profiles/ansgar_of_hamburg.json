@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 2,
+  "id": "ansgar_of_hamburg",
+  "profileKind": "individual",
+  "celebrationIds": [
+    "ansgar_of_hamburg",
+    "saint_ansgar_bishop"
+  ],
+  "name": "Saint Ansgar, Bishop",
+  "alternateNames": ["Anskar", "Anschar", "Ansgar of Hamburg"],
+  "ecclesialTitle": "Bishop and missionary",
+  "lifeSpan": "c. 801-865",
+  "lifeLength": "about 64 years",
+  "vocation": "Benedictine monk, bishop, missionary, and servant of vulnerable people",
+  "places": ["Corbie", "Corvey", "Denmark", "Birka", "Hamburg", "Bremen"],
+  "patronage": ["Archdiocese of Hamburg", "Scandinavia"],
+  "symbols": [],
+  "briefBio": "Ansgar was a ninth-century monk and bishop who made repeated missions to Denmark and Birka, sustained fragile Christian communities through political upheaval, and was remembered for care of poor and captive people. Rimbert's near-contemporary Life is indispensable but hagiographic, and Ansgar's work was an early mission rather than the single conversion of Scandinavia.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Ansgar",
+  "wikidataId": "Q110299",
+  "feastDates": ["February 3"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "hamburg-archdiocese",
+      "title": "Heiliger Ansgar - Patron des Erzbistums Hamburg",
+      "authorOrInstitution": "Archdiocese of Hamburg",
+      "publisher": "Archdiocese of Hamburg",
+      "url": "https://erzbistum-hamburg.de/Heiliger-Ansgar-Patron-des-Erzbistums-Hamburg-2001",
+      "publicationDate": "2024-02-20",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official local Church source used for approximate birth, Corbie formation, mission regions, episcopal identity, death, cult, and formal patronage",
+      "supports": ["identity", "chronology", "corbie", "mission", "bishop", "death", "cult", "patronage"]
+    },
+    {
+      "id": "swedish-catholic-calendar",
+      "title": "3 februari - S:t Ansgar, biskop",
+      "authorOrInstitution": "Catholic Church in Sweden",
+      "publisher": "Diocese of Stockholm",
+      "url": "https://www.katolskakyrkan.se/kyrkan-i-varlden/helgon/helgonkalender/februari/3-februari",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official Catholic calendar source used for February 3, early monastic life, 826 Denmark mission, Swedish mission, patience through difficulty, death, and the celebration's Scripture readings",
+      "supports": ["feast", "monasticLife", "denmarkMission", "swedenMission", "bishop", "perseverance", "death", "scripture"]
+    },
+    {
+      "id": "rimbert-life",
+      "title": "The Life of Anskar",
+      "authorOrInstitution": "Rimbert, translated by Charles H. Robinson",
+      "publisher": "Internet Medieval Sourcebook, Fordham University",
+      "url": "https://sourcebooks.web.fordham.edu/basis/anskar.asp",
+      "publicationDate": "1921 translation of a ninth-century hagiography",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Near-contemporary hagiographic primary source used cautiously for journeys, royal and assembly permission, setbacks, aid to poor and sick people, captive release tradition, and Ansgar's devotional character; miracle reports are not historicized",
+      "supports": ["primaryHagiography", "journeys", "permission", "localAssemblies", "setbacks", "poorRelief", "hospitalTradition", "captiveReleaseTradition", "prayer", "miracleTraditions"]
+    },
+    {
+      "id": "danish-national-museum",
+      "title": "The Transition to Christianity",
+      "authorOrInstitution": "National Museum of Denmark",
+      "publisher": "National Museum of Denmark",
+      "url": "https://en.natmus.dk/historical-knowledge/denmark/prehistoric-period-until-1050-ad/the-viking-age/religion-magic-death-and-rituals/the-transition-to-christianity/",
+      "accessedDate": "2026-08-10",
+      "tier": 2,
+      "reuseBasis": "National historical-museum control for the 826 and c. 830 journeys, Birka, church permissions, Frankish political interests, Ansgar's diplomatic role, and the limits of his biography as evidence",
+      "supports": ["chronology", "denmarkMission", "birka", "politicalContext", "diplomacy", "churchPermissions", "evidenceLimits"]
+    },
+    {
+      "id": "hamburg-history",
+      "title": "(Erz-)Bischof Ansgar",
+      "authorOrInstitution": "Geschichtsbuch Hamburg",
+      "publisher": "Free and Hanseatic City of Hamburg historical education project",
+      "url": "https://geschichtsbuch.hamburg.de/epochen/fruehes-mittelalter-2/erzbischof-ansgar/",
+      "accessedDate": "2026-08-10",
+      "tier": 2,
+      "reuseBasis": "Civic historical control for Corvey, royal commissioning, Hamburg, the 845 attack, Bremen, later missions, and critical assessment of Rimbert's institutional agenda and disputed archiepiscopal claims",
+      "supports": ["corvey", "royalCommission", "hamburg", "attack845", "bremen", "laterMissions", "rimbertAgenda", "archbishopDispute"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-10",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Ansgar's significance lies less in a victory story than in faithful return. Missions failed, patrons changed, Hamburg was destroyed, and northern Christian communities remained small and vulnerable. He went back, negotiated permission, placed ministers, and joined preaching to care for poor, sick, and captive people. Mission can be patient presence without pretending to own another culture's future.",
+  "oneMinuteSummary": "Born in Frankish territory around 801, Ansgar was formed at the monasteries of Corbie and Corvey. In 826 he accompanied the exiled Danish ruler Harald Klak on a mission connected to Frankish political interests. Around 829 or 830, after a request for missionaries, he traveled to Birka in Sweden and helped establish a small Christian presence. He later became bishop at Hamburg with responsibility for northern missions. His work depended on rulers, travel permissions, local assemblies, clergy, and material support; it cannot be separated from diplomacy or from the power structures of the Carolingian world. In 845 an attack devastated Hamburg, while missions in Sweden also suffered reversal. From Bremen, Ansgar patiently rebuilt relationships, obtained permission for churches and priests, and returned to Birka. His successor Rimbert wrote the principal Life soon after his death. It supplies precious near-contemporary information and portrays Ansgar's prayer, poverty, endurance, almsgiving, hospital care, and efforts to free captives. It is also a saint's Life written to uphold a mission and the Hamburg-Bremen church; its visions, miracles, and institutional claims require caution. Ansgar died at Bremen on 3 February 865. Sweden became broadly Christian only centuries later. He is best honored as an early witness who persevered in service, not as a conqueror who single-handedly converted the North.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Formed in monastic communities",
+        "body": "Ansgar entered Corbie young and later served at Corvey as teacher and monk. Prayer, study, shared discipline, and obedience to a community formed the base from which he traveled. Rimbert surrounds these years with dreams and signs typical of hagiography. They reveal how his successor understood Ansgar's vocation, but they cannot be used as an exact diary of supernatural events.",
+        "sourceIds": ["hamburg-archdiocese", "swedish-catholic-calendar", "rimbert-life", "hamburg-history"]
+      },
+      {
+        "heading": "Mission within a political world",
+        "body": "Ansgar's first northern journey followed the baptism and attempted restoration of the exiled Danish ruler Harald Klak. His later journey to Birka followed a request connected with the Swedish court. Frankish rulers saw religious and diplomatic advantage in northern Christianity, while local rulers and assemblies controlled access. This context does not erase Ansgar's faith; it prevents a false picture of mission detached from power, negotiation, and local agency.",
+        "sourceIds": ["rimbert-life", "danish-national-museum", "hamburg-history"]
+      },
+      {
+        "heading": "Permission, presence, and local choice",
+        "body": "Rimbert says Ansgar sought permission to establish churches and priests and that people who wished to become Christian could do so. At Birka, a king consulted assemblies before allowing renewed ministry. These accounts come from the missionary side and carry hagiographic language, so they do not prove a modern ideal of religious freedom. They do show that the mission often advanced by presence, persuasion, and negotiated consent rather than by Ansgar commanding a population.",
+        "sourceIds": ["rimbert-life", "danish-national-museum"]
+      },
+      {
+        "heading": "Beginning again after loss",
+        "body": "Ansgar's work repeatedly lost political and material support. Hamburg was attacked and devastated in 845, and Swedish ministry suffered violent disruption. From Bremen he rebuilt relationships, arranged clergy, and returned north. The outcomes remained fragile. Perseverance here means accepting limits and resuming available service; it does not rename invasion, displacement, or failure as blessings.",
+        "sourceIds": ["swedish-catholic-calendar", "rimbert-life", "hamburg-history"]
+      },
+      {
+        "heading": "Service remembered beside preaching",
+        "body": "Rimbert remembers Ansgar directing resources to poor and sick people, founding care at Bremen, supporting widows and students, sharing meals, and intervening for captives. These details are reported within a hagiographic portrait and are best called reliable tradition rather than audited records. They matter because the received image of his mission was not words alone: worship and proclamation were expected to become material mercy.",
+        "sourceIds": ["rimbert-life"]
+      }
+    ],
+    "gospelTheme": "Christ sends witnesses to serve and speak with perseverance, but the Gospel remains gift rather than cultural possession; mission bears light through justice, mercy, and respect for the hearer's freedom.",
+    "struggle": "Ansgar faced dangerous travel, political dependency, cultural distance, destroyed institutions, expelled coworkers, small results, and the temptation to measure fidelity only by visible success.",
+    "response": "He returned to prayer and community, negotiated access, sent and supported ministers, rebuilt after loss, and joined proclamation to remembered care for poor, sick, widowed, and captive people."
+  },
+  "virtues": [
+    {
+      "name": "Perseverance without possession",
+      "evidence": "After the destruction of Hamburg and reversal of northern missions, Ansgar rebuilt relationships and resumed limited ministry without controlling the eventual Christianization of the region.",
+      "imitation": "Return to one interrupted work of service with a smaller, realistic commitment. Measure fidelity by the care you can responsibly give, not by claiming an outcome that belongs to others and to God.",
+      "sourceIds": ["swedish-catholic-calendar", "rimbert-life", "hamburg-history"]
+    },
+    {
+      "name": "Witness through negotiated presence",
+      "evidence": "The mission accounts repeatedly show Ansgar seeking permission from rulers and local assemblies to place churches and ministers among people willing to receive them.",
+      "imitation": "Before entering another community to help or speak about faith, ask who invited you, who holds local trust, what consent is needed, and what you should learn before proposing anything.",
+      "sourceIds": ["rimbert-life", "danish-national-museum"]
+    },
+    {
+      "name": "Material mercy",
+      "evidence": "Rimbert's received portrait links Ansgar's episcopal and missionary work with food, care for sick and poor people, support of widows, and intervention for captives.",
+      "imitation": "Pair one conversation about faith with a no-strings-attached act that meets a need the other person has named. Do not make aid conditional on agreement or participation.",
+      "sourceIds": ["rimbert-life"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray Isaiah 42:5-10 for a culture or community not your own. Ask God to free you from contempt, romanticism, and the need to be the hero, then listen for one form of humble witness.",
+    "action": "Support a locally led ministry serving migrants, prisoners, or people in poverty. Ask what is actually needed, give without religious pressure, and let local leaders define the measure of useful partnership."
+  },
+  "reflectionQuestions": [
+    "Do I confuse Christian mission with winning, visibility, or making another community resemble my own?",
+    "After a ministry setback, what faithful presence can I rebuild without denying the loss or forcing an outcome?"
+  ],
+  "scripture": {
+    "reference": "Isaiah 42:5-10",
+    "connection": "The Swedish Catholic calendar appoints this passage for Ansgar's memorial. Its servant brings light and liberation from God; read beside Ansgar's mixed historical context, it judges mission by faithful witness and justice rather than domination."
+  },
+  "prayer": "Lord Jesus Christ, light for every people, you sent Saint Ansgar across difficult boundaries and taught him to begin again when his work was broken. Purify our mission of pride, pressure, and contempt. Make us patient guests, truthful witnesses, and practical servants of those in need. Bless local communities with freedom and wise leaders, and let every work we offer point beyond us to your mercy. Amen."
+}

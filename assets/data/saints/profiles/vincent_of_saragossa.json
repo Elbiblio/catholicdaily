@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 2,
+  "id": "vincent_of_saragossa",
+  "profileKind": "individual",
+  "celebrationIds": [
+    "vincent_of_saragossa",
+    "saint_vincent_deacon_and_martyr"
+  ],
+  "name": "Saint Vincent, Deacon and Martyr",
+  "alternateNames": ["Vincent of Saragossa", "Vincent of Zaragoza"],
+  "ecclesialTitle": "Deacon and martyr",
+  "lifeSpan": "d. c. 304",
+  "lifeLength": "",
+  "vocation": "Deacon of Saragossa and witness to Christ under persecution",
+  "places": ["Saragossa", "Valencia"],
+  "patronage": ["Valencia and its archdiocese", "Lisbon"],
+  "symbols": [],
+  "briefBio": "Vincent was a deacon of the Church in Saragossa who died at Valencia during the persecution associated with Diocletian. His martyrdom and January 22 feast were already widely remembered in late antiquity, but the elaborate ordeals and miracles in later accounts cannot be treated as a precise transcript of events.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Vincent_of_Saragossa",
+  "wikidataId": "Q318974",
+  "feastDates": ["January 22"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "vatican-state-profile",
+      "title": "January 22: Saint Vincent of Saragossa, Martyr",
+      "authorOrInstitution": "Vatican City State",
+      "publisher": "Governorate of Vatican City State",
+      "url": "https://www.vaticanstate.va/en/news/3488-january-22-saint-vincent-of-saragossa-martyr.html",
+      "publicationDate": "2026-01-22",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official Catholic synthesis used for identity, deacon ministry, persecution setting, early cult, Lisbon patronage, and disputed birthplace traditions; app prose is original",
+      "supports": ["identity", "deacon", "persecution", "martyrdom", "earlyCult", "patronage.lisbon", "birthplaceUncertainty"]
+    },
+    {
+      "id": "osservatore-prudentius",
+      "title": "La passione di san Vincenzo di Saragozza secondo Prudenzio",
+      "authorOrInstitution": "Vicente Cárcel Ortí",
+      "publisher": "L'Osservatore Romano via The Holy See",
+      "url": "https://www.vatican.va/news_services/or/or_quo/cultura/2011/017q04a1.html",
+      "publicationDate": "2011-01-22",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official historical-theological essay used for the January 22 observance, Valencia and Saragossa identity, probable 304-306 chronology, and explicit warning that Prudentius supplied imaginative detail where records were scarce",
+      "supports": ["feast", "identity", "chronology", "valencia", "persecution", "evidenceLimits", "prudentiusTradition", "patronage.valencia"]
+    },
+    {
+      "id": "schaff-herzog",
+      "title": "Vincent of Saragossa, Saint",
+      "authorOrInstitution": "Gustav Krüger",
+      "publisher": "New Schaff-Herzog Encyclopedia of Religious Knowledge via Christian Classics Ethereal Library",
+      "url": "https://ccel.org/s/schaff/encyc12/htm/iii.vii.lxvi.htm",
+      "publicationDate": "1912",
+      "accessedDate": "2026-08-10",
+      "tier": 2,
+      "reuseBasis": "Historical reference control for the early-fourth-century setting, the traditional Valerius narrative, the legendary character of later Passio material, and early spread of the cult",
+      "supports": ["chronology", "valeriusTradition", "martyrdom", "legendClassification", "augustineWitness", "prudentiusWitness", "cultSpread"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-10",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Vincent's witness survives beneath layers of dramatic retelling: a deacon was remembered for refusing to let an imperial demand displace his allegiance to Christ. His feast teaches fidelity without making violence sacred. It also teaches historical humility—the truth of a martyr's witness does not require us to repeat every later detail as fact.",
+  "oneMinuteSummary": "Vincent served as a deacon under Bishop Valerius in Saragossa and died at Valencia during the persecution associated with the emperor Diocletian, probably around 304. That small historical core became one of the best-known martyr memories of the early Western Church. Augustine preached on Vincent, Prudentius devoted a long hymn to him, and devotion spread far beyond Spain. Yet surviving accounts are not contemporary court records. The most elaborate narrative presents speeches, repeated ordeals, prison wonders, and marvels surrounding his body. An official L'Osservatore Romano study cautions that Prudentius wrote with poetic and popular imagination because documentary evidence was scarce. The profile therefore keeps the securely grounded identity, places, era, ministry, death under persecution, feast, and early cult, while treating the detailed Passio as tradition and legend. Vincent's courage did not make torture good; persecuting power did evil. Christian memory honors the grace by which he remained faithful and the community that refused to let violence erase his name.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A deacon remembered from Saragossa",
+        "body": "The stable early tradition identifies Vincent as a deacon serving the Church of Saragossa with Bishop Valerius. Later writers added a noble family, exact birthplace, education, and the claim that he regularly spoke for his bishop. Because sources disagree about his origin and the surviving narrative is hagiographic, those details are not needed for a responsible biography. What endures is his ordained service and his connection with the communities of Saragossa and Valencia.",
+        "sourceIds": ["vatican-state-profile", "osservatore-prudentius", "schaff-herzog"]
+      },
+      {
+        "heading": "Faith under an imperial demand",
+        "body": "During the final great Roman persecution, authorities sought public compliance with imperial religious policy and targeted Christian leaders, worship, and texts. Tradition says Vincent and Valerius were taken to Valencia and required to abandon Christian fidelity. Valerius was exiled; Vincent died after mistreatment in custody. Persecution and execution were abuses of power, not instruments that made him holy. His witness lies in refusing a coerced falsehood while entrusting his life to Christ.",
+        "sourceIds": ["vatican-state-profile", "osservatore-prudentius", "schaff-herzog"]
+      },
+      {
+        "heading": "Poetry, Passio, and historical restraint",
+        "body": "Prudentius' early-fifth-century hymn and Augustine's sermons show that Vincent's feast and reputation were already established. They also stand within devotional genres. The later Passio grew into a detailed contest between the martyr and the governor, including extraordinary punishments and wonders. Those scenes shaped art and prayer, but they cannot be narrated as if witnessed by a modern reporter. The early and the legendary remain related without being confused.",
+        "sourceIds": ["osservatore-prudentius", "schaff-herzog"]
+      },
+      {
+        "heading": "A memory that crossed borders",
+        "body": "Vincent's veneration moved early from Spain into North Africa and Gaul, and later became closely associated with Valencia and Lisbon. The wide cult is historically important even when competing relic stories remain uncertain. Communities kept returning to the same theological conviction: imperial force did not own the final meaning of a deacon's life, because the crucified and risen Christ held him beyond death.",
+        "sourceIds": ["vatican-state-profile", "osservatore-prudentius", "schaff-herzog"]
+      }
+    ],
+    "gospelTheme": "Christ does not call persecution good; he gives disciples truthful words and enduring hope when authorities demand a lie, and his resurrection denies violence the final word.",
+    "struggle": "Vincent faced coercion, imprisonment, abuse, and death, while later generations faced the different responsibility of preserving his witness without mistaking poetic elaboration for documented history.",
+    "response": "He was remembered as remaining faithful to Christ in his diaconal identity, and the Church carried his name, feast, and place of martyrdom across languages and regions."
+  },
+  "virtues": [
+    {
+      "name": "Truthful courage under coercion",
+      "evidence": "The stable martyr tradition remembers Vincent refusing an official demand to renounce Christian faith, even when refusal exposed him to lethal abuse.",
+      "imitation": "When pressure asks you to sign, repeat, or conceal something false, pause, verify the truth, and answer plainly without humiliating the person pressuring you.",
+      "sourceIds": ["vatican-state-profile", "osservatore-prudentius", "schaff-herzog"]
+    },
+    {
+      "name": "Service before reputation",
+      "evidence": "Vincent is first remembered by his ecclesial service as a deacon; his public fame came through a death he did not seek.",
+      "imitation": "Complete one hidden work of service assigned to you—especially a task of carrying, organizing, or assisting—without turning it into a performance.",
+      "sourceIds": ["vatican-state-profile", "osservatore-prudentius"]
+    },
+    {
+      "name": "Reverence joined to honesty",
+      "evidence": "His ancient cult is well attested, while responsible sources openly acknowledge that poetic imagination enlarged the surviving martyr narrative.",
+      "imitation": "Honor a saint by checking the source before sharing a dramatic claim. Let a smaller truth deepen devotion instead of decorating it with certainty you do not possess.",
+      "sourceIds": ["osservatore-prudentius", "schaff-herzog"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Read Luke 12:11-12 slowly and pray for deacons and Christians who must speak truth under pressure. Ask the Holy Spirit for words that are clear, restrained, and free from contempt.",
+    "action": "Identify one person facing institutional pressure to lie or remain silent. Offer a safe, practical form of support—documentation, accompaniment, a referral, or a private check-in—without exposing them to greater risk."
+  },
+  "reflectionQuestions": [
+    "Where am I tempted to preserve safety or approval by saying what I know is not true?",
+    "Can I honor Vincent more deeply by distinguishing what early sources establish from what later devotion imagined?"
+  ],
+  "scripture": {
+    "reference": "Luke 12:11-12",
+    "connection": "The martyr tradition remembers Vincent as a deacon whose confession endured official interrogation. Jesus' promise locates such courage in the Holy Spirit, not in admiration for pain or confidence in one's own toughness."
+  },
+  "prayer": "Lord Jesus Christ, faithful witness before earthly powers, you sustained Saint Vincent in his service and confession. Guard deacons and all who face coercion; give them truthful words, wise companions, and safe help. Keep us from glorifying violence or repeating legend as fact. By your Holy Spirit make our courage humble, our service steady, and our hope rooted in your resurrection. Amen."
+}

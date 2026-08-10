@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 2,
+  "id": "conversion_of_saint_paul",
+  "profileKind": "biblical",
+  "celebrationIds": [
+    "conversion_of_saint_paul",
+    "the_conversion_of_saint_paul_apostle"
+  ],
+  "name": "The Conversion of Saint Paul, Apostle",
+  "alternateNames": ["The Conversion of Paul the Apostle", "The Conversion of Saul"],
+  "ecclesialTitle": "Apostolic conversion and calling",
+  "lifeSpan": "",
+  "lifeLength": "",
+  "vocation": "Celebration of Christ's call of Paul from persecutor to apostle",
+  "places": ["Damascus", "Jerusalem", "Arabia"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "This feast celebrates the risen Jesus confronting Saul, who had persecuted the Church, and calling him into a radically changed life. Acts emphasizes his encounter near Damascus, Ananias, Baptism, ecclesial reception, and commission; Paul's letters describe Christ's revelation and appearance as grace that turned a persecutor into an apostle.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Conversion_of_Paul_the_Apostle",
+  "wikidataId": "Q901397",
+  "feastDates": ["January 25"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {
+      "id": "usccb-acts-9",
+      "title": "Acts of the Apostles, Chapter 9",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/acts/9",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official Catholic biblical text and notes used for Luke's narrative of persecution, encounter, Ananias, Baptism, first preaching, community suspicion, and differences among the three Acts accounts; no biblical wording is reproduced at length",
+      "supports": ["persecution", "damascusEncounter", "ananias", "baptism", "ecclesialReception", "mission", "actsDifferences"]
+    },
+    {
+      "id": "usccb-acts-22",
+      "title": "Acts of the Apostles, Chapter 22",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/acts/22",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official Catholic biblical text and notes used for Paul's defense before a Jerusalem audience, his acknowledgment of persecution, Ananias' role, Baptism, witness, and Gentile mission",
+      "supports": ["jewishIdentity", "persecution", "damascusEncounter", "ananias", "baptism", "witness", "gentileMission", "actsDifferences"]
+    },
+    {
+      "id": "usccb-acts-26",
+      "title": "Acts of the Apostles, Chapter 26",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/acts/26",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official Catholic biblical text and notes used for the third Acts retelling before Agrippa, its compressed commission, call to deeds consistent with repentance, and distinctive rhetorical emphasis",
+      "supports": ["phariseeIdentity", "persecution", "heavenlyVision", "commission", "repentance", "repair", "actsDifferences"]
+    },
+    {
+      "id": "usccb-galatians-1",
+      "title": "Galatians, Chapter 1",
+      "authorOrInstitution": "Saint Paul; biblical text and notes by the United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/galatians/1",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Pauline self-witness and Catholic study notes used for former persecution, revelation of the Son, grace, Gentile commission, Arabia, Damascus, and the distinction between Paul's emphasis and Luke's narrative",
+      "supports": ["paulineSelfWitness", "persecution", "revelation", "grace", "gentileMission", "arabia", "damascus", "sourceReconciliation"]
+    },
+    {
+      "id": "usccb-1-corinthians-15",
+      "title": "1 Corinthians, Chapter 15",
+      "authorOrInstitution": "Saint Paul; biblical text and notes by the United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/1corinthians/15",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Pauline self-witness used for the risen Christ's appearance, Paul's confession that he persecuted the Church, grace, labor, and continuity with the apostolic proclamation",
+      "supports": ["resurrectionAppearance", "persecution", "grace", "response", "apostolicCommunion"]
+    },
+    {
+      "id": "benedict-conversion-audience",
+      "title": "General Audience: St Paul's 'Conversion'",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/audiences/2008/documents/hf_ben-xvi_aud_20080903.html",
+      "publicationDate": "2008-09-03",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official Catholic synthesis used to compare Acts with Paul's letters, center the event on the risen Christ, and affirm Baptism and communion with the Church without flattening the sources",
+      "supports": ["sourceReconciliation", "risenChrist", "conversionMeaning", "baptism", "churchCommunion", "apostolicMission"]
+    },
+    {
+      "id": "benedict-feast-vespers",
+      "title": "Feast of the Conversion of St. Paul: Celebration of Vespers",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/homilies/2012/documents/hf_ben-xvi_hom_20120125_week-prayer.html",
+      "publicationDate": "2012-01-25",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official liturgical celebration used to establish the January 25 feast and to control its interpretation as grace-led transformation in Christ rather than personal effort alone",
+      "supports": ["feast", "feastDate", "conversionMeaning", "grace", "christCenteredTransformation"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-10",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Paul's conversion is not a slogan about reinventing yourself. The risen Christ interrupts a persecutor, identifies himself with the wounded Church, and gives grace that demands truth, reception by people Paul had reason to fear, Baptism, a changed direction, and costly service. Grace does not erase responsibility; it makes a truthful and reparative future possible.",
+  "oneMinuteSummary": "The January 25 feast does not mark a new lifespan for Paul; it contemplates the decisive call within his life. Saul had actively persecuted the Church. Acts tells three versions of his encounter with Jesus near Damascus: the narrator's account in chapter 9, Paul's defense before a Jerusalem crowd in chapter 22, and his testimony before Agrippa in chapter 26. They agree on the former persecution, heavenly light, the voice of Jesus, and a commission to witness, but vary in narrative perspective and detail. The companions' hearing and seeing are described differently; Acts 26 places more of the commission in Jesus' speech, while Acts 9 and 22 give Ananias a fuller role. These differences should not be forced into one cinematic script. Paul's own letters do not narrate the road scene. He says God revealed the Son to him, that the risen Christ appeared to him, that he had persecuted God's Church, and that grace redirected his life toward apostolic labor. Acts adds an essential ecclesial movement: Saul is helpless, receives Ananias as brother, is baptized, and must earn trust among communities he once threatened. Conversion here is Christ's gift and call, answered through truth, communion, mission, and a life whose work contradicts the harm once done.",
+  "life": {
+    "sections": [
+      {
+        "heading": "The harm is named",
+        "body": "Neither Acts nor Paul hides the starting point. Saul pursued followers of Jesus and sought their imprisonment; Paul later confessed that he had persecuted the Church of God. Conversion begins with this truth, not with a flattering story about intensity changing teams. His former zeal harmed real people and left Christian communities with legitimate reasons for fear.",
+        "sourceIds": ["usccb-acts-9", "usccb-acts-22", "usccb-acts-26", "usccb-galatians-1", "usccb-1-corinthians-15"]
+      },
+      {
+        "heading": "Jesus confronts and calls",
+        "body": "On the way to Damascus, Acts says a heavenly light surrounded Saul and the risen Jesus addressed him. The crucial identification is personal and ecclesial: violence against Jesus' disciples reaches Christ himself. Paul describes the same turning point in another register—God revealed the Son to him, and the risen Christ appeared to him. The initiative is grace, not a self-generated program of improvement.",
+        "sourceIds": ["usccb-acts-9", "usccb-acts-22", "usccb-acts-26", "usccb-galatians-1", "usccb-1-corinthians-15", "benedict-conversion-audience"]
+      },
+      {
+        "heading": "Received by the Church he wounded",
+        "body": "Acts 9 and 22 give Ananias a decisive role. He knows Saul's record and does not pretend the danger was imaginary, yet he obeys Christ, approaches him, addresses him as brother, and participates in his healing and Baptism. Saul does not appoint himself from isolation. He receives care, sacramental incorporation, instruction, and eventually the wary discernment and fellowship of believers.",
+        "sourceIds": ["usccb-acts-9", "usccb-acts-22", "benedict-conversion-audience"]
+      },
+      {
+        "heading": "One event, distinct testimonies",
+        "body": "Acts 9, 22, and 26 retell the encounter for different narrative and courtroom settings. They vary over how Saul's companions perceived the voice and light, and Acts 26 compresses the commissioning that other accounts mediate through Ananias. Paul's letters concentrate on revelation, appearance, grace, and vocation rather than road details. The sources converge on Christ's initiative and Paul's reversal without requiring one invented camera-angle reconstruction.",
+        "sourceIds": ["usccb-acts-9", "usccb-acts-22", "usccb-acts-26", "usccb-galatians-1", "benedict-conversion-audience"]
+      },
+      {
+        "heading": "Grace becomes mission and repair",
+        "body": "Paul's past could not be undone, and those he injured were not required to call it harmless. Grace opened a different future. He proclaimed the faith he once tried to destroy, accepted communion with other apostles, and spent himself in service of communities across cultural boundaries. Acts 26 joins repentance to deeds that show a changed life; 1 Corinthians joins grace to labor. Repair is not earning mercy, but mercy becoming visible in sustained responsibility.",
+        "sourceIds": ["usccb-acts-9", "usccb-acts-22", "usccb-acts-26", "usccb-galatians-1", "usccb-1-corinthians-15", "benedict-conversion-audience"]
+      }
+    ],
+    "gospelTheme": "The risen Jesus gives grace that tells the truth about harm, binds a convert to his wounded Body, and sends that person into a changed life of witness and responsible service.",
+    "struggle": "Paul had to face the evil of his persecution, surrender his certainty and control, receive help from people he had endangered, and live with mistrust while learning apostolic communion.",
+    "response": "He accepted Christ's call, received Baptism and the Church's ministry, confessed his former persecution, proclaimed Jesus, and let grace become sustained labor for the Gospel."
+  },
+  "virtues": [
+    {
+      "name": "Truthful repentance",
+      "evidence": "Paul repeatedly named his former persecution of the Church rather than disguising it as harmless zeal.",
+      "imitation": "Name one harm you caused without adding an excuse. Ask what acknowledgment, apology, restitution, or changed boundary the affected person actually needs, respecting that they control their response.",
+      "sourceIds": ["usccb-acts-22", "usccb-acts-26", "usccb-galatians-1", "usccb-1-corinthians-15"]
+    },
+    {
+      "name": "Receptivity to the wounded community",
+      "evidence": "Saul accepted Ananias' ministry, Baptism, and entry into a Church whose fear of him was grounded in experience.",
+      "imitation": "If trust has been broken, stop demanding immediate reassurance. Accept accountable guidance and allow the harmed person or community to set a prudent pace.",
+      "sourceIds": ["usccb-acts-9", "usccb-acts-22", "benedict-conversion-audience"]
+    },
+    {
+      "name": "Grace made fruitful in labor",
+      "evidence": "Paul understood his apostleship as grace, yet insisted that grace was not ineffective in him; it became enduring work in communion with the apostolic proclamation.",
+      "imitation": "Choose one repeated action—not a dramatic promise—that makes your change credible over time: show up, repay, report honestly, or serve under supervision.",
+      "sourceIds": ["usccb-1-corinthians-15", "usccb-galatians-1", "benedict-conversion-audience"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray through Acts 9:1-19 in three movements: name a truth Christ is confronting, receive his mercy without self-defense, and ask whose trustworthy guidance you need in order to respond faithfully.",
+    "action": "Make one repair that is yours to make today—correct a false statement, return what you owe, apologize without asking for comfort, or begin an accountability process—while honoring the safety and freedom of anyone harmed."
+  },
+  "reflectionQuestions": [
+    "What truth about my impact am I avoiding because I prefer the story of my intentions?",
+    "Who is my Ananias: the trustworthy person or community through whom I must receive guidance rather than appoint myself?"
+  ],
+  "scripture": {
+    "reference": "1 Corinthians 15:9-10",
+    "connection": "Paul holds confession and grace together: he names that he persecuted the Church, refuses to make grace a reward, and shows its fruit in a changed life of labor."
+  },
+  "prayer": "Risen Lord Jesus, you confronted Paul without abandoning him and joined his new life to the Church he had wounded. Shine your truth on the harm we excuse. Give us courage to confess, humility to receive guidance, patience when trust cannot return quickly, and perseverance in works that show repentance. By your grace turn us from self-protection toward communion and service, for you live and reign for ever. Amen."
+}
