@@ -5,6 +5,7 @@ import 'data/services/app_navigation_service.dart';
 import 'data/services/feast_reminder_service.dart';
 import 'data/services/feast_reminder_preferences.dart';
 import 'data/services/feast_reminder_payload.dart';
+import 'data/services/feast_reminder_destination_resolver.dart';
 import 'data/services/incipit_preference_service.dart';
 import 'data/services/liturgical_region_preference_service.dart';
 import 'data/services/bible_version_preference.dart';
@@ -103,6 +104,8 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
   bool _showOnboarding = false;
   bool _navigationReady = false;
   FeastReminderPayload? _pendingReminderTap;
+  bool _reminderTapDrainScheduled = false;
+  bool _resolvingReminderTap = false;
 
   @override
   void initState() {
@@ -159,20 +162,49 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
   }
 
   void _drainReminderTapAfterBuild() {
-    if (!_navigationReady || _pendingReminderTap == null) return;
+    if (!_navigationReady ||
+        _pendingReminderTap == null ||
+        _reminderTapDrainScheduled ||
+        _resolvingReminderTap) {
+      return;
+    }
+    _reminderTapDrainScheduled = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _reminderTapDrainScheduled = false;
       if (!mounted || !_navigationReady) return;
-      final payload = _pendingReminderTap;
-      final celebration = payload?.toSaintCelebration();
+      _resolvePendingReminderTap();
+    });
+  }
+
+  Future<void> _resolvePendingReminderTap() async {
+    final payload = _pendingReminderTap;
+    if (payload == null || _resolvingReminderTap) return;
+    _resolvingReminderTap = true;
+    try {
+      final celebration = await FeastReminderDestinationResolver.instance
+          .resolve(payload);
+      if (!mounted || !identical(_pendingReminderTap, payload)) return;
+      if (celebration == null) {
+        _pendingReminderTap = null;
+        return;
+      }
       final navigator = _navigatorKey.currentState;
-      if (payload == null || celebration == null || navigator == null) return;
+      if (navigator == null) return;
       _pendingReminderTap = null;
       navigator.push(
         MaterialPageRoute<void>(
           builder: (_) => SaintDetailScreen(celebration: celebration),
         ),
       );
-    });
+    } catch (e, st) {
+      if (identical(_pendingReminderTap, payload)) {
+        _pendingReminderTap = null;
+      }
+      debugPrint('[FeastReminder] Unable to resolve tap destination: $e\n$st');
+    } finally {
+      _resolvingReminderTap = false;
+      _drainReminderTapAfterBuild();
+    }
   }
 
   Widget _buildHomeScreen() {

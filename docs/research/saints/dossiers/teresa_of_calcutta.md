@@ -2,15 +2,30 @@
 
 ## Identity resolution
 
-The profile resolves Gonxha Agnes Bojaxhiu, Sister Mary Teresa of Loreto, Mother Teresa, and Saint Teresa of Calcutta as one documented person. Kolkata is used for the modern place name while historical titles retain Calcutta. Her memorial is September 5.
+- Stable ID: `teresa_of_calcutta`
+- Profile kind: Individual
+- Celebration IDs: `teresa_of_calcutta`, `saint_teresa_of_calcutta_virgin`
+- Canonical name and aliases: Saint Teresa of Calcutta; Mother Teresa; Gonxha Agnes Bojaxhiu
+- Feast date and calendar scope: September 5; optional memorial in the General Roman Calendar
+- Identity conflicts resolved: Gonxha Agnes Bojaxhiu, Sister Mary Teresa of Loreto, Mother Teresa, and Saint Teresa of Calcutta are one person. Modern prose uses Kolkata while historical titles may retain Calcutta.
 
 ## Source ledger
 
-The Holy See 2003 biography controls birth, Loreto years, 1946 inspiration, permissions, early service, foundation, expansion, spiritual darkness, and death. Francis's 2016 canonization homily controls the mercy interpretation. The Missionaries of Charity site cross-checks founding charism and daily union of prayer with service. Sources were accessed 2026-08-10.
+| ID | Tier | Author/institution | Title | Publisher | URL | Accessed | Reuse basis |
+|---|---:|---|---|---|---|---|---|
+| holy-see-biography | 1 | Office for the Liturgical Celebrations of the Supreme Pontiff | Mother Teresa of Calcutta (1910-1997) | The Holy See | https://www.vatican.va/news_services/liturgy/saints/ns_lit_doc_20031019_madre-teresa_en.html | 2026-08-10 | Official chronology, foundation history, and spiritual context; original synthesis |
+| canonization-homily | 1 | Pope Francis | Canonization of Blessed Mother Teresa of Calcutta | The Holy See | https://www.vatican.va/content/francesco/en/homilies/2016/documents/papa-francesco_20160904_omelia-canonizzazione-madre-teresa.html | 2026-08-10 | Official ecclesial interpretation of mercy and service; original synthesis |
+| mc-biography | 1 | Missionaries of Charity | Mother Teresa | Missionaries of Charity | https://missionariesofcharity.org/about-us/mother-teresa/ | 2026-08-10 | Primary institutional charism and biography cross-check; original synthesis |
 
 ## Claim ledger
 
-The page states that she sought permission and basic medical training before beginning independent service. Her “darkness” is described as a long felt absence of God rather than unbelief or clinical diagnosis. The profile does not repeat disputed slogans or unsupported miracle claims.
+| Profile field | Claim or editorial conclusion | Source IDs | Certainty | Reconciliation note |
+|---|---|---|---|---|
+| identity, lifeSpan | Gonxha Agnes Bojaxhiu lived from 1910 to 1997 and became known as Mother Teresa. | holy-see-biography; mc-biography | High | Religious names and civil name are explicitly reconciled. |
+| summary | After discernment, permission, and basic training, she began direct service and founded the Missionaries of Charity. | holy-see-biography; mc-biography | High | The profile does not encourage untrained medical intervention. |
+| biographySections | Her prolonged felt absence of God coexisted with persevering prayer and service. | holy-see-biography | High for reported experience | “Darkness” is not diagnosed as unbelief or a clinical condition. |
+| whyItMatters, virtues | Mercy joins prayer, competent attention, and concrete service to people in poverty. | canonization-homily; mc-biography | High | Poverty itself is not romanticized as holy. |
+| feastDates | Her memorial is September 5. | holy-see-biography; mc-biography | High | Sources agree; unsupported miracle claims and unstable quotations are omitted. |
 
 ## Copyright and media decision
 

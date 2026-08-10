@@ -1,8 +1,12 @@
 import 'package:catholic_daily/data/services/feast_reminder_payload.dart';
+import 'package:catholic_daily/data/services/feast_reminder_destination_resolver.dart';
 import 'package:catholic_daily/data/services/feast_reminder_service.dart';
+import 'package:catholic_daily/data/models/liturgical_region.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('FeastReminderPayload', () {
     test('round-trips a versioned saint deep link', () {
       final payload = FeastReminderPayload(
@@ -39,6 +43,23 @@ void main() {
       expect(decoded.saintProfileId, isNull);
       expect(decoded.dayBefore, isFalse);
     });
+
+    test(
+      'resolves a pre-upgrade cold-start payload to its saint page',
+      () async {
+        final payload = FeastReminderPayload.tryParse(
+          'feast:2026-11-01T00:00:00.000:day',
+        );
+
+        final celebration = await FeastReminderDestinationResolver.instance
+            .resolve(payload!, region: LiturgicalRegion.generalRoman);
+
+        expect(celebration, isNotNull);
+        expect(celebration!.id, 'all_saints');
+        expect(celebration.title, 'All Saints');
+        expect(celebration.rank.name, 'solemnity');
+      },
+    );
 
     test('rejects malformed and unrelated payloads safely', () {
       expect(FeastReminderPayload.tryParse(null), isNull);

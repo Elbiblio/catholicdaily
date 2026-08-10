@@ -287,6 +287,23 @@ bool _validDossier(String text) {
   if (text.length < 800 || headings.any((heading) => !text.contains(heading))) {
     return false;
   }
+  const identityFields = [
+    '- Stable ID:',
+    '- Profile kind:',
+    '- Celebration IDs:',
+    '- Canonical name and aliases:',
+    '- Feast date and calendar scope:',
+    '- Identity conflicts resolved:',
+  ];
+  const sourceLedgerHeader =
+      '| ID | Tier | Author/institution | Title | Publisher | URL | Accessed | Reuse basis |';
+  const claimLedgerHeader =
+      '| Profile field | Claim or editorial conclusion | Source IDs | Certainty | Reconciliation note |';
+  if (identityFields.any((field) => !text.contains(field)) ||
+      !text.contains(sourceLedgerHeader) ||
+      !text.contains(claimLedgerHeader)) {
+    return false;
+  }
   return !RegExp(r'\b(?:TBD|TODO)\b', caseSensitive: false).hasMatch(text);
 }
 

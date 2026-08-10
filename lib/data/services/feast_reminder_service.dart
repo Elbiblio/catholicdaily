@@ -9,8 +9,11 @@ import '../models/liturgical_region.dart';
 import 'feast_reminder_preferences.dart';
 import 'feast_reminder_payload.dart';
 import 'feast_reminder_schedule_policy.dart';
+import 'improved_liturgical_calendar_service.dart';
 import 'liturgical_region_preference_service.dart';
 import 'offline_ordo_lookup_service.dart';
+import 'optional_memorial_service.dart';
+import 'saint_calendar_service.dart';
 import 'saint_profile_service.dart';
 
 /// Represents a feast/solemnity event that can trigger a reminder.
@@ -359,6 +362,8 @@ class FeastReminderService {
     LiturgicalRegion? regionOverride,
   }) async {
     final lookup = OfflineOrdoLookupService.instance;
+    final memorials = OptionalMemorialService.instance;
+    final saintCalendar = SaintCalendarService.instance;
     var region = regionOverride ?? LiturgicalRegion.generalRoman;
     if (regionOverride == null) {
       try {
@@ -375,6 +380,7 @@ class FeastReminderService {
     for (var d = start; !d.isAfter(end); d = d.add(const Duration(days: 1))) {
       try {
         final day = lookup.resolve(d, region: region);
+        final dedupeKeys = <String>{};
         if (_shouldInclude(day.rank, rank)) {
           String? saintProfileId;
           if (SaintProfileService.isSaintLikeTitle(day.title)) {
@@ -399,6 +405,47 @@ class FeastReminderService {
               liturgicalColor: day.colorValue,
             ),
           );
+          dedupeKeys.add(SaintProfileService.normalizeTitle(day.title));
+          if (saintProfileId != null) dedupeKeys.add(saintProfileId);
+        }
+
+        if (rank != FeastReminderRank.all ||
+            !_canObserveMemorialsOn(d, day.rank, memorials)) {
+          continue;
+        }
+
+        final celebrations = await saintCalendar.getSaintCelebrationsForDate(
+          date: d,
+          optionalCelebrations: memorials.getOptionalCelebrations(d),
+        );
+        for (final celebration in celebrations) {
+          final profile =
+              await SaintProfileService.instance.findByCelebrationId(
+                celebration.id,
+              ) ??
+              await SaintProfileService.instance.findCuratedByTitle(
+                celebration.title,
+              );
+          final normalizedTitle = SaintProfileService.normalizeTitle(
+            celebration.title,
+          );
+          if (dedupeKeys.contains(celebration.id) ||
+              dedupeKeys.contains(normalizedTitle) ||
+              (profile != null && dedupeKeys.contains(profile.id))) {
+            continue;
+          }
+          dedupeKeys.add(celebration.id);
+          dedupeKeys.add(normalizedTitle);
+          if (profile != null) dedupeKeys.add(profile.id);
+          events.add(
+            _FeastEvent(
+              date: d,
+              title: celebration.title,
+              rank: _rankLabel(celebration.rank),
+              saintProfileId: profile?.id,
+              liturgicalColor: _colorValue(celebration.color),
+            ),
+          );
         }
       } catch (e) {
         debugPrint('[FeastReminder] Error resolving $d: $e');
@@ -407,6 +454,33 @@ class FeastReminderService {
 
     return events;
   }
+
+  bool _canObserveMemorialsOn(
+    DateTime date,
+    String? principalRank,
+    OptionalMemorialService memorials,
+  ) {
+    if (date.weekday == DateTime.sunday || memorials.isSuppressedDate(date)) {
+      return false;
+    }
+    return principalRank != 'Solemnity' && principalRank != 'Feast';
+  }
+
+  String _rankLabel(CelebrationRank rank) => switch (rank) {
+    CelebrationRank.solemnity => 'Solemnity',
+    CelebrationRank.feast => 'Feast',
+    CelebrationRank.obligatoryMemorial => 'Memorial',
+    CelebrationRank.optionalMemorial => 'Optional Memorial',
+  };
+
+  Color _colorValue(LiturgicalColor color) => switch (color) {
+    LiturgicalColor.green => const Color(0xFF228B22),
+    LiturgicalColor.purple => const Color(0xFF6B3FA0),
+    LiturgicalColor.red => const Color(0xFFB22222),
+    LiturgicalColor.pink => const Color(0xFFFF69B4),
+    LiturgicalColor.white => const Color(0xFFF5F5F5),
+    LiturgicalColor.gold => const Color(0xFFFFD700),
+  };
 
   @visibleForTesting
   Future<List<FeastReminderPreviewEvent>> buildPreviewEventsForTesting(

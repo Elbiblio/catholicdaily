@@ -2,15 +2,29 @@
 
 ## Identity resolution
 
-This is a Marian solemnity, not a biographical claim that Mary originated Christ's divinity. The title Theotokos identifies the child she bore as the one divine person Jesus Christ. January 1, the octave day of Christmas, is verified independently of civil New Year customs.
+- Stable ID: `mary_mother_of_god`
+- Profile kind: Marian
+- Celebration IDs: `mary_mother_of_god`, `mary_the_holy_mother_of_god`
+- Canonical name and aliases: Mary, the Holy Mother of God; Theotokos
+- Feast date and calendar scope: January 1; universal Roman solemnity and octave day of Christmas
+- Identity conflicts resolved: The title identifies the one divine person Mary bore according to his humanity; it does not claim that Mary originated Christ's divinity or existed before God.
 
 ## Source ledger
 
-The 2007 Benedict XVI solemnity homily controls the Christological meaning; the Catechism section on Mary's prayer controls discipleship and prayer; John Paul II's 1999 homily controls the January 1 setting and Luke 2 theme. All are Holy See sources accessed 2026-08-10.
+| ID | Tier | Author/institution | Title | Publisher | URL | Accessed | Reuse basis |
+|---|---:|---|---|---|---|---|---|
+| solemnity-homily-2007 | 1 | Pope Benedict XVI | Solemnity of Mary, Mother of God and 40th World Day of Peace | The Holy See | https://www.vatican.va/content/benedict-xvi/en/homilies/2007/documents/hf_ben-xvi_hom_20070101_world-day-peace.html | 2026-08-10 | Official Christological and liturgical interpretation; original synthesis |
+| catechism-mary-prayer | 1 | Catholic Church | Catechism of the Catholic Church: The Prayer of the Virgin Mary | The Holy See | https://www.vatican.va/content/catechism/en/part_four/section_one/chapter_two/article_2.html | 2026-08-10 | Authoritative doctrine on Mary's prayer and discipleship; original synthesis |
+| solemnity-homily-1999 | 1 | Pope John Paul II | Solemnity of Mary, Mother of God | The Holy See | https://www.vatican.va/content/john-paul-ii/en/homilies/1999/documents/hf_jp-ii_hom_01011999.html | 2026-08-10 | Official January 1 and Luke 2 context; original synthesis |
 
 ## Claim ledger
 
-The profile distinguishes motherhood according to Christ's humanity from any suggestion that Mary precedes God. Luke's account supports pondering and the shepherds. Peace is connected to the celebration's World Day of Peace context. No uncertain later-life chronology is asserted.
+| Profile field | Claim or editorial conclusion | Source IDs | Certainty | Reconciliation note |
+|---|---|---|---|---|
+| identity, profileKind | Theotokos is a Christological Marian title, not a claim that Mary precedes or creates God. | solemnity-homily-2007; catechism-mary-prayer | High | All sources agree; wording explicitly prevents a common misunderstanding. |
+| feastDates | January 1 is the octave day of Christmas and the Roman solemnity. | solemnity-homily-2007; solemnity-homily-1999 | High | Civil New Year customs are not used as the basis of the feast. |
+| lifeGuide.summary | Luke 2 presents Mary pondering Christ's mystery and receiving the shepherds' testimony. | solemnity-homily-1999; catechism-mary-prayer | High | No unsupported later-life chronology is added. |
+| whyItMatters, practices | Marian contemplation should lead to Christ-centered prayer, peace, and faithful action. | solemnity-homily-2007; catechism-mary-prayer | High | Pastoral application is original and distinguished from historical fact. |
 
 ## Copyright and media decision
 

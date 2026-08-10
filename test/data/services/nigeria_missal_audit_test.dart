@@ -195,6 +195,70 @@ void main() {
 
       expect(missing, isEmpty, reason: 'Missing reminder deep links: $missing');
     });
+
+    test(
+      'all-reminders mode includes researched optional and obligatory memorials',
+      () async {
+        final events2025 = await FeastReminderService.instance
+            .buildPreviewEventsForTesting(
+              2025,
+              FeastReminderRank.all,
+              region: LiturgicalRegion.nigeria,
+            );
+        final events2026 = await FeastReminderService.instance
+            .buildPreviewEventsForTesting(
+              2026,
+              FeastReminderRank.all,
+              region: LiturgicalRegion.nigeria,
+            );
+
+        void expectDeepLink(
+          List<FeastReminderPreviewEvent> events,
+          DateTime date,
+          String profileId,
+        ) {
+          expect(
+            events,
+            contains(
+              isA<FeastReminderPreviewEvent>()
+                  .having((event) => event.date, 'date', date)
+                  .having(
+                    (event) => event.saintProfileId,
+                    'saintProfileId',
+                    profileId,
+                  ),
+            ),
+          );
+        }
+
+        // Bakhita falls on a Sunday in 2026, so use an unsuppressed year.
+        expectDeepLink(events2025, DateTime(2025, 2, 8), 'josephine_bakhita');
+        expectDeepLink(events2026, DateTime(2026, 5, 1), 'joseph_the_worker');
+        expectDeepLink(events2026, DateTime(2026, 7, 9), 'augustine_zhao_rong');
+        expectDeepLink(
+          events2026,
+          DateTime(2026, 8, 14),
+          'maximilian_mary_kolbe',
+        );
+        expectDeepLink(events2026, DateTime(2026, 9, 5), 'teresa_of_calcutta');
+        expectDeepLink(
+          events2026,
+          DateTime(2026, 9, 17),
+          'hildegard_of_bingen',
+        );
+        expectDeepLink(events2026, DateTime(2026, 11, 3), 'martin_de_porres');
+
+        expect(
+          events2026.where(
+            (event) =>
+                event.date == DateTime(2026, 2, 8) &&
+                event.saintProfileId == 'josephine_bakhita',
+          ),
+          isEmpty,
+          reason: 'A Sunday must retain liturgical precedence.',
+        );
+      },
+    );
   });
 
   group('Nigeria readings audit', () {

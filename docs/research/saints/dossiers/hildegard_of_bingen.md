@@ -2,15 +2,30 @@
 
 ## Identity resolution
 
-The profile concerns the Benedictine abbess born in the Rhineland in 1098, founder at Rupertsberg, and writer who died on 17 September 1179. Her 2012 proclamation as Doctor of the Universal Church is distinguished from her medieval reputation and later liturgical recognition.
+- Stable ID: `hildegard_of_bingen`
+- Profile kind: Individual
+- Celebration IDs: `hildegard_of_bingen`, `saint_hildegard_of_bingen_abbess_and_doctor_of_the_church`
+- Canonical name and aliases: Saint Hildegard of Bingen; Hildegard of Rupertsberg
+- Feast date and calendar scope: September 17; optional memorial in the General Roman Calendar
+- Identity conflicts resolved: The medieval Benedictine abbess and Rupertsberg founder is the person proclaimed a Doctor of the Universal Church in 2012; medieval reputation and the later formal title are kept distinct.
 
 ## Source ledger
 
-Benedict XVI's apostolic letter controls the full chronology, works, theology, preaching, reform, nature, and Doctor title. His 2010 general audience independently controls early life, poor health, election as leader, and foundation. The 2012 proclamation homily confirms the title and evangelizing significance. Sources were accessed 2026-08-10.
+| ID | Tier | Author/institution | Title | Publisher | URL | Accessed | Reuse basis |
+|---|---:|---|---|---|---|---|---|
+| doctor-letter | 1 | Pope Benedict XVI | Apostolic Letter proclaiming Hildegard of Bingen a Doctor of the Church | The Holy See | https://www.vatican.va/content/benedict-xvi/en/apost_letters/documents/hf_ben-xvi_apl_20121007_ildegarda-bingen.html | 2026-08-10 | Authoritative chronology, theology, works, and Doctor title; original synthesis |
+| audience-one | 1 | Pope Benedict XVI | General Audience: Saint Hildegard of Bingen | The Holy See | https://www.vatican.va/content/benedict-xvi/en/audiences/2010/documents/hf_ben-xvi_aud_20100901.html | 2026-08-10 | Official biographical and foundation cross-check; original synthesis |
+| doctor-homily | 1 | Pope Benedict XVI | Proclamation of Saint Hildegard as Doctor of the Church | The Holy See | https://www.vatican.va/content/benedict-xvi/en/homilies/2012/documents/hf_ben-xvi_hom_20121007_apertura-sinodo.html | 2026-08-10 | Official confirmation of title and evangelizing significance; original synthesis |
 
 ## Claim ledger
 
-The profile names visions as historically reported but stresses disclosure, counsel, Scripture, theological work, and ecclesial encouragement. It does not turn medieval natural writings into modern medical advice or make scientific priority claims.
+| Profile field | Claim or editorial conclusion | Source IDs | Certainty | Reconciliation note |
+|---|---|---|---|---|
+| identity, lifeSpan | Hildegard was born in 1098, became a Benedictine leader, founded Rupertsberg, and died in 1179. | doctor-letter; audience-one | High | Official sources agree on the core chronology. |
+| summary, biographySections | She wrote theology, music, natural observations, correspondence, and preached reform. | doctor-letter; audience-one | High | Medieval categories are not converted into modern scientific priority claims. |
+| biographySections | Her visions were disclosed with counsel and interpreted through Scripture and ecclesial discernment. | doctor-letter; audience-one | High as historical report | The page neither demands belief in private revelation nor treats it as self-authenticating. |
+| honors | She was formally proclaimed a Doctor of the Universal Church in 2012. | doctor-letter; doctor-homily | High | Formal title is distinguished from earlier reputation. |
+| practices | Integrating prayer, study, creativity, creation care, and accountable discernment is a valid application. | doctor-letter; doctor-homily | High | No medieval remedy is presented as modern medical advice. |
 
 ## Copyright and media decision
 
