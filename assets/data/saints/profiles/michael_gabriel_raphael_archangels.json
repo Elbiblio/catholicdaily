@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 2,
+  "id": "michael_gabriel_raphael_archangels",
+  "profileKind": "angelic",
+  "celebrationIds": ["michael_gabriel_raphael_archangels", "saints_michael_gabriel_and_raphael_archangels"],
+  "name": "Saints Michael, Gabriel, and Raphael, Archangels",
+  "alternateNames": ["The Holy Archangels"],
+  "ecclesialTitle": "Angelic servants and messengers of God",
+  "lifeSpan": "",
+  "lifeLength": "",
+  "vocation": "Worship and service within God's saving plan",
+  "places": [],
+  "patronage": ["protection", "messengers", "healing", "travelers"],
+  "symbols": ["Michael with a shield", "Gabriel with a scroll", "Raphael with a traveler"],
+  "briefBio": "The Church celebrates Michael, Gabriel, and Raphael, the three angels named in canonical Scripture. Their biblical missions point away from fascination with hidden spiritual knowledge and toward God: Michael defends, Gabriel announces God's word, and Raphael accompanies and heals.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Archangel",
+  "feastDates": ["September 29"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {"id":"catechism-angels","title":"Catechism of the Catholic Church: Heaven and Earth","authorOrInstitution":"Catholic Church","publisher":"The Holy See","url":"https://www.vatican.va/content/catechism/en/part_one/section_two/chapter_one/article_1/paragraph_5_heaven_and_earth.html","publicationDate":"1992","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Official doctrinal source on angels as creatures, servants, and messengers centered on Christ; original synthesis","supports":["natureOfAngels","christCenter","gabriel","liturgy"]},
+    {"id":"popular-piety-directory","title":"Directory on Popular Piety and the Liturgy","authorOrInstitution":"Congregation for Divine Worship and the Discipline of the Sacraments","publisher":"The Holy See","url":"https://press.vatican.va/roman_curia/congregations/ccdds/documents/rc_con_ccdds_doc_20020513_vers-direttorio_en.html","publicationDate":"2001","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Official guidance for the September 29 feast and sound angel devotion; original prose","supports":["feastDate","veneration","devotionalBoundaries","liturgy"]},
+    {"id":"archangels-address","title":"Greeting on the Feast of the Holy Archangels","authorOrInstitution":"Pope Benedict XVI","publisher":"The Holy See","url":"https://www.vatican.va/content/benedict-xvi/en/speeches/2008/september/documents/hf_ben-xvi_spe_20080929_saluto-castel-gandolfo.html","publicationDate":"2008-09-29","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Official pastoral source on their biblical missions and service; original synthesis","supports":["michael","gabriel","raphael","service"]}
+  ],
+  "editorial": {"state":"published","researcher":"Catholic Daily editorial research","reviewer":"Catholic Daily factual and theological review","reviewedAt":"2026-08-10","revision":1,"warnings":[]},
+  "whyItMatters": "The archangels teach a healthy spiritual posture: worship belongs to God, spiritual power serves God's saving will, and a messenger is faithful by delivering God's word rather than drawing attention to self. Their feast encourages protection, truthful speech, and healing companionship.",
+  "oneMinuteSummary": "Michael, Gabriel, and Raphael are the angels named in the canonical books of Scripture and celebrated together on September 29. Michael appears as defender in Daniel and Revelation; his name asks, 'Who is like God?' and rejects every rival to divine sovereignty. Gabriel interprets God's message in Daniel and announces the births of John the Baptist and Jesus, making him a servant of revelation. Raphael accompanies Tobiah in the Book of Tobit, helps bring healing, and identifies himself as one who presents prayer before God. Catholic teaching describes angels as created, personal, spiritual beings who serve God's plan; Christ remains the center of the angelic world. The feast does not authorize attempts to name unknown angels, seek occult control, or replace trust in God with spiritual curiosity.",
+  "life": {
+    "sections": [
+      {"heading":"Three names, three biblical missions","body":"Scripture associates Michael with defense against evil, Gabriel with receiving and announcing God's message, and Raphael with accompaniment and healing. Their identity is known through service, not self-display.","sourceIds":["catechism-angels","archangels-address"]},
+      {"heading":"Devotion ordered toward God","body":"The Church joins the angels in worship and asks their help while insisting that they are creatures who belong to Christ. Sound devotion produces confidence, obedience, and praise rather than fear, secret naming systems, or attempts to control spiritual powers.","sourceIds":["catechism-angels","popular-piety-directory"]}
+    ],
+    "gospelTheme": "God's servants protect, communicate truth, and accompany healing while directing all glory and trust to the Lord.",
+    "struggle": "Fear, deception, evil, illness, and the human desire to control what is hidden can distort spiritual life.",
+    "response": "The archangels fulfill God's missions faithfully: defending his people, announcing his word, and accompanying healing without claiming God's place."
+  },
+  "virtues": [
+    {"name":"God-centered service","evidence":"Angelic ministry receives its meaning from God and Christ; the messengers act for salvation rather than personal recognition.","imitation":"Complete one necessary service quietly and direct any gratitude toward the shared mission and God's goodness.","sourceIds":["catechism-angels","popular-piety-directory"]},
+    {"name":"Truthful courage and accompaniment","evidence":"The named missions combine resistance to evil, clear announcement, and patient presence on a difficult journey.","imitation":"Defend someone without aggression, communicate one difficult truth clearly, or accompany a person through a medical or emotional burden.","sourceIds":["archangels-address","catechism-angels"]}
+  ],
+  "practice": {"spiritual":"Pray the Sanctus with attention, joining the Church's praise with the angels. Entrust one fear to God without seeking hidden signs or secret knowledge.","action":"Choose one archangel-shaped work today: protect someone vulnerable, deliver a truthful message kindly, or accompany someone who needs practical help."},
+  "reflectionQuestions": ["Does my spiritual curiosity lead me toward Christ and obedience, or toward fear and control?", "Which is needed from me today: protection, a truthful word, or healing companionship?"],
+  "scripture": {"reference":"Hebrews 1:14","connection":"Angels are ministering spirits sent in God's service; the verse keeps devotion focused on God's saving initiative rather than fascination with power."},
+  "prayer": "God of hosts, you send your holy angels to serve your saving purpose. Through the ministry of Michael, Gabriel, and Raphael, defend us from evil, make us attentive to your word, and accompany all who need healing. Keep our worship centered on you and make our own service courageous, truthful, and humble. Through Christ our Lord. Amen."
+}

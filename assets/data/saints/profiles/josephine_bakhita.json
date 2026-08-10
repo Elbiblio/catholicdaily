@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 2,
+  "id": "josephine_bakhita",
+  "profileKind": "individual",
+  "celebrationIds": [
+    "josephine_bakhita",
+    "saint_josephine_bakhita_virgin"
+  ],
+  "name": "Saint Josephine Bakhita",
+  "alternateNames": ["Giuseppina Bakhita"],
+  "ecclesialTitle": "Virgin and Canossian religious sister",
+  "lifeSpan": "c. 1869-1947",
+  "lifeLength": "about 78 years",
+  "vocation": "Canossian religious sister and witness of Christian hope",
+  "places": ["Darfur, Sudan", "Venice, Italy", "Schio, Italy"],
+  "patronage": ["Sudan", "survivors of human trafficking and slavery"],
+  "symbols": [],
+  "briefBio": "Kidnapped and enslaved as a child in Sudan, Josephine Bakhita endured repeated violence before gaining legal freedom in Italy. Baptism revealed to her a God who knew and loved her; as a Canossian sister, she turned that hope into decades of humble service, welcome, and prayer.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Josephine_Bakhita",
+  "wikidataId": "Q236030",
+  "feastDates": ["February 8"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {
+      "id": "holy-see-biography",
+      "title": "Josephine Bakhita (1869-1947)",
+      "authorOrInstitution": "Office for the Liturgical Celebrations of the Supreme Pontiff",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/news_services/liturgy/documents/ns_lit_doc_20001001_giuseppina-bakhita_en.html",
+      "publicationDate": "2000",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Facts checked against an official canonization biography; all app prose is original",
+      "supports": ["identity", "life.enslavement", "life.freedom", "life.religious_life", "patronage"]
+    },
+    {
+      "id": "canonization-homily",
+      "title": "Canonization of Augustine Zhao Rong and companions, Josephine Bakhita, and others",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/john-paul-ii/en/homilies/2000/documents/hf_jp-ii_hom_20001001_canonization.html",
+      "publicationDate": "2000-10-01",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official canonization interpretation used for factual and theological verification",
+      "supports": ["identity", "gospelTheme", "virtues.hope", "virtues.service"]
+    },
+    {
+      "id": "spe-salvi",
+      "title": "Spe salvi",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/encyclicals/documents/hf_ben-xvi_enc_20071130_spe-salvi.html",
+      "publicationDate": "2007-11-30",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official theological source for Bakhita as a witness of hope; all app prose is original",
+      "supports": ["life.freedom", "gospelTheme", "virtues.hope", "scripture"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-10",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Bakhita's life refuses two lies: that a person can be reduced to what others do to them, and that suffering must have the final word. Her freedom was legal, spiritual, and relational. She discovered herself as loved by God, then lived without allowing cruelty to dictate the person she became.",
+  "oneMinuteSummary": "Born around 1869 in Darfur, Bakhita was kidnapped as a young girl, sold repeatedly, and subjected to severe abuse. Traffickers gave her the name Bakhita, meaning 'fortunate'; the childhood name her family gave her was lost through trauma. Taken eventually to Italy, she was placed with the Canossian Sisters in Venice. There she encountered the Christian faith and, when an attempt was made to remove her from the convent and return her to Sudan, an Italian court recognized that she was legally free. She received Baptism, Confirmation, and First Communion in 1890, entered the Canossians, and professed vows in 1896. For decades at Schio she served through ordinary community work, hospitality, prayer, and encouragement. She died in 1947 and was canonized in 2000. The Church remembers her not because suffering made her holy, but because grace helped her recover freedom, hope, and the capacity to give love.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A stolen childhood",
+        "body": "Bakhita was born around 1869 in the Darfur region of Sudan. She did not know her exact birth date. While still a child, she was kidnapped by slave traders. The shock and repeated violence of captivity erased even the memory of the name her parents had given her. Her captors called her Bakhita, an Arabic word commonly rendered 'fortunate.' Over a number of years she was sold from one owner to another and endured physical cruelty that left lasting scars. The historical record does not invite romantic language: she was a child deprived of family, safety, freedom, and control over her own body. Her later holiness never makes those crimes acceptable. It shows instead that no crime committed against a person can erase that person's God-given dignity.",
+        "sourceIds": ["holy-see-biography"]
+      },
+      {
+        "heading": "Freedom recognized",
+        "body": "After being acquired by an Italian consular official and later transferred to another Italian family, Bakhita was taken to Italy. In Venice she and a young girl in her care stayed with the Canossian Sisters. There she began learning about the Christian faith. When the family sought to take her away again, Bakhita chose to remain. The dispute reached the Italian authorities, who concluded that the laws applying to her situation did not recognize her as property and that she was free. This decision mattered in concrete human terms: she could finally make a consequential choice about her own future. Her path to religious life began after, not instead of, that recognition of her liberty.",
+        "sourceIds": ["holy-see-biography", "spe-salvi"]
+      },
+      {
+        "heading": "Known and loved by God",
+        "body": "At the Canossian institute Bakhita encountered the God of Jesus Christ, whom she came to understand not as another master claiming possession but as the Lord who knew her, loved her, and had entered human suffering. On 9 January 1890 she received Baptism, Confirmation, and First Communion, taking the names Josephine Margaret Fortunata. Benedict XVI later used her story to explain Christian hope: Bakhita discovered that she was awaited by Love and therefore could live from a future no human oppressor controlled. Her faith did not erase memory or make trauma unreal. It gave her a new ground of identity deeper than the names, prices, and wounds imposed by others.",
+        "sourceIds": ["holy-see-biography", "spe-salvi"]
+      },
+      {
+        "heading": "A long fidelity at Schio",
+        "body": "Bakhita entered the Canossian novitiate and professed vows in 1896. From 1902 she lived chiefly in Schio, serving her community in such roles as cook, sacristan, and doorkeeper. The simplicity of these tasks is central to her witness. She became known for a calm welcome, a gentle voice, prayer, and willingness to encourage those who came to the convent. She also helped awaken concern for the Church's missions. Illness marked her later years, and memories of captivity could return painfully, yet witnesses remembered her trust. She died on 8 February 1947. Her canonization in 2000 publicly affirmed a holiness formed through grace, freedom, patient service, and hope shared with others.",
+        "sourceIds": ["holy-see-biography", "canonization-homily", "spe-salvi"]
+      }
+    ],
+    "gospelTheme": "In Christ, freedom begins with receiving the truth that no person is property and every person is known by God. That hope becomes fruitful when the freedom we receive is carried to others through welcome, solidarity, and service.",
+    "struggle": "Kidnapping, enslavement, bodily violence, the loss of family and childhood identity, and later illness all pressed against Bakhita's freedom and hope.",
+    "response": "She claimed the freedom available to her, received a new identity in Baptism, entered consecrated life by her own choice, and transformed ordinary service into a way of making other people feel welcomed rather than owned or dismissed."
+  },
+  "virtues": [
+    {
+      "name": "Hope rooted in being loved",
+      "evidence": "Bakhita came to understand herself as known and awaited by God, a conviction that changed how she faced both her past and her future.",
+      "imitation": "When shame or another person's judgment defines you, answer it with one concrete truth about your dignity before God and extend that dignity to someone who is overlooked.",
+      "sourceIds": ["spe-salvi", "canonization-homily"]
+    },
+    {
+      "name": "Freedom joined to service",
+      "evidence": "After legal and spiritual freedom, she freely chose consecrated life and decades of humble work that welcomed and strengthened others.",
+      "imitation": "Use one freedom you possess today—time, attention, mobility, education, or influence—to increase another person's safety or agency.",
+      "sourceIds": ["holy-see-biography", "spe-salvi"]
+    },
+    {
+      "name": "Gentleness without denial",
+      "evidence": "Her later gentleness did not declare her abuse good; it showed that cruelty would not be allowed to reproduce itself through her choices.",
+      "imitation": "Refuse one cycle of contempt today. Speak truthfully about harm while choosing a response that protects dignity rather than spreading humiliation.",
+      "sourceIds": ["holy-see-biography", "canonization-homily"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray slowly with the words 'I am known and loved by God.' Name before God any wound or label that tries to contradict that truth.",
+    "action": "Support a reputable anti-trafficking or survivor-care effort, or learn the warning signs and local reporting route for human trafficking without placing a survivor at further risk."
+  },
+  "reflectionQuestions": [
+    "What experience or label still tempts me to believe that my dignity can be taken away?",
+    "Whose freedom, safety, or voice can I strengthen through one respectful action today?"
+  ],
+  "scripture": {
+    "reference": "Romans 8:24-25",
+    "connection": "Christian hope is not denial of present suffering. It is patient confidence that God's saving love opens a future which violence and captivity cannot finally close."
+  },
+  "prayer": "God of the oppressed and Father of every person, you led Saint Josephine Bakhita from captivity into freedom and taught her that she was known and loved. Heal those wounded by trafficking and abuse, protect those still in danger, and make us courageous defenders of human dignity. Free us from every habit of domination, and teach us to carry your hope to others through Christ our Lord. Amen."
+}

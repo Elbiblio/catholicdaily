@@ -1,4 +1,17 @@
 {
   "schemaVersion": 2,
-  "profiles": []
+  "profiles": [
+    "assets/data/saints/profiles/mary_mother_of_god.json",
+    "assets/data/saints/profiles/josephine_bakhita.json",
+    "assets/data/saints/profiles/joseph_the_worker.json",
+    "assets/data/saints/profiles/saints_peter_and_paul_apostles.json",
+    "assets/data/saints/profiles/augustine_zhao_rong.json",
+    "assets/data/saints/profiles/maximilian_mary_kolbe.json",
+    "assets/data/saints/profiles/teresa_of_calcutta.json",
+    "assets/data/saints/profiles/hildegard_of_bingen.json",
+    "assets/data/saints/profiles/michael_gabriel_raphael_archangels.json",
+    "assets/data/saints/profiles/our_lady_queen_of_nigeria.json",
+    "assets/data/saints/profiles/all_saints.json",
+    "assets/data/saints/profiles/martin_de_porres.json"
+  ]
 }

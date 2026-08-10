@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 2,
+  "id": "martin_de_porres",
+  "profileKind": "individual",
+  "celebrationIds": ["martin_de_porres", "saint_martin_de_porres_religious"],
+  "name": "Saint Martin de Porres",
+  "alternateNames": ["Martín de Porres", "Martin of Charity"],
+  "ecclesialTitle": "Dominican cooperator brother",
+  "lifeSpan": "1579-1639",
+  "lifeLength": "59 years",
+  "vocation": "Dominican religious brother, healer, and servant of people in poverty",
+  "places": ["Lima, Peru"],
+  "patronage": ["racial harmony", "mixed-race people", "public health workers", "barbers"],
+  "symbols": [],
+  "briefBio": "Born into the racial and social hierarchy of colonial Lima, Martin de Porres learned the healing work of a barber-surgeon and entered the Dominican priory first as a servant, later professing as a cooperator brother. Prayer, medical care, and practical charity became one life of service across barriers of race and class.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Martin_de_Porres",
+  "wikidataId": "Q313293",
+  "feastDates": ["November 3"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {
+      "id": "canonization-homily",
+      "title": "Canonization of Blessed Martin de Porres",
+      "authorOrInstitution": "Pope John XXIII",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/john-xxiii/es/homilies/1962/documents/hf_j-xxiii_hom_19620506_martino-porres.html",
+      "publicationDate": "1962-05-06",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official canonization record used for ecclesial interpretation; original app prose",
+      "supports": ["identity", "life.religious_life", "gospelTheme", "virtues.humility", "patronage"]
+    },
+    {
+      "id": "dominican-biography",
+      "title": "St. Martin de Porres",
+      "authorOrInstitution": "Dominican Friars, Province of St. Joseph",
+      "publisher": "Dominican Friars",
+      "url": "https://dominicanfriars.org/st-martin-de-porres-2/",
+      "publicationDate": null,
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official religious-order biography used for chronology and vocation; original app prose",
+      "supports": ["identity", "life.formation", "life.healing", "life.religious_life", "virtues.service"]
+    },
+    {
+      "id": "latin-american-encyclopedia",
+      "title": "Porres, Martín de (1579-1639)",
+      "authorOrInstitution": "Noble David Cook",
+      "publisher": "Encyclopedia of Latin American History and Culture",
+      "url": "https://www.encyclopedia.com/humanities/encyclopedias-almanacs-transcripts-and-maps/porres-martin-de-1579-1639",
+      "publicationDate": null,
+      "accessedDate": "2026-08-10",
+      "tier": 2,
+      "reuseBasis": "Historical control for colonial context, dates, and profession; facts only",
+      "supports": ["identity", "life.colonial_context", "life.training", "life.profession", "life.death"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-10",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Martin shows that humility is not agreement with an unjust social order. He worked without seeking status, yet his care crossed the very racial and class lines that colonial society used to rank human worth. His holiness asks whether our prayer makes us more available to people whom our culture pushes aside.",
+  "oneMinuteSummary": "Martin was born in Lima in 1579 to Ana Velázquez, a freed woman of African descent from Panama, and Juan de Porres, a Spaniard of social standing. He grew up amid poverty and colonial categories that disadvantaged people of African, Indigenous, and mixed ancestry. Apprenticed in the medical work of a barber-surgeon, he gained practical skills in treating illness and injury. At about fifteen he entered the Dominican priory of the Holy Rosary as a lay helper; he later professed as a cooperator brother in 1603. Martin combined deep prayer—especially devotion to the Eucharist and Christ's Passion—with sustained care for sick friars, poor neighbors, and people who came to the priory for help. He became known for using medicine, gathering assistance, and serving without racial preference. He died in Lima on 3 November 1639 and was canonized in 1962. The documented core of his witness is not spectacle but a disciplined unity of contemplation, skilled care, humility, and resistance to social exclusion through concrete mercy.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Growing up inside a hierarchy",
+        "body": "Martin was born in Lima on 9 December 1579. His mother, Ana Velázquez, was a freed woman from Panama of African descent; his father, Juan de Porres, was a Spaniard whose position gave him social advantages unavailable to Martin and his sister. The family story unfolded within a colonial order that attached legal and social consequences to ancestry and birth. Martin knew poverty and unstable paternal support. Those conditions should not be treated as picturesque background. They shaped which doors were open to him and help explain why his later service across lines of race and rank had moral force. His holiness did not consist in accepting that some lives mattered less. It appeared in the steady refusal to ration care according to those categories.",
+        "sourceIds": ["latin-american-encyclopedia", "dominican-biography"]
+      },
+      {
+        "heading": "Learning to heal",
+        "body": "As a young adolescent Martin was apprenticed in the work of a barber-surgeon. In colonial Lima this involved more than cutting hair: it included practical medical procedures, knowledge of remedies, and attention to wounds and illness. These skills became part of his religious service rather than a discarded stage of secular life. He learned that mercy can require competence. Compassion for a sick person is strengthened, not weakened, by the patient work of acquiring useful knowledge. Later accounts also associate him with herbs and remedies, but the reliable conclusion is straightforward: Martin brought real training to the care of people who might otherwise have lacked treatment.",
+        "sourceIds": ["latin-american-encyclopedia", "dominican-biography"]
+      },
+      {
+        "heading": "A Dominican vocation without a search for rank",
+        "body": "Around the age of fifteen Martin entered the Dominican priory of the Holy Rosary in Lima as a lay helper. The form of entry available to him reflected both the customs and discriminatory limits of the period. He carried out ordinary work in the community and was eventually admitted to profession as a cooperator brother in 1603. His vocation joined manual service, care of the sick, and sustained prayer. Dominican sources remember his devotion to the Blessed Sacrament and to the Passion of Christ. The pattern matters: contemplation did not remove him from bodies in pain, and activity did not become a substitute for communion with God. Each corrected the other.",
+        "sourceIds": ["dominican-biography", "latin-american-encyclopedia", "canonization-homily"]
+      },
+      {
+        "heading": "Charity that crossed the priory door",
+        "body": "Martin cared for sick members of his community and became widely known among people beyond the priory. Historical summaries describe crowds of poor people seeking him and a reputation for healing, charity, and humility. Some later traditions recount extraordinary miracles; this guide does not depend on claims whose historical status varies. The well-grounded witness is already demanding: he noticed suffering, used his skills, gathered resources, and treated people as neighbors in a society trained to sort them by ancestry and status. When he died on 3 November 1639, civil and ecclesial leaders joined ordinary people in mourning. Canonized by John XXIII in 1962, Martin was presented to the modern Church as a summons to charity and social reconciliation.",
+        "sourceIds": ["latin-american-encyclopedia", "dominican-biography", "canonization-homily"]
+      }
+    ],
+    "gospelTheme": "Jesus joins love of God and love of neighbor. In Martin, Eucharistic prayer and attention to Christ's Passion became skilled, impartial care for people whose dignity society obscured.",
+    "struggle": "Poverty, uncertain family support, and a colonial racial order restricted Martin's opportunities and normalized unequal treatment around him.",
+    "response": "He developed useful healing skills, accepted a humble Dominican vocation without making humility an excuse for exclusion, and repeatedly crossed social boundaries through care for the sick and poor."
+  },
+  "virtues": [
+    {
+      "name": "Compassion made competent",
+      "evidence": "Martin brought the practical training of a barber-surgeon into sustained service of sick friars and poor neighbors.",
+      "imitation": "Choose one need you often feel sorry about and learn one concrete skill that will let you help safely and effectively.",
+      "sourceIds": ["dominican-biography", "latin-american-encyclopedia"]
+    },
+    {
+      "name": "Humility with moral courage",
+      "evidence": "He served without chasing social rank while treating people across the boundaries that ranked them by ancestry and class.",
+      "imitation": "Do one necessary task without seeking credit, and also challenge one practice that quietly gives better treatment to the socially favored.",
+      "sourceIds": ["canonization-homily", "latin-american-encyclopedia"]
+    },
+    {
+      "name": "Contemplation that becomes mercy",
+      "evidence": "Devotion to the Eucharist and Christ's Passion was integrated with daily medical and charitable service.",
+      "imitation": "After prayer, name the person or need toward which that prayer sends you, and take the first practical step before the day ends.",
+      "sourceIds": ["dominican-biography", "canonization-homily"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Spend ten quiet minutes before Christ, in a church if possible, and ask to see one person you have unconsciously ranked as less deserving of your time.",
+    "action": "Offer a useful skill—not only advice—to someone facing illness, poverty, or exclusion, while respecting professional limits and the person's own choices."
+  },
+  "reflectionQuestions": [
+    "Where do status, race, education, or income quietly influence the care and attention I give?",
+    "What skill can I patiently develop so that my compassion becomes more useful?"
+  ],
+  "scripture": {
+    "reference": "Matthew 25:35-40",
+    "connection": "Christ identifies himself with people who are hungry, ill, excluded, or in need of welcome. Martin's prayer became credible through concrete attention to those bodies and lives."
+  },
+  "prayer": "God of mercy, you formed Saint Martin de Porres in prayer and made his hands instruments of healing and welcome. Purify us of every habit that ranks one life above another. Give us humble hearts, useful skills, and courage to cross unjust boundaries in the service of our neighbors. May our love for you become visible in patient care for those in need, through Christ our Lord. Amen."
+}

@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 2,
+  "id": "hildegard_of_bingen",
+  "profileKind": "individual",
+  "celebrationIds": ["hildegard_of_bingen", "saint_hildegard_of_bingen_abbess_and_doctor_of_the_church"],
+  "name": "Saint Hildegard of Bingen",
+  "alternateNames": ["Hildegard of Rupertsberg"],
+  "ecclesialTitle": "Benedictine abbess and Doctor of the Church",
+  "lifeSpan": "1098-1179",
+  "lifeLength": "81 years",
+  "vocation": "Benedictine abbess, theologian, preacher, composer, and writer",
+  "places": ["Rhineland", "Disibodenberg", "Rupertsberg near Bingen"],
+  "patronage": ["musicians", "writers", "students of theology"],
+  "symbols": ["book", "musical notation"],
+  "briefBio": "Hildegard was a twelfth-century Benedictine abbess whose prayer, leadership, theological visions, preaching, music, letters, and study of nature formed an unusually integrated Christian vocation. In 2012 she was declared a Doctor of the Universal Church.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Hildegard_of_Bingen",
+  "wikidataId": "Q70991",
+  "feastDates": ["September 17"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {"id":"doctor-letter","title":"Apostolic Letter proclaiming Hildegard of Bingen a Doctor of the Church","authorOrInstitution":"Pope Benedict XVI","publisher":"The Holy See","url":"https://www.vatican.va/content/benedict-xvi/en/apost_letters/documents/hf_ben-xvi_apl_20121007_ildegarda-bingen.html","publicationDate":"2012-10-07","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Official comprehensive source for life, writings, theology, reform, and title; original synthesis","supports":["identity","chronology","writings","preaching","doctorOfChurch","theology"]},
+    {"id":"audience-one","title":"General Audience: Saint Hildegard of Bingen","authorOrInstitution":"Pope Benedict XVI","publisher":"The Holy See","url":"https://www.vatican.va/content/benedict-xvi/en/audiences/2010/documents/hf_ben-xvi_aud_20100901.html","publicationDate":"2010-09-01","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Official biographical catechesis used for early life and leadership; original prose","supports":["birth","monasticLife","abbess","foundations","health"]},
+    {"id":"doctor-homily","title":"Proclamation of Saint Hildegard as Doctor of the Church","authorOrInstitution":"Pope Benedict XVI","publisher":"The Holy See","url":"https://www.vatican.va/content/benedict-xvi/en/homilies/2012/documents/hf_ben-xvi_hom_20121007_apertura-sinodo.html","publicationDate":"2012-10-07","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Official liturgical confirmation and pastoral interpretation; original synthesis","supports":["doctorOfChurch","faith","evangelization"]}
+  ],
+  "editorial": {"state":"published","researcher":"Catholic Daily editorial research","reviewer":"Catholic Daily factual and theological review","reviewedAt":"2026-08-10","revision":1,"warnings":[]},
+  "whyItMatters": "Hildegard refuses the split between prayer and intelligent attention. She listened to Scripture and liturgy, led communities, created music, studied the natural world, advised leaders, and called the Church to conversion. Her breadth was rooted in one center: Christ.",
+  "oneMinuteSummary": "Born in the Rhineland in 1098, Hildegard entered a Benedictine religious setting as a child and later became leader of the women's community at Disibodenberg. She founded a new monastery at Rupertsberg near Bingen and guided its spiritual and material life. From childhood she experienced visions, but she did not simply trust private impressions. She disclosed them, received spiritual guidance, and wrote with ecclesial encouragement. Her major works treat salvation history, virtue, the Church, creation, and the human person; she also composed sacred music, wrote many letters, and produced works connected with medicine and the natural world. In later life she traveled to preach reform, an unusual public ministry for a woman of her period. She died in 1179. Benedict XVI declared her a Doctor of the Church in 2012, highlighting her biblical, liturgical, Christ-centered teaching and her call to conversion.",
+  "life": {
+    "sections": [
+      {"heading":"Discerned vision and disciplined study","body":"Hildegard's visions were joined to Scripture, theological reflection, spiritual counsel, writing, and review. This matters because Christian discernment does not confuse intensity with truth; gifts mature through humility, learning, and accountability.","sourceIds":["doctor-letter","audience-one"]},
+      {"heading":"A creative life serving reform","body":"As abbess she cared for community life and founded Rupertsberg. Her theology, music, letters, preaching, and attention to creation served a call to conversion. She saw authentic reform as changed hearts, not merely altered structures.","sourceIds":["doctor-letter","doctor-homily"]}
+    ],
+    "gospelTheme": "The Word who creates and redeems calls the whole human person - intellect, imagination, body, voice, and will - into a life of praise and conversion.",
+    "struggle": "Poor health, responsibility for communities, the burden of unusual experiences, resistance to her leadership, and corruption in Church life tested her vocation.",
+    "response": "She sought discernment, studied, wrote, composed, governed, preached, and directed her gifts toward Christ and the reform of life."
+  },
+  "virtues": [
+    {"name":"Integrated wisdom","evidence":"Her work connected Scripture, liturgy, theology, music, nature, bodily life, and moral conversion without making any created field an idol.","imitation":"Bring one area of study or creativity into prayer, then identify how it can serve truth, beauty, or another person's good.","sourceIds":["doctor-letter"]},
+    {"name":"Humble discernment","evidence":"She submitted extraordinary experiences to guidance and theological reflection rather than treating private certainty as self-authenticating.","imitation":"Before acting on a strong impression, test it against Scripture, Church teaching, facts, consequences, and wise counsel.","sourceIds":["doctor-letter","audience-one"]}
+  ],
+  "practice": {"spiritual":"Pray with Psalm 104 and notice one created thing as gift rather than possession. Ask how your knowledge can become praise and service.","action":"Use a creative or intellectual skill for someone else today: teach clearly, make something beautiful, solve a practical problem, or share trustworthy knowledge."},
+  "reflectionQuestions": ["Are my gifts becoming service and conversion, or mainly identity and display?", "What strong conviction in my life still needs patient discernment and wise counsel?"],
+  "scripture": {"reference":"Romans 12:2","connection":"Hildegard's reform begins with a renewed mind and converted life, allowing gifts and knowledge to discern and serve God's will."},
+  "prayer": "God of wisdom and beauty, you gave Saint Hildegard gifts of prayer, leadership, learning, and song. Unite what is divided in us. Make our study humble, our creativity truthful, our care for creation grateful, and our desire for reform begin in conversion. May every gift we receive praise you and serve our neighbor. Through Christ our Lord. Amen."
+}
