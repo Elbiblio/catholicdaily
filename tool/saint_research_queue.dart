@@ -81,6 +81,166 @@ class SaintResearchQueue {
   }
 }
 
+class SaintResearchDossierGate {
+  const SaintResearchDossierGate._();
+
+  static const _headings = [
+    '## Identity resolution',
+    '## Source ledger',
+    '## Claim ledger',
+    '## Copyright and media decision',
+    '## Content review',
+    '## Theological review',
+    '## Final validation',
+  ];
+  static const _identityFields = [
+    '- Stable ID:',
+    '- Profile kind:',
+    '- Celebration IDs:',
+    '- Canonical name and aliases:',
+    '- Feast date and calendar scope:',
+    '- Identity conflicts resolved:',
+  ];
+  static const _sourceLedgerHeader =
+      '| ID | Tier | Author/institution | Title | Publisher | URL | Accessed | Reuse basis |';
+  static const _claimLedgerHeader =
+      '| Profile field | Claim or editorial conclusion | Source IDs | Certainty | Reconciliation note |';
+
+  static bool isValid({
+    required String text,
+    required String profileId,
+    required Set<String> profileSourceIds,
+  }) {
+    if (text.length < 800 ||
+        _headings.any((heading) => !text.contains(heading)) ||
+        RegExp(r'\b(?:TBD|TODO)\b', caseSensitive: false).hasMatch(text)) {
+      return false;
+    }
+
+    final identity = <String, String>{};
+    for (final field in _identityFields) {
+      final value = _fieldValue(text, field);
+      if (value == null || value.isEmpty) return false;
+      identity[field] = value;
+    }
+    final stableId = identity['- Stable ID:']!.replaceAll('`', '').trim();
+    if (stableId != profileId) return false;
+
+    final sourceRows = _tableRows(
+      text: text,
+      sectionHeading: '## Source ledger',
+      expectedHeader: _sourceLedgerHeader,
+      columnCount: 8,
+    );
+    if (sourceRows == null || sourceRows.length < 2) return false;
+
+    final dossierSourceIds = <String>{};
+    for (final row in sourceRows) {
+      if (row.any((cell) => cell.isEmpty)) return false;
+      final tier = int.tryParse(row[1]);
+      if (tier == null || tier < 1 || tier > 3) return false;
+      final uri = Uri.tryParse(row[5]);
+      if (uri == null ||
+          (uri.scheme != 'https' && uri.scheme != 'http') ||
+          uri.host.isEmpty) {
+        return false;
+      }
+      if (!RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(row[6]) ||
+          DateTime.tryParse(row[6]) == null) {
+        return false;
+      }
+      if (!dossierSourceIds.add(row[0])) return false;
+    }
+    if (!_sameSet(dossierSourceIds, profileSourceIds)) return false;
+
+    final claimRows = _tableRows(
+      text: text,
+      sectionHeading: '## Claim ledger',
+      expectedHeader: _claimLedgerHeader,
+      columnCount: 5,
+    );
+    if (claimRows == null || claimRows.isEmpty) return false;
+    for (final row in claimRows) {
+      if (row.any((cell) => cell.isEmpty) ||
+          !RegExp(
+            r'^(?:High|Moderate|Low|Documented|Reliably traditional|Mixed)\b',
+            caseSensitive: false,
+          ).hasMatch(row[3])) {
+        return false;
+      }
+      final claimSourceIds = row[2]
+          .split(RegExp(r'[;,]'))
+          .map((id) => id.trim())
+          .where((id) => id.isNotEmpty)
+          .toSet();
+      if (claimSourceIds.isEmpty ||
+          claimSourceIds.any((id) => !profileSourceIds.contains(id))) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  static String? _fieldValue(String text, String label) {
+    final match = RegExp(
+      '^${RegExp.escape(label)}\\s*(.+)\$',
+      multiLine: true,
+    ).firstMatch(text);
+    return match?.group(1)?.trim();
+  }
+
+  static List<List<String>>? _tableRows({
+    required String text,
+    required String sectionHeading,
+    required String expectedHeader,
+    required int columnCount,
+  }) {
+    final sectionStart = text.indexOf(sectionHeading);
+    if (sectionStart < 0) return null;
+    final nextHeading = text.indexOf(
+      '\n## ',
+      sectionStart + sectionHeading.length,
+    );
+    final section = text.substring(
+      sectionStart,
+      nextHeading < 0 ? text.length : nextHeading,
+    );
+    final lines = section.split(RegExp(r'\r?\n'));
+    final headerIndex = lines.indexWhere(
+      (line) => line.trim() == expectedHeader,
+    );
+    if (headerIndex < 0 || headerIndex + 1 >= lines.length) return null;
+    if (!_isSeparatorRow(lines[headerIndex + 1], columnCount)) return null;
+
+    final rows = <List<String>>[];
+    for (var index = headerIndex + 2; index < lines.length; index++) {
+      final line = lines[index].trim();
+      if (line.isEmpty) continue;
+      if (!line.startsWith('|')) return null;
+      final cells = _cells(line);
+      if (cells.length != columnCount) return null;
+      rows.add(cells);
+    }
+    return rows;
+  }
+
+  static bool _isSeparatorRow(String line, int columnCount) {
+    final cells = _cells(line.trim());
+    return cells.length == columnCount &&
+        cells.every((cell) => RegExp(r'^:?-{3,}:?$').hasMatch(cell));
+  }
+
+  static List<String> _cells(String line) {
+    var body = line.trim();
+    if (body.startsWith('|')) body = body.substring(1);
+    if (body.endsWith('|')) body = body.substring(0, body.length - 1);
+    return body.split('|').map((cell) => cell.trim()).toList(growable: false);
+  }
+
+  static bool _sameSet(Set<String> left, Set<String> right) =>
+      left.length == right.length && left.containsAll(right);
+}
+
 Future<void> main(List<String> arguments) async {
   try {
     final options = _Options.parse(arguments);
@@ -146,7 +306,11 @@ Future<void> main(List<String> arguments) async {
       final dossier = File('docs/research/saints/dossiers/$id.md');
       if (!await dossier.exists()) {
         failures.add('$id: research dossier is missing');
-      } else if (!_validDossier(await dossier.readAsString())) {
+      } else if (!SaintResearchDossierGate.isValid(
+        text: await dossier.readAsString(),
+        profileId: profile.id,
+        profileSourceIds: profile.sources.map((source) => source.id).toSet(),
+      )) {
         failures.add('$id: research dossier is incomplete');
       }
       final errors = SaintProfileValidator()
@@ -272,39 +436,6 @@ Future<_LoadedProfiles> _loadIndexedProfiles() async {
         .map((entry) => entry.key)
         .toList(growable: false),
   );
-}
-
-bool _validDossier(String text) {
-  const headings = [
-    '## Identity resolution',
-    '## Source ledger',
-    '## Claim ledger',
-    '## Copyright and media decision',
-    '## Content review',
-    '## Theological review',
-    '## Final validation',
-  ];
-  if (text.length < 800 || headings.any((heading) => !text.contains(heading))) {
-    return false;
-  }
-  const identityFields = [
-    '- Stable ID:',
-    '- Profile kind:',
-    '- Celebration IDs:',
-    '- Canonical name and aliases:',
-    '- Feast date and calendar scope:',
-    '- Identity conflicts resolved:',
-  ];
-  const sourceLedgerHeader =
-      '| ID | Tier | Author/institution | Title | Publisher | URL | Accessed | Reuse basis |';
-  const claimLedgerHeader =
-      '| Profile field | Claim or editorial conclusion | Source IDs | Certainty | Reconciliation note |';
-  if (identityFields.any((field) => !text.contains(field)) ||
-      !text.contains(sourceLedgerHeader) ||
-      !text.contains(claimLedgerHeader)) {
-    return false;
-  }
-  return !RegExp(r'\b(?:TBD|TODO)\b', caseSensitive: false).hasMatch(text);
 }
 
 void _printList(String label, List<String> values, {IOSink? sink}) {

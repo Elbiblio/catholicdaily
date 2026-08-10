@@ -28,7 +28,7 @@
 | consecrated life | Professed with the Canossians in 1896 and served chiefly at Schio | holy-see-biography | documented | Ordinary ministries are emphasized because they are well attested |
 | spiritual theme | Encounter with God generated a hope stronger than imposed identities and opened into service | spe-salvi, canonization-homily | documented ecclesial interpretation | The profile does not imply that enslavement was providential or necessary |
 | patronage | Sudan and survivors of human trafficking and slavery | holy-see-biography | reliably traditional | Wording avoids the legacy label “slave,” which describes an imposed condition rather than identity |
-| quote | No quote included | all | documented editorial decision | Exact translated wording and edition were not needed for the guide; omission avoids false precision |
+| quote | No quote included | holy-see-biography; canonization-homily; spe-salvi | documented editorial decision | Exact translated wording and edition were not needed for the guide; omission avoids false precision |
 
 ## Copyright and media decision
 

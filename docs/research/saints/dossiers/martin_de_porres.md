@@ -28,7 +28,7 @@
 | spirituality | Eucharistic and Passion devotion integrated with care of sick and poor people | dominican-biography, canonization-homily | documented ecclesial interpretation | Prayer and service are kept together |
 | miracles | Popular traditions include extraordinary events | latin-american-encyclopedia | mixed | Not required for the guide; omitted from the narrative's factual claims |
 | patronage | Racial harmony, mixed-race people, public health workers, and barbers | canonization-homily, dominican-biography | reliably traditional | Narrow list chosen from stable associations relevant to his documented life |
-| quote | No quote included | all | documented editorial decision | No exact primary-text quotation was necessary |
+| quote | No quote included | canonization-homily; dominican-biography; latin-american-encyclopedia | documented editorial decision | No exact primary-text quotation was necessary |
 
 ## Copyright and media decision
 
