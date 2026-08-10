@@ -43,6 +43,30 @@
       "supports": ["life.medical_review", "healingClaims", "practice"]
     },
     {
+      "id": "lourdes-miracles-process",
+      "title": "The miracles of Lourdes",
+      "authorOrInstitution": "Sanctuary of Our Lady of Lourdes",
+      "publisher": "Sanctuary of Our Lady of Lourdes",
+      "url": "https://www.lourdes-france.org/en/the-miracles-of-lourdes/",
+      "publicationDate": "",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Authoritative sanctuary description of the multi-stage review of reported cures, including its possible duration and the residential bishop's responsibility for any declaration of miracle",
+      "supports": ["oneMinuteSummary.medicalReview", "life.medical_review", "medicalReviewDuration", "ecclesialDeclaration"]
+    },
+    {
+      "id": "universalis-bernadette",
+      "title": "BERNADETTE SOUBIROUS sainte (1844-1879)",
+      "authorOrInstitution": "Jacques Dubois",
+      "publisher": "Encyclopædia Universalis",
+      "url": "https://www.universalis.fr/encyclopedie/bernadette-soubirous/",
+      "publicationDate": "",
+      "accessedDate": "2026-08-10",
+      "tier": 2,
+      "reuseBasis": "Independent scholarly historical control for Bernadette's age, the first reported apparition in 1858, the sequence of eighteen reports, and the growth of pilgrimage; original synthesis",
+      "supports": ["oneMinuteSummary.chronology", "life.apparitions", "bernadette.age", "chronology", "pilgrimage", "historicalCertainty"]
+    },
+    {
       "id": "john-paul-lourdes-2004",
       "title": "Message for the 12th World Day of the Sick",
       "authorOrInstitution": "Pope John Paul II",
@@ -76,7 +100,7 @@
     "warnings": []
   },
   "whyItMatters": "Lourdes brings faith, suffering, and careful discernment into the same place. Mary's title points to grace won by Christ, while the shrine's practices ask believers to pray, accompany, investigate claims responsibly, and protect the dignity of people whose illnesses remain. No person's faith can be measured by whether physical healing occurs.",
-  "oneMinuteSummary": "This memorial is a Marian observance, not a new biography of Mary. Catholic doctrine teaches that the Immaculate Conception is God's preservation of Mary from original sin from the first moment of her own conception, through the merits of Jesus Christ; it is distinct from the virginal conception of Jesus. In 1858, fourteen-year-old Bernadette Soubirous reported eighteen apparitions at the grotto of Massabielle near Lourdes. After inquiry, Bishop Bertrand-Sévère Laurence of Tarbes recognized the apparitions in 1862. Lourdes became a major place of pilgrimage, prayer, penance, and care for people who are sick. Reports of physical healing are not accepted merely because they are sincere: the sanctuary's Medical Bureau investigates clinical evidence, an international medical committee may judge a course medically unexplained, and the competent bishop makes any ecclesial declaration of miracle. Pilgrimage and prayer can sustain hope, but they never replace professional medical care or imply that a person who remains ill lacks faith.",
+  "oneMinuteSummary": "This memorial is a Marian observance, not a new biography of Mary. Catholic doctrine teaches that the Immaculate Conception is God's preservation of Mary from original sin from the first moment of her own conception, through the merits of Jesus Christ; it is distinct from the virginal conception of Jesus. In 1858, fourteen-year-old Bernadette Soubirous reported eighteen apparitions at the grotto of Massabielle near Lourdes. After inquiry, Bishop Bertrand-Sévère Laurence of Tarbes recognized the apparitions in 1862. Lourdes became a major place of pilgrimage, prayer, penance, and care for people who are sick. Reports of physical healing are not accepted merely because they are sincere: the sanctuary's Medical Bureau investigates clinical evidence, an international medical committee may judge a course medically unexplained, and the bishop of the cured person's place of residence decides whether to declare a miracle. Pilgrimage and prayer can sustain hope, but they never replace professional medical care or imply that a person who remains ill lacks faith.",
   "life": {
     "sections": [
       {
@@ -87,7 +111,7 @@
       {
         "heading": "Bernadette's reports and the Church's inquiry",
         "body": "Between February 11 and July 16, 1858, Bernadette Soubirous reported eighteen encounters with a lady at Massabielle whom she came to identify as the Virgin Mary. The apparitions are religious claims received in faith, while the dates, testimony, commission of inquiry, and later decision are historical matters. On January 18, 1862, after investigation and discernment, the Bishop of Tarbes recognized the apparitions as authentic for Catholic belief.",
-        "sourceIds": ["lourdes-decree", "john-paul-lourdes-2004"]
+        "sourceIds": ["lourdes-decree", "universalis-bernadette", "john-paul-lourdes-2004"]
       },
       {
         "heading": "A pilgrimage directed toward Christ",
@@ -96,8 +120,8 @@
       },
       {
         "heading": "Healing claims receive careful review",
-        "body": "People have reported physical cures associated with Lourdes, but the sanctuary distinguishes a testimony from a verified medical finding and a medical finding from the Church's judgment of a miracle. The Medical Bureau gathers records and conducts collegial assessment; a case may undergo years of review before experts decide whether the course remains unexplained in current medical knowledge. Any declaration of miracle belongs to the person's bishop. Most pilgrims receive no declared physical miracle, and that says nothing about the depth of their faith or God's love for them.",
-        "sourceIds": ["lourdes-medical-bureau"]
+        "body": "People have reported physical cures associated with Lourdes, but the sanctuary distinguishes a testimony from a verified medical finding and a medical finding from the Church's judgment of a miracle. The Medical Bureau gathers records and conducts collegial assessment; a case may undergo several years of review before experts decide whether the course remains unexplained in current medical knowledge. The bishop of the cured person's place of residence decides whether to declare a miracle. Most pilgrims receive no declared physical miracle, and that says nothing about the depth of their faith or God's love for them.",
+        "sourceIds": ["lourdes-medical-bureau", "lourdes-miracles-process"]
       }
     ],
     "gospelTheme": "Mary receives God's grace and directs hope toward Jesus Christ; discipleship then becomes prayerful, practical companionship so that no person who is ill is reduced to a diagnosis or left alone.",

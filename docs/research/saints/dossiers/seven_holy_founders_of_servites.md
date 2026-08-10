@@ -14,7 +14,7 @@
 | ID | Tier | Author/institution | Title | Publisher | URL | Accessed | Reuse basis |
 |---|---:|---|---|---|---|---|---|
 | vatican-news-founders | 1 | Vatican News | Sts. Seven Founders of the Order of the Servants of Mary among whom St. Alessio Falconieri | Dicastery for Communication | https://www.vaticannews.va/en/saints/02/17/sts--seven-fonders-of-the-order-of-the-servants-of-mary-among-wh.html | 2026-08-10 | Official Catholic overview for collective identity, Florentine origin, Monte Senario, development, approval, and canonization; original synthesis |
-| servite-monte-senario | 1 | Servite Friars Australia | Monte Senario: Cradle of the Order of the Servants of Mary | Servite Friars Australia | https://www.servite.org.au/monte-senario | 2026-08-10 | Official order source for Monte Senario and Servite interpretation of fraternity, hospitality, service, and Marian discipleship; origin legends treated as tradition |
+| servite-monte-senario | 1 | Servite Friars Australia | Monte Senario: Cradle of the Order of the Servants of Mary | Servite Friars Australia | https://www.servite.org.au/monte-senario | 2026-08-10 | Official order source for Marian origin tradition, Monte Senario, and the community's shared contemplation, prayer, and work; origin legends treated as tradition |
 | treccani-servites | 2 | Istituto della Enciclopedia Italiana | Servi di Maria | Treccani | https://www.treccani.it/enciclopedia/servi-di-maria/ | 2026-08-10 | Independent historical control for the group foundation, Augustinian rule, Monte Senario, institutional recognition, approval, and canonization |
 
 ## Claim ledger
@@ -28,7 +28,7 @@
 | approval | The order experienced stages of recognition and received definitive approval from Pope Benedict XI in 1304. | vatican-news-founders; treccani-servites | documented | Earlier recognition dates are not flattened into final approval. |
 | canonization | Pope Leo XIII canonized the seven together in 1888. | vatican-news-founders; servite-monte-senario; treccani-servites | documented | The collective act supports retaining a group profile. |
 | legends and rejected precision | Marian apparition narratives, an exact 110-year lifespan for Alexis, and confident individual roles are not used as profile facts. | vatican-news-founders; servite-monte-senario | Low (traditional or disputed) | The sources transmit these traditions, but independent control is insufficient and the profile does not need them. |
-| virtues, practices | Fraternity, shared discernment, reconciliation, common rule, service, and Marian discipleship are grounded in the order's received interpretation. | vatican-news-founders; servite-monte-senario; treccani-servites | reliably traditional and pastoral synthesis | Marian language points to receiving God's word and serving Christ; community does not erase gifts, limits, or safe disagreement. |
+| virtues, practices | Community and reconciliation applications rest on the group origin and shared rule; the Servite source specifically supports Marian origin tradition, contemplation, prayer, and work. | vatican-news-founders; servite-monte-senario; treccani-servites | reliably traditional and pastoral synthesis | The profile does not use the Servite page to substantiate hospitality or apostolic work; community does not erase gifts, limits, or safe disagreement. |
 | patronage, symbols | No formal patronage or symbol metadata are included. | vatican-news-founders; servite-monte-senario; treccani-servites | documented editorial decision | Legacy generic labels such as religious life and contemplative prayer were not established as formal patronage. |
 
 ## Copyright and media decision
@@ -37,11 +37,11 @@ The profile and prayer are original. No origin legend, liturgical reading, or or
 
 ## Content review
 
-The factual pass checked group identity, both celebration IDs, Florence, the Marian confraternity setting, Monte Senario, the Augustinian rule, gradual institutional development, definitive approval in 1304, and collective canonization in 1888. It explicitly records the unresolved Monte Senario chronology and excludes the precise longevity of Alexis, seven synchronized biographies, exact individual roles, and apparition scenes. The spiritual applications preserve individuality and safe disagreement within community.
+The factual pass checked group identity, both celebration IDs, Florence, the Marian confraternity setting, Monte Senario, the Augustinian rule, gradual institutional development, definitive approval in 1304, and collective canonization in 1888. It explicitly records the unresolved Monte Senario chronology and excludes the precise longevity of Alexis, seven synchronized biographies, exact individual roles, and apparition scenes. The Servite page is used only for its Marian origin tradition and shared contemplation, prayer, and work, not as evidence for hospitality or apostolic work. The spiritual applications preserve individuality and safe disagreement within community.
 
 ## Theological review
 
-The profile treats Mary as model and patron of discipleship whose service is directed to Christ, never as an independent source of salvation. Reconciliation is not confused with avoiding truth, coercing agreement, or remaining in unsafe situations. Shared rule places influential members under the same Gospel standard as everyone else. Holiness is communal without dissolving personal vocation or responsibility.
+Marian tradition remains subordinate to Christ and is used here only for the founders' remembered dedication to Mary within shared contemplation, prayer, and work. Christ is the source and center of discipleship, never displaced by Marian devotion. Reconciliation is not confused with avoiding truth, coercing agreement, or remaining in unsafe situations. Shared rule places influential members under the same Gospel standard as everyone else, while communal holiness does not dissolve personal vocation or responsibility.
 
 ## Final validation
 
