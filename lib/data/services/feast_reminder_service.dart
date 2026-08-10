@@ -7,21 +7,25 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tzdata;
 import '../models/liturgical_region.dart';
 import 'feast_reminder_preferences.dart';
+import 'feast_reminder_payload.dart';
 import 'feast_reminder_schedule_policy.dart';
 import 'liturgical_region_preference_service.dart';
 import 'offline_ordo_lookup_service.dart';
+import 'saint_profile_service.dart';
 
 /// Represents a feast/solemnity event that can trigger a reminder.
 class _FeastEvent {
   final DateTime date;
   final String title;
   final String rank;
+  final String? saintProfileId;
   final Color? liturgicalColor;
 
   const _FeastEvent({
     required this.date,
     required this.title,
     required this.rank,
+    required this.saintProfileId,
     this.liturgicalColor,
   });
 }
@@ -59,11 +63,13 @@ class FeastReminderPreviewEvent {
   final DateTime date;
   final String title;
   final String rank;
+  final String? saintProfileId;
 
   const FeastReminderPreviewEvent({
     required this.date,
     required this.title,
     required this.rank,
+    required this.saintProfileId,
   });
 }
 
@@ -96,12 +102,14 @@ class FeastReminderService {
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
   bool _initialized = false;
+  void Function(FeastReminderPayload payload)? _tapHandler;
+  FeastReminderPayload? _pendingTap;
 
   static const _channelId = 'feast_reminders';
   static const _channelName = 'Feast & Solemnity Reminders';
   static const _channelDesc =
       'Daily reminders for Catholic feasts and solemnities';
-  static const _scheduleSchemaVersion = 3;
+  static const _scheduleSchemaVersion = 4;
   static const _schedulePolicy = FeastReminderSchedulePolicy();
   static const _majorFeastTitleTokens = <String>[
     'lord',
@@ -130,8 +138,46 @@ class FeastReminderService {
       iOS: iosSettings,
     );
 
-    await _plugin.initialize(initSettings);
+    await _plugin.initialize(
+      initSettings,
+      onDidReceiveNotificationResponse: (response) {
+        _receiveTap(response.payload);
+      },
+    );
+    final launchDetails = await _plugin.getNotificationAppLaunchDetails();
+    if (launchDetails?.didNotificationLaunchApp ?? false) {
+      _receiveTap(launchDetails?.notificationResponse?.payload);
+    }
     _initialized = true;
+  }
+
+  void setNotificationTapHandler(
+    void Function(FeastReminderPayload payload) handler,
+  ) {
+    _tapHandler = handler;
+    final pending = _pendingTap;
+    if (pending != null) {
+      _pendingTap = null;
+      handler(pending);
+    }
+  }
+
+  void clearNotificationTapHandler() => _tapHandler = null;
+
+  void _receiveTap(String? rawPayload) {
+    final payload = FeastReminderPayload.tryParse(rawPayload);
+    if (payload == null) return;
+    final handler = _tapHandler;
+    if (handler == null) {
+      _pendingTap = payload;
+    } else {
+      handler(payload);
+    }
+  }
+
+  @visibleForTesting
+  void receiveNotificationTapForTesting(String? rawPayload) {
+    _receiveTap(rawPayload);
   }
 
   /// Request notification permission and return whether it was granted.
@@ -330,11 +376,26 @@ class FeastReminderService {
       try {
         final day = lookup.resolve(d, region: region);
         if (_shouldInclude(day.rank, rank)) {
+          String? saintProfileId;
+          if (SaintProfileService.isSaintLikeTitle(day.title)) {
+            try {
+              saintProfileId =
+                  (await SaintProfileService.instance.findCuratedByTitle(
+                    day.title,
+                  ))?.id;
+            } catch (e) {
+              debugPrint(
+                '[FeastReminder] Unable to resolve saint profile for '
+                '${day.title}: $e',
+              );
+            }
+          }
           events.add(
             _FeastEvent(
               date: d,
               title: day.title,
               rank: day.rank ?? '',
+              saintProfileId: saintProfileId,
               liturgicalColor: day.colorValue,
             ),
           );
@@ -360,6 +421,7 @@ class FeastReminderService {
             date: event.date,
             title: event.title,
             rank: event.rank,
+            saintProfileId: event.saintProfileId,
           ),
         )
         .toList();
@@ -663,9 +725,13 @@ class FeastReminderService {
           androidScheduleMode: androidScheduleMode,
           uiLocalNotificationDateInterpretation:
               UILocalNotificationDateInterpretation.absoluteTime,
-          payload:
-              'feast:${event.date.toIso8601String()}:'
-              '${occurrence.dayBefore ? 'eve' : 'day'}',
+          payload: FeastReminderPayload(
+            celebrationDate: event.date,
+            title: event.title,
+            rank: event.rank,
+            saintProfileId: event.saintProfileId,
+            dayBefore: occurrence.dayBefore,
+          ).encode(),
         );
         scheduled++;
         scheduledThrough = occurrence.scheduledTime;

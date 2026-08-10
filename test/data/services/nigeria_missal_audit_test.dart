@@ -7,6 +7,7 @@ import 'package:catholic_daily/data/services/feast_reminder_preferences.dart';
 import 'package:catholic_daily/data/services/feast_reminder_service.dart';
 import 'package:catholic_daily/data/services/liturgical_region_preference_service.dart';
 import 'package:catholic_daily/data/services/offline_ordo_lookup_service.dart';
+import 'package:catholic_daily/data/services/saint_profile_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../helpers/test_helpers.dart';
@@ -124,6 +125,10 @@ void main() {
           'Our Lady, Queen of Nigeria',
           'Solemnity',
         );
+        final queenOfNigeria = events.singleWhere(
+          (event) => event.title == 'Our Lady, Queen of Nigeria',
+        );
+        expect(queenOfNigeria.saintProfileId, 'our_lady_queen_of_nigeria');
         expectEvent(
           DateTime(2026, 11, 22),
           'Our Lord Jesus Christ, King of the Universe',
@@ -171,6 +176,25 @@ void main() {
         expect(solemnity.any((event) => event.isAdditionalReminder), isTrue);
       },
     );
+
+    test('every saint-like scheduled feast has a detail deep link', () async {
+      final events = await FeastReminderService.instance
+          .buildPreviewEventsForTesting(
+            2026,
+            FeastReminderRank.all,
+            region: LiturgicalRegion.nigeria,
+          );
+      final missing = events
+          .where(
+            (event) =>
+                SaintProfileService.isSaintLikeTitle(event.title) &&
+                event.saintProfileId == null,
+          )
+          .map((event) => event.title)
+          .toList();
+
+      expect(missing, isEmpty, reason: 'Missing reminder deep links: $missing');
+    });
   });
 
   group('Nigeria readings audit', () {

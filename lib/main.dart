@@ -4,6 +4,7 @@ import 'data/services/theme_preferences.dart';
 import 'data/services/app_navigation_service.dart';
 import 'data/services/feast_reminder_service.dart';
 import 'data/services/feast_reminder_preferences.dart';
+import 'data/services/feast_reminder_payload.dart';
 import 'data/services/incipit_preference_service.dart';
 import 'data/services/liturgical_region_preference_service.dart';
 import 'data/services/bible_version_preference.dart';
@@ -11,6 +12,7 @@ import 'demo_launch_config.dart';
 import 'ui/screens/home_screen.dart';
 import 'ui/screens/mass_flow_screen.dart';
 import 'ui/screens/onboarding_screen.dart';
+import 'ui/screens/saint_detail_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -96,15 +98,25 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
   late ThemeMode _themeMode;
   late AppThemeStyle _themeStyle;
   final AppNavigationService _navigationService = AppNavigationService();
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   Widget? _initialScreen;
   bool _showOnboarding = false;
+  bool _navigationReady = false;
+  FeastReminderPayload? _pendingReminderTap;
 
   @override
   void initState() {
     super.initState();
     _themeMode = widget.themePreferences.getThemeMode();
     _themeStyle = widget.themePreferences.getThemeStyle();
+    FeastReminderService.instance.setNotificationTapHandler(_handleReminderTap);
     _initializeNavigation();
+  }
+
+  @override
+  void dispose() {
+    FeastReminderService.instance.clearNotificationTapHandler();
+    super.dispose();
   }
 
   Future<void> _initializeNavigation() async {
@@ -114,7 +126,9 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
     if (widget.demoLaunchConfig.enabled) {
       _showOnboarding = false;
       _initialScreen = _buildDemoScreen(widget.demoLaunchConfig);
+      _navigationReady = true;
       setState(() {});
+      _drainReminderTapAfterBuild();
       return;
     }
 
@@ -123,15 +137,41 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
       _initialScreen = OnboardingScreen(onComplete: _onOnboardingComplete);
     } else {
       _initialScreen = _buildHomeScreen();
+      _navigationReady = true;
     }
 
     setState(() {});
+    _drainReminderTapAfterBuild();
   }
 
   void _onOnboardingComplete() {
     setState(() {
       _showOnboarding = false;
       _initialScreen = _buildHomeScreen();
+      _navigationReady = true;
+    });
+    _drainReminderTapAfterBuild();
+  }
+
+  void _handleReminderTap(FeastReminderPayload payload) {
+    _pendingReminderTap = payload;
+    _drainReminderTapAfterBuild();
+  }
+
+  void _drainReminderTapAfterBuild() {
+    if (!_navigationReady || _pendingReminderTap == null) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_navigationReady) return;
+      final payload = _pendingReminderTap;
+      final celebration = payload?.toSaintCelebration();
+      final navigator = _navigatorKey.currentState;
+      if (payload == null || celebration == null || navigator == null) return;
+      _pendingReminderTap = null;
+      navigator.push(
+        MaterialPageRoute<void>(
+          builder: (_) => SaintDetailScreen(celebration: celebration),
+        ),
+      );
     });
   }
 
@@ -156,6 +196,7 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: _navigatorKey,
       title: 'Catholic Daily',
       debugShowCheckedModeBanner: false,
       theme: _buildPremiumTheme(Brightness.light, _themeStyle),

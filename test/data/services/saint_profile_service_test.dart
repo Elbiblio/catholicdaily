@@ -40,6 +40,17 @@ void main() {
     expect(profile!.name, 'Saint Bede the Venerable');
   });
 
+  test(
+    'resolves a notification title to a stable curated profile id',
+    () async {
+      final profile = await SaintProfileService.instance.findCuratedByTitle(
+        'All Saints',
+      );
+
+      expect(profile?.id, 'all_saints');
+    },
+  );
+
   test('normalizes celebration titles for fallback matching', () {
     expect(
       SaintProfileService.normalizeTitle(

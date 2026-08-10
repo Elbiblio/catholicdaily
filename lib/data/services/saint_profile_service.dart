@@ -60,6 +60,20 @@ class SaintProfileService {
     return index[profileId];
   }
 
+  Future<SaintProfile?> findCuratedByTitle(String title) async {
+    final normalizedTitle = normalizeTitle(title);
+    if (normalizedTitle.isEmpty) return null;
+    for (final profile in await loadProfiles()) {
+      if (normalizeTitle(profile.name) == normalizedTitle ||
+          profile.alternateNames.any(
+            (name) => normalizeTitle(name) == normalizedTitle,
+          )) {
+        return profile;
+      }
+    }
+    return null;
+  }
+
   SaintProfile buildFallbackProfile(OptionalCelebration celebration) {
     return SaintProfile(
       id: celebration.id,
