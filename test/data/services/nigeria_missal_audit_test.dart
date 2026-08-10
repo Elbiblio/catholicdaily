@@ -131,6 +131,46 @@ void main() {
         );
       },
     );
+
+    test(
+      'major feast and solemnity reminders get a second notification',
+      () async {
+        final reminders = await FeastReminderService.instance
+            .buildScheduledRemindersForTesting(
+              now: DateTime(2026, 4, 20, 9),
+              monthsAhead: 1,
+              rank: FeastReminderRank.feastsDays,
+              hour: 9,
+              minute: 0,
+              notifyDayBefore: false,
+              region: LiturgicalRegion.nigeria,
+            );
+
+        List<FeastReminderScheduledPreviewEvent> remindersFor(String title) =>
+            reminders.where((event) => event.title == title).toList();
+
+        final regularFeast = remindersFor('Saint Mark, Evangelist');
+        expect(regularFeast, hasLength(1));
+        expect(regularFeast.single.scheduledTime, DateTime(2026, 4, 25, 9));
+        expect(regularFeast.single.isAdditionalReminder, isFalse);
+
+        final majorFeast = remindersFor('Our Lady Mother of Africa');
+        expect(majorFeast, hasLength(2));
+        expect(
+          majorFeast.map((event) => event.scheduledTime),
+          containsAll([DateTime(2026, 4, 29, 20), DateTime(2026, 4, 30, 9)]),
+        );
+        expect(majorFeast.any((event) => event.isAdditionalReminder), isTrue);
+
+        final solemnity = remindersFor('The Ascension of the Lord');
+        expect(solemnity, hasLength(2));
+        expect(
+          solemnity.map((event) => event.scheduledTime),
+          containsAll([DateTime(2026, 5, 13, 20), DateTime(2026, 5, 14, 9)]),
+        );
+        expect(solemnity.any((event) => event.isAdditionalReminder), isTrue);
+      },
+    );
   });
 
   group('Nigeria readings audit', () {

@@ -4,6 +4,7 @@ class BibleVersion {
   final String name;
   final String abbreviation;
   final String? downloadUrl;
+  final String? dbFilename;
   final bool isDownloaded;
   final int size;
 
@@ -12,6 +13,7 @@ class BibleVersion {
     required this.name,
     required this.abbreviation,
     this.downloadUrl,
+    this.dbFilename,
     this.isDownloaded = false,
     this.size = 0,
   });
@@ -21,6 +23,7 @@ class BibleVersion {
     String? name,
     String? abbreviation,
     String? downloadUrl,
+    String? dbFilename,
     bool? isDownloaded,
     int? size,
   }) {
@@ -29,6 +32,7 @@ class BibleVersion {
       name: name ?? this.name,
       abbreviation: abbreviation ?? this.abbreviation,
       downloadUrl: downloadUrl ?? this.downloadUrl,
+      dbFilename: dbFilename ?? this.dbFilename,
       isDownloaded: isDownloaded ?? this.isDownloaded,
       size: size ?? this.size,
     );
@@ -40,6 +44,7 @@ class BibleVersion {
       'name': name,
       'abbreviation': abbreviation,
       'downloadUrl': downloadUrl,
+      'dbFilename': dbFilename,
       'isDownloaded': isDownloaded,
       'size': size,
     };
@@ -51,6 +56,7 @@ class BibleVersion {
       name: map['name'] as String,
       abbreviation: map['abbreviation'] as String,
       downloadUrl: map['downloadUrl'] as String?,
+      dbFilename: map['dbFilename'] as String?,
       isDownloaded: map['isDownloaded'] as bool? ?? false,
       size: map['size'] as int? ?? 0,
     );

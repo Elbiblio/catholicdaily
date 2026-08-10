@@ -5,7 +5,8 @@ import 'bible_source_registry.dart';
 
 enum BibleVersionType {
   rsvce('rsvce'),
-  nabre('nabre');
+  nabre('nabre'),
+  douayRheims('douay_rheims');
 
   final String dbName;
 

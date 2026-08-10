@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import '../../core/latest_request_guard.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
 import '../../data/services/ordo_resolver_service.dart';
 import '../../data/services/readings_backend.dart';
@@ -66,6 +67,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
       .createReadingsBackend();
   final ReadingFlowService _readingFlow = ReadingFlowService.instance;
   final SaintCalendarService _saintCalendar = SaintCalendarService.instance;
+  final LatestRequestGuard _loadGuard = LatestRequestGuard();
 
   @override
   void initState() {
@@ -105,51 +107,57 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
     super.dispose();
   }
 
-  Future<void> _loadReadings() async {
+  Future<bool> _loadReadings() async {
+    final date = DateTime(
+      _selectedDate.year,
+      _selectedDate.month,
+      _selectedDate.day,
+    );
+    final request = _loadGuard.begin();
     setState(() => _isLoading = true);
 
     try {
       final results = await Future.wait([
-        _ordoResolver.resolveDay(_selectedDate),
-        _ordoResolver.resolveYearVariables(_selectedDate),
-        _readingsBackend.getReadingsForDate(_selectedDate),
+        _ordoResolver.resolveDay(date),
+        _ordoResolver.resolveYearVariables(date),
+        _readingsBackend.getReadingsForDate(date),
       ]);
-      _liturgicalDay = results[0] as LiturgicalDay;
-      _ordoYearVariables = results[1] as OrdoYearVariables;
+      final liturgicalDay = results[0] as LiturgicalDay;
+      final ordoYearVariables = results[1] as OrdoYearVariables;
       final rawReadings = results[2] as List<DailyReading>;
 
       final optionalMemorialService = OptionalMemorialService.instance;
 
       // Always load celebrations for display, even when suppressed liturgically.
-      _optionalCelebrations = optionalMemorialService.getAllCelebrationsForDate(
-        _selectedDate,
+      final optionalCelebrations = optionalMemorialService
+          .getAllCelebrationsForDate(date);
+      final celebrationsSuppressed = optionalMemorialService.isSuppressedDate(
+        date,
       );
-      _celebrationsSuppressed = optionalMemorialService.isSuppressedDate(
-        _selectedDate,
-      );
-      _saintCelebrations = await _saintCalendar.getSaintCelebrationsForDate(
-        date: _selectedDate,
-        liturgicalDay: _liturgicalDay,
-        optionalCelebrations: _optionalCelebrations,
-      );
+      final saintCelebrations = await _saintCalendar
+          .getSaintCelebrationsForDate(
+            date: date,
+            liturgicalDay: liturgicalDay,
+            optionalCelebrations: optionalCelebrations,
+          );
 
       debugPrint(
-        'Celebrations for date: ${_optionalCelebrations.map((c) => '${c.title} (${c.rank})').join(', ')}',
+        'Celebrations for date: ${optionalCelebrations.map((c) => '${c.title} (${c.rank})').join(', ')}',
       );
       debugPrint(
-        'Saint profiles for date: ${_saintCelebrations.map((c) => c.title).join(', ')}',
+        'Saint profiles for date: ${saintCelebrations.map((c) => c.title).join(', ')}',
       );
-      debugPrint('Celebrations suppressed: $_celebrationsSuppressed');
+      debugPrint('Celebrations suppressed: $celebrationsSuppressed');
 
       // Auto-select feast or solemnity with proper readings over ferial
       // This ensures feast days like St. Mark show their proper readings
       List<DailyReading> readingsToLoad = rawReadings;
-      _selectedCelebrationIndex = -1;
+      var selectedCelebrationIndex = -1;
 
-      final primaryIsSolemnity = _liturgicalDay?.rank == 'Solemnity';
-      if (!_celebrationsSuppressed && !primaryIsSolemnity) {
+      final primaryIsSolemnity = liturgicalDay.rank == 'Solemnity';
+      if (!celebrationsSuppressed && !primaryIsSolemnity) {
         // Find feasts or solemnities with proper readings
-        final feastWithReadings = _optionalCelebrations.indexWhere(
+        final feastWithReadings = optionalCelebrations.indexWhere(
           (c) =>
               (c.rank == CelebrationRank.feast ||
                   c.rank == CelebrationRank.solemnity) &&
@@ -160,16 +168,14 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
 
         if (feastWithReadings >= 0) {
           // Load the feast readings instead of ferial
-          final celebration = _optionalCelebrations[feastWithReadings];
+          final celebration = optionalCelebrations[feastWithReadings];
           debugPrint('Loading feast readings for: ${celebration.title}');
           final readingSet = optionalMemorialService.getProperReadings(
             celebration.id,
           );
           if (readingSet != null) {
             final alternateService = AlternateReadingsService.instance;
-            final sets = await alternateService.getAvailableReadingSets(
-              _selectedDate,
-            );
+            final sets = await alternateService.getAvailableReadingSets(date);
             debugPrint(
               'Available reading sets: ${sets.map((s) => '${s.label} (isFerial: ${s.isFerial})').join(', ')}',
             );
@@ -179,7 +185,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
             final matchingSet = matching.isEmpty ? null : matching.first;
             if (matchingSet != null && matchingSet.readings.isNotEmpty) {
               readingsToLoad = matchingSet.readings;
-              _selectedCelebrationIndex = feastWithReadings;
+              selectedCelebrationIndex = feastWithReadings;
               debugPrint(
                 'Using feast readings, feast field on first reading: ${readingsToLoad[0].feast}',
               );
@@ -193,23 +199,42 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
       );
 
       final hydrated = await _readingFlow.hydrateReadingSet(
-        date: _selectedDate,
+        date: date,
         readings: readingsToLoad,
       );
-      _applyHydratedReadings(hydrated);
+
+      if (!mounted || !_loadGuard.isCurrent(request)) return false;
+      setState(() {
+        _liturgicalDay = liturgicalDay;
+        _ordoYearVariables = ordoYearVariables;
+        _optionalCelebrations = optionalCelebrations;
+        _celebrationsSuppressed = celebrationsSuppressed;
+        _saintCelebrations = saintCelebrations;
+        _selectedCelebrationIndex = selectedCelebrationIndex;
+        _applyHydratedReadings(hydrated);
+        _isLoading = false;
+      });
 
       // Restart animations when data loads
       _restartAnimations();
+      return true;
     } catch (e) {
       debugPrint('Error loading readings: $e');
-      _readings = [];
-      _ordoYearVariables = null;
-      _saintCelebrations = [];
-      _readingTexts = {};
-      _readingPreviews = {};
+      if (!mounted || !_loadGuard.isCurrent(request)) return false;
+      setState(() {
+        _readings = [];
+        _liturgicalDay = null;
+        _ordoYearVariables = null;
+        _optionalCelebrations = [];
+        _saintCelebrations = [];
+        _selectedCelebrationIndex = -1;
+        _celebrationsSuppressed = false;
+        _readingTexts = {};
+        _readingPreviews = {};
+        _isLoading = false;
+      });
+      return false;
     }
-
-    setState(() => _isLoading = false);
   }
 
   void _previousDay() {
@@ -239,9 +264,9 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
     final normalizedDate = DateTime(date.year, date.month, date.day);
     HapticFeedback.mediumImpact();
     setState(() => _selectedDate = normalizedDate);
-    await _loadReadings();
+    final loaded = await _loadReadings();
 
-    if (!mounted || !openFirstReading || _readings.isEmpty) {
+    if (!mounted || !loaded || !openFirstReading || _readings.isEmpty) {
       return;
     }
 
@@ -254,19 +279,22 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
     }
 
     final reading = _readings[index];
+    final request = _loadGuard.capture();
+    final sessionReadings = List<DailyReading>.from(_readings);
+    final liturgicalDay = _liturgicalDay;
     final reference = reading.reading;
     final text =
         _readingTexts[reference] ?? await _readingFlow.getReadingText(reading);
-    if (!mounted) {
+    if (!mounted || !_loadGuard.isCurrent(request)) {
       return;
     }
 
     widget.onReadingSelected(
       reference,
       text,
-      _liturgicalDay,
+      liturgicalDay,
       reading,
-      _readings,
+      sessionReadings,
       index,
     );
   }
@@ -1459,6 +1487,12 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
   }
 
   Future<void> _loadCelebrationReadings(OptionalCelebration celebration) async {
+    final date = DateTime(
+      _selectedDate.year,
+      _selectedDate.month,
+      _selectedDate.day,
+    );
+    final request = _loadGuard.begin();
     setState(() => _isLoading = true);
     try {
       final readingSet = OptionalMemorialService.instance.getProperReadings(
@@ -1466,24 +1500,28 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
       );
       if (readingSet != null) {
         final alternateService = AlternateReadingsService.instance;
-        final sets = await alternateService.getAvailableReadingSets(
-          _selectedDate,
-        );
+        final sets = await alternateService.getAvailableReadingSets(date);
         // Find the matching set
         final matching = sets.where((s) => s.celebration?.id == celebration.id);
         final matchingSet = matching.isEmpty ? null : matching.first;
         if (matchingSet != null && matchingSet.readings.isNotEmpty) {
           final hydrated = await _readingFlow.hydrateReadingSet(
-            date: _selectedDate,
+            date: date,
             readings: matchingSet.readings,
           );
-          _applyHydratedReadings(hydrated);
+          if (!mounted || !_loadGuard.isCurrent(request)) return;
+          setState(() {
+            _applyHydratedReadings(hydrated);
+            _isLoading = false;
+          });
           _restartAnimations();
+          return;
         }
       }
     } catch (e) {
       debugPrint('Error loading celebration readings: $e');
     }
+    if (!mounted || !_loadGuard.isCurrent(request)) return;
     setState(() => _isLoading = false);
   }
 }

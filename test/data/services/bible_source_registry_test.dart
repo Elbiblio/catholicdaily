@@ -45,6 +45,17 @@ void main() {
       expect(jerusalem.regionAffinityCodes, contains('NG'));
     });
 
+    test('registers Douay-Rheims as a downloadable local Catholic source', () {
+      final source = BibleSourceRegistry.instance.requireById('douay_rheims');
+
+      expect(source.displayName, 'Douay-Rheims Bible');
+      expect(source.abbreviation, 'DR');
+      expect(source.storage, BibleSourceStorage.userProvidedLocal);
+      expect(source.redistribution, BibleSourceRedistribution.userProvidedOnly);
+      expect(source.assetDbName, 'engdra.db');
+      expect(source.catholicCanon, isTrue);
+    });
+
     test(
       'selectableBundledSources only returns locally renderable sources',
       () {

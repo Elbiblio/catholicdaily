@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../core/latest_request_guard.dart';
 import '../../data/models/daily_reading.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
 import '../../data/services/order_of_mass_service.dart';
@@ -29,6 +30,7 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
       LanguagePreferenceService();
   final OrdoResolverService _ordoResolver = OrdoResolverService.instance;
   final ReadingsBackendIo _readingsBackend = ReadingsBackendIo();
+  final LatestRequestGuard _loadGuard = LatestRequestGuard();
 
   late DateTime _selectedDate;
   String _primaryLanguage = 'en';
@@ -60,6 +62,8 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
   }
 
   Future<void> _loadMassForDate(DateTime date) async {
+    if (!mounted) return;
+    final request = _loadGuard.begin();
     setState(() => _isLoading = true);
 
     try {
@@ -73,7 +77,7 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
       );
       final readings = await _readingsBackend.getReadingsForDate(date);
 
-      if (mounted) {
+      if (mounted && _loadGuard.isCurrent(request)) {
         setState(() {
           _selectedDate = date;
           _liturgicalDay = liturgicalDay;
@@ -84,7 +88,7 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
       }
     } catch (e) {
       debugPrint('Error loading mass: $e');
-      if (mounted) {
+      if (mounted && _loadGuard.isCurrent(request)) {
         setState(() => _isLoading = false);
       }
     }
