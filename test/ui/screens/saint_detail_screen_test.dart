@@ -1,10 +1,101 @@
 import 'package:catholic_daily/data/models/saint_profile.dart';
+import 'package:catholic_daily/data/services/improved_liturgical_calendar_service.dart';
+import 'package:catholic_daily/data/services/optional_memorial_service.dart';
+import 'package:catholic_daily/ui/screens/saint_detail_screen.dart';
 import 'package:catholic_daily/ui/widgets/saint_profile/saint_life_guide_view.dart';
 import 'package:catholic_daily/ui/widgets/saint_profile/saint_sources_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  testWidgets('route renders the complete guide for a published profile', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SaintDetailScreen(
+          celebration: _celebration,
+          profileLoader: (_) async => _profile(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byType(SaintLifeGuideView), findsOneWidget);
+    expect(find.text('Why this saint matters today'), findsOneWidget);
+  });
+
+  testWidgets('route keeps legacy biography with an honest research notice', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SaintDetailScreen(
+          celebration: _celebration,
+          profileLoader: (_) async => _legacyProfile(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Brief Bio'), findsOneWidget);
+    expect(
+      find.text('Existing source-backed offline biography.'),
+      findsOneWidget,
+    );
+    expect(find.text('Research in progress'), findsOneWidget);
+    expect(find.text('Open reference article'), findsOneWidget);
+  });
+
+  testWidgets('route shows an honest unavailable state for a missing profile', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SaintDetailScreen(
+          celebration: _celebration,
+          profileLoader: (_) async => null,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Profile unavailable'), findsOneWidget);
+    expect(find.textContaining('curated biography'), findsNothing);
+  });
+
+  testWidgets('retry requests a fresh future after a loading error', (
+    tester,
+  ) async {
+    var calls = 0;
+    Future<SaintProfile?> loader(OptionalCelebration _) {
+      calls++;
+      if (calls == 1) throw StateError('asset unavailable');
+      return Future.value(_legacyProfile());
+    }
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: SaintDetailScreen(
+          celebration: _celebration,
+          profileLoader: loader,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Could not load this profile'), findsOneWidget);
+    expect(calls, 1);
+    await tester.tap(find.text('Try again'));
+    await tester.pumpAndSettle();
+
+    expect(calls, 2);
+    expect(
+      find.text('Existing source-backed offline biography.'),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('renders the complete guide in the approved spiritual order', (
     tester,
   ) async {
@@ -142,6 +233,16 @@ void main() {
   });
 }
 
+const _celebration = OptionalCelebration(
+  id: 'sample_saint',
+  title: 'Saint Sample, Religious',
+  rank: CelebrationRank.optionalMemorial,
+  color: LiturgicalColor.white,
+  month: 1,
+  day: 2,
+  commonType: 'Religious',
+);
+
 Widget _host(Widget child, {TextScaler textScaler = TextScaler.noScaling}) {
   return MaterialApp(
     theme: ThemeData(colorSchemeSeed: const Color(0xFF6B3FA0)),
@@ -158,6 +259,19 @@ Widget _host(Widget child, {TextScaler textScaler = TextScaler.noScaling}) {
 }
 
 SaintProfile _profile() => SaintProfile.fromJson(_profileJson());
+
+SaintProfile _legacyProfile() => SaintProfile.fromJson({
+  'id': 'sample_saint',
+  'celebrationIds': ['sample_saint'],
+  'name': 'Saint Sample',
+  'lifeSpan': '1900-1970',
+  'lifeLength': '70 years',
+  'briefBio': 'Existing source-backed offline biography.',
+  'patronage': ['reconciliation'],
+  'feastDates': ['January 2'],
+  'wikipediaUrl': 'https://example.org/reference',
+  'sources': ['Legacy discovery source'],
+});
 
 Map<String, dynamic> _profileJson() => {
   'schemaVersion': 2,
