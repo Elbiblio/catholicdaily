@@ -77,6 +77,9 @@ class SaintSource {
   final SaintSourceTier tier;
   final String reuseBasis;
   final List<String> supports;
+
+  @override
+  String toString() => title;
 }
 
 class SaintImageAttribution {

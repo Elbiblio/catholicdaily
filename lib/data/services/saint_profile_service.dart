@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import '../models/saint_profile.dart';
+import '../models/saint_profile_source.dart';
 import 'optional_memorial_service.dart';
 
 class SaintProfileService {
@@ -59,7 +60,20 @@ class SaintProfileService {
           'This feast or memorial is included in the app calendar. A fuller '
           'curated biography has not yet been added offline.',
       feastDates: [_formatFeastDate(celebration.month, celebration.day)],
-      sources: const ['Catholic Daily calendar'],
+      sources: const [
+        SaintSource(
+          id: 'catholic-daily-calendar',
+          title: 'Catholic Daily calendar',
+          authorOrInstitution: 'Catholic Daily',
+          publisher: 'Catholic Daily',
+          url: null,
+          publicationDate: null,
+          accessedDate: null,
+          tier: SaintSourceTier.discovery,
+          reuseBasis: 'Internal calendar identity only',
+          supports: ['identity', 'feastDates'],
+        ),
+      ],
     );
   }
 
