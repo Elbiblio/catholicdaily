@@ -167,7 +167,12 @@ void main() {
       profiles.where((profile) => profile.briefBio.trim().isEmpty),
       isEmpty,
     );
-    expect(profiles.where((profile) => profile.patronage.isEmpty), isEmpty);
+    expect(
+      profiles
+          .expand((profile) => profile.patronage)
+          .where((patronage) => patronage.trim().isEmpty),
+      isEmpty,
+    );
     expect(
       profiles.where(
         (profile) => profile.briefBio.contains('fuller curated biography'),
