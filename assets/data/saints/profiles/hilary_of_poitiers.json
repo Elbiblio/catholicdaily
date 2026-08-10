@@ -13,7 +13,7 @@
   "lifeLength": "about 57 years",
   "vocation": "Bishop, Scripture scholar, and teacher of the divinity of Christ",
   "places": ["Poitiers", "Béziers", "Phrygia"],
-  "patronage": ["theologians", "teachers of the faith"],
+  "patronage": [],
   "symbols": ["book", "bishop's staff"],
   "briefBio": "Hilary was a fourth-century bishop of Poitiers whose exile deepened his encounter with Eastern Christian theology. Through Scripture, On the Trinity, and patient controversy, he defended the full divinity of Jesus Christ and worked for unity in the Nicene faith.",
   "wikipediaUrl": "https://en.wikipedia.org/wiki/Hilary_of_Poitiers",
@@ -75,7 +75,7 @@
     "warnings": []
   },
   "whyItMatters": "Hilary shows that doctrinal clarity and patient communion belong together. He accepted exile rather than surrender Christ's full divinity, yet he also listened closely to Eastern formulations and sought to lead hesitant bishops toward shared Nicene faith. Conviction did not excuse caricature.",
-  "oneMinuteSummary": "Hilary was born at Poitiers around 310 and received a strong literary education. His search for truth and reading of Scripture led him to Christian faith and adult Baptism. Elected bishop of Poitiers around 353–354, he entered a bitter controversy over whether the Son is truly God with the Father. After the Synod of Béziers in 356, imperial power forced him into exile in Phrygia. There he encountered Eastern theological debates more directly and began his major work On the Trinity, reading both Old and New Testaments in the light of Christ. Hilary defended the equality of Father and Son firmly, but he also tried to understand bishops whose language was not yet fully Nicene and to guide them toward communion. Returning to Gaul around 360–361, he resumed pastoral work and continued writing on Scripture. He died in 367. In 1851 Pius IX proclaimed him a Doctor of the universal Church.",
+  "oneMinuteSummary": "Hilary was born at Poitiers around 310 and received a strong literary education. His search for truth and reading of Scripture led him to Christian faith and adult Baptism. Elected bishop of Poitiers around 353–354, he entered a bitter controversy over whether the Son is truly God with the Father. After the Synod of Béziers in 356, imperial power forced him into exile in Phrygia. There he encountered Eastern theological debates more directly and continued and substantially completed his major work On the Trinity, reading both Old and New Testaments in the light of Christ. Hilary defended the equality of Father and Son firmly, but he also tried to understand bishops whose language was not yet fully Nicene and to guide them toward communion. Returning to Gaul around 360–361, he resumed pastoral work and continued writing on Scripture. He died in 367. In 1851 Pius IX proclaimed him a Doctor of the universal Church.",
   "life": {
     "sections": [
       {
@@ -90,7 +90,7 @@
       },
       {
         "heading": "Scripture in service of the Trinity",
-        "body": "During exile Hilary developed On the Trinity, his best-known theological work. He argued from the baptismal confession and the whole sweep of Scripture that the Son is not a creature but truly shares the divine nature of the Father. He also distinguished texts concerning Christ's eternal divinity from those concerning his genuine human lowliness. His goal was not verbal victory; it was faithful worship of the Father, through the Son, in the Holy Spirit.",
+        "body": "Hilary began On the Trinity before his banishment and substantially developed and completed it during exile. In this best-known theological work, he argued from the baptismal confession and the whole sweep of Scripture that the Son is not a creature but truly shares the divine nature of the Father. He also distinguished texts concerning Christ's eternal divinity from those concerning his genuine human lowliness. His goal was not verbal victory; it was faithful worship of the Father, through the Son, in the Holy Spirit.",
         "sourceIds": ["benedict-audience", "on-the-trinity", "graz-patrology", "new-catholic-encyclopedia"]
       },
       {

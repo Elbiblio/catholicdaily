@@ -13,7 +13,7 @@
   "lifeLength": "about nine decades",
   "vocation": "Dominican friar, canonist, confessor, and master general",
   "places": ["Barcelona", "Bologna", "Rome"],
-  "patronage": ["canon lawyers", "those serving justice in the Church"],
+  "patronage": [],
   "symbols": ["book of canon law"],
   "briefBio": "Raymond of Penyafort was a Catalan Dominican and one of the most influential canonists of the thirteenth century. He wrote for confessors, led the compilation of Gregory IX's decretals, and served briefly as master general of the Order of Preachers.",
   "wikipediaUrl": "https://en.wikipedia.org/wiki/Raymond_of_Pe%C3%B1afort",
@@ -65,7 +65,7 @@
       "publicationDate": "2023-12-01",
       "accessedDate": "2026-08-10",
       "tier": 1,
-      "reuseBasis": "Official theological interpretation of canon law under Raymond's patronage, used for the Christ-centred pastoral application",
+      "reuseBasis": "Official contemporary Catholic teaching on canon law in a message for an association celebrating Raymond's legacy, used for the Christ-centred pastoral application",
       "supports": ["gospelTheme", "justice", "mercy", "pastoralApplication"]
     }
   ],
@@ -115,7 +115,7 @@
     },
     {
       "name": "Pastoral justice",
-      "evidence": "His writing joined law to cases of conscience, while contemporary Catholic teaching under his patronage insists that Church law must serve persons redeemed in Christ.",
+      "evidence": "His writing joined law to cases of conscience, while contemporary Catholic teaching on canon law insists that Church law must serve persons redeemed in Christ.",
       "imitation": "Before applying a rule today, identify both the truth it protects and the person it affects; seek a response that preserves accountability without withholding respectful accompaniment.",
       "sourceIds": ["harvard-canonists", "canon-law-message"]
     },
