@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 2,
+  "id": "sebastian_of_milan",
+  "profileKind": "individual",
+  "celebrationIds": [
+    "sebastian_of_milan",
+    "saint_sebastian_martyr"
+  ],
+  "name": "Saint Sebastian, Martyr",
+  "alternateNames": ["Sebastian of Milan"],
+  "ecclesialTitle": "Early Roman martyr",
+  "lifeSpan": "",
+  "lifeLength": "",
+  "vocation": "Christian martyr remembered at the Appian Way",
+  "places": ["Milan", "Rome", "Via Appia"],
+  "patronage": ["persecuted Christians", "those who aid people in danger"],
+  "symbols": ["arrows in later tradition"],
+  "briefBio": "Sebastian was an early Roman martyr commemorated on January 20 at the catacombs along the Appian Way. Ambrose connects him with Milan, but the familiar soldier, arrow, and Irene narrative comes from a fifth-century Passio and should be received as later tradition rather than secure biography.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Saint_Sebastian",
+  "wikidataId": "Q183332",
+  "feastDates": ["January 20"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "vatican-news-history",
+      "title": "Saint Sebastian, Martyr",
+      "authorOrInstitution": "Vatican News",
+      "publisher": "Dicastery for Communication",
+      "url": "https://www.vaticannews.va/de/tagesheiliger/01/20/hl--sebastian--maertyrer.html",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official Catholic source used for the Depositio and Ambrose evidence, explicit classification of the Passio, cult, and burial tradition; app prose is original",
+      "supports": ["identity", "depositioMartyrum", "milanConnection", "passioClassification", "cult"]
+    },
+    {
+      "id": "catholic-encyclopedia",
+      "title": "St. Sebastian",
+      "authorOrInstitution": "Klemens Löffler",
+      "publisher": "The Catholic Encyclopedia via New Advent",
+      "url": "https://www.newadvent.org/cathen/13668a.htm",
+      "publicationDate": "1912",
+      "accessedDate": "2026-08-10",
+      "tier": 2,
+      "reuseBasis": "Historical control emphasizing the small secure core and rejecting the later Acts as reliable biography",
+      "supports": ["martyrdom", "viaAppia", "milanConnection", "legendaryActs", "feast"]
+    },
+    {
+      "id": "catacombs-official",
+      "title": "200 Years of Presence of the Friars Minor",
+      "authorOrInstitution": "Catacombs of Saint Sebastian",
+      "publisher": "Catacombs of Saint Sebastian",
+      "url": "https://www.catacombe.org/en/200ofm",
+      "publicationDate": "2026",
+      "accessedDate": "2026-08-10",
+      "tier": 2,
+      "reuseBasis": "Custodian and archaeological context for the ancient Appian Way site and the later development of Sebastian's cult there",
+      "supports": ["viaAppiaSite", "archaeology", "cultDevelopment", "pilgrimage"]
+    },
+    {
+      "id": "vatican-state-tradition",
+      "title": "20 January: Saint Sebastian, Martyr",
+      "authorOrInstitution": "Vatican City State",
+      "publisher": "Governorate of Vatican City State",
+      "url": "https://www.vaticanstate.va/en/state-and-government/general-informations/saint-of-the-day/1368-20-january-saint-sebastian-martyr.html",
+      "publicationDate": "2026-01-20",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official presentation of the Passio as tradition, used to identify rather than historicize its soldier, prisoner-care, arrow, and Irene motifs",
+      "supports": ["laterTradition", "soldierMotif", "prisonerCareMotif", "arrows", "irene"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-10",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Sebastian's oldest memorial is strikingly spare: a martyr's name, a January date, and a place on the Appian Way. Later Christians surrounded that memory with a dramatic story of hidden service and repeated witness. Holding evidence and tradition apart lets his real significance remain clear—Christians remembered a person whose fidelity outlasted the power that killed him.",
+  "oneMinuteSummary": "Much less is securely known about Sebastian than later art suggests. The Depositio martyrum, a fourth-century Roman calendar, records his commemoration on January 20 “in Catacumbas” along the Appian Way. Ambrose of Milan later associated Sebastian with Milan and said that he went to Rome and was martyred there. These early witnesses establish a martyr, a place of memory, and an ancient cult, but they do not provide exact life dates, military rank, or manner of death. A fifth-century Passio supplied the familiar narrative: Sebastian as an imperial guardsman who secretly aided imprisoned Christians, was shot with arrows, was nursed by Irene, confronted the rulers again, and was finally killed. Vatican News describes that work as a historical romance, and historical reference works do not accept its details as secure biography. The Church may receive its themes as tradition while refusing false certainty. Sebastian's feast honors fidelity to Christ and solidarity with endangered believers; it does not celebrate persecution or injury.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A name fixed in an early calendar",
+        "body": "The oldest firm evidence is liturgical and topographical. The Roman Depositio martyrum of 354 places Sebastian's January 20 commemoration at the catacombs on the Appian Way. This brief record does not tell a dramatic life, but it shows that the Roman church already gathered around his memory within living reach of the age of persecution. The location became a durable center of Christian burial, worship, and pilgrimage.",
+        "sourceIds": ["vatican-news-history", "catholic-encyclopedia", "catacombs-official"]
+      },
+      {
+        "heading": "An early link between Milan and Rome",
+        "body": "Ambrose, bishop of Milan in the later fourth century, identified Sebastian with Milan and remembered that he went to Rome, where he suffered martyrdom. That testimony gives the stable ID's Milan connection a genuine ancient basis. It still does not justify the legacy profile's exact birth and death years or a detailed reconstruction of Sebastian's career, so those claims are left unstated.",
+        "sourceIds": ["vatican-news-history", "catholic-encyclopedia"]
+      },
+      {
+        "heading": "The soldier and arrows of later tradition",
+        "body": "A fifth-century Passio transformed the spare early memory into a full narrative. It portrays Sebastian as an imperial guardsman who used access to help imprisoned Christians, survived an assault by archers through Irene's care, and then confronted persecution openly before being killed. These details shaped prayer and art, but the work is a historical romance rather than a contemporary report. They belong to Sebastian's devotional tradition, not to the secure historical summary.",
+        "sourceIds": ["vatican-news-history", "catholic-encyclopedia", "vatican-state-tradition"]
+      },
+      {
+        "heading": "A place where memory endured",
+        "body": "The Appian Way complex preserves ancient Christian cemeteries, inscriptions, and later basilica history. Over centuries it became closely identified with Sebastian and welcomed pilgrims who came to pray among the witnesses of Rome's early Church. Archaeology cannot prove every episode of the Passio, but the continuity of worship shows how a martyr's remembered fidelity helped Christians confess resurrection when imperial violence claimed the final word.",
+        "sourceIds": ["vatican-news-history", "catacombs-official"]
+      }
+    ],
+    "gospelTheme": "Jesus calls disciples to acknowledge him without surrendering to fear, and the resurrection promises that persecuting power can kill the body but cannot erase a life held by God.",
+    "struggle": "Sebastian faced lethal persecution as a Christian in Rome; later generations also faced the challenge of preserving his witness when secure biographical detail was scarce.",
+    "response": "The early Church kept his name, feast, and burial place, while later tradition remembered his fidelity through stories of solidarity with prisoners and renewed public witness."
+  },
+  "virtues": [
+    {
+      "name": "Fidelity without fame",
+      "evidence": "Sebastian's earliest record preserves almost no biography, yet his name and place endured because the Roman church remembered him as a martyr of Christ.",
+      "imitation": "Do one faithful act that may never become a story: keep a promise, refuse a dishonest shortcut, or pray for someone whose suffering receives little notice.",
+      "sourceIds": ["vatican-news-history", "catholic-encyclopedia"]
+    },
+    {
+      "name": "Solidarity with endangered believers",
+      "evidence": "The later Passio characteristically remembers Sebastian as using his position to strengthen Christians in prison, a devotional tradition rather than securely documented biography.",
+      "imitation": "Support someone facing danger without exposing them: follow their lead, protect identifying details, use a verified channel, and do not turn their suffering into content.",
+      "sourceIds": ["vatican-news-history", "vatican-state-tradition"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray Matthew 10:28-33 for a persecuted Christian whose name you do not know. Entrust their body, fear, family, and faithful witness to Christ without imagining details about their ordeal.",
+    "action": "Use a verified prisoner-support or religious-freedom organization to send an approved message, fund legal or family aid, or advocate for one detained believer while following every security rule."
+  },
+  "reflectionQuestions": [
+    "Can I honor a holy witness without filling gaps in the story with attractive certainty?",
+    "Whom could I support quietly and safely when public attention might increase rather than relieve their danger?"
+  ],
+  "scripture": {
+    "reference": "Matthew 10:28-33",
+    "connection": "Jesus neither denies the body's vulnerability nor gives persecutors the last word. Sebastian's ancient martyr memory points to courageous acknowledgment of Christ and to the Father's care for a life that violence cannot erase."
+  },
+  "prayer": "Lord Jesus Christ, faithful witness and risen Savior, you held Saint Sebastian when earthly power sought to silence him. Strengthen Christians who live under threat, protect those who aid prisoners and families, and convert those who persecute. Teach us to love truth more than dramatic stories, to help without exposing the vulnerable, and to acknowledge you with humble courage. Amen."
+}

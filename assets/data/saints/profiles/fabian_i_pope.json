@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 2,
+  "id": "fabian_i_pope",
+  "profileKind": "individual",
+  "celebrationIds": [
+    "fabian_i_pope",
+    "saint_fabian_pope_and_martyr"
+  ],
+  "name": "Saint Fabian, Pope and Martyr",
+  "alternateNames": ["Pope Fabian", "Fabianus"],
+  "ecclesialTitle": "Bishop of Rome and martyr",
+  "lifeSpan": "died 250",
+  "lifeLength": "",
+  "vocation": "Bishop of Rome and witness to Christ under the Decian persecution",
+  "places": ["Rome", "Cemetery of Callistus"],
+  "patronage": ["persecuted Christians", "pastoral leaders under pressure"],
+  "symbols": ["dove", "martyr's palm"],
+  "briefBio": "Fabian served as bishop of Rome from 236 until his martyrdom in the persecution under Emperor Decius in 250. Cyprian of Carthage remembered the integrity of his administration and the firmness of faith by which his death strengthened other Christians.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Pope_Fabian",
+  "wikidataId": "Q131159",
+  "feastDates": ["January 20"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "holy-see-popes",
+      "title": "Fabian",
+      "authorOrInstitution": "The Holy See",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/vatican/en/holy-father/fabiano.html",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official papal chronology and Roman identity; original synthesis",
+      "supports": ["identity", "pontificate", "deathDate", "rome"]
+    },
+    {
+      "id": "eusebius-history",
+      "title": "Church History, Book VI",
+      "authorOrInstitution": "Eusebius of Caesarea",
+      "publisher": "Andrews University",
+      "url": "https://www.andrews.edu/~toews/classes/sources/early/Eusebius%20of%20Caesarea%20Church%20History%20VI.htm",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Early primary narrative for the reported election tradition, episcopal succession, and martyrdom under Decius",
+      "supports": ["electionTradition", "bishopOfRome", "decianPersecution", "martyrdom"]
+    },
+    {
+      "id": "cyprian-letter",
+      "title": "Epistle 3 to the Presbyters and Deacons at Rome",
+      "authorOrInstitution": "Saint Cyprian of Carthage",
+      "publisher": "New Advent, from Ante-Nicene Fathers",
+      "url": "https://www.newadvent.org/fathers/050603.htm",
+      "publicationDate": "250",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Near-contemporary primary testimony to Fabian's death, integrity of administration, and firmness of faith",
+      "supports": ["administration", "martyrdom", "firmnessOfFaith", "pastoralExample"]
+    },
+    {
+      "id": "new-catholic-encyclopedia",
+      "title": "Fabian, Pope, St.",
+      "authorOrInstitution": "E. G. Weltin",
+      "publisher": "New Catholic Encyclopedia via Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/fabian-pope-st",
+      "accessedDate": "2026-08-10",
+      "tier": 2,
+      "reuseBasis": "Historical control for pontificate, later administrative traditions, burial, and source evaluation",
+      "supports": ["pontificate", "administrativeTraditions", "burial", "sourceClassification"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-10",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Fabian's story joins an unexpectedly received office to steady service when that office became dangerous. The most valuable near-contemporary testimony does not dwell on spectacle; it remembers the integrity of his administration and a faith that gave the Roman church an example when public pressure demanded surrender.",
+  "oneMinuteSummary": "Fabian became bishop of Rome in 236. Eusebius, writing in the next century, preserves the tradition that Fabian was not an expected candidate: a dove reportedly alighted on him during the election, and the gathered community acclaimed him. That sign belongs to early Christian memory rather than independently documented fact. His fourteen-year ministry is more securely visible through church records and correspondence. Later Roman sources credit him with organizing pastoral administration and works in the cemeteries, while Cyprian of Carthage praised the integrity with which he governed. When Emperor Decius began persecuting Christians, Fabian died as a martyr at Rome on 20 January 250 and was buried in the Cemetery of Callistus. The reviewed evidence does not establish his birth year or method of death. His memorial honors faithful pastoral leadership and resistance to coercion, not the violence inflicted on him.",
+  "life": {
+    "sections": [
+      {
+        "heading": "An unexpected election remembered",
+        "body": "Eusebius reports that Fabian arrived in Rome from the countryside while the Christian community was choosing a new bishop. According to the tradition he records, a dove came to rest on Fabian and the assembly acclaimed him. The story became a sign of an office received rather than pursued. Because the account was written later, the profile holds the dove episode as reliable early tradition, not as a datum equal to Fabian's documented pontificate.",
+        "sourceIds": ["eusebius-history", "new-catholic-encyclopedia"]
+      },
+      {
+        "heading": "Fourteen years of administration",
+        "body": "Fabian led the Roman church from 236 to 250. Later records connect his pontificate with cemetery works and a more ordered distribution of ministry across Rome. Nearer to his lifetime, Cyprian remembered the integrity of his administration. Together these sources show a shepherd whose courage was prepared through years of responsible governance before persecution made his fidelity visible in a final way.",
+        "sourceIds": ["holy-see-popes", "cyprian-letter", "new-catholic-encyclopedia"]
+      },
+      {
+        "heading": "Martyrdom under Decius",
+        "body": "The accession of Decius ended a period of relative peace and brought state pressure against Christian worship. Eusebius records that Fabian suffered martyrdom at Rome, and Cyprian's letter confirms that news of his death reached Carthage with testimony to his steadfast faith. Fabian's killing was an injustice. Christian memory honors the truth and pastoral responsibility he would not abandon, while refusing to make violence itself sacred.",
+        "sourceIds": ["eusebius-history", "cyprian-letter", "new-catholic-encyclopedia"]
+      }
+    ],
+    "gospelTheme": "Christ the chief Shepherd calls leaders to care for his people with integrity in ordinary administration and with fidelity when fear or coercion makes that care costly.",
+    "struggle": "Fabian bore responsibility for the Roman church as imperial policy shifted from relative peace to a persecution aimed at Christian leaders and public fidelity.",
+    "response": "He governed with an integrity remembered by a contemporary bishop and remained faithful to Christ when persecution placed his ministry and life in danger."
+  },
+  "virtues": [
+    {
+      "name": "Integrity in administration",
+      "evidence": "Cyprian's near-contemporary response to Fabian's death specifically joined the quality of his final witness to the integrity of his prior administration.",
+      "imitation": "Choose one unglamorous duty for which others depend on you—records, funds, scheduling, safeguarding, or follow-up—and complete it transparently enough that someone else can verify it.",
+      "sourceIds": ["cyprian-letter"]
+    },
+    {
+      "name": "Steadfast pastoral witness",
+      "evidence": "Early sources remember Fabian as a bishop who suffered martyrdom during Decius's persecution and whose firmness strengthened the Church he served.",
+      "imitation": "When pressure asks you to hide a just responsibility, state the truth calmly, protect those entrusted to you, and seek prudent support rather than facing danger alone for display.",
+      "sourceIds": ["eusebius-history", "cyprian-letter"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray by name for pastors and Christian communities living under coercion. Ask Christ to give them prudence, trustworthy companions, and freedom from both fear and reckless pressure.",
+    "action": "Learn about one currently persecuted Christian community from a reliable religious-freedom organization, then support verified relief or advocacy in a way that does not expose anyone's identity or location."
+  },
+  "reflectionQuestions": [
+    "If a crisis revealed the habits of my ordinary leadership, would others find integrity, secrecy, negligence, or dependable care?",
+    "How can I stand with people under religious coercion without turning their danger into an inspiring story for my own comfort?"
+  ],
+  "scripture": {
+    "reference": "1 Peter 5:2-4",
+    "connection": "The call to tend God's flock willingly and without domination illuminates Fabian's remembered integrity: episcopal courage begins in accountable care and looks beyond human approval to Christ, the chief Shepherd."
+  },
+  "prayer": "Lord Jesus Christ, chief Shepherd of your Church, you strengthened Saint Fabian to govern with integrity and to remain faithful when persecution came. Protect Christians who are threatened for worshiping you, sustain their pastors, and convert those who misuse power. Make our daily responsibilities honest and our courage prudent, so that no fear or ambition turns us away from the people you entrust to us. Amen."
+}

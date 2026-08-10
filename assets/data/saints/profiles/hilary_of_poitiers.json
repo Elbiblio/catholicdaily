@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 2,
+  "id": "hilary_of_poitiers",
+  "profileKind": "individual",
+  "celebrationIds": [
+    "hilary_of_poitiers",
+    "saint_hilary_bishop_and_doctor_of_the_church"
+  ],
+  "name": "Saint Hilary of Poitiers",
+  "alternateNames": ["Hilarius Pictaviensis"],
+  "ecclesialTitle": "Bishop and Doctor of the Church",
+  "lifeSpan": "c. 310-367",
+  "lifeLength": "about 57 years",
+  "vocation": "Bishop, Scripture scholar, and teacher of the divinity of Christ",
+  "places": ["Poitiers", "Béziers", "Phrygia"],
+  "patronage": ["theologians", "teachers of the faith"],
+  "symbols": ["book", "bishop's staff"],
+  "briefBio": "Hilary was a fourth-century bishop of Poitiers whose exile deepened his encounter with Eastern Christian theology. Through Scripture, On the Trinity, and patient controversy, he defended the full divinity of Jesus Christ and worked for unity in the Nicene faith.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Hilary_of_Poitiers",
+  "feastDates": ["January 13"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {
+      "id": "benedict-audience",
+      "title": "General Audience: Saint Hilary of Poitiers",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/audiences/2007/documents/hf_ben-xvi_aud_20071010.html",
+      "publicationDate": "2007-10-10",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official Catholic synthesis used for cautious chronology, exile, writings, pastoral method, feast, and Doctor title; app prose is original",
+      "supports": ["identity", "chronology", "conversion", "exile", "writings", "doctorOfChurch"]
+    },
+    {
+      "id": "on-the-trinity",
+      "title": "On the Trinity",
+      "authorOrInstitution": "Saint Hilary of Poitiers",
+      "publisher": "New Advent, from Nicene and Post-Nicene Fathers",
+      "url": "https://www.newadvent.org/fathers/3302.htm",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Primary patristic work used to verify the subject's Trinitarian teaching and scriptural method without reproducing quotations",
+      "supports": ["trinitarianTeaching", "scripture", "baptismalFaith"]
+    },
+    {
+      "id": "graz-patrology",
+      "title": "Hilary of Poitiers",
+      "authorOrInstitution": "Department for Ecumenical Theology, Eastern Orthodoxy and Patrology",
+      "publisher": "University of Graz",
+      "url": "https://oekumene.uni-graz.at/en/research/sources-for-the-church-fathers/hilary-of-poitiers/",
+      "accessedDate": "2026-08-10",
+      "tier": 2,
+      "reuseBasis": "Academic patristic control for chronology, works, Eastern theological encounter, and conciliatory complexity",
+      "supports": ["education", "episcopacy", "exile", "easternTheology", "works", "reconciliation"]
+    },
+    {
+      "id": "new-catholic-encyclopedia",
+      "title": "Hilary of Poitiers, St.",
+      "authorOrInstitution": "S. J. McKenna",
+      "publisher": "New Catholic Encyclopedia via Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/hilary-poitiers-st",
+      "accessedDate": "2026-08-10",
+      "tier": 2,
+      "reuseBasis": "Reputable reference control for exile, major writings, influence, theological limits, and Doctor title",
+      "supports": ["chronology", "exile", "deTrinitate", "influence", "doctorOfChurch"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-10",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Hilary shows that doctrinal clarity and patient communion belong together. He accepted exile rather than surrender Christ's full divinity, yet he also listened closely to Eastern formulations and sought to lead hesitant bishops toward shared Nicene faith. Conviction did not excuse caricature.",
+  "oneMinuteSummary": "Hilary was born at Poitiers around 310 and received a strong literary education. His search for truth and reading of Scripture led him to Christian faith and adult Baptism. Elected bishop of Poitiers around 353–354, he entered a bitter controversy over whether the Son is truly God with the Father. After the Synod of Béziers in 356, imperial power forced him into exile in Phrygia. There he encountered Eastern theological debates more directly and began his major work On the Trinity, reading both Old and New Testaments in the light of Christ. Hilary defended the equality of Father and Son firmly, but he also tried to understand bishops whose language was not yet fully Nicene and to guide them toward communion. Returning to Gaul around 360–361, he resumed pastoral work and continued writing on Scripture. He died in 367. In 1851 Pius IX proclaimed him a Doctor of the universal Church.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A search brought to Baptism",
+        "body": "Reliable detail about Hilary's early life is limited, but his education is visible in his writing and he describes a gradual search for the truth. Scripture led him to confess the Creator and the incarnate Son who gives eternal life. Baptized as an adult, he did not treat faith as the end of inquiry. His learning became a lifelong effort to speak faithfully about the God he had come to worship.",
+        "sourceIds": ["benedict-audience", "graz-patrology"]
+      },
+      {
+        "heading": "A bishop sent into exile",
+        "body": "As bishop of Poitiers, Hilary opposed teaching that reduced the Son below the full divinity of the Father. At the Synod of Béziers in 356, bishops aligned with imperial religious policy secured his exile to Phrygia. Removal from his people was an injustice and a pastoral wound, not a spiritual achievement. Hilary nevertheless used the imposed displacement to learn more deeply from Eastern Christian thought and to keep serving the Church through correspondence and writing.",
+        "sourceIds": ["benedict-audience", "graz-patrology", "new-catholic-encyclopedia"]
+      },
+      {
+        "heading": "Scripture in service of the Trinity",
+        "body": "During exile Hilary developed On the Trinity, his best-known theological work. He argued from the baptismal confession and the whole sweep of Scripture that the Son is not a creature but truly shares the divine nature of the Father. He also distinguished texts concerning Christ's eternal divinity from those concerning his genuine human lowliness. His goal was not verbal victory; it was faithful worship of the Father, through the Son, in the Holy Spirit.",
+        "sourceIds": ["benedict-audience", "on-the-trinity", "graz-patrology", "new-catholic-encyclopedia"]
+      },
+      {
+        "heading": "Strength joined to understanding",
+        "body": "Hilary opposed radical denials of Christ's divinity without treating every imperfect formulation as equally hostile. He studied Eastern confessions of faith and tried to show where divided bishops could move toward the truth confessed at Nicaea. After returning to Gaul, he resumed pastoral work and continued commenting on Scripture. His later recognition as a Doctor of the Church honors both what he taught and the episcopal patience with which he sought communion.",
+        "sourceIds": ["benedict-audience", "graz-patrology", "new-catholic-encyclopedia"]
+      }
+    ],
+    "gospelTheme": "The Church's confession of Father, Son, and Holy Spirit is not an abstract puzzle: it is the baptismal truth of the God who creates, saves in Christ, and draws believers into communion.",
+    "struggle": "Doctrinal division, imperial pressure, removal from his diocese, unfamiliar theological language, and the temptation to mistake opponents for one undifferentiated enemy tested Hilary's ministry.",
+    "response": "He searched Scripture, learned from Eastern theology, defended Christ's divinity without compromise, and combined firmness of faith with patient efforts toward reconciliation."
+  },
+  "virtues": [
+    {
+      "name": "Baptismal conviction",
+      "evidence": "Hilary built his teaching on the faith confessed in Baptism and accepted exile rather than speak of the Son as less than truly God.",
+      "imitation": "Renew the baptismal promises deliberately, then identify one choice today that should change because you belong to the Father, Son, and Holy Spirit.",
+      "sourceIds": ["benedict-audience", "on-the-trinity"]
+    },
+    {
+      "name": "Patient theological listening",
+      "evidence": "Contact with Eastern theology during exile helped Hilary understand different vocabularies and seek a path by which hesitant bishops could reach fuller Nicene confession.",
+      "imitation": "In one disagreement about faith, restate the other person's actual claim fairly before answering it, and distinguish confused language from a real denial of truth.",
+      "sourceIds": ["benedict-audience", "graz-patrology"]
+    },
+    {
+      "name": "Pastoral endurance",
+      "evidence": "Though forced away from Poitiers, Hilary continued serving through study, correspondence, doctrinal writing, and efforts for the unity of the Church.",
+      "imitation": "If a role or plan has been taken from you, choose one faithful form of service still available rather than allowing displacement to end your responsibility for others.",
+      "sourceIds": ["benedict-audience", "new-catholic-encyclopedia"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray the baptismal formula of Matthew 28:19 slowly. After naming the Father, Son, and Holy Spirit, spend a minute asking how each name reshapes your worship and your relationships.",
+    "action": "Choose one religious disagreement and check the primary text before repeating a summary. Correct one caricature—even if it was useful to your own side—while stating the truth you believe clearly."
+  },
+  "reflectionQuestions": [
+    "Does my defense of Christian truth help another person see Christ more clearly, or mainly display that I am right?",
+    "What loss or displacement could become a place of deeper study and faithful service without pretending that the loss itself was good?"
+  ],
+  "scripture": {
+    "reference": "Matthew 28:19",
+    "connection": "Hilary returned to Jesus' baptismal command as a compact confession of the one divine communion of Father, Son, and Holy Spirit—the faith into which Christians are baptized and from which they learn to live."
+  },
+  "prayer": "Father of light, you led Saint Hilary from searching into the Baptism of your Church and gave him courage to confess your eternal Son. Through Jesus Christ, keep us faithful when truth is costly; by the Holy Spirit, make our study humble, our speech precise, and our disagreements patient. Heal division without weakening faith, and draw us into the communion we proclaim. Amen."
+}

@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 2,
+  "id": "raymond_of_penyafort",
+  "profileKind": "individual",
+  "celebrationIds": [
+    "raymond_of_penyafort",
+    "saint_raymond_of_penyafort_priest"
+  ],
+  "name": "Saint Raymond of Penyafort",
+  "alternateNames": ["Ramon de Penyafort", "Raymond of Peñafort"],
+  "ecclesialTitle": "Dominican priest and canon lawyer",
+  "lifeSpan": "c. 1180-1275",
+  "lifeLength": "about nine decades",
+  "vocation": "Dominican friar, canonist, confessor, and master general",
+  "places": ["Barcelona", "Bologna", "Rome"],
+  "patronage": ["canon lawyers", "those serving justice in the Church"],
+  "symbols": ["book of canon law"],
+  "briefBio": "Raymond of Penyafort was a Catalan Dominican and one of the most influential canonists of the thirteenth century. He wrote for confessors, led the compilation of Gregory IX's decretals, and served briefly as master general of the Order of Preachers.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Raymond_of_Pe%C3%B1afort",
+  "wikidataId": "Q318980",
+  "feastDates": ["January 7"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {
+      "id": "vatican-news-biography",
+      "title": "St. Raymond of Penyafort, Dominican, Co-founder of the Mercedarians",
+      "authorOrInstitution": "Vatican News",
+      "publisher": "Dicastery for Communication",
+      "url": "https://www.vaticannews.va/en/saints/01/07/st--raymond-of--penyafort--dominican--co-founder-of-the-mercedar.html",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official Catholic biographical source used for vocation, Dominican leadership, formation, death, and canonization; all app prose is original",
+      "supports": ["identity", "dominicanVocation", "leadership", "formation", "death"]
+    },
+    {
+      "id": "harvard-canonists",
+      "title": "Bio-Bibliographical Guide to Medieval and Early Modern Jurists: Raymundus de Pennaforte",
+      "authorOrInstitution": "Ames Foundation, Harvard Law School",
+      "publisher": "Ames Foundation",
+      "url": "https://amesfoundation.law.harvard.edu/BioBibCanonists/Report_Biobib2.php?record_id=a481",
+      "publicationDate": "2015",
+      "accessedDate": "2026-08-10",
+      "tier": 2,
+      "reuseBasis": "Specialist legal-historical chronology and bibliography used to control dates, offices, and writings",
+      "supports": ["chronology", "bologna", "liberExtra", "penitentialWorks", "masterGeneral"]
+    },
+    {
+      "id": "cambridge-chapter",
+      "title": "Ramon de Penyafort and His Influence",
+      "authorOrInstitution": "Damian J. Smith",
+      "publisher": "Cambridge Core and Amsterdam University Press",
+      "url": "https://www.cambridge.org/core/books/abs/friars-and-their-influence-in-medieval-spain/ramon-de-penyafort-and-his-influence/43E713D3B134FA1D500FE9BAB97EFA76",
+      "publicationDate": "2018",
+      "accessedDate": "2026-08-10",
+      "tier": 2,
+      "reuseBasis": "Scholarly overview used for the breadth and morally mixed character of Raymond's influence in medieval law, mission, and Dominican governance",
+      "supports": ["canonLaw", "dominicanGovernance", "constitutions", "historicalLimits"]
+    },
+    {
+      "id": "canon-law-message",
+      "title": "Message for the 50th anniversary of the Consociatio Internationalis Studio Iuris Canonici Promovendo",
+      "authorOrInstitution": "Pope Francis",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/francesco/en/messages/pont-messages/2023/documents/20231201-messaggio-studio-iuris-canonici-promovendo.html",
+      "publicationDate": "2023-12-01",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official theological interpretation of canon law under Raymond's patronage, used for the Christ-centred pastoral application",
+      "supports": ["gospelTheme", "justice", "mercy", "pastoralApplication"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-10",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Raymond's vocation asks a hard question: can law become a form of pastoral care? His best work brought order to scattered rules and gave confessors tools for responsible judgment. His mixed medieval context also warns that religious expertise must always be examined by the dignity of the persons it affects.",
+  "oneMinuteSummary": "Born in Catalonia around 1180, Raymond studied and taught law at Bologna before returning to Barcelona and entering the Order of Preachers in 1222. He composed a widely used work on cases of conscience for confessors, joining legal learning to the care of souls. Pope Gregory IX later called him to Rome, where Raymond presided over the compilation of the Liber Extra, the collection of decretals promulgated in 1234. He served as master general of the Dominicans from 1238 to 1240 and helped shape the Order's constitutions and formation. His long influence reached law, pastoral practice, royal counsel, and Christian engagement with other communities. That legacy must be read honestly: scholarship also connects his work to medieval policies that diminished the position of Jews. Raymond died in Barcelona in 1275 and was canonized in 1601. His witness is strongest where disciplined knowledge serves mercy, justice, and the salvation of persons.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A lawyer who became a friar",
+        "body": "Raymond's early career was formed by study and teaching in Barcelona and Bologna, one of medieval Europe's great centers of legal learning. After returning to Barcelona, he entered the Dominican Order in 1222. The move did not discard his expertise; it placed that expertise inside a vocation of preaching, prayer, and service. His life shows that professional knowledge can be converted from a path of distinction into a tool for the Church's mission.",
+        "sourceIds": ["vatican-news-biography", "harvard-canonists", "cambridge-chapter"]
+      },
+      {
+        "heading": "Judgment formed for the care of souls",
+        "body": "As a Dominican, Raymond wrote a substantial guide for confessors dealing with penance and difficult cases of conscience. Its importance was not simply that it supplied answers. It trained ministers to bring moral and canonical learning to concrete human situations. That purpose remains demanding: careful judgment must protect truth and responsibility while helping a person encounter the mercy of Christ.",
+        "sourceIds": ["harvard-canonists", "cambridge-chapter", "canon-law-message"]
+      },
+      {
+        "heading": "Ordering the decretals",
+        "body": "Pope Gregory IX summoned Raymond to Rome and commissioned the work that became the Liber Extra. Promulgated in 1234, it organized a large body of papal decretals into an authoritative collection. Raymond's contribution was patient, exacting, and institutional rather than spectacular. By making legal material coherent and usable, he helped the Church govern with greater consistency across many places.",
+        "sourceIds": ["vatican-news-biography", "harvard-canonists"]
+      },
+      {
+        "heading": "Leadership and a legacy to examine",
+        "body": "Raymond served as Dominican master general from 1238 to 1240, revising constitutions and attending to the formation of preachers. His influence also extended into the religious and political tensions of medieval Iberia. Scholarly study connects him not only with learning and mission but also with measures that reduced Jewish status. A truthful remembrance can honor his service without treating every policy of his age as holy. Christian law is judged by whether it serves persons, justice, mercy, and the Gospel of Christ.",
+        "sourceIds": ["vatican-news-biography", "harvard-canonists", "cambridge-chapter", "canon-law-message"]
+      }
+    ],
+    "gospelTheme": "Christ places the salvation and dignity of persons at the heart of the Church's law, so that disciplined truth and merciful accompaniment serve one mission rather than compete.",
+    "struggle": "Raymond faced the burden of organizing complex legal traditions, judging difficult cases, leading a growing religious order, and exercising influence within the coercive religious politics of medieval Iberia.",
+    "response": "He devoted exceptional legal learning to confession, Church governance, and Dominican formation; his legacy also requires later Christians to test inherited structures honestly against justice, mercy, and human dignity."
+  },
+  "virtues": [
+    {
+      "name": "Disciplined service",
+      "evidence": "Raymond applied years of legal formation to demanding works for confessors and to the careful compilation of Gregory IX's decretals.",
+      "imitation": "Take one complicated responsibility you have been avoiding and make it usable for others: organize the facts, state the rule clearly, and explain the humane purpose it should serve.",
+      "sourceIds": ["harvard-canonists", "cambridge-chapter"]
+    },
+    {
+      "name": "Pastoral justice",
+      "evidence": "His writing joined law to cases of conscience, while contemporary Catholic teaching under his patronage insists that Church law must serve persons redeemed in Christ.",
+      "imitation": "Before applying a rule today, identify both the truth it protects and the person it affects; seek a response that preserves accountability without withholding respectful accompaniment.",
+      "sourceIds": ["harvard-canonists", "canon-law-message"]
+    },
+    {
+      "name": "Honest accountability",
+      "evidence": "Modern scholarship makes it possible to recognize both Raymond's constructive legal work and his involvement in a medieval environment that diminished the status of Jews.",
+      "imitation": "Review one honored institution or inherited practice without defensiveness. Keep what serves the Gospel, name whom it has harmed, and support a concrete correction.",
+      "sourceIds": ["cambridge-chapter", "canon-law-message"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Bring one rule, obligation, or difficult decision before Christ. Ask: what truth does this protect, whose dignity is at stake, and how can justice remain inseparable from mercy?",
+    "action": "Make one process you control fairer and easier to navigate today—rewrite an unclear instruction, explain an appeal path, remove a needless obstacle, or help someone understand both a right and a responsibility."
+  },
+  "reflectionQuestions": [
+    "Where do I use rules to avoid the harder work of listening, discernment, and merciful accountability?",
+    "What part of my inherited religious or professional practice needs honest examination because of its effect on people with less power?"
+  ],
+  "scripture": {
+    "reference": "Mark 2:27",
+    "connection": "Jesus' teaching that the sabbath was made for the human person provides a searching measure for Raymond's legal vocation: a holy norm serves God's saving purpose and the true good of people; people are not raw material for a system."
+  },
+  "prayer": "Lord Jesus Christ, giver of truth and mercy, you called Saint Raymond to place learning at the service of your Church. Grant wisdom to canonists, pastors, judges, and all who carry authority. Keep us exact without becoming cold, compassionate without abandoning truth, and honest about the harm that institutions can cause. Make every rule we shape or apply serve justice, conversion, and the dignity of your people. Amen."
+}
