@@ -6,25 +6,42 @@ import '../../data/models/saint_profile.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
 import '../../data/services/optional_memorial_service.dart';
 import '../../data/services/saint_profile_service.dart';
+import '../widgets/saint_profile/saint_life_guide_view.dart';
+import '../widgets/saint_profile/saint_sources_sheet.dart';
+
+typedef SaintProfileLoader =
+    Future<SaintProfile?> Function(OptionalCelebration celebration);
 
 class SaintDetailScreen extends StatefulWidget {
   final OptionalCelebration celebration;
+  final SaintProfileLoader? profileLoader;
 
-  const SaintDetailScreen({super.key, required this.celebration});
+  const SaintDetailScreen({
+    super.key,
+    required this.celebration,
+    this.profileLoader,
+  });
 
   @override
   State<SaintDetailScreen> createState() => _SaintDetailScreenState();
 }
 
 class _SaintDetailScreenState extends State<SaintDetailScreen> {
-  late final Future<SaintProfile?> _profileFuture;
+  late Future<SaintProfile?> _profileFuture;
 
   @override
   void initState() {
     super.initState();
-    _profileFuture = SaintProfileService.instance.findForCelebration(
-      widget.celebration,
-    );
+    _profileFuture = _requestProfile();
+  }
+
+  @override
+  void didUpdateWidget(covariant SaintDetailScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.celebration != widget.celebration ||
+        oldWidget.profileLoader != widget.profileLoader) {
+      _profileFuture = _requestProfile();
+    }
   }
 
   @override
@@ -38,9 +55,22 @@ class _SaintDetailScreenState extends State<SaintDetailScreen> {
             return const Center(child: CircularProgressIndicator());
           }
 
+          if (snapshot.hasError) {
+            return _PageList(
+              children: [
+                _Header(
+                  title: widget.celebration.title,
+                  subtitle: _celebrationSubtitle(widget.celebration),
+                  color: _colorForLiturgicalColor(widget.celebration.color),
+                ),
+                const SizedBox(height: 18),
+                _LoadError(onRetry: _retry),
+              ],
+            );
+          }
+
           final profile = snapshot.data;
-          return ListView(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
+          return _PageList(
             children: [
               _Header(
                 title: profile?.name ?? widget.celebration.title,
@@ -50,11 +80,20 @@ class _SaintDetailScreenState extends State<SaintDetailScreen> {
               const SizedBox(height: 18),
               if (profile == null)
                 _MissingProfile(celebration: widget.celebration)
+              else if (profile.isPublished && profile.hasFullGuide)
+                SaintLifeGuideView(
+                  profile: profile,
+                  onShowSources: () => SaintSourcesSheet.show(
+                    context,
+                    profile,
+                    onOpenUrl: _openExternalUri,
+                  ),
+                )
               else
                 _ProfileBody(
                   profile: profile,
                   onOpenWikipedia: profile.hasWikipediaLink
-                      ? () => _openExternalLink(profile.wikipediaUrl!)
+                      ? () => _openExternalUri(Uri.parse(profile.wikipediaUrl!))
                       : null,
                 ),
             ],
@@ -64,9 +103,20 @@ class _SaintDetailScreenState extends State<SaintDetailScreen> {
     );
   }
 
-  Future<void> _openExternalLink(String url) async {
+  Future<SaintProfile?> _requestProfile() {
+    final loader =
+        widget.profileLoader ?? SaintProfileService.instance.findForCelebration;
+    return Future<SaintProfile?>.sync(() => loader(widget.celebration));
+  }
+
+  void _retry() {
+    setState(() {
+      _profileFuture = _requestProfile();
+    });
+  }
+
+  Future<void> _openExternalUri(Uri uri) async {
     HapticFeedback.selectionClick();
-    final uri = Uri.parse(url);
     final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
     if (!opened && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -133,6 +183,20 @@ class _SaintDetailScreenState extends State<SaintDetailScreen> {
       case LiturgicalColor.gold:
         return const Color(0xFFD4AF37);
     }
+  }
+}
+
+class _PageList extends StatelessWidget {
+  const _PageList({required this.children});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
+      children: children,
+    );
   }
 }
 
@@ -216,6 +280,44 @@ class _ProfileBody extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                Icons.manage_search_rounded,
+                color: theme.colorScheme.primary,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Research in progress',
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'This existing offline profile is being expanded and '
+                      'reviewed for the full spiritual life guide.',
+                      style: theme.textTheme.bodyMedium?.copyWith(height: 1.4),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 18),
         if (profile.hasLifeInfo)
           _InfoStrip(
             children: [
@@ -284,7 +386,7 @@ class _ProfileBody extends StatelessWidget {
           FilledButton.icon(
             onPressed: onOpenWikipedia,
             icon: const Icon(Icons.open_in_new_rounded),
-            label: const Text('Read More'),
+            label: const Text('Open reference article'),
           ),
         if (profile.sources.isNotEmpty) ...[
           const SizedBox(height: 16),
@@ -328,7 +430,7 @@ class _MissingProfile extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  'Profile Pending',
+                  'Profile unavailable',
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w800,
                   ),
@@ -338,7 +440,8 @@ class _MissingProfile extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            'A curated biography has not been added for ${celebration.title} yet.',
+            'No verified offline profile is available for '
+            '${celebration.title} yet.',
             style: theme.textTheme.bodyMedium?.copyWith(height: 1.35),
           ),
           const SizedBox(height: 12),
@@ -364,6 +467,49 @@ class _MissingProfile extends StatelessWidget {
       case CelebrationRank.optionalMemorial:
         return 'Optional memorial';
     }
+  }
+}
+
+class _LoadError extends StatelessWidget {
+  const _LoadError({required this.onRetry});
+
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.errorContainer,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Could not load this profile',
+            style: theme.textTheme.titleMedium?.copyWith(
+              color: theme.colorScheme.onErrorContainer,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'The offline profile could not be read. Please try again.',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onErrorContainer,
+            ),
+          ),
+          const SizedBox(height: 16),
+          FilledButton.icon(
+            onPressed: onRetry,
+            icon: const Icon(Icons.refresh_rounded),
+            label: const Text('Try again'),
+          ),
+        ],
+      ),
+    );
   }
 }
 

@@ -7,6 +7,7 @@ import 'package:catholic_daily/data/services/feast_reminder_preferences.dart';
 import 'package:catholic_daily/data/services/feast_reminder_service.dart';
 import 'package:catholic_daily/data/services/liturgical_region_preference_service.dart';
 import 'package:catholic_daily/data/services/offline_ordo_lookup_service.dart';
+import 'package:catholic_daily/data/services/saint_profile_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../helpers/test_helpers.dart';
@@ -124,6 +125,10 @@ void main() {
           'Our Lady, Queen of Nigeria',
           'Solemnity',
         );
+        final queenOfNigeria = events.singleWhere(
+          (event) => event.title == 'Our Lady, Queen of Nigeria',
+        );
+        expect(queenOfNigeria.saintProfileId, 'our_lady_queen_of_nigeria');
         expectEvent(
           DateTime(2026, 11, 22),
           'Our Lord Jesus Christ, King of the Universe',
@@ -169,6 +174,89 @@ void main() {
           containsAll([DateTime(2026, 5, 13, 20), DateTime(2026, 5, 14, 9)]),
         );
         expect(solemnity.any((event) => event.isAdditionalReminder), isTrue);
+      },
+    );
+
+    test('every saint-like scheduled feast has a detail deep link', () async {
+      final events = await FeastReminderService.instance
+          .buildPreviewEventsForTesting(
+            2026,
+            FeastReminderRank.all,
+            region: LiturgicalRegion.nigeria,
+          );
+      final missing = events
+          .where(
+            (event) =>
+                SaintProfileService.isSaintLikeTitle(event.title) &&
+                event.saintProfileId == null,
+          )
+          .map((event) => event.title)
+          .toList();
+
+      expect(missing, isEmpty, reason: 'Missing reminder deep links: $missing');
+    });
+
+    test(
+      'all-reminders mode includes researched optional and obligatory memorials',
+      () async {
+        final events2025 = await FeastReminderService.instance
+            .buildPreviewEventsForTesting(
+              2025,
+              FeastReminderRank.all,
+              region: LiturgicalRegion.nigeria,
+            );
+        final events2026 = await FeastReminderService.instance
+            .buildPreviewEventsForTesting(
+              2026,
+              FeastReminderRank.all,
+              region: LiturgicalRegion.nigeria,
+            );
+
+        void expectDeepLink(
+          List<FeastReminderPreviewEvent> events,
+          DateTime date,
+          String profileId,
+        ) {
+          expect(
+            events,
+            contains(
+              isA<FeastReminderPreviewEvent>()
+                  .having((event) => event.date, 'date', date)
+                  .having(
+                    (event) => event.saintProfileId,
+                    'saintProfileId',
+                    profileId,
+                  ),
+            ),
+          );
+        }
+
+        // Bakhita falls on a Sunday in 2026, so use an unsuppressed year.
+        expectDeepLink(events2025, DateTime(2025, 2, 8), 'josephine_bakhita');
+        expectDeepLink(events2026, DateTime(2026, 5, 1), 'joseph_the_worker');
+        expectDeepLink(events2026, DateTime(2026, 7, 9), 'augustine_zhao_rong');
+        expectDeepLink(
+          events2026,
+          DateTime(2026, 8, 14),
+          'maximilian_mary_kolbe',
+        );
+        expectDeepLink(events2026, DateTime(2026, 9, 5), 'teresa_of_calcutta');
+        expectDeepLink(
+          events2026,
+          DateTime(2026, 9, 17),
+          'hildegard_of_bingen',
+        );
+        expectDeepLink(events2026, DateTime(2026, 11, 3), 'martin_de_porres');
+
+        expect(
+          events2026.where(
+            (event) =>
+                event.date == DateTime(2026, 2, 8) &&
+                event.saintProfileId == 'josephine_bakhita',
+          ),
+          isEmpty,
+          reason: 'A Sunday must retain liturgical precedence.',
+        );
       },
     );
   });

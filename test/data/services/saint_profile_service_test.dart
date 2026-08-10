@@ -31,6 +31,26 @@ void main() {
     expect(profile.patronage, contains('scholars'));
   });
 
+  test('loads a curated profile by stable profile id', () async {
+    final profile = await SaintProfileService.instance.findById(
+      'bede_the_venerable',
+    );
+
+    expect(profile, isNotNull);
+    expect(profile!.name, 'Saint Bede the Venerable');
+  });
+
+  test(
+    'resolves a notification title to a stable curated profile id',
+    () async {
+      final profile = await SaintProfileService.instance.findCuratedByTitle(
+        'All Saints',
+      );
+
+      expect(profile?.id, 'all_saints');
+    },
+  );
+
   test('normalizes celebration titles for fallback matching', () {
     expect(
       SaintProfileService.normalizeTitle(

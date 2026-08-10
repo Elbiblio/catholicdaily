@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 2,
+  "id": "teresa_of_calcutta",
+  "profileKind": "individual",
+  "celebrationIds": ["teresa_of_calcutta", "saint_teresa_of_calcutta_virgin"],
+  "name": "Saint Teresa of Calcutta",
+  "alternateNames": ["Mother Teresa", "Gonxha Agnes Bojaxhiu"],
+  "ecclesialTitle": "Foundress of the Missionaries of Charity",
+  "lifeSpan": "1910-1997",
+  "lifeLength": "87 years",
+  "vocation": "Religious sister and servant of people in severe poverty",
+  "places": ["Skopje", "Ireland", "Kolkata, India"],
+  "patronage": ["Missionaries of Charity", "people in severe poverty", "World Youth Day"],
+  "symbols": ["white sari with blue border"],
+  "briefBio": "Teresa of Calcutta left the Sisters of Loreto, with Church permission, to serve people who were sick, dying, abandoned, or extremely poor. She founded the Missionaries of Charity and joined sustained prayer to direct personal care, even through a long interior experience of spiritual darkness.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Mother_Teresa",
+  "wikidataId": "Q30547",
+  "feastDates": ["September 5"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {"id":"holy-see-biography","title":"Mother Teresa of Calcutta (1910-1997)","authorOrInstitution":"Office for the Liturgical Celebrations of the Supreme Pontiff","publisher":"The Holy See","url":"https://www.vatican.va/news_services/liturgy/saints/ns_lit_doc_20031019_madre-teresa_en.html","publicationDate":"2003","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Official biography used for chronology, vocation, works, and spiritual darkness; original prose","supports":["identity","chronology","loreto","foundation","darkness","death"]},
+    {"id":"canonization-homily","title":"Canonization of Blessed Mother Teresa of Calcutta","authorOrInstitution":"Pope Francis","publisher":"The Holy See","url":"https://www.vatican.va/content/francesco/en/homilies/2016/documents/papa-francesco_20160904_omelia-canonizzazione-madre-teresa.html","publicationDate":"2016-09-04","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Official ecclesial interpretation of mercy and service; original synthesis","supports":["canonization","mercy","service","poor"]},
+    {"id":"mc-biography","title":"Mother Teresa","authorOrInstitution":"Missionaries of Charity","publisher":"Missionaries of Charity","url":"https://missionariesofcharity.org/about-us/mother-teresa/","publicationDate":"","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Founding community source used to cross-check charism and chronology; app prose is original","supports":["charism","congregation","dailyPrayer","service"]}
+  ],
+  "editorial": {"state":"published","researcher":"Catholic Daily editorial research","reviewer":"Catholic Daily factual and theological review","reviewedAt":"2026-08-10","revision":1,"warnings":[]},
+  "whyItMatters": "Teresa's witness makes mercy personal: suffering is not an issue to admire from a distance but a person to approach with competence and tenderness. Her long spiritual darkness also helps people who remain faithful without emotional consolation.",
+  "oneMinuteSummary": "Gonxha Agnes Bojaxhiu was born in Skopje in 1910 and joined the Sisters of Loreto at eighteen. Sent to India, she taught and later led a school in Calcutta. In 1946 she experienced a call to serve Christ among the poorest and most abandoned. After discernment and permissions, she left the Loreto enclosure, received basic medical training, and began visiting families, caring for sick people, and teaching children. The Missionaries of Charity were established in 1950 and grew internationally. Her method joined Eucharistic prayer and direct service, insisting that people who were dying or unwanted be encountered as persons. After her death, letters revealed a prolonged interior darkness and felt absence of God. She continued praying and serving without pretending that faith always felt consoling. She died on September 5, 1997, and was canonized in 2016.",
+  "life": {
+    "sections": [
+      {"heading":"A call tested and organized","body":"Teresa did not turn a private inspiration into immediate independent action. She discerned, sought permission, learned basic medical care, began locally, and formed a community. Compassion became a sustainable vocation through prayer, training, and structure.","sourceIds":["holy-see-biography","mc-biography"]},
+      {"heading":"Faithfulness without consolation","body":"For decades Teresa experienced a painful sense of God's absence even while publicly serving with energy. The record prevents a shallow equation of holiness with pleasant religious emotion: she continued choosing prayer and love in darkness.","sourceIds":["holy-see-biography"]}
+    ],
+    "gospelTheme": "Jesus asks to be recognized and served in people who are unwanted, while faithful love can continue even when God feels absent.",
+    "struggle": "Severe poverty, illness, abandonment, organizational burdens, criticism, declining health, and prolonged interior darkness marked her mission.",
+    "response": "She combined prayer, discernment, practical preparation, community, and direct personal care, continuing faithfully without relying on spiritual feelings."
+  },
+  "virtues": [
+    {"name":"Concrete mercy","evidence":"She moved from concern to bodily works of mercy: visiting, cleaning wounds, teaching, sheltering, and organizing sustained care.","imitation":"Do one work of mercy that involves respectful presence, not only money or an online reaction.","sourceIds":["holy-see-biography","canonization-homily"]},
+    {"name":"Fidelity in darkness","evidence":"Her prayer and service continued through a long period when she felt separated from God and lacked consolation.","imitation":"Keep one modest commitment to prayer or service today even if it feels dry; do not manufacture an emotion as proof of faith.","sourceIds":["holy-see-biography"]}
+  ],
+  "practice": {"spiritual":"Spend ten quiet minutes before Christ, then name one person you find difficult to see as beloved. Ask for the grace to meet that person without superiority.","action":"Offer direct, dignified help to someone isolated, ill, hungry, elderly, or overwhelmed. Ask what is useful rather than assuming."},
+  "reflectionQuestions": ["Whose suffering have I kept safely abstract instead of approaching with respect?", "Can I remain faithful when prayer brings no immediate comfort or visible result?"],
+  "scripture": {"reference":"Matthew 25:40","connection":"Service to a person in need becomes an encounter with Christ, so dignity and attentive presence matter as much as the task performed."},
+  "prayer": "Jesus, you draw near in every person who is forgotten or cast aside. Through Saint Teresa's witness, open our eyes, remove our fear of another's suffering, and make our mercy practical and respectful. When prayer feels empty, keep us faithful. Bless those who serve and those who need care, and lead us together into your love. Amen."
+}

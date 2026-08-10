@@ -7,21 +7,28 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tzdata;
 import '../models/liturgical_region.dart';
 import 'feast_reminder_preferences.dart';
+import 'feast_reminder_payload.dart';
 import 'feast_reminder_schedule_policy.dart';
+import 'improved_liturgical_calendar_service.dart';
 import 'liturgical_region_preference_service.dart';
 import 'offline_ordo_lookup_service.dart';
+import 'optional_memorial_service.dart';
+import 'saint_calendar_service.dart';
+import 'saint_profile_service.dart';
 
 /// Represents a feast/solemnity event that can trigger a reminder.
 class _FeastEvent {
   final DateTime date;
   final String title;
   final String rank;
+  final String? saintProfileId;
   final Color? liturgicalColor;
 
   const _FeastEvent({
     required this.date,
     required this.title,
     required this.rank,
+    required this.saintProfileId,
     this.liturgicalColor,
   });
 }
@@ -59,11 +66,13 @@ class FeastReminderPreviewEvent {
   final DateTime date;
   final String title;
   final String rank;
+  final String? saintProfileId;
 
   const FeastReminderPreviewEvent({
     required this.date,
     required this.title,
     required this.rank,
+    required this.saintProfileId,
   });
 }
 
@@ -96,12 +105,14 @@ class FeastReminderService {
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
   bool _initialized = false;
+  void Function(FeastReminderPayload payload)? _tapHandler;
+  FeastReminderPayload? _pendingTap;
 
   static const _channelId = 'feast_reminders';
   static const _channelName = 'Feast & Solemnity Reminders';
   static const _channelDesc =
       'Daily reminders for Catholic feasts and solemnities';
-  static const _scheduleSchemaVersion = 3;
+  static const _scheduleSchemaVersion = 4;
   static const _schedulePolicy = FeastReminderSchedulePolicy();
   static const _majorFeastTitleTokens = <String>[
     'lord',
@@ -130,8 +141,46 @@ class FeastReminderService {
       iOS: iosSettings,
     );
 
-    await _plugin.initialize(initSettings);
+    await _plugin.initialize(
+      initSettings,
+      onDidReceiveNotificationResponse: (response) {
+        _receiveTap(response.payload);
+      },
+    );
+    final launchDetails = await _plugin.getNotificationAppLaunchDetails();
+    if (launchDetails?.didNotificationLaunchApp ?? false) {
+      _receiveTap(launchDetails?.notificationResponse?.payload);
+    }
     _initialized = true;
+  }
+
+  void setNotificationTapHandler(
+    void Function(FeastReminderPayload payload) handler,
+  ) {
+    _tapHandler = handler;
+    final pending = _pendingTap;
+    if (pending != null) {
+      _pendingTap = null;
+      handler(pending);
+    }
+  }
+
+  void clearNotificationTapHandler() => _tapHandler = null;
+
+  void _receiveTap(String? rawPayload) {
+    final payload = FeastReminderPayload.tryParse(rawPayload);
+    if (payload == null) return;
+    final handler = _tapHandler;
+    if (handler == null) {
+      _pendingTap = payload;
+    } else {
+      handler(payload);
+    }
+  }
+
+  @visibleForTesting
+  void receiveNotificationTapForTesting(String? rawPayload) {
+    _receiveTap(rawPayload);
   }
 
   /// Request notification permission and return whether it was granted.
@@ -313,6 +362,8 @@ class FeastReminderService {
     LiturgicalRegion? regionOverride,
   }) async {
     final lookup = OfflineOrdoLookupService.instance;
+    final memorials = OptionalMemorialService.instance;
+    final saintCalendar = SaintCalendarService.instance;
     var region = regionOverride ?? LiturgicalRegion.generalRoman;
     if (regionOverride == null) {
       try {
@@ -329,13 +380,70 @@ class FeastReminderService {
     for (var d = start; !d.isAfter(end); d = d.add(const Duration(days: 1))) {
       try {
         final day = lookup.resolve(d, region: region);
+        final dedupeKeys = <String>{};
         if (_shouldInclude(day.rank, rank)) {
+          String? saintProfileId;
+          if (SaintProfileService.isSaintLikeTitle(day.title)) {
+            try {
+              saintProfileId =
+                  (await SaintProfileService.instance.findCuratedByTitle(
+                    day.title,
+                  ))?.id;
+            } catch (e) {
+              debugPrint(
+                '[FeastReminder] Unable to resolve saint profile for '
+                '${day.title}: $e',
+              );
+            }
+          }
           events.add(
             _FeastEvent(
               date: d,
               title: day.title,
               rank: day.rank ?? '',
+              saintProfileId: saintProfileId,
               liturgicalColor: day.colorValue,
+            ),
+          );
+          dedupeKeys.add(SaintProfileService.normalizeTitle(day.title));
+          if (saintProfileId != null) dedupeKeys.add(saintProfileId);
+        }
+
+        if (rank != FeastReminderRank.all ||
+            !_canObserveMemorialsOn(d, day.rank, memorials)) {
+          continue;
+        }
+
+        final celebrations = await saintCalendar.getSaintCelebrationsForDate(
+          date: d,
+          optionalCelebrations: memorials.getOptionalCelebrations(d),
+        );
+        for (final celebration in celebrations) {
+          final profile =
+              await SaintProfileService.instance.findByCelebrationId(
+                celebration.id,
+              ) ??
+              await SaintProfileService.instance.findCuratedByTitle(
+                celebration.title,
+              );
+          final normalizedTitle = SaintProfileService.normalizeTitle(
+            celebration.title,
+          );
+          if (dedupeKeys.contains(celebration.id) ||
+              dedupeKeys.contains(normalizedTitle) ||
+              (profile != null && dedupeKeys.contains(profile.id))) {
+            continue;
+          }
+          dedupeKeys.add(celebration.id);
+          dedupeKeys.add(normalizedTitle);
+          if (profile != null) dedupeKeys.add(profile.id);
+          events.add(
+            _FeastEvent(
+              date: d,
+              title: celebration.title,
+              rank: _rankLabel(celebration.rank),
+              saintProfileId: profile?.id,
+              liturgicalColor: _colorValue(celebration.color),
             ),
           );
         }
@@ -346,6 +454,33 @@ class FeastReminderService {
 
     return events;
   }
+
+  bool _canObserveMemorialsOn(
+    DateTime date,
+    String? principalRank,
+    OptionalMemorialService memorials,
+  ) {
+    if (date.weekday == DateTime.sunday || memorials.isSuppressedDate(date)) {
+      return false;
+    }
+    return principalRank != 'Solemnity' && principalRank != 'Feast';
+  }
+
+  String _rankLabel(CelebrationRank rank) => switch (rank) {
+    CelebrationRank.solemnity => 'Solemnity',
+    CelebrationRank.feast => 'Feast',
+    CelebrationRank.obligatoryMemorial => 'Memorial',
+    CelebrationRank.optionalMemorial => 'Optional Memorial',
+  };
+
+  Color _colorValue(LiturgicalColor color) => switch (color) {
+    LiturgicalColor.green => const Color(0xFF228B22),
+    LiturgicalColor.purple => const Color(0xFF6B3FA0),
+    LiturgicalColor.red => const Color(0xFFB22222),
+    LiturgicalColor.pink => const Color(0xFFFF69B4),
+    LiturgicalColor.white => const Color(0xFFF5F5F5),
+    LiturgicalColor.gold => const Color(0xFFFFD700),
+  };
 
   @visibleForTesting
   Future<List<FeastReminderPreviewEvent>> buildPreviewEventsForTesting(
@@ -360,6 +495,7 @@ class FeastReminderService {
             date: event.date,
             title: event.title,
             rank: event.rank,
+            saintProfileId: event.saintProfileId,
           ),
         )
         .toList();
@@ -663,9 +799,13 @@ class FeastReminderService {
           androidScheduleMode: androidScheduleMode,
           uiLocalNotificationDateInterpretation:
               UILocalNotificationDateInterpretation.absoluteTime,
-          payload:
-              'feast:${event.date.toIso8601String()}:'
-              '${occurrence.dayBefore ? 'eve' : 'day'}',
+          payload: FeastReminderPayload(
+            celebrationDate: event.date,
+            title: event.title,
+            rank: event.rank,
+            saintProfileId: event.saintProfileId,
+            dayBefore: occurrence.dayBefore,
+          ).encode(),
         );
         scheduled++;
         scheduledThrough = occurrence.scheduledTime;

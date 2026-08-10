@@ -1,20 +1,24 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 
 import '../models/saint_profile.dart';
+import '../models/saint_profile_source.dart';
 import 'optional_memorial_service.dart';
+import 'saint_profile_repository.dart';
 
 class SaintProfileService {
-  static final SaintProfileService instance = SaintProfileService._();
+  static final SaintProfileService instance = SaintProfileService._(
+    SaintProfileRepository(),
+  );
 
-  SaintProfileService._();
+  SaintProfileService._(this._repository);
 
-  static const String _assetPath = 'assets/data/saints_profiles.json';
+  @visibleForTesting
+  SaintProfileService.forTesting(this._repository);
 
+  final SaintProfileRepository _repository;
   List<SaintProfile>? _profiles;
   Map<String, SaintProfile>? _byCelebrationId;
+  Map<String, SaintProfile>? _byId;
 
   Future<SaintProfile?> findForCelebration(
     OptionalCelebration celebration,
@@ -47,6 +51,29 @@ class SaintProfileService {
     return byId[celebrationId];
   }
 
+  Future<SaintProfile?> findById(String profileId) async {
+    final cached = _byId;
+    if (cached != null) return cached[profileId];
+    final profiles = await loadProfiles();
+    final index = {for (final profile in profiles) profile.id: profile};
+    _byId = index;
+    return index[profileId];
+  }
+
+  Future<SaintProfile?> findCuratedByTitle(String title) async {
+    final normalizedTitle = normalizeTitle(title);
+    if (normalizedTitle.isEmpty) return null;
+    for (final profile in await loadProfiles()) {
+      if (normalizeTitle(profile.name) == normalizedTitle ||
+          profile.alternateNames.any(
+            (name) => normalizeTitle(name) == normalizedTitle,
+          )) {
+        return profile;
+      }
+    }
+    return null;
+  }
+
   SaintProfile buildFallbackProfile(OptionalCelebration celebration) {
     return SaintProfile(
       id: celebration.id,
@@ -59,7 +86,20 @@ class SaintProfileService {
           'This feast or memorial is included in the app calendar. A fuller '
           'curated biography has not yet been added offline.',
       feastDates: [_formatFeastDate(celebration.month, celebration.day)],
-      sources: const ['Catholic Daily calendar'],
+      sources: const [
+        SaintSource(
+          id: 'catholic-daily-calendar',
+          title: 'Catholic Daily calendar',
+          authorOrInstitution: 'Catholic Daily',
+          publisher: 'Catholic Daily',
+          url: null,
+          publicationDate: null,
+          accessedDate: null,
+          tier: SaintSourceTier.discovery,
+          reuseBasis: 'Internal calendar identity only',
+          supports: ['identity', 'feastDates'],
+        ),
+      ],
     );
   }
 
@@ -67,10 +107,10 @@ class SaintProfileService {
     final cached = _profiles;
     if (cached != null) return cached;
 
-    final source = await rootBundle.loadString(_assetPath);
-    final parsed = parseProfiles(source);
+    final parsed = await _repository.loadProfiles();
     _profiles = parsed;
     _byCelebrationId = null;
+    _byId = null;
     return parsed;
   }
 
@@ -90,12 +130,7 @@ class SaintProfileService {
 
   @visibleForTesting
   static List<SaintProfile> parseProfiles(String source) {
-    final decoded = jsonDecode(source);
-    if (decoded is! List) return const [];
-    return decoded
-        .whereType<Map<String, dynamic>>()
-        .map(SaintProfile.fromJson)
-        .toList(growable: false);
+    return SaintProfileRepository.parseLegacyProfiles(source);
   }
 
   static String normalizeTitle(String value) {

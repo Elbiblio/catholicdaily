@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 2,
+  "id": "mary_mother_of_god",
+  "profileKind": "marian",
+  "celebrationIds": ["mary_mother_of_god", "mary_the_holy_mother_of_god"],
+  "name": "Mary, the Holy Mother of God",
+  "alternateNames": ["Theotokos"],
+  "ecclesialTitle": "Mother of God",
+  "lifeSpan": "",
+  "lifeLength": "",
+  "vocation": "Mother of Jesus and disciple of her Son",
+  "places": ["Nazareth", "Bethlehem", "Jerusalem"],
+  "patronage": ["the Church", "mothers", "families", "peace"],
+  "symbols": ["Christ Child"],
+  "briefBio": "On the octave of Christmas, the Church honors Mary as Mother of God because the son she bore is one divine person, Jesus Christ, truly God and truly human. Her attentive faith teaches Christians to receive Christ, ponder God's work, and carry his peace into a new year.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Mary%2C_mother_of_Jesus",
+  "wikidataId": "Q345",
+  "feastDates": ["January 1"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {"id":"solemnity-homily-2007","title":"Solemnity of Mary, Mother of God and 40th World Day of Peace","authorOrInstitution":"Pope Benedict XVI","publisher":"The Holy See","url":"https://www.vatican.va/content/benedict-xvi/en/homilies/2007/documents/hf_ben-xvi_hom_20070101_world-day-peace.html","publicationDate":"2007-01-01","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Official liturgical and Christological interpretation; app prose is original","supports":["identity","title","liturgicalMeaning","peace"]},
+    {"id":"catechism-mary-prayer","title":"Catechism of the Catholic Church: The Prayer of the Virgin Mary","authorOrInstitution":"Catholic Church","publisher":"The Holy See","url":"https://www.vatican.va/content/catechism/en/part_four/section_one/chapter_two/article_2.html","publicationDate":"1992","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Official doctrinal source for Mary's faith and prayer; original synthesis","supports":["vocation","discipleship","prayer"]},
+    {"id":"solemnity-homily-1999","title":"Solemnity of Mary, Mother of God","authorOrInstitution":"Pope John Paul II","publisher":"The Holy See","url":"https://www.vatican.va/content/john-paul-ii/en/homilies/1999/documents/hf_jp-ii_hom_01011999.html","publicationDate":"1999-01-01","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Official source for the January 1 celebration and Luke 2 theme; original synthesis","supports":["feastDate","pondering","newYear"]}
+  ],
+  "editorial": {"state":"published","researcher":"Catholic Daily editorial research","reviewer":"Catholic Daily factual and theological review","reviewedAt":"2026-08-10","revision":1,"warnings":[]},
+  "whyItMatters": "The title Mother of God protects the truth about Jesus: the child born of Mary is not partly divine or merely inspired, but God the Son made flesh. Mary also shows what receiving Christ looks like in a human life: consent, attention, courage, and a heart that keeps returning to God's action.",
+  "oneMinuteSummary": "January 1 closes the octave of Christmas by looking again at Jesus with Mary. The Church calls her Mother of God, or Theotokos, not because she is the source of Christ's divinity, but because the one she conceived and bore is the eternal Son who truly became human. The Gospel presents her receiving the shepherds' testimony and pondering these events in her heart. Her faith was active rather than passive: she welcomed God's word, bore Christ, cared for him, and remained among his disciples. The day is also observed as the World Day of Peace, joining contemplation of the Incarnation to the work of peace. Mary directs attention to her Son and teaches believers to enter a new year by receiving Christ before trying to control every outcome.",
+  "life": {
+    "sections": [
+      {"heading":"A title centered on Christ","body":"Calling Mary Mother of God confesses the identity of Jesus. She gave birth according to his humanity to the one person who is God the Son. The title neither makes Mary divine nor places her before God; it safeguards the Incarnation and leads worship toward Christ.","sourceIds":["solemnity-homily-2007"]},
+      {"heading":"The disciple who pondered","body":"Luke shows Mary receiving events she could not fully master and keeping them in her heart. Her prayerful attention did not remove risk, travel, misunderstanding, or sorrow. It formed a faithful response: she welcomed God's word, acted on it, and continued with Jesus and his Church.","sourceIds":["catechism-mary-prayer","solemnity-homily-1999"]}
+    ],
+    "gospelTheme": "God comes close in Jesus Christ, and faith receives him with Mary's attentive yes before carrying his peace to others.",
+    "struggle": "Mary's vocation unfolded without complete explanations and amid vulnerability, displacement, misunderstanding, and eventual sorrow.",
+    "response": "She consented to God's word, cared for Jesus in ordinary life, pondered what she did not yet understand, and remained faithful to her Son."
+  },
+  "virtues": [
+    {"name":"Contemplative attention","evidence":"Mary did not treat the shepherds' message as noise; she kept and pondered what God was revealing through events.","imitation":"Pause before reacting today. Hold one confusing event before God and ask what response is faithful, loving, and true.","sourceIds":["solemnity-homily-1999","catechism-mary-prayer"]},
+    {"name":"Christ-centered availability","evidence":"Her motherhood and discipleship were a free human cooperation with God's initiative, always ordered toward Jesus.","imitation":"Make one clear yes to Christ concrete: reconcile, serve, pray, or complete a neglected duty with love.","sourceIds":["solemnity-homily-2007","catechism-mary-prayer"]}
+  ],
+  "practice": {"spiritual":"Read Luke 2:16-21 slowly. Sit in silence for two minutes and repeat: 'Jesus, let me receive you before I rush into this year.'","action":"Begin one work of peace today: apologize without self-defense, end a harmful rumor, or contact someone who has been isolated."},
+  "reflectionQuestions": ["What am I trying to control instead of prayerfully receiving from God?", "Where can my yes to Christ become peace for another person today?"],
+  "scripture": {"reference":"Luke 2:19","connection":"Mary's pondering is a school of discipleship: faith pays attention to God's action and allows that attention to shape a response."},
+  "prayer": "God our Father, through Mary you gave the world your eternal Son. Keep us faithful to Jesus, attentive to your word, and willing to carry his peace into our homes and communities. Through the prayers of the Holy Mother of God, make our choices generous and our hearts steady. Through Christ our Lord. Amen."
+}

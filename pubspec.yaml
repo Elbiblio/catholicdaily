@@ -115,6 +115,8 @@ flutter:
     - assets/data/lectionary_text_overrides.json
     - assets/data/local_lectionary_extract_text_sources.json
     - assets/data/saints_profiles.json
+    - assets/data/saints/
+    - assets/data/saints/profiles/
     - assets/data/prayer_of_faithful_mapped.csv
     - assets/data/cpl_prayer_faithful_spanish.csv
     - assets/incipit_rules.csv

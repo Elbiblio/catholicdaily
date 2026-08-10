@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 2,
+  "id": "augustine_zhao_rong",
+  "profileKind": "group",
+  "celebrationIds": ["augustine_zhao_rong", "saint_augustine_zhao_rong_priest_and_companions_martyrs"],
+  "name": "Saint Augustine Zhao Rong, Priest, and Companions, Martyrs",
+  "alternateNames": ["120 Martyrs of China"],
+  "ecclesialTitle": "Martyrs in China",
+  "lifeSpan": "1648-1930",
+  "lifeLength": "",
+  "vocation": "Clergy, religious, and lay witnesses to Christ in China",
+  "places": ["China"],
+  "patronage": ["China", "persecuted Christians", "courage in witness"],
+  "symbols": ["martyr's palm"],
+  "briefBio": "Augustine Zhao Rong, a Chinese soldier converted through the witness of imprisoned Christians and later ordained a priest, represents 120 martyrs killed in different persecutions in China from 1648 to 1930. Most were Chinese, and the group includes women, men, children, clergy, religious, and lay people.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Martyr_Saints_of_China",
+  "wikidataId": "Q552659",
+  "feastDates": ["July 9"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {"id":"official-biography","title":"Augustine Zhao Rong and 119 Companions, Martyrs in China","authorOrInstitution":"Office for the Liturgical Celebrations of the Supreme Pontiff","publisher":"The Holy See","url":"https://www.vatican.va/news_services/liturgy/saints/ns_lit_doc_20001001_zhao-rong-compagni_en.html","publicationDate":"2000","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Official group biography used for identity, chronology, and composition; original app prose","supports":["identity","chronology","members","augustine","martyrdom"]},
+    {"id":"canonization-homily","title":"Canonization of Augustine Zhao Rong and companions","authorOrInstitution":"Pope John Paul II","publisher":"The Holy See","url":"https://www.vatican.va/content/john-paul-ii/en/homilies/2000/documents/hf_jp-ii_hom_20001001_canonization.html","publicationDate":"2000-10-01","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Official ecclesial interpretation of the martyrs' witness; original synthesis","supports":["canonization","faithfulness","china","forgiveness"]},
+    {"id":"roman-calendar","title":"General Roman Calendar: July","authorOrInstitution":"United States Conference of Catholic Bishops","publisher":"USCCB","url":"https://www.usccb.org/prayer-worship/liturgical-year/saints","publicationDate":"","accessedDate":"2026-08-10","tier":2,"reuseBasis":"Episcopal calendar source for the July 9 optional memorial; original prose","supports":["feastDate","liturgicalTitle"]}
+  ],
+  "editorial": {"state":"published","researcher":"Catholic Daily editorial research","reviewer":"Catholic Daily factual and theological review","reviewedAt":"2026-08-10","revision":1,"warnings":[]},
+  "whyItMatters": "This memorial resists reducing Christianity in China to a foreign story. Most of the canonized martyrs were Chinese, and lay people form a large part of the group. Their witness asks how faith can be both deeply rooted in a culture and free enough to resist coercion.",
+  "oneMinuteSummary": "The 120 martyrs commemorated with Augustine Zhao Rong did not die in one event. Their deaths span nearly three centuries, from 1648 to 1930, amid distinct waves of persecution in China. The group includes 87 Chinese faithful and 33 missionaries, with bishops, priests, religious, catechists, parents, workers, and children. Augustine Zhao Rong had served as a soldier and was assigned to escort imprisoned Christians. Their witness led to his conversion; he was later ordained as one of the first Chinese diocesan priests and died from mistreatment in 1815. Other members faced demands to abandon their faith during local and national violence. The memorial should not be used to condemn a people or culture. It honors Chinese Christian courage and the communion created by Christ across nationality, class, age, and vocation.",
+  "life": {
+    "sections": [
+      {"heading":"A communion across centuries","body":"The title gathers 120 distinct people whose martyrdoms occurred between 1648 and 1930. The group is predominantly Chinese and includes many lay believers, some of them very young, alongside clergy, religious, and missionaries. Their unity comes from faith, not from a single political episode.","sourceIds":["official-biography","canonization-homily"]},
+      {"heading":"Augustine's conversion","body":"Augustine Zhao Rong first encountered Christian endurance while serving as a soldier connected with prisoners. Their witness moved him toward Baptism. He later became a diocesan priest and continued ministry under danger until imprisonment and abuse led to his death in 1815.","sourceIds":["official-biography"]}
+    ],
+    "gospelTheme": "Christ creates a family across cultures and gives ordinary believers courage to remain truthful without surrendering love.",
+    "struggle": "The martyrs faced coercion, imprisonment, violence, social pressure, and demands to renounce faith across several historical periods.",
+    "response": "Clergy, religious, adults, and children remained faithful, supported one another, and refused to let persecution turn Christian witness into hatred of China or its people."
+  },
+  "virtues": [
+    {"name":"Courage under coercion","evidence":"Members of the group maintained their Christian identity when authorities or violent movements demanded apostasy.","imitation":"Practice a smaller courage today: state a true conviction calmly, refuse a dishonest shortcut, or stand beside someone being pressured.","sourceIds":["official-biography","canonization-homily"]},
+    {"name":"Witness that awakens faith","evidence":"The endurance of Christian prisoners helped open Augustine Zhao Rong to conversion and eventually priestly service.","imitation":"Let your conduct make faith credible: endure one difficulty without contempt, and explain your hope if someone asks.","sourceIds":["official-biography"]}
+  ],
+  "practice": {"spiritual":"Pray Psalm 27 for Christians who face coercion today, especially in places you rarely hear about. Ask for courage without bitterness.","action":"Learn from a trustworthy source about one persecuted community and support an established relief or religious-freedom organization without spreading sensational claims."},
+  "reflectionQuestions": ["Where am I tempted to hide or distort the truth because belonging feels costly?", "Does my defense of faith preserve love for the people and culture around me?"],
+  "scripture": {"reference":"Romans 8:35-37","connection":"Persecution can wound and kill, but it cannot sever the believer from the love of Christ or make hatred the final response."},
+  "prayer": "God of every people and nation, you strengthened Saint Augustine Zhao Rong and his companions to remain faithful through persecution. Protect all who are coerced for conscience, give prisoners courage and families consolation, and keep our witness truthful, peaceful, and free from hatred. Make the Church in China flourish in wisdom and charity. Through Christ our Lord. Amen."
+}

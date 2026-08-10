@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 2,
+  "id": "maximilian_mary_kolbe",
+  "profileKind": "individual",
+  "celebrationIds": ["maximilian_mary_kolbe", "saint_maximilian_mary_kolbe_priest_and_martyr"],
+  "name": "Saint Maximilian Mary Kolbe",
+  "alternateNames": ["Raymond Kolbe"],
+  "ecclesialTitle": "Conventual Franciscan priest and martyr of charity",
+  "lifeSpan": "1894-1941",
+  "lifeLength": "47 years",
+  "vocation": "Franciscan priest, publisher, missionary, and martyr",
+  "places": ["Poland", "Japan", "Auschwitz"],
+  "patronage": ["prisoners", "families", "journalists", "people affected by addiction"],
+  "symbols": ["Franciscan habit", "martyr's palm", "two crowns"],
+  "briefBio": "Maximilian Kolbe was a Polish Conventual Franciscan who used print and missionary work to spread the Gospel and Marian devotion. Imprisoned by Nazi Germany at Auschwitz, he volunteered to take the place of another prisoner selected to die and was killed in 1941.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Maximilian_Kolbe",
+  "wikidataId": "Q153850",
+  "feastDates": ["August 14"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {"id":"canonization-homily","title":"Canonization of Maximilian Mary Kolbe","authorOrInstitution":"Pope John Paul II","publisher":"The Holy See","url":"https://www.vatican.va/content/john-paul-ii/it/homilies/1982/documents/hf_jp-ii_hom_19821010_canonizzazione-kolbe.html","publicationDate":"1982-10-10","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Official canonization interpretation of his death as martyrdom of charity; original synthesis","supports":["martyrdom","auschwitz","charity","canonization"]},
+    {"id":"kolbe-center-biography","title":"Biography of Saint Maximilian Kolbe","authorOrInstitution":"National Shrine of St. Maximilian Kolbe","publisher":"Marytown","url":"https://saintmaximiliankolbe.com/biography/","publicationDate":"","accessedDate":"2026-08-10","tier":2,"reuseBasis":"Franciscan shrine biography used for chronology and ministries; original app prose","supports":["identity","education","publishing","mission","arrest"]},
+    {"id":"franciscan-media","title":"Saint Maximilian Mary Kolbe","authorOrInstitution":"Franciscan Media","publisher":"Franciscan Media","url":"https://www.franciscanmedia.org/saint-of-the-day/saint-maximilian-mary-kolbe/","publicationDate":"","accessedDate":"2026-08-10","tier":2,"reuseBasis":"Franciscan secondary source for feast and biographical cross-check; original prose","supports":["feastDate","lifeSpan","franciscanVocation","martyrdom"]}
+  ],
+  "editorial": {"state":"published","researcher":"Catholic Daily editorial research","reviewer":"Catholic Daily factual and theological review","reviewedAt":"2026-08-10","revision":1,"warnings":[]},
+  "whyItMatters": "Kolbe's final self-offering was not an isolated heroic impulse. It grew from years of prayer, disciplined community life, communication, mission, and risky care for others. His story asks us to train daily for charity before a crisis chooses the cost.",
+  "oneMinuteSummary": "Born Raymond Kolbe in 1894, Maximilian entered the Conventual Franciscans, became a priest, and developed an energetic apostolate of Marian spirituality and evangelization through print. He founded communities in Poland and Japan and returned to Poland before the Second World War. His friary sheltered refugees, including Jews, while its publications opposed Nazi ideology. Arrested by the Gestapo in 1941, he was sent to Auschwitz. After a prisoner escaped, camp authorities selected men for death by starvation. Franciszek Gajowniczek cried out for his wife and children; Kolbe offered himself in the man's place. He supported the condemned men through prayer until, as one of the last alive, he was killed by injection on August 14. The Church calls him a martyr of charity: his death reveals Christlike love, while never making the murderous camp system anything less than evil.",
+  "life": {
+    "sections": [
+      {"heading":"Formation for mission","body":"Kolbe's life combined Franciscan vows, priesthood, study, organization, publishing, and missionary work. His Marian devotion aimed at belonging completely to Christ and making the Gospel accessible through the communications tools of his time.","sourceIds":["kolbe-center-biography","franciscan-media"]},
+      {"heading":"A free gift inside coercion","body":"At Auschwitz, prisoners had virtually no control. Kolbe's offer to replace Franciszek Gajowniczek was therefore a rare free act within a system built to erase freedom. His choice did not justify the execution; it defended another person's life and dignity at the cost of his own.","sourceIds":["canonization-homily","kolbe-center-biography"]}
+    ],
+    "gospelTheme": "Love becomes credible through freely chosen self-gift, formed in ordinary fidelity and opposed to every system that treats persons as expendable.",
+    "struggle": "War, totalitarian violence, imprisonment, starvation, and the temptation to preserve oneself at another's expense formed the final setting of his witness.",
+    "response": "He prepared through prayer and mission, sheltered people at risk, encouraged fellow prisoners, and freely offered his life for a husband and father."
+  },
+  "virtues": [
+    {"name":"Prepared self-gift","evidence":"His final act followed years spent offering intellect, media skill, community leadership, and missionary energy to Christ and others.","imitation":"Practice costly love before a crisis: give focused time, share a skill, or accept an inconvenience that protects another person's good.","sourceIds":["kolbe-center-biography","canonization-homily"]},
+    {"name":"Hope under dehumanization","evidence":"In the starvation cell he remained a priest and brother to the condemned, helping sustain prayer where the camp intended isolation and despair.","imitation":"When a system reduces someone to a label or number, use their name, hear their story, and defend one concrete need.","sourceIds":["canonization-homily","kolbe-center-biography"]}
+  ],
+  "practice": {"spiritual":"Pray John 15:9-13 and ask Christ to show you the next small cost of love, not an imagined dramatic sacrifice.","action":"Protect a family or prisoner in a practical way: assist a caregiver, support a prison ministry, or intervene safely when someone is being dehumanized."},
+  "reflectionQuestions": ["What daily discipline is forming me to choose love when it becomes costly?", "Who around me is being treated as expendable, and what protection can I offer?"],
+  "scripture": {"reference":"John 15:13","connection":"Kolbe's self-offering makes visible Jesus' teaching that the greatest love gives life for another, while the crime that created the choice remains condemned."},
+  "prayer": "God of steadfast love, you formed Saint Maximilian Kolbe for a final act of courageous charity. Make our prayer become service, our skills become instruments of truth, and our freedom become protection for others. Strengthen prisoners, families, and all who face dehumanizing powers. Teach us to give ourselves in the ordinary costs of love. Through Christ our Lord. Amen."
+}

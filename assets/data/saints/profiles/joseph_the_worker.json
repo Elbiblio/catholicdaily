@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 2,
+  "id": "joseph_the_worker",
+  "profileKind": "biblical",
+  "celebrationIds": ["joseph_the_worker", "saint_joseph_the_worker"],
+  "name": "Saint Joseph the Worker",
+  "alternateNames": ["Joseph of Nazareth"],
+  "ecclesialTitle": "Husband of Mary and guardian of the Redeemer",
+  "lifeSpan": "1st century BC-1st century AD",
+  "lifeLength": "",
+  "vocation": "Carpenter, husband, father, and worker",
+  "places": ["Nazareth", "Bethlehem", "Egypt"],
+  "patronage": ["workers", "carpenters", "fathers", "the universal Church"],
+  "symbols": ["carpenter's tools", "lily"],
+  "briefBio": "The Gospels identify Joseph as a righteous man and a carpenter who protected Mary and Jesus, obeyed God's direction, and supported the household of Nazareth. The May 1 memorial reveals ordinary work as service, participation in God's creation, and a claim to human dignity.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Saint_Joseph",
+  "wikidataId": "Q128267",
+  "feastDates": ["May 1"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {"id":"redemptoris-custos","title":"Redemptoris Custos","authorOrInstitution":"Pope John Paul II","publisher":"The Holy See","url":"https://www.vatican.va/content/john-paul-ii/en/apost_exhortations/documents/hf_jp-ii_exh_15081989_redemptoris-custos.html","publicationDate":"1989-08-15","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Official synthesis of Gospel testimony about Joseph and work; original app prose","supports":["identity","vocation","work","family"]},
+    {"id":"work-vocation-homily","title":"Work is the vocation of man","authorOrInstitution":"Pope Francis","publisher":"The Holy See","url":"https://www.vatican.va/content/francesco/en/cotidie/2020/documents/papa-francesco-cotidie_20200501_illavoro-primavocazione-delluomo.html","publicationDate":"2020-05-01","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Official reflection on work, dignity, fair pay, and rest; original synthesis","supports":["feastDate","dignityOfWork","justice"]},
+    {"id":"audience-2013","title":"General Audience of 1 May 2013","authorOrInstitution":"Pope Francis","publisher":"The Holy See","url":"https://www.vatican.va/content/francesco/en/audiences/2013/documents/papa-francesco_20130501_udienza-generale.html","publicationDate":"2013-05-01","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Official pastoral application of Joseph's work; all prose is original","supports":["work","teachingJesus","workerRights"]}
+  ],
+  "editorial": {"state":"published","researcher":"Catholic Daily editorial research","reviewer":"Catholic Daily factual and theological review","reviewedAt":"2026-08-10","revision":1,"warnings":[]},
+  "whyItMatters": "Joseph shows that hidden work can be holy without being exploited or idolized. Work can provide, teach, build, and cooperate with creation; justice requires that it also respect the worker's dignity, fair support, and need for rest.",
+  "oneMinuteSummary": "Scripture gives no speech from Joseph, but it records decisive actions. He accepted Mary, named Jesus, protected the child from danger, returned from Egypt, and established a home in Nazareth. The Gospels call him a carpenter, and Jesus became known as the carpenter's son. Joseph's labor supported the Holy Family and gave Jesus a human apprenticeship in ordinary work. The Church placed his memorial on May 1 to illuminate the world of labor with the Gospel. This celebration does not bless overwork, unsafe conditions, unemployment, or unjust wages. It honors work as service and participation in creation while defending the person who works. Joseph asks us to unite competence with care: do the task honestly, protect those entrusted to us, and resist systems that treat people as disposable tools.",
+  "life": {
+    "sections": [
+      {"heading":"Righteousness expressed in action","body":"Joseph faced decisions he had not planned. Matthew portrays him listening to God's direction and responding through concrete protection: receiving Mary, naming Jesus, leaving for Egypt, and returning when danger passed. His silence is not passivity; it is obedient responsibility.","sourceIds":["redemptoris-custos"]},
+      {"heading":"The workshop at Nazareth","body":"Joseph's trade supported his family and introduced Jesus to human work. Christian tradition therefore sees the workshop of Nazareth as a place where labor, family love, skill, fatigue, and prayer belong together. Work serves the person and the common good; the person must never be sacrificed to production.","sourceIds":["redemptoris-custos","work-vocation-homily","audience-2013"]}
+    ],
+    "gospelTheme": "Faithful work cooperates with God's care when it serves people, protects dignity, and builds a home and society fit for human flourishing.",
+    "struggle": "Joseph carried economic responsibility and family danger while acting with limited information and no public recognition.",
+    "response": "He listened, acted promptly, practiced his trade, protected his family, and let ordinary fidelity become service to Christ."
+  },
+  "virtues": [
+    {"name":"Responsible diligence","evidence":"Joseph's righteousness repeatedly took practical form in work, travel, protection, and care for Mary and Jesus.","imitation":"Choose the most important neglected duty and complete it carefully, without seeking applause.","sourceIds":["redemptoris-custos"]},
+    {"name":"Respect for workers","evidence":"The May 1 tradition links Joseph to the goodness of work and to the demand that employment, pay, and rest honor human dignity.","imitation":"Thank a worker specifically, pay promptly and fairly where you have influence, and refuse language that demeans any honest job.","sourceIds":["work-vocation-homily","audience-2013"]}
+  ],
+  "practice": {"spiritual":"Offer the first focused period of today's work to God. Ask Joseph's intercession for one unemployed, underpaid, unsafe, or exhausted worker by name.","action":"Improve one person's working conditions in a concrete way: share a lead, correct an unpaid obligation, give useful help, or allow proper rest."},
+  "reflectionQuestions": ["Does my way of working serve people, or am I letting productivity reduce people to tools?", "What quiet responsibility is God asking me to carry faithfully today?"],
+  "scripture": {"reference":"Matthew 13:55","connection":"Jesus was known through Joseph's trade, showing that the Son of God entered the ordinary world of human labor and family provision."},
+  "prayer": "God our Creator, you entrusted Jesus and Mary to the faithful care of Saint Joseph. Teach us to work with honesty, skill, and love. Protect those without work, defend those who are exploited, grant fair wages and restorative rest, and make every workplace serve human dignity and the common good. Through Christ our Lord. Amen."
+}

@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 2,
+  "id": "all_saints",
+  "profileKind": "collective",
+  "celebrationIds": ["all_saints"],
+  "name": "All Saints",
+  "alternateNames": ["Solemnity of All Saints"],
+  "ecclesialTitle": "The whole communion of saints in heaven",
+  "lifeSpan": "",
+  "lifeLength": "",
+  "vocation": "The universal call to holiness brought to fulfillment",
+  "places": ["every nation and people"],
+  "patronage": ["the communion of saints", "all Christians seeking holiness"],
+  "symbols": ["innumerable multitude", "martyr's palms", "Beatitudes"],
+  "briefBio": "All Saints celebrates the complete company of people who live with God, including countless faithful disciples whose names are not in the calendar. The feast presents holiness as God's gift and every Christian's vocation, shaped by Jesus in the Beatitudes.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/All_Saints%27_Day",
+  "wikidataId": "Q587",
+  "feastDates": ["November 1"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {"id":"all-saints-homily-2006","title":"Solemnity of All Saints","authorOrInstitution":"Pope Benedict XVI","publisher":"The Holy See","url":"https://www.vatican.va/content/benedict-xvi/en/homilies/2006/documents/hf_ben-xvi_hom_20061101_all-saints.html","publicationDate":"2006-11-01","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Official liturgical interpretation of the unnamed multitude, Beatitudes, and imitation; original synthesis","supports":["identity","unnamedSaints","beatitudes","imitation"]},
+    {"id":"all-saints-homily-2015","title":"Holy Mass on the Solemnity of All Saints","authorOrInstitution":"Pope Francis","publisher":"The Holy See","url":"https://www.vatican.va/content/francesco/en/homilies/2015/documents/papa-francesco_20151101_omelia-ognissanti.html","publicationDate":"2015-11-01","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Official pastoral reading of the Beatitudes as a path to holiness; original prose","supports":["beatitudes","discipleship","holiness"]},
+    {"id":"all-saints-angelus-2010","title":"Angelus on the Solemnity of All Saints","authorOrInstitution":"Pope Benedict XVI","publisher":"The Holy See","url":"https://www.vatican.va/content/benedict-xvi/en/angelus/2010/documents/hf_ben-xvi_ang_20101101_all-saints.html","publicationDate":"2010-11-01","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Official source for holiness as goal and baptismal gift; original synthesis","supports":["communion","baptism","goalOfLife","hope"]}
+  ],
+  "editorial": {"state":"published","researcher":"Catholic Daily editorial research","reviewer":"Catholic Daily factual and theological review","reviewedAt":"2026-08-10","revision":1,"warnings":[]},
+  "whyItMatters": "All Saints makes holiness both larger and nearer. The saints are not a celebrity class competing for attention; they are the fruit of Christ's grace in every culture and vocation. Countless holy lives remain unknown publicly but fully known to God.",
+  "oneMinuteSummary": "On November 1 the Church rejoices in all who have reached communion with God: canonized saints and an innumerable multitude whose fidelity was never publicly recorded. The feast looks toward the crowd from every nation in Revelation and listens to Jesus' Beatitudes. These are not eight personality types but the shape of Christ's own life: poverty of spirit, mercy, purity of heart, peacemaking, hunger for justice, endurance in suffering, and hope in God's kingdom. Catholics honor saints because God's grace is visible in them and because their communion encourages the Church still on pilgrimage. The feast does not deny their sins, differences, or unfinished earthly circumstances. It announces that holiness is possible only through Christ and genuinely possible in ordinary family, work, community, consecrated, and hidden lives.",
+  "life": {
+    "sections": [
+      {"heading":"The known and the hidden","body":"The liturgy celebrates far more people than the official calendar can name. This protects holiness from celebrity logic: a caregiver, worker, child, elder, martyr, or repentant sinner may be unknown to history yet known completely by God.","sourceIds":["all-saints-homily-2006","all-saints-angelus-2010"]},
+      {"heading":"The face of Christ in the Beatitudes","body":"Jesus is the blessed one whose life fulfills the Beatitudes. Saints share his holiness by grace as they become merciful, pure-hearted, hungry for justice, peaceful, humble, and steadfast. The path is demanding, but it is not reserved for specialists.","sourceIds":["all-saints-homily-2006","all-saints-homily-2015"]}
+    ],
+    "gospelTheme": "Christ gives his own holiness to a diverse people and forms them through the Beatitudes for communion with God.",
+    "struggle": "Ordinary believers face sin, discouragement, obscurity, suffering, and the false belief that holiness belongs only to exceptional personalities.",
+    "response": "The saints received grace, repented, practiced the Beatitudes in their circumstances, supported one another, and persevered toward God."
+  },
+  "virtues": [
+    {"name":"Everyday holiness","evidence":"The feast includes innumerable faithful people from every time and nation, many never publicly recognized during life.","imitation":"Choose one hidden act of fidelity that only God may notice: forgive, care, pray, tell the truth, or complete a duty with love.","sourceIds":["all-saints-homily-2006","all-saints-angelus-2010"]},
+    {"name":"Beatitude-shaped hope","evidence":"The Church presents the Beatitudes as Christ's own features and the path by which disciples share his blessedness.","imitation":"Select the Beatitude that most challenges you and translate it into one observable choice before the day ends.","sourceIds":["all-saints-homily-2006","all-saints-homily-2015"]}
+  ],
+  "practice": {"spiritual":"Read Matthew 5:1-12 and thank God for three holy influences, including one person who will probably never be canonized.","action":"Honor hidden holiness: encourage a quiet caregiver or faithful worker, and imitate one concrete good you have seen in that person."},
+  "reflectionQuestions": ["What false image of holiness makes me think it is not possible in my actual life?", "Which Beatitude is Christ inviting me to practice in one concrete relationship today?"],
+  "scripture": {"reference":"Revelation 7:9","connection":"The multitude from every nation shows holiness as a vast, diverse communion gathered by God, not an exclusive spiritual elite."},
+  "prayer": "Holy God, you gather an immense family from every nation and way of life. Through the prayers and example of all the saints, free us from discouragement and teach us the Beatitudes of Jesus. Make us merciful, truthful, pure of heart, hungry for justice, and courageous in peace, until we rejoice with you forever. Through Christ our Lord. Amen."
+}

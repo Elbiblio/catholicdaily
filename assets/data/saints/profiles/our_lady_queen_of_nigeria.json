@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 2,
+  "id": "our_lady_queen_of_nigeria",
+  "profileKind": "marian",
+  "celebrationIds": ["our_lady_queen_of_nigeria"],
+  "name": "Our Lady, Queen and Patroness of Nigeria",
+  "alternateNames": ["Our Lady, Queen of Nigeria"],
+  "ecclesialTitle": "Queen and Patroness of Nigeria",
+  "lifeSpan": "",
+  "lifeLength": "",
+  "vocation": "Mary honored as mother, intercessor, and model of discipleship for Nigeria",
+  "places": ["Nigeria"],
+  "patronage": ["Nigeria", "peace", "justice", "national unity"],
+  "symbols": ["crown", "map of Nigeria"],
+  "briefBio": "On October 1, Nigerian Catholics celebrate Mary as Queen and Patroness of Nigeria, recalling the bishops' dedication of the newly independent nation to her maternal care in 1960. The solemnity turns prayer for the nation into a call to imitate Mary's faith through justice, peace, unity, and service.",
+  "feastDates": ["October 1"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {"id":"umuahia-homily","title":"Reflection for the Solemnity of Our Lady Queen and Patroness of Nigeria","authorOrInstitution":"Father Francis Onwunali","publisher":"Catholic Diocese of Umuahia","url":"https://www.umuahiadiocese.org/fullhomilies?sn=60","publicationDate":"2022-10-01","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Official diocesan source for the 1960 dedication, date, rank, and justice-peace themes; original synthesis","supports":["dedication1960","feastDate","solemnity","peace","justice"]},
+    {"id":"kaigama-address","title":"National Marian Celebration and Rededication of Nigeria to the Immaculate Heart of Mary","authorOrInstitution":"Archbishop Ignatius Kaigama","publisher":"Archbishop Ignatius Kaigama","url":"https://ignatiuskaigama.com/national-marian-celebration-rededication-nigeria-immaculate-heart-mary/","publicationDate":"2017","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Nigerian episcopal address used for the title's national pastoral meaning and Marian virtues; original prose","supports":["nationalCelebration","marianModel","unity","service"]},
+    {"id":"warri-reflection","title":"Mary Queen and Patroness of Nigeria","authorOrInstitution":"Father Jude Igho","publisher":"Catholic Diocese of Warri","url":"https://warridiocese.org/mary-queen-and-patroness-of-nigeria/","publicationDate":"","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Official diocesan cross-check for title and October 1 observance; original synthesis","supports":["title","patronage","feastDate","discipleship"]}
+  ],
+  "editorial": {"state":"published","researcher":"Catholic Daily editorial research","reviewer":"Catholic Daily factual and theological review","reviewedAt":"2026-08-10","revision":1,"warnings":[]},
+  "whyItMatters": "This Nigerian solemnity refuses to separate prayer for the nation from responsibility within it. Mary's queenship participates in Christ's reign of truth and service. Entrusting Nigeria to her intercession should form citizens who resist corruption, ethnic and religious contempt, violence, and indifference.",
+  "oneMinuteSummary": "Nigeria became independent on October 1, 1960. Nigerian Catholic sources record that the nation's bishops dedicated the country to the Blessed Virgin Mary as Queen, Patroness, and Mother of Nigeria. The local Church celebrates the title as a solemnity each October 1, when the universal calendar ordinarily keeps Saint Therese of Lisieux. The celebration is not a claim that Mary replaces Christ or grants political success automatically. Her queenship depends on Jesus, and her Gospel pattern is humble, courageous discipleship: receiving God's word, attending to human need, and directing people to her Son. In a nation of many ethnic groups, regions, and religions, devotion must become prayer and work for justice, safety, honest public service, respect across differences, and care for families harmed by violence or poverty.",
+  "life": {
+    "sections": [
+      {"heading":"A dedication at independence","body":"The October 1 solemnity remembers the Nigerian bishops' dedication of the country to Mary's maternal care in 1960. The date joins gratitude for national freedom to examination of how that freedom serves truth, human dignity, and the common good.","sourceIds":["umuahia-homily","warri-reflection"]},
+      {"heading":"Patronage that forms citizens","body":"Nigerian pastoral teaching presents Mary as a model of faith, humility, social sensitivity, care, and intercession. Authentic devotion therefore moves beyond slogans into peaceful action, honest work, solidarity across ethnic and religious lines, and hope centered on Christ.","sourceIds":["kaigama-address","umuahia-homily"]}
+    ],
+    "gospelTheme": "Mary's yes to God becomes a pattern for receiving Christ and serving the peace, justice, unity, and dignity of the whole human family.",
+    "struggle": "Nigeria's gifts coexist with corruption, poverty, insecurity, political and religious violence, ethnic rivalry, and discouragement about the common good.",
+    "response": "The solemnity calls believers to sustained intercession, Marian discipleship, truthful citizenship, reconciliation, and concrete care rather than passive religious sentiment."
+  },
+  "virtues": [
+    {"name":"Hopeful public responsibility","evidence":"The dedication joins prayer for Nigeria to the nation's independence and the continuing work of building justice and peace.","imitation":"Perform one civic duty honestly today and refuse one small act of bribery, favoritism, misinformation, or public neglect.","sourceIds":["umuahia-homily","kaigama-address"]},
+    {"name":"Unity without erasure","evidence":"Mary's maternal patronage is invoked for a diverse nation, directing Christians toward care that crosses ethnic, regional, and social boundaries.","imitation":"Listen to and assist someone outside your usual ethnic, regional, political, or economic circle without turning the encounter into debate.","sourceIds":["kaigama-address","warri-reflection"]}
+  ],
+  "practice": {"spiritual":"Pray one decade of the Rosary for Nigeria, naming peace, honest leadership, victims of violence, and young people seeking a future.","action":"Choose one nation-building act: verify before forwarding news, help a displaced or struggling family, support peaceful local service, or complete a public responsibility honestly."},
+  "reflectionQuestions": ["Where does my private devotion need to become honest citizenship and service?", "Which prejudice or rivalry keeps me from seeking the good of all Nigerians?"],
+  "scripture": {"reference":"John 2:5","connection":"Mary directs servants to Jesus and to obedient action; national devotion is genuine when it leads believers to do what Christ teaches."},
+  "prayer": "God of all peoples, we thank you for Nigeria and entrust her to you through the prayers of Mary, our Queen and Patroness. Protect every community, comfort victims of violence, convert corrupt hearts, guide leaders in justice, and give citizens courage for honest service. Heal ethnic and religious hatred, strengthen families, and make us one in seeking the common good. Through Christ our Lord. Amen."
+}

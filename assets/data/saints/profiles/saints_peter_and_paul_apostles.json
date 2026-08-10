@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 2,
+  "id": "saints_peter_and_paul_apostles",
+  "profileKind": "group",
+  "celebrationIds": ["saints_peter_and_paul_apostles"],
+  "name": "Saints Peter and Paul, Apostles",
+  "alternateNames": ["Apostles of Rome"],
+  "ecclesialTitle": "Apostles and martyrs",
+  "lifeSpan": "1st century",
+  "lifeLength": "",
+  "vocation": "Apostolic witnesses to Christ",
+  "places": ["Galilee", "Jerusalem", "Antioch", "Rome"],
+  "patronage": ["Rome", "missionaries", "evangelization", "Christian unity"],
+  "symbols": ["keys", "sword", "book"],
+  "briefBio": "Peter, a Galilean fisherman called to shepherd Christ's flock, and Paul, a former persecutor sent to the nations, were very different apostles united by faith in Jesus and martyrdom at Rome. Their shared feast makes communion and mission inseparable.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Feast_of_Saints_Peter_and_Paul",
+  "feastDates": ["June 29"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {"id":"homily-2020","title":"Solemnity of Saints Peter and Paul","authorOrInstitution":"Pope Francis","publisher":"The Holy See","url":"https://www.vatican.va/content/francesco/en/homilies/2020/documents/papa-francesco_20200629_omelia-pallio.html","publicationDate":"2020-06-29","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Official interpretation of unity and prophecy; original app prose","supports":["identity","unity","mission","differences"]},
+    {"id":"homily-2005","title":"Solemnity of Saints Peter and Paul","authorOrInstitution":"Pope Benedict XVI","publisher":"The Holy See","url":"https://www.vatican.va/content/benedict-xvi/en/homilies/2005/documents/hf_ben-xvi_hom_20050629_sts-peter-paul.html","publicationDate":"2005-06-29","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Official source for apostolicity, catholicity, Rome, and common witness; original synthesis","supports":["rome","apostolicity","catholicity","witness"]},
+    {"id":"homily-1999","title":"Solemnity of Saints Peter and Paul","authorOrInstitution":"Pope John Paul II","publisher":"The Holy See","url":"https://www.vatican.va/content/john-paul-ii/en/homilies/1999/documents/hf_jp-ii_hom_29061999.html","publicationDate":"1999-06-29","accessedDate":"2026-08-10","tier":1,"reuseBasis":"Official source for Peter's confession, Paul's mission, and shared Roman feast; original synthesis","supports":["peter","paul","martyrdom","feast"]}
+  ],
+  "editorial": {"state":"published","researcher":"Catholic Daily editorial research","reviewer":"Catholic Daily factual and theological review","reviewedAt":"2026-08-10","revision":1,"warnings":[]},
+  "whyItMatters": "Peter and Paul prove that Christian unity is not sameness. Grace did not erase their histories or temperaments; it made their differences serve one Lord and one Gospel. Their failures also show that mission belongs to converted sinners, not flawless heroes.",
+  "oneMinuteSummary": "Simon Peter left his nets to follow Jesus, confessed him as Messiah, failed through denial, and was restored to shepherd Christ's flock. Paul had persecuted Christians before encountering the risen Jesus and becoming an apostle to the nations. Scripture does not hide tension between them, including Paul's public correction of Peter at Antioch. Yet the Church venerates them together. Both gave authoritative witness to Christ, carried the Gospel beyond familiar boundaries, and were martyred in Rome. Peter's pastoral ministry and Paul's missionary reach are not competing brands; they belong to one apostolic Church. Their feast asks Christians to refuse personality cults, receive correction, return after failure, and cooperate across real differences so that the world can encounter Jesus rather than our factions.",
+  "life": {
+    "sections": [
+      {"heading":"Two lives redirected by mercy","body":"Peter's denial and Paul's persecution of Christians are part of the apostolic record. Neither man created a holy past for himself. Christ met, corrected, and commissioned each one, showing that repentance can become responsibility rather than permanent disqualification.","sourceIds":["homily-1999","homily-2020"]},
+      {"heading":"Different missions, one witness","body":"Peter served the unity and pastoral care of the Church; Paul carried the Gospel forcefully among the nations. They sometimes disagreed, yet remained brothers in the one Lord. Ancient Roman tradition remembers both as martyrs, and the June 29 solemnity joins their witness.","sourceIds":["homily-2020","homily-2005","homily-1999"]}
+    ],
+    "gospelTheme": "The risen Christ restores sinners, gives different gifts, and draws them into a communion whose purpose is courageous witness.",
+    "struggle": "Fear, past wrongdoing, sharp disagreement, imprisonment, and persecution tested both apostles and the unity of the early Church.",
+    "response": "They accepted mercy, received correction, preached beyond comfortable boundaries, and gave their lives in witness to Christ."
+  },
+  "virtues": [
+    {"name":"Repentant courage","evidence":"Peter returned after denial and Paul allowed his former violence to be judged and redirected by Christ.","imitation":"Name one failure honestly, make the needed repair, and take the next faithful responsibility instead of hiding in shame.","sourceIds":["homily-1999","homily-2020"]},
+    {"name":"Unity across difference","evidence":"Their vocations, audiences, and temperaments differed, yet their witness belonged to one Church and one Gospel.","imitation":"Work today with a faithful person whose style differs from yours; define the shared good before debating preferences.","sourceIds":["homily-2020","homily-2005"]}
+  ],
+  "practice": {"spiritual":"Pray for the unity and missionary courage of your parish. Read Matthew 16:13-19 and 2 Timothy 4:6-8, noticing the grace at work in two different apostles.","action":"Repair one unnecessary division: contact the person directly, listen without caricature, and agree on one concrete good you can pursue together."},
+  "reflectionQuestions": ["Do I let an old failure keep me from a responsibility Christ may still be giving me?", "Which difference am I treating as a rivalry when it could serve a shared mission?"],
+  "scripture": {"reference":"2 Timothy 4:17","connection":"Paul's confidence rested not in self-sufficiency but in the Lord who stood by him and strengthened the proclamation of the Gospel."},
+  "prayer": "Lord Jesus Christ, you restored Peter and transformed Paul, then sent them to bear one Gospel. Heal our divisions, free us from rivalry, and give us courage to repent, receive correction, and speak your truth with love. Make our different gifts serve your Church and those who have not yet heard your hope. Amen."
+}
