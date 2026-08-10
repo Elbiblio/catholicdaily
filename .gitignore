@@ -15,6 +15,7 @@ node_modules
 web/
 linux/
 recycle_bin/
+.worktrees/
 
 # IntelliJ related
 *.iml
