@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 2,
+  "id": "blaise_of_sebaste",
+  "profileKind": "individual",
+  "celebrationIds": [
+    "blaise_of_sebaste",
+    "saint_blaise_bishop_and_martyr"
+  ],
+  "name": "Saint Blaise",
+  "alternateNames": ["Saint Blasius"],
+  "ecclesialTitle": "Bishop and martyr",
+  "lifeSpan": "early 4th century",
+  "lifeLength": "",
+  "vocation": "Bishop of Sebaste and witness to Christ",
+  "places": ["Sebaste in ancient Armenia"],
+  "patronage": ["people with ailments of the throat"],
+  "symbols": ["crossed candles"],
+  "briefBio": "Blaise is remembered as an early fourth-century bishop of Sebaste who was martyred for faith in Christ. The details of his life come mostly from later legendary Acts, including the story behind the Church's traditional blessing of throats, so this profile distinguishes the ancient witness from the later devotion.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Saint_Blaise",
+  "wikidataId": "Q151967",
+  "feastDates": ["February 3"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "usccb-memorial",
+      "title": "Optional Memorial of Saint Blaise, Bishop and Martyr",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/readings/0203-memorial-blase.cfm",
+      "publicationDate": "",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official liturgical identity, date, and suggested readings checked; no liturgical text copied",
+      "supports": ["identity", "feastDate", "scripture"]
+    },
+    {
+      "id": "new-advent-blaise",
+      "title": "St. Blaise",
+      "authorOrInstitution": "Johann Peter Kirsch",
+      "publisher": "The Catholic Encyclopedia, transcribed by New Advent",
+      "url": "https://www.newadvent.org/cathen/02592a.htm",
+      "publicationDate": "1907",
+      "accessedDate": "2026-08-10",
+      "tier": 2,
+      "reuseBasis": "Historical control for the limited early evidence and later legendary Acts; original synthesis",
+      "supports": ["identity", "life.early_record", "life.legend", "historicalCertainty", "patronage", "symbols"]
+    },
+    {
+      "id": "archny-blessing",
+      "title": "Blessing of Throats on St. Blaise Day",
+      "authorOrInstitution": "Archdiocese of New York",
+      "publisher": "Archdiocese of New York",
+      "url": "https://www.archny.org/posts/blessing-of-throats-on-st-blaise-day",
+      "publicationDate": "2024-02-02",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official diocesan explanation of the legend and present blessing tradition; blessing formula not reproduced",
+      "supports": ["life.legend", "life.blessing", "patronage", "symbols", "practice"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-10",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Blaise's remembrance teaches a disciplined kind of trust. Christians may ask God for help in illness while also facing the limits of the historical record and using the care God makes available through medicine. His feast joins courageous fidelity, compassionate intercession, and responsible action without turning a blessing into a guarantee.",
+  "oneMinuteSummary": "Ancient liturgical memory identifies Blaise as a bishop of Sebaste in ancient Armenia and a martyr, probably from the beginning of the fourth century. Beyond that core, the surviving biographical details depend on later Acts that historians classify as legendary. Those Acts portray him as a physician and tell of his prayer for a child in danger from a fish bone. The story helped shape his association with ailments of the throat and the custom of blessing throats with crossed candles near his February 3 memorial. The Church continues that blessing as prayer for God's care, not as a diagnosis, treatment, or promise that illness will disappear. Blaise can therefore be remembered honestly: a martyr whose sparse record points to fidelity in Christ, and a saint whose later devotional tradition prompts believers to accompany prayer with prompt, appropriate medical care.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A bishop remembered as a martyr",
+        "body": "Later martyrologies remember Blaise as bishop of Sebaste in ancient Armenia and place his martyrdom near the beginning of the fourth century. The sources do not preserve a dependable birth date, length of episcopal service, or detailed account of his death. The surest way to honor him is therefore to keep the focus on his received identity as a pastor who remained faithful to Christ under persecution.",
+        "sourceIds": ["new-advent-blaise", "usccb-memorial"]
+      },
+      {
+        "heading": "A later story of compassionate prayer",
+        "body": "The familiar account of Blaise praying for a child whose throat was obstructed belongs to later legendary Acts, not to a contemporary biography. Versions of the story differ, including when the encounter happened and how candles became connected with it. The tradition may still invite compassion and intercession, provided it is named as tradition rather than presented as verified fourth-century history.",
+        "sourceIds": ["new-advent-blaise", "archny-blessing"]
+      },
+      {
+        "heading": "The blessing of throats",
+        "body": "Catholic communities have long invoked Blaise when praying for people with throat ailments. In the present custom, crossed candles recall both the neighboring feast of the Presentation and the devotional tradition surrounding Blaise. The rite asks God for help through a saint's intercession. It does not determine the cause of symptoms, replace clinical assessment, or guarantee a physical cure.",
+        "sourceIds": ["archny-blessing", "new-advent-blaise"]
+      }
+    ],
+    "gospelTheme": "Christ sends his witnesses to proclaim the Gospel and teaches his people to hold courageous prayer together with compassionate care for those who are ill.",
+    "struggle": "Blaise's historical outline is sparse, while later devotion accumulated details that cannot be treated as contemporary evidence; his martyrdom also places his witness within persecution.",
+    "response": "The Church preserves his identity as bishop and martyr, clearly labels the later throat story as tradition, and turns remembrance into prayerful care rather than magical or medical claims."
+  },
+  "virtues": [
+    {
+      "name": "Faithful witness",
+      "evidence": "The durable historical memory of Blaise is that of a bishop who suffered martyrdom rather than abandon faith in Christ.",
+      "imitation": "Hold to one truthful Christian commitment today without aggression, exaggeration, or contempt for those who disagree.",
+      "sourceIds": ["new-advent-blaise", "usccb-memorial"]
+    },
+    {
+      "name": "Compassionate intercession",
+      "evidence": "Although the throat-healing episode is legendary, the long devotional tradition consistently directs attention toward people who are ill and asks God to help them.",
+      "imitation": "Pray for a person who is ill, then offer practical help that respects their choices and the advice of qualified health professionals.",
+      "sourceIds": ["archny-blessing", "new-advent-blaise"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Ask Christ to strengthen people who are frightened by illness, and pray that caregivers may act with wisdom, patience, and skill.",
+    "action": "If you or someone with you has persistent throat symptoms, seek appropriate professional medical care; for choking, breathing difficulty, or other dangerous symptoms, contact emergency services immediately. Prayer and the blessing of throats must never delay or substitute for urgent or ongoing treatment."
+  },
+  "reflectionQuestions": [
+    "Where do I need the courage to remain truthful when certainty is limited?",
+    "How can my prayer for someone who is ill become respectful, practical support today?"
+  ],
+  "scripture": {
+    "reference": "Mark 16:15",
+    "connection": "The Gospel proposed for Blaise's memorial begins with Christ's command to proclaim the good news; the center of the feast is Jesus and the faithful witness given in his name."
+  },
+  "prayer": "Lord Jesus Christ, you sustain your servants in witness and draw near to all who are afraid or ill. Through the intercession of Saint Blaise, give us courage, honesty, and compassion. Guide medical professionals, protect those in urgent danger, and teach us to join faithful prayer with responsible care. Keep our hope fixed on you, who live and reign for ever. Amen."
+}

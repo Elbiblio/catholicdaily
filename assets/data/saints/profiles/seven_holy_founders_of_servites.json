@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 2,
+  "id": "seven_holy_founders_of_servites",
+  "profileKind": "group",
+  "celebrationIds": [
+    "seven_holy_founders_of_servites",
+    "the_seven_holy_founders_of_the_servite_order"
+  ],
+  "name": "The Seven Holy Founders of the Servite Order",
+  "alternateNames": ["Seven Founders of the Order of Servants of Mary"],
+  "ecclesialTitle": "Founders of the Order of Servants of Mary",
+  "lifeSpan": "13th century",
+  "lifeLength": "",
+  "vocation": "A fraternity of penitents who founded the Servite Order",
+  "places": ["Florence, Italy", "Monte Senario, Italy"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "The Seven Holy Founders were Florentine laymen joined by prayer, friendship, and devotion to Mary who formed a religious community in the thirteenth century. Their life together at Monte Senario helped give rise to the Order of Servants of Mary, whose institutional development is better documented than separate biographies of all seven men.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Seven_Holy_Founders_of_the_Servite_Order",
+  "wikidataId": "Q1057218",
+  "feastDates": ["February 17"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "vatican-news-founders",
+      "title": "Sts. Seven Founders of the Order of the Servants of Mary among whom St. Alessio Falconieri",
+      "authorOrInstitution": "Vatican News",
+      "publisher": "Dicastery for Communication",
+      "url": "https://www.vaticannews.va/en/saints/02/17/sts--seven-fonders-of-the-order-of-the-servants-of-mary-among-wh.html",
+      "publicationDate": "",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official Catholic overview used for collective identity, Florentine origin, Monte Senario, order development, approval, and canonization; original synthesis",
+      "supports": ["identity", "feastDate", "life.florence", "life.monte_senario", "order", "approval", "canonization"]
+    },
+    {
+      "id": "servite-monte-senario",
+      "title": "Monte Senario: Cradle of the Order of the Servants of Mary",
+      "authorOrInstitution": "Servite Friars Australia",
+      "publisher": "Servite Friars Australia",
+      "url": "https://www.servite.org.au/monte-senario",
+      "publicationDate": "",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official order source for Monte Senario and Servite interpretation of fraternity, hospitality, service, and Marian discipleship; origin legends treated as tradition",
+      "supports": ["life.monte_senario", "marianDiscipleship", "virtues.fraternity", "virtues.service", "historicalCertainty"]
+    },
+    {
+      "id": "treccani-servites",
+      "title": "Servi di Maria",
+      "authorOrInstitution": "Istituto della Enciclopedia Italiana",
+      "publisher": "Treccani",
+      "url": "https://www.treccani.it/enciclopedia/servi-di-maria/",
+      "publicationDate": "",
+      "accessedDate": "2026-08-10",
+      "tier": 2,
+      "reuseBasis": "Independent historical control for the group foundation, Augustinian rule, Monte Senario, institutional recognition, approval, and canonization",
+      "supports": ["identity", "life.monte_senario", "order", "approval", "canonization", "historicalCertainty"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-10",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "The Seven Founders offer a rare picture of holiness shaped in the plural. Their shared calling did not require identical personalities or invented parallel stories. They show that prayerful friendship can resist faction, accept a common rule, and mature into service that lasts beyond its first members.",
+  "oneMinuteSummary": "In thirteenth-century Florence, seven laymen associated with a Marian confraternity began a common life of prayer, penance, work, and service. Servite tradition places the origin in 1233 amid bitter civic divisions. The group later withdrew to Monte Senario under the guidance of the Bishop of Florence, where their fraternity attracted new members. From these beginnings developed the Order of Servants of Mary, also called the Servites, living under the Rule of Saint Augustine and dedicated to following Christ with Mary as model and patron. The order's path to stable ecclesial approval took decades; historical references note recognition during the thirteenth century and definitive approval by Pope Benedict XI in 1304. Pope Leo XIII canonized the founders together in 1888. The early narrative includes Marian visions and precise individual details preserved in the order's origin tradition, but the evidence is not strong enough to turn those elements into seven confident biographies. Their collective witness is clearer: communal discernment, reconciliation, shared discipline, prayer, hospitality, and service.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Friendship amid a divided city",
+        "body": "The founding tradition remembers seven Florentine laymen, many associated with commerce and a Marian confraternity, who sought a common Christian life while their city was marked by factional conflict. They did not answer division by creating another party around a charismatic individual. Prayer, penance, work, and concern for neighbors became practices through which friendship could be purified into fraternity.",
+        "sourceIds": ["vatican-news-founders", "servite-monte-senario"]
+      },
+      {
+        "heading": "A shared life at Monte Senario",
+        "body": "Under episcopal guidance the community established itself at Monte Senario, outside Florence. The mountain became the spiritual home of the Servite family. Withdrawal made room for contemplation and common discipline, but the community was not founded for isolation alone: hospitality, counsel, prayer, and service connected its life with the needs of others.",
+        "sourceIds": ["vatican-news-founders", "servite-monte-senario", "treccani-servites"]
+      },
+      {
+        "heading": "From fraternity to an approved order",
+        "body": "As companions joined them, the community developed into the Order of Servants of Mary and adopted the Rule of Saint Augustine. Its institutional identity did not appear complete in a single moment. Recognition, expansion, uncertainty about the future of newer mendicant communities, and further papal decisions marked a long process that reached definitive approval under Pope Benedict XI in 1304.",
+        "sourceIds": ["vatican-news-founders", "treccani-servites"]
+      },
+      {
+        "heading": "One canonization and a careful memory",
+        "body": "Pope Leo XIII canonized the seven together in 1888, preserving the communal shape of their witness. Servite tradition transmits names, individual roles, and apparition narratives, but the early evidence is uneven. This profile therefore does not manufacture seven symmetrical life stories or rely on disputed longevity claims. What can be said responsibly is that a real religious order grew from a remembered group at Florence and Monte Senario and continues to understand service to Mary as discipleship of her Son.",
+        "sourceIds": ["vatican-news-founders", "servite-monte-senario", "treccani-servites"]
+      }
+    ],
+    "gospelTheme": "Christ forms disciples into a reconciled community in which different people receive a common rule, learn from Mary to welcome God's word, and turn contemplation into service.",
+    "struggle": "Civic faction, the cost of changing one's way of life, the demands of shared discernment, institutional uncertainty, and uneven evidence about individual founders all resist an easy heroic narrative.",
+    "response": "They pursued a common life of prayer and service, accepted guidance and a shared rule, welcomed new members, and allowed the community's vocation to mature through ecclesial discernment."
+  },
+  "virtues": [
+    {
+      "name": "Fraternity that resists faction",
+      "evidence": "The founders' communal life emerged in a divided Florentine setting and became known for prayer, hospitality, and brotherly service rather than partisan rivalry.",
+      "imitation": "Refuse one caricature of an opposing group, listen to a person rather than a label, and identify a concrete good you can pursue together.",
+      "sourceIds": ["vatican-news-founders", "servite-monte-senario"]
+    },
+    {
+      "name": "Discernment under a shared rule",
+      "evidence": "The early fraternity received episcopal guidance and adopted the Rule of Saint Augustine as the order developed.",
+      "imitation": "Before a group decision, agree on the Gospel value and fair process that will govern everyone, including the most influential member.",
+      "sourceIds": ["vatican-news-founders", "treccani-servites"]
+    },
+    {
+      "name": "Marian service centered on Christ",
+      "evidence": "Servite sources describe dedication to Mary as a pattern of receiving God's word and serving Christ and neighbor through prayer, hospitality, and apostolic work.",
+      "imitation": "Ask Mary to teach your community her attentive yes, then answer a real need together without erasing anyone's gifts or limits.",
+      "sourceIds": ["servite-monte-senario"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Gather with others for ten minutes of silence, Scripture, and shared discernment. Let each person speak once before anyone speaks twice, then name the common good you believe Christ is asking you to serve.",
+    "action": "Repair one strained relationship or group division through a direct, safe conversation. Agree on one shared rule for listening and one concrete act of service that uses different members' gifts without pressuring everyone into the same role."
+  },
+  "reflectionQuestions": [
+    "What shared rule would help my community choose the Gospel over personality and faction?",
+    "Whose distinct gift or limit do I need to honor for our service to become truly communal?"
+  ],
+  "scripture": {
+    "reference": "Acts 4:32",
+    "connection": "The first believers were one in heart and soul; the Servite founders show that such communion is a practiced discipline of prayer, shared responsibility, and service rather than the loss of individuality."
+  },
+  "prayer": "Lord Jesus Christ, you call disciples by name and gather them into one body. Through the intercession of the Seven Holy Founders, free our communities from rivalry, contempt, and the rule of strong personalities. Teach us with Mary to receive your word, discern together, honor different gifts, repair divisions, and serve those in need. Make our common life a faithful witness to your reconciling love. Amen."
+}

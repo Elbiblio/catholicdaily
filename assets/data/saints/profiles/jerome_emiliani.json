@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 2,
+  "id": "jerome_emiliani",
+  "profileKind": "individual",
+  "celebrationIds": [
+    "jerome_emiliani",
+    "saint_jerome_emiliani"
+  ],
+  "name": "Saint Jerome Emiliani",
+  "alternateNames": ["Girolamo Emiliani", "Gerolamo Miani"],
+  "ecclesialTitle": "Founder of the Clerics Regular of Somasca",
+  "lifeSpan": "1486-1537",
+  "lifeLength": "about 51 years",
+  "vocation": "Lay reformer, educator, and founder serving orphaned and vulnerable young people",
+  "places": ["Venice, Italy", "Treviso, Italy", "Somasca, Italy"],
+  "patronage": ["orphans and abandoned youth"],
+  "symbols": [],
+  "briefBio": "Jerome Emiliani was a Venetian soldier and public official whose imprisonment in 1511 became a turning point in a gradual conversion to Christ. He later organized practical care and education for orphaned and vulnerable young people and gathered the community that developed into the Clerics Regular of Somasca.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Gerolamo_Emiliani",
+  "wikidataId": "Q451914",
+  "feastDates": ["February 8"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {
+      "id": "benedict-somascan-message",
+      "title": "Message to the Order of Clerics Regular of Somasca on the 500th anniversary of the prodigious liberation of their founder St. Jerome Emiliani",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/messages/pont-messages/2011/documents/hf_ben-xvi_mes_20110720_moscone.html",
+      "publicationDate": "2011-07-20",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official ecclesial account of imprisonment, conversion, care for young people, and Somascan charism; original prose",
+      "supports": ["identity", "life.imprisonment", "life.conversion", "life.young_people", "patronage", "virtues.conversion"]
+    },
+    {
+      "id": "somascan-founder",
+      "title": "Our Founder",
+      "authorOrInstitution": "Somascan Fathers and Brothers",
+      "publisher": "Somascan Fathers and Brothers",
+      "url": "https://somascans.org/our-founder/",
+      "publicationDate": "",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official order history used for chronology and institutional identity; miraculous details treated as ecclesial tradition",
+      "supports": ["identity", "dates", "life.imprisonment", "life.conversion", "life.service", "order", "patronage"]
+    },
+    {
+      "id": "francis-somascan-address",
+      "title": "To participants in the General Chapter of the Order of Clerics Regular of Somasca",
+      "authorOrInstitution": "Pope Francis",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/francesco/en/speeches/2017/march/documents/papa-francesco_20170330_capitolo-chierici-somaschi.html",
+      "publicationDate": "2017-03-30",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official source for integral education, professional expertise, protection of minors, and Christ-centred service",
+      "supports": ["life.education", "gospelTheme", "virtues.service", "practice", "safeguarding"]
+    },
+    {
+      "id": "treccani-emiliani",
+      "title": "Giròlamo Emiliani, santo",
+      "authorOrInstitution": "Istituto della Enciclopedia Italiana",
+      "publisher": "Treccani",
+      "url": "https://www.treccani.it/enciclopedia/santo-girolamo-emiliani/",
+      "publicationDate": "",
+      "accessedDate": "2026-08-10",
+      "tier": 2,
+      "reuseBasis": "Independent historical control for dates, imprisonment, educational work, Somascan development, canonization, and patronage",
+      "supports": ["identity", "dates", "life.imprisonment", "life.service", "life.education", "order", "canonization", "patronage"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-10",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Jerome shows that conversion is more than a private feeling. His changed priorities became durable care, education, collaboration, and institutions serving young people who had too often been left alone. His witness also corrects impulsive charity: love for children must protect their dignity through competence, safeguarding, and accountable community.",
+  "oneMinuteSummary": "Born in Venice in 1486, Jerome Emiliani entered military and civic service. He was captured while defending Castelnuovo in 1511. Catholic tradition connects his unexpected release with a vow and the intercession of Mary; official Church sources also describe the event as the beginning of a deep interior change. That does not make imprisonment or fear good. Rather, Jerome gradually allowed Christ to redirect his freedom away from status and self-advancement. After caring for orphaned relatives, he gave increasing attention to people affected by famine, sickness, poverty, and abandonment. He gathered orphaned and vulnerable children into communities where care included faith, literacy, useful skills, and preparation for responsible life. Collaborators joined him in a company known as the Servants of the Poor, from which the Somascan order developed. Jerome died at Somasca in 1537. His legacy asks Christians to pair mercy with trained, accountable service that protects every child's agency and safety.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Imprisonment and a redirected freedom",
+        "body": "Jerome served the Venetian Republic and was taken prisoner after the fall of Castelnuovo in 1511. He prayed for deliverance and promised to change his life. The Somascan and papal accounts interpret his unexpected release through Mary's intercession, while the historical control confirms that captivity and release were followed by spiritual maturation. The profile does not treat confinement, hunger, or fear as spiritually desirable. The important moral fact is what Jerome chose to do with freedom afterward.",
+        "sourceIds": ["benedict-somascan-message", "somascan-founder", "treccani-emiliani"]
+      },
+      {
+        "heading": "Conversion becoming service",
+        "body": "Jerome's change unfolded over years through prayer, attention to Scripture, care of orphaned relatives, and increasing solidarity with people harmed by famine and poverty. He used his resources and organizing ability to serve the sick, the poor, and especially children without dependable family care. His conversion moved from remorse to a sustained reordering of time, property, and responsibility around Christ and neighbor.",
+        "sourceIds": ["benedict-somascan-message", "somascan-founder"]
+      },
+      {
+        "heading": "Care joined to education",
+        "body": "Jerome did not understand care as temporary relief alone. The communities associated with him provided religious formation, literacy, and practical preparation for work so that young people could grow toward responsible adulthood. Church teaching on the Somascan charism emphasizes the whole person: dignity, intellectual and practical abilities, protection of minors, and professional competence all belong together.",
+        "sourceIds": ["treccani-emiliani", "francis-somascan-address"]
+      },
+      {
+        "heading": "A community larger than one founder",
+        "body": "Jerome gathered lay and clerical collaborators into the Servants of the Poor. Their work spread beyond Venice, and the community later received its enduring form as the Clerics Regular of Somasca. Jerome died at Somasca in 1537, before every institutional stage was complete. The order's later approval and continuing mission show how a charism becomes dependable when it is shared, governed, reviewed, and carried by a community rather than resting on one person's energy.",
+        "sourceIds": ["somascan-founder", "treccani-emiliani", "francis-somascan-address"]
+      }
+    ],
+    "gospelTheme": "Encounter with Christ turns freedom into merciful responsibility, especially through patient, competent care for children and young people whom society is tempted to overlook.",
+    "struggle": "War, imprisonment, personal ambition, family bereavement, famine, sickness, and the abandonment of children confronted Jerome with both his own need for conversion and the failures of his society.",
+    "response": "He pursued a gradual conversion, shared his resources, organized education and care, recruited collaborators, and placed the work within a community able to continue beyond him."
+  },
+  "virtues": [
+    {
+      "name": "Conversion expressed in responsibility",
+      "evidence": "Church sources connect Jerome's release from prison with an interior renewal that redirected his life toward God and people who were orphaned, sick, or abandoned.",
+      "imitation": "Choose one concrete use of time, money, or influence that makes your professed change of heart visible and accountable.",
+      "sourceIds": ["benedict-somascan-message", "somascan-founder"]
+    },
+    {
+      "name": "Mercy that develops the whole person",
+      "evidence": "His work joined immediate care to education and practical skills, seeking not dependence but the dignity and development of each young person.",
+      "imitation": "When helping, ask what strengthens the other person's safety, voice, skills, and long-term agency rather than centering your own need to feel useful.",
+      "sourceIds": ["treccani-emiliani", "francis-somascan-address"]
+    },
+    {
+      "name": "Collaborative perseverance",
+      "evidence": "Jerome gathered others into a shared work that matured into the Somascan community and continued after his death.",
+      "imitation": "Bring a work of mercy into an accountable team: define roles, listen to qualified people, and accept review instead of trying to act alone.",
+      "sourceIds": ["somascan-founder", "francis-somascan-address"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Place one ambition or regret before the crucified Christ and ask how conversion could become patient service rather than self-punishment or display.",
+    "action": "Support an established, safeguarding-compliant organization that serves vulnerable children or families. Follow its training, supervision, screening, confidentiality rules, and professional boundaries; do not seek or arrange unsupervised access to children."
+  },
+  "reflectionQuestions": [
+    "What part of my conversion still needs to become a concrete responsibility toward others?",
+    "Does the help I offer increase another person's safety and agency, or mainly satisfy my own preferences?"
+  ],
+  "scripture": {
+    "reference": "John 14:18",
+    "connection": "Christ promises not to leave his disciples orphaned; Jerome's vocation made that promise visible through communities of protection, formation, and faithful presence."
+  },
+  "prayer": "Lord Jesus Christ, you did not leave us orphaned but came to us in mercy. Through the intercession of Saint Jerome Emiliani, convert our freedom into responsible love. Protect children and young people who lack safe care, strengthen their families and trustworthy caregivers, and give every servant humility, training, sound boundaries, and perseverance. Make your Church a home of dignity and hope. Amen."
+}

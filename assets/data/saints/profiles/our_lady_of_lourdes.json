@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 2,
+  "id": "our_lady_of_lourdes",
+  "profileKind": "marian",
+  "celebrationIds": ["our_lady_of_lourdes"],
+  "name": "Our Lady of Lourdes",
+  "alternateNames": ["The Blessed Virgin Mary of Lourdes"],
+  "ecclesialTitle": "Marian memorial associated with the apparitions at Lourdes",
+  "lifeSpan": "",
+  "lifeLength": "",
+  "vocation": "Mary honored as Mother of Christ, model of discipleship, and companion in prayer for the sick",
+  "places": ["Lourdes, France", "Massabielle Grotto"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Our Lady of Lourdes commemorates the Blessed Virgin Mary in connection with the apparitions reported by Bernadette Soubirous at Massabielle in 1858 and recognized by the Bishop of Tarbes in 1862. The memorial calls pilgrims toward Christ through prayer, conversion, and compassionate care for people who are sick.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Our_Lady_of_Lourdes",
+  "wikidataId": "Q21532387",
+  "feastDates": ["February 11"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "lourdes-decree",
+      "title": "The Decree",
+      "authorOrInstitution": "Sanctuary of Our Lady of Lourdes",
+      "publisher": "Sanctuary of Our Lady of Lourdes",
+      "url": "https://www.lourdes-france.org/en/the-decree/",
+      "publicationDate": "",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official sanctuary presentation of the 1858 reports, diocesan inquiry, and 1862 recognition; apparition wording not reproduced",
+      "supports": ["identity", "apparitions", "recognition", "dates", "historicalCertainty"]
+    },
+    {
+      "id": "lourdes-medical-bureau",
+      "title": "The Medical Bureau of the Sanctuary",
+      "authorOrInstitution": "Sanctuary of Our Lady of Lourdes",
+      "publisher": "Sanctuary of Our Lady of Lourdes",
+      "url": "https://www.lourdes-france.org/en/medical-bureau-sanctuary/",
+      "publicationDate": "",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Authoritative sanctuary description of medical investigation and the distinction between medical assessment and ecclesial judgment",
+      "supports": ["life.medical_review", "healingClaims", "practice"]
+    },
+    {
+      "id": "john-paul-lourdes-2004",
+      "title": "Message for the 12th World Day of the Sick",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/john-paul-ii/en/messages/sick/documents/hf_jp-ii_mes_20031203_world-day-of-the-sick-2004.html",
+      "publicationDate": "2003-12-01",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official doctrinal and Christ-centred interpretation of the Immaculate Conception, Lourdes, pilgrimage, and illness; original synthesis",
+      "supports": ["doctrine", "apparitions", "pilgrimage", "gospelTheme", "virtues.faith", "scripture"]
+    },
+    {
+      "id": "world-day-sick-2022",
+      "title": "Message of the Holy Father for the 30th World Day of the Sick",
+      "authorOrInstitution": "Pope Francis",
+      "publisher": "Holy See Press Office",
+      "url": "https://press.vatican.va/content/salastampa/en/bollettino/pubblico/2022/01/04/220104a.html",
+      "publicationDate": "2022-01-04",
+      "accessedDate": "2026-08-10",
+      "tier": 1,
+      "reuseBasis": "Official pastoral source for February 11, equitable health care, and accompaniment of sick people and caregivers",
+      "supports": ["feastDate", "careForSick", "virtues.compassion", "practice"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-10",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Lourdes brings faith, suffering, and careful discernment into the same place. Mary's title points to grace won by Christ, while the shrine's practices ask believers to pray, accompany, investigate claims responsibly, and protect the dignity of people whose illnesses remain. No person's faith can be measured by whether physical healing occurs.",
+  "oneMinuteSummary": "This memorial is a Marian observance, not a new biography of Mary. Catholic doctrine teaches that the Immaculate Conception is God's preservation of Mary from original sin from the first moment of her own conception, through the merits of Jesus Christ; it is distinct from the virginal conception of Jesus. In 1858, fourteen-year-old Bernadette Soubirous reported eighteen apparitions at the grotto of Massabielle near Lourdes. After inquiry, Bishop Bertrand-Sévère Laurence of Tarbes recognized the apparitions in 1862. Lourdes became a major place of pilgrimage, prayer, penance, and care for people who are sick. Reports of physical healing are not accepted merely because they are sincere: the sanctuary's Medical Bureau investigates clinical evidence, an international medical committee may judge a course medically unexplained, and the competent bishop makes any ecclesial declaration of miracle. Pilgrimage and prayer can sustain hope, but they never replace professional medical care or imply that a person who remains ill lacks faith.",
+  "life": {
+    "sections": [
+      {
+        "heading": "The Immaculate Conception is about grace",
+        "body": "The Catholic dogma defined in 1854 concerns Mary's own conception: from its first moment she was preserved from original sin by a singular gift of God, entirely through the merits of Jesus Christ. It does not mean that Mary conceived Jesus without sin; that is a distinct teaching about Christ's virginal conception. Lourdes spirituality receives the doctrine as praise of God's prior grace and Mary's free response, never as a claim that Mary saves apart from her Son.",
+        "sourceIds": ["john-paul-lourdes-2004"]
+      },
+      {
+        "heading": "Bernadette's reports and the Church's inquiry",
+        "body": "Between February 11 and July 16, 1858, Bernadette Soubirous reported eighteen encounters with a lady at Massabielle whom she came to identify as the Virgin Mary. The apparitions are religious claims received in faith, while the dates, testimony, commission of inquiry, and later decision are historical matters. On January 18, 1862, after investigation and discernment, the Bishop of Tarbes recognized the apparitions as authentic for Catholic belief.",
+        "sourceIds": ["lourdes-decree", "john-paul-lourdes-2004"]
+      },
+      {
+        "heading": "A pilgrimage directed toward Christ",
+        "body": "Lourdes draws pilgrims into prayer, conversion, the sacraments, and solidarity with people who are sick or isolated. Mary is honored as a disciple who receives God's grace and leads believers toward Jesus, the crucified and risen Lord. The Church's observance of the World Day of the Sick on February 11 widens the devotion into responsibility for accessible health care, pastoral accompaniment, families, and caregivers.",
+        "sourceIds": ["john-paul-lourdes-2004", "world-day-sick-2022"]
+      },
+      {
+        "heading": "Healing claims receive careful review",
+        "body": "People have reported physical cures associated with Lourdes, but the sanctuary distinguishes a testimony from a verified medical finding and a medical finding from the Church's judgment of a miracle. The Medical Bureau gathers records and conducts collegial assessment; a case may undergo years of review before experts decide whether the course remains unexplained in current medical knowledge. Any declaration of miracle belongs to the person's bishop. Most pilgrims receive no declared physical miracle, and that says nothing about the depth of their faith or God's love for them.",
+        "sourceIds": ["lourdes-medical-bureau"]
+      }
+    ],
+    "gospelTheme": "Mary receives God's grace and directs hope toward Jesus Christ; discipleship then becomes prayerful, practical companionship so that no person who is ill is reduced to a diagnosis or left alone.",
+    "struggle": "Illness, disability, poverty, isolation, disappointed hopes, sensational claims, and confusion about doctrine can all distort the dignity of sick people or the meaning of Lourdes.",
+    "response": "The Church joins Marian prayer to Christ-centred hope, ecclesial discernment, rigorous review of medical claims, equitable care, and faithful accompaniment whether or not physical recovery occurs."
+  },
+  "virtues": [
+    {
+      "name": "Receptivity to grace",
+      "evidence": "The doctrine associated with Lourdes presents Mary's holiness as God's freely given work in view of Christ, received in a faithful and loving response.",
+      "imitation": "Begin prayer by receiving God's love before listing achievements or needs, then answer that grace with one faithful yes.",
+      "sourceIds": ["john-paul-lourdes-2004"]
+    },
+    {
+      "name": "Compassionate presence",
+      "evidence": "The February 11 observance calls the Church and society to attend to people who are sick and to those who care for them, including where poverty limits access to care.",
+      "imitation": "Ask a sick or disabled person what support they actually want, listen without offering a cure story, and respect their decisions and privacy.",
+      "sourceIds": ["world-day-sick-2022", "john-paul-lourdes-2004"]
+    },
+    {
+      "name": "Hope without presumption",
+      "evidence": "Lourdes welcomes prayer for healing while using structured medical and ecclesial review rather than assuming every improvement is miraculous.",
+      "imitation": "Pray boldly while speaking modestly: avoid promising an outcome, and make decisions using the best available clinical evidence and qualified advice.",
+      "sourceIds": ["lourdes-medical-bureau"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray one decade of the Rosary with a person who is suffering in mind, asking Mary to lead you both toward the mercy and hope of Christ without demanding a particular outcome.",
+    "action": "Keep or arrange appropriate professional medical care, follow qualified clinical advice, and seek urgent help for dangerous symptoms. Offer practical accompaniment with consent; pilgrimage, Lourdes water, and prayer must never delay or substitute for emergency or ongoing treatment."
+  },
+  "reflectionQuestions": [
+    "Can I remain faithfully present when another person's suffering is not resolved?",
+    "Where do I need to replace promises or explanations with listening, careful discernment, and practical care?"
+  ],
+  "scripture": {
+    "reference": "Luke 1:38",
+    "connection": "Mary's answer receives God's initiative and opens her life to Christ; Lourdes devotion is authentic when it likewise welcomes grace and follows Jesus in merciful service."
+  },
+  "prayer": "God of mercy, you prepared Mary by grace to welcome your Son and gave her to the Church as a mother in faith. Through her intercession, draw every pilgrim more deeply to Jesus Christ. Comfort those who are sick, protect their dignity, guide clinicians and caregivers, and provide just access to needed care. When healing is delayed or does not come, keep us from blame and abandonment, and make us steadfast companions in hope. Through Christ our Lord. Amen."
+}
