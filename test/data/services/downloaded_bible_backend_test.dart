@@ -56,13 +56,157 @@ void main() {
   test('backend opens an installed local Douay-Rheims database', () async {
     final preference = await BibleVersionPreference.getInstance();
     await preference.setVersion(BibleVersionType.douayRheims);
-    final backend = ReadingsBackendIo();
+    final backend = ReadingsBackendIo(
+      minimumDownloadedBookCount: 1,
+      minimumDownloadedVerseCount: 1,
+    );
     try {
       final chapter = await backend.getChapterText(
         bookShortName: 'John',
         chapter: 3,
       );
       expect(chapter, contains('16. For God so loved the world.'));
+    } finally {
+      await backend.close();
+    }
+  });
+
+  test('missing selected download falls back to bundled RSVCE', () async {
+    final preference = await BibleVersionPreference.getInstance();
+    await preference.setVersion(BibleVersionType.douayRheims);
+    File('${tempDir.path}${Platform.pathSeparator}engdra.db').deleteSync();
+    final backend = ReadingsBackendIo(
+      minimumDownloadedBookCount: 1,
+      minimumDownloadedVerseCount: 1,
+    );
+    try {
+      final chapter = await backend.getChapterText(
+        bookShortName: 'John',
+        chapter: 3,
+      );
+
+      expect(chapter, isNot(contains('unavailable')));
+      expect(preference.currentVersion, BibleVersionType.rsvce);
+    } finally {
+      await backend.close();
+    }
+  });
+
+  test('invalid selected download falls back to bundled RSVCE', () async {
+    final preference = await BibleVersionPreference.getInstance();
+    await preference.setVersion(BibleVersionType.douayRheims);
+    final databasePath = '${tempDir.path}${Platform.pathSeparator}engdra.db';
+    File(databasePath).deleteSync();
+    final invalidDatabase = await databaseFactory.openDatabase(
+      databasePath,
+      options: OpenDatabaseOptions(singleInstance: false),
+    );
+    await invalidDatabase.execute('CREATE TABLE unrelated (id INTEGER)');
+    await invalidDatabase.close();
+    final backend = ReadingsBackendIo(
+      minimumDownloadedBookCount: 1,
+      minimumDownloadedVerseCount: 1,
+    );
+    try {
+      final chapter = await backend.getChapterText(
+        bookShortName: 'John',
+        chapter: 3,
+      );
+
+      expect(chapter, isNot(contains('unavailable')));
+      expect(preference.currentVersion, BibleVersionType.rsvce);
+    } finally {
+      await backend.close();
+    }
+  });
+
+  test('selected schema missing verse identity falls back to RSVCE', () async {
+    final preference = await BibleVersionPreference.getInstance();
+    await preference.setVersion(BibleVersionType.douayRheims);
+    final databasePath = '${tempDir.path}${Platform.pathSeparator}engdra.db';
+    File(databasePath).deleteSync();
+    final partialDatabase = await databaseFactory.openDatabase(
+      databasePath,
+      options: OpenDatabaseOptions(singleInstance: false),
+    );
+    await partialDatabase.execute(
+      'CREATE TABLE books (_id INTEGER PRIMARY KEY, text TEXT, shortname TEXT)',
+    );
+    await partialDatabase.execute('''
+      CREATE TABLE verses (
+        book_id INTEGER,
+        chapter_id INTEGER,
+        verse_id INTEGER,
+        text TEXT
+      )
+    ''');
+    await partialDatabase.insert('books', {
+      '_id': 1,
+      'text': 'John',
+      'shortname': 'John',
+    });
+    await partialDatabase.insert('verses', {
+      'book_id': 1,
+      'chapter_id': 3,
+      'verse_id': 16,
+      'text': 'Partial text that must not be selected.',
+    });
+    await partialDatabase.close();
+    final backend = ReadingsBackendIo(
+      minimumDownloadedBookCount: 1,
+      minimumDownloadedVerseCount: 1,
+    );
+    try {
+      final chapter = await backend.getChapterText(
+        bookShortName: 'John',
+        chapter: 3,
+      );
+
+      expect(chapter, isNot(contains('unavailable')));
+      expect(preference.currentVersion, BibleVersionType.rsvce);
+      final movedDatabase = File('$databasePath.replacement-check');
+      await File(databasePath).rename(movedDatabase.path);
+      expect(movedDatabase.existsSync(), isTrue);
+      await movedDatabase.rename(databasePath);
+    } finally {
+      await backend.close();
+    }
+  });
+
+  test('empty selected database falls back to bundled RSVCE', () async {
+    final preference = await BibleVersionPreference.getInstance();
+    await preference.setVersion(BibleVersionType.douayRheims);
+    final databasePath = '${tempDir.path}${Platform.pathSeparator}engdra.db';
+    File(databasePath).deleteSync();
+    final emptyDatabase = await databaseFactory.openDatabase(
+      databasePath,
+      options: OpenDatabaseOptions(singleInstance: false),
+    );
+    await emptyDatabase.execute(
+      'CREATE TABLE books (_id INTEGER PRIMARY KEY, text TEXT, shortname TEXT)',
+    );
+    await emptyDatabase.execute('''
+      CREATE TABLE verses (
+        _id INTEGER PRIMARY KEY,
+        book_id INTEGER,
+        chapter_id INTEGER,
+        verse_id INTEGER,
+        text TEXT
+      )
+    ''');
+    await emptyDatabase.close();
+    final backend = ReadingsBackendIo(
+      minimumDownloadedBookCount: 1,
+      minimumDownloadedVerseCount: 1,
+    );
+    try {
+      final chapter = await backend.getChapterText(
+        bookShortName: 'John',
+        chapter: 3,
+      );
+
+      expect(chapter, isNot(contains('unavailable')));
+      expect(preference.currentVersion, BibleVersionType.rsvce);
     } finally {
       await backend.close();
     }

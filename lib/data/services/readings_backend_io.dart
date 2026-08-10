@@ -24,7 +24,13 @@ import 'shared_service_utils.dart';
 ReadingsBackend createReadingsBackend() => ReadingsBackendIo();
 
 class ReadingsBackendIo implements ReadingsBackend {
-  ReadingsBackendIo() {
+  final int minimumDownloadedBookCount;
+  final int minimumDownloadedVerseCount;
+
+  ReadingsBackendIo({
+    this.minimumDownloadedBookCount = 73,
+    this.minimumDownloadedVerseCount = 30000,
+  }) {
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
       sqfliteFfiInit();
       databaseFactory = databaseFactoryFfi;
@@ -66,6 +72,16 @@ class ReadingsBackendIo implements ReadingsBackend {
         databasePath,
         options: OpenDatabaseOptions(readOnly: true, singleInstance: false),
       );
+      try {
+        await _validateDownloadedDatabase(opened, source);
+      } catch (_) {
+        try {
+          await opened.close();
+        } catch (_) {
+          // Preserve the validation failure that triggered recovery.
+        }
+        rethrow;
+      }
     }
     _databaseCache[source.id] = opened;
     return opened;
@@ -73,10 +89,65 @@ class ReadingsBackendIo implements ReadingsBackend {
 
   Future<Database> get _currentBibleDatabase async {
     _versionPreference ??= await BibleVersionPreference.getInstance();
+    final failedVersion = _versionPreference!.currentVersion;
     final source = BibleSourceRegistry.instance.requireById(
-      _versionPreference!.currentDbName,
+      failedVersion.dbName,
     );
-    return _databaseForSource(source);
+    try {
+      return await _databaseForSource(source);
+    } catch (_) {
+      if (!source.isDownloadableLocal) rethrow;
+      final recoveryVersion = BibleVersionRecoveryPolicy.versionAfterFailure(
+        failedVersion: failedVersion,
+        currentVersion: _versionPreference!.currentVersion,
+      );
+      if (_versionPreference!.currentVersion == failedVersion) {
+        await _versionPreference!.setVersion(recoveryVersion);
+      }
+      _booksCache = null;
+      _aliasesCache = null;
+      return _databaseForSource(
+        BibleSourceRegistry.instance.requireById(
+          _versionPreference!.currentVersion.dbName,
+        ),
+      );
+    }
+  }
+
+  Future<void> _validateDownloadedDatabase(
+    Database database,
+    BibleSource source,
+  ) async {
+    const requiredColumns = <String, Set<String>>{
+      'books': {'_id', 'text', 'shortname'},
+      'verses': {'_id', 'book_id', 'chapter_id', 'verse_id', 'text'},
+    };
+    for (final entry in requiredColumns.entries) {
+      final rows = await database.rawQuery('PRAGMA table_info(${entry.key})');
+      final columns = rows
+          .map((row) => row['name'])
+          .whereType<String>()
+          .toSet();
+      if (!columns.containsAll(entry.value)) {
+        throw StateError(
+          'Bible source ${source.id} has an invalid ${entry.key} schema.',
+        );
+      }
+    }
+
+    final counts = await database.rawQuery('''
+      SELECT
+        (SELECT COUNT(*) FROM books) AS book_count,
+        (SELECT COUNT(*) FROM verses) AS verse_count
+    ''');
+    final bookCount = counts.first['book_count'] as int? ?? 0;
+    final verseCount = counts.first['verse_count'] as int? ?? 0;
+    if (bookCount < minimumDownloadedBookCount ||
+        verseCount < minimumDownloadedVerseCount) {
+      throw StateError(
+        'Bible source ${source.id} does not contain enough Scripture data.',
+      );
+    }
   }
 
   @override

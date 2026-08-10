@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../core/latest_request_guard.dart';
 import '../../data/models/daily_reading.dart';
+import '../../data/models/mass_flow_request_state.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
 import '../../data/services/order_of_mass_service.dart';
 import '../../data/services/order_of_mass_preference_service.dart';
@@ -32,7 +33,7 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
   final ReadingsBackendIo _readingsBackend = ReadingsBackendIo();
   final LatestRequestGuard _loadGuard = LatestRequestGuard();
 
-  late DateTime _selectedDate;
+  late MassFlowRequestState _dateState;
   String _primaryLanguage = 'en';
   String _secondaryLanguage = 'en';
   List<ResolvedOrderOfMassSection>? _sections;
@@ -43,7 +44,7 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
   @override
   void initState() {
     super.initState();
-    _selectedDate = widget.date ?? DateTime.now();
+    _dateState = MassFlowRequestState(widget.date ?? DateTime.now());
     _initialize();
   }
 
@@ -58,12 +59,13 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
       });
     }
 
-    await _loadMassForDate(_selectedDate);
+    await _loadMassForDate(_dateState.requestedDate);
   }
 
   Future<void> _loadMassForDate(DateTime date) async {
     if (!mounted) return;
     final request = _loadGuard.begin();
+    _dateState.request(date);
     setState(() => _isLoading = true);
 
     try {
@@ -79,7 +81,7 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
 
       if (mounted && _loadGuard.isCurrent(request)) {
         setState(() {
-          _selectedDate = date;
+          _dateState.commit(date);
           _liturgicalDay = liturgicalDay;
           _sections = sections;
           _readings = readings;
@@ -97,7 +99,7 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
   Future<void> _selectDate() async {
     final picked = await showDatePicker(
       context: context,
-      initialDate: _selectedDate,
+      initialDate: _dateState.requestedDate,
       firstDate: DateTime(2020),
       lastDate: DateTime(2038),
     );
@@ -119,7 +121,7 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
     if (mounted) {
       setState(() => _secondaryLanguage = language);
     }
-    await _loadMassForDate(_selectedDate);
+    await _loadMassForDate(_dateState.requestedDate);
   }
 
   @override
@@ -314,7 +316,7 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              DateFormat.yMMMMd().format(_selectedDate),
+              DateFormat.yMMMMd().format(_dateState.committedDate),
               style: theme.textTheme.labelLarge?.copyWith(
                 color: readableColor,
                 fontWeight: FontWeight.w600,

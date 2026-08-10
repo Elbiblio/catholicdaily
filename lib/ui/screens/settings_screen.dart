@@ -44,6 +44,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   String _selectedThemeStyle = 'standard';
   String _appVersion = '1.0.0';
   BibleVersionType? _currentBibleVersion;
+  BibleVersionPreference? _bibleVersionPreference;
   FeastReminderPreferences? _reminderPrefs;
   LiturgicalRegion _liturgicalRegion = LiturgicalRegion.generalRoman;
   bool _showIncipit = true;
@@ -106,7 +107,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _loadCurrentBibleVersion() async {
     final pref = await BibleVersionPreference.getInstance();
     if (!mounted) return;
+    _bibleVersionPreference?.removeListener(_onBibleVersionChanged);
+    _bibleVersionPreference = pref;
+    _bibleVersionPreference!.addListener(_onBibleVersionChanged);
     setState(() => _currentBibleVersion = pref.currentVersion);
+  }
+
+  void _onBibleVersionChanged() {
+    if (!mounted || _bibleVersionPreference == null) return;
+    setState(
+      () => _currentBibleVersion = _bibleVersionPreference!.currentVersion,
+    );
   }
 
   Future<void> _loadReminderPrefs() async {
@@ -278,7 +289,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 onTap: () async {
                   final pref = await BibleVersionPreference.getInstance();
                   await pref.setVersion(version);
-                  setState(() => _currentBibleVersion = version);
                   if (context.mounted) Navigator.pop(context);
                 },
               );
@@ -882,6 +892,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
         Text('Prayer of the Faithful sourced from BiddingPrayers.com.'),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    _bibleVersionPreference?.removeListener(_onBibleVersionChanged);
+    super.dispose();
   }
 }
 
