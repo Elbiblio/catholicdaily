@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 2,
+  "id": "christopher_magallanes",
+  "profileKind": "group",
+  "celebrationIds": ["christopher_magallanes", "saint_christopher_magallanes_priest_and_companions_martyrs"],
+  "name": "Saint Christopher Magallanes, Priest, and Companions, Martyrs",
+  "alternateNames": ["Saint Cristobal Magallanes Jara and 24 Companions", "Mexican Martyrs of 1915-1937"],
+  "ecclesialTitle": "Twenty-five Mexican martyrs: twenty-two diocesan priests and three laymen",
+  "vocation": "Distinct pastoral and lay witnesses killed in anti-Catholic persecution in Mexico",
+  "places": ["Mexico", "Jalisco", "Zacatecas", "Colima", "Chihuahua"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Christopher Magallanes Jara and twenty-four companions were twenty-two diocesan priests and three lay Catholics killed in separate Mexican cases between 1915 and 1937 and canonized together in 2000. Their formal cause recognizes death for the faith, but their histories must not be collapsed into a single execution or used to romanticize the Cristero War. Magallanes rejected armed violence; scholarship distinguishes state repression, local conflicts, armed resistance, and violence affecting Catholics themselves.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Saints_of_the_Cristero_War",
+  "wikidataId": "Q747826",
+  "feastDates": ["May 21"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "magallanes-canonization-homily",
+      "title": "Canonization of 27 New Saints",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "Holy See",
+      "url": "https://www.vatican.va/content/john-paul-ii/en/homilies/2000/documents/hf_jp-ii_hom_20000521_canonizations.html",
+      "publicationDate": "2000-05-21",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal canonization homily used for the group of twenty-five, its composition of mostly diocesan priests and three laymen, continuing ministry during persecution, forgiveness, and a non-retaliatory call to justice and harmony",
+      "supports": ["identity", "profileKind", "group.count", "clergyLayComposition", "martyrRecognition", "ministry", "forgiveness", "peace"]
+    },
+    {
+      "id": "magallanes-decretal",
+      "title": "Christiani Suppliciis",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "Holy See",
+      "url": "https://www.vatican.va/content/john-paul-ii/la/apost_letters/2000/documents/hf_jp-ii_apl_20000521_christiani-suppliciis.html",
+      "publicationDate": "2000-05-21",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal canonization decretal used for the complete group identity, twenty-two diocesan priests and three laymen, individual names and cases, dispersed dates and locations, and canonical recognition of martyrdom",
+      "supports": ["identity", "alternateNames", "profileKind", "group.count", "individualCases", "dates", "places", "martyrRecognition"]
+    },
+    {
+      "id": "magallanes-vatican-news",
+      "title": "Saint Christopher Magallanes, Priest, and Companions, Martyrs in Mexico",
+      "authorOrInstitution": "Vatican News",
+      "publisher": "Dicastery for Communication",
+      "url": "https://www.vaticannews.va/es/santos/05/21/ss--cristoforo-magallanes--sac---y-companeros--martires-en-mexic.html",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Official tertiary biography used for Magallanes's pastoral works, clandestine seminary, refusal of armed violence, arrest, and execution at Colotlan, while excluding its questionable ordination chronology",
+      "supports": ["magallanes.pastoralWork", "seminary", "violence.rejection", "arrest", "execution", "historicalCertainty"]
+    },
+    {
+      "id": "magallanes-causesanti-index",
+      "title": "Cristobal Magallanes Jara",
+      "authorOrInstitution": "Dicastery for the Causes of Saints",
+      "publisher": "Holy See",
+      "url": "https://www.causesanti.va/it/santi-e-beati/cristobal-magallanes-jara.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal cause index used for Christopher's 1869 birth and 25 May 1927 death, the cause's May 25 proper commemoration, and the group's individual dossier scope distinct from the app's May 21 optional memorial",
+      "supports": ["magallanes.birth", "magallanes.death", "cause.scope", "cause.properCommemoration", "calendar.scopeDifference"]
+    },
+    {
+      "id": "magallanes-usccb-liturgy",
+      "title": "Optional Memorial of Saint Christopher Magallanes, Priest, and Companions, Martyrs",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/readings/0521-memorial-christopher-magallanes.cfm",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Official liturgical page used for the May 21 optional memorial and Revelation 7 reading centered on worship of God amid tribulation",
+      "supports": ["celebrationIds", "feast", "calendar.rank", "scripture"]
+    },
+    {
+      "id": "mexico-pius-xi-1926",
+      "title": "Iniquis Afflictisque",
+      "authorOrInstitution": "Pope Pius XI",
+      "publisher": "Holy See",
+      "url": "https://www.vatican.va/content/pius-xi/en/encyclicals/documents/hf_p-xi_enc_18111926_iniquis-afflictisque.html",
+      "publicationDate": "1926-11-18",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Contemporary ecclesial primary source used as a situated witness to constitutional restrictions, the Calles Law, expulsions, property and worship measures, deaths, and episcopal passive resistance, not as a neutral account of every actor",
+      "supports": ["historicalContext", "stateRestrictions", "callesLaw", "worshipSuspension", "violence", "churchResponse", "genre.limit"]
+    },
+    {
+      "id": "cristero-lawrence",
+      "title": "Popular violence and 'lay religion' in centre-west Mexico during Mexico's Cristero war (1926-29)",
+      "authorOrInstitution": "Mark Lawrence",
+      "publisher": "Historical Encounters",
+      "url": "https://kar.kent.ac.uk/106341/1/Mark%20Lawrence.pdf",
+      "publicationDate": "2023",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Peer-reviewed independent control used to distinguish armed insurgency, federal counterinsurgency, local agrarian conflict, lay religion, clerical non-support, and Cristero violence that also harmed Catholic civilians and institutions",
+      "supports": ["cristeroWar", "armedResistance", "stateViolence", "rebelViolence", "localConflict", "clergyDistinctions", "civilianHarm", "historicalCertainty"]
+    },
+    {
+      "id": "cristero-lopez-historiography",
+      "title": "La guerra cristera (Mexico, 1926-1929): una aproximacion historiografica",
+      "authorOrInstitution": "Damian Lopez",
+      "publisher": "Historiografias",
+      "url": "https://doi.org/10.26754/ojs_historiografias/hrht.201112523",
+      "publicationDate": "2011",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent historiographic survey used to frame the conflict as a complex confrontation involving state, Church, armed Catholics, and varied social groups rather than a simple morality tale",
+      "supports": ["historicalContext", "historiography", "socialGroups", "churchStateConflict", "complexity", "historicalCertainty"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "The twenty-five martyrs show many forms of faithful ministry under persecution, not one military legend. Their deaths expose the wrong of state repression and religious coercion, while independent history also records armed resistance, rebel violence, and local conflict. Their memorial calls Catholics to protect conscience, serve threatened communities, forgive without erasing accountability, and refuse collective hatred.",
+  "oneMinuteSummary": "Christopher Magallanes Jara and twenty-four companions were twenty-two diocesan priests and three lay Catholics killed in distinct places and circumstances in Mexico between 1915 and 1937. The Church examined their individual causes, recognized martyrdom, and canonized them together in 2000. Magallanes served parishioners through education, charity, mission, and a clandestine seminary; Vatican biographical material says he rejected armed violence before his arrest and execution in 1927. The wider Cristero conflict cannot be reduced to their stories. Contemporary Church sources document severe state restrictions, expulsions, suppression of worship, and killings, while independent scholarship also describes federal counterinsurgency, agrarian disputes, armed Catholic rebellion, clerical differences, and Cristero violence that harmed Catholic civilians. The companions were not one military unit and did not share one political role. Their memorial condemns persecution without blaming all Mexicans or all government workers, and honors courageous ministry without romanticizing war, retaliation, or avoidable exposure to violence.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Twenty-five distinct witnesses",
+        "body": "The canonization documents identify twenty-two diocesan priests and three laymen, killed in different places and years. The group profile preserves their formal common recognition while refusing to assign Christopher's lifespan, biography, or choices to every companion.",
+        "sourceIds": ["magallanes-decretal", "magallanes-canonization-homily"]
+      },
+      {
+        "heading": "Christopher's pastoral ministry",
+        "body": "Christopher was born in 1869 and died on May 25, 1927. He served through parish ministry, mission among Indigenous communities, education, charitable institutions, and formation of seminarians when public structures were suppressed. The official biography presents him as opposing armed violence. These details describe Christopher, not automatically all twenty-four companions; a questionable 1888 ordination chronology is omitted.",
+        "sourceIds": ["magallanes-vatican-news", "magallanes-decretal", "magallanes-causesanti-index"]
+      },
+      {
+        "heading": "Persecution and state violence",
+        "body": "Post-revolutionary constitutional provisions and the Calles Law sharply restricted Catholic institutions and ministry. Clergy and lay people faced expulsions, closures, arrest, and killing. A contemporary papal encyclical is important evidence of the Church's experience, but its polemical voice cannot substitute for independent political history.",
+        "sourceIds": ["mexico-pius-xi-1926", "cristero-lopez-historiography"]
+      },
+      {
+        "heading": "The Cristero War was not one story",
+        "body": "Armed Catholic resistance, federal counterinsurgency, agrarian rivalries, local grievances, and contested religious loyalties interacted differently across regions. Most clergy did not openly support the rebellion, and Cristero forces also committed violence against Catholic civilians and institutions. Martyr recognition cannot turn every armed act into holy war.",
+        "sourceIds": ["cristero-lawrence", "cristero-lopez-historiography", "magallanes-vatican-news"]
+      },
+      {
+        "heading": "Martyrdom without collective blame",
+        "body": "The formal cause recognizes the companions' deaths for the faith and their steadfast ministry. It does not establish guilt for every official, identify all government workers with persecutors, or erase differences among victims, civilians, combatants, and political actors. Forgiveness and justice oppose both impunity and revenge.",
+        "sourceIds": ["magallanes-decretal", "magallanes-canonization-homily", "cristero-lawrence"]
+      },
+      {
+        "heading": "Two calendar scopes",
+        "body": "The app follows the May 21 optional memorial used by the wider liturgical calendar, while the Dicastery's cause index records May 25 as the cause's proper commemoration. The difference is one of calendar scope, not competing death dates: May 25 is also Christopher's documented date of death.",
+        "sourceIds": ["magallanes-usccb-liturgy", "magallanes-causesanti-index"]
+      }
+    ],
+    "gospelTheme": "The Lamb gathers a people from every nation who worship God amid tribulation; Christian witness refuses both coerced abandonment of faith and hatred of an opposing people.",
+    "struggle": "The companions ministered amid anti-Catholic repression, lethal state power, civil war, local faction, and armed resistance whose actors and victims cannot be collapsed into two morally uniform camps.",
+    "response": "They continued distinct forms of priestly and lay service and accepted death without renouncing faith. Their canonization points toward forgiveness, justice, and harmony, not retaliation or sacralized war."
+  },
+  "virtues": [
+    {
+      "name": "Pastoral courage",
+      "evidence": "Formal and official sources describe priests and laymen sustaining ministry and communal life when public Catholic institutions were severely restricted.",
+      "imitation": "Help a threatened faith community meet one verified practical need through safe accompaniment, legal support, transport, communications, or material aid rather than theatrical risk-taking.",
+      "sourceIds": ["magallanes-canonization-homily", "magallanes-decretal", "magallanes-vatican-news"]
+    },
+    {
+      "name": "Non-retaliatory fidelity",
+      "evidence": "The canonization homily emphasizes forgiveness and harmony, while Magallanes's official biography records his refusal of armed violence.",
+      "imitation": "Oppose an unjust policy with truthful, organized, nonviolent action and refuse language that assigns collective guilt to a nationality, party, or public service.",
+      "sourceIds": ["magallanes-canonization-homily", "magallanes-vatican-news"]
+    },
+    {
+      "name": "Historical truthfulness",
+      "evidence": "Independent scholarship distinguishes state repression, armed insurgency, clerical positions, local conflicts, and violence against Catholic civilians, preventing a romantic war narrative.",
+      "imitation": "Before sharing a martyr story, identify the person, date, place, source genre, and whether the subject was a civilian, minister, or combatant; correct any conflation you find.",
+      "sourceIds": ["cristero-lawrence", "cristero-lopez-historiography", "magallanes-decretal"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Read Revelation 7:9-17 and pray by name for a religious community facing coercion and for public servants resisting unlawful orders. Ask for courage without hatred, forgiveness without denial, and justice without revenge.",
+    "action": "Verify one current religious-freedom case through independent reporting and support a credible nonviolent response. Remove collective-blame language, distinguish officials from populations, and prioritize the safety and agency of those directly affected."
+  },
+  "reflectionQuestions": [
+    "Do the martyr stories I tell protect truth and living communities, or turn suffering into partisan excitement?",
+    "How can I oppose religious coercion while refusing collective blame, war romanticism, and pressure on others to take avoidable risks?"
+  ],
+  "scripture": {
+    "reference": "Revelation 7:9-17",
+    "connection": "The memorial's liturgical vision places the martyrs before God's throne among every people. Their hope transcends national camps and forbids using their deaths to sanctify hatred or revenge."
+  },
+  "prayer": "God of every people, you strengthened Saint Christopher Magallanes and his companions in faithful service amid persecution. Protect all who suffer for conscience, restrain state and insurgent violence, and convert those who misuse power. Make us truthful about history, courageous in nonviolent solidarity, and free from collective blame or revenge. Gather us in the peace of Christ our Lord. Amen."
+}

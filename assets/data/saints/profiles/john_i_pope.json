@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 2,
+  "id": "john_i_pope",
+  "profileKind": "individual",
+  "celebrationIds": ["john_i_pope", "saint_john_i_pope_and_martyr"],
+  "name": "Saint John I, Pope and Martyr",
+  "alternateNames": ["Pope John I"],
+  "ecclesialTitle": "Pope and martyr",
+  "vocation": "Bishop of Rome entrusted with a coerced diplomatic mission amid conflict over Arian policy",
+  "places": ["Rome", "Constantinople", "Ravenna"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "John I served as Bishop of Rome from 523 until his death in 526. The Ostrogothic king Theodoric compelled him to lead an embassy to Emperor Justin I after imperial measures against Arians. John was received with honor in Constantinople, but on returning he was imprisoned at Ravenna and died in custody. Sources differ over political motives and details; the Church venerates his fidelity under coercion without presenting state abuse as spiritually desirable.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Pope_John_I",
+  "wikidataId": "Q170918",
+  "feastDates": ["May 18"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "john-vatican-registry",
+      "title": "John I",
+      "authorOrInstitution": "Holy See",
+      "publisher": "Holy See",
+      "url": "https://www.vatican.va/content/vatican/en/holy-father/giovanni-i.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Official papal registry used for John as the fifty-third pope and for the documented boundaries of his pontificate, 13 August 523 to 18 May 526",
+      "supports": ["identity", "pontificate", "deathDate", "ecclesialTitle"]
+    },
+    {
+      "id": "john-cei-martyrology",
+      "title": "Saint of the Day: Saint John I, Pope and Martyr",
+      "authorOrInstitution": "Italian Episcopal Conference",
+      "publisher": "Chiesa Cattolica Italiana",
+      "url": "https://www.chiesacattolica.it/santo-del-giorno/?data-liturgia=20260518",
+      "publicationDate": "2026-05-18",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Official liturgical and Martyrology source used for the May 18 optional memorial, red color, mission to Constantinople, imprisonment, death, and ecclesial recognition as martyr",
+      "supports": ["celebrationIds", "feast", "calendar.rank", "calendar.color", "mission", "imprisonment", "martyrTitle"]
+    },
+    {
+      "id": "john-liber-pontificalis",
+      "title": "The Book of the Popes (Liber Pontificalis), John I",
+      "authorOrInstitution": "Anonymous early papal biographers; translated by Louise Ropes Loomis",
+      "publisher": "Columbia University Press scan, Internet Archive",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/2/23/The_book_of_the_popes_%28Liber_pontificalis%29_I-_%28IA_cu31924006163897%29.pdf",
+      "publicationDate": "1916",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Early primary reception used cautiously for the embassy, return, imprisonment at Ravenna, and death in custody; miraculous and providential-punishment elements are excluded as hagiographic interpretation",
+      "supports": ["mission", "constantinople", "imprisonment", "death", "reception.early", "historicalCertainty"]
+    },
+    {
+      "id": "john-nce",
+      "title": "John I, Pope, St.",
+      "authorOrInstitution": "New Catholic Encyclopedia",
+      "publisher": "Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/john-i-pope-st",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Historical control used for Justin's anti-Arian measures, Theodoric's coerced embassy, John's qualified diplomatic response, Easter at Constantinople, disputed suspicions, and probable effects of maltreatment in custody",
+      "supports": ["historicalContext", "arianPolicy", "mission", "diplomaticOutcome", "imprisonment", "deathCause.limit", "historicalCertainty"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "John I's memorial faces a morally tangled episode without simplifying it into partisan legend. He was pressed between an Ostrogothic ruler and an Eastern emperor during coercive religious policy, then died in custody. His witness invites fidelity, prudent diplomacy, and care for religious minorities while condemning imprisonment, forced conversion, and political retaliation.",
+  "oneMinuteSummary": "John I was Bishop of Rome from August 523 until May 526. His pontificate unfolded while Italy was ruled by the Arian Ostrogoth Theodoric and the Eastern emperor Justin I imposed restrictions on Arians. Theodoric compelled John to head an embassy to Constantinople seeking relief from the imperial measures. Historical summaries indicate that John pleaded for restoration of confiscated churches but resisted forced reconversion of people who had become Catholic. He was honored in Constantinople and celebrated Easter there. After the embassy returned, Theodoric imprisoned John at Ravenna; John died in custody on May 18, probably after harsh treatment, although the precise cause and the king's motives cannot be proved with confidence. The Liber Pontificalis preserves early testimony but adds hagiographic elements that should not be treated as neutral history. The memorial honors fidelity under coercion while rejecting imprisonment, forced conversion, political vengeance, and romanticized suffering.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A short pontificate in divided Italy",
+        "body": "John became the fifty-third Bishop of Rome in 523. Italy was governed by the Ostrogothic king Theodoric, an Arian Christian, while the emperor Justin I in Constantinople advanced policies restricting Arians. The religious dispute was inseparable from imperial rivalry and political suspicion.",
+        "sourceIds": ["john-vatican-registry", "john-nce"]
+      },
+      {
+        "heading": "A mission undertaken under pressure",
+        "body": "Theodoric compelled John to lead an embassy to Justin. John sought relief for Arian communities and was received with honor in Constantinople. Later sources differ on what the delegation secured, but a critical summary says John resisted demands for forced reconversion. Diplomacy here was constrained service, not free endorsement of either ruler's policy.",
+        "sourceIds": ["john-nce", "john-liber-pontificalis", "john-cei-martyrology"]
+      },
+      {
+        "heading": "Imprisonment and death",
+        "body": "On his return, John was imprisoned at Ravenna and died there on May 18, 526. Maltreatment and deprivation are probable contributors, but surviving accounts do not establish a precise medical cause or a single certain motive for Theodoric's decision. The Church receives John as martyr without turning abuse into a good.",
+        "sourceIds": ["john-vatican-registry", "john-cei-martyrology", "john-liber-pontificalis", "john-nce"]
+      },
+      {
+        "heading": "Reading early hagiography responsibly",
+        "body": "The Liber Pontificalis is valuable early reception evidence, yet its chronology and political account require comparison with historical controls. Its miracle and divine-punishment motifs express devotion rather than demonstrable causation; this profile neither repeats them as fact nor portrays an opponent's death as God's revenge.",
+        "sourceIds": ["john-liber-pontificalis", "john-nce"]
+      }
+    ],
+    "gospelTheme": "Christ's shepherd serves truth and human dignity even when rulers make religious communities instruments of political conflict.",
+    "struggle": "John faced incompatible demands amid anti-Arian coercion, Ostrogothic suspicion, and Byzantine ambition, then suffered imprisonment whose exact political motive remains uncertain.",
+    "response": "He undertook the imposed embassy, sought a limited remedy, resisted forced reconversion according to the historical control, and remained faithful in custody. His witness does not justify the coercion inflicted on him or on Arians."
+  },
+  "virtues": [
+    {
+      "name": "Prudence under constraint",
+      "evidence": "John negotiated between rulers whose policies placed him and religious communities under pressure, pursuing relief without simply endorsing coercive demands.",
+      "imitation": "When power limits your choices, identify what good remains possible, document the pressure, seek counsel, and refuse to call a coerced compromise complete justice.",
+      "sourceIds": ["john-nce", "john-liber-pontificalis"]
+    },
+    {
+      "name": "Respect for conscience",
+      "evidence": "The critical historical account distinguishes restoring Arian churches from compelling people who had become Catholic to convert back, a coercion John would not support.",
+      "imitation": "Defend a neighbor's freedom from forced religious conformity, even when you disagree with the neighbor's belief or community.",
+      "sourceIds": ["john-nce"]
+    },
+    {
+      "name": "Fidelity without glorifying harm",
+      "evidence": "John died after imprisonment and harsh treatment and is venerated as martyr; the wrong done to him remains wrong rather than a spiritually desirable ordeal.",
+      "imitation": "Stand beside someone facing unjust detention or retaliation through verified advocacy and practical care, without pressuring that person to endure avoidable danger.",
+      "sourceIds": ["john-cei-martyrology", "john-nce"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray Psalm 146 for prisoners, religious minorities, diplomats, and leaders caught between conscience and coercion. Ask for fidelity that neither hates opponents nor mistakes suffering for God's preference.",
+    "action": "Learn one credible local route for supporting prisoners or people facing religious coercion, then offer a concrete contribution such as transport, legal-aid funding, family support, or a verified letter of advocacy."
+  },
+  "reflectionQuestions": [
+    "When conflict becomes partisan, whose conscience or safety am I tempted to treat as expendable?",
+    "How can I honor a martyr's courage while still working to prevent detention, abuse, and retaliation?"
+  ],
+  "scripture": {
+    "reference": "2 Corinthians 4:8-10",
+    "connection": "Paul's language of being afflicted but not crushed illuminates resilient witness; it does not excuse those who inflict affliction or remove the duty to protect people from abuse."
+  },
+  "prayer": "God of justice and mercy, you sustained Saint John I amid political pressure and imprisonment. Give your Church prudent courage, respect for conscience, and steadfast care for those held or harmed by power. Free us from forced conversion, vengeance, and contempt for opponents. May our fidelity protect life and bear truthful witness to Christ our Lord. Amen."
+}

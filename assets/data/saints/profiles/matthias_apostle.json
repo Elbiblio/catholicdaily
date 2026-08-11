@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 2,
+  "id": "matthias_apostle",
+  "profileKind": "biblical",
+  "celebrationIds": ["matthias_apostle", "saint_matthias_apostle"],
+  "name": "Saint Matthias, Apostle",
+  "alternateNames": ["Matthias the Apostle"],
+  "ecclesialTitle": "Apostle chosen to join the Twelve after the Ascension",
+  "vocation": "Apostolic witness to the resurrection of Jesus",
+  "places": ["Jerusalem"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Acts identifies Matthias as the disciple chosen, after communal prayer and the casting of lots, to take the place left vacant by Judas Iscariot. He had accompanied Jesus' followers from John's baptism through the Ascension and was appointed as a witness to the Resurrection. Scripture says nothing further about his ministry or death, so later travel, martyrdom, and relic stories are presented as traditions rather than biography.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Saint_Matthias",
+  "wikidataId": "Q43669",
+  "feastDates": ["May 14"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "matthias-acts-usccb",
+      "title": "Acts of the Apostles, Chapter 1",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/acts/1",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Canonical biblical text used for the vacancy among the Twelve, candidate requirements, communal prayer, casting of lots, and Matthias being counted with the eleven",
+      "supports": ["identity", "profileKind", "election", "apostolicWitness", "scripture", "historicalCertainty"]
+    },
+    {
+      "id": "matthias-benedict-audience",
+      "title": "Judas Iscariot and Matthias",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "Holy See",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/audiences/2006/documents/hf_ben-xvi_aud_20061018.html",
+      "publicationDate": "2006-10-18",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal catechesis used for the Church's reception of Matthias as an apostolic witness and for the explicit acknowledgment that reliable information about his later life is lacking",
+      "supports": ["identity", "ecclesialTitle", "apostolicWitness", "laterLife.limit", "theology.vocation"]
+    },
+    {
+      "id": "matthias-eusebius-history",
+      "title": "Ecclesiastical History, Book I, Chapter 12",
+      "authorOrInstitution": "Eusebius of Caesarea",
+      "publisher": "Bibliothek der Kirchenvaeter, University of Fribourg",
+      "url": "https://bkv.unifr.ch/en/works/cpg-3495/compare/the-church-history-of-eusebius/14/kirchengeschichte-bkv-2",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Early primary reception used only for Eusebius's report of a tradition that Matthias belonged to the seventy disciples, not as proof of later journeys or death",
+      "supports": ["reception.early", "tradition.seventy", "historicalCertainty"]
+    },
+    {
+      "id": "matthias-nce",
+      "title": "Matthias, Apostle, St.",
+      "authorOrInstitution": "New Catholic Encyclopedia",
+      "publisher": "Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/matthias-apostle-st",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Historical reference control used to distinguish the Acts account from legendary later careers and to explain the symbolic restoration of the Twelve",
+      "supports": ["identity", "election", "twelve.symbolism", "laterTraditions", "historicalCertainty"]
+    },
+    {
+      "id": "matthias-cei-liturgy",
+      "title": "Liturgy of the Day: Saint Matthias, Apostle",
+      "authorOrInstitution": "Italian Episcopal Conference",
+      "publisher": "Chiesa Cattolica Italiana",
+      "url": "https://www.chiesacattolica.it/liturgia-del-giorno/?data-liturgia=20260514",
+      "publicationDate": "2026-05-14",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Official liturgical page used for the proper date, rank, red color, and readings while allowing higher-ranking local celebrations to take precedence",
+      "supports": ["celebrationIds", "feast", "calendar.rank", "calendar.color", "scripture"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Matthias shows that apostolic ministry is received as a call to witness to Christ, not seized as status. The community names qualified candidates, prays, and entrusts the choice to God. His scriptural obscurity also teaches historical honesty: discipleship does not require invented adventures, and faithful service can remain largely unrecorded.",
+  "oneMinuteSummary": "Acts presents Matthias at a decisive moment between the Ascension and Pentecost. Peter tells the gathered believers that the vacancy among the Twelve should be filled by someone who had accompanied Jesus' followers from John's baptism through the Ascension and could witness to the Resurrection. The community proposes Joseph Barsabbas and Matthias, prays for the Lord who knows every heart to show his choice, casts lots, and counts Matthias with the eleven apostles. This is the secure core of his biography. Eusebius later reports a tradition that Matthias belonged to the seventy disciples, but Scripture gives no later itinerary or account of his death. Conflicting stories place his ministry and death in different lands and attach disputed relics to him; they should not be narrated as fact. His feast highlights prayerful discernment, continuity in communal mission, and humble witness rather than personal fame.",
+  "life": {
+    "sections": [
+      {
+        "heading": "The vacancy among the Twelve",
+        "body": "After Judas's departure and death, the gathered believers faced a vacancy in the apostolic circle. Acts connects the restored Twelve with continuity in Israel's story and the Church's mission, not with replacing one personality by inventing another hero.",
+        "sourceIds": ["matthias-acts-usccb", "matthias-nce"]
+      },
+      {
+        "heading": "Chosen for resurrection witness",
+        "body": "The candidates had to have accompanied the disciples throughout Jesus' public ministry. The community proposed two men, prayed to the Lord who knows hearts, cast lots, and received Matthias as numbered with the eleven. The text combines communal judgment, prayer, and trust in divine initiative.",
+        "sourceIds": ["matthias-acts-usccb", "matthias-benedict-audience"]
+      },
+      {
+        "heading": "Where evidence ends",
+        "body": "Acts records no subsequent journey, sermon, manner of death, or burial for Matthias. Eusebius preserves a tradition that he was among the seventy; later accounts disagree about regions, martyrdom, and relics. These traditions belong to reception history and cannot be merged into a certain life story.",
+        "sourceIds": ["matthias-eusebius-history", "matthias-nce", "matthias-benedict-audience"]
+      },
+      {
+        "heading": "The feast",
+        "body": "May 14 is the proper date for the Feast of Saint Matthias and red is its liturgical color. A higher-ranking celebration may take precedence in a local calendar; in Nigeria in 2026, the Ascension creates such a collision, so the feast should not be described as universally observed on that civil date.",
+        "sourceIds": ["matthias-cei-liturgy"]
+      }
+    ],
+    "gospelTheme": "Jesus chooses disciples to remain in his love and bear lasting fruit. Matthias's election serves the continuing apostolic witness to the Resurrection.",
+    "struggle": "A community wounded by betrayal had to restore its ministry without making ambition, rumor, or resentment the basis of discernment.",
+    "response": "The believers identified credible witnesses, prayed together, accepted a bounded process, and entrusted the outcome to God. Matthias received the mission without a scriptural record of self-promotion."
+  },
+  "virtues": [
+    {
+      "name": "Faithful presence",
+      "evidence": "Acts requires that the new apostle had accompanied the disciples from John's baptism through the Ascension, making sustained presence part of credible witness.",
+      "imitation": "Keep one quiet commitment to your parish, family, or neighbor consistently, especially when nobody is recording the work.",
+      "sourceIds": ["matthias-acts-usccb"]
+    },
+    {
+      "name": "Prayerful discernment",
+      "evidence": "The gathered community assessed candidates and then prayed to the Lord who knows every heart before the selection.",
+      "imitation": "Before a consequential choice, name the relevant qualifications, consult those affected, and pray without pretending that your preference is automatically God's will.",
+      "sourceIds": ["matthias-acts-usccb", "matthias-benedict-audience"]
+    },
+    {
+      "name": "Humility without invented fame",
+      "evidence": "Reliable sources preserve Matthias's apostolic election but very little about his later life; his significance does not depend on filling that silence with legend.",
+      "imitation": "Let a useful act remain unpublicized today, and resist repeating an inspiring religious claim whose evidence you have not checked.",
+      "sourceIds": ["matthias-benedict-audience", "matthias-nce"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Read Acts 1:21-26 slowly. Name one decision facing your community, ask the Lord who knows every heart for freedom from ego, and sit in silence before choosing your next faithful step.",
+    "action": "Support a transparent discernment process this week: clarify qualifications, invite affected voices, disclose conflicts, and avoid treating chance, popularity, or private certainty as a substitute for responsibility."
+  },
+  "reflectionQuestions": [
+    "Where have I confused visibility or seniority with readiness to serve as a trustworthy witness?",
+    "Can I honor the boundary between what is known about a holy person and what later devotion imagined?"
+  ],
+  "scripture": {
+    "reference": "Acts 1:24-26",
+    "connection": "The community's prayer and the counting of Matthias with the eleven place discernment at the service of resurrection witness and shared mission, not personal advancement."
+  },
+  "prayer": "Lord Jesus Christ, you call witnesses to your Resurrection and know every heart. Teach us to discern with truth, prayer, and freedom from ambition. Make us faithful in hidden service, honest about the limits of our knowledge, and ready to bear lasting fruit wherever you send us. Through you, who live and reign for ever and ever. Amen."
+}

@@ -1,0 +1,200 @@
+{
+  "schemaVersion": 2,
+  "id": "bernardine_of_siena",
+  "profileKind": "individual",
+  "celebrationIds": ["bernardine_of_siena", "saint_bernardine_of_siena_priest"],
+  "name": "Saint Bernardine of Siena, Priest",
+  "alternateNames": ["Bernardino da Siena"],
+  "ecclesialTitle": "Franciscan priest and preacher",
+  "vocation": "Observant Franciscan preaching, reform, and pastoral service",
+  "places": ["Massa Marittima", "Siena", "L'Aquila"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Bernardine of Siena (1380-1444) was an Observant Franciscan priest whose wide-ranging vernacular preaching promoted devotion to the Holy Name of Jesus, moral reform, reconciliation, and renewed Franciscan life. He also wrote extensively about contracts, prices, credit, and usury within medieval moral theology. A truthful account must confront his anti-Jewish preaching and demands for coercive policies, which helped intensify exclusion and harm and cannot be imitated or excused.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Bernardino_of_Siena",
+  "wikidataId": "Q314079",
+  "feastDates": ["May 20"],
+  "lifeSpan": "1380-1444",
+  "lifeLength": "63 years",
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "bernardine-cei-liturgy",
+      "title": "Saint of the Day: Saint Bernardine of Siena, Priest",
+      "authorOrInstitution": "Italian Episcopal Conference",
+      "publisher": "Chiesa Cattolica Italiana",
+      "url": "https://www.chiesacattolica.it/santo-del-giorno/?data-liturgia=20260520",
+      "publicationDate": "2026-05-20",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Official Martyrology and liturgical source used for identity, Franciscan priesthood, preaching ministry, Holy Name devotion, death at L'Aquila, May 20 optional memorial, and white color",
+      "supports": ["identity", "ecclesialTitle", "vocation", "holyName", "deathPlace", "celebrationIds", "feast", "calendar.rank", "calendar.color"]
+    },
+    {
+      "id": "bernardine-ofm-biography",
+      "title": "St Bernardine of Siena",
+      "authorOrInstitution": "Order of Friars Minor",
+      "publisher": "Order of Friars Minor",
+      "url": "https://ofm.org/en/st-bernardine-of-siena.html",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Official order summary used as a tertiary control for plague service, entry into the Friars Minor, Observant reform, itinerant preaching, and devotion to the Holy Name",
+      "supports": ["earlyService", "franciscanVocation", "observantReform", "preaching", "holyName"]
+    },
+    {
+      "id": "bernardine-treccani-biography",
+      "title": "Bernardino da Siena, santo",
+      "authorOrInstitution": "Dizionario Biografico degli Italiani",
+      "publisher": "Treccani",
+      "url": "https://www.treccani.it/enciclopedia/bernardino-da-siena-santo_%28Dizionario-Biografico%29/",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Critical scholarly biography used for birth and family, education, documented plague service with limits on later legend, Franciscan chronology, preaching career, Observant leadership, and death",
+      "supports": ["identity", "lifeSpan", "earlyLife", "plagueService", "legend.limit", "franciscanVocation", "preaching", "observantReform", "death"]
+    },
+    {
+      "id": "bernardine-todeschini-economy",
+      "title": "Bernardino da Siena",
+      "authorOrInstitution": "Giacomo Todeschini",
+      "publisher": "Treccani, Il Contributo italiano alla storia del Pensiero: Economia",
+      "url": "https://www.treccani.it/enciclopedia/bernardino-da-siena_%28Il-Contributo-italiano-alla-storia-del-Pensiero%3A-Economia%29/",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent scholarly control used to place the contract and usury sermons inside medieval moral theology, identify their scholastic debts, and avoid the anachronistic label of modern economist",
+      "supports": ["economicThought", "contracts", "usury", "sources.intellectual", "anachronism.limit"]
+    },
+    {
+      "id": "bernardine-contracts-primary",
+      "title": "On Contracts and Usury, selected translated texts",
+      "authorOrInstitution": "Bernardine of Siena; translated selections hosted by Saint Bonaventure University",
+      "publisher": "Saint Bonaventure University",
+      "url": "https://web.sbu.edu/theology/bychkov/Bernardino%20on%20contracts.pdf",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Primary translated selections used for Bernardine's moral analysis of contracts, interest, poverty, concentration of wealth, and damage to the civic body",
+      "supports": ["economicThought", "contracts", "usury", "poverty", "commonGood"]
+    },
+    {
+      "id": "bernardine-fordham-sermons",
+      "title": "Two Sermons on Wives and Widows",
+      "authorOrInstitution": "Bernardine of Siena; Internet Medieval Sourcebook",
+      "publisher": "Fordham University",
+      "url": "https://sourcebooks.web.fordham.edu/source/Bernardino-2sermons.asp",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Primary translated sermon witness used to assess Bernardine's popular vernacular method and historically conditioned teaching about women without reproducing degrading formulations",
+      "supports": ["preaching.style", "vernacular", "genderedRhetoric", "historicalCertainty", "harm.safeguard"]
+    },
+    {
+      "id": "bernardine-mormando",
+      "title": "The Preacher's Demons: Bernardino of Siena and the Social Underworld of Early Renaissance Italy",
+      "authorOrInstitution": "Franco Mormando",
+      "publisher": "University of Chicago Press",
+      "url": "https://press.uchicago.edu/ucp/books/book/chicago/P/bo3615018.html",
+      "publicationDate": "1999",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent monograph control used for the social effects of Bernardine's rhetoric toward marginalized groups and the scholarly reappraisal of his anti-Jewish preaching",
+      "supports": ["preaching.reception", "marginalizedGroups", "antiJewishRhetoric", "harm", "historicalCertainty"]
+    },
+    {
+      "id": "bernardine-frank",
+      "title": "From Egypt to Umbria: Jewish Women and Property in the Medieval Mediterranean",
+      "authorOrInstitution": "Karen A. Frank",
+      "publisher": "California Italian Studies, University of California",
+      "url": "https://escholarship.org/content/qt9249w3hr/qt9249w3hr.pdf?t=r9pe6o",
+      "publicationDate": "2010",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Peer-reviewed independent historical control used for Bernardine's 1425 demands against Jewish bankers in Perugia and the subsequent badges, exclusions, and coercive effects on Jewish communal life",
+      "supports": ["antiJewishRhetoric", "perugia.1425", "coercivePolicy", "jewishWomen", "harm", "reception"]
+    },
+    {
+      "id": "bernardine-nostra-aetate",
+      "title": "Nostra Aetate",
+      "authorOrInstitution": "Second Vatican Council",
+      "publisher": "Holy See",
+      "url": "https://www.vatican.va/content/dam/wss/archive/hist_councils/ii_vatican_council/documents/vat-ii_decl_19651028_nostra-aetate_en.html",
+      "publicationDate": "1965-10-28",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal conciliar safeguard used for the Church's shared patrimony with the Jewish people, rejection of antisemitism, persecution, discrimination, and contempt, and commitment to mutual understanding and respect",
+      "supports": ["theology.jewishRelations", "antiSemitism.rejection", "discrimination.rejection", "preaching.safeguard", "humanDignity"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Bernardine joins tireless preaching, Franciscan reform, devotion to Jesus' Holy Name, and serious moral reflection on economic life. His record also warns that religious eloquence can mobilize exclusion. Honoring a saint requires neither erasing harm nor repeating contempt: reform must remain accountable to the equal dignity of Jewish people, women, and every neighbor.",
+  "oneMinuteSummary": "Bernardine was born in 1380 near Siena, served plague patients as a young man, entered the Friars Minor in 1402, and became a leading Observant reformer and itinerant preacher. His preaching promoted repentance, reconciliation, and devotion to the Holy Name of Jesus. Sermons on contracts, prices, credit, wealth, and usury belong to medieval moral theology and draw on earlier scholastic thought; calling him a modern economist would be anachronistic. The same preaching career also carried grave harms. Primary sermons preserve degrading assumptions about women, while historical scholarship documents Bernardine's anti-Jewish rhetoric and his demands in Perugia for punishment and expulsion of Jewish lenders. Such agitation contributed to badges, exclusions, and restrictions on Jewish communal life. Canonization does not make every judgment or policy holy. His memorial can inspire Christ-centered preaching, service, and economic conscience only with repentance for coercive rhetoric and an explicit commitment to Jewish dignity and religious freedom.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Service and Franciscan vocation",
+        "body": "Born in 1380 and orphaned young, Bernardine studied in Siena and helped care for plague patients. A critical biography confirms the service while distinguishing documentation from later embellished vows. He entered the Friars Minor in 1402 and became a major figure in the Observant reform.",
+        "sourceIds": ["bernardine-treccani-biography", "bernardine-ofm-biography"]
+      },
+      {
+        "heading": "Preaching and the Holy Name",
+        "body": "Bernardine traveled widely, preaching repentance, civic reconciliation, and renewed Christian practice. Devotion to the Holy Name placed Jesus at the center of his public ministry. Surviving vernacular sermon reports also expose gendered assumptions that must be studied rather than reused as pastoral language.",
+        "sourceIds": ["bernardine-cei-liturgy", "bernardine-ofm-biography", "bernardine-fordham-sermons"]
+      },
+      {
+        "heading": "Economic life as a moral question",
+        "body": "His sermons on contracts and usury analyze fair exchange, credit, poverty, and the common good. They belong to a scholastic moral tradition and depend substantially on earlier writers. They can prompt scrutiny of exploitation, but they do not supply a modern economic system and should not be detached from their medieval setting.",
+        "sourceIds": ["bernardine-contracts-primary", "bernardine-todeschini-economy"]
+      },
+      {
+        "heading": "Anti-Jewish rhetoric and coercive effects",
+        "body": "Bernardine's grave anti-Jewish preaching presented Jewish lenders as a cause of social disorder and in 1425 pressed Perugian authorities toward punishment and expulsion. Scholarship traces advocacy and effects including segregation, compulsory badges, economic exclusion, and restrictions on worship, work, medicine, and communal life. Historical context never excuses contempt, and canonization does not endorse every sermon or policy. Nostra Aetate rejects antisemitism, persecution, and religious discrimination and calls Christians to mutual understanding and respect with Jewish people.",
+        "sourceIds": ["bernardine-mormando", "bernardine-frank", "bernardine-nostra-aetate"]
+      },
+      {
+        "heading": "A memorial with accountability",
+        "body": "Bernardine died at L'Aquila in 1444 and is commemorated on May 20. Liturgical remembrance can receive his service, reform, and Christ-centered devotion while rejecting anti-Judaism, coercion, and degrading rhetoric. The label Missionaries is a liturgical common mapping in the dataset, not evidence of formal patronage.",
+        "sourceIds": ["bernardine-cei-liturgy", "bernardine-treccani-biography", "bernardine-mormando", "bernardine-frank", "bernardine-nostra-aetate"]
+      }
+    ],
+    "gospelTheme": "The Holy Name directs preaching to Jesus, whose command to love the neighbor judges both economic exploitation and religious contempt.",
+    "struggle": "Bernardine sought communal reform in societies marked by plague, debt, faction, and inequality, yet some of his remedies scapegoated Jewish neighbors and reinforced coercion and exclusion.",
+    "response": "The Church can receive his service, disciplined reform, and concern for moral economic life only through Christ's command of love, honest historical accountability, and refusal of anti-Jewish rhetoric or coercive policy."
+  },
+  "virtues": [
+    {
+      "name": "Service in public need",
+      "evidence": "Critical biography and Franciscan reception preserve Bernardine's organized care for plague patients before his entry into the order, while qualifying later legendary details.",
+      "imitation": "Offer one sustainable service to people affected by illness or poverty, using public-health guidance and sharing responsibility rather than seeking heroic exposure.",
+      "sourceIds": ["bernardine-treccani-biography", "bernardine-ofm-biography"]
+    },
+    {
+      "name": "Moral attention to economic life",
+      "evidence": "His contract sermons asked how exchange, interest, poverty, and concentrated wealth affect neighbors and the civic body within medieval moral theology.",
+      "imitation": "Review one loan, wage, price, or purchasing habit for hidden exploitation and make one change that protects the more vulnerable party.",
+      "sourceIds": ["bernardine-contracts-primary", "bernardine-todeschini-economy"]
+    },
+    {
+      "name": "Accountable reform",
+      "evidence": "Modern scholarship shows that reforming rhetoric can produce coercive harm when it stereotypes a minority; Bernardine's anti-Jewish agitation is a warning, not a model.",
+      "imitation": "Audit one religious claim you share about another community, correct stereotypes publicly, and center testimony from people who bear the consequences.",
+      "sourceIds": ["bernardine-mormando", "bernardine-frank", "bernardine-fordham-sermons", "bernardine-nostra-aetate"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray Philippians 2:9-11 with the Holy Name of Jesus, then examine whether your speech about another religious or social group reflects Christ's humility. Confess and repair any contempt rather than baptizing it as zeal.",
+    "action": "Choose one economic relationship to make fairer and one anti-Jewish or misogynistic stereotype to correct. Learn from a credible Jewish or women's historical source before speaking, and do not demand that harmed people educate you personally."
+  },
+  "reflectionQuestions": [
+    "Does invoking Jesus' name make my speech more truthful and protective of neighbors, especially those outside my community?",
+    "Which reform I support could impose costs on a minority, and whose evidence must shape a safer course?"
+  ],
+  "scripture": {
+    "reference": "Philippians 2:9-11",
+    "connection": "The exalted name of Jesus belongs to the one who humbled himself. Devotion to that Name is contradicted when preaching humiliates neighbors or seeks coercive power over them."
+  },
+  "prayer": "Lord Jesus Christ, whose holy Name reveals humble and saving love, purify our preaching and our economic choices. Receive every true work of service, expose every prejudice, and heal the harms of anti-Jewish and degrading speech. Give us courage to reform without scapegoating, to seek justice without coercion, and to honor the dignity of every neighbor. Amen."
+}
