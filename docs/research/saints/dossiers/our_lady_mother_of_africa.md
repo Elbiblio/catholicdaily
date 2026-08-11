@@ -81,4 +81,6 @@ Christ's unique mediation governs every Marian statement. The Gospel and practic
 - Review date: 2026-08-11
 - Revision: 1
 - Status: published
+- Command: `dart run tool/validate_saint_profiles.dart --published-only`
+- Result: PASS — 158 total, 158 legacy, 48 researched, 48 validated, 0 errors, 0 warnings
 - Warnings: none
