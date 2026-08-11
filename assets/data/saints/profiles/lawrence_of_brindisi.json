@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 2,
+  "id": "lawrence_of_brindisi",
+  "profileKind": "individual",
+  "celebrationIds": ["lawrence_of_brindisi", "saint_lawrence_of_brindisi_priest_and_doctor_of_the_church"],
+  "name": "Saint Lawrence of Brindisi, Priest and Doctor of the Church",
+  "alternateNames": ["Lorenzo da Brindisi", "Giulio Cesare Russo"],
+  "ecclesialTitle": "Priest and Doctor of the Church",
+  "lifeSpan": "1559–1619",
+  "vocation": "Capuchin friar, Scripture scholar, preacher, religious superior, chaplain, and diplomat",
+  "places": ["Brindisi", "Venice", "Prague", "Vienna", "Lisbon"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Lawrence of Brindisi was a Capuchin priest whose language study, preaching, biblical exegesis, order government, and diplomacy moved across religiously divided Europe. His posthumously edited works show deep engagement with Scripture and rabbinic literature, but also confessional and anti-Jewish polemic that cannot be repeated as Christian contempt. He served beside armed forces as chaplain and envoy; later victory-miracle stories are not treated as historical causation. Declared a Doctor of the Church in 1959, he invites disciplined learning ordered toward peace, correction, and human dignity.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Lawrence_of_Brindisi",
+  "wikidataId": "Q313803",
+  "feastDates": ["July 21"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {
+      "id": "lawrence-benedict-audience",
+      "title": "General Audience of 23 March 2011: Saint Lawrence of Brindisi",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/audiences/2011/documents/hf_ben-xvi_aud_20110323.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal reception used for Lawrence's 1559–1619 chronology, Capuchin formation and priesthood, language learning, Scripture and rabbinic study, preaching, order offices, prayer, diplomatic missions, death in Lisbon while advocating for Neapolitan subjects, canonization, declaration as Doctor in 1959, and Christ-centered theology; devotional quotations are not reproduced",
+      "supports": ["identity", "alternateNames", "ecclesialTitle", "lifeSpan", "places", "life.capuchin", "life.priesthood", "life.languages", "life.scripture", "life.rabbinic_learning", "life.preaching", "life.government", "life.prayer", "life.diplomacy", "life.death", "reception.canonization", "reception.doctor"]
+    },
+    {
+      "id": "lawrence-opera-omnia",
+      "title": "Opera omnia, Volume 1: Mariale",
+      "authorOrInstitution": "Lawrence of Brindisi; edited by the Capuchin Fathers of the Venetian Province",
+      "publisher": "Ex Officina Typographica Seminarii",
+      "url": "https://books.google.com/books/about/Opera_omnia.html?id=es0nAAAAMAAJ",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Bibliographic access to the critical Opera omnia used to establish the posthumous editorial corpus, its Latin sermons and Mariale, its manuscript-based Capuchin publication beginning in 1928, and the need to cite a defined work and edition rather than circulating unattributed internet sayings; primary theological claims are summarized without quotation",
+      "supports": ["identity", "life.writings", "life.mariale", "life.sermons", "reception.edition", "sourceLimits"]
+    },
+    {
+      "id": "lawrence-drenas",
+      "title": "The Standard Bearer of the Roman Church: Lawrence of Brindisi and Capuchin Missions in the Holy Roman Empire (1599–1613)",
+      "authorOrInstitution": "Andrew J. G. Drenas",
+      "publisher": "The Catholic University of America Press",
+      "url": "https://www.cuapress.org/9780813230252/the-standard-bearer-of-the-roman-church/",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Scholarly monograph used for Lawrence's papally commissioned Central European missions, leadership of Capuchin foundations, preaching and disputations in confessional conflict, Lutheran polemical strategy, roles as chaplain and diplomat, and the military and political setting behind the later standard-bearer image; effectiveness and miracle claims are not inferred from devotional reception",
+      "supports": ["life.mission", "life.capuchin_foundations", "life.polemics", "life.disputations", "life.military_context", "life.chaplaincy", "life.diplomacy", "reception.standard_bearer", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "lawrence-cargnoni",
+      "title": "Il significato storico del titolo ‘Doctor Apostolicus’",
+      "authorOrInstitution": "Costanzo Cargnoni",
+      "publisher": "Italia Francescana, Conferenza Italiana dei Ministri Provinciali Cappuccini",
+      "url": "https://www.fraticappuccini.it/new_site/pubblicazioni/CIMP_Cap/italia_francescana/ItFr85-2010-3/257-302_2010-2-03_Approfo-Cargnoni.pdf",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Capuchin scholarly study used for the extent and genres of Lawrence's securely edited writings, their manuscript and publication history, the autobiographical De rebus Austriae et Bohemiae, biblical and theological priorities, and the historical reception of the title Doctor Apostolicus; it controls loose attribution of sayings and later devotional summaries",
+      "supports": ["life.writings", "life.manuscripts", "life.exegesis", "life.sermons", "life.polemics", "life.de_rebus", "reception.opera_omnia", "reception.doctor", "sourceLimits"]
+    },
+    {
+      "id": "lawrence-nostra-aetate",
+      "title": "Nostra Aetate: Declaration on the Relation of the Church to Non-Christian Religions, 4",
+      "authorOrInstitution": "Second Vatican Council",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/archive/hist_councils/ii_vatican_council/documents/vat-ii_decl_19651028_nostra-aetate_en.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal conciliar safeguard used to reject collective Jewish guilt for Christ's Passion, the portrayal of Jews as rejected or accursed by God, hatred, persecution, and antisemitism, and to require mutual understanding and respect when receiving Lawrence's historically situated anti-Jewish exegesis and conversion preaching",
+      "supports": ["doctrine.jewish_relation", "safeguard.no_collective_guilt", "safeguard.no_rejection", "safeguard.no_antisemitism", "safeguard.respect"]
+    },
+    {
+      "id": "lawrence-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — July",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/JulUC.shtml",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the canonical title Saint Lawrence of Brindisi, Priest and Doctor of the Church, July 21 optional memorial, and white color; the calendar key establishes that an entry without a printed rank is optional",
+      "supports": ["identity", "celebrationIds", "ecclesialTitle", "feastDates", "calendar.rank", "calendar.color"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Lawrence challenges readers to unite prayer and serious study while subjecting inherited polemic, political influence, and religious speech to the Gospel's demands for truth, peace, and the dignity of living communities.",
+  "oneMinuteSummary": "Lawrence of Brindisi was born Giulio Cesare Russo in 1559. He entered the Capuchins, became a priest, learned biblical languages, preached widely, governed his order, and wrote sermons, exegesis, and confessional controversy later edited from manuscripts. Popes and rulers also used him as missionary, military chaplain, and diplomat in a Europe divided by Catholic-Protestant conflict and war with Ottoman forces. Later accounts credit his presence with battle victory; the profile does not treat miracle claims as military causation. Lawrence's knowledge of Hebrew and rabbinic texts was remarkable, yet parts of his corpus use supersessionist and anti-Jewish rhetoric. Catholic reception today must reject collective guilt, divine rejection, hatred, and coerced conversion. He died in Lisbon in 1619 while pursuing a diplomatic appeal, was canonized in 1881, and became a Doctor of the Church in 1959. Learning serves holiness when it produces humility, peace, and truthful encounter.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Scripture, languages, and an edited corpus",
+        "body": "Born at Brindisi in 1559 and named Giulio Cesare Russo, Lawrence entered the Capuchins in 1575 and was ordained in 1582. He studied Hebrew, Greek, Syriac, Latin, and modern languages for preaching and biblical interpretation. His large Latin corpus was published posthumously from manuscripts; exact attribution belongs to defined works and editions, not free-floating internet quotations.",
+        "sourceIds": ["lawrence-benedict-audience", "lawrence-opera-omnia", "lawrence-cargnoni"]
+      },
+      {
+        "heading": "Mission in a divided Europe",
+        "body": "Lawrence taught, preached, governed Capuchin provinces and the whole order, and helped establish missions and friaries in Central Europe. His debates and writings addressed Lutheran opponents within an age of state-backed confessional competition. Intellectual courage does not require caricature: Christian teaching is served by accurate representation, patient listening, and freedom from coercion.",
+        "sourceIds": ["lawrence-benedict-audience", "lawrence-drenas", "lawrence-cargnoni"]
+      },
+      {
+        "heading": "Jewish learning and anti-Jewish polemic",
+        "body": "Lawrence knew Hebrew and rabbinic literature and preached in settings aimed at Jewish conversion. That learning coexists with supersessionist and condemnatory passages in his early-modern corpus. Nostra Aetate supplies the binding safeguard: Jews are not collectively guilty for Christ's death, rejected by God, or legitimate targets of hatred. Sainthood does not make harmful rhetoric reusable.",
+        "sourceIds": ["lawrence-benedict-audience", "lawrence-opera-omnia", "lawrence-cargnoni", "lawrence-nostra-aetate"]
+      },
+      {
+        "heading": "Chaplaincy, diplomacy, and peace",
+        "body": "Lawrence accompanied armed campaigns and became a remembered standard-bearer, while later devotion credited him with victory. The historical setting must not become a miracle claim that God guaranteed a battle. His later diplomatic work included appeals against abuse of Neapolitan subjects. He died in Lisbon in 1619 and was eventually declared a Doctor of the Church for his teaching.",
+        "sourceIds": ["lawrence-drenas", "lawrence-benedict-audience", "lawrence-cargnoni"]
+      }
+    ],
+    "gospelTheme": "The Word of God forms teachers who remain teachable, test their inherited rhetoric, and use learning and influence for truth, reconciliation, and protection rather than domination.",
+    "struggle": "Lawrence worked amid exhausting responsibility, confessional division, conversion campaigns, war, court politics, and polemical conventions that could turn scholarship into contempt.",
+    "response": "He joined sustained prayer, language study, preaching, leadership, and diplomacy; receiving him today also requires correcting anti-Jewish rhetoric and refusing miraculous or triumphalist readings of war."
+  },
+  "virtues": [
+    {
+      "name": "Disciplined study",
+      "evidence": "Lawrence learned languages and worked deeply with Scripture, patristic sources, and rabbinic literature across a substantial edited corpus.",
+      "imitation": "Before teaching a disputed subject, read a primary source and a responsible account from the community being discussed, then revise any claim you cannot represent fairly.",
+      "sourceIds": ["lawrence-benedict-audience", "lawrence-opera-omnia", "lawrence-cargnoni"]
+    },
+    {
+      "name": "Public responsibility",
+      "evidence": "His later diplomatic mission addressed reported oppression in Naples and ended with his death in Lisbon.",
+      "imitation": "Use one credential, relationship, or institutional channel to raise a documented injustice, centering the affected people's agency and safety rather than your prominence.",
+      "sourceIds": ["lawrence-benedict-audience"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray 2 Timothy 3:14–17, asking the Spirit to make Scripture correct your prejudices before you use it to correct another person.",
+    "action": "Audit one religious claim about Jews, another Christian community, or another religion; remove collective blame and contempt, and replace it with verified, specific, respectful language."
+  },
+  "reflectionQuestions": [
+    "Does my learning make me more accurate and peaceable, or simply better armed in an argument?",
+    "Which inherited religious phrase needs correction because it harms a living community or hides coercive history?"
+  ],
+  "scripture": {
+    "reference": "2 Timothy 3:14–17",
+    "connection": "Sacred Scripture forms and corrects the servant of God for good work; it is not permission to misrepresent opponents, sanctify political violence, or refuse later moral learning."
+  },
+  "prayer": "God of truth and peace, through Saint Lawrence's intercession give us disciplined minds, prayerful hearts, and speech free from contempt. Correct what we inherit wrongly, protect every neighbor's dignity, and turn our learning toward justice and reconciliation. Through Christ our Lord. Amen."
+}

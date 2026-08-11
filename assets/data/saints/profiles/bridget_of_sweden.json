@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 2,
+  "id": "bridget_of_sweden",
+  "profileKind": "individual",
+  "celebrationIds": ["bridget_of_sweden", "saint_bridget_religious"],
+  "name": "Saint Bridget of Sweden, Religious",
+  "alternateNames": ["Birgitta of Sweden", "Birgitta Birgersdotter", "Bridget of Vadstena"],
+  "ecclesialTitle": "Religious foundress and co-patroness of Europe",
+  "lifeSpan": "c. 1303–1373",
+  "vocation": "Wife, mother, widow, charitable organizer, foundress, pilgrim, adviser, and visionary",
+  "places": ["Sweden", "Vadstena", "Rome", "Jerusalem"],
+  "patronage": ["Europe"],
+  "symbols": [],
+  "briefBio": "Bridget of Sweden was a medieval wife and mother of eight, a widow, charitable organizer, pilgrim, foundress of the Order of the Most Holy Savior, and visionary who spent her later years in Rome. She did not herself become a consecrated member of the order she founded. Her reported revelations moved from Swedish dictation through Latin translators, scribes, and editors into a complex corpus. Canonization receives her holiness, not every individual revelation as authenticated fact or prediction. Her spiritual intensity must never justify family neglect, self-harm, unsafe fasting, or unaccountable political certainty.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Bridget_of_Sweden",
+  "wikidataId": "Q204996",
+  "feastDates": ["July 23"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "bridget-benedict-audience",
+      "title": "General Audience of 27 October 2010: Saint Bridget of Sweden",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/audiences/2010/documents/hf_ben-xvi_aud_20101027.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal reception used for Bridget's c. 1303–1373 chronology, marriage to Ulf, eight children, shared charity and pilgrimage, widowhood, later prayer and service, foundation of the Order of the Most Holy Savior, Rome and Holy Land journeys, Swedish dictation through confessor-secretaries into Latin Revelationes, Christ-centered spirituality, canonization, and European reception",
+      "supports": ["identity", "alternateNames", "ecclesialTitle", "lifeSpan", "places", "life.marriage", "life.children", "life.charity", "life.pilgrimage", "life.widowhood", "life.founding", "life.rome", "life.holy_land", "life.revelations", "life.translation", "life.death", "reception.canonization", "patronage"]
+    },
+    {
+      "id": "bridget-spes-aedificandi",
+      "title": "Spes Aedificandi: Proclamation of the Co-Patronesses of Europe",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/john-paul-ii/en/motu_proprio/documents/hf_jp-ii_motu-proprio_01101999_co-patronesses-europe.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal proclamation used for Bridget's roles as wife, mother, court participant, widow, foundress, pilgrim, ecclesial and political admonisher, advocate of reform and Christian unity, and co-patroness of Europe, and for the explicit distinction that the Church's recognition of her holiness does not pronounce on each individual reported revelation",
+      "supports": ["identity", "ecclesialTitle", "life.marriage", "life.children", "life.court", "life.widowhood", "life.founding", "life.pilgrimage", "life.admonition", "life.reform", "doctrine.revelation_discernment", "reception.canonization", "patronage", "patronage.europe"]
+    },
+    {
+      "id": "bridget-oxford-revelations",
+      "title": "The Revelations of St. Birgitta of Sweden, Volume I: Liber Caelestis, Books I–III",
+      "authorOrInstitution": "Translated by Denis Searby; introduction and notes by Bridget Morris",
+      "publisher": "Oxford University Press",
+      "url": "https://academic.oup.com/book/27045",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Modern critical translation and scholarly introduction used for the Revelationes corpus, its approximately seven hundred chapters, domestic, Swedish, Roman, ecclesial, political, Incarnation, Passion, and Marian subjects, its dependence on the Royal Swedish Academy critical Latin edition, and the need to distinguish Bridget's reported experiences from the wording of modern translation and editorial organization",
+      "supports": ["life.revelations", "life.domestic_context", "life.political_context", "life.ecclesial_context", "life.christology", "life.marian_devotion", "reception.corpus", "reception.critical_edition", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "bridget-uppsala-transmission",
+      "title": "Bridget of Sweden digitally: Making St Birgitta’s revelations in Old Swedish accessible",
+      "authorOrInstitution": "Henrik Williams, Marco Bianchi, Ingela Hedström-Bolton, Roger Andersson, and Zeth Alvered",
+      "publisher": "Uppsala University",
+      "url": "https://www.uu.se/en/research/research-projects/project?query=IN15-0214%3A1_RJ",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "University textual-research project used for the loss of most Swedish originals, translation into Latin for international transmission, later back-translation into Old Swedish, differences among manuscript witnesses and textual phases, and the inadequacy of treating one obsolete edition or circulating prayer collection as Bridget's unmediated verbatim words",
+      "supports": ["life.revelations", "life.swedish_dictation", "life.latin_translation", "reception.originals_lost", "reception.back_translation", "reception.manuscripts", "reception.editorial_layers", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "bridget-catechism-private-revelation",
+      "title": "Catechism of the Catholic Church, 66–67: Christ Jesus — Mediator and Fullness of All Revelation",
+      "authorOrInstitution": "Catholic Church",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/catechism/en/part_one/section_one/chapter_two/article_1/iii_christ_jesus_mediator_and_fullness_of_all_revelation.index.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal doctrinal control used for the completion of public Revelation in Christ, the non-improving and non-completing role of private revelations, their need for ecclesial discernment, and the refusal of any alleged revelation that claims to surpass or correct the definitive Revelation fulfilled in Christ",
+      "supports": ["doctrine.christ_fullness", "doctrine.public_revelation", "doctrine.private_revelation", "doctrine.discernment", "safeguard.no_guaranteed_prediction"]
+    },
+    {
+      "id": "bridget-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — July",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/JulUC.shtml",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the canonical title Saint Bridget, Religious, July 23 optional memorial, and white color; the calendar key establishes that an entry without a printed rank is optional",
+      "supports": ["identity", "celebrationIds", "ecclesialTitle", "feastDates", "calendar.rank", "calendar.color"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Bridget brings family life, public responsibility, contemplative experience, and Church reform into one demanding vocation while teaching that even powerful spiritual impressions require textual honesty, ecclesial discernment, humility, and safe practice.",
+  "oneMinuteSummary": "Bridget of Sweden was born around 1303, married Ulf Gudmarsson, raised eight children, practiced organized charity, and made pilgrimages within a medieval noble household. After Ulf's death she entered a widowed vocation of prayer and public service, founded the Order of the Most Holy Savior, moved to Rome, advised rulers and church leaders, and journeyed to the Holy Land. She did not herself become a consecrated religious. Bridget reported visions and words that she dictated or wrote in Swedish; confessors, translators, scribes, and editors rendered and organized them in Latin. Most Swedish originals are lost, and manuscript study reveals layered transmission. The Church canonized Bridget and named her co-patroness of Europe, but did not authenticate every individual revelation, prediction, or political instruction. Her memorial supports discernment, family responsibility, reform, and safe pilgrimage—not child marriage, self-harm, punitive fasting, sleep deprivation, neglected dependants, or treating spiritual impressions as commands beyond review.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Marriage, children, and public charity",
+        "body": "Bridget married young within a medieval noble and dynastic setting; that circumstance is history, not a modern model for child marriage. She and Ulf had eight children and combined household responsibility with prayer, hospitality, aid to poor and sick people, and pilgrimage. Her family members and collaborators retain their own agency; a spouse or parent cannot carry everyone else's holiness alone.",
+        "sourceIds": ["bridget-benedict-audience", "bridget-spes-aedificandi"]
+      },
+      {
+        "heading": "Widow, foundress, and traveler",
+        "body": "After Ulf died, Bridget developed a widowed vocation of prayer, charity, reform, and public counsel. She planned the Order of the Most Holy Savior at Vadstena and later lived in Rome, but did not become a consecrated member of the order. Pilgrimages, including the Holy Land journey, belong to her vocation without becoming commands to travel unsafely or abandon dependants.",
+        "sourceIds": ["bridget-benedict-audience", "bridget-spes-aedificandi"]
+      },
+      {
+        "heading": "How the Revelations reached readers",
+        "body": "Bridget reported spiritual experiences in Swedish and communicated them through confessor-secretaries. Latin translation, scribal copying, selection, and editorial organization produced the Revelationes corpus; most Swedish originals are lost, and some material returned to Swedish through back-translation. A printed sentence is therefore not an audio transcript of God or automatically Bridget's exact wording.",
+        "sourceIds": ["bridget-benedict-audience", "bridget-oxford-revelations", "bridget-uppsala-transmission"]
+      },
+      {
+        "heading": "Discernment before certainty",
+        "body": "Bridget admonished rulers and church leaders and called for reform and unity. Canonization recognizes her holiness but, as John Paul II stated, does not authenticate each reported revelation. Catholic teaching judges private revelation by Christ's definitive public Revelation. Spiritual impressions cannot guarantee predictions, override conscience and evidence, dictate policy without review, or replace mental and physical healthcare.",
+        "sourceIds": ["bridget-spes-aedificandi", "bridget-catechism-private-revelation", "bridget-oxford-revelations"]
+      }
+    ],
+    "gospelTheme": "Christ remains the fullness of Revelation, so contemplation becomes fruitful when it deepens responsible love, receives discernment, respects family and community, and serves reform without claiming unreviewable certainty.",
+    "struggle": "Bridget navigated medieval marriage and motherhood, bereavement, institutional resistance, travel, Church conflict, political speech, intense ascetic culture, and spiritual experiences transmitted through many editorial hands.",
+    "response": "She organized charity, sustained family and collaborators, founded a religious community, spoke publicly, traveled, and submitted her reported experiences to ecclesial processes rather than keeping them purely private."
+  },
+  "virtues": [
+    {
+      "name": "Responsible discernment",
+      "evidence": "Bridget communicated reported experiences through confessors and a community of translators and editors, while Church reception explicitly distinguishes her holiness from authentication of each revelation.",
+      "imitation": "Write down a strong spiritual impression, compare it with Scripture and Church teaching, consider ordinary explanations, and seek a mature adviser who can disagree with you safely.",
+      "sourceIds": ["bridget-spes-aedificandi", "bridget-uppsala-transmission", "bridget-catechism-private-revelation"]
+    },
+    {
+      "name": "Public charity with family responsibility",
+      "evidence": "Her married life joined children, household obligations, hospitality, care for poor and sick people, and participation in Church and public life.",
+      "imitation": "Choose one work of mercy that fits your real duties, budget, health, and dependants, and share the planning with those affected rather than imposing a private ideal.",
+      "sourceIds": ["bridget-benedict-audience", "bridget-spes-aedificandi"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray Hebrews 1:1–3, receiving Christ as the fullness of God's self-gift; hold every private impression beneath his Gospel and the Church's patient discernment.",
+    "action": "Before acting on a strong inner message, use a four-part check: safety, duties, evidence, and accountable counsel; pause any action that risks health, dependants, money, or another person's rights."
+  },
+  "reflectionQuestions": [
+    "Can trusted people question my spiritual interpretation without being treated as unfaithful or obstructive?",
+    "Does my prayer deepen safe love for family, neighbor, and Church, or excuse exhaustion, certainty, and neglected responsibilities?"
+  ],
+  "scripture": {
+    "reference": "Hebrews 1:1–3",
+    "connection": "God has spoken definitively in the Son; Bridget's reported revelations can serve Christian life only by directing believers toward Christ, never by completing or correcting him."
+  },
+  "prayer": "Lord Jesus Christ, fullness of the Father's word, through Saint Bridget's intercession make our prayer humble, our service responsible, and our discernment patient. Protect families, travelers, and those in distress, and reform your Church in truth and charity. Amen."
+}

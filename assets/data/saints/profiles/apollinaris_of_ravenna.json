@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 2,
+  "id": "apollinaris_of_ravenna",
+  "profileKind": "individual",
+  "celebrationIds": ["apollinaris_of_ravenna", "saint_apollinaris_bishop_and_martyr"],
+  "name": "Saint Apollinaris, Bishop and Martyr",
+  "alternateNames": ["Apollinaris of Ravenna", "Apollinaris of Classe"],
+  "ecclesialTitle": "Bishop and martyr",
+  "vocation": "Early bishop remembered as shepherd of the Christian community of Ravenna and Classe",
+  "places": ["Ravenna", "Classe"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Apollinaris is remembered in Ravenna's early Christian tradition as its first bishop and a martyr associated with Classe. A fifth-century sermon and the sixth-century basilica built over an older cemetery show an established local cult, but they do not supply a secure lifespan. The later Passion makes him Peter's disciple and adds Antioch, journeys, repeated assaults, miracles, and exact imperial dates. These details remain tradition rather than established biography. His memorial invites patient, non-coercive pastoral witness, not danger-seeking or contempt for non-Christians.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Apollinaris_of_Ravenna",
+  "wikidataId": "Q320199",
+  "feastDates": ["July 20"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "apollinaris-csla-passio",
+      "title": "E02088: The Latin Martyrdom of Apollinaris (BHL 623)",
+      "authorOrInstitution": "The Cult of Saints in Late Antiquity research project",
+      "publisher": "University of Oxford",
+      "url": "https://csla.history.ox.ac.uk/record.php?recid=E02088",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Source-critical record used to identify the Latin Passion's probable Ravenna or Classe origin between the fifth and late seventh centuries and to separate its narrative of Peter's appointment, Antioch, Claudian and Vespasianic chronology, journeys, miracles, trials, repeated violence, and death from the earlier secure cult evidence",
+      "supports": ["identity", "places", "life.passio", "reception.peter", "reception.antioch", "reception.journeys", "reception.miracles", "reception.martyr_details", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "apollinaris-treccani",
+      "title": "APOLLINARE di Ravenna, santo",
+      "authorOrInstitution": "Francesco Lanzoni",
+      "publisher": "Enciclopedia Italiana, Istituto della Enciclopedia Italiana",
+      "url": "https://www.treccani.it/enciclopedia/apollinare-di-ravenna-santo_%28Enciclopedia-Italiana%29/",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Historical reference used for Peter Chrysologus's fifth-century witness to Apollinaris as Ravenna's first bishop who suffered for faith, the early Classe tomb and cult, the uncertain late-second- or early-third-century placement proposed from episcopal lists, the sixth-century basilica and translation, and the later Passion's connection with Ravenna's claims to apostolic status",
+      "supports": ["identity", "alternateNames", "ecclesialTitle", "places", "life.first_bishop", "life.suffering", "life.date_uncertain", "life.cult", "life.tomb", "life.basilica", "reception.passio", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "apollinaris-basilica-culture",
+      "title": "Basilica di Sant'Apollinare in Classe",
+      "authorOrInstitution": "Ministero della Cultura, Repubblica Italiana",
+      "publisher": "Ministero della Cultura",
+      "url": "https://cultura.gov.it/luogo/basilica-di-sant-apollinare-in-classe",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Official cultural-heritage record used for the surviving basilica at Classe, its sixth-century mosaic program depicting Apollinaris in prayer, its location and material reception, and its status among Ravenna's protected early Christian monuments; the monument witnesses an established cult but cannot prove every later life narrative",
+      "supports": ["places", "life.basilica", "life.mosaic", "life.cult", "reception.material_history", "sourceLimits"]
+    },
+    {
+      "id": "apollinaris-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — July",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/JulUC.shtml",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the canonical title Saint Apollinaris, Bishop and Martyr, July 20 optional memorial, and red martyr color; the calendar key establishes that an entry without a printed rank is optional",
+      "supports": ["identity", "celebrationIds", "ecclesialTitle", "feastDates", "calendar.rank", "calendar.color"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Apollinaris shows how a local Church can remember courageous shepherding while staying honest about sparse evidence: faithfulness needs patient service and truthful tradition, not invented certainty or admiration of suffering itself.",
+  "oneMinuteSummary": "Apollinaris is honored as an early bishop of Ravenna and martyr associated with its port at Classe. His lifespan cannot be established. By the fifth century, Peter Chrysologus remembered him as Ravenna's first bishop who suffered for the faith, and a great basilica was built at his honored burial site in the sixth century. This early cult is firmer evidence than the later Latin Passion. That narrative makes Apollinaris a disciple sent by Peter from Rome, assigns him journeys across the Adriatic, and describes repeated trials, healings, assaults, and a death under Vespasian. Modern source criticism treats those details as layered tradition shaped partly by Ravenna's claims to apostolic prestige. The memorial therefore centers a shepherd who remained faithful to Christ and his community. It does not require seeking persecution, staying in preventable danger, coercing belief, despising non-Christians, or repeating graphic violence as devotion.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A remembered first shepherd",
+        "body": "The earliest substantial literary witness is a fifth-century sermon of Peter Chrysologus, who remembers Apollinaris as Ravenna's first bishop and as one who suffered repeatedly for faith. It does not provide a complete biography or a secure date. Later estimates that place him around the late second or early third century remain reconstructions, so no lifespan is published.",
+        "sourceIds": ["apollinaris-treccani"]
+      },
+      {
+        "heading": "Classe, tomb, and public memory",
+        "body": "Apollinaris's cult was rooted at Classe, Ravenna's port, where an honored burial place stood in an older cemetery. The sixth-century Basilica of Sant'Apollinare in Classe made that memory monumental. Its apse shows the bishop at prayer within a Christ-centered mosaic program. Archaeology and art demonstrate veneration; they do not independently verify the Passion's life details.",
+        "sourceIds": ["apollinaris-treccani", "apollinaris-basilica-culture"]
+      },
+      {
+        "heading": "What the later Passion adds",
+        "body": "The Latin Passion, composed centuries after the time it depicts, calls Apollinaris an Antiochene disciple commissioned by Peter. It supplies exact emperors, travels, miracles, trials, repeated assaults, and a narrated death at Classe. These traditions shaped devotion and Ravenna's apostolic claims, but they must be labeled as later hagiography rather than silently converted into eyewitness history.",
+        "sourceIds": ["apollinaris-csla-passio", "apollinaris-treccani"]
+      },
+      {
+        "heading": "Martyr memory without danger-seeking",
+        "body": "The Church's calendar receives Apollinaris as bishop and martyr. Christian martyrdom means faithful witness when injustice is imposed; it is not a command to provoke attackers, refuse escape, conceal abuse, or remain in preventable danger. Pastoral courage also includes protecting a community, seeking help, and speaking about people of other beliefs without contempt.",
+        "sourceIds": ["apollinaris-calendar", "apollinaris-treccani"]
+      }
+    ],
+    "gospelTheme": "Christ's shepherding is measured by faithful care for people entrusted to us, not by prestige, dramatic stories, or the quantity of suffering a leader can endure.",
+    "struggle": "Apollinaris's historical person is visible mainly through an early local cult, while a much later Passion supplies most familiar narrative detail and reflects Ravenna's institutional aspirations.",
+    "response": "The Church can honor his enduring witness and Ravenna's memory while distinguishing evidence from tradition and rejecting coercive or danger-seeking uses of martyrdom."
+  },
+  "virtues": [
+    {
+      "name": "Truthful witness",
+      "evidence": "The durable early memory identifies Apollinaris with pastoral leadership and suffering for faith even though a detailed chronology cannot be recovered.",
+      "imitation": "State what you know, label what is uncertain, and let integrity rather than dramatic embellishment carry your witness.",
+      "sourceIds": ["apollinaris-treccani", "apollinaris-csla-passio"]
+    },
+    {
+      "name": "Patient shepherding",
+      "evidence": "Ravenna preserved Apollinaris as its first shepherd, and the Classe mosaic receives him in prayer within the communion gathered around Christ.",
+      "imitation": "Choose one quiet act that protects or strengthens people in your care, using appropriate help and shared responsibility rather than solitary heroics.",
+      "sourceIds": ["apollinaris-treccani", "apollinaris-basilica-culture"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray 1 Peter 5:1–4 and ask Christ to purify any desire for recognition, control, or dramatic sacrifice from the way you care for others.",
+    "action": "Check one story you repeat about a saint or community; distinguish its earliest evidence from later tradition, then share the corrected account without ridicule."
+  },
+  "reflectionQuestions": [
+    "Do I confuse a moving tradition with established history, or can I honor both without collapsing the distinction?",
+    "Does my idea of courage protect people and seek appropriate help, or does it romanticize exposure to avoidable harm?"
+  ],
+  "scripture": {
+    "reference": "1 Peter 5:1–4",
+    "connection": "Church leaders are called to tend God's flock willingly and by example, without domination; this gives Apollinaris's sparse shepherd-memory a concrete and safe measure."
+  },
+  "prayer": "Christ, chief Shepherd, through the intercession of Saint Apollinaris make us truthful in memory, patient in service, and courageous without contempt or recklessness. Guard every community from domination and lead us in faithful care. You live and reign for ever and ever. Amen."
+}

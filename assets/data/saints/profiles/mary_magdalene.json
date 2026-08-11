@@ -1,0 +1,161 @@
+{
+  "schemaVersion": 2,
+  "id": "mary_magdalene",
+  "profileKind": "individual",
+  "celebrationIds": ["mary_magdalene", "saint_mary_magdalene"],
+  "name": "Saint Mary Magdalene",
+  "alternateNames": ["Mary of Magdala", "Apostle to the Apostles"],
+  "ecclesialTitle": "Disciple of the Lord and witness to the Resurrection",
+  "vocation": "Healed disciple, supporter of Jesus's ministry, Passion and burial witness, and messenger of the Resurrection",
+  "places": ["Magdala", "Galilee", "Jerusalem"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "The canonical Gospels name Mary Magdalene as a woman healed by Jesus who traveled with and materially supported his mission. She remained a prominent witness at his crucifixion, burial, empty tomb, and resurrection appearances. John records Jesus commissioning her to announce his rising to the disciples. Scripture never identifies her as the unnamed sinful woman, Mary of Bethany, an adulteress, prostitute, wife, or romantic partner of Jesus. Her seven demons are not evidence of sexual sin, moral guilt, or a modern diagnosis. Her July 22 celebration became a feast in 2016.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Mary_Magdalene",
+  "wikidataId": "Q63070",
+  "feastDates": ["July 22"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {
+      "id": "magdalene-luke-8",
+      "title": "Luke, Chapter 8",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "USCCB Bible",
+      "url": "https://bible.usccb.org/bible/luke/8",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Canonical Scripture used for Mary Magdalene's naming immediately after the distinct unnamed woman in Luke 7, healing from seven demons, travel with Jesus and the Twelve, inclusion among a wider group of women, and material support from their resources; the text does not identify her former condition with sexual sin or a modern diagnosis",
+      "supports": ["identity", "alternateNames", "vocation", "places", "life.healing", "life.discipleship", "life.women_group", "life.material_support", "sourceLimits"]
+    },
+    {
+      "id": "magdalene-mark-15",
+      "title": "Mark, Chapter 15",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "USCCB Bible",
+      "url": "https://bible.usccb.org/bible/mark/15",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Canonical Scripture used for Mary Magdalene among the women who followed and served Jesus in Galilee, witnessed the crucifixion from a distance, and observed where he was laid; Mark's named group is preserved without merging Gospel lists or inventing dialogue",
+      "supports": ["identity", "places", "life.galilee", "life.service", "life.crucifixion_witness", "life.burial_witness", "sourceLimits"]
+    },
+    {
+      "id": "magdalene-matthew-28",
+      "title": "Matthew, Chapter 28",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "USCCB Bible",
+      "url": "https://bible.usccb.org/bible/matthew/28",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Canonical Scripture used for Mary Magdalene and the other Mary at the tomb, their commission to inform the disciples, encounter with the risen Jesus, and delivery of the message; Matthew's shared witness is kept distinct from John's individual encounter",
+      "supports": ["identity", "life.empty_tomb", "life.resurrection_witness", "life.commission", "life.message", "sourceLimits"]
+    },
+    {
+      "id": "magdalene-john-20",
+      "title": "John, Chapter 20",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "USCCB Bible",
+      "url": "https://bible.usccb.org/bible/john/20",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Canonical Scripture used for Mary's discovery of the open tomb, grief and persistence, recognition when the risen Jesus addresses her, his commission, and her announcement to the disciples; John's narrative is not collapsed into the differing Synoptic tomb accounts",
+      "supports": ["identity", "ecclesialTitle", "life.empty_tomb", "life.grief", "life.resurrection_witness", "life.recognition", "life.commission", "life.announcement", "sourceLimits"]
+    },
+    {
+      "id": "magdalene-feast-decree",
+      "title": "The liturgical memory of Mary Magdalene becomes a feast, like that of the other apostles",
+      "authorOrInstitution": "Congregation for Divine Worship and the Discipline of the Sacraments",
+      "publisher": "Holy See Press Office",
+      "url": "https://press.vatican.va/content/salastampa/en/bollettino/pubblico/2016/06/10/160610b.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal liturgical decree and explanatory notice used for the elevation of Mary Magdalene's July 22 celebration from memorial to feast in 2016, reception alongside apostolic celebrations, and the title Apostle to the Apostles grounded in her resurrection message; the title does not make her one of the Twelve",
+      "supports": ["identity", "alternateNames", "ecclesialTitle", "feastDates", "calendar.rank", "reception.apostle_to_apostles"]
+    },
+    {
+      "id": "magdalene-beavis",
+      "title": "Mary Magdalene",
+      "authorOrInstitution": "Mary Ann Beavis",
+      "publisher": "The Baylor Institute for Faith and Learning",
+      "url": "https://ifl.web.baylor.edu/sites/g/files/ecbvkj771/files/2024-03/WomenintheBibleArticleBeavis.pdf",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Scholarly biblical and reception study used for Mary's distinct canonical identity, Gospel roles as disciple, supporter, Passion and resurrection witness, the lack of scriptural basis for calling her a prostitute, Gregory the Great's later Western conflation with Luke's unnamed sinner and Mary of Bethany, and the development of noncanonical and legendary images",
+      "supports": ["identity", "life.discipleship", "life.material_support", "life.passion_witness", "life.resurrection_witness", "reception.conflation", "reception.gregory", "reception.prostitute_stereotype", "reception.noncanonical", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "magdalene-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — July",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/JulUC.shtml",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the canonical title Saint Mary Magdalene, July 22 feast, and white color",
+      "supports": ["identity", "celebrationIds", "feastDates", "calendar.rank", "calendar.color"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Mary Magdalene helps the Church recover women as named disciples, material supporters, and authoritative witnesses: her story forms people to remain near suffering, seek truth through grief, and announce Christ without sexualized shame.",
+  "oneMinuteSummary": "Mary Magdalene is a named disciple in all four Gospels. Luke says Jesus healed her from seven demons and that she traveled with other women who supported the mission from their resources. The Gospels place her prominently at Jesus's crucifixion, burial, empty tomb, and resurrection appearances, while preserving different details in each account. In John, Jesus calls her by name and sends her to announce his rising to the disciples. Scripture never identifies Mary Magdalene as Luke's unnamed sinful woman, Mary of Bethany, a prostitute, adulteress, wife, or romantic partner of Jesus. Seven demons do not establish sexual history, moral guilt, or a modern medical diagnosis. Later Western conflation shaped preaching and art, but it is reception, not biography. In 2016 the Church elevated July 22 to a feast and highlighted her as Apostle to the Apostles, a messenger rather than one of the Twelve.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Healed disciple and supporter",
+        "body": "Luke introduces Mary Magdalene after the unnamed woman of the previous episode and does not identify them. Jesus had healed Mary from seven demons. She then traveled with the Twelve and other named and unnamed women who supported the mission from their resources. Healing is not evidence of prostitution, sexual sin, personal blame, or a modern psychiatric diagnosis.",
+        "sourceIds": ["magdalene-luke-8", "magdalene-beavis"]
+      },
+      {
+        "heading": "Witness through death and burial",
+        "body": "Mark names Mary among women who had followed and served Jesus in Galilee, remained present at the crucifixion, and observed his burial. The Gospel lists differ in detail, but they converge on women's durable witness when many others were absent. Presence here is not a command to enter danger without support; it is faithful attention to truth and the suffering person.",
+        "sourceIds": ["magdalene-mark-15", "magdalene-beavis"]
+      },
+      {
+        "heading": "Sent with resurrection news",
+        "body": "Matthew presents Mary Magdalene and the other Mary receiving and carrying the Easter message together. John gives Mary an individual encounter: grieving at the tomb, she recognizes Jesus when addressed by name and announces to the disciples that she has seen the Lord. The accounts should be heard in their own voices rather than forced into a single invented sequence.",
+        "sourceIds": ["magdalene-matthew-28", "magdalene-john-20"]
+      },
+      {
+        "heading": "Recovering her from conflation",
+        "body": "Later Western preaching, notably Gregory the Great's composite reading, joined Mary Magdalene to Luke's unnamed sinner and Mary of Bethany. Popular culture then sexualized her further or invented marriage and bloodline stories. None is canonical biography. The 2016 feast centers her received title Apostle to the Apostles: she carried Easter news, though she was not one of the Twelve.",
+        "sourceIds": ["magdalene-beavis", "magdalene-feast-decree", "magdalene-calendar"]
+      }
+    ],
+    "gospelTheme": "The risen Christ calls a grieving disciple by name and entrusts her with truthful good news, showing that healing, material support, steadfast witness, and proclamation all belong to discipleship.",
+    "struggle": "Mary experienced a serious condition described as seven demons, witnessed Jesus's violent death and burial, grieved at an empty tomb, and was later obscured by conflation and sexualized stereotype.",
+    "response": "She joined the community of women disciples, supported Jesus's mission, remained a witness through death and burial, and carried the resurrection message entrusted to her."
+  },
+  "virtues": [
+    {
+      "name": "Steadfast witness",
+      "evidence": "The Gospel traditions repeatedly place Mary at the Passion, burial, tomb, and Easter proclamation rather than defining her by an imagined sexual past.",
+      "imitation": "Stay attentively present to a suffering person's stated needs, respect safety and privacy, and record or report truth through the appropriate channel without making yourself the center.",
+      "sourceIds": ["magdalene-mark-15", "magdalene-matthew-28", "magdalene-john-20"]
+    },
+    {
+      "name": "Generous discipleship",
+      "evidence": "Mary belonged to a wider group of women who traveled with Jesus and supported the mission from their own resources.",
+      "imitation": "Direct a concrete resource—money, time, skill, transport, or advocacy—to a trustworthy Gospel work, with accountability and without erasing the women who sustain it.",
+      "sourceIds": ["magdalene-luke-8"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray John 20:11–18 slowly, noticing grief, recognition, naming, and commission; ask Christ to free your imagination from stereotypes that obscure a real person's witness.",
+    "action": "Correct one sexualized or unsupported claim about Mary Magdalene in a conversation, lesson, or saved resource, replacing it with her documented Gospel roles."
+  },
+  "reflectionQuestions": [
+    "Which label has kept me from seeing Mary Magdalene as a disciple, supporter, and resurrection witness?",
+    "Whose faithful work or testimony do I discount because of gender, illness, grief, or a story imposed on them?"
+  ],
+  "scripture": {
+    "reference": "John 20:11–18",
+    "connection": "Jesus meets Mary in grief, calls her by name, and entrusts her with news of the Resurrection; her authority here comes from encounter and faithful testimony, not a fabricated past."
+  },
+  "prayer": "Risen Lord Jesus, you called Mary Magdalene by name and sent her with Easter joy. Heal our distorted memories, honor every truthful witness, and give us courage to remain present, seek what is true, and announce your life without shame or prejudice. Amen."
+}
