@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 2,
+  "id": "mary_magdalene_de_pazzi",
+  "profileKind": "individual",
+  "celebrationIds": ["mary_magdalene_de_pazzi", "saint_mary_magdalene_de_pazzi_virgin"],
+  "name": "Saint Mary Magdalene de' Pazzi",
+  "alternateNames": ["Caterina de' Pazzi", "Maria Maddalena de' Pazzi"],
+  "ecclesialTitle": "Virgin",
+  "lifeSpan": "1566–1607",
+  "lifeLength": "41 years",
+  "vocation": "Carmelite nun, formator, and mystic",
+  "places": ["Florence, Italy"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Born Caterina de' Pazzi in Florence, Mary Magdalene entered the Carmelite monastery of Santa Maria degli Angeli and made profession during serious illness in 1584. Her sisters recorded words spoken during reported ecstasies, producing manuscripts later edited as her works. She served the community in formation and leadership. Her mystical claims, fasting, illness, and obedience require historical and theological context, never imitation of self-harm or rejection of medical care.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Mary_Magdalene_de%27_Pazzi",
+  "wikidataId": "Q231196",
+  "feastDates": ["May 25"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {
+      "id": "pazzi-benedict-letter",
+      "title": "Letter on the Fourth Centenary of the Death of Saint Mary Magdalene de' Pazzi",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "Holy See",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/letters/2007/documents/hf_ben-xvi_let_20070429_maddalena-pazzi.html",
+      "publicationDate": "2007-04-29",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal letter used for birth and baptismal name, Carmelite entrance, illness and profession in 1584, sister-recorded manuscripts and titles, letters, communal responsibilities, final illness, death at age 41, and canonization in 1669",
+      "supports": ["identity", "lifeSpan", "life.entrance", "life.profession", "life.illness", "works.transmission", "works.titles", "life.community", "death", "canonization"]
+    },
+    {
+      "id": "pazzi-forty-days-primary",
+      "title": "Los cuarenta días",
+      "authorOrInstitution": "Saint Mary Magdalene de' Pazzi; critical edition by María Jesús Fernández Cordero and Otger Steggink",
+      "publisher": "Universidad Pontificia Comillas, Textos para un Milenio",
+      "url": "https://repositorio.comillas.edu/xmlui/bitstream/handle/11531/15682/Santa%20Mar%C3%ADa%20Magdalena%20de%20Pazzi%2C%20Los%20cuarenta%20d%C3%ADas.pdf?isAllowed=y&sequence=1",
+      "publicationDate": "2016",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Critical edition of a primary text used for the manuscript history, the mediation of sister-scribes, recovery of original manuscripts in modern editions, and the limits on treating the works as direct autobiographical transcripts",
+      "supports": ["works.primary", "works.transmission", "works.scribes", "works.editing", "evidenceLimits"]
+    },
+    {
+      "id": "pazzi-carmelite-account",
+      "title": "St. Mary Magdalene de' Pazzi",
+      "authorOrInstitution": "P. Gorazd Cetkovský, O.Carm.",
+      "publisher": "Czech-Moravian General Delegation of the Carmelite Order",
+      "url": "https://www.karmel.cz/blog_clanek.php?clanek=18892&lang=en",
+      "publicationDate": "2017-10-24",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Official order narrative used cautiously for convent life, sister-recorded ecstasies, the small number of letters she wrote herself, fasting and illness traditions, medical attention, formation and subprioress roles, and death; its inconsistent age-45 statement is rejected against the secure 1566–1607 chronology and age 41",
+      "supports": ["life.convent", "works.transmission", "works.letters", "tradition.ecstasy", "tradition.fasting", "life.illness", "life.medicalCare", "life.roles", "death", "sourceError.age"]
+    },
+    {
+      "id": "pazzi-new-catholic-encyclopedia",
+      "title": "Pazzi, Maria Maddalena de', St.",
+      "authorOrInstitution": "E. E. Larkin",
+      "publisher": "New Catholic Encyclopedia via Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/pazzi-maria-maddalena-de-st",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent theological reference control used for chronology, community roles, Trinitarian, Christological, Eucharistic, liturgical, and ecclesial themes, and the textual problems of older truncated or uncritical editions before publication of original manuscripts",
+      "supports": ["identity", "lifeSpan", "life.roles", "theology.trinity", "theology.christ", "theology.eucharist", "theology.liturgy", "theology.church", "works.editing", "evidenceLimits"]
+    },
+    {
+      "id": "pazzi-copeland-oxford",
+      "title": "Maria Maddalena de' Pazzi: The Making of a Counter-Reformation Saint",
+      "authorOrInstitution": "Clare Copeland",
+      "publisher": "Oxford University Press",
+      "url": "https://academic.oup.com/book/9270",
+      "publicationDate": "2016-08-25",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Modern book-length scholarly control used for Mary's convent culture, recorded claims of ecstasies, visions, and stigmata, the making of her public cult, canonization process, order reform context, and the difference between lived history and later saint-making",
+      "supports": ["life.convent", "tradition.ecstasy", "tradition.visions", "tradition.stigmata", "reception", "canonizationCause", "reform.context", "historiography"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Mary Magdalene de' Pazzi shows that mystical language belongs inside Scripture, liturgy, community, and careful discernment. The mediated form of her writings teaches readers to ask who recorded and edited a text. Her illness and severe practices must never be used to praise self-harm, avoid treatment, or make unsafe obedience holy.",
+  "oneMinuteSummary": "Caterina de' Pazzi was born in Florence in 1566 and entered the Carmelite monastery of Santa Maria degli Angeli, taking the name Mary Magdalene. During grave illness she made profession on May 27, 1584. Her community later reported ecstasies and visions, while sisters recorded her spoken words and assembled manuscripts now known as her works. Readers should distinguish her few direct letters from transcription, editing, and interpretation. She served in formation and as subprioress, rooting mystical language in shared duties. Accounts describe severe fasting and long illness, but neither is a spiritual prescription: harming the body, abandoning treatment, or obeying an unsafe command is not holiness. Medical help was sought. Mary died on May 25, 1607, aged 41, and was canonized in 1669. Her memory invites Christ-centered prayer, communal discernment, truthful textual care, and compassionate care for body and mind.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Carmelite vocation amid illness",
+        "body": "Born Caterina in Florence on April 2, 1566, she entered Santa Maria degli Angeli and received the name Mary Magdalene. Serious illness led the community to permit profession on May 27, 1584. Illness did not prove spiritual superiority, and profession was not a replacement for care. Order sources remember physicians being consulted, a useful boundary against romanticizing untreated suffering.",
+        "sourceIds": ["pazzi-benedict-letter", "pazzi-carmelite-account", "pazzi-new-catholic-encyclopedia"]
+      },
+      {
+        "heading": "Mystical testimony mediated by sisters",
+        "body": "The reported ecstasies and visions are known largely because sisters wrote down words Mary spoke and organized them into manuscripts. A critical edition traces that complex transmission. Mary wrote only a few family letters directly; other letters were dictated or perhaps never sent, and the 1609 biography was collaboratively shaped from community testimony. These works can carry theological insight without becoming unmediated autobiography, proving a supernatural mechanism, or supporting retrospective diagnosis.",
+        "sourceIds": ["pazzi-benedict-letter", "pazzi-forty-days-primary", "pazzi-carmelite-account", "pazzi-copeland-oxford"]
+      },
+      {
+        "heading": "Texts need critical editions",
+        "body": "Older printed versions could be selective, rearranged, or uncritical. Modern recovery and publication of original manuscripts made better textual work possible, while still leaving the interventions of scribes and editors visible. Responsible reading identifies the manuscript, edition, translator, and genre before assigning a sentence directly to Mary or using it as a universal spiritual command.",
+        "sourceIds": ["pazzi-forty-days-primary", "pazzi-new-catholic-encyclopedia"]
+      },
+      {
+        "heading": "Fasting, obedience, and bodily safety",
+        "body": "Historical accounts attribute extraordinary fasting and severe disciplines to Mary. Such reports belong to a particular convent culture and require critical discernment; they are not practices to imitate. Fasting should remain proportionate, medically safe, and consistent with one's responsibilities. Obedience never requires self-harm, concealment of illness, refusal of food or treatment, or compliance with abuse. Anyone at risk should seek qualified medical and safeguarding help.",
+        "sourceIds": ["pazzi-carmelite-account", "pazzi-copeland-oxford"]
+      },
+      {
+        "heading": "Community duties and a corrected age",
+        "body": "Mary served in formation and as subprioress, showing a life not reducible to extraordinary experiences. She endured prolonged illness and died on May 25, 1607. The secure dates 1566–1607 and Benedict XVI's explicit age of 41 correct an internal age-45 error in the Carmelite summary. Even an official order page needs comparison with stronger chronological controls.",
+        "sourceIds": ["pazzi-benedict-letter", "pazzi-carmelite-account", "pazzi-new-catholic-encyclopedia"]
+      }
+    ],
+    "gospelTheme": "Union with Christ is discerned in truthful prayer, sacramental and communal life, love of neighbor, and responsible care for the whole person.",
+    "struggle": "Mystical testimony can be detached from its scribes and editors, while illness, fasting, and obedience can be romanticized in ways that endanger vulnerable people.",
+    "response": "Mary's received witness joined intense prayer to Carmelite community and service; responsible remembrance tests extraordinary claims and refuses to make bodily harm or unsafe submission a spiritual ideal."
+  },
+  "virtues": [
+    {
+      "name": "Christ-centered prayer",
+      "evidence": "Benedict XVI and Catholic reference sources emphasize the Trinitarian, Christological, Eucharistic, and liturgical center of Mary's spirituality.",
+      "imitation": "Anchor an intense feeling or spiritual impression in Scripture, the sacraments, ordinary duties, and conversation with a mature, trustworthy guide.",
+      "sourceIds": ["pazzi-benedict-letter", "pazzi-new-catholic-encyclopedia"]
+    },
+    {
+      "name": "Communal discernment",
+      "evidence": "Her remembered experiences were received, recorded, and organized within a community, while her offices involved forming and serving other sisters.",
+      "imitation": "Test a claimed insight with people who can ask hard questions, respect evidence, and prioritize safety; do not make a major decision from a private experience alone.",
+      "sourceIds": ["pazzi-benedict-letter", "pazzi-carmelite-account", "pazzi-copeland-oxford"]
+    },
+    {
+      "name": "Truthful care for testimony",
+      "evidence": "Critical editions reveal the work of sister-scribes, later editors, and textual recovery behind writings traditionally associated with Mary.",
+      "imitation": "Before quoting a mystic, check the critical edition and context, identify whether the wording is direct or mediated, and avoid turning a personal practice into a command for others.",
+      "sourceIds": ["pazzi-forty-days-primary", "pazzi-new-catholic-encyclopedia"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray with John 15:4-5 for ten quiet minutes. Write any insight as a possibility to discern, then compare it with Scripture, charity, ordinary responsibilities, and the counsel of a trustworthy person.",
+    "action": "Review one fasting, health, or obedience practice for safety. If it involves pain, nutritional risk, untreated symptoms, coercion, or fear, pause it and consult an appropriate clinician, safeguarding professional, or qualified pastoral adviser."
+  },
+  "reflectionQuestions": [
+    "Do I test spiritual impressions through Scripture, community, evidence, and their effects on love and safety?",
+    "Have I treated bodily harm, neglected illness, or unquestioning obedience as holier than responsible care?"
+  ],
+  "scripture": {
+    "reference": "1 Thessalonians 5:21",
+    "connection": "Paul's instruction to test everything offers a sound frame for mystical testimony: receive possible good with openness, examine sources and fruits carefully, and refuse whatever harms truth, charity, or human dignity."
+  },
+  "prayer": "Triune God, through the intercession of Saint Mary Magdalene de' Pazzi draw us into the love of Christ. Give us prayer rooted in Scripture and the Eucharist, discernment that welcomes truth, and communities that protect body and mind. Guard us from self-harm, coercion, and false certainty. Bless those living with illness, and lead them to compassionate care, wise counsel, and faithful hope. Amen."
+}

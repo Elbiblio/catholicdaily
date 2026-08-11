@@ -29,7 +29,8 @@ void main() {
     expect(profile!.name, 'Saint Bede the Venerable');
     expect(profile.lifeLength, 'about 62 years');
     expect(profile.wikipediaUrl, contains('wikipedia.org'));
-    expect(profile.patronage, contains('scholars'));
+    // The researched overlay removes unsupported legacy patronage tokens.
+    expect(profile.patronage, isEmpty);
   });
 
   test('loads a curated profile by stable profile id', () async {

@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 2,
+  "id": "rita_of_cascia",
+  "profileKind": "individual",
+  "celebrationIds": ["rita_of_cascia", "saint_rita_of_cascia_religious"],
+  "name": "Saint Rita of Cascia",
+  "alternateNames": ["Margherita Lotti", "Rita of Cascia"],
+  "ecclesialTitle": "Religious",
+  "lifeSpan": "c. 1381–1457",
+  "lifeLength": "about 76 years",
+  "vocation": "Wife, mother, widow, peacemaker, and Augustinian religious",
+  "places": ["Roccaporena, Italy", "Cascia, Italy"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Rita of Cascia is remembered as a wife and mother whose husband was killed in a family feud, a widow who opposed revenge, and later an Augustinian nun. Accounts of household violence, her sons' intentions, her admission to the monastery, a forehead wound linked to Christ's Passion, and later miracles differ in genre and certainty. The secure witness is a life received by the Church as centered on Christ, forgiveness, peace, and prayer, not passive endurance of danger.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Rita_of_Cascia",
+  "wikidataId": "Q153024",
+  "feastDates": ["May 22"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "rita-jp2-centenary",
+      "title": "To the Pilgrims Gathered to Venerate Saint Rita of Cascia on the Centenary of Her Canonization",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "Holy See",
+      "url": "https://www.vatican.va/content/john-paul-ii/en/speeches/2000/apr-jun/documents/hf_jp-ii_spe_20000520_santa-rita.html",
+      "publicationDate": "2000-05-20",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal address used for Rita as wife, mother, widow, and nun; her peace-making and forgiveness; the received forehead-wound and rose traditions; Christ-centered interpretation; and the 24 May 1900 canonization",
+      "supports": ["identity", "vocation", "life.family", "life.peace", "tradition.wound", "tradition.rose", "canonization", "theology.christ"]
+    },
+    {
+      "id": "rita-augustinian-order",
+      "title": "Saint Rita of Cascia, Religious",
+      "authorOrInstitution": "Order of Saint Augustine",
+      "publisher": "Order of Saint Augustine",
+      "url": "https://www.augustinianorder.org/saints-and-blessed/saint-rita-of-cascia%2C-religious",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Official order narrative used cautiously for Roccaporena, marriage and two sons, her husband's murder in a family rivalry, opposition to revenge, widowhood, eventual admission to the Cascia monastery, the received wound tradition, death, feast, and popular impossible-cause devotion",
+      "supports": ["identity", "lifeSpan", "life.marriage", "life.children", "life.feud", "life.widowhood", "life.monastery", "tradition.wound", "tradition.intercession", "death", "feast"]
+    },
+    {
+      "id": "rita-treccani",
+      "title": "Rita da Cascia, santa",
+      "authorOrInstitution": "Bianca Paulucci, Enciclopedia Italiana",
+      "publisher": "Istituto della Enciclopedia Italiana Treccani",
+      "url": "https://www.treccani.it/enciclopedia/rita-da-cascia-santa_%28Enciclopedia-Italiana%29/",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent historical reference control used for dates, early marriage, the report of a violent-tempered husband, murder and widowhood, Augustinian life, the received forehead-wound tradition, beatification, and canonization",
+      "supports": ["identity", "lifeSpan", "life.marriage", "tradition.householdViolence", "life.murder", "life.widowhood", "life.monastery", "tradition.wound", "beatification", "canonization"]
+    },
+    {
+      "id": "rita-siusa-cause",
+      "title": "Processo apostolico per la canonizzazione della beata Rita da Cascia",
+      "authorOrInstitution": "Sistema Informativo Unificato per le Soprintendenze Archivistiche",
+      "publisher": "Italian Ministry of Culture",
+      "url": "https://siusa-archivi.cultura.gov.it/cgi-bin/siusa/pagina.pl?ApriNodo=0&Chiave=235939&ChiaveAlbero=247614&ChiaveRadice=247614&RicSez=fondi&RicTipoScheda=ca&RicVM=indice&TipoPag=comparc",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Government archival description used for the 1887–1900 apostolic cause record, the documentary status of one investigated healing claim, surviving sessions and medical certificates, and Leo XIII's canonization on 24 May 1900",
+      "supports": ["canonizationCause", "tradition.healing", "archive", "canonization"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Rita's memory can help Christians interrupt revenge and seek peace, but it must never be used to keep someone in an unsafe marriage or to make suffering a test of faith. Her intercession expresses hope in God; it does not guarantee a requested outcome or replace practical help, protection, medical care, or honest discernment.",
+  "oneMinuteSummary": "Rita was born near Cascia around 1381 and is remembered through sources of unequal historical weight. She married young, became the mother of two sons, and was widowed when her husband was killed amid a family rivalry. Later accounts differ about violence within the marriage and about her sons' desire for revenge; the Christian lesson is not passive endurance but Rita's refusal to continue the feud. After her sons died, she eventually entered the Augustinian monastery in Cascia and lived there until her death on May 22, 1457. Devotional tradition associates her prayer before the crucified Christ with a wound on her forehead, and later testimony shaped devotion to her intercession in desperate situations. These claims belong to received tradition, not a promise that prayer produces a chosen result. Canonized by Leo XIII on May 24, 1900, Rita points toward Christ's peace, truthful forgiveness, and help that protects life.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Marriage remembered with caution",
+        "body": "Rita married young and became the mother of two sons. One independent reference describes her husband as violent-tempered, while the Order's summary emphasizes the long family rivalry that ended in his murder without making that same claim. This conflict in the record matters: Rita's story cannot require anyone to remain with an abusive spouse, conceal danger, refuse professional help, or call unsafe submission a virtue.",
+        "sourceIds": ["rita-augustinian-order", "rita-treccani"]
+      },
+      {
+        "heading": "Widowhood without revenge",
+        "body": "After her husband's killing, the Order's received narrative remembers Rita opposing her sons' desire for retaliation. It also attributes their failure to take revenge to her prayer. The opposition to vengeance is morally clear; the claimed causal sequence is devotional tradition and must not imply that a parent can control another person's choices by praying hard enough. Rita's example supports seeking safety, justice, mediation, and an end to family violence.",
+        "sourceIds": ["rita-jp2-centenary", "rita-augustinian-order"]
+      },
+      {
+        "heading": "A vocation after loss",
+        "body": "Widowed and later bereaved of both sons, Rita sought the Augustinian life in Cascia. The Order says that admission followed several requests and links it to reconciliation between rival families; details of the episode carry devotional shaping. Her eventual religious vocation did not prove that family life was a mistake. It marked a new season in which prayer and community gave her remaining years a different form.",
+        "sourceIds": ["rita-augustinian-order", "rita-treccani"]
+      },
+      {
+        "heading": "The wound as received tradition",
+        "body": "Catholic and Augustinian sources receive the tradition that prayer before an image of Christ crowned with thorns was followed by a wound on Rita's forehead. The profile reports this as devotional tradition, not clinical evidence, a practice to reproduce, or proof that injury makes a person holy. Contemplating the Passion should deepen compassionate love and responsible care for wounded people, never self-harm.",
+        "sourceIds": ["rita-jp2-centenary", "rita-augustinian-order", "rita-treccani"]
+      },
+      {
+        "heading": "Hope without guarantees",
+        "body": "Rita's cause included investigated healing testimony, and popular devotion calls her the saint of impossible situations. Canonization recognizes holiness; it does not authenticate every later story or promise a particular answer to prayer. Christian hope asks boldly while accepting that God is not controlled by formulas and that urgent needs still call for medical, legal, pastoral, and practical assistance.",
+        "sourceIds": ["rita-jp2-centenary", "rita-augustinian-order", "rita-siusa-cause"]
+      }
+    ],
+    "gospelTheme": "Christ breaks cycles of retaliation and leads wounded people toward peace grounded in truth, protection, justice, and mercy.",
+    "struggle": "Rita's memory stands amid marriage, lethal family conflict, widowhood, bereavement, delayed religious vocation, bodily suffering, and devotional expectations that can be misused as pressure or false promises.",
+    "response": "She is remembered for refusing revenge, seeking reconciliation, persevering into a new communal vocation, and directing suffering toward the crucified Christ rather than making harm itself sacred."
+  },
+  "virtues": [
+    {
+      "name": "Peacemaking",
+      "evidence": "Official Catholic and Augustinian sources consistently receive Rita as a woman who answered a murderous family conflict with forgiveness and efforts toward peace.",
+      "imitation": "Refuse to carry a feud forward. If contact is safe, use a trained mediator or trusted community process; if anyone is at risk, prioritize protection and professional support over reconciliation meetings.",
+      "sourceIds": ["rita-jp2-centenary", "rita-augustinian-order"]
+    },
+    {
+      "name": "Hope through changing vocations",
+      "evidence": "Rita's remembered life moved through marriage, motherhood, widowhood, bereavement, and Augustinian community rather than remaining fixed in one role.",
+      "imitation": "Name the duties and losses of your present season, then discern one safe next step with people qualified to advise you; do not force a dramatic answer or abandon those who depend on you.",
+      "sourceIds": ["rita-jp2-centenary", "rita-augustinian-order", "rita-treccani"]
+    },
+    {
+      "name": "Christ-centered perseverance",
+      "evidence": "John Paul II interpreted Rita's received wound and long devotion through conformity to Christ and active forgiveness rather than passive resignation.",
+      "imitation": "Bring one painful situation to Christ in prayer, then take one concrete life-protecting action: seek counsel, document a concern, keep a medical appointment, or contact a safeguarding service.",
+      "sourceIds": ["rita-jp2-centenary"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray slowly through Romans 12:17-21. Name the harm truthfully, ask Christ to stop retaliation in you, and entrust outcomes to God without treating prayer as a guarantee or a substitute for action.",
+    "action": "Take one safe step that interrupts violence or isolation: contact a qualified domestic-violence service, clinician, legal adviser, safeguarding lead, or trusted pastor as appropriate. Do not confront a dangerous person alone or pressure a victim to reconcile."
+  },
+  "reflectionQuestions": [
+    "Where have I confused forgiveness with restored access, silence, or remaining in danger?",
+    "What outcome am I trying to guarantee through prayer, and what faithful practical help can I seek while leaving the result with God?"
+  ],
+  "scripture": {
+    "reference": "Romans 12:18",
+    "connection": "Paul says to live peaceably so far as it depends on us. That limit protects truthful peacemaking: Christians reject revenge and pursue peace without pretending that one person controls another's conduct or must stay exposed to harm."
+  },
+  "prayer": "Lord Jesus Christ, you met violence without returning evil for evil. Through the intercession of Saint Rita, free our families from revenge, protect everyone living with abuse or threat, and guide them to trustworthy help. Teach us to forgive without denying truth, to hope without demanding guarantees, and to seek peace with justice, wisdom, and safe boundaries. Amen."
+}

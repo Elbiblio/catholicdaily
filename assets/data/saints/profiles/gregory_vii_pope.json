@@ -1,0 +1,202 @@
+{
+  "schemaVersion": 2,
+  "id": "gregory_vii_pope",
+  "profileKind": "individual",
+  "celebrationIds": ["gregory_vii_pope", "saint_gregory_vii_pope"],
+  "name": "Saint Gregory VII, Pope",
+  "alternateNames": ["Hildebrand of Sovana", "Gregory VII"],
+  "ecclesialTitle": "Pope",
+  "lifeSpan": "c. 1020/1025–1085",
+  "lifeLength": "about 60–65 years",
+  "vocation": "Benedictine monk, papal adviser, reformer, and pope",
+  "places": ["Tuscany, Italy", "Rome, Italy", "Canossa, Italy", "Salerno, Italy"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Hildebrand, elected Pope Gregory VII in 1073, pursued the freedom of the Church, opposed simony, and pressed clerical discipline. His conflict with Emperor Henry IV over investiture produced excommunications, contested deposition, Canossa, renewed civil and ecclesial struggle, an antipope, violence in Rome, and Gregory's exile. His sanctity does not turn every policy into doctrine or erase the human costs borne by clergy, wives, children, rulers, and communities.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Pope_Gregory_VII",
+  "wikidataId": "Q131444",
+  "feastDates": ["May 25"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {
+      "id": "gregory-holy-see-pontificate",
+      "title": "Gregory VII",
+      "authorOrInstitution": "Holy See",
+      "publisher": "Holy See",
+      "url": "https://www.vatican.va/content/vatican/en/holy-father/gregorio-vii.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Official pontificate record used for Hildebrand's papal name, election and inauguration dates, and death on 25 May 1085",
+      "supports": ["identity", "pontificate", "death"]
+    },
+    {
+      "id": "gregory-dictatus-primary",
+      "title": "Dictatus Papae",
+      "authorOrInstitution": "Register of Pope Gregory VII; translated by Ernest F. Henderson",
+      "publisher": "Internet Medieval Sourcebook, Fordham University",
+      "url": "https://sourcebooks.web.fordham.edu/source/g7-dictpap.asp",
+      "publicationDate": "1075",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Primary-source translation used for the papal claims entered in Gregory's register; authorship, exact function, and juridical status remain disputed, so it is not treated as a complete policy platform or as later Catholic doctrine",
+      "supports": ["reform.papalClaims", "investiture", "evidenceLimits"]
+    },
+    {
+      "id": "gregory-canossa-primary",
+      "title": "The Correspondence of Gregory VII and Henry IV: Gregory VII's Account of Canossa",
+      "authorOrInstitution": "Pope Gregory VII; translated by Ephraim Emerton",
+      "publisher": "Internet Medieval Sourcebook, Fordham University",
+      "url": "https://sourcebooks.web.fordham.edu/source/1075GregoryVIIlettersandconflict1.asp",
+      "publicationDate": "1077",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Primary letter used for Gregory's own presentation of Henry IV's penance, the negotiations at Canossa, absolution from excommunication, and the limits of a partisan account",
+      "supports": ["conflict.canossa", "conflict.absolution", "method.partisanAccount"]
+    },
+    {
+      "id": "gregory-jp2-salerno",
+      "title": "Holy Mass at Salerno: Homily of John Paul II",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "Holy See",
+      "url": "https://www.vatican.va/content/john-paul-ii/it/homilies/1985/documents/hf_jp-ii_hom_19850526_salerno.html",
+      "publicationDate": "1985-05-26",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal homily used for Gregory's reform aims, opposition to simony, clerical discipline, conflict and exile, death at Salerno, and the explicitly unresolved authenticity of the famous final words attributed by chroniclers",
+      "supports": ["reform.freedom", "reform.simony", "reform.clergy", "conflict", "exile", "death", "tradition.finalWords"]
+    },
+    {
+      "id": "gregory-doran-oxford",
+      "title": "Pope Gregory VII (c. 1025–1085)",
+      "authorOrInstitution": "John Doran",
+      "publisher": "Oxford Bibliographies in Medieval Studies, Oxford University Press",
+      "url": "https://academic.oup.com/reference/62384/reference-article-abstract/555053476?login=false",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Specialist scholarly overview used for the Reform Papacy context, investiture conflict, excommunications of Henry IV, Canossa, the antipope and Norman intervention, exile, and contested historiography and legacy",
+      "supports": ["identity", "lifeSpan", "reform.context", "conflict.investiture", "conflict.excommunication", "conflict.canossa", "conflict.antipope", "conflict.normans", "exile", "legacy"]
+    },
+    {
+      "id": "gregory-cowdrey-biography",
+      "title": "Pope Gregory VII, 1073–1085",
+      "authorOrInstitution": "H. E. J. Cowdrey",
+      "publisher": "Oxford University Press",
+      "url": "https://academic.oup.com/book/3028",
+      "publicationDate": "1998",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Modern scholarly biography used for Gregory's formation, reform program, political relationships, papal government, investiture conflict, support for Norman power and the conquest of England, exile, and complex institutional legacy",
+      "supports": ["life.formation", "reform", "politics", "conflict", "conflict.normans", "politics.englishConquest", "exile", "legacy"]
+    },
+    {
+      "id": "gregory-freestone-clergy-families",
+      "title": "The Evidence of the Ordinary: Wives and Children of the Clergy in Normandy and England, 1050–1150",
+      "authorOrInstitution": "Hazel Freestone",
+      "publisher": "Boydell & Brewer via Cambridge Core",
+      "url": "https://www.cambridge.org/core/books/abs/anglonorman-studies-xli/evidence-of-the-ordinary-wives-and-children-of-the-clergy-in-normandy-and-england-10501150/D9DAB5DB6C0C97DF690E675C4AF0C650",
+      "publicationDate": "2020-03-29",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent social-historical control used to name clergy wives and children as people affected by eleventh- and twelfth-century clerical marriage reforms and to resist presenting reform only from institutional leaders' perspectives",
+      "supports": ["reform.clericalMarriage", "consequences.wives", "consequences.children", "historiography"]
+    },
+    {
+      "id": "gregory-cowdrey-death",
+      "title": "Epilogue: Death and Canonization",
+      "authorOrInstitution": "H. E. J. Cowdrey",
+      "publisher": "Oxford University Press",
+      "url": "https://academic.oup.com/book/3028/chapter/143804334",
+      "publicationDate": "1998",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Focused scholarly control used for Gregory's death at Salerno on 25 May 1085 and to qualify the conventional image of an entirely isolated and materially destitute exile",
+      "supports": ["death", "exile", "evidenceLimits"]
+    },
+    {
+      "id": "gregory-vatican-news-feast",
+      "title": "Saint Gregory VII, Pope",
+      "authorOrInstitution": "Vatican News",
+      "publisher": "Dicastery for Communication",
+      "url": "https://www.vaticannews.va/en/saints/05/25/s--gregory-vii--pope.html",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Official tertiary calendar source used only for Gregory's May 25 celebration and ecclesial title",
+      "supports": ["feast", "ecclesialTitle"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Gregory VII's life makes reform impossible to separate from the use of power. Christians can honor courage against corruption while examining methods, unintended victims, and institutional consequences. Canonization recognizes holiness, not the perfection of every judgment, policy, alliance, or political claim.",
+  "oneMinuteSummary": "Hildebrand of Sovana became Pope Gregory VII in 1073 after decades in the papal reform movement. He opposed simony, pressed clerical discipline, and defended the Church's freedom from secular control. His claims about papal authority and conflict with Emperor Henry IV over investiture reshaped medieval church and politics. Gregory excommunicated Henry in 1076, absolved him after the contested encounter at Canossa in 1077, and excommunicated him again in 1080. The struggle continued through rival assemblies, civil war, an antipope, Henry's occupation of Rome, and a Norman rescue whose violence devastated the city. Gregory died in exile at Salerno on May 25, 1085. His reform should not be reduced to heroic pope against wicked emperor: coercive power had consequences, and clerical discipline affected wives and children as well as institutions. Canonization honors Gregory's fidelity to the Church without canonizing every policy or making disputed last words certain.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Reform formed before the pontificate",
+        "body": "Hildebrand served the reforming papacy for years before his election in 1073. His program sought freedom from lay domination, opposed simony, and demanded stricter clerical discipline. Historians now often speak of the broader Reform Papacy rather than making every eleventh-century change Gregory's personal creation. That correction preserves both his agency and the many people, movements, and earlier developments involved.",
+        "sourceIds": ["gregory-jp2-salerno", "gregory-doran-oxford", "gregory-cowdrey-biography"]
+      },
+      {
+        "heading": "Papal claims require historical boundaries",
+        "body": "The short propositions known as the Dictatus Papae appear in Gregory's working register under 1075 and assert far-reaching papal prerogatives. Scholars debate their authorship, purpose, and legal function. They witness to the claims surrounding his government, but they are not a universal manifesto, an automatic summary of medieval practice, or a list whose every statement Catholics must receive as doctrine.",
+        "sourceIds": ["gregory-dictatus-primary", "gregory-doran-oxford", "gregory-cowdrey-biography"]
+      },
+      {
+        "heading": "Excommunication, Canossa, and renewed conflict",
+        "body": "Gregory's struggle with Henry IV included Henry's rejection by an assembly, Gregory's 1076 excommunication and release of subjects from oaths, and Henry's winter journey to Canossa. Gregory's own letter emphasizes penance and absolution; it cannot settle every political motive, the encounter's meaning, or Henry's restoration of royal power. Conflict resumed, Gregory excommunicated Henry again in 1080, and rival claimants and armed supporters widened the crisis. Such medieval sanctions are not modern leadership techniques.",
+        "sourceIds": ["gregory-canossa-primary", "gregory-doran-oxford", "gregory-cowdrey-biography"]
+      },
+      {
+        "heading": "Reform had human consequences",
+        "body": "Movements against clerical marriage were not only arguments about offices and law. Research recovers wives and children whose lives could be disrupted or erased when clerical households were condemned. Gregory also supported Norman power and the conquest of England. His sanctity does not make coercion harmless. Responsible memory names institutional aims, conquest, resistance, and people with less power who bore consequences they did not choose.",
+        "sourceIds": ["gregory-jp2-salerno", "gregory-freestone-clergy-families", "gregory-cowdrey-biography"]
+      },
+      {
+        "heading": "Rome, exile, death, and disputed words",
+        "body": "Henry entered Rome and supported an antipope; Norman forces rescued Gregory but their sack brought grave violence and helped make his position in the city untenable. Gregory withdrew and died at Salerno on May 25, 1085. The famous words about loving justice and dying in exile are attributed by chroniclers, yet John Paul II explicitly left their authenticity unresolved. Scholarship also qualifies the image of Gregory dying wholly alone and destitute.",
+        "sourceIds": ["gregory-jp2-salerno", "gregory-doran-oxford", "gregory-cowdrey-biography", "gregory-cowdrey-death"]
+      }
+    ],
+    "gospelTheme": "Reform seeks freedom for faithful service, yet Christian authority remains accountable to truth, justice, mercy, and the people who bear its consequences.",
+    "struggle": "Gregory confronted corruption and political domination while exercising forms of spiritual and political power that intensified conflict and carried serious human costs.",
+    "response": "He pursued reform with courage and endurance, while his contested methods and alliances leave the Church a demanding lesson in accountable authority rather than a simple victory story."
+  },
+  "virtues": [
+    {
+      "name": "Courage for reform",
+      "evidence": "Gregory consistently opposed simony and defended ecclesial freedom despite resistance, deposition claims, military danger, and exile.",
+      "imitation": "Name one corrupt practice clearly, gather reliable evidence, and pursue reform through accountable channels that protect vulnerable people and permit correction.",
+      "sourceIds": ["gregory-jp2-salerno", "gregory-doran-oxford", "gregory-cowdrey-biography"]
+    },
+    {
+      "name": "Perseverance under opposition",
+      "evidence": "He continued his ministry through contested assemblies, excommunications, armed conflict, displacement from Rome, and death away from his see.",
+      "imitation": "When principled work meets resistance, review both the goal and the means with trusted advisers; persevere in what is just and change methods that create avoidable harm.",
+      "sourceIds": ["gregory-doran-oxford", "gregory-cowdrey-biography", "gregory-cowdrey-death"]
+    },
+    {
+      "name": "Zeal accountable to consequences",
+      "evidence": "Gregory's reforming zeal produced enduring institutional change, while scholarship also shows consequences for political communities and clerical families.",
+      "imitation": "Before imposing a reform, map who gains authority, who loses security, and whose voice is absent; build safeguards and a real process for appeal.",
+      "sourceIds": ["gregory-cowdrey-biography", "gregory-freestone-clergy-families"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Read Mark 10:42-45 and examine one responsibility you hold. Ask Christ to purify both your purpose and your use of influence, especially where a good goal can hide coercive habits.",
+    "action": "For one proposed change in your family, parish, workplace, or community, consult someone likely to bear its cost. Record their concern, revise one safeguard, and make the decision and appeal path transparent."
+  },
+  "reflectionQuestions": [
+    "When I call something reform, whose experience or safety am I failing to count?",
+    "Can I honor a holy person's fidelity while evaluating particular methods, policies, and historical claims critically?"
+  ],
+  "scripture": {
+    "reference": "Mark 10:43-45",
+    "connection": "Jesus places authority under the pattern of service. Gregory's reforming courage can inspire, while the conflicts and consequences of his pontificate warn that ecclesial power must remain accountable to the people it affects."
+  },
+  "prayer": "Lord Jesus Christ, servant and shepherd, through the intercession of Saint Gregory VII give your Church courage to resist corruption and freedom to serve the Gospel. Purify every use of authority, protect those who carry the costs of reform, and make leaders willing to hear correction. Teach us to pursue justice without coercive pride, truth without simplification, and perseverance with mercy. Amen."
+}

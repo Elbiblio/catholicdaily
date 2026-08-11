@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 2,
+  "id": "bede_the_venerable",
+  "profileKind": "individual",
+  "celebrationIds": ["bede_the_venerable", "saint_bede_the_venerable_priest_and_doctor_of_the_church"],
+  "name": "Saint Bede the Venerable",
+  "alternateNames": ["Bede", "The Venerable Bede", "Beda Venerabilis"],
+  "ecclesialTitle": "Priest and Doctor of the Church",
+  "lifeSpan": "c. 672/673–735",
+  "lifeLength": "about 62 years",
+  "vocation": "Monk, priest, biblical commentator, teacher, historian, and computist",
+  "places": ["Northumbria", "Wearmouth, England", "Jarrow, England"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Bede spent nearly all his life in the monastic community of Wearmouth-Jarrow, where worship, study, teaching, and writing belonged together. His biblical commentaries, works on time and nature, and Ecclesiastical History made him one of the early Middle Ages' most influential scholars. His own source-conscious methods deserve attention, while the limits, aims, and inherited traditions of his texts require critical reading rather than treating every narrative as modern reportage.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Bede",
+  "wikidataId": "Q154938",
+  "feastDates": ["May 25"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {
+      "id": "bede-history-primary",
+      "title": "Bede's Ecclesiastical History of England, Book V, Chapter 24",
+      "authorOrInstitution": "Saint Bede; translated by A. M. Sellar",
+      "publisher": "Project Gutenberg",
+      "url": "https://www.gutenberg.org/files/38326/38326-h/38326-h.html",
+      "publicationDate": "1907",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Public-domain primary work read for Bede's own account of his monastic identity, education, ordinations, lifelong scriptural study, worship, learning, teaching, writing, source categories, and catalogue of works; the edition's introduction is used only to identify later title legends",
+      "supports": ["identity", "lifeSpan", "life.monastery", "life.ordination", "life.study", "life.worship", "life.teaching", "life.writing", "method.sources", "works.catalogue", "tradition.title"]
+    },
+    {
+      "id": "bede-benedict-audience",
+      "title": "General Audience: Bede, the Venerable",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "Holy See",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/audiences/2009/documents/hf_ben-xvi_aud_20090218.html",
+      "publicationDate": "2009-02-18",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal catechesis used for Bede's monastic learning, manuscripts and community, Christ-centered exegesis, liturgical theology, history, Easter calculation, teaching, and European reception; its apparent 737 death-year error is rejected against primary and scholarly controls",
+      "supports": ["identity", "life.monastery", "life.library", "life.scripture", "theology.christ", "theology.liturgy", "works.history", "works.computus", "legacy", "sourceError.deathYear"]
+    },
+    {
+      "id": "bede-oxford-bibliography",
+      "title": "Bede",
+      "authorOrInstitution": "Richard Shaw",
+      "publisher": "Oxford Bibliographies in British and Irish Literature, Oxford University Press",
+      "url": "https://academic.oup.com/reference/62337/reference-article-abstract/567251700",
+      "publicationDate": "2026-07-07",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Current specialist scholarly control used for the 672/673–735 chronology, Wearmouth-Jarrow context, ordinations, range and transmission of works, historical method, influence, and limits of the autobiographical evidence",
+      "supports": ["identity", "lifeSpan", "life.monastery", "life.ordination", "works.range", "works.history", "method", "legacy", "evidenceLimits"]
+    },
+    {
+      "id": "bede-mup-autobiography",
+      "title": "The Autobiographical Statement of Bede the Scholar in Ecclesiastical History 5.24",
+      "authorOrInstitution": "Peter Darby and Máirín MacCarron",
+      "publisher": "Manchester University Press",
+      "url": "https://www.degruyterbrill.com/document/doi/10.7765/9781526153210.00011/html?lang=de",
+      "publicationDate": "2023",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Scholarly chapter used to interpret Bede's self-description as servant of Christ, its literary context, the enabling role of Wearmouth-Jarrow's teachers and library, and the need not to turn a concise self-presentation into unsupported biography",
+      "supports": ["identity", "life.selfPresentation", "life.monastery", "life.community", "life.library", "evidenceLimits"]
+    },
+    {
+      "id": "bede-vatican-news-calendar",
+      "title": "Saint of the Day: Saint Bede the Venerable, Benedictine and Doctor of the Church",
+      "authorOrInstitution": "Vatican News",
+      "publisher": "Dicastery for Communication",
+      "url": "https://www.vaticannews.va/en/saints/05/25.html",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Official tertiary calendar control used only for the May 25 celebration and ecclesial title",
+      "supports": ["feast", "ecclesialTitle"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Bede shows learning as a communal vocation ordered to Christ. He did not separate books from worship, teaching from humility, or history from moral purpose. His example encourages careful sources and patient study, while his historical distance reminds readers to test claims, notice an author's aims, and correct even respected authorities when evidence requires it.",
+  "oneMinuteSummary": "Born in Northumbria around 672 or 673, Bede entered the linked monasteries of Wearmouth and Jarrow at seven. His own brief account says that he spent his life there under monastic discipline, daily worship, study of Scripture, learning, teaching, and writing. Ordained deacon at nineteen and priest at thirty, he produced biblical commentaries, homilies, works on chronology and nature, saints' lives, and the Ecclesiastical History of the English People. That History identifies written records, inherited testimony, and personal knowledge among its sources, yet it remains a theological history shaped by Bede's purposes and period, not modern neutral reporting. Later legends about his title and final days should not replace the secure autobiographical core. He died in 735. Honored as a Doctor of the Church and celebrated on May 25, Bede invites Christians to make truthful learning an act of prayer, service, and accountable community memory.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A life known through a concise self-account",
+        "body": "Most secure biographical facts come from Bede's short conclusion to the Ecclesiastical History: birth in the monastery's territory, entrance at seven under Benedict Biscop and Ceolfrith, ordination as deacon and priest, and a life spent in the community. Scholarship cautions that this is a crafted self-presentation, not a complete memoir. Later stories about how he received the title Venerable or extraordinary events at his death belong to reception history, not the core biography.",
+        "sourceIds": ["bede-history-primary", "bede-oxford-bibliography", "bede-mup-autobiography"]
+      },
+      {
+        "heading": "Learning held inside prayer and community",
+        "body": "Bede describes study alongside the monastic rule and daily singing in church. His achievement depended on abbots, teachers, scribes, inherited books, and a library connected to Rome and the continent. Learning was therefore neither solitary self-invention nor a claim to superiority; it was disciplined work received from a community and returned through teaching and writing.",
+        "sourceIds": ["bede-history-primary", "bede-benedict-audience", "bede-mup-autobiography"]
+      },
+      {
+        "heading": "Scripture read toward Christ",
+        "body": "Bede's largest body of writing was biblical interpretation. Benedict XVI highlights his attention to what the text says and his conviction that Christ unifies Scripture. Modern readers can value this spiritual and textual seriousness without pretending that early medieval exegesis answers every later historical or scientific question. Love of Scripture includes learning languages, contexts, genres, and the limits of one's expertise.",
+        "sourceIds": ["bede-benedict-audience", "bede-oxford-bibliography"]
+      },
+      {
+        "heading": "History with sources, purpose, and limits",
+        "body": "At the close of his History, Bede names ancient writings, ancestral tradition, and his own knowledge as kinds of evidence. This explicit source awareness is valuable, but his work also interprets events through ecclesial and moral aims. Readers should ask which voices, regions, and conflicts his narrative foregrounds or leaves aside. Respect for Bede means reading him carefully, not treating every reported speech, miracle, or judgment as independently verified fact.",
+        "sourceIds": ["bede-history-primary", "bede-oxford-bibliography"]
+      },
+      {
+        "heading": "A broad craft of service",
+        "body": "Bede wrote across Scripture, history, chronology, grammar, poetry, saints' lives, and the calculation of Easter. The range grew from concrete needs of worship, education, and memory. It offers no permission to speak beyond evidence; rather, it models patient formation, acknowledgment of sources, and work made useful to a community. Even a formal modern catechesis can contain a date error, as its 737 death year shows, so reverence and correction can coexist.",
+        "sourceIds": ["bede-history-primary", "bede-benedict-audience", "bede-oxford-bibliography"]
+      }
+    ],
+    "gospelTheme": "Truth received in Christ becomes a shared ministry of listening, learning, worship, teaching, and responsible memory.",
+    "struggle": "Scholarship can become self-display, inherited narratives can be repeated without testing, and respected authorities can be treated as incapable of error.",
+    "response": "Bede located study within prayer and community, named the kinds of sources he used, wrote for real ecclesial needs, and placed knowledge in service of Christ."
+  },
+  "virtues": [
+    {
+      "name": "Studious humility",
+      "evidence": "Bede called himself a servant of Christ and situated learning, teaching, and writing within monastic discipline and daily worship.",
+      "imitation": "Before presenting a conclusion, identify what you learned from others, what remains uncertain, and how the work can serve rather than impress your community.",
+      "sourceIds": ["bede-history-primary", "bede-mup-autobiography"]
+    },
+    {
+      "name": "Source-conscious truthfulness",
+      "evidence": "Bede distinguished ancient documents, inherited testimony, and personal knowledge as sources for his History, even though his use of them still requires critical evaluation.",
+      "imitation": "For one claim you plan to share, locate the primary source, compare an independent scholarly control, label inference or tradition, and remove precision you cannot support.",
+      "sourceIds": ["bede-history-primary", "bede-oxford-bibliography"]
+    },
+    {
+      "name": "Learning for communion",
+      "evidence": "His library, teachers, worship, and teaching belonged to the corporate life of Wearmouth-Jarrow, while his works circulated for the benefit of later communities.",
+      "imitation": "Share one well-sourced insight in a form another person can use, and invite a correction from someone whose knowledge or perspective differs from yours.",
+      "sourceIds": ["bede-benedict-audience", "bede-mup-autobiography"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Read Luke 1:1-4 and pray for the grace to love both truth and the people affected by your words. Write down the difference between what you know, what you infer, and what you still need to verify.",
+    "action": "Audit one historical, devotional, or social-media claim before repeating it. Check an original source and an independent scholarly account, correct the record publicly if needed, and credit the people whose work made your understanding possible."
+  },
+  "reflectionQuestions": [
+    "Does my learning lead me toward worship, service, and teachability, or toward status and certainty beyond the evidence?",
+    "Which inherited story do I need to revisit by asking who recorded it, for what purpose, and whose voice is missing?"
+  ],
+  "scripture": {
+    "reference": "Luke 1:3-4",
+    "connection": "Luke links careful investigation and orderly writing to trustworthy formation. Bede's source awareness echoes that vocation, while reminding every historian and teacher that method, purpose, and human limitation must remain visible."
+  },
+  "prayer": "Lord Jesus Christ, fountain of wisdom, through the intercession of Saint Bede teach us to love Scripture, pursue truth patiently, and remember the past with humility. Bless teachers, students, librarians, translators, and historians. Keep us honest about our sources and limits, ready to correct error, and eager to place every gift of learning at the service of your people. Amen."
+}
