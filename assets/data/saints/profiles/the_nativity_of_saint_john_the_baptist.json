@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 2,
+  "id": "the_nativity_of_saint_john_the_baptist",
+  "profileKind": "observance",
+  "celebrationIds": ["the_nativity_of_saint_john_the_baptist", "nativity_of_saint_john_the_baptist"],
+  "name": "The Nativity of Saint John the Baptist",
+  "alternateNames": ["The Birth of Saint John the Baptist", "Nativity of John the Baptist"],
+  "ecclesialTitle": "Solemnity of the Nativity of Saint John the Baptist",
+  "vocation": "Liturgical observance of John's birth, naming, prophetic calling, and witness to Christ",
+  "places": ["The hill country of Judea"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "This solemnity is not a complete biography or a separate lifespan for John. It celebrates Luke 1: Zechariah and Elizabeth receive a long-awaited child; relatives and neighbors share their joy; the child is named John; Zechariah blesses God in the Benedictus; and John's vocation is announced as preparing the Lord's way. The feast receives every child as gift and person, while directing hope beyond John toward Jesus Christ.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Nativity_of_John_the_Baptist",
+  "wikidataId": "Q3870479",
+  "feastDates": ["June 24"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {
+      "id": "john-nativity-usccb-luke1",
+      "title": "Luke, Chapter 1",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/luke/1",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Canonical Scripture used for Zechariah and Elizabeth, the announcement and conception, Mary's kinship with Elizabeth, John's birth and naming, neighbors' shared joy, the Benedictus, John's prophetic vocation, covenant continuity with Israel, and growth before public ministry; paraphrased without reproducing the translation",
+      "supports": ["observanceIdentity", "places", "life.parents", "life.announcement", "life.birth", "life.naming", "life.community", "life.benedictus", "life.vocation", "life.israel", "gospelTheme", "scripture"]
+    },
+    {
+      "id": "john-nativity-francis-angelus",
+      "title": "Angelus, 24 June 2018",
+      "authorOrInstitution": "Pope Francis",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/francesco/en/angelus/2018/documents/papa-francesco_angelus_20180624.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal reflection used for the liturgy's event-centered focus on John's birth, Elizabeth and Zechariah, relatives and neighbors, unexpected grace, naming, humility before God's work, and the child's identity and mission as gift rather than parental possession",
+      "supports": ["profileKind", "life.event", "life.parents", "life.community", "life.naming", "life.gift", "virtues.welcome", "virtues.humility"]
+    },
+    {
+      "id": "john-nativity-benedict-angelus",
+      "title": "Angelus, 24 June 2012",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/angelus/2012/documents/hf_ben-xvi_ang_20120624.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal reflection used for Solemnity rank, the birth's close connection to Christ's Incarnation, the six-month relationship in Luke, the naming and Benedictus, John's role as forerunner, and the requirement that devotion to John lead to Jesus rather than stop at the prophet",
+      "supports": ["feastDates", "calendar.rank", "history.liturgical", "life.naming", "life.benedictus", "life.forerunner", "gospelTheme"]
+    },
+    {
+      "id": "john-nativity-fitzmyer-luke",
+      "title": "The Gospel According to Luke I-IX",
+      "authorOrInstitution": "Joseph A. Fitzmyer",
+      "publisher": "Yale University Press",
+      "url": "https://yalebooks.yale.edu/book/9780300139808/the-gospel-according-to-luke-i-ix/",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent critical commentary used as a control for Luke's literary structure, first-century setting, theological themes, and the interpretation of Luke 1 as Gospel narrative rather than a modern civil birth record",
+      "supports": ["life.luke_structure", "historicalContext", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "john-nativity-universal-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — June",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/JunUC.shtml",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the June 24 Solemnity of the Nativity of Saint John the Baptist and white liturgical color",
+      "supports": ["profileKind", "celebrationIds", "feastDates", "calendar.rank", "calendar.color", "ecclesialTitle"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "The feast celebrates God's fidelity entering one family's long waiting and a community's shared joy. John's name and vocation are received, not manufactured: he belongs to God and will prepare people for Christ. This can renew how Christians welcome children, honor family grief without stigma, pray with the Benedictus, and help another person's calling grow without controlling it.",
+  "oneMinuteSummary": "The Nativity of Saint John the Baptist is a solemnity about a saving event, not a cradle-to-death biography. Luke 1 presents Elizabeth and Zechariah receiving a child, relatives and neighbors sharing joy, and the name John confirming God's gift rather than an extension of family expectation. Zechariah's Benedictus blesses the God of Israel for covenant mercy and announces John's vocation: he will go before the Lord and prepare a people for salvation. The feast has long been celebrated on June 24, six months before the Nativity of Christ, so John's birth points beyond itself to Jesus. It does not promise pregnancy to every family, blame infertility, or make a child's worth depend on a future achievement. It invites communities to welcome children safely, accompany parents and grieving families without pressure, speak blessing rather than ownership, and help each person's vocation mature in freedom toward Christ.",
+  "life": {
+    "sections": [
+      {
+        "heading": "The event the solemnity celebrates",
+        "body": "Luke presents Elizabeth and Zechariah within Israel's covenant story. After long childlessness and an angelic announcement, Elizabeth gives birth; relatives and neighbors share her joy. The observance does not turn this scene into a full biography or calculate John's lifespan. It stays with God's fidelity, the family's experience, and a community learning to receive an unexpected gift.",
+        "sourceIds": ["john-nativity-usccb-luke1", "john-nativity-francis-angelus"]
+      },
+      {
+        "heading": "A child named, not possessed",
+        "body": "Elizabeth insists on the name John, and Zechariah confirms it despite relatives' expectations. The child has a God-given identity and vocation that cannot be reduced to repeating a parent's status. Every child has dignity before achievement; adults are entrusted with protection, care, and room to grow, never ownership or pressure to fulfill an adult's unrealized plans.",
+        "sourceIds": ["john-nativity-usccb-luke1", "john-nativity-francis-angelus"]
+      },
+      {
+        "heading": "The Benedictus directs hope to Christ",
+        "body": "Zechariah blesses the God of Israel for covenant mercy and speaks of John as prophet who will prepare the Lord's way and give knowledge of salvation. John's greatness is relational: his calling serves the coming of Jesus. Prayer with the Benedictus should therefore deepen gratitude, repentance, mercy, and readiness for Christ rather than produce a personality cult around the forerunner.",
+        "sourceIds": ["john-nativity-usccb-luke1", "john-nativity-benedict-angelus"]
+      },
+      {
+        "heading": "Why the Church celebrates on June 24",
+        "body": "The ancient solemnity stands six months before Christmas, reflecting Luke's relative chronology between Elizabeth's pregnancy and the announcement to Mary. Liturgical dating proclaims a theological relationship rather than a modern birth certificate. The feast welcomes joy while never turning Elizabeth's story into a guarantee of pregnancy or a judgment on infertility, miscarriage, adoption, or childlessness.",
+        "sourceIds": ["john-nativity-usccb-luke1", "john-nativity-benedict-angelus", "john-nativity-universal-calendar"]
+      }
+    ],
+    "gospelTheme": "God's covenant mercy prepares the way for Jesus Christ; John receives a name and mission so that a people may become ready for the Lord.",
+    "struggle": "Waiting can acquire shame, family expectation can eclipse a child's dignity, and religious celebration can offer simplistic promises to people carrying infertility or grief.",
+    "response": "Bless God's faithfulness, welcome each child as a person rather than a project, accompany grief without blame, and use your gifts to prepare attention for Christ rather than yourself."
+  },
+  "virtues": [
+    {
+      "name": "Hospitable joy",
+      "evidence": "Elizabeth's relatives and neighbors share joy at the child's birth, making the event a community welcome rather than a private possession.",
+      "imitation": "Support one new parent, foster or adoptive family, child, or grieving household with a practical offer they can freely accept or decline.",
+      "sourceIds": ["john-nativity-usccb-luke1", "john-nativity-francis-angelus"]
+    },
+    {
+      "name": "Freedom-giving care",
+      "evidence": "John receives the unexpected name given in the announcement, signaling a vocation that exceeds inherited family expectation.",
+      "imitation": "Ask a younger or dependent person what support helps them grow; listen without assigning them your preferred vocation, career, personality, or spiritual experience.",
+      "sourceIds": ["john-nativity-usccb-luke1", "john-nativity-francis-angelus"]
+    },
+    {
+      "name": "Christ-pointing humility",
+      "evidence": "The Benedictus gives John a real prophetic calling whose purpose is to prepare the Lord's way and announce salvation.",
+      "imitation": "In one task you lead, make another person's contribution visible and redirect praise toward the shared service of Christ and neighbor.",
+      "sourceIds": ["john-nativity-usccb-luke1", "john-nativity-benedict-angelus"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Read Luke 1:57-80 slowly. Pray the Benedictus as praise of God's covenant mercy, then name one way your gifts can prepare welcome for Jesus rather than draw attention to yourself.",
+    "action": "Offer one specific, consent-based support to a child, parent, caregiver, adoptive or foster family, or person carrying reproductive grief. Avoid unsolicited explanations, promises, and questions about pregnancy."
+  },
+  "reflectionQuestions": [
+    "Do I welcome another person's God-given identity, or pressure them to repeat my expectations?",
+    "How can my words and work prepare a path toward Christ while protecting children and honoring families whose stories differ from Elizabeth's?"
+  ],
+  "scripture": {
+    "reference": "Luke 1:57-80",
+    "connection": "John's birth, naming, and the Benedictus reveal God's covenant mercy and a vocation ordered toward Jesus. The solemnity stays with this event so that celebration becomes welcome, blessing, and readiness for Christ."
+  },
+  "prayer": "God of Israel and Father of mercy, you gave John a name and a calling to prepare the way for Jesus. Teach us to welcome every child with reverence, accompany waiting and grief without blame, and release those we love from our controlling expectations. Make our praise truthful, our homes and communities safe, and our gifts humble signs pointing to Christ our rising light. Amen."
+}

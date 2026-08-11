@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 2,
+  "id": "paulinus_of_nola",
+  "profileKind": "individual",
+  "celebrationIds": ["paulinus_of_nola", "saint_paulinus_of_nola_bishop"],
+  "name": "Saint Paulinus of Nola, Bishop",
+  "alternateNames": ["Paulinus of Nola", "Pontius Meropius Anicius Paulinus"],
+  "ecclesialTitle": "Bishop of Nola",
+  "lifeSpan": "c. 352–431",
+  "vocation": "Husband, poet, priest, monastic community leader, and bishop",
+  "places": ["Bordeaux", "Campania", "Barcelona", "Nola"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Born into a wealthy senatorial family near Bordeaux around 352, Paulinus served as governor, married Therasia, and experienced the death of their infant son. With his wife's agreement he redirected substantial property over time, was ordained in Barcelona, and settled at Nola near the shrine of Felix. His poems, letters, buildings, hospitality, and later episcopal service joined culture to Christian community. Gregory the Great's story that he became a captive to free another is much later and chronologically impossible as written.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Paulinus_of_Nola",
+  "wikidataId": "Q132473",
+  "feastDates": ["June 22"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "paulinus-benedict-audience",
+      "title": "General Audience of 12 December 2007: Saint Paulinus, Bishop of Nola",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/audiences/2007/documents/hf_ben-xvi_aud_20071212.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal catechesis used for Paulinus's aristocratic and political background, education, conversion, marriage to Therasia, infant son's death, consensual renunciation, Nola community, priesthood, episcopate, poetry, hospitality, care for poor people, and its own explicit acknowledgment that the captivity story is historically disputed",
+      "supports": ["identity", "places", "life.background", "life.governor", "life.conversion", "life.marriage", "life.child", "life.renunciation", "life.nola", "life.priest", "life.bishop", "life.poetry", "life.hospitality", "life.poor", "tradition.captivity"]
+    },
+    {
+      "id": "paulinus-letter-32-sussex",
+      "title": "Letter 32 to Severus",
+      "authorOrInstitution": "Paulinus of Nola; translated by P. G. Walsh",
+      "publisher": "Sussex Centre for Byzantine Cultural History, University of Sussex",
+      "url": "https://www.sussex.ac.uk/byzantine/mosaic/view/text/id/304",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Primary letter record in a scholarly architectural database used for Paulinus's description of the Basilica Nova at Nola, its Christ-centered mosaic program, the relationship of writing and building, and material investment in a worshiping community; translated wording is not reproduced",
+      "supports": ["life.letters", "life.buildings", "life.basilica", "life.art", "life.christ_centered", "places"]
+    },
+    {
+      "id": "paulinus-gregory-dialogues",
+      "title": "Dialogues, Book III",
+      "authorOrInstitution": "Gregory the Great; translated by P. W.",
+      "publisher": "Tertullian.org",
+      "url": "https://www.tertullian.org/fathers/gregory_03_dialogues_book3.htm",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Late sixth-century hagiographic primary source used only to identify the much later story that Paulinus offered himself as a captive for a widow's son and returned from Vandal Africa with captives; the narrative is not treated as contemporary biography or chronological fact",
+      "supports": ["tradition.captivity", "tradition.ransom", "tradition.vandals", "sourceHistory", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "paulinus-kirstein-trout-review",
+      "title": "Paulinus of Nola. Life, Letters, and Poems",
+      "authorOrInstitution": "Robert Kirstein, reviewing Dennis E. Trout",
+      "publisher": "Bryn Mawr Classical Review",
+      "url": "https://bmcr.brynmawr.edu/2001/2001.10.16/",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent scholarly review used for c. 352/53–431 chronology, senatorial career, Therasia and Celsus, gradual property distribution rather than instant total abandonment, ordination and move to Nola, bishopric, letters and poems, Felix devotion, buildings, self-fashioning, and later legendary reception",
+      "supports": ["identity", "lifeSpan", "life.background", "life.governor", "life.marriage", "life.child", "life.property_gradual", "life.ordination", "life.nola", "life.bishop", "life.writings", "life.felix", "life.buildings", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "paulinus-universal-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — June",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/JunUC.shtml",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for Paulinus's June 22 optional memorial and white liturgical color; the calendar key establishes that an entry without a printed rank is optional",
+      "supports": ["celebrationIds", "feastDates", "calendar.rank", "calendar.color", "ecclesialTitle"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Paulinus shows conversion working through marriage, grief, property, culture, friendship, place, and public responsibility. He and Therasia did not make one theatrical gesture of destitution; they redirected wealth over time and built a community of prayer and hospitality. His witness invites planned generosity and Christ-centered creativity without abandoning dependants, prescribing celibacy within marriage, or turning grief and legend into commands.",
+  "oneMinuteSummary": "Paulinus was born around 352 near Bordeaux into a wealthy senatorial family and served as governor of Campania. He married Therasia, was baptized, and grieved the death of their infant son Celsus. Their ascetical direction and redirection of property were decisions; scholarship shows distribution was gradual rather than instant abandonment. Ordained a priest in Barcelona in 394, Paulinus settled with Therasia at Nola in 395 near the shrine of Felix. Letters, poems, a monastic-style community, hospitality, and church building turned elite resources and classical culture toward Christ and neighbor. Chosen bishop around 408 or 409, he served until 431. More than a century later, Gregory the Great told a dramatic story that Paulinus became a captive to ransom a widow's son from Vandals in Africa. It is chronologically impossible as written and not secure biography. Paulinus inspires consensual, planned generosity, honest grief, creative faith, and care that protects dependants.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Marriage, conversion, and grief",
+        "body": "Paulinus came from a wealthy senatorial family near Bordeaux, studied literature, and served as governor in Campania. He married the Christian noblewoman Therasia and received baptism. Their infant son Celsus died after only days. Later sources connect this grief with deepened ascetic commitment, but a child's death is not a divine instruction or a template; grief deserves truthful lament, support, and time.",
+        "sourceIds": ["paulinus-benedict-audience", "paulinus-kirstein-trout-review"]
+      },
+      {
+        "heading": "Wealth redirected by shared discernment",
+        "body": "Paulinus and Therasia agreed on a new pattern of life and redirected great properties toward poor people and the Church. Historical scholarship describes progressive distribution and continued property management, not an instantaneous disposal of everything. Their choice cannot be imposed on a spouse or copied by neglecting children, elders, debt, workers, health, or basic security.",
+        "sourceIds": ["paulinus-benedict-audience", "paulinus-kirstein-trout-review"]
+      },
+      {
+        "heading": "Nola: poetry, place, and community",
+        "body": "After ordination in Barcelona, Paulinus and Therasia settled at Nola near the memorial of Felix. Paulinus sustained friendships through letters, composed annual poems, welcomed pilgrims, and invested in worshiping space. Letter 32 describes a new basilica and a visual program centered on Christ. Culture and material resources become Christian service when they build communion rather than a patron's image.",
+        "sourceIds": ["paulinus-benedict-audience", "paulinus-letter-32-sussex", "paulinus-kirstein-trout-review"]
+      },
+      {
+        "heading": "Bishop and the boundary of legend",
+        "body": "The Nola community chose Paulinus as bishop around 408 or 409, and he served until his death in 431. Gregory the Great, writing much later, says Paulinus offered himself as a captive for a widow's son and returned from Vandal Africa with others. The chronology cannot fit Paulinus's lifetime as written and no contemporary evidence confirms it. Preserve the story as later reception, not a demand to enter captivity or bypass safe aid.",
+        "sourceIds": ["paulinus-benedict-audience", "paulinus-gregory-dialogues", "paulinus-kirstein-trout-review", "paulinus-universal-calendar"]
+      }
+    ],
+    "gospelTheme": "Jesus Christ receives human relationships, possessions, grief, art, and public responsibility and redirects them toward communion, hospitality, and care for people in need.",
+    "struggle": "Conversion stories can romanticize poverty, treat grief as divine manipulation, erase a spouse's agency, or praise dramatic rescue while neglecting safe and sustainable care.",
+    "response": "Grieve honestly, discern major changes with those affected, give through a responsible plan, use culture and property for communion, and distinguish inspiring reception from secure history."
+  },
+  "virtues": [
+    {
+      "name": "Shared discernment",
+      "evidence": "Paulinus's renunciation and community life developed with Therasia's agreement rather than treating marriage as an obstacle or her property as his alone.",
+      "imitation": "Before a major spiritual or financial commitment, disclose its real costs to your spouse, family, or dependants and seek free agreement without using holiness to pressure them.",
+      "sourceIds": ["paulinus-benedict-audience", "paulinus-kirstein-trout-review"]
+    },
+    {
+      "name": "Responsible generosity",
+      "evidence": "Their large property distribution unfolded progressively, while Nola's community, hospitality, buildings, and service made resources durable rather than merely dramatic.",
+      "imitation": "Choose a sustainable gift or budget percentage, protect essential obligations, use a transparent recipient, and review the result before increasing it.",
+      "sourceIds": ["paulinus-kirstein-trout-review", "paulinus-letter-32-sussex"]
+    },
+    {
+      "name": "Christ-centered creativity",
+      "evidence": "Paulinus redirected literary skill and visual patronage toward Scripture, worship, friendship, and a community gathered around Christ.",
+      "imitation": "Use one skill in writing, design, teaching, organizing, or building to make prayer, welcome, or practical care more accessible without centering your name.",
+      "sourceIds": ["paulinus-letter-32-sussex", "paulinus-benedict-audience", "paulinus-kirstein-trout-review"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Read 2 Corinthians 8:9-15. Bring one possession, talent, and grief before Christ. Ask what equitable, sustainable sharing looks like without interpreting loss as punishment or a command to abandon your responsibilities.",
+    "action": "Make one consent-based generosity plan: name the need, amount or time, recipient, obligations protected, and review date. If grief is fresh, choose support and companionship before major irreversible decisions."
+  },
+  "reflectionQuestions": [
+    "Who carries the cost of my spiritual or financial decisions, and have they been heard without pressure?",
+    "Can I let grief be grief before assigning it a providential explanation or making a dramatic change?"
+  ],
+  "scripture": {
+    "reference": "2 Corinthians 8:9-15",
+    "connection": "Paul presents Christ's self-giving as the source of equitable sharing, while explicitly refusing relief for others that crushes the giver. Paulinus's wealth story is safest when read through this balance of grace, sufficiency, and responsibility."
+  },
+  "prayer": "Lord Jesus Christ, who became poor to make us rich in grace, through Saint Paulinus teach us to grieve honestly, discern with those we love, and share without neglect or display. Receive our learning, art, property, and work for communion and hospitality. Give bishops generous hearts, families freedom from spiritual pressure, and all who suffer loss patient companionship. Amen."
+}

@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 2,
+  "id": "john_fisher_and_thomas_more",
+  "profileKind": "group",
+  "celebrationIds": ["john_fisher_and_thomas_more", "saints_john_fisher_bishop_and_thomas_more_martyrs"],
+  "name": "Saints John Fisher, Bishop, and Thomas More, Martyrs",
+  "alternateNames": ["John Fisher and Thomas More", "Saints John Fisher and Thomas More"],
+  "ecclesialTitle": "Bishop and lay statesman, martyrs",
+  "vocation": "Two distinct English Christians—bishop and scholar; husband, father, lawyer, and statesman—honored in one memorial",
+  "places": ["Cambridge", "Rochester", "London", "Tower of London"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "John Fisher, bishop of Rochester and Cambridge scholar, and Thomas More, lawyer, husband, father, humanist, and former lord chancellor, were executed separately in 1535 after opposing Henry VIII's claim of supreme ecclesial authority. Their legal cases raise enduring questions about conscience, silence, oaths, and politically driven prosecution. They were not interchangeable, and More's own participation in coercive action against religious dissent remains part of an honest account of his contested legacy.",
+  "feastDates": ["June 22"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "fisher-english-works",
+      "title": "English Works of John Fisher, Bishop of Rochester: Sermons and Other Writings 1520 to 1535",
+      "authorOrInstitution": "John Fisher; edited by Cecilia A. Hatt",
+      "publisher": "Oxford University Press",
+      "url": "https://academic.oup.com/book/32808",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Critical edition and scholarly introduction used for Fisher's 1469–1535 chronology, Cambridge humanism, Greek and Hebrew study, preaching, Rochester episcopate, opposition to the Act of Supremacy, execution, and prison devotional writings; modern editorial prose is paraphrased",
+      "supports": ["fisher.identity", "fisher.dates", "fisher.cambridge", "fisher.humanism", "fisher.preaching", "fisher.rochester", "fisher.supremacy", "fisher.execution", "fisher.writings"]
+    },
+    {
+      "id": "fisher-theology-rex",
+      "title": "Introduction to The Theology of John Fisher",
+      "authorOrInstitution": "Richard Rex",
+      "publisher": "Cambridge University Press",
+      "url": "https://www.cambridge.org/core/books/abs/theology-of-john-fisher/introduction/BD5E980884C290F45BC675376912D0A0",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent scholarly control used to distinguish Fisher's professional theology, preaching, humanist learning, marriage and authority controversies, and historical reception from More's better-known but different career",
+      "supports": ["group.distinct", "fisher.theology", "fisher.preaching", "fisher.humanism", "fisher.marriage_controversy", "fisher.authority", "reception.fisher"]
+    },
+    {
+      "id": "more-vatican-patron",
+      "title": "Proclamation of Saint Thomas More as Patron of Statesmen",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "Holy See Press Office",
+      "url": "https://press.vatican.va/jubilee_2000/jubilevents/jub_jubilparlgov_20001026_thomas-more_en.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal profile and proclamation used for More's 1478–1535 chronology, education, family responsibility, legal and political career, resignation, imprisonment, oath and conscience conflict, execution, canonization with Fisher, and More's individual patronage of statesmen and politicians, which is not assigned to the joint group",
+      "supports": ["more.identity", "more.dates", "more.family", "more.education", "more.law", "more.chancellor", "more.resignation", "more.conscience", "more.imprisonment", "more.execution", "group.canonization", "more.patronage"]
+    },
+    {
+      "id": "more-trial-helmholz",
+      "title": "Natural Law and the Trial of Thomas More",
+      "authorOrInstitution": "R. H. Helmholz",
+      "publisher": "Cambridge University Press",
+      "url": "https://www.cambridge.org/core/books/abs/thomas-mores-trial-by-jury/natural-law-and-the-trial-of-thomas-more/13A4868A9E7AB846EF16012312075E84",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent legal-historical analysis used to separate political motive from procedural fairness, examine the treason trial and silence strategy, and frame due process as a real moral question rather than treating conviction or martyr status as a substitute for legal analysis",
+      "supports": ["more.trial", "more.silence", "more.due_process", "historicalContext", "virtues.conscience"]
+    },
+    {
+      "id": "more-heresy-rex",
+      "title": "Thomas More and the heretics: statesman or fanatic?",
+      "authorOrInstitution": "Richard Rex",
+      "publisher": "Cambridge University Press",
+      "url": "https://www.cambridge.org/core/books/abs/cambridge-companion-to-thomas-more/thomas-more-and-the-heretics-statesman-or-fanatic/5AC04FAA245E38D9FAFE55D062A4AE90",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent historiographical control used for More's active legal and polemical campaign against Protestant dissent, executions during his chancellorship, disputed allegations including torture, and the need to reject both sanitizing admiration and inflated villain narratives",
+      "supports": ["more.heresy_policy", "more.coercion", "more.polemics", "more.executions_context", "more.torture_dispute", "reception.contested", "sourceLimits"]
+    },
+    {
+      "id": "fisher-more-universal-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — June",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/JunUC.shtml",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the shared June 22 optional memorial, red liturgical color, and joint titles; the calendar key establishes that an entry without a printed rank is optional",
+      "supports": ["profileKind", "celebrationIds", "feastDates", "calendar.rank", "calendar.color", "ecclesialTitle"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Fisher and More show conscience as disciplined responsibility rather than private stubbornness. Both accepted public obligations and legal consequences while refusing an ecclesial claim they judged false. Their witness also demands consistency: Christians cannot celebrate freedom of conscience for saints while excusing coercion against dissenters, ignoring due process, or pressuring anyone to seek martyrdom.",
+  "oneMinuteSummary": "John Fisher and Thomas More were distinct English Christians executed in 1535 under Henry VIII. Fisher, bishop of Rochester and a Cambridge scholar, preached reform, advanced humanist learning, and opposed the king's ecclesial supremacy. More was a lawyer, husband, father, humanist author, and lord chancellor who resigned, guarded his silence, and refused an oath he believed violated conscience. Fisher was executed on June 22; More on July 6 after separate treason proceedings. Their shared memorial honors fidelity to Christ under coercive state power, but martyrdom does not erase complexity. More had himself used office and polemic in a coercive campaign against Protestant dissent; particular torture allegations remain disputed, while the underlying persecution is real. Their holiness cannot justify every prior action or make execution desirable. They invite formed conscience, careful legal process, family responsibility, nonviolent courage, repentance for coercion, and protection for people whose convictions expose them to power.",
+  "life": {
+    "sections": [
+      {
+        "heading": "John Fisher: scholar, preacher, and bishop",
+        "body": "Born in 1469, Fisher became a Cambridge scholar and chancellor of the university, encouraged Greek and Hebrew learning, and served as bishop of Rochester from 1504. His sermons and theological writings show a professional churchman concerned with preaching, reform, authority, and doctrine. He opposed Henry VIII's marriage policy and later the royal claim to supreme authority over the Church in England.",
+        "sourceIds": ["fisher-english-works", "fisher-theology-rex"]
+      },
+      {
+        "heading": "Thomas More: family life and public office",
+        "body": "Born in London in 1478, More became a lawyer, humanist writer, husband, father, and eventually lord chancellor. He educated his daughters seriously as well as his son and understood public service as morally accountable. He resigned in 1532 rather than support the king's ecclesial program, but his family bore the material and emotional cost of his decisions and imprisonment.",
+        "sourceIds": ["more-vatican-patron"]
+      },
+      {
+        "heading": "Conscience under Tudor law",
+        "body": "Fisher and More faced different interrogations and trials after refusing the required settlement of royal supremacy. More attempted to protect conscience through silence; Fisher's earlier statements were used against him. Political purpose, statutory wording, evidence, and procedure all matter when judging their convictions. Neither execution should be romanticized: lawful safety, counsel, appeal, and care for dependants can be faithful choices.",
+        "sourceIds": ["fisher-english-works", "more-vatican-patron", "more-trial-helmholz"]
+      },
+      {
+        "heading": "A shared memorial with an honest boundary",
+        "body": "Fisher was beheaded on June 22 and More on July 6, 1535; the Church canonized them together in 1935. More's own campaign against religious dissent included coercive law, prosecution, and fierce polemic. Scholars dispute some allegations, especially torture stories, but devotion cannot suppress persecution or grant conscience only to people we agree with. Their memorial calls Christians to oppose both royal absolutism and religious coercion.",
+        "sourceIds": ["more-vatican-patron", "more-heresy-rex", "fisher-more-universal-calendar"]
+      }
+    ],
+    "gospelTheme": "Jesus distinguishes what belongs to Caesar from what belongs to God, calling disciples to truthful public responsibility without making political power lord of conscience.",
+    "struggle": "Conscience can be manipulated by power, reduced to personal preference, or invoked selectively while denying freedom and due process to opponents.",
+    "response": "Form conscience through Scripture, prayer, competent counsel, evidence, and responsibility for others; resist coercion nonviolently, use lawful protections, and repent wherever your own power has violated another person's dignity."
+  },
+  "virtues": [
+    {
+      "name": "Formed conscience",
+      "evidence": "Fisher and More grounded refusal in sustained theological, legal, ecclesial, and moral judgment rather than a sudden dislike of authority.",
+      "imitation": "For one serious decision, write the relevant facts, duties, affected people, Scripture and Church teaching, then consult a competent person who can challenge your reasoning.",
+      "sourceIds": ["fisher-theology-rex", "more-vatican-patron", "more-trial-helmholz"]
+    },
+    {
+      "name": "Nonviolent courage",
+      "evidence": "Both men refused the claim they judged false without organizing violence, even when imprisonment and execution followed.",
+      "imitation": "If pressured to affirm what you judge harmful, state your boundary calmly, preserve records, seek legal or safeguarding help, and choose the safest truthful response available.",
+      "sourceIds": ["fisher-english-works", "more-vatican-patron"]
+    },
+    {
+      "name": "Correctable integrity",
+      "evidence": "More's honored resistance to coercive power exists alongside his own coercive treatment of religious dissent, a contradiction that honest remembrance must face.",
+      "imitation": "Ask where you defend freedom for yourself but restrict it for an opponent. Make one repair through apology, changed policy, or support for equal due process.",
+      "sourceIds": ["more-heresy-rex", "more-trial-helmholz"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Read Matthew 22:15-22. Place one conflict of conscience before Christ and ask what belongs to lawful authority, what belongs to God, and what responsibility you still owe to family, colleagues, opponents, and vulnerable people.",
+    "action": "Review one oath, policy, or pressured decision using facts, competent advice, and the likely impact on others. Document a safe lawful response; if rights or safety are at stake, contact qualified legal or safeguarding support."
+  },
+  "reflectionQuestions": [
+    "Is my conscience formed enough to accept correction, or do I use the word to shield preference and pride?",
+    "Do I defend due process and freedom for people whose beliefs I oppose as seriously as I defend them for myself?"
+  ],
+  "scripture": {
+    "reference": "Matthew 22:15-22",
+    "connection": "Jesus refuses a trap that would make either imperial power or religious posturing absolute. Fisher and More invite careful discernment of public duty under God's higher claim, with truth and responsibility held together."
+  },
+  "prayer": "Lord Jesus Christ, truth before every throne, through Saints John Fisher and Thomas More give us consciences formed by your Gospel, courage without violence, respect for due process, and humility to repent of coercion. Protect families and all who bear the cost of public decisions. Teach us to serve the common good without making power an idol or denying opponents their dignity. Amen."
+}

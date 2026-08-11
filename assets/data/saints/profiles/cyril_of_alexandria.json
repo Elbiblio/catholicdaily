@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 2,
+  "id": "cyril_of_alexandria",
+  "profileKind": "individual",
+  "celebrationIds": ["cyril_of_alexandria", "saint_cyril_of_alexandria_bishop_and_doctor_of_the_church"],
+  "name": "Saint Cyril of Alexandria, Bishop and Doctor of the Church",
+  "alternateNames": ["Cyril of Alexandria", "Cyril, Patriarch of Alexandria"],
+  "ecclesialTitle": "Bishop of Alexandria and Doctor of the Church",
+  "lifeSpan": "c. 376–444",
+  "vocation": "Bishop, biblical commentator, theologian, and conciliar leader",
+  "places": ["Alexandria", "Constantinople", "Ephesus"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Cyril became bishop of Alexandria in 412 and a decisive theologian of the one incarnate Christ. His letters shaped the Council of Ephesus in 431 and later reconciliation with John of Antioch. His achievement cannot excuse his exercise of power: Socrates reports seizure of synagogues, expulsion and plunder affecting Alexandrian Jews, conflict with the prefect, and a Christian mob's murder of Hypatia. No secure evidence shows Cyril ordered that murder, but the violence and contested conciliar procedure remain morally serious.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Cyril_of_Alexandria",
+  "wikidataId": "Q44079",
+  "feastDates": ["June 27"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "cyril-benedict-audience",
+      "title": "General Audience of 3 October 2007: Saint Cyril of Alexandria",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/audiences/2007/documents/hf_ben-xvi_aud_20071003.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal catechesis used for the broad 370–380 birth range, Theophilus relationship, election in 412, Alexandrian and Constantinopolitan rivalry, Nestorian controversy, Council of Ephesus, letters, reconciliation with John of Antioch, one Christ as divine Word incarnate, death in 444, and Doctor title; political and violent contexts are controlled independently",
+      "supports": ["identity", "lifeSpan", "places", "life.theophilus", "life.bishop", "life.rivalry", "life.nestorius", "life.ephesus", "life.letters", "life.reunion", "life.christology", "life.death", "ecclesialTitle"]
+    },
+    {
+      "id": "cyril-ephesus-acts",
+      "title": "Council of Ephesus (A.D. 431)",
+      "authorOrInstitution": "Council of Ephesus; translated and edited in the Nicene and Post-Nicene Fathers",
+      "publisher": "New Advent",
+      "url": "https://www.newadvent.org/fathers/3810.htm",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Primary conciliar dossier in a public-domain translation used for the reading and reception of Cyril's letters, the council's comparison with Nicaea, Cyril's claim that the Word truly became flesh, Theotokos as a Christological confession, the one Christ, and the surviving record's polemical and procedural texture; no extended translation is reproduced",
+      "supports": ["life.ephesus", "life.letters", "life.nicaea", "life.word_incarnate", "life.theotokos", "life.one_christ", "life.procedure", "historicalCertainty"]
+    },
+    {
+      "id": "cyril-socrates-history",
+      "title": "Church History, Book VII",
+      "authorOrInstitution": "Socrates Scholasticus; translated by A. C. Zenos",
+      "publisher": "New Advent",
+      "url": "https://www.newadvent.org/fathers/26017.htm",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Near-contemporary ecclesiastical history used for Cyril's contested election, conflict with Prefect Orestes, reported seizure of synagogues and expulsion and plunder affecting Jews, violent monks, the murder of Hypatia by a Christian mob led by Peter the lector, the opprobrium this brought on Cyril and the Church, and the council's disputed timing; the author's scope and rhetoric remain source limitations",
+      "supports": ["life.election", "life.orestes", "life.jews", "life.synagogues", "life.expulsion", "life.plunder", "life.monks", "life.hypatia", "life.peter_lector", "life.opprobrium", "life.ephesus_procedure", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "cyril-wessel-nestorian",
+      "title": "Cyril of Alexandria and the Nestorian Controversy: The Making of a Saint and of a Heretic",
+      "authorOrInstitution": "Susan Wessel",
+      "publisher": "Oxford University Press",
+      "url": "https://academic.oup.com/book/32671",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent scholarly monograph used to control the making of Cyril and Nestorius's opposed reputations, theological argument within episcopal politics, rhetorical strategy, imperial and conciliar process, and the danger of reducing a complex dispute to timeless hero and villain labels",
+      "supports": ["life.nestorius", "life.christology", "life.politics", "life.rhetoric", "life.ephesus_procedure", "reception.contested", "sourceLimits"]
+    },
+    {
+      "id": "cyril-crawford-violence",
+      "title": "Cyril of Alexandria's Renunciation of Religious Violence",
+      "authorOrInstitution": "Matthew R. Crawford",
+      "publisher": "Cambridge University Press",
+      "url": "https://www.cambridge.org/core/journals/church-history/article/cyril-of-alexandrias-renunciation-of-religious-violence/4A134CFE5D31C6F71838A26E286E7B37",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Peer-reviewed scholarship used for Alexandria's violence and competing power structures, the expulsion and Hypatia contexts, Cyril's early rhetoric that could incite violence, later explicit renunciations of religious violence, and the need to avoid both one-sided demonization and moral sanitization",
+      "supports": ["life.alexandria_violence", "life.jews", "life.hypatia", "life.power", "life.rhetoric", "life.renunciation_violence", "reception.contested", "pastoralSafety"]
+    },
+    {
+      "id": "cyril-universal-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — June",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/JunUC.shtml",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for Cyril's June 27 optional memorial and white liturgical color; the calendar key establishes that an entry without a printed rank is optional",
+      "supports": ["celebrationIds", "feastDates", "calendar.rank", "calendar.color", "ecclesialTitle"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Cyril's theology protects the Christian claim that the one who meets, heals, suffers, dies, and rises in the Gospel is truly the eternal Word made fully human. His history also proves that correct doctrine does not sanctify abusive procedure, anti-Jewish coercion, inflammatory rhetoric, or mob violence. Mature devotion receives truth about Christ together with repentance, fair process, and the protection of neighbors.",
+  "oneMinuteSummary": "Cyril became bishop of Alexandria in 412. In controversy with Nestorius, he defended Christ's unity: the eternal Word became human, so Mary may be called Theotokos because the one she bore is the incarnate Son, not another person. Cyril's letters shaped Ephesus and later reunion with John of Antioch. Yet the history is not a simple triumph. The council opened before the Antiochene delegation arrived, rival assemblies issued condemnations, and imperial politics affected the process. Earlier in Alexandria, Socrates reports Cyril's seizure of synagogues, expulsion and plunder affecting Jewish residents, conflict with the prefect, and a Christian mob's murder of Hypatia. No secure evidence shows Cyril ordered her killing; Socrates still says it disgraced Cyril and the Church. Sound doctrine never licenses anti-Judaism, coercion, mob action, contempt, or unfair procedure. Cyril invites precise Christ-centered faith joined to moral accountability and nonviolence.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Bishop within Alexandrian power",
+        "body": "Cyril, likely born between 370 and 380, was the nephew of the powerful bishop Theophilus and succeeded him at Alexandria in 412 after a contested election. The episcopal office carried pastoral, civic, and political influence. Rivalry with Constantinople and tension with Prefect Orestes formed part of his ministry's setting, so theological history cannot be separated from institutions and power.",
+        "sourceIds": ["cyril-benedict-audience", "cyril-socrates-history", "cyril-crawford-violence"]
+      },
+      {
+        "heading": "One incarnate Son",
+        "body": "Against teaching he believed divided Christ, Cyril argued that the eternal Word personally assumed full humanity: the Gospel's divine and human actions belong to the one Son. The title Theotokos protects this confession about Christ rather than making Mary the source of divinity. Later reunion language with John of Antioch affirmed both full divinity and full humanity, showing that precision and negotiated clarification could follow polemic.",
+        "sourceIds": ["cyril-benedict-audience", "cyril-ephesus-acts", "cyril-wessel-nestorian"]
+      },
+      {
+        "heading": "Ephesus: doctrine and disputed procedure",
+        "body": "At Ephesus in 431, Cyril's assembly opened before John of Antioch and his bishops arrived and judged Nestorius; the late delegation organized a rival council and condemned Cyril. Imperial intervention and imprisonment followed before later settlement. The council's Christological reception matters, but doctrinal truth does not make every timing, sanction, alliance, or rhetorical tactic exemplary. Fair hearing and accurate representation remain Christian duties.",
+        "sourceIds": ["cyril-ephesus-acts", "cyril-socrates-history", "cyril-wessel-nestorian", "cyril-benedict-audience"]
+      },
+      {
+        "heading": "Violence cannot defend Christ",
+        "body": "Socrates reports that Cyril seized synagogues and drove Jewish residents from Alexandria while crowds plundered property after deadly communal violence; historians debate scale and permanence, not the moral need to name coercion. A Christian mob led by Peter the lector later murdered Hypatia. There is no secure evidence Cyril ordered it, yet Socrates says the crime brought opprobrium on Cyril and the Church. Later anti-violence rhetoric is important but does not erase victims.",
+        "sourceIds": ["cyril-socrates-history", "cyril-crawford-violence"]
+      }
+    ],
+    "gospelTheme": "The Word truly became flesh: Jesus Christ is one divine Son who assumes full humanity, and fidelity to him must honor the flesh-and-blood dignity of every neighbor.",
+    "struggle": "Doctrinal urgency can merge with rivalry, distorted representation, state force, anti-Jewish rhetoric, and crowds that imagine violence serves God.",
+    "response": "Study claims precisely, hear opponents fairly, distinguish doctrine from political tactics, reject collective blame and coercion, name victims, and let confession of the incarnate Christ deepen protection of embodied human dignity."
+  },
+  "virtues": [
+    {
+      "name": "Christ-centered precision",
+      "evidence": "Cyril insisted that Scripture's divine and human predicates refer to the one incarnate Son, protecting both Christ's true divinity and real humanity.",
+      "imitation": "When a doctrinal dispute arises, define the terms, read the primary text in context, state the other view in words its adherents recognize, and keep Jesus rather than victory at the center.",
+      "sourceIds": ["cyril-ephesus-acts", "cyril-benedict-audience", "cyril-wessel-nestorian"]
+    },
+    {
+      "name": "Capacity for clarification",
+      "evidence": "After Ephesus, Cyril and John of Antioch reached reunion language that affirmed one Christ with full divinity and full humanity despite prior condemnations.",
+      "imitation": "Revisit one conflict after emotions settle. Identify a shared truth, one phrase needing clarification, and a fair process for continued disagreement without forced reconciliation.",
+      "sourceIds": ["cyril-benedict-audience", "cyril-wessel-nestorian"]
+    },
+    {
+      "name": "Truthful moral accountability",
+      "evidence": "Near-contemporary history preserves coercion against Jewish residents and the Christian mob murder of Hypatia, while modern study also finds later explicit rejection of religious violence in Cyril's writings.",
+      "imitation": "When honoring a leader, name one documented harm without excuse, refuse collective blame, and support a concrete practice that protects targeted minorities and nonviolent dissent.",
+      "sourceIds": ["cyril-socrates-history", "cyril-crawford-violence"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Read John 1:1-18. Confess that the eternal Word truly became flesh, then examine whether your doctrinal speech protects or wounds the embodied dignity of Jewish people, opponents, minorities, and those with less institutional power.",
+    "action": "For one disagreement, write your source, the other side's strongest formulation, the decision process, and safeguards against retaliation. Remove collective labels and report any threat or incitement through the proper safety channel."
+  },
+  "reflectionQuestions": [
+    "Does my defense of truth become more Christlike in method, or do I excuse contempt and unfair process because I believe my conclusion is right?",
+    "Whose suffering disappears when I tell Church history only as the victory of my preferred leader or formula?"
+  ],
+  "scripture": {
+    "reference": "John 1:1-18",
+    "connection": "The eternal Word becomes flesh without ceasing to be God. Cyril's central insight serves this mystery; the same Incarnation forbids treating any human body, people, or opponent as expendable in doctrine's defense."
+  },
+  "prayer": "Lord Jesus Christ, eternal Word made flesh, through Saint Cyril deepen our faith in your full divinity and humanity. Give teachers precision without pride, councils fair process, and leaders courage to reject coercion. Forgive anti-Jewish contempt and every violence done in religion's name. Keep victims in our memory, protect minorities and opponents, and make doctrine bear the fruit of truth, repentance, and peace. Amen."
+}
