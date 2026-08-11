@@ -256,6 +256,43 @@ void main() {
     expect(find.text('Seen in their life'), findsNothing);
   });
 
+  testWidgets(
+    'Batch 6 real observance assets render without lifespan or biography headings',
+    (tester) async {
+      for (final id in const [
+        'visitation_of_mary',
+        'the_nativity_of_saint_john_the_baptist',
+      ]) {
+        final profile = await tester.runAsync(
+          () => SaintProfileService.instance.findById(id),
+        );
+
+        expect(profile, isNotNull, reason: '$id must be curated');
+        expect(profile!.kind, SaintProfileKind.observance, reason: id);
+        expect(profile.lifeSpan, isEmpty, reason: id);
+        expect(profile.lifeLength, isEmpty, reason: id);
+
+        await tester.pumpWidget(
+          _host(SaintLifeGuideView(profile: profile, onShowSources: () {})),
+        );
+
+        expect(find.text('What the Church celebrates'), findsOneWidget);
+        expect(
+          find.text('The Gospel at the heart of this observance'),
+          findsOneWidget,
+        );
+        expect(find.text('Lived'), findsNothing, reason: id);
+        expect(find.text('Length'), findsNothing, reason: id);
+        expect(find.text('Their life and journey'), findsNothing, reason: id);
+        expect(
+          find.text('The Gospel visible in their life'),
+          findsNothing,
+          reason: id,
+        );
+      }
+    },
+  );
+
   testWidgets('group profiles retain person-centered guide copy', (
     tester,
   ) async {
