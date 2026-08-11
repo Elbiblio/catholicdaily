@@ -63,13 +63,13 @@
     {
       "id": "marcellinus-peter-catacombs",
       "title": "The Catacombs of Saints Marcellino and Peter",
-      "authorOrInstitution": "Pontifical Commission for Sacred Archaeology",
-      "publisher": "Pontifical Commission for Sacred Archaeology",
+      "authorOrInstitution": "Raffaella Giuliani",
+      "publisher": "Città del Vaticano",
       "url": "https://www.catacombeditalia.va/content/archeologiasacra/en/publications/catacomba-ssmarcellino-pietro11-eng.html",
       "accessedDate": "2026-08-11",
       "tier": 3,
-      "reuseBasis": "Official archaeological synthesis used for the cemetery at the ancient Via Labicana, its dedication to the martyrs, burial memory in the Diocletianic period, later basilica and pilgrimage reception, and the limits of archaeology as biographical proof",
-      "supports": ["places", "burial", "cult.early", "reception.basilica", "chronology.cautious", "historicalCertainty"]
+      "reuseBasis": "Archaeological publication page used for the cemetery at the ancient Via Labicana, its dedication to the martyrs, burial memory in the Diocletianic period, pilgrimage reception, and the limits of archaeology as biographical proof",
+      "supports": ["places", "burial", "cult.early", "reception.pilgrimage", "chronology.cautious", "historicalCertainty"]
     },
     {
       "id": "marcellinus-peter-liturgy-calendar",
