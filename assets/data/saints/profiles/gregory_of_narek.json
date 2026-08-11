@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 2,
+  "id": "gregory_of_narek",
+  "profileKind": "individual",
+  "celebrationIds": [
+    "gregory_of_narek",
+    "saint_gregory_of_narek_abbot_and_doctor_of_the_church"
+  ],
+  "name": "Saint Gregory of Narek",
+  "alternateNames": ["Grigor Narekatsi", "Gregory of Nareg"],
+  "ecclesialTitle": "Abbot and Doctor of the Church",
+  "lifeSpan": "c. 950-early 11th century",
+  "lifeLength": "",
+  "vocation": "Armenian monk, priest, teacher, poet, and theologian",
+  "places": ["Narek, Vaspurakan, historic Armenia"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Gregory was formed within the medieval Armenian Church at the monastery of Narek, where he lived as monk, priest, teacher, poet, and theologian. His Book of Lamentation turns searching compunction toward the merciful Christ and the hope of communion with God. Pope Francis proclaimed him a Doctor of the Church in 2015.",
+  "feastDates": ["February 27"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "armenian-church-gregory",
+      "title": "St. Gregory of Narek",
+      "authorOrInstitution": "Eastern Diocese of the Armenian Church of America",
+      "publisher": "The Armenian Church",
+      "url": "https://armenianchurch.us/the-saints/st-gregory-of-narek/",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Armenian ecclesial saint profile used for identity, formation under Khosrov and Anania, Narek setting, priestly and teaching work, literary range, and the Armenian reception of the Book of Lamentations; miracle traditions and exact death year are not adopted",
+      "supports": ["identity", "life.armenian_context", "life.formation", "life.narek", "life.writings", "dateConflict"]
+    },
+    {
+      "id": "usccb-gregory-propers",
+      "title": "Saint Gregory of Narek",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://www.usccb.org/prayer-worship/liturgical-year/saint-gregory-of-narek",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal Roman liturgical proper used for February 27, canonical title, General Roman Calendar inscription, broad chronology, and Christ-centered themes of refuge, grace, and mercy; the translated proper is not reproduced",
+      "supports": ["feastDate", "ecclesialTitle", "calendar", "chronology", "life.book_of_lamentation", "gospelTheme"]
+    },
+    {
+      "id": "francis-gregory-doctor",
+      "title": "Message on the Centenary of the Metz Yeghern and the Proclamation of Saint Gregory of Narek as Doctor of the Church",
+      "authorOrInstitution": "Pope Francis",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/francesco/en/messages/pont-messages/2015/documents/papa-francesco_20150412_messaggio-armeni.html",
+      "publicationDate": "2015-04-12",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal message used for the 2015 Doctor proclamation, Gregory's Armenian ecclesial identity, and the relation of lament to divine love, hope, solidarity, and ecumenical friendship",
+      "supports": ["ecclesialTitle", "life.doctor", "life.armenian_context", "gospelTheme", "virtues.hopeful_compunction"]
+    },
+    {
+      "id": "francis-gregory-audience",
+      "title": "General Audience: Witnesses - Saint Gregory of Narek",
+      "authorOrInstitution": "Pope Francis",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/francesco/en/audiences/2023/documents/20230426-udienza-generale.html",
+      "publicationDate": "2023-04-26",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal catechesis used for Gregory's monastery, poetic prayer, universal solidarity, intercession, reconciliation, redemption, and peace",
+      "supports": ["life.narek", "life.prayer", "virtues.solidarity", "virtues.reconciliation"]
+    },
+    {
+      "id": "encyclopedia-gregory",
+      "title": "Gregory of Narek",
+      "authorOrInstitution": "Avak Asadourian",
+      "publisher": "Encyclopedia of Religion via Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/environment/encyclopedias-almanacs-transcripts-and-maps/gregory-narek",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent scholarly reference used for the approximate date range, Armenian historical setting, biblical and liturgical character of the Book of Lamentation, and the union of compunction with Christ's mercy",
+      "supports": ["chronology", "dateConflict", "life.armenian_context", "life.book_of_lamentation", "theology.compunction", "theology.mercy"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Gregory teaches Christians to tell the truth about sin and suffering while looking toward the merciful face of Christ. His lament is neither despair nor a technique for self-absorption: it becomes prayer for the whole human family, confident that grace can reconcile and restore. His Armenian witness also invites Catholics to receive a treasury formed in an ancient Eastern Christian tradition without erasing its identity.",
+  "oneMinuteSummary": "Gregory was born around the middle of the tenth century in the Armenian world of Vaspurakan. He was formed first by his father, Bishop Khosrov, and then at the monastery of Narek under the learned Anania. Gregory remained connected to Narek as a monk, priest, teacher, poet, and theologian. He wrote biblical commentary, hymns, odes, and other works, but is best known for the Book of Lamentation, a sustained sequence of prayer traditionally treasured among Armenians. The work examines sin and human woundedness with intense compunction, yet its horizon is Christ's mercy, healing grace, communion, and hope. Gregory's first-person voice also expands into solidarity and intercession for humanity; readers should not turn it into self-hatred, scrupulous accounting, or an assumption of personal guilt for another person's wrongdoing. Sources disagree about his exact dates: estimates range from about 945 to about 1010, and official accounts do not agree whether he died in 1003 or shortly after. The cautious range is therefore about 950 to the early eleventh century. Pope Francis proclaimed Gregory a Doctor of the Church in 2015, honoring an Armenian teacher whose prayer can serve Christian communion while remaining rooted in the ecclesial culture that formed it.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Formed in the Armenian Church",
+        "body": "Gregory grew up in tenth-century Vaspurakan within the Armenian Christian tradition. Sources connect his early education with his father, Bishop Khosrov, and his monastic formation with Anania at Narek. His language, Scripture, worship, and theology belong to that Armenian ecclesial world; his later Roman title should not be used to rewrite him as detached from it.",
+        "sourceIds": ["armenian-church-gregory", "encyclopedia-gregory", "francis-gregory-doctor"]
+      },
+      {
+        "heading": "A monk, priest, teacher, and poet at Narek",
+        "body": "At the monastery of Narek Gregory served through prayer, priesthood, teaching, and writing. The Roman calendar calls him Abbot and Doctor, while Armenian and scholarly summaries securely describe his monastic, priestly, and teaching identity without establishing the details of an abbacy. The profile keeps the canonical title but does not invent a term of governance.",
+        "sourceIds": ["armenian-church-gregory", "usccb-gregory-propers", "francis-gregory-audience"]
+      },
+      {
+        "heading": "Lament opened to mercy",
+        "body": "Gregory's Book of Lamentation is deeply biblical prayer. It brings sin, weakness, grief, and longing before God rather than hiding them. Compunction here must remain joined to Christ's saving mercy and hope: it is not permission for self-loathing, obsessive guilt, punitive fasting, or refusing needed medical or psychological care.",
+        "sourceIds": ["usccb-gregory-propers", "encyclopedia-gregory", "francis-gregory-doctor"]
+      },
+      {
+        "heading": "An Armenian Doctor for the wider Church",
+        "body": "In 2015 Pope Francis proclaimed Gregory a Doctor of the Church while addressing the Armenian people and Christian communities. The declaration recognizes a teaching gift available to the universal Church; it does not erase Armenian ecclesial identity. Francis later highlighted Gregory's capacity to bear the wounds of others in prayer and to seek reconciliation, redemption, and peace.",
+        "sourceIds": ["francis-gregory-doctor", "francis-gregory-audience"]
+      }
+    ],
+    "gospelTheme": "The merciful Christ receives honest lament, brings sinners from compunction to hope, and enlarges personal prayer into intercession for the wounded world.",
+    "struggle": "Gregory faced the universal human struggle to speak truthfully about sin, suffering, and mortality without allowing anguish to close the heart against grace or neighbor.",
+    "response": "He shaped lament into biblical prayer addressed to Christ, joined confession to trust in mercy, and carried the needs of others through poetic intercession."
+  },
+  "virtues": [
+    {
+      "name": "Hopeful compunction",
+      "evidence": "Gregory's searching prayer names sin and frailty while official and scholarly sources place that lament within Christ's grace, mercy, love, and hope.",
+      "imitation": "In prayer, name one real wrong without exaggerating or excusing it, receive Christ's mercy, and choose one proportionate act of repair. Stop if reflection becomes compulsive self-accusation and seek wise help.",
+      "sourceIds": ["usccb-gregory-propers", "francis-gregory-doctor", "encyclopedia-gregory"]
+    },
+    {
+      "name": "Solidarity in prayer",
+      "evidence": "Pope Francis presents Gregory's first-person prayer as capacious enough to carry the weakness and suffering of humanity in intercession.",
+      "imitation": "Let one personal sorrow become intercession: pray for others facing a similar burden, then offer a concrete, consent-respecting act of support.",
+      "sourceIds": ["francis-gregory-audience", "francis-gregory-doctor"]
+    },
+    {
+      "name": "Reconciliation without erasure",
+      "evidence": "Gregory's Doctor proclamation honors an Armenian voice in the universal Church, and later papal teaching connects his prayer with reconciliation and peace.",
+      "imitation": "Learn from a Christian tradition other than your own by naming its community and history accurately, receiving its gift without claiming or flattening it.",
+      "sourceIds": ["francis-gregory-doctor", "francis-gregory-audience"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray for ten quiet minutes before Christ. Name one sorrow and one fault in plain language; then name one sign of mercy and one reason for hope. Do not multiply accusations or adopt severe penance. If guilt becomes intrusive, disabling, or connected to thoughts of self-harm, pause the exercise and contact a trusted pastoral caregiver and a qualified mental-health professional or emergency support.",
+    "action": "Write a short intercession for people whose suffering resembles yours, without making yourself responsible for harms you did not cause. Follow it with one safe act of solidarity such as listening with consent, sharing a verified resource, or helping with an ordinary need."
+  },
+  "reflectionQuestions": [
+    "When I confess weakness, do I leave room for Christ's mercy and a concrete next step, or do I circle around self-condemnation?",
+    "Whose suffering can I carry in prayer and practical solidarity without erasing their voice or assuming guilt that is not mine?"
+  ],
+  "scripture": {
+    "reference": "Hebrews 4:14-16",
+    "connection": "Because Jesus is the compassionate high priest, honest knowledge of weakness leads not to flight or self-hatred but to confident approach for mercy and timely grace. That movement gives Gregory's compunction its Christian horizon."
+  },
+  "prayer": "Merciful Lord Jesus Christ, receive every truthful lament and keep us from despair. Through the intercession of Saint Gregory of Narek, teach us to confess without self-hatred, to hope without denial, and to carry one another before you with humility. Bless the Armenian Church and deepen communion among Christians. Turn wounded memory toward justice, reconciliation, and your healing peace. Amen."
+}

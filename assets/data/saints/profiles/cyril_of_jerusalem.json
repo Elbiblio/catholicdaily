@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 2,
+  "id": "cyril_of_jerusalem",
+  "profileKind": "individual",
+  "celebrationIds": [
+    "cyril_of_jerusalem",
+    "saint_cyril_of_jerusalem_bishop_and_doctor_of_the_church"
+  ],
+  "name": "Saint Cyril of Jerusalem",
+  "alternateNames": ["Cyril, Bishop of Jerusalem"],
+  "ecclesialTitle": "Bishop and Doctor of the Church",
+  "lifeSpan": "c. 315-late 380s",
+  "lifeLength": "",
+  "vocation": "Bishop, catechist, theologian, and pastor",
+  "places": ["Jerusalem", "Caesarea in Palestine", "Tarsus"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Cyril, fourth-century bishop of Jerusalem, is remembered especially for catecheses that patiently formed candidates for Baptism and led the newly initiated into sacramental faith. His episcopate was marked by doctrinal and jurisdictional conflicts and periods away from Jerusalem whose familiar three-exile outline is debated. His teaching should be received for its Christ-centered formation without repeating its era's contemptuous polemics.",
+  "feastDates": ["March 18"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "cyril-catechetical-lectures",
+      "title": "Catechetical Lectures",
+      "authorOrInstitution": "Saint Cyril of Jerusalem; translated by Edwin Hamilton Gifford",
+      "publisher": "New Advent, from Nicene and Post-Nicene Fathers",
+      "url": "https://www.newadvent.org/fathers/3101.htm",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Hosted public-domain primary text used for Cyril's staged baptismal formation, appeal to Scripture, doctrinal teaching, moral conversion, Baptism, and Eucharist; app prose paraphrases and does not repeat anti-Jewish, anti-pagan, or anti-heretical invective",
+      "supports": ["life.catechesis", "life.scripture", "life.baptism", "life.eucharist", "theology.christ", "historicalPolemics"]
+    },
+    {
+      "id": "benedict-cyril-audience",
+      "title": "General Audience: Saint Cyril of Jerusalem",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/audiences/2007/documents/hf_ben-xvi_aud_20070627.html",
+      "publicationDate": "2007-06-27",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal catechesis used for broad chronology, episcopal conflict involving doctrine and jurisdiction, the traditional exile account and its source difficulties, the 382 synodal reception, and the systematic Christ-centered and sacramental shape of Cyril's catecheses",
+      "supports": ["chronology", "life.episcopate", "life.conflict", "life.exiles", "life.catechesis", "theology.christ", "theology.sacraments"]
+    },
+    {
+      "id": "van-nuffelen-cyril",
+      "title": "The Career of Cyril of Jerusalem (c. 348-87): A Reassessment",
+      "authorOrInstitution": "Peter Van Nuffelen",
+      "publisher": "The Journal of Theological Studies, Oxford University Press",
+      "url": "https://academic.oup.com/jts/article/58/1/134/2931861",
+      "publicationDate": "2007-04-01",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Peer-reviewed reassessment used to qualify the later three-exile narrative, distinguish doctrinal development from a simple partisan story, and identify struggles over ecclesial authority alongside theology",
+      "supports": ["life.episcopate", "life.conflict", "life.exiles", "historicalCertainty", "theologicalDevelopment"]
+    },
+    {
+      "id": "encyclopedia-cyril",
+      "title": "Cyril of Jerusalem",
+      "authorOrInstitution": "Panagiotis C. Christou",
+      "publisher": "Encyclopedia of Religion via Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/environment/encyclopedias-almanacs-transcripts-and-maps/cyril-jerusalem",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent scholarly control used for approximate dates, ordination and episcopate, Acacian conflict, catechetical pedagogy, and questions about authorship of the five mystagogical lectures",
+      "supports": ["chronology", "life.episcopate", "life.conflict", "life.catechesis", "authorshipQuestion", "dateConflict"]
+    },
+    {
+      "id": "usccb-cyril-memorial",
+      "title": "Optional Memorial of Saint Cyril of Jerusalem, Bishop and Doctor of the Church",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/readings/0318-memorial-cyril-jerusalem.cfm",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal liturgical page used for the March 18 optional memorial, canonical title, and the memorial's readings from 1 John 5 and John 15",
+      "supports": ["feastDate", "ecclesialTitle", "scripture", "gospelTheme"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Cyril shows that Christian formation is patient apprenticeship in Christ, not a rush to slogans. He joins Scripture, creed, moral conversion, Baptism, and Eucharist in one path of belonging to Jesus. His contested episcopal history and sharp ancient polemics also teach a necessary limit: truth is not served by contempt, caricature, or coercion.",
+  "oneMinuteSummary": "Cyril was born in or near Jerusalem around 315, became a priest, and was made bishop of Jerusalem around 348. His surviving catechetical lectures reveal a carefully staged formation: candidates prepare for Baptism through repentance, Scripture, creed, prayer, and moral practice, while sacramental catecheses traditionally transmitted in the Cyril corpus unfold the meaning of initiation and Eucharist. Scholars debate whether Cyril himself or his successor John authored the five mystagogical lectures, so their attribution should be qualified. Cyril's episcopate unfolded amid fourth-century disputes over Trinitarian language and a jurisdictional struggle with Acacius of Caesarea. Older accounts organize the conflict as three exiles and present Cyril as an unchanging partisan from the beginning. A modern reassessment argues that the exact sequence cannot always be proven and that Cyril's theological position developed as political and doctrinal alignments changed. The evidence still supports serious conflict and removals from Jerusalem, followed by acceptance at the Council of Constantinople in 381 and the synodal defense recorded in 382. His catecheses also contain hostile labels for Jews, pagans, Manichaeans, and theological opponents. Those expressions belong to a polemical late-antique setting and must not be imitated or used against living communities. Cyril's enduring guide is slower and better: remain in Christ, learn the faith from Scripture, receive the sacraments with reverence, and speak truth without contempt.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Patient formation for Baptism",
+        "body": "Cyril addressed adults preparing for Christian initiation and treated formation as a journey. His lectures call for repentance, attention, prayer, moral change, and learning within the Church before Baptism. The method respects growth over time: a teacher proposes the faith clearly, and the learner must receive and practice it freely rather than be pressured into a performance.",
+        "sourceIds": ["cyril-catechetical-lectures", "benedict-cyril-audience", "encyclopedia-cyril"]
+      },
+      {
+        "heading": "Scripture, creed, and Christ",
+        "body": "Cyril repeatedly grounds instruction in Scripture and arranges doctrine around God's saving work in Jesus Christ. He teaches the creed as a concise map for a larger scriptural faith, not as a weapon for winning arguments. Some lectures use contemptuous names for other religious and theological groups; fidelity to truth today requires refusing those insults and representing neighbors and disagreements honestly.",
+        "sourceIds": ["cyril-catechetical-lectures", "benedict-cyril-audience"]
+      },
+      {
+        "heading": "Initiation and sacramental belonging",
+        "body": "The catechetical collection leads from preparation into reflection on Baptism, anointing, Eucharist, and the worshiping life of the Church. The five mystagogical lectures are traditionally associated with Cyril, but manuscript and scholarly questions leave open whether his successor John composed them. Their place in the Cyril corpus can be honored without claiming more precise authorship than the evidence allows.",
+        "sourceIds": ["cyril-catechetical-lectures", "benedict-cyril-audience", "encyclopedia-cyril"]
+      },
+      {
+        "heading": "A disputed episcopate",
+        "body": "As bishop, Cyril clashed with Acacius of Caesarea over both doctrine and ecclesial jurisdiction. Cyril did spend periods away from Jerusalem, but modern scholarship questions whether the familiar sequence of exactly three exiles can be demonstrated as later accounts present it. His relation to Nicene language also developed; neither a flawless champion-versus-villain story nor a dismissal of his eventual reception does justice to the evidence.",
+        "sourceIds": ["benedict-cyril-audience", "van-nuffelen-cyril", "encyclopedia-cyril"]
+      }
+    ],
+    "gospelTheme": "Jesus the true vine forms disciples who remain in him, receive life through faith and sacrament, and bear fruit in patient love rather than contemptuous victory.",
+    "struggle": "Cyril served amid doctrinal instability, rivalry over episcopal authority, political reversals, and an argumentative culture whose inherited invective could obscure the truth it meant to defend.",
+    "response": "He devoted sustained attention to catechesis, Scripture, creed, and sacramental initiation, persevering through conflict while his own theological language matured."
+  },
+  "virtues": [
+    {
+      "name": "Patient formation",
+      "evidence": "Cyril's catecheses unfold conversion and doctrine in stages before and after initiation rather than reducing faith to a single explanation.",
+      "imitation": "Choose one part of the creed or sacramental life to study for four weeks. Pair reading with prayer, one trusted teacher, and one concrete practice instead of trying to master everything at once.",
+      "sourceIds": ["cyril-catechetical-lectures", "benedict-cyril-audience", "encyclopedia-cyril"]
+    },
+    {
+      "name": "Sacramental faith",
+      "evidence": "The Cyril corpus connects biblical teaching and moral preparation with Baptism, anointing, Eucharist, and participation in the worshiping Church.",
+      "imitation": "Prepare deliberately for the next Sunday Eucharist: read the readings, reconcile where possible, arrive with attention, and name one fruit of communion to practice afterward.",
+      "sourceIds": ["cyril-catechetical-lectures", "benedict-cyril-audience"]
+    },
+    {
+      "name": "Truth with teachability",
+      "evidence": "Cyril defended and taught the faith through a period in which his own theological position and the Church's public language were still being clarified; modern reassessment resists a simple partisan portrait.",
+      "imitation": "State a conviction from its strongest evidence, describe an opponent's view without ridicule, and identify what evidence would make you refine your wording.",
+      "sourceIds": ["benedict-cyril-audience", "van-nuffelen-cyril"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Read John 15:1-8 slowly before reviewing one paragraph of the creed. Ask how this truth helps you remain in Christ and love a real neighbor. End by rejecting any impulse to make contempt, pressure, or humiliation a test of orthodoxy.",
+    "action": "Help one learner take a next step without overload: ask what they understand, offer one reliable source, invite questions without penalty, and agree on a small follow-up. If the topic involves trauma, coercion, or safeguarding, involve appropriately trained and accountable support."
+  },
+  "reflectionQuestions": [
+    "Am I allowing Christ to form me patiently through Scripture, sacrament, community, and practice, or am I collecting religious answers without conversion?",
+    "When I defend truth, can another person still recognize that I have listened accurately and respected their dignity?"
+  ],
+  "scripture": {
+    "reference": "John 15:4-5",
+    "connection": "The Gospel assigned for Cyril's memorial presents formation as remaining in Christ the vine. Doctrine and sacrament bear fruit when they deepen communion with Jesus; detached from him, even correct language can become barren or cruel."
+  },
+  "prayer": "Lord Jesus Christ, true vine and source of every sacrament, form us patiently in your word. Through the intercession of Saint Cyril of Jerusalem, deepen the faith of those preparing for initiation, renew the baptized, and make teachers both clear and teachable. Free our speech from contempt and coercion. Keep your Church truthful, reverent, and fruitful in love. Amen."
+}

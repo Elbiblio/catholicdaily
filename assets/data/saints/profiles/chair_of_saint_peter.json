@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 2,
+  "id": "chair_of_saint_peter",
+  "profileKind": "observance",
+  "celebrationIds": [
+    "chair_of_saint_peter",
+    "the_chair_of_saint_peter_apostle"
+  ],
+  "name": "Chair of Saint Peter",
+  "alternateNames": ["Feast of the Chair of Saint Peter the Apostle"],
+  "ecclesialTitle": "Feast of the Petrine ministry of unity",
+  "lifeSpan": "",
+  "lifeLength": "",
+  "vocation": "Liturgical observance of Peter's confession and pastoral commission",
+  "places": ["Rome, Italy"],
+  "patronage": [],
+  "symbols": ["Chair or cathedra", "Keys"],
+  "briefBio": "This feast is not a second biography of Saint Peter. It celebrates Christ's call to Peter to confess the faith, strengthen communion, and tend the flock. The chair signifies a teaching and pastoral office; the ancient wooden object kept in Saint Peter's Basilica has a later, composite history and should not be confused with the feast's theological meaning.",
+  "feastDates": ["February 22"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "usccb-chair-readings",
+      "title": "Feast of the Chair of Saint Peter, Apostle",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/readings/022220.cfm",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal liturgical readings used for Matthew 16:13-19 and 1 Peter 5:1-4, joining Peter's confession and the keys with accountable pastoral service that does not dominate",
+      "supports": ["feast", "scripture.matthew16", "scripture.1peter5", "life.petrine_ministry", "virtues.accountable_service"]
+    },
+    {
+      "id": "francis-chair-service",
+      "title": "Homily at the Conclusion of the Ordinary General Assembly of the Synod of Bishops",
+      "authorOrInstitution": "Pope Francis",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/francesco/en/homilies/2024/documents/20241027-omelia-conclusione-sinodo.pdf",
+      "publicationDate": "2024-10-27",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal homily used for the Chair as love, unity, and mercy and for interpreting Petrine authority as service rather than domination",
+      "supports": ["life.petrine_ministry", "life.service", "gospelTheme", "pastoralSafety"]
+    },
+    {
+      "id": "fabric-chair-archive",
+      "title": "The Cathedra of Saint Peter on Display to the Faithful",
+      "authorOrInstitution": "Fabric of Saint Peter in the Vatican",
+      "publisher": "Holy See Press Office",
+      "url": "https://press.vatican.va/content/salastampa/en/info/2024/10/25/241025a.html",
+      "publicationDate": "2024-10-25",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Official archival and conservation account used for the object's composite construction, Carolingian association, disputed ivory dating, documented medieval devotion, and Bernini setting",
+      "supports": ["life.physical_chair", "historicalCertainty", "symbols.chair"]
+    },
+    {
+      "id": "vatican-news-chair",
+      "title": "Feast of the Chair of Saint Peter the Apostle",
+      "authorOrInstitution": "Vatican News",
+      "publisher": "Dicastery for Communication",
+      "url": "https://www.vaticannews.va/en/liturgical-holidays/feast-of-the-chair-of-saint-peter-the-apostle.html",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Official Catholic saint-of-day synthesis used cautiously for the February 22 observance and the cathedra as a sign of episcopal teaching, pastoral care, and unity; precise origin stories are not adopted",
+      "supports": ["feastDate", "observanceIdentity", "symbols.chair", "life.unity"]
+    },
+    {
+      "id": "smith-chair-relic-history",
+      "title": "The Remains of the Saints: The Evidence of Early Medieval Relic Collections",
+      "authorOrInstitution": "Julia M. H. Smith",
+      "publisher": "Early Medieval Europe; Oxford University Research Archive",
+      "url": "https://ora.ox.ac.uk/objects/uuid%3A6b2f18f0-00b3-4ba1-bc2d-be584dcd6c6a",
+      "publicationDate": "2020-07-14",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Peer-reviewed historical control used for the ninth-century dating and Carolingian setting of the throne-like object, its later treatment as a relic, and the seventeenth-century shrine",
+      "supports": ["life.physical_chair", "historicalCertainty", "relicHistory"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "The feast directs Christians to Jesus Christ, whose gift and demand precede every Church office. Peter receives the keys after confessing Christ and is charged to shepherd by example. Authority in this pattern is answerable service: it protects communion, listens to those who suffer, and can never justify domination or the silencing of safeguarding concerns.",
+  "oneMinuteSummary": "On February 22 the Roman liturgy celebrates the Chair of Saint Peter. A cathedra is the bishop's seat and therefore a sign of teaching and pastoral responsibility, not merely a piece of furniture. Matthew 16 remembers Peter's confession of Jesus as the Christ and the commission expressed by rock and keys. First Peter 5 immediately gives authority an evangelical measure: shepherd willingly, do not lord power over others, and become an example under the chief Shepherd. John 21, recalled in recent official reflection on the Chair, places Peter's care of the flock within repeated love for Jesus. The feast therefore joins unity to responsibility and mercy. Saint Peter's Basilica also preserves a composite wooden throne enclosed by Bernini's great bronze monument. Official conservation history associates much of the object with the Carolingian period and records later medieval devotion to it; scholarly control likewise does not establish it as Peter's first-century furniture. That object's history may illuminate devotion, but the feast does not depend on an archaeological claim. Christians honor the Chair best when every exercise of authority serves Christ's flock, receives truthful scrutiny, and makes room for legitimate complaint and protection.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A feast, not an added lifespan",
+        "body": "The Chair of Saint Peter is an observance rather than a person with separate birth and death dates. Celebrated on February 22, it uses the image of a bishop's chair to focus on Peter's ministry of teaching, pastoral care, and communion in the Church.",
+        "sourceIds": ["usccb-chair-readings", "vatican-news-chair"]
+      },
+      {
+        "heading": "Confession and commission under Christ",
+        "body": "In Matthew 16 Peter confesses Jesus as the Christ and receives the images of rock and keys. This commission remains Christ-centered: Peter does not replace the Lord or possess the Church. The office serves the faith confessed and must answer to the one who gives it.",
+        "sourceIds": ["usccb-chair-readings"]
+      },
+      {
+        "heading": "A chair measured by service",
+        "body": "First Peter tells elders to tend the flock without domination and to lead by example under the chief Shepherd. Pope Francis similarly interprets the Chair through love, unity, mercy, and service. These sources rule out using Petrine authority to protect status, coerce consciences, or suppress legitimate safeguarding reports. Unity grows through truth, accountability, listening, and care for people at risk.",
+        "sourceIds": ["usccb-chair-readings", "francis-chair-service"]
+      },
+      {
+        "heading": "The physical chair and its later history",
+        "body": "The wooden throne preserved in Saint Peter's Basilica is a composite object with a medieval outer frame, older elements, and ivory decoration whose dating has been debated. Official archival research associates the throne especially with the Carolingian world and documents devotion identifying it with Peter after the year 1000. Bernini's later bronze monument enshrines it. This material history is distinct from the liturgical theology of Petrine ministry and does not prove first-century provenance.",
+        "sourceIds": ["fabric-chair-archive", "smith-chair-relic-history"]
+      }
+    ],
+    "gospelTheme": "Jesus entrusts pastoral responsibility to Peter so that confessed faith becomes loving service, communion, and care for the flock under Christ the chief Shepherd.",
+    "struggle": "Christians can confuse visible office with personal privilege, treat unity as enforced silence, or make devotion depend on stronger relic claims than historical evidence permits.",
+    "response": "The feast returns authority to Scripture's measure: confess Christ, feed his people, lead by example, welcome truthful accountability, and distinguish the enduring ministry from the uncertain history of a physical object."
+  },
+  "virtues": [
+    {
+      "name": "Accountable service",
+      "evidence": "The feast's reading from 1 Peter commands shepherds not to dominate but to become examples, while Pope Francis describes the Chair through service, love, unity, and mercy.",
+      "imitation": "If you hold responsibility, invite one specific form of review, explain how concerns can be raised safely, and follow through without retaliation or defensiveness.",
+      "sourceIds": ["usccb-chair-readings", "francis-chair-service"]
+    },
+    {
+      "name": "Unity grounded in truth",
+      "evidence": "Peter's confession names Jesus as the Christ; the chair symbolizes a ministry that gathers believers around this received faith rather than around a leader's preferences.",
+      "imitation": "In a divided group, state the shared truth and common good clearly, then listen carefully to a person whose experience challenges the majority's comfort.",
+      "sourceIds": ["usccb-chair-readings", "vatican-news-chair"]
+    },
+    {
+      "name": "Historical humility",
+      "evidence": "Official conservation reporting and independent scholarship distinguish the composite medieval throne and its developing relic devotion from an unproven claim of first-century ownership.",
+      "imitation": "When a cherished story exceeds the evidence, keep the spiritual truth it expresses while describing the material or historical claim with honest limits.",
+      "sourceIds": ["fabric-chair-archive", "smith-chair-relic-history"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Read Matthew 16:13-19, John 21:15-17, and 1 Peter 5:1-4 together. Notice that confession, love, and non-dominating care belong to one commission. Pray by name for the pope, bishops, parish leaders, safeguarding personnel, and those whose concerns need a fair hearing.",
+    "action": "Review one process in a community where you have influence. Make the route for reporting harm or misuse of power clear, independent where possible, confidential within proper limits, and protected from retaliation. Authority serves unity when it makes truth safer to tell."
+  },
+  "reflectionQuestions": [
+    "Does my idea of Church unity make room for truth, accountability, and the voices of people who may be at risk?",
+    "How can my own responsibilities become more visibly patterned on Christ's love and the non-dominating example required in 1 Peter?"
+  ],
+  "scripture": {
+    "reference": "1 Peter 5:2-4",
+    "connection": "The feast's own reading places every shepherd beneath Christ, the chief Shepherd. Pastoral authority is willing service and credible example, never domination; this gives the images of chair and keys their Christian measure."
+  },
+  "prayer": "Lord Jesus Christ, Son of the living God and chief Shepherd of your people, keep the Church steadfast in the faith Peter confessed. Give the successor of Peter and every pastor courage to serve, listen, protect, and accept accountability. Heal divisions without hiding truth, guard those who report harm, and make every office a sign of your love, mercy, and self-giving care. Amen."
+}

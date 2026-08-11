@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 2,
+  "id": "peter_damian",
+  "profileKind": "individual",
+  "celebrationIds": [
+    "peter_damian",
+    "saint_peter_damian_bishop_and_doctor_of_the_church"
+  ],
+  "name": "Saint Peter Damian",
+  "alternateNames": ["Peter of Damian", "Pier Damiani"],
+  "ecclesialTitle": "Cardinal Bishop and Doctor of the Church",
+  "lifeSpan": "c. 1007-1072",
+  "lifeLength": "",
+  "vocation": "Hermit, prior, papal legate, reformer, and theological writer",
+  "places": ["Ravenna, Italy", "Fonte Avellana, Italy", "Ostia, Italy", "Faenza, Italy"],
+  "patronage": [],
+  "symbols": ["Cross"],
+  "briefBio": "Peter Damian left a successful teaching career for the hermitage of Fonte Avellana, then reluctantly served as Cardinal Bishop of Ostia and as a papal legate. His prayer, letters, and reform work joined love of Christ crucified to a demand for integrity, although some severe ascetical and polemical language in his writings requires critical rather than imitative reception.",
+  "feastDates": ["February 21"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {
+      "id": "benedict-peter-damian",
+      "title": "General Audience: Saint Peter Damian",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/audiences/2009/documents/hf_ben-xvi_aud_20090909.html",
+      "publicationDate": "2009-09-09",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Official Catholic synthesis used for chronology, Fonte Avellana, literary range, spirituality of the Cross, strict eremitical discipline, the Ostia appointment, reform missions, and ecclesiology; app prose is original",
+      "supports": ["identity", "chronology", "life.fonte_avellana", "life.writings", "life.asceticism", "life.ostia", "life.reform", "gospelTheme"]
+    },
+    {
+      "id": "cua-damian-letters",
+      "title": "Letters, 31-60",
+      "authorOrInstitution": "Saint Peter Damian; translated by Owen J. Blum",
+      "publisher": "The Catholic University of America Press",
+      "url": "https://www.cuapress.org/9780813226378/letters-31-60/",
+      "publicationDate": "2014-01-17",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Scholarly critical-translation catalogue used to identify Letters 31 and 40, their reform subjects, rhetorical severity, sacramental position, and the range of Peter's correspondence without reproducing the translation",
+      "supports": ["life.writings", "life.reform", "life.severe_rhetoric", "sacramentalTheology"]
+    },
+    {
+      "id": "stanford-peter-damian",
+      "title": "Peter Damian",
+      "authorOrInstitution": "Toivo J. Holopainen",
+      "publisher": "Stanford Encyclopedia of Philosophy",
+      "url": "https://plato.stanford.edu/entries/peter-damian/",
+      "publicationDate": "2024-10-07",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Peer-reviewed scholarly reference used for controlled chronology, offices, letters, De divina omnipotentia, and correction of the claim that Peter simply rejected logic or contradiction",
+      "supports": ["chronology", "life.education", "life.fonte_avellana", "life.ostia", "life.legate", "life.writings", "intellectualComplexity"]
+    },
+    {
+      "id": "jasper-bounded-wilderness",
+      "title": "Bounded Wilderness: Land and Reform at the Hermitage of Fonte Avellana, ca. 1035-1072",
+      "authorOrInstitution": "Kathryn Jasper",
+      "publisher": "Cornell University Press via Cornell Scholarship Online",
+      "url": "https://academic.oup.com/cornell-scholarship-online/book/60390/chapter-abstract/520833014",
+      "publicationDate": "2024-10-15",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Recent scholarly monograph evidence used to place Peter's reform within the lived economy, land stewardship, communal network, and documentary record of Fonte Avellana rather than treating reform only as polemic",
+      "supports": ["life.fonte_avellana", "life.reform", "historicalContext", "virtues.accountable_reform"]
+    },
+    {
+      "id": "encyclopedia-damian-gender",
+      "title": "Damian, Peter c. 1007-1072",
+      "authorOrInstitution": "Edith Benkov",
+      "publisher": "Encyclopedia of Sex and Gender via Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/social-sciences/encyclopedias-almanacs-transcripts-and-maps/damian-peter-c-1007-1072",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent historical control used for the social setting and demeaning rhetoric of Liber Gomorrhianus, its severe proposed penalties, and Pope Leo IX's qualified rather than total acceptance",
+      "supports": ["life.reform", "life.severe_rhetoric", "historicalContext", "receptionComplexity", "pastoralSafety"]
+    },
+    {
+      "id": "usccb-2025-calendar",
+      "title": "Liturgical Calendar for the Dioceses of the United States of America 2025",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://www.usccb.org/resources/2025cal.pdf",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal episcopal-conference calendar used to establish the February 21 optional memorial and the title Bishop and Doctor of the Church",
+      "supports": ["feast", "feastDate", "ecclesialTitle"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Peter Damian shows that reform begins under the Cross, where truth about wrongdoing and mercy for persons cannot be separated. His courage in confronting corruption remains challenging; his excesses also warn reformers that urgency never licenses humiliation, coercion, or unsafe discipline. Christian renewal must be accountable, patient, and ordered to healing in Christ.",
+  "oneMinuteSummary": "Born around 1007 at Ravenna, Peter received an excellent education and became a teacher of rhetoric. About 1035 he entered the austere hermitage of Fonte Avellana and became its prior in 1043. Scripture, prayer, and contemplation of Christ's Cross shaped a large body of letters, sermons, prayers, poetry, hagiography, and theological works. He also promoted a demanding eremitical discipline that included prolonged fasting; such historical asceticism should not be copied without regard for health, vocation, and competent guidance. In 1057 Peter reluctantly became Cardinal Bishop of Ostia and served several popes as a legate in disputes over ecclesial office, simony, clerical conduct, and communion. His letters could combine sacramental care and institutional responsibility with exceptionally harsh invective. One notorious reform tract used demeaning sexual rhetoric and pressed penalties that a contemporary pope did not fully accept. That complexity belongs in an honest account: Peter's demand that leaders answer for wrongdoing can be received, while contempt and disproportionate punishment must be rejected. He died at Faenza in 1072 after returning from a mission. His durable witness is reform rooted in prayer and personal conversion, tested by charity, evidence, and responsibility for those affected.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Learning given to a hermitage",
+        "body": "Peter was educated at Ravenna, Faenza, and Parma and became known as a teacher of rhetoric. Around 1035 he left that career for Fonte Avellana. He did not discard learning: as monk and later prior, he placed literary skill, biblical meditation, and administration at the service of a community seeking God in solitude and communion.",
+        "sourceIds": ["benedict-peter-damian", "stanford-peter-damian", "jasper-bounded-wilderness"]
+      },
+      {
+        "heading": "The Cross and a severe discipline",
+        "body": "The Cross of Christ stood at the center of Peter's prayer and teaching. His rule for hermits also stressed rigorous obedience, night prayer, and prolonged fasting. These practices belong to a specific medieval monastic setting. Physical deprivation is not itself holiness, and dangerous fasting or self-punishment should never be undertaken as an imitation of him. Sustainable discipline requires attention to health, one's actual vocation, and accountable spiritual guidance.",
+        "sourceIds": ["benedict-peter-damian"]
+      },
+      {
+        "heading": "A reluctant office and active reform",
+        "body": "Peter became prior of Fonte Avellana in 1043. In 1057 he accepted, reluctantly, appointment as Cardinal Bishop of Ostia and later served as papal legate. His reform activity addressed the purchase of ecclesiastical office, disputed ordinations, clerical conduct, and conflicts among church leaders. He argued and negotiated through letters and missions rather than treating contemplation as an escape from institutional responsibility.",
+        "sourceIds": ["benedict-peter-damian", "cua-damian-letters", "stanford-peter-damian", "jasper-bounded-wilderness"]
+      },
+      {
+        "heading": "A legacy that needs moral discernment",
+        "body": "Peter's wide correspondence preserves careful theology as well as fierce polemic. Modern scholarship has corrected the caricature that his work on divine power simply abandons reason. It also documents that another tract used demeaning language about sexuality and urged severe penalties not wholly accepted even by Pope Leo IX. Accountability for abuse or corruption remains necessary; contempt for persons, collective suspicion, and disproportionate punishment do not become Christian because a reformer used them.",
+        "sourceIds": ["cua-damian-letters", "stanford-peter-damian", "encyclopedia-damian-gender"]
+      }
+    ],
+    "gospelTheme": "At the Cross, Christ exposes sin without discarding the sinner and reforms his people through truth, mercy, conversion, and responsible service.",
+    "struggle": "Peter faced ecclesial corruption, conflicts over office and sacraments, the tension between solitude and public duty, and his own tendency toward severe discipline and rhetoric.",
+    "response": "He prayed, studied Scripture, accepted difficult missions, wrote extensively, and called leaders to account; his mixed rhetorical legacy now requires the Church to retain truth and responsibility while rejecting humiliation and harm."
+  },
+  "virtues": [
+    {
+      "name": "Courage for accountable reform",
+      "evidence": "Peter left the solitude he loved to serve as bishop and legate, confronting simony, misconduct, and institutional conflict through sustained work.",
+      "imitation": "Name one concrete failure in a community you influence, verify the facts, involve responsible oversight, and pursue a remedy that protects affected people without public shaming.",
+      "sourceIds": ["benedict-peter-damian", "stanford-peter-damian", "jasper-bounded-wilderness"]
+    },
+    {
+      "name": "Contemplation that accepts responsibility",
+      "evidence": "His love of the hermitage and the Cross did not prevent him from accepting public duties when the Church needed his learning and labor.",
+      "imitation": "Let prayer lead to one bounded responsibility you can carry faithfully, with clear limits and collaborators, instead of using either activism or retreat to avoid conversion.",
+      "sourceIds": ["benedict-peter-damian"]
+    },
+    {
+      "name": "Intellectual seriousness open to correction",
+      "evidence": "Peter's letters range across pastoral, canonical, and theological questions; modern scholarship shows both more intellectual care and more moral complexity than simple heroic or hostile portraits allow.",
+      "imitation": "Read a primary text and a qualified historical control before repeating a judgment about a disputed Christian figure, and correct your account when evidence complicates it.",
+      "sourceIds": ["cua-damian-letters", "stanford-peter-damian", "encyclopedia-damian-gender"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray before Christ crucified and ask: what in me needs reform, and whom might my reforming zeal wound? Choose one safe, sustainable discipline for the next week, such as a limited period of silence or a modest fast appropriate to your health; seek medical or spiritual guidance when needed and never use pain or deprivation as proof of holiness.",
+    "action": "Improve one accountability process in a family, parish, workplace, or ministry: define the concern, hear people affected, document facts, use safeguarding or professional channels, set a review date, and include a merciful path for truthful change without weakening protection."
+  },
+  "reflectionQuestions": [
+    "When I call for reform, do I seek the protection and conversion of persons, or the satisfaction of condemning an enemy?",
+    "What discipline will make me freer to love Christ and neighbor while respecting health, limits, and accountable guidance?"
+  ],
+  "scripture": {
+    "reference": "Galatians 6:1-2",
+    "connection": "Paul joins restoration with gentleness and commands believers to carry one another's burdens. That standard receives Peter's zeal for reform while correcting every temptation to contempt, unsafe penance, or punitive display."
+  },
+  "prayer": "Lord Jesus Christ, you reform your Church from the truth and mercy of the Cross. Through the intercession of Saint Peter Damian, give us courage to face corruption, humility to examine ourselves, and patience to build accountable remedies. Guard us from contempt, coercion, and harmful discipline. Teach leaders to protect the vulnerable, accept review, repair what can be repaired, and seek holiness in your merciful love. Amen."
+}
