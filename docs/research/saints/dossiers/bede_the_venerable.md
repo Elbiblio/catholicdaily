@@ -6,7 +6,7 @@
 - Profile kind: individual
 - Celebration IDs: `bede_the_venerable`; `saint_bede_the_venerable_priest_and_doctor_of_the_church`
 - Canonical name and aliases: Saint Bede the Venerable; Bede; The Venerable Bede; Beda Venerabilis
-- Feast date and calendar scope: May 25
+- Feast date and calendar scope: May 25; optional memorial
 - Lifespan and life length: c. 672/673–735; about 62 years
 - Identity conflicts resolved: Bede's own concise notice at the end of the Ecclesiastical History controls the core life; later title and death legends are not merged into it. A modern Holy See page's apparent 737 death-year typo is rejected against Bede's notice and Oxford scholarship. No formal controlled patronage or symbols were established.
 

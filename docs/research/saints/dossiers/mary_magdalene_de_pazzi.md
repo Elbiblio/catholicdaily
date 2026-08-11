@@ -6,7 +6,7 @@
 - Profile kind: individual
 - Celebration IDs: `mary_magdalene_de_pazzi`; `saint_mary_magdalene_de_pazzi_virgin`
 - Canonical name and aliases: Saint Mary Magdalene de' Pazzi; Caterina de' Pazzi; Maria Maddalena de' Pazzi
-- Feast date and calendar scope: May 25
+- Feast date and calendar scope: May 25; optional memorial
 - Lifespan and life length: 1566–1607; 41 years
 - Identity conflicts resolved: Benedict XVI and independent controls establish the 1566–1607 chronology, which yields an age of 41; the current Carmelite account also states that age explicitly. Mystical works are treated as sister-recorded and editorially mediated testimony, not an unbroken first-person transcript. No formal controlled patronage or symbols were established.
 

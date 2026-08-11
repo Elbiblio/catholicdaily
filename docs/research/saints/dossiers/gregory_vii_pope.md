@@ -6,7 +6,7 @@
 - Profile kind: individual
 - Celebration IDs: `gregory_vii_pope`; `saint_gregory_vii_pope`
 - Canonical name and aliases: Saint Gregory VII, Pope; Hildebrand of Sovana; Gregory VII
-- Feast date and calendar scope: May 25
+- Feast date and calendar scope: May 25; optional memorial
 - Lifespan and life length: c. 1020/1025–1085; about 60–65 years
 - Identity conflicts resolved: the Holy See controls pontificate dates and death; modern scholarship controls the approximate birth range and conflict narrative. Reform, investiture, sanctions, Canossa, Roman violence, exile, and legacy are not reduced to a holy pope versus an evil ruler. No formal controlled patronage or symbols were established.
 

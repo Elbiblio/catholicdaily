@@ -6,7 +6,7 @@
 - Profile kind: individual
 - Celebration IDs: `rita_of_cascia`; `saint_rita_of_cascia_religious`
 - Canonical name and aliases: Saint Rita of Cascia; Margherita Lotti; Rita of Cascia
-- Feast date and calendar scope: May 22
+- Feast date and calendar scope: May 22; optional memorial
 - Lifespan and life length: c. 1381–1457; about 76 years
 - Identity conflicts resolved: Rita's secure ecclesial reception as wife, mother, widow, and Augustinian religious is distinguished from late or devotional detail about household violence, her sons' intentions, admission to the monastery, the forehead wound, the rose, and miracles. No formal controlled patronage or symbols were established.
 
