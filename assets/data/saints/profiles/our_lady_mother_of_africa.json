@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 2,
+  "id": "our_lady_mother_of_africa",
+  "profileKind": "observance",
+  "celebrationIds": ["our_lady_mother_of_africa"],
+  "name": "Our Lady, Mother of Africa",
+  "alternateNames": ["Our Lady Mother of Africa", "Notre-Dame d'Afrique"],
+  "ecclesialTitle": "Marian observance",
+  "vocation": "Marian observance of Christ-centered discipleship, prayer, and reconciliation in Africa",
+  "places": ["Africa", "Nigeria", "Algiers", "Algeria"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Our Lady, Mother of Africa is a Marian observance, not a separate biography or apparition. In Nigeria it is celebrated as a Feast on April 30. The title is also associated with the nineteenth-century Basilica of Notre-Dame d'Afrique in Algiers. Marian doctrine directs believers to Christ, while the shrine's colonial setting requires truthful remembrance, African agency, and respect for Muslim neighbors.",
+  "feastDates": ["April 30"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "mother-africa-lumen-gentium",
+      "title": "Dogmatic Constitution on the Church Lumen Gentium, Chapter VIII",
+      "authorOrInstitution": "Second Vatican Council",
+      "publisher": "Holy See",
+      "url": "https://www.vatican.va/archive/hist_councils/ii_vatican_council/documents/vat-ii_const_19641121_lumen-gentium_en.html",
+      "publicationDate": "1964",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal conciliar teaching used to distinguish Mary's maternal role from Christ's unique mediation and to ground true devotion in faith, charity, and orientation to Christ rather than sentiment or credulity",
+      "supports": ["profileKind", "theology.mary", "theology.christ", "devotion.safeguard", "gospelTheme"]
+    },
+    {
+      "id": "mother-africa-ecclesia",
+      "title": "Post-Synodal Apostolic Exhortation Ecclesia in Africa",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "Holy See",
+      "url": "https://www.vatican.va/content/john-paul-ii/en/apost_exhortations/documents/hf_jp-ii_exh_14091995_ecclesia-in-africa.html",
+      "publicationDate": "1995",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal teaching used for African ecclesial agency, communion in diversity, justice, peace, reconciliation, dialogue with Muslims and African traditional religion, and the African bishops' prayer to Mary for the continent",
+      "supports": ["africanChurchAgency", "reconciliation", "justice", "peace", "interreligiousDialogue", "prayer.mary"]
+    },
+    {
+      "id": "mother-africa-basilica-origins",
+      "title": "Origines",
+      "authorOrInstitution": "Basilica of Notre-Dame d'Afrique",
+      "publisher": "Basilica of Notre-Dame d'Afrique",
+      "url": "https://notre-dame-afrique.org/un-patrimoine-exceptionnel/origines/",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Official shrine history used for the women who initiated the pilgrimages, construction chronology, the naming of Notre-Dame d'Afrique, installation of the statue, and the sanctuary's prayer for Christians and Muslims",
+      "supports": ["title.history", "basilica.origins", "basilica.dates", "algiers", "interreligiousPrayer"]
+    },
+    {
+      "id": "mother-africa-basilica-muslim-country",
+      "title": "Une basilique chrétienne dans un pays musulman",
+      "authorOrInstitution": "Basilica of Notre-Dame d'Afrique",
+      "publisher": "Basilica of Notre-Dame d'Afrique",
+      "url": "https://notre-dame-afrique.org/une-basilique-de-croyants/une-basilique-chretienne-dans-un-pays-musulman/",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Official contemporary shrine account used for the basilica's life in a Muslim-majority society and its stated commitment to peace between Christians and Muslims",
+      "supports": ["algeria.present", "muslimNeighbors", "interreligiousPeace"]
+    },
+    {
+      "id": "mother-africa-algeria-church-colonial",
+      "title": "La période coloniale",
+      "authorOrInstitution": "Catholic Church in Algeria",
+      "publisher": "Catholic Church in Algeria",
+      "url": "https://eglise-catholique-algerie.org/accueil-2/des-racines-profondes/la-periode-coloniale/",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Official local Church history used to place the basilica's construction inside French armed conquest, settler colonization, French diocesan structures, and later Algerian demands for independence",
+      "supports": ["colonialContext", "basilica.construction", "algeria.agency", "sourceLimits"]
+    },
+    {
+      "id": "mother-africa-barnard-heritage",
+      "title": "Erasing the Ketchaoua Mosque: Catholicism, Assimilation, and Civic Identity in France and Algeria",
+      "authorOrInstitution": "Ralph Ghoche",
+      "publisher": "Routledge, in Neocolonialism and Built Heritage",
+      "url": "https://barnard.edu/sites/default/files/inline-files/Neocolonialism%20and%20Built%20Heritage%3B%20Echoes%20of%20Empire%20in%20Africa%2C%20Asia%2C%20and%20Europe_1.pdf",
+      "publicationDate": "2020",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent scholarly architectural history used to control the basilica's 1872 setting within French colonial assimilation, Church conversion projects, government policy, and the colonial reshaping of Algiers",
+      "supports": ["colonialContext", "assimilation", "basilica.architecture", "power.safeguard", "historicalCertainty"]
+    },
+    {
+      "id": "mother-africa-nigeria-calendar",
+      "title": "Liturgical Calendar: Nigeria, 2026",
+      "authorOrInstitution": "GCatholic.org",
+      "publisher": "GCatholic.org",
+      "url": "https://gcatholic.org/calendar/2026/NG-en",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Current calendar cross-check used only for the April 30 Feast of Our Lady Mother of Africa in Nigeria; it does not establish the title's theology or the Algiers shrine history",
+      "supports": ["feast", "calendar.nigeria", "calendar.rank"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "This observance invites Catholics to entrust Africa's peoples and churches to God with Mary, while refusing to imagine the continent as one passive object of outside concern. Its associated Algiers basilica arose under French colonial rule, so truthful devotion must reject conquest and assimilation. Mary leads disciples to Christ and toward African-led work for justice, reconciliation, peace, and respectful encounter with Muslim neighbors.",
+  "oneMinuteSummary": "Our Lady, Mother of Africa is a Marian observance, not another episode in Mary's earthly life or a documented apparition. Nigeria celebrates it as a Feast on April 30. The title is also associated with the Basilica of Notre-Dame d'Afrique in Algiers, whose pilgrimages began through Marguerite Berger and Anna Cinquin and whose present church was built during nineteenth-century French colonial rule. That history includes religious devotion, local encounter, settler institutions, and assimilationist ambitions; devotion cannot make colonial domination holy. Vatican teaching holds that Mary's maternal role depends entirely on Christ and leads believers to him. The African Church speaks in its own voice, seeking justice, reconciliation, communion in diversity, and dialogue with Muslims and followers of African traditional religions. The feast therefore calls for prayer with Mary, honest memory, respect for Africa's many peoples, and support for African-led peace.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A title and observance centered on Christ",
+        "body": "Our Lady, Mother of Africa names a Marian observance rather than a separate person, lifespan, or apparition. Vatican II teaches that Mary's maternal role depends completely on Christ's unique mediation. Authentic devotion forms faith and charity and directs disciples to her Son, not to sentiment, credulity, or a substitute savior.",
+        "sourceIds": ["mother-africa-lumen-gentium"]
+      },
+      {
+        "heading": "The Algiers shrine within colonial history",
+        "body": "Marguerite Berger and Anna Cinquin helped begin pilgrimages associated with the title. The basilica was constructed from 1858 and consecrated in 1872 in French-ruled Algeria. Both local Church history and independent scholarship locate its building within conquest, settlement, unequal administration, and assimilationist Christian projects. The sanctuary's history must therefore be remembered without blessing colonial domination.",
+        "sourceIds": ["mother-africa-basilica-origins", "mother-africa-algeria-church-colonial", "mother-africa-barnard-heritage"]
+      },
+      {
+        "heading": "Nigeria, African agency, and peace",
+        "body": "The observance is a Feast in Nigeria on April 30. Ecclesia in Africa records African bishops praying with Mary for communion, justice, love, and peace, and calls the Church to dialogue with Muslims and African traditional religion. The Algiers basilica now emphasizes prayer and peace among Christians and Muslims. Africa is plural, and its churches and communities are agents of their own discipleship and future.",
+        "sourceIds": ["mother-africa-nigeria-calendar", "mother-africa-ecclesia", "mother-africa-basilica-muslim-country"]
+      }
+    ],
+    "gospelTheme": "At Cana Mary directs attention to Jesus, while in the upper room she prays within the community awaiting the Spirit; Christian hope for Africa remains Christ's gift received in communal faith and service.",
+    "struggle": "Prayer for a vast and diverse continent can become vague, paternalistic, or entangled with colonial memory, and Marian language can be detached from Christ or used without listening to African and Muslim neighbors.",
+    "response": "The Church prays with Mary for Africa while centering Christ, telling the truth about colonial power, honoring distinct peoples and faiths, and following African-led paths of justice, reconciliation, and peace."
+  },
+  "virtues": [
+    {
+      "name": "Christ-centered trust",
+      "evidence": "Vatican II presents Mary as a model of faith and charity whose maternal role depends on Christ and whose honor leads believers to know and obey him more fully.",
+      "imitation": "Bring one need to Mary in prayer, then read Jesus' words at Cana and choose the concrete act of obedience to Christ that the situation requires.",
+      "sourceIds": ["mother-africa-lumen-gentium"]
+    },
+    {
+      "name": "Communion without domination",
+      "evidence": "Ecclesia in Africa joins Marian prayer to African ecclesial agency, communion in diversity, justice, reconciliation, and respectful dialogue with Muslims and African traditional religion.",
+      "imitation": "Learn from an African-led source or community before speaking about Africa, and support a priority its members identify rather than imposing your own project.",
+      "sourceIds": ["mother-africa-ecclesia"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Read John 2:1-11 and Acts 1:12-14. Pray one decade of the Rosary for an African community by name, asking Jesus for justice and peace and leaving room to hear that community's own concerns.",
+    "action": "Choose an African-led reconciliation, education, or relief initiative. Read its stated priorities, verify its accountability, and offer money, attention, or practical help without making aid conditional on conversion or control."
+  },
+  "reflectionQuestions": [
+    "Does my Marian devotion lead me more clearly to Jesus, faithful action, and truthful love of neighbors?",
+    "Whose African voice do I need to hear before I pray, give, teach, or speak about a community that is not mine?"
+  ],
+  "scripture": {
+    "reference": "John 2:5",
+    "connection": "Mary's instruction at Cana points beyond herself to Jesus. The observance is healthiest when prayer with Mary becomes attentive obedience to Christ expressed in justice, peace, and neighborly respect."
+  },
+  "prayer": "God of every people, you gave Mary to the Church as a mother who leads disciples to Christ. Receive her prayer for the many peoples of Africa. Strengthen African churches and communities in their own callings; heal wounds left by conquest, racism, exploitation, and religious coercion; deepen friendship among Christians, Muslims, and all neighbors; and make us servants of justice and an unarmed peace. Through Christ our Lord. Amen."
+}

@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 2,
+  "id": "pius_v_pope",
+  "profileKind": "individual",
+  "celebrationIds": ["pius_v_pope", "saint_pius_v_pope"],
+  "name": "Saint Pius V, Pope",
+  "alternateNames": ["Antonio Ghislieri", "Michele Ghislieri", "Pope Pius V"],
+  "ecclesialTitle": "Pope",
+  "lifeSpan": "1504–1572",
+  "lifeLength": "68 years",
+  "vocation": "Dominican friar, inquisitor, bishop, and Bishop of Rome",
+  "places": ["Bosco Marengo", "Italy", "Rome", "Papal States"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Antonio Ghislieri entered the Dominicans, took the name Michele, and became Pope Pius V in 1566. He implemented Tridentine reform, issued the Roman Catechism, Breviary, and 1570 Missal, promoted the Rosary, and organized the Holy League at Lepanto. He also led and strengthened coercive institutions, restricted and expelled Jewish communities, and backed confessional war. Sainthood does not make every policy holy.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Pope_Pius_V",
+  "wikidataId": "Q131945",
+  "feastDates": ["April 30"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {
+      "id": "pius-jp2-centenary",
+      "title": "Message on the Fifth Centenary of the Birth of Saint Pius V",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "Holy See",
+      "url": "https://www.vatican.va/content/john-paul-ii/en/speeches/2004/may/documents/hf_jp-ii_spe_20040504_anniversary-pius-v.html",
+      "publicationDate": "2004",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal message used for Dominican formation, Scripture and theology, ordination, prayer, Rosary devotion, reform, the Holy League, and Lepanto; celebratory interpretation is balanced by independent controls",
+      "supports": ["identity", "formation", "ordination", "prayer", "reform", "rosary", "lepanto", "reception"]
+    },
+    {
+      "id": "pius-francis-2022",
+      "title": "Address to Pilgrims from the Dioceses of Alessandria and Spoleto-Norcia",
+      "authorOrInstitution": "Pope Francis",
+      "publisher": "Holy See",
+      "url": "https://www.vatican.va/content/francesco/en/speeches/2022/september/documents/20220917-diocesi-alessandria-spoleto.html",
+      "publicationDate": "2022",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal address used for Pius's six-year reforming pontificate, continuing liturgical development, prayer, and the warning against anachronistic, nostalgic, or embalmed remembrance",
+      "supports": ["pontificate", "reform", "liturgy.continuity", "prayer", "memory.safeguard"]
+    },
+    {
+      "id": "pius-missale-romanum",
+      "title": "Apostolic Constitution Missale Romanum",
+      "authorOrInstitution": "Pope Paul VI",
+      "publisher": "Holy See",
+      "url": "https://www.vatican.va/content/paul-vi/en/apost_constitutions/documents/hf_p-vi_apc_19690403_missale-romanum.html",
+      "publicationDate": "1969",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal liturgical document used for Quo primum and the 1570 Roman Missal and to show that Pius's reform belongs to an ongoing history that includes later Vatican II revision",
+      "supports": ["liturgy.missal1570", "liturgy.continuity", "sourceLimits"]
+    },
+    {
+      "id": "pius-ddf-history",
+      "title": "To Promote and Safeguard the Faith: From the Holy Office to the Congregation for the Doctrine of the Faith",
+      "authorOrInstitution": "Congregation for the Doctrine of the Faith",
+      "publisher": "Holy See",
+      "url": "https://www.vatican.va/roman_curia/congregations/cfaith/storia/documents/rc_con_cfaith_storia_20150319_promuovere-custodire-fede_en.html",
+      "publicationDate": "2015",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Official institutional history used for Ghislieri's senior Inquisition roles and for the tribunal system's power to condemn, invoke secular enforcement, permit torture in its legal framework, and send people to execution by civil authorities",
+      "supports": ["inquisition.office", "inquisition.institution", "torture", "execution", "institutionalHarm"]
+    },
+    {
+      "id": "pius-nce",
+      "title": "Pius V, Pope, St.",
+      "authorOrInstitution": "New Catholic Encyclopedia",
+      "publisher": "Gale; Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/pius-v-pope-st",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Specialist reference used for chronology, Inquisition leadership, Tridentine governance, Catechism, Breviary and Missal, foreign policy, Huguenot policy, England, Holy League, and Lepanto",
+      "supports": ["dates", "inquisition.office", "reform.trent", "governance", "liturgy", "huguenots", "england", "lepanto"]
+    },
+    {
+      "id": "pius-european-history",
+      "title": "Pius V (1504–1572)",
+      "authorOrInstitution": "Encyclopedia of European Social History",
+      "publisher": "Gale; Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/international/encyclopedias-almanacs-transcripts-and-maps/pius-v-1504-1572",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent historical reference used for Dominican formation, Inquisition appointments, discipline, liturgical measures, the harmful consequences of policy toward Elizabeth I, Lepanto, death, and 1712 canonization",
+      "supports": ["formation", "inquisition.office", "reform", "liturgy", "england.harm", "lepanto", "death", "canonization"]
+    },
+    {
+      "id": "pius-treccani-inquisition",
+      "title": "Inquisizione",
+      "authorOrInstitution": "Istituto della Enciclopedia Italiana",
+      "publisher": "Treccani",
+      "url": "https://www.treccani.it/enciclopedia/inquisizione/",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent scholarly encyclopedia used to control the coercive operation of the Roman Inquisition under Pius V, including persecution of Protestants and Jews and institutional repression",
+      "supports": ["inquisition", "protestants", "jews", "coercion", "institutionalHarm"]
+    },
+    {
+      "id": "pius-jewish-encyclopedia",
+      "title": "Popes, The",
+      "authorOrInstitution": "Jewish Encyclopedia",
+      "publisher": "JewishEncyclopedia.com",
+      "url": "https://jewishencyclopedia.com/articles/12273-popes-the",
+      "publicationDate": "1906",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent Jewish historical reference used for Pius's renewed restrictions, forced property sales, commercial limits, and the 1569 expulsion of Jewish communities from most Papal States",
+      "supports": ["jewishMeasures", "property", "commerce", "expulsion", "minorityHarm"]
+    },
+    {
+      "id": "pius-huguenot-war",
+      "title": "Saint Bartholomew's Day Massacre: The Holy See and the Massacre",
+      "authorOrInstitution": "Catholic Encyclopedia",
+      "publisher": "New Advent transcription",
+      "url": "https://www.newadvent.org/cathen/13333b.htm",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Historical Catholic reference used for Pius's 1569 military support to the French crown, endorsement of open war against Huguenots, opposition to toleration, and his separate refusal to approve covert assassination",
+      "supports": ["huguenotWar", "militarySupport", "religiousCoercion", "sourceLimits"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Pius V shows both the seriousness and the danger of religious authority. His disciplined prayer and implementation of reform shaped Catholic life, but his Inquisition leadership, anti-Jewish measures, and support for confessional force caused real institutional harm. Christian memory must resist both erasure and triumphalism: holiness does not canonize every policy, and reform without the dignity of conscience becomes coercion.",
+  "oneMinuteSummary": "Antonio Ghislieri was born in 1504, entered the Dominicans at fourteen, took the name Michele, and was ordained in 1528. After senior work in the Roman Inquisition, he became Pope Pius V in 1566. He enforced episcopal residence and religious discipline, issued the Roman Catechism, revised the Breviary, and promulgated the 1570 Roman Missal, later itself followed by further liturgical reform. He promoted the Rosary and organized the Holy League whose fleet won at Lepanto. His record also includes grave coercion: the Inquisition could use torture and deliver people for execution; he supported war against Huguenots, restricted and expelled Jewish communities, and worsened danger for English Catholics through policy toward Elizabeth I. He died in 1572 and was canonized in 1712. Honoring his prayer and reform cannot make every exercise of power holy.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Dominican formation and inquisitorial office",
+        "body": "Born Antonio Ghislieri in Bosco Marengo in 1504, he entered the Order of Preachers at fourteen, became Michele, studied theology, and was ordained in 1528. His career also advanced through the Roman Inquisition, where he became commissary general and cardinal inquisitor before his election as pope. That tribunal could permit torture and transfer condemned people to civil execution; his office cannot be detached from its coercive system.",
+        "sourceIds": ["pius-jp2-centenary", "pius-ddf-history", "pius-nce", "pius-european-history"]
+      },
+      {
+        "heading": "Tridentine discipline and liturgical reform",
+        "body": "As pope from 1566, Pius pursued implementation of the Council of Trent, disciplined absentee bishops and religious houses, and issued the Roman Catechism, the 1568 Breviary, and the 1570 Missal. Paul VI's later Missale Romanum places that achievement within continuing liturgical development rather than making one sixteenth-century form immune to later reform.",
+        "sourceIds": ["pius-francis-2022", "pius-missale-romanum", "pius-nce", "pius-european-history"]
+      },
+      {
+        "heading": "Government, minorities, and coercion",
+        "body": "Pius used spiritual and temporal authority to enforce confessional uniformity. Under his rule the Inquisition repressed Protestants and Jews; papal measures constrained Jewish property and commerce and expelled communities from most of the Papal States. His intervention against Elizabeth I also increased danger for English Catholics. These were institutional harms, not incidental blemishes to hide behind the word reform.",
+        "sourceIds": ["pius-ddf-history", "pius-nce", "pius-european-history", "pius-treccani-inquisition", "pius-jewish-encyclopedia"]
+      },
+      {
+        "heading": "Confessional war and Lepanto",
+        "body": "Pius sent troops to support the French crown in war against Huguenots and opposed religious toleration, although he rejected covert assassination. He also formed the Holy League against the Ottoman Empire; its fleet won at Lepanto in 1571, and Catholic memory linked the victory with Rosary prayer. Prayer for deliverance must not turn war, defeated peoples, or confessional violence into sacred spectacle.",
+        "sourceIds": ["pius-jp2-centenary", "pius-nce", "pius-huguenot-war"]
+      },
+      {
+        "heading": "Devotion and accountable memory",
+        "body": "Pius maintained an austere life of prayer and promoted the Rosary. He died in 1572 and was canonized in 1712. Pope Francis warns against nostalgic or embalmed remembrance and against judging the past only through present categories. Context improves understanding, but it does not erase victims or convert coercion into holiness; truthful veneration can receive what is good and repent of harm.",
+        "sourceIds": ["pius-jp2-centenary", "pius-francis-2022", "pius-european-history"]
+      }
+    ],
+    "gospelTheme": "Jesus defines authority as service rather than domination; prayer, discipline, and reform remain Christian only when ordered to truth, mercy, and the dignity of every person.",
+    "struggle": "Pius sought Catholic reform in an age of political and confessional conflict, yet joined reforming conviction to institutions and policies that coerced consciences and injured Jewish and Protestant communities as well as English Catholics.",
+    "response": "His disciplined prayer and administrative action produced lasting reforms, but the Church must receive that legacy with moral discrimination, listen to those harmed, and refuse to treat sainthood as approval of every decision."
+  },
+  "virtues": [
+    {
+      "name": "Disciplined prayer",
+      "evidence": "Papal sources remember Pius's austere personal prayer, study, Dominican formation, and promotion of the Rosary as foundations of his service.",
+      "imitation": "Keep a fixed period of prayer for seven days, ending each time by asking whose dignity your convictions and decisions may overlook.",
+      "sourceIds": ["pius-jp2-centenary", "pius-francis-2022"]
+    },
+    {
+      "name": "Responsibility for institutional reform",
+      "evidence": "Pius implemented Tridentine decrees, confronted absentee leadership, and completed major catechetical and liturgical projects rather than treating reform as only personal aspiration.",
+      "imitation": "Choose one rule or process you influence, ask those affected where it causes avoidable harm, and make one transparent correction with a date for review.",
+      "sourceIds": ["pius-nce", "pius-european-history"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray Mark 10:42-45, then one decade of the Rosary for people harmed by religious coercion, especially Jews and Christians wounded by confessional violence. Ask Christ to purify zeal of domination.",
+    "action": "Audit one policy in a church, workplace, or family where you hold influence. Seek testimony from the least powerful person affected, name any harm plainly, and propose a documented remedy rather than defending good intentions."
+  },
+  "reflectionQuestions": [
+    "Where do I excuse harmful methods because I believe my goal is religiously or morally correct?",
+    "Can I honor genuine holiness while listening to victims and refusing to sanctify every policy of a revered leader?"
+  ],
+  "scripture": {
+    "reference": "Mark 10:43–45",
+    "connection": "Jesus overturns patterns of rulers who dominate and makes service the measure of greatness. The text provides an essential test for Pius V's reforms, for his coercive policies, and for every Christian exercise of authority."
+  },
+  "prayer": "Lord Jesus, servant and judge of every ruler, through the intercession of Saint Pius V give your Church disciplined prayer and courage to reform. Purify zeal that reaches for force. Remember Jewish and Christian communities harmed by coercion, expulsion, imprisonment, torture, and war; lead institutions to truth, repentance, repair, and safeguards for conscience. Make all authority answerable to your mercy and all prayer fruitful in peace. Amen."
+}

@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 2,
+  "id": "philip_and_james_apostles",
+  "profileKind": "group",
+  "celebrationIds": ["philip_and_james_apostles", "saints_philip_and_james_apostles"],
+  "name": "Saints Philip and James, Apostles",
+  "alternateNames": ["Philip the Apostle and James son of Alphaeus", "Saints Philip and James the Lesser"],
+  "ecclesialTitle": "Apostles",
+  "vocation": "Two distinct members of the Twelve honored in one celebration",
+  "places": ["Bethsaida", "Galilee", "Jerusalem"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Philip and James are two distinct apostles honored together on May 3. John gives Philip an individual voice: he follows Jesus, invites Nathanael, participates in the bread dialogue, receives Greek visitors, and asks to see the Father. James son of Alphaeus is securely named in apostle lists but otherwise scarcely described. He must not be silently identified with James the Lord's brother or assigned that man's writings and death.",
+  "feastDates": ["May 3"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "philip-benedict-audience",
+      "title": "General Audience: Philip, the Apostle",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "Holy See",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/audiences/2006/documents/hf_ben-xvi_aud_20060906.html",
+      "publicationDate": "2006",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal catechesis used for Philip's distinct New Testament profile in Bethsaida, the call and Nathanael, bread dialogue, Greek visitors, request to see the Father, and explicitly later and variable death traditions",
+      "supports": ["philip.identity", "philip.bethsaida", "philip.call", "philip.nathanael", "philip.bread", "philip.greeks", "philip.father", "tradition.philipDeath"]
+    },
+    {
+      "id": "james-benedict-audience",
+      "title": "General Audience: James, the Lesser",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "Holy See",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/audiences/2006/documents/hf_ben-xvi_aud_20060628.html",
+      "publicationDate": "2006",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal catechesis used to acknowledge the unresolved relationship between James son of Alphaeus and James the Lord's brother; material about Jerusalem's leader is not transferred to the apostle as certain biography",
+      "supports": ["james.identity", "james.alphaeus", "identityDispute", "jamesJerusalem", "sourceLimits"]
+    },
+    {
+      "id": "philip-nce",
+      "title": "Philip the Apostle, St.",
+      "authorOrInstitution": "New Catholic Encyclopedia",
+      "publisher": "Gale; Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/philip-apostle-st",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Specialist historical reference used for Philip's Johannine profile and to control later reports that confuse the apostle with Philip the deacon or assign unverified places and death details",
+      "supports": ["philip.scripture", "philip.identity", "philipTradition", "identityConfusion", "sourceLimits"]
+    },
+    {
+      "id": "james-alphaeus-nce",
+      "title": "James, Son of Alphaeus, St.",
+      "authorOrInstitution": "New Catholic Encyclopedia",
+      "publisher": "Gale; Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/james-son-alphaeus-st",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Specialist historical reference used for James son of Alphaeus in the four apostle lists, the long history of disputed identifications, and the weak basis for transferring James of Jerusalem's martyr story or later iconography",
+      "supports": ["james.alphaeus", "james.apostleLists", "identityDispute", "tradition.martyrdom", "tradition.iconography", "sourceLimits"]
+    },
+    {
+      "id": "philip-james-vatican-liturgy",
+      "title": "Word of the Day: Saints Philip and James, Apostles, Feast",
+      "authorOrInstitution": "Vatican News",
+      "publisher": "Dicastery for Communication",
+      "url": "https://www.vaticannews.va/en/word-of-the-day/2027/05/03.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Official liturgical page used for the joint May 3 Feast and its readings from 1 Corinthians 15 and John 14; the page is not used to merge the apostles' identities",
+      "supports": ["profileKind", "jointCelebration", "feast", "calendar.rank", "liturgy.readings", "scripture"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "The joint Feast shows unity without sameness. Philip's questions and invitations are visible in John's Gospel; James son of Alphaeus remains mostly a name among the Twelve. Honoring both teaches Christians to receive distinct vocations, to invite others toward Jesus without pressure, and to resist filling silence with borrowed achievements. Truthful memory can value a quiet apostle without confusing him with someone more famous.",
+  "oneMinuteSummary": "Philip and James are two distinct members of the Twelve whom the Roman liturgy honors together as a Feast on May 3. John's Gospel gives Philip a recognizable voice: Jesus calls him, he tells Nathanael to “come and see,” he calculates the crowd's need for bread, Greek visitors approach him, and he asks Jesus to show the Father. Later accounts place his ministry and death in different locations and sometimes confuse him with Philip the deacon, so those details remain tradition rather than secure biography. James is identified in the apostle lists as the son of Alphaeus, but little else is securely known. Christian tradition has often joined him to James the Lord's brother, leader of Jerusalem; scholars and even ecclesial sources acknowledge that the identification is disputed. Their shared celebration honors communion without erasing difference or inventing certainty.",
+  "life": {
+    "sections": [
+      {
+        "heading": "One feast, two apostles",
+        "body": "The Roman liturgy celebrates Philip and James together on May 3, but a shared date does not create a shared biography. They are distinct members of the Twelve. The group profile preserves both identities and lets the evidence for each stand on its own.",
+        "sourceIds": ["philip-james-vatican-liturgy", "philip-benedict-audience", "james-alphaeus-nce"]
+      },
+      {
+        "heading": "Philip: called, questioning, inviting",
+        "body": "Philip came from Bethsaida. In John, Jesus calls him; he invites Nathanael to come and see, responds practically when a crowd needs bread, helps Greek visitors approach Jesus, and asks at the supper to see the Father. Jesus answers by drawing him more deeply into the mystery of the Son's unity with the Father.",
+        "sourceIds": ["philip-benedict-audience", "philip-nce", "philip-james-vatican-liturgy"]
+      },
+      {
+        "heading": "James son of Alphaeus: a sparse record",
+        "body": "James son of Alphaeus appears in the New Testament lists of the Twelve and is present within the apostolic community, but the texts provide no separate ministry narrative. His obscurity is not a defect to repair by borrowing another person's deeds. A named place among the Twelve is meaningful even when an individual story is not preserved.",
+        "sourceIds": ["james-alphaeus-nce"]
+      },
+      {
+        "heading": "Identity disputes and later traditions",
+        "body": "For centuries many Christians identified James son of Alphaeus with James the Lord's brother and leader of Jerusalem. That identification remains disputed, so the Jerusalem leadership, epistle, and martyr account cannot simply be assigned to this apostle. Philip's later mission locations and death methods also vary and sometimes reflect confusion with Philip the deacon. Relics, places, and legends do not settle either identity.",
+        "sourceIds": ["james-benedict-audience", "james-alphaeus-nce", "philip-benedict-audience", "philip-nce"]
+      }
+    ],
+    "gospelTheme": "Jesus calls people by name, receives honest questions, and forms distinct disciples into communion centered on himself rather than on equal visibility or identical stories.",
+    "struggle": "Philip's questions reveal incomplete understanding, while James's sparse record has invited later conflation; both cases test whether believers can remain faithful without exaggerating knowledge.",
+    "response": "Philip brings others toward Jesus and keeps asking; James remains among the apostolic body without a preserved individual narrative. The Church honors both together while distinguishing evidence from later tradition."
+  },
+  "virtues": [
+    {
+      "name": "Open invitation",
+      "evidence": "When Nathanael objects, Philip does not force an argument; he invites him to come and encounter Jesus directly.",
+      "imitation": "Invite one person to read a Gospel passage, pray, or join a work of service, making it easy for them to decline and leaving the encounter with Christ free of pressure.",
+      "sourceIds": ["philip-benedict-audience", "philip-nce"]
+    },
+    {
+      "name": "Faithful presence without display",
+      "evidence": "James son of Alphaeus is consistently named among the apostles even though no separate teaching or achievement can be assigned to him securely.",
+      "imitation": "Thank a quiet collaborator by naming their distinct contribution, then take one necessary task that may remain unseen instead of competing for recognition.",
+      "sourceIds": ["james-alphaeus-nce"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Read John 1:43-46 and John 14:8-11. Bring Jesus one honest question as Philip did, then spend five minutes attending to Christ's answer rather than rushing to defend what you already think.",
+    "action": "Make room for two different kinds of participation in a shared project. Invite someone without pressure, and explicitly credit the quieter person whose faithful work might otherwise be merged into the group's story."
+  },
+  "reflectionQuestions": [
+    "Can I invite someone toward Jesus without controlling the answer or turning the invitation into pressure?",
+    "Whose distinct contribution have I overlooked because another person has a fuller or more famous story?"
+  ],
+  "scripture": {
+    "reference": "John 14:9",
+    "connection": "Jesus responds to Philip's request by directing him to the Son's revealing presence. The Feast does the same: beyond uncertain later biographies, the apostles' calling and communion point believers toward Christ."
+  },
+  "prayer": "Lord Jesus Christ, you called Philip and James by name and joined their different lives in one apostolic communion. Through their intercession, give us honest questions, patient attention, and invitations free of pressure. Teach us to honor quiet faithfulness without inventing stories, to distinguish every person's gifts, and to lead one another toward you, the image of the Father and center of the Church. Amen."
+}

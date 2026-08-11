@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 2,
+  "id": "peter_chanel",
+  "profileKind": "individual",
+  "celebrationIds": ["peter_chanel", "saint_peter_chanel_priest_and_martyr"],
+  "name": "Saint Peter Chanel, Priest and Martyr",
+  "alternateNames": ["Pierre-Louis-Marie Chanel", "Pierre Chanel"],
+  "ecclesialTitle": "Priest and Martyr",
+  "lifeSpan": "1803–1841",
+  "lifeLength": "37 years",
+  "vocation": "Marist priest and missionary on Futuna",
+  "places": ["France", "Futuna", "Oceania"],
+  "patronage": ["Oceania"],
+  "symbols": [],
+  "briefBio": "Peter Chanel was a French priest who joined the Society of Mary and reached Futuna in 1837 with Brother Marie-Nizier. His diary and letters show dependence on Futunan hospitality, serious language and cultural limits, and a mission entangled in chiefly politics and outside power. He was killed on April 28, 1841. Later martyr accounts require careful comparison with the surviving records.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Peter_Chanel",
+  "wikidataId": "Q380651",
+  "feastDates": ["April 28"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "chanel-causes",
+      "title": "San Pietro Chanel",
+      "authorOrInstitution": "Dicastery for the Causes of Saints",
+      "publisher": "Holy See",
+      "url": "https://www.causesanti.va/it/santi-e-beati/pietro-chanel.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Official cause profile used for identity, dates, formation, Marist profession, voyage, work on Futuna, death, beatification, canonization, and April 28 liturgical memory; devotional interpretation is not treated as an independent historical control",
+      "supports": ["identity", "dates", "formation", "mission.departure", "mission.futuna", "death", "beatification", "canonization", "feast"]
+    },
+    {
+      "id": "chanel-jp2-pacific",
+      "title": "Address to the Bishops of the Episcopal Conference of the Pacific",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "Holy See",
+      "url": "https://www.vatican.va/content/john-paul-ii/en/speeches/1986/november/documents/hf_jp-ii_spe_19861121_vescovi-fiji.html",
+      "publicationDate": "1986",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal address used only for the exact patronage title Patron of Oceania and ecclesial reception; its compressed account of Futuna's later conversion is controlled by mission records, local political context, and independent Pacific history",
+      "supports": ["patronage", "patronage.oceania", "reception", "sourceLimits"]
+    },
+    {
+      "id": "chanel-apac63",
+      "title": "APAC 63: The First Marist Missionary Experience",
+      "authorOrInstitution": "Marist Studies",
+      "publisher": "Marist Studies",
+      "url": "https://mariststudies.org/docs/APAC63",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Marist archival history used for the November 1837 arrival, Futunan invitation and hospitality, the political division between Alo and Sigave, and the mission's dependence on Niuliki's protection",
+      "supports": ["mission.arrival", "futunanAgency", "politics.alo_sigave", "niuliki.protection"]
+    },
+    {
+      "id": "chanel-apac127",
+      "title": "APAC 127: The First Years on Futuna",
+      "authorOrInstitution": "Marist Studies",
+      "publisher": "Marist Studies",
+      "url": "https://mariststudies.org/docs/APAC127",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Source-critical Marist study of diaries and letters used for the restrained early sacramental record, wider Pacific distrust of foreign missions, material dependence, Niuliki's support, and limits of later estrangement narratives",
+      "supports": ["mission.methods", "mission.limits", "futunanAgency", "niuliki", "sourceLimits"]
+    },
+    {
+      "id": "chanel-apac155",
+      "title": "APAC 155: Peter Chanel's Diary and Its Interpreters",
+      "authorOrInstitution": "Marist Studies",
+      "publisher": "Marist Studies",
+      "url": "https://mariststudies.org/docs/APAC155",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Order research grounded in Chanel's diary and letters used to distinguish surviving records from selective later interpretation, recover Futunan political agency, and control hostile or romanticized martyr narratives",
+      "supports": ["diary", "futunanAgency", "politics", "death.interpretation", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "chanel-apac116",
+      "title": "APAC 116: The Pacific Cultures and the First Marists",
+      "authorOrInstitution": "Marist Studies",
+      "publisher": "Marist Studies",
+      "url": "https://www.mariststudies.org/docs/APAC116",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Marist historical reflection used for Chanel's objection to another missionary's destruction of ancestral objects and for the explicit ethical judgment that Pacific peoples retain agency over their cultures",
+      "supports": ["mission.restraint", "culturalAgency", "coercion.safeguard"]
+    },
+    {
+      "id": "chanel-fisher-pacific",
+      "title": "France in the South Pacific: Power and Politics",
+      "authorOrInstitution": "Denise Fisher",
+      "publisher": "ANU Press",
+      "url": "https://press.anu.edu.au/downloads/press/p241101/pdf/book.pdf",
+      "publicationDate": "2013",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent academic history used to situate French Catholic missions, including the Marists and Futuna, within French strategic interests, imperial rivalry, and the wider political history of the Pacific",
+      "supports": ["colonialContext", "mission.externalPower", "futuna.history", "historicalCertainty"]
+    },
+    {
+      "id": "chanel-nce",
+      "title": "Chanel, Peter-Louis-Marie, St.",
+      "authorOrInstitution": "New Catholic Encyclopedia",
+      "publisher": "Gale; Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/chanel-peter-louis-marie-st",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Specialist reference used to cross-check dates, ministry, death, recognition, and feast; its dated stereotypes and simplified chiefly characterization are explicitly rejected",
+      "supports": ["identity", "dates", "mission", "death", "canonization", "feast", "sourceLimits"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Peter Chanel's witness can be honored without turning Futunans into scenery or villains. The records reveal welcome, exchange, political tension, cultural misunderstanding, and unequal outside power alongside patient ministry and a violent death. His memory challenges Christians to proclaim Christ through presence and service while respecting local agency, refusing coercion, and examining how mission can become entangled with prestige or empire.",
+  "oneMinuteSummary": "Peter Chanel was born in France in 1803, ordained in 1827, and later joined the Society of Mary. He reached Futuna with Brother Marie-Nizier in November 1837. Surviving diary and letter evidence shows that the missionaries depended on Futunan invitation, hospitality, and chiefly protection while learning language and customs amid the island's own political divisions. Chanel served the sick, taught, prayed, and objected when another missionary destroyed ancestral objects. The mission nevertheless carried outside resources and became entangled in local rivalry and wider French Catholic expansion. Chanel was killed on April 28, 1841. Later accounts identify him as a martyr, but some motives and dramatic details were filtered through selective retelling. Beatified in 1889 and canonized in 1954, he invites patient Christian presence that rejects cultural contempt, coercion, and colonial triumphalism.",
+  "life": {
+    "sections": [
+      {
+        "heading": "From parish priest to Marist mission",
+        "body": "Born in 1803 in the hamlet of Cuet, France, Chanel was ordained in 1827 and served in parish ministry before entering the Society of Mary. In 1836 he departed for Oceania. His formation supplied zeal and discipline, but not automatic competence in a Pacific language or society.",
+        "sourceIds": ["chanel-causes"]
+      },
+      {
+        "heading": "A guest within Futunan life",
+        "body": "Chanel and Brother Marie-Nizier arrived in November 1837 after a Futunan intermediary invited them ashore. Niuliki received and protected them within a society divided between Alo and Sigave. The mission depended on local food, shelter, interpretation, relationships, and political choices; Futunans were historical actors, not a passive audience.",
+        "sourceIds": ["chanel-apac63", "chanel-apac127", "chanel-apac155"]
+      },
+      {
+        "heading": "Patient service amid unequal power",
+        "body": "The diary records daily exchange, language difficulty, care for illness, and only limited early baptisms. Chanel resisted one colleague's destruction of ancestral objects, yet the mission still arrived with an overseas institution, material resources, and connections later intertwined with French power. Respectful intent did not remove this imbalance.",
+        "sourceIds": ["chanel-causes", "chanel-apac127", "chanel-apac116", "chanel-fisher-pacific"]
+      },
+      {
+        "heading": "Death, interpretation, and ecclesial memory",
+        "body": "Chanel was killed on April 28, 1841. Later narratives connect the death with chiefly and religious conflict, including the adherence of Niuliki's son Meitala, but the surviving record is incomplete and was sometimes arranged to heighten hostility and suffering. The Church beatified Chanel in 1889 and canonized him in 1954; veneration need not certify every later detail.",
+        "sourceIds": ["chanel-causes", "chanel-apac127", "chanel-apac155", "chanel-nce"]
+      }
+    ],
+    "gospelTheme": "Christ sends disciples as dependent guests and servants, not masters; witness becomes credible through patient presence, truth, and love that does not compel.",
+    "struggle": "Chanel faced isolation, illness, language limits, and deadly political tension, while the mission itself operated within unequal cross-cultural relationships and emerging imperial interests.",
+    "response": "He remained in ordinary ministry, learned through local relationships, cared for vulnerable people, and objected to destructive treatment of ancestral objects; the Church now must remember him without erasing Futunan agency or mission's entanglements."
+  },
+  "virtues": [
+    {
+      "name": "Patient presence",
+      "evidence": "Chanel's diary and the Marist records show years of language learning, ordinary exchange, care, teaching, and a deliberately restrained early sacramental record rather than a rapid conquest narrative.",
+      "imitation": "Enter one relationship as a learner this week: ask what the other person values, listen without correcting, and let their account change your planned response.",
+      "sourceIds": ["chanel-apac127", "chanel-apac155"]
+    },
+    {
+      "name": "Restraint before another culture",
+      "evidence": "Marist historical reflection records Chanel's unhappiness when Bataillon promoted burning ancestral objects, distinguishing his approach from a coercive act by a fellow missionary.",
+      "imitation": "Before using religious authority, money, or expertise, ask who has consented, who bears the cost, and how local people can direct the work themselves.",
+      "sourceIds": ["chanel-apac116"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray Luke 10:1-9 slowly, noticing that Jesus' messengers receive hospitality and eat what is offered. Ask where you have confused witness with control, then name one attitude or practice that needs repentance.",
+    "action": "Support a locally led community effort without attaching religious pressure to aid. Ask its leaders what help is wanted, follow their safeguards, and give them public credit and decision-making power."
+  },
+  "reflectionQuestions": [
+    "When have I treated people from another culture as a problem to solve instead of neighbors with knowledge and agency?",
+    "What would faithful witness look like if I surrendered prestige, control, and the need for a dramatic success story?"
+  ],
+  "scripture": {
+    "reference": "Luke 10:7",
+    "connection": "Jesus tells those he sends to remain as guests and receive what a household provides. That dependence exposes the false image of the missionary as owner and fits Chanel's real reliance on Futunan hospitality and relationships."
+  },
+  "prayer": "Lord Jesus, you sent your friends in humility and dependence. Through the intercession of Saint Peter Chanel, make us patient witnesses who listen before speaking and serve without coercion. Receive those wounded by missions joined to contempt or empire; honor the dignity and agency of Pacific peoples; and teach your Church to tell the truth, repair harm, and proclaim you through justice and peace. Amen."
+}
