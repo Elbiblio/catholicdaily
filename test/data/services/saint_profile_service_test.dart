@@ -42,6 +42,18 @@ void main() {
     expect(profile!.name, 'Saint Bede the Venerable');
   });
 
+  test('preserves reviewed Batch 5 identity mappings', () async {
+    final gregory = await SaintProfileService.instance.findById(
+      'gregory_vii_pope',
+    );
+    final pazzi = await SaintProfileService.instance.findById(
+      'mary_magdalene_de_pazzi',
+    );
+
+    expect(gregory!.wikidataId, 'Q133063');
+    expect(pazzi!.wikidataId, 'Q242040');
+  });
+
   test('preserves reviewed Batch 3 publication precision', () async {
     final frances = await SaintProfileService.instance.findById(
       'frances_of_rome',

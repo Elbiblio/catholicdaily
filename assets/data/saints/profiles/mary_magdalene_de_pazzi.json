@@ -14,7 +14,7 @@
   "symbols": [],
   "briefBio": "Born Caterina de' Pazzi in Florence, Mary Magdalene entered the Carmelite monastery of Santa Maria degli Angeli and made profession during serious illness in 1584. Her sisters recorded words spoken during reported ecstasies, producing manuscripts later edited as her works. She served the community in formation and leadership. Her mystical claims, fasting, illness, and obedience require historical and theological context, never imitation of self-harm or rejection of medical care.",
   "wikipediaUrl": "https://en.wikipedia.org/wiki/Mary_Magdalene_de%27_Pazzi",
-  "wikidataId": "Q231196",
+  "wikidataId": "Q242040",
   "feastDates": ["May 25"],
   "historicalCertainty": "documented",
   "sources": [
@@ -27,15 +27,15 @@
       "publicationDate": "2007-04-29",
       "accessedDate": "2026-08-11",
       "tier": 1,
-      "reuseBasis": "Formal papal letter used for birth and baptismal name, Carmelite entrance, illness and profession in 1584, sister-recorded manuscripts and titles, letters, communal responsibilities, final illness, death at age 41, and canonization in 1669",
+      "reuseBasis": "Formal papal letter used for birth and baptismal name, Carmelite entrance, illness and profession in 1584, sister-recorded manuscripts and titles, letters, communal responsibilities, final illness, death in 1607, and canonization in 1669",
       "supports": ["identity", "lifeSpan", "life.entrance", "life.profession", "life.illness", "works.transmission", "works.titles", "life.community", "death", "canonization"]
     },
     {
       "id": "pazzi-forty-days-primary",
       "title": "Los cuarenta días",
-      "authorOrInstitution": "Saint Mary Magdalene de' Pazzi; critical edition by María Jesús Fernández Cordero and Otger Steggink",
-      "publisher": "Universidad Pontificia Comillas, Textos para un Milenio",
-      "url": "https://repositorio.comillas.edu/xmlui/bitstream/handle/11531/15682/Santa%20Mar%C3%ADa%20Magdalena%20de%20Pazzi%2C%20Los%20cuarenta%20d%C3%ADas.pdf?isAllowed=y&sequence=1",
+      "authorOrInstitution": "Saint Mary Magdalene de' Pazzi; 2016 edition and notes by María Jesús Fernández Cordero",
+      "publisher": "Ediciones Carmelitanas",
+      "url": "https://repositorio.comillas.edu/xmlui/handle/11531/15682",
       "publicationDate": "2016",
       "accessedDate": "2026-08-11",
       "tier": 1,
@@ -51,8 +51,8 @@
       "publicationDate": "2017-10-24",
       "accessedDate": "2026-08-11",
       "tier": 3,
-      "reuseBasis": "Official order narrative used cautiously for convent life, sister-recorded ecstasies, the small number of letters she wrote herself, fasting and illness traditions, medical attention, formation and subprioress roles, and death; its inconsistent age-45 statement is rejected against the secure 1566–1607 chronology and age 41",
-      "supports": ["life.convent", "works.transmission", "works.letters", "tradition.ecstasy", "tradition.fasting", "life.illness", "life.medicalCare", "life.roles", "death", "sourceError.age"]
+      "reuseBasis": "Official order narrative used cautiously for convent life, sister-recorded ecstasies, the small number of letters she wrote herself, fasting and illness traditions, medical attention, formation and subprioress roles, death, and its explicit statement that she was 41",
+      "supports": ["life.convent", "works.transmission", "works.letters", "tradition.ecstasy", "tradition.fasting", "life.illness", "life.medicalCare", "life.roles", "death", "lifeLength"]
     },
     {
       "id": "pazzi-new-catholic-encyclopedia",
@@ -111,8 +111,8 @@
         "sourceIds": ["pazzi-carmelite-account", "pazzi-copeland-oxford"]
       },
       {
-        "heading": "Community duties and a corrected age",
-        "body": "Mary served in formation and as subprioress, showing a life not reducible to extraordinary experiences. She endured prolonged illness and died on May 25, 1607. The secure dates 1566–1607 and Benedict XVI's explicit age of 41 correct an internal age-45 error in the Carmelite summary. Even an official order page needs comparison with stronger chronological controls.",
+        "heading": "Community duties and final illness",
+        "body": "Mary served in formation and as subprioress, showing a life not reducible to extraordinary experiences. She endured prolonged illness and died on May 25, 1607. The secure dates 1566–1607 yield an age of 41, which the current Carmelite account also states explicitly. Chronology still benefits from comparison across formal, order, and independent reference sources.",
         "sourceIds": ["pazzi-benedict-letter", "pazzi-carmelite-account", "pazzi-new-catholic-encyclopedia"]
       }
     ],
