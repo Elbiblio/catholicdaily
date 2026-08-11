@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 2,
+  "id": "camillus_de_lellis",
+  "profileKind": "individual",
+  "celebrationIds": ["camillus_de_lellis", "saint_camillus_de_lellis_priest"],
+  "name": "Saint Camillus de Lellis, Priest",
+  "alternateNames": ["Camillo de Lellis", "Camillus of Lellis"],
+  "ecclesialTitle": "Priest and founder of the Ministers of the Sick",
+  "lifeSpan": "1550–1614",
+  "vocation": "Soldier, hospital servant and administrator, priest, and founder of a healthcare community",
+  "places": ["Bucchianico", "Manfredonia", "Rome"],
+  "patronage": ["hospitals", "the sick", "nurses"],
+  "symbols": [],
+  "briefBio": "Camillus de Lellis moved from soldiering, harmful gambling, poverty, and a chronic leg wound into sustained service among sick people in Rome. Ordained a priest, he formed the Ministers of the Sick to unite competent bodily care, spiritual accompaniment, and service during epidemics. His testament insisted that spiritual care must not be separated from care of the body. His conversion supports treatment, teamwork, consent, and recovery; it never makes untreated illness, financial ruin, or exhausted caregiving holy.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Camillus_de_Lellis",
+  "wikidataId": "Q332656",
+  "feastDates": ["July 14"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "camillus-causes",
+      "title": "Camillo de Lellis",
+      "authorOrInstitution": "Dicastery for the Causes of Saints",
+      "publisher": "The Holy See",
+      "url": "https://www.causesanti.va/it/santi-e-beati/camillo-de-lellis.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal cause and cult record used for Camillus's 1550–1614 chronology, Bucchianico origin, soldiering and gambling losses, chronic leg wound, hospital service, 1575 conversion, formation and approval of the Ministers of the Sick, priesthood, red-cross habit, death, canonization, and formal patronages; devotional details are controlled by independent scholarship",
+      "supports": ["identity", "alternateNames", "ecclesialTitle", "lifeSpan", "places", "life.soldiering", "life.gambling", "life.wound", "life.hospital", "life.conversion", "life.founding", "life.priesthood", "life.death", "reception.canonization", "patronage", "historicalCertainty"]
+    },
+    {
+      "id": "camillus-testament",
+      "title": "Testamentary Letter of Saint Camillus de Lellis",
+      "authorOrInstitution": "Camillus de Lellis; English translation published by the Order of the Ministers of the Sick",
+      "publisher": "Camilliani / Order of the Ministers of the Sick",
+      "url": "https://www.camilliani.org/en/testamentary-letter-of-san-camillus-de-lellis/",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Camillus's 1614 testament used as primary evidence for the institute's purpose, the inseparability of bodily and spiritual care, financial and governance concerns, and his desire to preserve the ministry after his death; the modern English translation is paraphrased rather than reproduced",
+      "supports": ["identity", "life.founding", "life.bodily_care", "life.spiritual_care", "life.governance", "life.finances", "life.death", "doctrine.whole_person_care"]
+    },
+    {
+      "id": "camillus-donnelly",
+      "title": "Camillus de Lellis (1550–1614), Patron Saint of Hospitals",
+      "authorOrInstitution": "John Patrick Donnelly",
+      "publisher": "The Linacre Quarterly, SAGE Publications",
+      "url": "https://journals.sagepub.com/doi/10.1177/00243639211055233",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Peer-reviewed historical study used for Camillus's military and gambling background, persistent leg ulcer without retrospective diagnosis, experiences in Roman hospitals, collaboration with Philip Neri and healthcare workers, formation and development of the Ministers of the Sick, plague and battlefield service, practical patient care, and limits on claims that he single-handedly invented modern nursing",
+      "supports": ["identity", "lifeSpan", "places", "life.soldiering", "life.gambling", "life.wound", "life.hospital", "life.collaboration", "life.founding", "life.epidemics", "life.battlefields", "life.patient_care", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "camillus-jp2-jubilee",
+      "title": "Address to the Camillian Religious Family, 15 May 2000",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/john-paul-ii/fr/speeches/2000/apr-jun/documents/hf_jp-ii_spe_20000515_camilliani.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal reception used for Camillus's charism of merciful service to sick people, whole-person bodily and spiritual care, professional competence, respect for life and dignity, collaboration with healthcare workers, and an ecclesial mission that does not reduce care to technique or replace clinical responsibility with devotion",
+      "supports": ["ecclesialTitle", "life.founding", "life.patient_care", "doctrine.dignity", "doctrine.whole_person_care", "practice.competence", "practice.collaboration", "patronage"]
+    },
+    {
+      "id": "camillus-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — July",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/JulUC.shtml",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the canonical title Saint Camillus de Lellis, Priest, July 14 optional memorial, and white color; the calendar key establishes that an entry without a printed rank is optional",
+      "supports": ["identity", "celebrationIds", "ecclesialTitle", "feastDates", "calendar.rank", "calendar.color"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Camillus shows that conversion can become safer systems of care: honest recovery from harmful behavior, competent attention to the body, spiritual presence without neglect, and organized teamwork that protects both patients and caregivers.",
+  "oneMinuteSummary": "Camillus de Lellis was born in 1550. As a soldier he gambled destructively, lost his resources, and lived with a chronic leg wound; the evidence does not justify a modern diagnosis for either condition. Work connected with Capuchins prompted conversion in 1575, while treatment repeatedly brought him into Roman hospitals. There he learned both patients' needs and the failures of poorly organized care. With companions, clinicians, Philip Neri, and other collaborators, Camillus formed the Ministers of the Sick and was ordained a priest. The community combined practical bodily care, spiritual accompaniment, and service during epidemics and war. Camillus did not single-handedly invent modern nursing or the later Red Cross. His 1614 testament insists that spiritual care must never be offered while bodily care is neglected. His memorial supports medical treatment, addiction recovery, consent, skilled teamwork, financial safeguards, and rest—not shame, reckless exposure, or caregiver burnout.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Gambling, poverty, and a chronic wound",
+        "body": "Camillus served as a soldier, gambled away money and possessions, and experienced poverty. A persistent leg wound repeatedly required hospital treatment. These facts can be described without retroactively diagnosing an addiction or a specific disease. Conversion did not make the wound disappear; grace worked alongside continuing treatment, practical limits, and changed behavior.",
+        "sourceIds": ["camillus-causes", "camillus-donnelly"]
+      },
+      {
+        "heading": "Learning care from inside the hospital",
+        "body": "Camillus encountered Roman hospitals as both patient and worker. He saw neglect and began organizing companions for more attentive service. His ministry developed through relationships with patients, clergy, administrators, and healthcare workers, not through a solitary invention. Honest reform asks what patients need, builds competence, and changes systems rather than relying on heroic intention alone.",
+        "sourceIds": ["camillus-causes", "camillus-donnelly", "camillus-jp2-jubilee"]
+      },
+      {
+        "heading": "A community for the whole person",
+        "body": "Camillus became a priest and organized the Ministers of the Sick. Members served in hospitals, epidemics, and dangerous settings, marked by a red cross on their habit. Their history anticipates parts of professional and spiritual healthcare, but it is inaccurate to make Camillus the sole inventor of modern nursing or of the later International Red Cross.",
+        "sourceIds": ["camillus-causes", "camillus-donnelly", "camillus-jp2-jubilee"]
+      },
+      {
+        "heading": "Body and spirit must not be separated",
+        "body": "Near death in 1614, Camillus's testament directed his community not to offer spiritual service while leaving bodily needs uncared for. That principle rejects medical neglect disguised as faith. Whole-person care brings prayer and sacraments when wanted, while respecting clinical knowledge, consent, infection precautions, adequate staffing, financial accountability, and caregivers' need for rest.",
+        "sourceIds": ["camillus-testament", "camillus-jp2-jubilee"]
+      }
+    ],
+    "gospelTheme": "In the suffering person, Christian love meets a whole human being whose body, choices, relationships, and spiritual needs deserve skilled and reverent care.",
+    "struggle": "Camillus faced harmful gambling, financial collapse, unstable soldiering, chronic illness, institutional neglect, and the risk that zeal for service could outrun competence or sustainable limits.",
+    "response": "He changed direction, remained engaged with treatment, gathered collaborators, and built a durable ministry that held bodily and spiritual care together."
+  },
+  "virtues": [
+    {
+      "name": "Conversion with practical repair",
+      "evidence": "Camillus's turn from destructive gambling and instability became sustained changes in work, formation, finances, and responsibility rather than a claim that one spiritual moment solved every problem.",
+      "imitation": "Name one harmful pattern without shame, seek qualified treatment or a recovery community, and add a concrete financial or environmental safeguard that makes the next safe choice easier.",
+      "sourceIds": ["camillus-causes", "camillus-donnelly"]
+    },
+    {
+      "name": "Whole-person care",
+      "evidence": "His testament explicitly joined spiritual ministry to care of the body, while the community organized practical service to sick people.",
+      "imitation": "Ask a person what kind of help they want, support appropriate medical care, and offer prayer or spiritual accompaniment without pressure or substitution.",
+      "sourceIds": ["camillus-testament", "camillus-jp2-jubilee"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray Matthew 25:36 slowly, asking Christ to make your presence with sick people attentive to their expressed needs rather than centered on your desire to feel helpful.",
+    "action": "Support one concrete healthcare need today—transport, a meal, respite, a verified care fund, or help following a treatment plan—while respecting privacy, consent, and professional boundaries."
+  },
+  "reflectionQuestions": [
+    "Do I use prayer or inspirational language to avoid practical, clinical, financial, or safeguarding responsibilities?",
+    "What limit, training, or shared responsibility would make my service safer for the person receiving care and for the caregiver?"
+  ],
+  "scripture": {
+    "reference": "Matthew 25:34–40",
+    "connection": "Christ identifies himself with people who are sick and receive care; this calls disciples to concrete presence that honors the whole person rather than spiritual words without bodily help."
+  },
+  "prayer": "Merciful Christ, you meet us in every person who is sick. Through the intercession of Saint Camillus, free us from shame and neglect, strengthen recovery, and make our care skilled, patient, collaborative, and faithful to body and spirit. You live and reign for ever and ever. Amen."
+}

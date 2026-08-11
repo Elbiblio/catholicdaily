@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 2,
+  "id": "our_lady_of_mount_carmel",
+  "profileKind": "observance",
+  "celebrationIds": ["our_lady_of_mount_carmel"],
+  "name": "Our Lady of Mount Carmel",
+  "alternateNames": ["The Blessed Virgin Mary of Mount Carmel", "Mother and Queen of Mount Carmel"],
+  "ecclesialTitle": "Marian title and Carmelite memorial",
+  "vocation": "Liturgical observance of Mary as Carmelite patron, model of discipleship, and guide toward Christ",
+  "places": ["Mount Carmel", "Holy Land"],
+  "patronage": [],
+  "symbols": ["brown scapular"],
+  "briefBio": "The memorial of Our Lady of Mount Carmel celebrates Mary within the history and spirituality of Carmel. Early thirteenth-century hermits on Mount Carmel received the Rule of Saint Albert to live in allegiance to Jesus Christ through Scripture, prayer, work, silence, and community. Later Carmelites honored Mary as patron and model. The brown scapular is a Church-regulated sign of Carmelite relationship and baptismal commitment, not a magical promise or automatic guarantee of salvation.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Our_Lady_of_Mount_Carmel",
+  "wikidataId": "Q1065053",
+  "feastDates": ["July 16"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "carmel-directory-205",
+      "title": "Directory on Popular Piety and the Liturgy, 205: The Brown Scapular and Other Scapulars",
+      "authorOrInstitution": "Congregation for Divine Worship and the Discipline of the Sacraments",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/dam/wss/roman_curia/congregations/ccdds/documents/rc_con_ccdds_doc_20020513_vers-direttorio_en.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal universal guidance used for the brown scapular as a reduced Carmelite habit, its Marian and Carmelite relationship, its special rite and need for preparation, its connection to Baptism and being clothed in Christ, the primacy of prayer and spiritual life, and the distinction between optional popular devotion and the Church's liturgy and sacraments",
+      "supports": ["identity", "profileKind", "ecclesialTitle", "life.scapular", "life.carmelite_family", "doctrine.baptism", "doctrine.christ_center", "doctrine.marian_intercession", "practice.preparation", "symbols", "symbols.brown_scapular", "safeguard.not_magic"]
+    },
+    {
+      "id": "carmel-rule-albert",
+      "title": "The Rule of Saint Albert",
+      "authorOrInstitution": "Albert, Latin Patriarch of Jerusalem; translated by Bede Edwards; Carmelite Order",
+      "publisher": "The British Province of Carmelites",
+      "url": "https://carmelite.org/spirituality/rule-of-saint-albert/",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Foundational Carmelite text and institutional introduction used for early thirteenth-century hermits near the spring on Mount Carmel, the 1206–1214 formula of life and 1247 adaptation, allegiance to Jesus Christ, shared leadership, Scripture, prayer, work, silence, Eucharistic worship, and practical community order; the modern translation is paraphrased rather than reproduced",
+      "supports": ["identity", "places", "life.hermits", "life.rule", "life.christ_center", "life.scripture", "life.prayer", "life.work", "life.silence", "life.community", "historicalCertainty"]
+    },
+    {
+      "id": "carmel-jp2-message",
+      "title": "Message to the Carmelite Family, 25 March 2001",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/john-paul-ii/en/messages/pont_messages/2001/documents/hf_jp-ii_mes_20010326_ordine-carmelo.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal reception used for Mary as Carmelite patron, mother, sister, and guide toward Christ; her listening, faith, prayer, and presence at the Cross; the July 16 memorial; and the scapular as a Carmelite habit of Christian conduct expressed through prayer, sacraments, and works of mercy rather than occasional tribute alone",
+      "supports": ["identity", "alternateNames", "ecclesialTitle", "life.mary_discipleship", "life.carmelite_patron", "life.july16", "life.scapular", "doctrine.christ_center", "doctrine.church", "practice.prayer", "practice.sacraments", "practice.mercy"]
+    },
+    {
+      "id": "carmel-jotischky-history",
+      "title": "The Carmelites and Antiquity: Mendicants and their Pasts in the Middle Ages",
+      "authorOrInstitution": "Andrew Jotischky",
+      "publisher": "Oxford University Press",
+      "url": "https://academic.oup.com/book/25478",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Scholarly monograph used for the documented early-thirteenth-century regulated community on Mount Carmel, its migration and mendicant development, and the later creation of legendary histories extending Carmelite origins back before 1200 and making Elijah the order's historical founder; biblical inspiration is distinguished from institutional continuity",
+      "supports": ["life.hermits", "life.mount_carmel", "life.migration", "life.mendicant_development", "reception.elijah", "reception.legendary_history", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "carmel-copsey-stock",
+      "title": "Simon Stock and the Scapular Vision",
+      "authorOrInstitution": "Richard Copsey",
+      "publisher": "The Journal of Ecclesiastical History, Cambridge University Press",
+      "url": "https://www.cambridge.org/core/journals/journal-of-ecclesiastical-history/article/abs/simon-stock-and-the-scapular-vision/90D25EA8D3B5B4AEEE33F6B7B86A293D",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Peer-reviewed source-critical study used for the sparse and contested evidence about Simon Stock, the legendary early history surrounding Carmel, the layered development of the scapular vision account, and the need to distinguish the Church's current scapular theology from an exact 1251 apparition narrative",
+      "supports": ["reception.simon_stock", "reception.scapular_vision", "reception.1251", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "carmel-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — July",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/JulUC.shtml",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the canonical title, July 16 optional memorial, and white Marian color; the calendar key establishes that an entry without a printed rank is optional",
+      "supports": ["identity", "profileKind", "celebrationIds", "feastDates", "calendar.rank", "calendar.color"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Mount Carmel turns Marian devotion toward Christ-shaped habits: listening to Scripture, sustained prayer, responsible community, the sacraments, and works of mercy rather than fear, merchandise, or magical promises.",
+  "oneMinuteSummary": "Our Lady of Mount Carmel is a Marian title and liturgical memorial, not a separate biography of Mary or a verified apparition anniversary. Mount Carmel recalls Elijah's biblical prayer, but the documented Carmelite community begins with Latin Christian hermits living there in the early thirteenth century. The Rule of Saint Albert ordered their life toward allegiance to Jesus Christ through Scripture, prayer, work, silence, Eucharistic worship, and accountable community. As Carmel developed, Mary was honored as patron, mother, sister, and model of listening discipleship. The July 16 memorial also receives the brown scapular tradition. Modern scholarship finds the precise Simon Stock vision and 1251 promise historically disputed. Church teaching instead presents the scapular as an optional Carmelite and baptismal sign of being clothed in Christ. It is not a talisman, compulsory enrollment, salvation or purgatory guarantee, or substitute for faith, conversion, sacraments, medicine, safeguarding, or justice.",
+  "life": {
+    "sections": [
+      {
+        "heading": "What the memorial celebrates",
+        "body": "July 16 honors Mary under the title Our Lady of Mount Carmel within the history and spirituality of the Carmelite family. It celebrates her as patron and model of attentive faith who guides disciples toward Christ. It does not add a new event to Mary's earthly biography or establish the anniversary of a historically verified apparition.",
+        "sourceIds": ["carmel-jp2-message", "carmel-calendar", "carmel-copsey-stock"]
+      },
+      {
+        "heading": "Biblical Carmel and documented Carmelite beginnings",
+        "body": "Mount Carmel evokes Elijah and biblical prayer. The institutional evidence, however, begins with a regulated community of Latin Christian hermits there in the early thirteenth century. The Rule given by Albert called them to allegiance to Jesus Christ through Scripture, prayer, work, silence, worship, shared discernment, and practical community order. Elijah is a spiritual ancestor, not the documented medieval founder.",
+        "sourceIds": ["carmel-rule-albert", "carmel-jotischky-history"]
+      },
+      {
+        "heading": "Mary in the spirituality of Carmel",
+        "body": "Carmelites came to honor Mary as patron, mother, sister, and guide. Her listening to God's word, prayer with the Church, fidelity at the Cross, and orientation toward her Son shape Carmelite discipleship. Marian devotion remains Christian when it conforms believers to Christ and becomes prayer, sacramental life, and concrete mercy.",
+        "sourceIds": ["carmel-jp2-message", "carmel-directory-205"]
+      },
+      {
+        "heading": "The scapular as sign, not guarantee",
+        "body": "The Church's Directory calls the brown scapular a reduced form of the Carmelite habit and a sign connected with Baptism, prayer, and a prepared relationship with the Carmelite family. The precise Simon Stock vision and 1251 promise are historically disputed. Cloth does not work automatically: the scapular cannot guarantee salvation, shorten purgatory by formula, or replace Christ, conversion, sacraments, medicine, safeguarding, or justice.",
+        "sourceIds": ["carmel-directory-205", "carmel-jp2-message", "carmel-copsey-stock"]
+      }
+    ],
+    "gospelTheme": "Mary's discipleship directs believers to Christ, and the Carmelite sign becomes truthful when prayer and Scripture take flesh in sacramental communion and works of mercy.",
+    "struggle": "A rich Marian and Carmelite tradition can be flattened into an invented institutional antiquity, a single over-certain vision story, or fear-based claims about an object guaranteeing salvation.",
+    "response": "The Church receives the memorial through documented Carmelite history and interprets the scapular as an optional, prepared, Christ-centered sign of baptismal discipleship."
+  },
+  "virtues": [
+    {
+      "name": "Attentive discipleship",
+      "evidence": "Carmelite reception looks to Mary as one who listens to God's word, prays with the Church, remains with Christ, and guides believers toward imitation of him.",
+      "imitation": "Read a short Gospel passage twice, name what it asks of you, and choose one action that makes the listening visible in mercy.",
+      "sourceIds": ["carmel-jp2-message"]
+    },
+    {
+      "name": "Steady prayer in community",
+      "evidence": "The Rule of Saint Albert integrates personal prayer and Scripture with common worship, accountable leadership, work, and practical care for community life.",
+      "imitation": "Set one sustainable daily prayer time and connect it to your parish, household duties, and appropriate accountability rather than using solitude to disappear from responsibility.",
+      "sourceIds": ["carmel-rule-albert"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray with Acts 1:14 and ask Mary to help you remain with Christ's Church in patient, Scripture-shaped prayer rather than seeking certainty from an object.",
+    "action": "If you wear or seek the scapular, learn its approved meaning and rite from a responsible parish or Carmelite source, then pair the devotion with one sacramental commitment and one work of mercy."
+  },
+  "reflectionQuestions": [
+    "Does my Marian devotion make my life more attentive to Christ, Scripture, the sacraments, community, and people in need?",
+    "Where have fear, a promised shortcut, or a devotional object displaced conversion, responsible care, or justice?"
+  ],
+  "scripture": {
+    "reference": "Acts 1:12–14",
+    "connection": "Mary appears among the disciples persevering together in prayer as they await the Spirit; Carmel receives this pattern as communal, Christ-centered discipleship rather than private spiritual magic."
+  },
+  "prayer": "Lord Jesus Christ, you gave Mary to your Church as a faithful disciple and mother. Through the memorial of Mount Carmel, clothe us in your life, root us in Scripture and prayer, and make our devotion fruitful in sacraments, mercy, safety, and justice. You live and reign for ever and ever. Amen."
+}

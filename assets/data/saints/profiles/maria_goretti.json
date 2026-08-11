@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 2,
+  "id": "maria_goretti",
+  "profileKind": "individual",
+  "celebrationIds": ["maria_goretti", "saint_maria_goretti_virgin_and_martyr"],
+  "name": "Saint Maria Goretti, Virgin and Martyr",
+  "alternateNames": ["Maria Teresa Goretti", "Marietta Goretti"],
+  "ecclesialTitle": "Virgin and martyr",
+  "lifeSpan": "1890–1902",
+  "vocation": "Child of a farmworker family, Christian witness, and martyr",
+  "places": ["Corinaldo", "Le Ferriere", "Nettuno"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Maria Goretti was an eleven-year-old Italian child from a poor farmworker family. In July 1902 an older household neighbor sexually assaulted and fatally injured her after earlier threats and coercion. Her mother later testified that Maria forgave her attacker before dying. The Church canonized Maria in 1950. Her memory must protect children and survivors: assault never makes a victim sinful or impure, and forgiveness never cancels justice, reporting, boundaries, or care.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Maria_Goretti",
+  "wikidataId": "Q234697",
+  "feastDates": ["July 6"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "goretti-jp2-centenary",
+      "title": "Message to the Bishop of Albano for the Centenary of the Death of St. Maria Goretti",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/john-paul-ii/en/speeches/2002/july/documents/hf_jp-ii_spe_20020708_santa-maria-goretti.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal reception used for Maria's 1890–1902 chronology, Corinaldo and Le Ferriere settings, poverty and family life, Christian faith, her mother's testimony about forgiveness, the perpetrator's later responsibility and repentance, and the teaching that forgiveness requires acknowledgment of guilt rather than permissiveness",
+      "supports": ["identity", "lifeSpan", "places", "life.family", "life.poverty", "life.faith", "life.assault", "life.death", "life.forgiveness_testimony", "reception.forgiveness", "safeguard.accountability"]
+    },
+    {
+      "id": "goretti-causes",
+      "title": "Maria Goretti",
+      "authorOrInstitution": "Dicastery for the Causes of Saints",
+      "publisher": "The Holy See",
+      "url": "https://www.causesanti.va/it/santi-e-beati/maria-goretti.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal cause and canonization record used for Maria's identity and dates, July 6 liturgical memory, beatification in 1947, canonization by Pius XII in 1950, household setting, assault and fatal injury, and ecclesial recognition as virgin and martyr; devotional quotations and later perpetrator narratives are not treated as independent contemporary evidence",
+      "supports": ["identity", "alternateNames", "ecclesialTitle", "lifeSpan", "places", "life.household", "life.assault", "life.death", "feastDates", "reception.beatification", "reception.canonization", "sourceLimits"]
+    },
+    {
+      "id": "goretti-treccani",
+      "title": "MARIA Goretti, santa",
+      "authorOrInstitution": "Isabella Pera",
+      "publisher": "Dizionario Biografico degli Italiani, Istituto della Enciclopedia Italiana",
+      "url": "https://www.treccani.it/enciclopedia/santa-maria-goretti_%28Dizionario-Biografico%29/",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Source-critical biographical reference used for the farmworker family's poverty and migration, Maria's domestic responsibilities and lack of schooling, earlier coercion and threats, the 1902 sexual assault and homicide, criminal conviction, her mother's testimony about forgiveness, and the later construction of purity-centered hagiography from criminal, cause, family, and perpetrator evidence",
+      "supports": ["identity", "lifeSpan", "places", "life.poverty", "life.migration", "life.work", "life.schooling", "life.prior_threats", "life.assault", "life.death", "life.criminal_process", "life.forgiveness_testimony", "reception.hagiography", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "goretti-catechism-safeguard",
+      "title": "Catechism of the Catholic Church, 2337–2356: The Vocation to Chastity",
+      "authorOrInstitution": "Catholic Church",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/catechism/en/part_three/section_two/chapter_two/article_6/ii_the_vocation_to_chastity.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal doctrinal safeguard used for chastity as personal integrity and respect, the dignity and rights of every person, and the teaching that rape violates justice, freedom, and physical and moral integrity, causes lasting harm, and is always intrinsically evil; it prevents any implication that assault transfers guilt or impurity to a victim",
+      "supports": ["doctrine.chastity", "doctrine.dignity", "safeguard.assault_evil", "safeguard.victim_not_guilty", "safeguard.integrity", "safeguard.trauma"]
+    },
+    {
+      "id": "goretti-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — July",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/JulUC.shtml",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the July 6 optional memorial, canonical title, and red martyr color; the calendar key establishes that an entry without a printed rank is optional",
+      "supports": ["identity", "celebrationIds", "ecclesialTitle", "feastDates", "calendar.rank", "calendar.color"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Maria's dignity and courage call the Church to believe children, prevent abuse, pursue justice, and accompany survivors without making them responsible for an offender's repentance or anyone else's idea of forgiveness.",
+  "oneMinuteSummary": "Maria Goretti was born in 1890 to an Italian farmworker family living in poverty. After her father died, eleven-year-old Maria carried heavy household responsibilities and lacked access to school. In July 1902, an older neighbor who had previously threatened and coerced her sexually assaulted and fatally injured her. The crime was his responsibility alone. Maria died in hospital the next day; her mother later testified that Maria forgave him. He was convicted and imprisoned, and accounts of his later repentance belong to his story, not a burden Maria or other victims must carry. Maria was canonized in 1950 as a virgin and martyr. Her memorial must never imply that rape causes impurity, that death is preferable to surviving assault, or that silence is holy. Christian forgiveness can coexist with reporting, prosecution, firm boundaries, no restored access, trauma-informed care, and the protection of children and survivors.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A child in a precarious household",
+        "body": "Maria was born at Corinaldo in 1890 and migrated with her farmworker family through poverty to Le Ferriere. Her father died of malaria in 1900. She did domestic work, cared for younger siblings, and did not attend school. These conditions reveal vulnerability and adult responsibilities placed on a child; they are not hardships to romanticize or reproduce.",
+        "sourceIds": ["goretti-jp2-centenary", "goretti-treccani"]
+      },
+      {
+        "heading": "Sexual violence and murder",
+        "body": "An older neighbor had threatened and tried to coerce Maria before the final attack. On July 5, 1902, he sexually assaulted and fatally injured her; she died at Nettuno the next day. The facts are stated without graphic detail. Maria did not cause the crime, and neither resistance nor inability to resist determines a victim's dignity, innocence, or holiness.",
+        "sourceIds": ["goretti-causes", "goretti-treccani", "goretti-catechism-safeguard"]
+      },
+      {
+        "heading": "Forgiveness with responsibility",
+        "body": "Maria's mother later testified that Maria forgave her attacker before dying. The exact words come through testimony, not a recording. The attacker was arrested, convicted, and imprisoned; his later repentance was his responsibility. Church teaching represented by John Paul II explicitly joins forgiveness to acknowledgment of guilt. It never erases justice, safety, or consequences.",
+        "sourceIds": ["goretti-jp2-centenary", "goretti-treccani"]
+      },
+      {
+        "heading": "A safer reception of virgin and martyr",
+        "body": "Maria was beatified in 1947 and canonized in 1950. Twentieth-century hagiography often centered purity language and the perpetrator's later story. The Catechism provides a necessary control: sexual assault violates a person's rights and integrity and is always evil. A survivor remains fully dignified and is never morally stained by violence done to them.",
+        "sourceIds": ["goretti-causes", "goretti-treccani", "goretti-catechism-safeguard"]
+      }
+    ],
+    "gospelTheme": "Christ places children among those his community must receive and protect, and his mercy never transfers an offender's guilt onto the person harmed.",
+    "struggle": "Maria faced poverty, lost schooling, adult household burdens, threats, sexual violence, and fatal injury within a setting where a child lacked safe power and protection.",
+    "response": "The Church honors her faith and courage while learning to center the child's dignity, name the offender's responsibility, protect others, and hold mercy together with justice."
+  },
+  "virtues": [
+    {
+      "name": "Dignity under coercion",
+      "evidence": "Maria resisted an older person's coercion and retained her human and Christian dignity; the violence and its moral responsibility belonged wholly to the attacker.",
+      "imitation": "Respect every person's consent and boundaries, and respond to a disclosure by believing, protecting, and connecting the person with qualified help rather than interrogating or blaming them.",
+      "sourceIds": ["goretti-treccani", "goretti-catechism-safeguard"]
+    },
+    {
+      "name": "Mercy without denial",
+      "evidence": "Her mother's testimony remembers forgiveness, while the offender was arrested, tried, and punished and later had to acknowledge his own guilt.",
+      "imitation": "Refuse retaliation without obstructing reporting, justice, boundaries, treatment, or consequences; never pressure a harmed person to reconcile or forgive on someone else's timetable.",
+      "sourceIds": ["goretti-jp2-centenary", "goretti-treccani"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray Matthew 18:1–6 for children and survivors, asking Christ to expose every form of blame, secrecy, and misuse of power in the Church and society.",
+    "action": "Review one safeguarding route today—who receives reports, how immediate danger is handled, and which civil or professional service is contacted—so you can respond safely rather than improvise during a disclosure."
+  },
+  "reflectionQuestions": [
+    "Do my words about purity, resistance, or forgiveness place any responsibility for sexual violence on the person harmed?",
+    "What concrete boundary, reporting pathway, or trauma-informed support can I strengthen for children and survivors?"
+  ],
+  "scripture": {
+    "reference": "Matthew 18:1–6",
+    "connection": "Jesus centers the dignity of children and warns against causing them harm; discipleship therefore requires active safeguarding, accountable truth, and care for those who have been violated."
+  },
+  "prayer": "Lord Jesus Christ, receive Maria and every child harmed by violence. Give us courage to believe and protect the vulnerable, wisdom to report abuse, and compassion for survivors. Let mercy serve truth and justice, never silence or blame. You live and reign for ever and ever. Amen."
+}

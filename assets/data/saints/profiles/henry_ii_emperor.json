@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 2,
+  "id": "henry_ii_emperor",
+  "profileKind": "individual",
+  "celebrationIds": ["henry_ii_emperor", "saint_henry"],
+  "name": "Saint Henry II, Emperor",
+  "alternateNames": ["Henry the Holy", "Heinrich II"],
+  "ecclesialTitle": "Emperor and confessor",
+  "lifeSpan": "973–1024",
+  "vocation": "Duke, king, emperor, husband, and patron of ecclesial foundations",
+  "places": ["Bavaria", "Bamberg", "Rome", "Grona"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Henry II became duke of Bavaria, king of Germany and Italy, and Holy Roman emperor during a contested age of dynastic rule and war. With Empress Cunigunde, an active petitioner, representative, and foundress, he endowed churches and established Bamberg as an episcopal center. His canonization receives his Christian intention without making every campaign or policy holy. Later stories of a permanently chaste marriage and Cunigunde's ordeal by ploughshares are not secure contemporary history.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Henry_II,_Holy_Roman_Emperor",
+  "wikidataId": "Q103556",
+  "feastDates": ["July 13"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "henry-thietmar",
+      "title": "Chronicon (Chronicle)",
+      "authorOrInstitution": "Thietmar of Merseburg; edited by Robert Holtzmann",
+      "publisher": "Monumenta Germaniae Historica",
+      "url": "https://www.mgh-bibliothek.de/digilib/thietmar.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Near-contemporary narrative source used critically for Henry's accession, campaigns, dealings with Bolesław of Poland, alliance with pagan Liutizi, ecclesial policy, foundation of Bamberg, and Cunigunde's public role; Thietmar's episcopal loyalties, providential interpretations, and polemic require control rather than uncritical devotional retelling",
+      "supports": ["identity", "lifeSpan", "places", "life.accession", "life.wars", "life.liutizi", "life.bamberg", "life.church_policy", "life.cunigunde", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "henry-diplomas",
+      "title": "Die Urkunden Heinrichs II. und Arduins",
+      "authorOrInstitution": "Henry II and Empress Cunigunde; edited by Harry Bresslau and Hermann Bloch",
+      "publisher": "Monumenta Germaniae Historica",
+      "url": "https://www.dmgh.de/mgh_dd_h_ii/index.htm",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Critical edition of royal and imperial charters used as primary evidence for Henry's governance, gifts and ecclesial foundations, and Cunigunde's documented intervention as petitioner; charters express official acts and claims and do not by themselves prove personal motives or later miracle traditions",
+      "supports": ["identity", "life.governance", "life.church_foundations", "life.bamberg", "life.cunigunde", "sourceLimits"]
+    },
+    {
+      "id": "henry-ndb-appelt",
+      "title": "Heinrich II.",
+      "authorOrInstitution": "Heinrich Appelt",
+      "publisher": "Neue Deutsche Biographie / Deutsche Biographie",
+      "url": "https://www.deutsche-biographie.de/sfz53169.html",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Scholarly reference biography used for Henry's 973–1024 chronology, Ottonian family, marriage and childlessness, contested succession, German, Polish, Italian, and Byzantine-facing politics, imperial coronation, Bamberg, death at Grona, canonization, and the distinction between governance and later saintly legend",
+      "supports": ["identity", "alternateNames", "lifeSpan", "places", "life.marriage", "life.childlessness", "life.accession", "life.wars", "life.coronation", "life.bamberg", "life.death", "reception.canonization", "reception.legend", "historicalCertainty"]
+    },
+    {
+      "id": "henry-anstatt-cunigunde",
+      "title": "Empress and Virgin: St Cunigunde and Female Sainthood in the Early Thirteenth Century",
+      "authorOrInstitution": "Maria Anstatt",
+      "publisher": "German History, Oxford University Press",
+      "url": "https://academic.oup.com/gh/article/41/2/153/7103628",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Peer-reviewed study used for Cunigunde's agency as crowned empress, charter petitioner, imperial representative, founder of Kaufungen, and regent after Henry's death, and for the later development of virgin-marriage, wedding-dialogue, and ploughshare-ordeal narratives rather than treating them as contemporary facts",
+      "supports": ["life.cunigunde", "life.marriage", "life.childlessness", "life.regency", "life.kaufungen", "reception.chaste_marriage", "reception.ordeal", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "henry-kandzha-marriage",
+      "title": "Virgins on the Throne: The Chaste Marriage of Emperor Henry II and Empress Cunigunde in Medieval Narrative Traditions",
+      "authorOrInstitution": "Iliana Kandzha",
+      "publisher": "Royal Studies Journal",
+      "url": "https://rsj.winchester.ac.uk/articles/10.21039/rsj.205",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Peer-reviewed reception-history control used for the chronology and purposes of later narratives portraying the royal marriage as perpetually chaste, and for separating medieval ideals of virgin rulership from secure evidence about the couple's married life",
+      "supports": ["life.marriage", "life.childlessness", "reception.chaste_marriage", "reception.legend", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "henry-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — July",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/JulUC.shtml",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the July 13 optional memorial, canonical title Saint Henry, and white color; the calendar key establishes that an entry without a printed rank is optional",
+      "supports": ["identity", "celebrationIds", "feastDates", "calendar.rank", "calendar.color"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Henry's memory asks Christians with authority to submit ambition, institutions, alliances, and resources to moral scrutiny while recognizing collaborators such as Cunigunde and refusing to baptize power itself.",
+  "oneMinuteSummary": "Henry II was born in 973 into the Ottonian ruling family. After a contested succession, he became German king in 1002, king of Italy in 1004, and emperor in 1014. His reign joined prayer and church patronage to dynastic government: he founded the diocese of Bamberg and supported reform, but also fought repeated wars in Poland and Italy and allied with non-Christian Liutizi against a Christian rival. Empress Cunigunde was not a decorative spouse; charters and later research show her as petitioner, representative, foundress, and brief regent. The couple had no children. Stories that they mutually vowed lifelong continence, or that Cunigunde proved her innocence by walking over hot ploughshares, developed later and should not govern marriages today. Henry died in 1024 and was canonized in 1146. His memorial honors accountable Christian purpose, not empire, war, or every prudential decision.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A contested path to kingship",
+        "body": "Born in 973, Henry inherited Bavaria and claimed the German kingship after Otto III died in 1002. His election followed rivalry, negotiation, and force rather than an uncontested constitutional transfer. He later received the Italian crown and was crowned emperor in Rome in 1014. Sanctity cannot be inferred from a crown; political choices remain open to moral and historical judgment.",
+        "sourceIds": ["henry-thietmar", "henry-ndb-appelt"]
+      },
+      {
+        "heading": "Cunigunde as partner and ruler",
+        "body": "Henry married Cunigunde of Luxembourg, who was crowned, repeatedly appeared as petitioner in royal acts, represented imperial interests, founded Kaufungen, and governed briefly after Henry died. Their childlessness is a fact, not evidence of fault. Later accounts transformed it into a permanently virginal marriage and an ordeal by hot ploughshares; these stories cannot justify unilateral abstinence, suspicion, or dangerous tests.",
+        "sourceIds": ["henry-diplomas", "henry-anstatt-cunigunde", "henry-kandzha-marriage", "henry-ndb-appelt"]
+      },
+      {
+        "heading": "Church building within government",
+        "body": "Henry endowed churches, promoted ecclesial personnel, and established the diocese of Bamberg in 1007. These actions supported worship, education, care, and reform, but also belonged to a system in which rulers used bishoprics, lands, and appointments to govern. A truthful reception can value durable institutions while examining patronage, consent, and the concentration of power.",
+        "sourceIds": ["henry-thietmar", "henry-diplomas", "henry-ndb-appelt"]
+      },
+      {
+        "heading": "War, alliance, and canonization",
+        "body": "Henry's reign included wars with Bolesław of Poland, Italian campaigns, and conflict around Byzantine power in southern Italy. He also allied with the non-Christian Liutizi, a choice criticized by contemporaries. He died at Grona in 1024 and was canonized in 1146. Canonization recognizes holiness; it does not turn an empire, campaign, alliance, or disputed policy into a timeless Christian program.",
+        "sourceIds": ["henry-thietmar", "henry-ndb-appelt"]
+      }
+    ],
+    "gospelTheme": "Authority is Christian only when rulers accept judgment, recognize their collaborators, protect human dignity, and direct institutions toward service rather than treating success as proof of divine approval.",
+    "struggle": "Henry governed amid contested succession, dynastic expectations, war, institutional bargaining, and the temptation to identify political victory with religious faithfulness.",
+    "response": "He invested heavily in ecclesial life and reform, while the full record calls believers to receive his devotion without hiding conflict, shared agency, or the moral ambiguity of medieval rule."
+  },
+  "virtues": [
+    {
+      "name": "Institutional stewardship",
+      "evidence": "Henry devoted lands and royal attention to Bamberg and other ecclesial foundations intended to outlast his reign.",
+      "imitation": "Use authority to strengthen transparent institutions that serve worship, education, and people in need, with independent oversight and clear limits on personal control.",
+      "sourceIds": ["henry-diplomas", "henry-ndb-appelt"]
+    },
+    {
+      "name": "Shared responsibility",
+      "evidence": "The documentary record shows Cunigunde participating through petitions, representation, foundations, and regency rather than merely standing beside Henry.",
+      "imitation": "Name collaborators, share information and credit, and give people real decision-making authority instead of using partnership language while retaining every power.",
+      "sourceIds": ["henry-diplomas", "henry-anstatt-cunigunde"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray Wisdom 9:1–6 before one decision that affects other people, asking for teachability and freedom from mistaking status or success for wisdom.",
+    "action": "Audit one role you hold: identify who bears its risks, who is missing from the decision, and what transparent review or shared authority should be added."
+  },
+  "reflectionQuestions": [
+    "Where do I treat religious language, office, or success as protection from honest scrutiny?",
+    "Whose agency or labor has been hidden in the way I tell a story of leadership?"
+  ],
+  "scripture": {
+    "reference": "Wisdom 9:1–6",
+    "connection": "The ruler asks God for wisdom because human judgment is weak; authority therefore begins with humility and remains answerable rather than self-confirming."
+  },
+  "prayer": "God of wisdom, you call every ruler and servant to account. Through the intercession of Saint Henry, purify our use of power, teach us to honor our partners, and make our institutions truthful, peaceful, and protective of the vulnerable. Through Christ our Lord. Amen."
+}
