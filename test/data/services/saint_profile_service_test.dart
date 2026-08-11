@@ -54,6 +54,25 @@ void main() {
     expect(pazzi!.wikidataId, 'Q242040');
   });
 
+  test('preserves reviewed Batch 6 observance and group identities', () async {
+    final nativity = await SaintProfileService.instance.findById(
+      'the_nativity_of_saint_john_the_baptist',
+    );
+    final fisherAndMore = await SaintProfileService.instance.findById(
+      'john_fisher_and_thomas_more',
+    );
+
+    expect(nativity!.wikidataId, 'Q3870479');
+    expect(nativity.kind.name, 'observance');
+    expect(nativity.lifeSpan, isEmpty);
+    expect(nativity.lifeLength, isEmpty);
+
+    expect(fisherAndMore!.wikidataId, isNull);
+    expect(fisherAndMore.kind.name, 'group');
+    expect(fisherAndMore.lifeSpan, isEmpty);
+    expect(fisherAndMore.lifeLength, isEmpty);
+  });
+
   test('preserves reviewed Batch 3 publication precision', () async {
     final frances = await SaintProfileService.instance.findById(
       'frances_of_rome',
