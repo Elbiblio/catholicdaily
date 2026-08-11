@@ -88,7 +88,7 @@ class SaintCalendarService {
         const OptionalCelebration(
           id: 'saint_barnabas_apostle',
           title: 'Saint Barnabas, Apostle',
-          rank: CelebrationRank.feast,
+          rank: CelebrationRank.obligatoryMemorial,
           color: LiturgicalColor.red,
           month: 6,
           day: 11,

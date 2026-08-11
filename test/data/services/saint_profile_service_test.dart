@@ -223,7 +223,7 @@ void main() {
         OptionalCelebration(
           id: 'saint_barnabas_apostle',
           title: 'Saint Barnabas, Apostle',
-          rank: CelebrationRank.feast,
+          rank: CelebrationRank.obligatoryMemorial,
           color: LiturgicalColor.red,
           month: 6,
           day: 11,
@@ -313,6 +313,14 @@ void main() {
     expect(
       barnabas.map((celebration) => celebration.id),
       contains('saint_barnabas_apostle'),
+    );
+    expect(
+      barnabas
+          .firstWhere(
+            (celebration) => celebration.id == 'saint_barnabas_apostle',
+          )
+          .rank,
+      CelebrationRank.obligatoryMemorial,
     );
 
     final immaculateHeart = await SaintCalendarService.instance
