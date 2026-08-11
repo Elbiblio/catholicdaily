@@ -20,7 +20,7 @@
   "sources": [
     {
       "id": "martin-vatican-registry",
-      "title": "Martin I, Martyr",
+      "title": "Martin I., Märtyrer",
       "authorOrInstitution": "The Holy See",
       "publisher": "The Holy See",
       "url": "https://www.vatican.va/content/vatican/de/holy-father/martino-i.html",
@@ -31,7 +31,7 @@
     },
     {
       "id": "martin-benedict-maximus",
-      "title": "General Audience: St Maximus the Confessor",
+      "title": "General Audience of 25 June 2008: St Maximus the Confessor",
       "authorOrInstitution": "Pope Benedict XVI",
       "publisher": "The Holy See",
       "url": "https://www.vatican.va/content/benedict-xvi/en/audiences/2008/documents/hf_ben-xvi_aud_20080625.html",
@@ -54,10 +54,10 @@
     },
     {
       "id": "martin-jts-lateran",
-      "title": "The Acts of the Lateran Synod of 649. Translated with notes by Richard Price, with contributions by Phil Booth and Catherine Cubitt",
+      "title": "The Acts of the Lateran Synod of 649. Translated with notes by Richard Price, with contributions by Phil Booth and Catherine Cubitt.",
       "authorOrInstitution": "Eileen Rubery",
       "publisher": "The Journal of Theological Studies, Oxford University Press",
-      "url": "https://academic.oup.com/jts/article-pdf/68/1/384/16705412/flx050.pdf",
+      "url": "https://doi.org/10.1093/jts/flx050",
       "publicationDate": "2017-02-08",
       "accessedDate": "2026-08-11",
       "tier": 2,
@@ -68,7 +68,7 @@
       "id": "martin-nce-biography",
       "title": "Martin I, Pope, St.",
       "authorOrInstitution": "R. E. Sullivan",
-      "publisher": "New Catholic Encyclopedia via Encyclopedia.com",
+      "publisher": "New Catholic Encyclopedia; hosted by Encyclopedia.com",
       "url": "https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/martin-i-pope-st",
       "accessedDate": "2026-08-11",
       "tier": 2,
@@ -79,7 +79,7 @@
       "id": "martin-treccani-biography",
       "title": "MARTINO I, papa, santo",
       "authorOrInstitution": "Georg Jenal",
-      "publisher": "Dizionario Biografico degli Italiani, Istituto della Enciclopedia Italiana",
+      "publisher": "Dizionario Biografico degli Italiani, Istituto della Enciclopedia Italiana; hosted by Treccani",
       "url": "https://www.treccani.it/enciclopedia/martino-i-papa-santo_%28Dizionario-Biografico%29/",
       "publicationDate": "2008",
       "accessedDate": "2026-08-11",
