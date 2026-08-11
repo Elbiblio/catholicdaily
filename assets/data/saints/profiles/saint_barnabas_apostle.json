@@ -57,8 +57,19 @@
       "url": "https://bible.usccb.org/bible/acts/13",
       "accessedDate": "2026-08-11",
       "tier": 1,
-      "reuseBasis": "Canonical Scripture used for the Antioch community's prayer and sending, mission with Saul and Mark, Barnabas's designation as apostle, and proclamation centered on Jesus Christ",
-      "supports": ["ecclesialTitle", "life.mission", "life.community_sending", "gospelTheme"]
+      "reuseBasis": "Canonical Scripture used for the Antioch community's prayer and sending, mission with Saul and Mark, and proclamation centered on Jesus Christ",
+      "supports": ["life.mission", "life.community_sending", "gospelTheme"]
+    },
+    {
+      "id": "barnabas-acts-14",
+      "title": "Acts of the Apostles, Chapter 14",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/acts/14",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Canonical Scripture used for the explicit designation of Barnabas and Paul as apostles and for their shared mission centered on the living God; this does not place Barnabas among the Twelve",
+      "supports": ["identity", "ecclesialTitle", "life.mission", "gospelTheme"]
     },
     {
       "id": "barnabas-acts-15",
