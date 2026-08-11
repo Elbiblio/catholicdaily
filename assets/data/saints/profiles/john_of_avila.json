@@ -12,7 +12,7 @@
   "places": ["Almodóvar del Campo, Spain", "Seville, Spain", "Baeza, Spain", "Montilla, Spain"],
   "patronage": ["diocesan clergy of Spain"],
   "symbols": [],
-  "briefBio": "John of Ávila joined prayerful study to preaching, spiritual direction, education, and reform. Imprisoned by the Spanish Inquisition in 1531 and acquitted in 1533, he continued teaching a Christ-centered spirituality of grace. Illness curtailed his travel from 1554, but letters and revised writings extended his ministry. The Church declared him a Doctor in 2012.",
+  "briefBio": "John of Ávila joined prayerful study to preaching, spiritual direction, education, and reform. Denounced to the Spanish Inquisition in 1531, imprisoned in 1532, and acquitted in 1533, he continued teaching a Christ-centered spirituality of grace. Illness curtailed his travel from 1554, but letters and revised writings extended his ministry. The Church declared him a Doctor in 2012.",
   "wikipediaUrl": "https://en.wikipedia.org/wiki/John_of_%C3%81vila",
   "wikidataId": "Q320160",
   "feastDates": ["May 10"],
@@ -32,11 +32,10 @@
     },
     {
       "id": "avila-audi-filia",
-      "title": "The Audi Filia, or a Rich Cabinet Full of Spirituall Iewells",
-      "authorOrInstitution": "Saint John of Ávila; translated by Sir Tobie Matthew",
-      "publisher": "University of Oxford Text Archive",
-      "url": "https://llds.phon.ox.ac.uk/llds/xmlui/handle/20.500.14106/A23406",
-      "publicationDate": "1620",
+      "title": "Avisos y reglas cristianas para los que desean servir a Dios... Audi, filia",
+      "authorOrInstitution": "Saint John of Ávila",
+      "publisher": "Biblioteca Virtual Miguel de Cervantes",
+      "url": "https://www.cervantesvirtual.com/obra-visor/avisos-y-reglas-cristianas-compuestas-sobre-aquel-verso-de-david-audi-filia--0/html/fef5d03e-82b1-11df-acc7-002185ce6064_1.html",
       "accessedDate": "2026-08-11",
       "tier": 1,
       "reuseBasis": "Digitized early English edition of John's primary spiritual work, read for its sustained call to hear God's word, contemplate Christ, distrust self-sufficiency, and receive spiritual counsel; no wording is quoted",
@@ -74,7 +73,7 @@
     "warnings": []
   },
   "whyItMatters": "John of Ávila shows that teaching the faith is not merely possessing answers. He studied Scripture, prayed, listened to people, formed ministers, endured institutional scrutiny, and kept serving when illness narrowed his reach. His example invites teachers and clergy to unite truth with humility, preparation, accountability, and care for the hearer.",
-  "oneMinuteSummary": "John of Ávila was born in Spain around 1500. Ordained in 1526, he hoped to serve overseas but remained in Andalusia as a preacher, spiritual director, educator, and reformer. The Spanish Inquisition imprisoned him in 1531 after a complaint about his preaching; he was acquitted in 1533. He founded colleges and gave sustained attention to the University of Baeza, while Audi, filia, sermons, letters, and reform proposals joined study and prayer to confidence in Christ's grace. Illness led him to withdraw to Montilla in 1554, where writing and correspondence continued his ministry until his death on May 10, 1569. Canonized in 1970 and declared a Doctor of the Church in 2012, he is formally patron of Spain's diocesan clergy. His witness commends prepared teaching, humble discernment, and service adapted to real limits.",
+  "oneMinuteSummary": "John of Ávila was born in Spain around 1500. Ordained in 1526, he hoped to serve overseas but remained in Andalusia as a preacher, spiritual director, educator, and reformer. He was denounced to the Spanish Inquisition in 1531, imprisoned in 1532, and acquitted in 1533. He founded colleges and gave sustained attention to the University of Baeza, while Audi, filia, sermons, letters, and reform proposals joined study and prayer to confidence in Christ's grace. Illness led him to withdraw to Montilla in 1554, where writing and correspondence continued his ministry until his death on May 10, 1569. Canonized in 1970 and declared a Doctor of the Church in 2012, he is formally patron of Spain's diocesan clergy. His witness commends prepared teaching, humble discernment, and service adapted to real limits.",
   "life": {
     "sections": [
       {
@@ -84,7 +83,7 @@
       },
       {
         "heading": "Scrutiny did not make him infallible",
-        "body": "A complaint about his preaching brought imprisonment by the Spanish Inquisition in 1531. He began an early form of Audi, filia while confined and was acquitted in 1533. The episode should neither romanticize coercive detention nor turn acquittal into proof that every later opinion of his was beyond criticism; it shows a teacher continuing his vocation after scrutiny without making the coercive process a model of accountability.",
+        "body": "A complaint about his preaching led to denunciation before the Spanish Inquisition in 1531, imprisonment in 1532, and acquittal in 1533. He developed an early form of Audi, filia during the proceedings. The episode should neither romanticize coercive detention nor turn acquittal into proof that every later opinion of his was beyond criticism; it shows a teacher continuing his vocation after scrutiny without making the coercive process a model of accountability.",
         "sourceIds": ["avila-doctor-letter", "avila-nce", "avila-audi-filia"]
       },
       {
