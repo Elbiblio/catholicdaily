@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 2,
+  "id": "nereus_and_achilleus",
+  "profileKind": "group",
+  "celebrationIds": ["nereus_and_achilleus", "saints_nereus_and_achilleus_martyrs"],
+  "name": "Saints Nereus and Achilleus, Martyrs",
+  "alternateNames": ["Nereus and Achilleus"],
+  "ecclesialTitle": "Early Roman martyrs",
+  "vocation": "Christian martyrs remembered together at Rome",
+  "places": ["Catacomb of Domitilla, Via Ardeatina, Rome"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Nereus and Achilleus are early Roman martyrs whose established cult at the Catacomb of Domitilla is attested by a late-fourth-century inscription of Pope Damasus. That inscription depicts them as soldiers who abandoned violent service for Christ. Later apocryphal Acts instead make them eunuch chamberlains of Flavia Domitilla and supply elaborate first-century stories; those details are not secure history.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Nereus_and_Achilleus",
+  "wikidataId": "Q721711",
+  "feastDates": ["May 12"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "nereus-damasus-inscription",
+      "title": "E07153: Latin Poem by Pope Damasus for Nereus and Achilleus",
+      "authorOrInstitution": "Pope Damasus I; critical record by the University of Oxford Cult of Saints project",
+      "publisher": "University of Oxford",
+      "url": "https://portal.sds.ox.ac.uk/articles/online_resource/E07153_Latin_poem_by_Pope_Damasus_for_an_inscription_commemorating_Nereus_and_Achilleus_eunuchs_and_martyrs_of_Rome_S00403_at_their_shrine_in_the_catacomb_of_Domitilla_on_the_via_Ardeatina_outside_Rome_Written_in_Rome_366_384_/13910852",
+      "publicationDate": "366–384",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Primary late-fourth-century inscription in critical edition and translation, used for their names, established Roman martyr cult, military portrayal, abandonment of violent arms, confession of Christ, tomb setting, and limits of later biography; wording is not quoted",
+      "supports": ["identity", "group", "life.martyrdom", "life.soldiers", "life.nonviolence", "places", "cult.early", "historicalCertainty"]
+    },
+    {
+      "id": "nereus-domitilla-archaeology",
+      "title": "Catacombs of Domitilla",
+      "authorOrInstitution": "Pontifical Commission for Sacred Archaeology",
+      "publisher": "Holy See",
+      "url": "https://www.catacombeditalia.va/content/archeologiasacra/en/catacombs/by-provinces/rome/catacomb-of-domitilla.pdf",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Official archaeological summary used for the Via Ardeatina cemetery, the martyrs' basilica and burial tradition, late-fourth-century construction context, and the cautious attribution to the Diocletianic period",
+      "supports": ["places", "burial", "basilica", "cult.early", "chronology.cautious"]
+    },
+    {
+      "id": "nereus-nasscal-acts",
+      "title": "Acts of Nereus and Achilleus",
+      "authorOrInstitution": "Tony Burke, North American Society for the Study of Christian Apocryphal Literature",
+      "publisher": "NASSCAL e-Clavis: Christian Apocrypha",
+      "url": "https://www.nasscal.com/e-clavis-christian-apocrypha/acts-of-nereus-and-achilleus/",
+      "publicationDate": "2017",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Scholarly genre control used to identify the later account as apocryphal Acts and to separate its Domitilla household, eunuch, exile, speeches, and execution narrative from earlier evidence",
+      "supports": ["sourceLimits", "legend.acts", "legend.domitilla", "legend.eunuchs", "legend.chronology", "historicalCertainty"]
+    },
+    {
+      "id": "nereus-usccb-liturgy",
+      "title": "Optional Memorial of Saints Nereus and Achilleus, Martyrs",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/readings/0512-memorial-nereus-achilleus.cfm",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Official liturgical page used for the May 12 optional memorial, joint martyr title, Common of Martyrs, and assigned readings",
+      "supports": ["celebrationIds", "feast", "calendar.rank", "ecclesialTitle", "scripture"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Their memorial preserves two names and a costly confession while refusing to fill silence with legend. Damasus remembered soldiers laying down violent service for Christ; later storytellers supplied a different identity and elaborate plot. Christians can honor martyr memory most faithfully by telling the truth, rejecting coercion, and seeking courageous ways to leave harmful systems.",
+  "oneMinuteSummary": "Nereus and Achilleus are early Roman martyrs celebrated together on May 12. The earliest surviving evidence is a poem that Pope Damasus placed at their shrine in the Catacomb of Domitilla between 366 and 384. It presents them as soldiers who abandoned a tyrant's violent service, laid aside their weapons, confessed Christ, and died as martyrs. Archaeology confirms an early cult and basilica around their burial place, but it does not establish an exact death year. Later apocryphal Acts tell a different, elaborate story: they become eunuch chamberlains of Flavia Domitilla, associates of Peter, exiles, and first-century victims. Those details cannot be merged silently with Damasus as biography. Their memorial therefore honors real but sparsely documented witnesses, receives the disarming imagery as a summons away from violence, and never treats execution or coercion as good. Fidelity today includes truthful memory, protection of life, and supported departure from harmful service.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Names preserved at an early Roman shrine",
+        "body": "Damasus's late-fourth-century inscription is the earliest surviving evidence for Nereus and Achilleus. Its placement at their shrine, surviving fragments, and the basilica built around their tombs establish a recognized Roman martyr cult at the Catacomb of Domitilla, even though their birth, exact date, and full circumstances remain unknown.",
+        "sourceIds": ["nereus-damasus-inscription", "nereus-domitilla-archaeology"]
+      },
+      {
+        "heading": "A memory of laying down violent service",
+        "body": "Damasus portrays the pair as soldiers who turned from a tyrant's commands, abandoned weapons, and confessed Christ. The poem is commemorative theology rather than a trial transcript, so it supports the military tradition and its moral reversal without proving a rank, unit, commander, or reconstructed final scene.",
+        "sourceIds": ["nereus-damasus-inscription"]
+      },
+      {
+        "heading": "Later Acts are not early biography",
+        "body": "The apocryphal Acts make Nereus and Achilleus eunuch household servants of Flavia Domitilla and connect them with Peter, exile, speeches, and a first-century execution. This later literary world conflicts with Damasus's soldier portrayal. It belongs to reception history and should not supply confident facts about their lives.",
+        "sourceIds": ["nereus-damasus-inscription", "nereus-nasscal-acts"]
+      }
+    ],
+    "gospelTheme": "Christ calls disciples to lose life rather than secure it through injustice, yet the Gospel never licenses others to inflict suffering or demand reckless sacrifice.",
+    "struggle": "Sparse evidence invites embellished certainty, while martyr language can be misused to glorify execution, pressure endangered people to remain exposed, or shame those who need help leaving coercive service.",
+    "response": "The memorial keeps their names, distinguishes early inscription from later Acts, rejects the tyrant's violence, and asks communities to support truthful and life-protecting fidelity."
+  },
+  "virtues": [
+    {
+      "name": "Moral courage",
+      "evidence": "Damasus's memorial centers a decisive refusal to continue violent service and a confession of Christ despite fatal consequences.",
+      "imitation": "Refuse one instruction that would directly harm or dehumanize another person, document the concern, and seek lawful advice and allies rather than facing retaliation alone.",
+      "sourceIds": ["nereus-damasus-inscription"]
+    },
+    {
+      "name": "Truthful remembrance",
+      "evidence": "The earliest inscription and the later apocryphal Acts preserve incompatible roles, requiring clear labels instead of a seamless heroic biography.",
+      "imitation": "When sharing their story, say what the fourth-century inscription attests and label the Domitilla household narrative as later apocryphal tradition.",
+      "sourceIds": ["nereus-damasus-inscription", "nereus-nasscal-acts"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray with Matthew 16:24-27 and ask where following Christ requires renouncing participation in harm. Distinguish a sacrifice you freely choose from danger someone else is pressuring you to accept.",
+    "action": "Support a person trying to leave violent, abusive, or coercive work: listen without exposing them, help locate qualified legal or safeguarding assistance, and do not urge a dramatic confrontation that increases risk."
+  },
+  "reflectionQuestions": [
+    "What command, custom, or loyalty tempts me to cooperate with harm because refusal may cost me?",
+    "Do I tell martyr stories in a way that protects people under coercion and clearly labels what history cannot establish?"
+  ],
+  "scripture": {
+    "reference": "Matthew 16:25",
+    "connection": "Jesus speaks of giving one's life for his sake, not taking another's life or imposing suffering. Damasus's image of weapons laid aside helps direct martyr courage toward fidelity rather than domination."
+  },
+  "prayer": "Lord Jesus Christ, faithful witness, through the intercession of Saints Nereus and Achilleus free us from obedience to cruelty. Give courage to those who must refuse harmful commands, protection and wise companions to people facing retaliation, and honesty to all who preserve the memory of martyrs. Keep us from glorifying violence or inventing certainty, and make our fidelity serve life, truth, and peace. Amen."
+}

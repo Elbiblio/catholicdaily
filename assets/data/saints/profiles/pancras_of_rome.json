@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 2,
+  "id": "pancras_of_rome",
+  "profileKind": "individual",
+  "celebrationIds": ["pancras_of_rome", "saint_pancras_martyr"],
+  "name": "Saint Pancras, Martyr",
+  "alternateNames": ["Pancras of Rome", "Pancratius of Rome"],
+  "ecclesialTitle": "Early Roman martyr",
+  "vocation": "Christian martyr remembered at Rome",
+  "places": ["Via Aurelia, Rome"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Pancras is securely remembered as an early Roman martyr buried and venerated on the Via Aurelia, with his May 12 cult attested in early calendars. The familiar account of a fourteen-year-old Phrygian orphan brought to Rome with his uncle comes from a later Passion and is not dependable biography. His memorial can honor youthful faith without asking children to seek danger, hide abuse, or imitate an execution.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Pancras_of_Rome",
+  "feastDates": ["May 12"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "pancras-csla",
+      "title": "Pancratius, Martyr of Rome (S00307): Related Late Antique Evidence",
+      "authorOrInstitution": "Cult of Saints in Late Antiquity project, University of Oxford",
+      "publisher": "University of Oxford",
+      "url": "https://csla.history.ox.ac.uk/record.php?recid=S00307",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Critical evidence index read for the secure Roman martyr identity, tomb outside Rome, late-sixth-century cult, later relic circulation, and the distinction between early cult evidence and narrative biography",
+      "supports": ["identity", "places", "burial", "cult.early", "cult.reception", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "pancras-norway-history",
+      "title": "Den hellige Pancratius av Roma",
+      "authorOrInstitution": "Catholic Church in Norway",
+      "publisher": "katolsk.no",
+      "url": "https://www.katolsk.no/biografier/historisk/pancrati",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Official Catholic historical narrative used for the deliberately sparse secure core, Via Aurelia burial, May 12 entries in early calendars, growth of the cult, and explicit separation of later Passion detail",
+      "supports": ["identity", "places", "burial", "feast", "cult.early", "legend.youth", "legend.phrygia", "legend.passion", "sourceLimits"]
+    },
+    {
+      "id": "pancras-leyser-cult",
+      "title": "The Temptations of Cult: Roman Martyr Piety in the Age of Gregory the Great",
+      "authorOrInstitution": "Conrad Leyser",
+      "publisher": "Early Medieval Europe; University of Oxford record",
+      "url": "https://www.history.ox.ac.uk/publication/360423/scopus",
+      "publicationDate": "2000",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Peer-reviewed historical control used for Gregory the Great's Roman martyr-cult setting and his emphasis on imitable moral witness rather than aggressive fascination with martyr death",
+      "supports": ["cult.gregory", "cult.context", "martyrdom.safeguard", "reception.interpretation"]
+    },
+    {
+      "id": "pancras-usccb-liturgy",
+      "title": "Optional Memorial of Saint Pancras, Martyr",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/readings/0512-memorial-pancras.cfm",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Official liturgical page used for the May 12 optional memorial, martyr title, Common of Martyrs, and assigned Revelation 19 and Matthew 11 readings",
+      "supports": ["celebrationIds", "feast", "calendar.rank", "ecclesialTitle", "scripture"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Pancras matters because a young person's faith and dignity are not measured by dramatic danger. The Roman Church preserved the memory of a martyr at the Via Aurelia, but later stories supplied most biographical detail. The memorial can help adults hear young believers, protect them, and receive Christ's gentleness without turning a child's death into a test others must repeat.",
+  "oneMinuteSummary": "Pancras is an early Roman martyr whose optional memorial is celebrated on May 12. His cult on the Via Aurelia is the secure historical center; early calendars preserve the date, and later evidence shows that his shrine became important in wider devotion. A much later Passion describes him as a fourteen-year-old orphan from Phrygia who came to Rome with an uncle, confronted an emperor, and was beheaded under Diocletian. Those vivid details are traditional hagiography, not a reliable contemporary record, so the profile leaves his exact age, birthplace, speeches, death year, and circumstances unresolved. The Church may honor Pancras as a martyr without making execution attractive or asking children to prove faith through danger. Jesus welcomes the little and burdened. Adults therefore imitate the memorial best by taking young people's faith seriously, protecting them from coercion, reporting abuse, and helping them choose truthful courage with trusted support.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A Roman martyr with an early cult",
+        "body": "The dependable core is that Pancras was remembered as a martyr at Rome and associated with a burial place on the Via Aurelia. His May 12 commemoration appears in early calendars, and by the sixth century his tomb, church, and name had a developed reception. Cult evidence establishes memory, not a complete life story.",
+        "sourceIds": ["pancras-csla", "pancras-norway-history"]
+      },
+      {
+        "heading": "The child-martyr biography is later tradition",
+        "body": "The familiar details—Phrygian birth, orphanhood, an uncle named Dionysius, age fourteen, imperial dialogue, and a precise Diocletianic date—depend on a later Passion rather than contemporary testimony. Pancras has long been received as young, but responsible retelling labels that age and narrative as traditional, not documented fact.",
+        "sourceIds": ["pancras-norway-history", "pancras-csla"]
+      },
+      {
+        "heading": "Martyr memory should protect the young",
+        "body": "Historical study of Roman martyr devotion shows an important move away from fascination with violent death toward virtues that can be imitated. Pancras's memorial must never tell a child to seek danger, keep an adult's harmful secret, refuse medical care, or remain with an abuser. Courage grows with truthful speech, safe adults, and protection.",
+        "sourceIds": ["pancras-leyser-cult", "pancras-usccb-liturgy"]
+      }
+    ],
+    "gospelTheme": "Jesus reveals the Father to the childlike and gives rest to the burdened; faith receives his gentle yoke rather than adult demands that crush or endanger the young.",
+    "struggle": "Later legend can masquerade as certainty, and admiration for a young martyr can become pressure on children to suppress fear, endure abuse silently, or attempt unsafe heroics.",
+    "response": "The Church honors the early martyr memory while adults create conditions in which young people can speak truth, receive protection, ask questions, and follow Christ without coercion."
+  },
+  "virtues": [
+    {
+      "name": "Truthful courage",
+      "evidence": "Pancras's early cult preserves martyr witness even though the detailed speeches and childhood narrative are later and uncertain.",
+      "imitation": "Tell the truth about a difficult situation to a safe, responsible person; courage does not require facing danger alone or pretending not to be afraid.",
+      "sourceIds": ["pancras-csla", "pancras-norway-history"]
+    },
+    {
+      "name": "Gentleness toward the burdened",
+      "evidence": "The Gospel assigned to his memorial presents Jesus as meek and humble, offering rest rather than imposing a crushing burden.",
+      "imitation": "When a young person discloses fear or harm, listen calmly, believe the seriousness, explain the next safeguarding step, and involve qualified help.",
+      "sourceIds": ["pancras-usccb-liturgy"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Read Matthew 11:25-30 with a young person if appropriate. Ask what feels heavy, listen without testing their faith, and pray briefly for Christ's protection and rest.",
+    "action": "Review the safeguarding route in your parish, school, or family. Save the proper reporting contact and act promptly on any disclosure or immediate danger; do not conduct your own investigation or promise secrecy."
+  },
+  "reflectionQuestions": [
+    "Do my stories about courage give young people permission to seek help, or pressure them to appear fearless?",
+    "Which safeguarding responsibility must I learn or fulfill so that a child can speak and be protected?"
+  ],
+  "scripture": {
+    "reference": "Matthew 11:28-29",
+    "connection": "The memorial's Gospel directs burdened people to the gentle Christ. Pancras's witness should therefore form communities that relieve crushing loads and protect the young, not communities that romanticize suffering."
+  },
+  "prayer": "Lord Jesus, gentle and humble of heart, through the intercession of Saint Pancras receive every young person who trusts in you. Give them safe adults, freedom to speak, and courage joined to wisdom. Forgive our fascination with dramatic suffering; make us quick to protect, report harm, and tell the truth. Keep children from coercion, and let martyr memory serve life, justice, and faithful hope. Amen."
+}

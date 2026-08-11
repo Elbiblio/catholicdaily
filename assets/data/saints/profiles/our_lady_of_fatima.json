@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 2,
+  "id": "our_lady_of_fatima",
+  "profileKind": "observance",
+  "celebrationIds": ["our_lady_of_fatima"],
+  "name": "Our Lady of Fatima",
+  "alternateNames": ["Our Lady of Fátima", "Our Lady of the Rosary of Fatima"],
+  "ecclesialTitle": "Marian optional memorial associated with the reported Fatima apparitions",
+  "vocation": "Marian observance of conversion to Christ, prayer, peace, and responsible reparation",
+  "places": ["Fátima, Portugal", "Cova da Iria"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "The memorial of Our Lady of Fatima commemorates the Church's reception of reported apparitions to Lúcia dos Santos and Francisco and Jacinta Marto from May to October 1917. It is an observance, not another biography of Mary. Church approval permits prudent devotion but does not make private revelation part of the deposit of faith. Its enduring call is conversion to Christ, prayer, peace, and mercy rather than prediction or fear.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Our_Lady_of_F%C3%A1tima",
+  "wikidataId": "Q719524",
+  "feastDates": ["May 13"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "fatima-cdf-message",
+      "title": "The Message of Fatima",
+      "authorOrInstitution": "Congregation for the Doctrine of the Faith; theological commentary by Cardinal Joseph Ratzinger",
+      "publisher": "Holy See",
+      "url": "https://www.vatican.va/content/dam/wss/roman_curia/congregations/cfaith/documents/rc_con_cfaith_doc_20000626_message-fatima_en.html",
+      "publicationDate": "2000-06-26",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal doctrinal publication used for the status of private revelation, publication and symbolic interpretation of the third secret, conversion and penance, Marian orientation to Christ, Sister Lucia's acceptance of the 1984 consecration, and rejection of predictive sensationalism",
+      "supports": ["profileKind", "apparitions.discernment", "privateRevelation", "publicRevelation", "secret.third", "symbolicInterpretation", "conversion", "reparation", "peace", "consecration.1984", "devotion.safeguard", "theology.christ"]
+    },
+    {
+      "id": "fatima-ddf-norms",
+      "title": "Norms for Proceeding in the Discernment of Alleged Supernatural Phenomena",
+      "authorOrInstitution": "Dicastery for the Doctrine of the Faith",
+      "publisher": "Holy See Press Office",
+      "url": "https://press.vatican.va/content/salastampa/en/bollettino/pubblico/2024/05/17/240517h.html",
+      "publicationDate": "2024-05-17",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Current formal discernment norms used to explain prudent adherence, positive and negative criteria, human elements in reported phenomena, continuing pastoral oversight, and the grave wrong of using mystical claims for control or abuse",
+      "supports": ["apparitions.discernment", "privateRevelation", "prudentAdherence", "humanElements", "pastoralFruits", "abuse.safeguard", "coercion.safeguard"]
+    },
+    {
+      "id": "fatima-sanctuary-chronology",
+      "title": "Chronologie",
+      "authorOrInstitution": "Sanctuary of Fatima",
+      "publisher": "Sanctuary of Fatima",
+      "url": "https://www.fatima.pt/fr/pages/chronologie",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Official sanctuary chronology tied to its critical documentation, used for the 1917 report sequence, the three child witnesses, contemporary questionnaires, later memoir layers, detention at Ourém, and the Bishop of Leiria's 1930 judgment that the visions were worthy of belief",
+      "supports": ["identity", "apparitions.1917", "children", "chronology", "testimony.layers", "detention", "discernment.1930", "historicalCertainty"]
+    },
+    {
+      "id": "fatima-maunder-history",
+      "title": "Our Lady of the Nations: Apparitions of Mary in 20th-Century Catholic Europe",
+      "authorOrInstitution": "Chris Maunder",
+      "publisher": "Oxford University Press",
+      "url": "https://academic.oup.com/book/3873",
+      "publicationDate": "2016-02-01",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent scholarly control used for the social construction and reception of apparition narratives, children's participation, community agency, war and political anxiety, and the need to distinguish experience, later narration, and interpretation",
+      "supports": ["historicalContext", "war", "politicalAnxiety", "children", "testimony.reception", "communityAgency", "historicalCertainty"]
+    },
+    {
+      "id": "fatima-usccb-liturgy",
+      "title": "Optional Memorial of Our Lady of Fatima",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/readings/0513-memorial-our-lady-fatima.cfm",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Official liturgical page used for the May 13 optional memorial, Marian common, and the memorial's Isaiah 61 and Luke 11 readings that center hearing and keeping God's word",
+      "supports": ["celebrationIds", "feast", "calendar.rank", "ecclesialTitle", "scripture"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Fatima matters as an ecclesially discerned call to live the Gospel amid war, fear, and human sin—not as a timetable of disasters. The memorial directs believers through Mary to Christ, whose public Revelation is complete. Prayer and reparation become conversion, mercy, peacebuilding, and responsibility; they must never become compulsions, political weapons, or burdens imposed on children.",
+  "oneMinuteSummary": "Our Lady of Fatima is a Marian observance, not another biography of Mary. It recalls reports that Lúcia dos Santos and Francisco and Jacinta Marto experienced apparitions at Cova da Iria between May and October 1917, amid war and political anxiety. Contemporary questioning, later memoirs, community reception, and solar reports are distinct layers of evidence. After diocesan inquiry, the Bishop of Leiria declared the visions worthy of belief in 1930 and permitted the devotion. Church teaching distinguishes private revelation from the public Revelation completed in Christ: no Catholic is obliged to accept Fatima, and its message adds no new doctrine. The 2000 doctrinal commentary reads the third secret symbolically, not as a film of a fixed future, and records Lúcia's acceptance of the 1984 consecration. The memorial calls for conversion, Rosary prayer, peace, and reparation expressed through mercy—never prediction, panic, compulsive penance, political hostility, or pressure on children.",
+  "life": {
+    "sections": [
+      {
+        "heading": "What the memorial commemorates",
+        "body": "The Church commemorates reported Marian apparitions experienced by three shepherd children at Cova da Iria from May to October 1917. This profile concerns the observance, its discernment, doctrine, and practice. It does not assign Mary a new lifespan or treat an apparition title as a separate saintly person.",
+        "sourceIds": ["fatima-sanctuary-chronology", "fatima-usccb-liturgy"]
+      },
+      {
+        "heading": "Testimony, later memory, and ecclesial judgment",
+        "body": "The historical record includes early questionnaires, later memoirs by Lúcia, public expectation, varying reports of unusual solar effects on October 13, and decades of interpretation. These are not identical forms of evidence. The reports do not establish physical movement of the sun, universal witness, or scientific proof, and no one should stare at the sun. Following a diocesan process, the Bishop of Leiria judged the visions worthy of belief in 1930; that authorized devotion without turning every later retelling or contested explanation into established fact.",
+        "sourceIds": ["fatima-sanctuary-chronology", "fatima-maunder-history", "fatima-ddf-norms"]
+      },
+      {
+        "heading": "Private revelation serves the Gospel",
+        "body": "The doctrinal commentary distinguishes Fatima from the public Revelation fulfilled in Jesus Christ. Private revelation can help believers live the Gospel in a particular time, but it adds no doctrine and calls for prudent rather than obligatory adherence. Mary's role is to direct disciples toward Christ, conversion, prayer, hope, and responsible love.",
+        "sourceIds": ["fatima-cdf-message", "fatima-ddf-norms", "fatima-usccb-liturgy"]
+      },
+      {
+        "heading": "Secrets are not a machinery of fear",
+        "body": "The 2000 commentary presents the third secret as a symbolic vision of twentieth-century suffering and witness, not a prediction film with an unchangeable script. It also records Lúcia's statement that the 1984 consecration fulfilled the request. Endless deadline-setting, hidden-secret claims, anti-Russian hostility, and panic about catastrophe distort the call to conversion and peace.",
+        "sourceIds": ["fatima-cdf-message", "fatima-maunder-history"]
+      },
+      {
+        "heading": "Reparation without scrupulosity or harm",
+        "body": "Christian reparation participates in Christ's merciful love through repentance, prayer, sacramental life, and repair of harm. It is not self-punishment, bargaining with God, or a demand that children absorb the world's guilt. Fasting and penance must respect health, age, family duties, and pastoral guidance; intrusive thoughts or compulsive rituals deserve compassionate clinical and spiritual support.",
+        "sourceIds": ["fatima-cdf-message", "fatima-ddf-norms"]
+      }
+    ],
+    "gospelTheme": "Jesus blesses those who hear God's word and keep it. Authentic Fatima devotion therefore moves from extraordinary reports to ordinary Gospel obedience, conversion, mercy, justice, and peace.",
+    "struggle": "War and anxiety shaped the observance's reception, while secrets, punishment language, geopolitical interpretations, and demanding devotions can feed fear, scrupulosity, division, or coercion—especially in children and vulnerable adults.",
+    "response": "The Church discerns reported phenomena, keeps Christ and public Revelation central, permits prudent devotion, reads symbols responsibly, and tests spiritual fruit by conversion, communion, charity, and peace."
+  },
+  "virtues": [
+    {
+      "name": "Prudent faith",
+      "evidence": "Church teaching permits the faithful to receive approved private revelation prudently while maintaining that it adds nothing to Christ's definitive Revelation and is not obligatory belief.",
+      "imitation": "Measure any apparition claim by Scripture, Church teaching, verified evidence, good spiritual fruit, and freedom from manipulation; step back from accounts that trade in panic or absolute private certainty.",
+      "sourceIds": ["fatima-cdf-message", "fatima-ddf-norms"]
+    },
+    {
+      "name": "Peace-seeking conversion",
+      "evidence": "The received message emphasizes conversion, prayer, and peace in a Europe wounded by war, while the doctrinal interpretation directs hope toward Christ's merciful victory rather than geopolitical hatred.",
+      "imitation": "After praying a decade of the Rosary, repair one relationship or support one credible nonviolent effort serving people harmed by war, including without discrimination by nationality.",
+      "sourceIds": ["fatima-cdf-message", "fatima-maunder-history"]
+    },
+    {
+      "name": "Responsible care for the vulnerable",
+      "evidence": "The witnesses were children, and current discernment norms require respect for persons and condemn using mystical claims as a means of control or abuse.",
+      "imitation": "Never burden a child with catastrophe predictions, secret spiritual duties, or responsibility for preventing disaster; answer questions calmly and involve safe caregivers and qualified support.",
+      "sourceIds": ["fatima-sanctuary-chronology", "fatima-ddf-norms"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray one decade of the Rosary for people living through a named conflict. End with Luke 11:28 and choose one ordinary act of God's word to keep today. If repetition feeds compulsion or panic, pause and seek compassionate pastoral and mental-health support.",
+    "action": "Verify one alarming Fatima claim before sharing it, remove prediction-based content, and give practical support to a reputable peace, refugee, or trauma-care effort. Never stare at the sun or invite others to do so. Do not treat any nationality as an enemy people or substitute devotion for responsible civic action."
+  },
+  "reflectionQuestions": [
+    "Does my Fatima devotion make me more faithful to Christ's word, merciful toward neighbors, and active for peace—or more frightened and suspicious?",
+    "Which repeated claim about secrets, punishment, Russia, or future events do I need to verify, qualify, or stop sharing?"
+  ],
+  "scripture": {
+    "reference": "Luke 11:28",
+    "connection": "The Gospel assigned to the memorial turns attention from admiration alone to hearing and keeping God's word. Fatima bears good fruit when Marian prayer becomes concrete obedience to Christ in conversion, mercy, truth, and peace."
+  },
+  "prayer": "God of mercy and peace, you have spoken fully in your Son, Jesus Christ. As we honor Mary under the title of Our Lady of Fatima, lead us through her prayer to hear and keep your word. Convert our hearts, heal those wounded by war, protect children from fear and coercion, and free the scrupulous from crushing burdens. Make our prayer honest, our reparation merciful, and our action courageous for justice and peace. Through Christ our Lord. Amen."
+}

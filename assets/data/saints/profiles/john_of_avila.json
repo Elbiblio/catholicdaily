@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 2,
+  "id": "john_of_avila",
+  "profileKind": "individual",
+  "celebrationIds": ["john_of_avila", "saint_john_of_vila_priest_and_doctor_of_the_church"],
+  "name": "Saint John of Ávila, Priest and Doctor of the Church",
+  "alternateNames": ["John of Avila", "Juan de Ávila", "Master Ávila"],
+  "ecclesialTitle": "Priest and Doctor of the Church",
+  "lifeSpan": "c. 1500–1569",
+  "lifeLength": "about 69 years",
+  "vocation": "Diocesan priest, preacher, spiritual director, writer, and educator",
+  "places": ["Almodóvar del Campo, Spain", "Seville, Spain", "Baeza, Spain", "Montilla, Spain"],
+  "patronage": ["diocesan clergy of Spain"],
+  "symbols": [],
+  "briefBio": "John of Ávila joined prayerful study to preaching, spiritual direction, education, and reform. Imprisoned by the Spanish Inquisition in 1531 and acquitted in 1533, he continued teaching a Christ-centered spirituality of grace. Illness curtailed his travel from 1554, but letters and revised writings extended his ministry. The Church declared him a Doctor in 2012.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/John_of_%C3%81vila",
+  "wikidataId": "Q320160",
+  "feastDates": ["May 10"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {
+      "id": "avila-doctor-letter",
+      "title": "Apostolic Letter Proclaiming Saint John of Avila, Diocesan Priest, a Doctor of the Universal Church",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "Holy See",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/apost_letters/documents/hf_ben-xvi_apl_20121007_giovanni-avila.html",
+      "publicationDate": "2012-10-07",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal declaration and historical-theological synthesis used for the disputed birth year, education, preaching, imprisonment and acquittal, illness, works, Christ-centered doctrine, canonization, Doctor recognition, and formal Spanish clergy patronage",
+      "supports": ["identity", "lifeSpan", "life.preaching", "life.imprisonment", "life.illness", "life.writings", "theology.grace", "doctorOfChurch", "canonization", "patronage"]
+    },
+    {
+      "id": "avila-audi-filia",
+      "title": "The Audi Filia, or a Rich Cabinet Full of Spirituall Iewells",
+      "authorOrInstitution": "Saint John of Ávila; translated by Sir Tobie Matthew",
+      "publisher": "University of Oxford Text Archive",
+      "url": "https://llds.phon.ox.ac.uk/llds/xmlui/handle/20.500.14106/A23406",
+      "publicationDate": "1620",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Digitized early English edition of John's primary spiritual work, read for its sustained call to hear God's word, contemplate Christ, distrust self-sufficiency, and receive spiritual counsel; no wording is quoted",
+      "supports": ["primaryWork", "life.writings", "spirituality.hearing", "spirituality.discernment", "theology.christ"]
+    },
+    {
+      "id": "avila-nce",
+      "title": "John of Avila, St.",
+      "authorOrInstitution": "J. C. Willke, New Catholic Encyclopedia",
+      "publisher": "Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/john-avila-st",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Recognized reference control used for chronology, Inquisition proceedings, Andalusian preaching, clerical reform, Baeza, spiritual direction, writings, and feast date",
+      "supports": ["identity", "lifeSpan", "life.preaching", "life.inquisition", "life.reform", "life.education", "life.writings", "feast"]
+    },
+    {
+      "id": "avila-usccb-liturgy",
+      "title": "Optional Memorial of John of Avila, Priest and Doctor of the Church",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/readings/0510b-memorial-Johnofavila",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Official liturgical page used for the May 10 optional memorial, ecclesial title, and the memorial's Acts 13 and Matthew 5 readings",
+      "supports": ["celebrationIds", "feast", "calendar.rank", "ecclesialTitle", "scripture"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "John of Ávila shows that teaching the faith is not merely possessing answers. He studied Scripture, prayed, listened to people, formed ministers, endured institutional scrutiny, and kept serving when illness narrowed his reach. His example invites teachers and clergy to unite truth with humility, preparation, accountability, and care for the hearer.",
+  "oneMinuteSummary": "John of Ávila was born in Spain around 1500. Ordained in 1526, he hoped to serve overseas but remained in Andalusia as a preacher, spiritual director, educator, and reformer. The Spanish Inquisition imprisoned him in 1531 after a complaint about his preaching; he was acquitted in 1533. He founded colleges and gave sustained attention to the University of Baeza, while Audi, filia, sermons, letters, and reform proposals joined study and prayer to confidence in Christ's grace. Illness led him to withdraw to Montilla in 1554, where writing and correspondence continued his ministry until his death on May 10, 1569. Canonized in 1970 and declared a Doctor of the Church in 2012, he is formally patron of Spain's diocesan clergy. His witness commends prepared teaching, humble discernment, and service adapted to real limits.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A preacher formed by Scripture and prayer",
+        "body": "After study at Salamanca and Alcalá, John was ordained in 1526. Plans for mission overseas gave way to preaching in Andalusia. His ministry combined biblical study, prior prayer, accessible teaching, confession, and spiritual direction; he understood theology as wisdom ordered to the building up of the Church, not as display.",
+        "sourceIds": ["avila-doctor-letter", "avila-nce"]
+      },
+      {
+        "heading": "Scrutiny did not make him infallible",
+        "body": "A complaint about his preaching brought imprisonment by the Spanish Inquisition in 1531. He began an early form of Audi, filia while confined and was acquitted in 1533. The episode should neither romanticize coercive detention nor turn acquittal into proof that every later opinion of his was beyond criticism; it shows a teacher continuing his vocation after scrutiny without making the coercive process a model of accountability.",
+        "sourceIds": ["avila-doctor-letter", "avila-nce", "avila-audi-filia"]
+      },
+      {
+        "heading": "Reform through formation",
+        "body": "John formed clergy and lay people through colleges, letters, preaching, and practical proposals. He invested especially in Baeza and pressed for scriptural study, suitable preparation, holy ministry, and pastoral theology. Reform was not a slogan aimed only at others: teachers and ministers also needed conversion, disciplined learning, and communities of formation.",
+        "sourceIds": ["avila-doctor-letter", "avila-nce"]
+      },
+      {
+        "heading": "A ministry reshaped by illness",
+        "body": "By 1554 poor health ended most travel, and John withdrew to Montilla. He did not treat illness as failure or a test to defeat by willpower. Correspondence, revision of writings, prayer, and counsel became a different form of service until his death in 1569; prudent limits can change a vocation's form without erasing its worth.",
+        "sourceIds": ["avila-doctor-letter"]
+      }
+    ],
+    "gospelTheme": "Christ makes disciples salt and light so that faithful deeds glorify the Father; John joined proclamation to study, prayer, formation, and a life answerable to the Gospel he taught.",
+    "struggle": "Preachers and teachers can mistake eloquence, authority, productivity, or suffering for proof of holiness, while illness and criticism can tempt them either to despair or defensiveness.",
+    "response": "John returned teaching to Christ's grace, Scripture, prayer, careful formation, practical reform, and service that could be adapted when health and circumstances changed."
+  },
+  "virtues": [
+    {
+      "name": "Prayerful preparation",
+      "evidence": "John's teaching joined methodical study of Scripture with contemplation and insisted that preaching be prepared through study and prayer.",
+      "imitation": "Before teaching or advising, read the relevant text in context, pray for the people affected, verify what you do not know, and revise one sentence for clarity and charity.",
+      "sourceIds": ["avila-doctor-letter", "avila-audi-filia"]
+    },
+    {
+      "name": "Reform beginning with oneself",
+      "evidence": "His proposals for renewed clergy emphasized suitable formation, holiness of life, and pastoral usefulness rather than reputation alone.",
+      "imitation": "Name one standard you urge on others and take one measurable step to practice it yourself before correcting anyone else.",
+      "sourceIds": ["avila-doctor-letter", "avila-nce"]
+    },
+    {
+      "name": "Fidelity within limits",
+      "evidence": "When illness curtailed travel, John continued through letters, revised writings, counsel, and prayer instead of denying his body's limits.",
+      "imitation": "If health limits an obligation, seek qualified care and agree on a sustainable form of service; do not conceal symptoms or treat overwork as devotion.",
+      "sourceIds": ["avila-doctor-letter"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Read Matthew 5:13-19 slowly. Prepare a five-minute explanation of one verse, then pray for the actual people who may hear it and remove any claim you cannot support.",
+    "action": "Ask one trusted listener to review a lesson, homily, post, or piece of advice for accuracy, clarity, and pastoral effect. Receive the correction without using office or expertise to silence it."
+  },
+  "reflectionQuestions": [
+    "Does my way of teaching help people meet Christ, or mainly display what I know?",
+    "What limit, correction, or need for further study must I accept before I speak with authority?"
+  ],
+  "scripture": {
+    "reference": "Matthew 5:16",
+    "connection": "The Gospel assigned to John's memorial makes public witness answerable to the Father's glory. Knowledge becomes light when it is embodied in truthful, merciful deeds rather than self-promotion."
+  },
+  "prayer": "Lord Jesus Christ, Word of the Father, through the intercession of Saint John of Ávila teach us to listen before we speak, to study without pride, and to join sound teaching with prayer and mercy. Protect those subjected to coercion, guide ministers into accountability, and help the sick serve without denying their limits. Make our words faithful to your Gospel and fruitful for your people. Amen."
+}
