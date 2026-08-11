@@ -13,7 +13,7 @@
 
 | ID | Tier | Author/institution | Title | Publisher | URL | Accessed | Reuse basis |
 |---|---:|---|---|---|---|---|---|
-| vatican-news-founders | 1 | Vatican News | Sts. Seven Founders of the Order of the Servants of Mary among whom St. Alessio Falconieri | Dicastery for Communication | https://www.vaticannews.va/en/saints/02/17/sts--seven-fonders-of-the-order-of-the-servants-of-mary-among-wh.html | 2026-08-10 | Official Catholic overview for collective identity, Florentine origin, Monte Senario, development, approval, and canonization; original synthesis |
+| vatican-news-founders | 3 | Vatican News | Sts. Seven Founders of the Order of the Servants of Mary among whom St. Alessio Falconieri | Dicastery for Communication | https://www.vaticannews.va/en/saints/02/17/sts--seven-fonders-of-the-order-of-the-servants-of-mary-among-wh.html | 2026-08-10 | Tertiary Catholic overview for collective identity, Florentine origin, Monte Senario, development, approval, and canonization; original synthesis |
 | servite-monte-senario | 1 | Servite Friars Australia | Monte Senario: Cradle of the Order of the Servants of Mary | Servite Friars Australia | https://www.servite.org.au/monte-senario | 2026-08-10 | Official order source for Marian origin tradition, Monte Senario, and the community's shared contemplation, prayer, and work; origin legends treated as tradition |
 | treccani-servites | 2 | Istituto della Enciclopedia Italiana | Servi di Maria | Treccani | https://www.treccani.it/enciclopedia/servi-di-maria/ | 2026-08-10 | Independent historical control for the group foundation, Augustinian rule, Monte Senario, institutional recognition, approval, and canonization |
 

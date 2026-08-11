@@ -29,8 +29,8 @@
       "url": "https://www.vaticannews.va/en/saints/02/17/sts--seven-fonders-of-the-order-of-the-servants-of-mary-among-wh.html",
       "publicationDate": "",
       "accessedDate": "2026-08-10",
-      "tier": 1,
-      "reuseBasis": "Official Catholic overview used for collective identity, Florentine origin, Monte Senario, order development, approval, and canonization; original synthesis",
+      "tier": 3,
+      "reuseBasis": "Tertiary Catholic overview used for collective identity, Florentine origin, Monte Senario, order development, approval, and canonization; original synthesis",
       "supports": ["identity", "feastDate", "life.florence", "life.monte_senario", "order", "approval", "canonization"]
     },
     {

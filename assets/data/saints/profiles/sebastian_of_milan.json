@@ -28,8 +28,8 @@
       "publisher": "Dicastery for Communication",
       "url": "https://www.vaticannews.va/de/tagesheiliger/01/20/hl--sebastian--maertyrer.html",
       "accessedDate": "2026-08-10",
-      "tier": 1,
-      "reuseBasis": "Official Catholic source used for the Depositio and Ambrose evidence, explicit classification of the Passio, cult, and burial tradition; app prose is original",
+      "tier": 3,
+      "reuseBasis": "Tertiary Catholic summary used for the Depositio and Ambrose evidence, explicit classification of the Passio, cult, and burial tradition; app prose is original",
       "supports": ["identity", "depositioMartyrum", "milanConnection", "passioClassification", "cult"]
     },
     {
@@ -64,8 +64,8 @@
       "url": "https://www.vaticanstate.va/en/state-and-government/general-informations/saint-of-the-day/1368-20-january-saint-sebastian-martyr.html",
       "publicationDate": "2026-01-20",
       "accessedDate": "2026-08-10",
-      "tier": 1,
-      "reuseBasis": "Official presentation of the Passio as tradition, used to identify rather than historicize its soldier, prisoner-care, arrow, and Irene motifs",
+      "tier": 3,
+      "reuseBasis": "Tertiary presentation of the Passio as tradition, used to identify rather than historicize its soldier, prisoner-care, arrow, and Irene motifs",
       "supports": ["laterTradition", "soldierMotif", "prisonerCareMotif", "arrows", "irene"]
     }
   ],

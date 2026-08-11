@@ -29,8 +29,8 @@
       "url": "https://www.vaticanstate.va/en/news/3488-january-22-saint-vincent-of-saragossa-martyr.html",
       "publicationDate": "2026-01-22",
       "accessedDate": "2026-08-10",
-      "tier": 1,
-      "reuseBasis": "Official Catholic synthesis used for identity, deacon ministry, persecution setting, early cult, Lisbon patronage, and disputed birthplace traditions; app prose is original",
+      "tier": 3,
+      "reuseBasis": "Tertiary Catholic synthesis used for identity, deacon ministry, persecution setting, early cult, Lisbon patronage, and disputed birthplace traditions; app prose is original",
       "supports": ["identity", "deacon", "persecution", "martyrdom", "earlyCult", "patronage.lisbon", "birthplaceUncertainty"]
     },
     {
@@ -41,8 +41,8 @@
       "url": "https://www.vatican.va/news_services/or/or_quo/cultura/2011/017q04a1.html",
       "publicationDate": "2011-01-22",
       "accessedDate": "2026-08-10",
-      "tier": 1,
-      "reuseBasis": "Official historical-theological essay used for the January 22 observance, Valencia and Saragossa identity, probable 304-306 chronology, and explicit warning that Prudentius supplied imaginative detail where records were scarce",
+      "tier": 2,
+      "reuseBasis": "Named historical-theological essay used for the January 22 observance, Valencia and Saragossa identity, probable 304-306 chronology, and explicit warning that Prudentius supplied imaginative detail where records were scarce",
       "supports": ["feast", "identity", "chronology", "valencia", "persecution", "evidenceLimits", "prudentiusTradition", "patronage.valencia"]
     },
     {

@@ -28,8 +28,8 @@
       "publisher": "Dicastery for Communication",
       "url": "https://www.vaticannews.va/en/saints/01/07/st--raymond-of--penyafort--dominican--co-founder-of-the-mercedar.html",
       "accessedDate": "2026-08-10",
-      "tier": 1,
-      "reuseBasis": "Official Catholic biographical source used for vocation, Dominican leadership, formation, death, and canonization; all app prose is original",
+      "tier": 3,
+      "reuseBasis": "Tertiary Catholic biography used for vocation, Dominican leadership, formation, death, and canonization; all app prose is original",
       "supports": ["identity", "dominicanVocation", "leadership", "formation", "death"]
     },
     {

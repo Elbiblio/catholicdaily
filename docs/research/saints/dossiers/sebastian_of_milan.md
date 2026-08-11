@@ -13,10 +13,10 @@
 
 | ID | Tier | Author/institution | Title | Publisher | URL | Accessed | Reuse basis |
 |---|---:|---|---|---|---|---|---|
-| vatican-news-history | 1 | Vatican News | Saint Sebastian, Martyr | Dicastery for Communication | https://www.vaticannews.va/de/tagesheiliger/01/20/hl--sebastian--maertyrer.html | 2026-08-10 | Official Catholic source used for the Depositio and Ambrose evidence, explicit classification of the Passio, cult, and burial tradition; app prose is original |
+| vatican-news-history | 3 | Vatican News | Saint Sebastian, Martyr | Dicastery for Communication | https://www.vaticannews.va/de/tagesheiliger/01/20/hl--sebastian--maertyrer.html | 2026-08-10 | Tertiary Catholic summary used for the Depositio and Ambrose evidence, explicit classification of the Passio, cult, and burial tradition; app prose is original |
 | catholic-encyclopedia | 2 | Klemens Löffler | St. Sebastian | The Catholic Encyclopedia via New Advent | https://www.newadvent.org/cathen/13668a.htm | 2026-08-10 | Historical control emphasizing the small secure core and rejecting the later Acts as reliable biography |
 | catacombs-official | 2 | Catacombs of Saint Sebastian | 200 Years of Presence of the Friars Minor | Catacombs of Saint Sebastian | https://www.catacombe.org/en/200ofm | 2026-08-10 | Custodian and archaeological context for the ancient Appian Way site and the later development of Sebastian's cult there |
-| vatican-state-tradition | 1 | Vatican City State | 20 January: Saint Sebastian, Martyr | Governorate of Vatican City State | https://www.vaticanstate.va/en/state-and-government/general-informations/saint-of-the-day/1368-20-january-saint-sebastian-martyr.html | 2026-08-10 | Official presentation of the Passio as tradition, used to identify rather than historicize its soldier, prisoner-care, arrow, and Irene motifs |
+| vatican-state-tradition | 3 | Vatican City State | 20 January: Saint Sebastian, Martyr | Governorate of Vatican City State | https://www.vaticanstate.va/en/state-and-government/general-informations/saint-of-the-day/1368-20-january-saint-sebastian-martyr.html | 2026-08-10 | Tertiary presentation of the Passio as tradition, used to identify rather than historicize its soldier, prisoner-care, arrow, and Irene motifs |
 
 ## Claim ledger
 

@@ -29,8 +29,8 @@
       "url": "https://erzbistum-hamburg.de/Heiliger-Ansgar-Patron-des-Erzbistums-Hamburg-2001",
       "publicationDate": "2024-02-20",
       "accessedDate": "2026-08-10",
-      "tier": 1,
-      "reuseBasis": "Official local Church source used for approximate birth, Corbie formation, mission regions, episcopal identity, death, cult, and formal patronage",
+      "tier": 3,
+      "reuseBasis": "Official local Church biographical summary used for approximate birth, Corbie formation, mission regions, episcopal identity, death, cult, and formal patronage",
       "supports": ["identity", "chronology", "corbie", "mission", "bishop", "death", "cult", "patronage"]
     },
     {
