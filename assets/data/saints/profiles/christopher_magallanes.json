@@ -4,10 +4,10 @@
   "profileKind": "group",
   "celebrationIds": ["christopher_magallanes", "saint_christopher_magallanes_priest_and_companions_martyrs"],
   "name": "Saint Christopher Magallanes, Priest, and Companions, Martyrs",
-  "alternateNames": ["Saint Cristobal Magallanes Jara and 24 Companions", "Mexican Martyrs of 1915-1937"],
+  "alternateNames": ["Saint Cristóbal Magallanes Jara and 24 Companions", "Mexican Martyrs of 1915-1937"],
   "ecclesialTitle": "Twenty-five Mexican martyrs: twenty-two diocesan priests and three laymen",
   "vocation": "Distinct pastoral and lay witnesses killed in anti-Catholic persecution in Mexico",
-  "places": ["Mexico", "Jalisco", "Zacatecas", "Colima", "Chihuahua"],
+  "places": ["Mexico"],
   "patronage": [],
   "symbols": [],
   "briefBio": "Christopher Magallanes Jara and twenty-four companions were twenty-two diocesan priests and three lay Catholics killed in separate Mexican cases between 1915 and 1937 and canonized together in 2000. Their formal cause recognizes death for the faith, but their histories must not be collapsed into a single execution or used to romanticize the Cristero War. Magallanes rejected armed violence; scholarship distinguishes state repression, local conflicts, armed resistance, and violence affecting Catholics themselves.",
@@ -36,8 +36,8 @@
       "publicationDate": "2000-05-21",
       "accessedDate": "2026-08-11",
       "tier": 1,
-      "reuseBasis": "Formal canonization decretal used for the complete group identity, twenty-two diocesan priests and three laymen, individual names and cases, dispersed dates and locations, and canonical recognition of martyrdom",
-      "supports": ["identity", "alternateNames", "profileKind", "group.count", "individualCases", "dates", "places", "martyrRecognition"]
+      "reuseBasis": "Formal canonization decretal used for the full roster, twenty-two diocesan priests and three laymen, distinct cases and locations, David Galván's 1915 death, and canonical recognition of martyrdom; its erroneous 1927 year for Pedro Maldonado is controlled by his dedicated Vatican biography",
+      "supports": ["identity", "alternateNames", "profileKind", "group.count", "roster", "individualCases", "davidGalvan.1915", "dates", "places", "martyrRecognition", "maldonado.discrepancy"]
     },
     {
       "id": "magallanes-vatican-news",
@@ -47,19 +47,30 @@
       "url": "https://www.vaticannews.va/es/santos/05/21/ss--cristoforo-magallanes--sac---y-companeros--martires-en-mexic.html",
       "accessedDate": "2026-08-11",
       "tier": 3,
-      "reuseBasis": "Official tertiary biography used for Magallanes's pastoral works, clandestine seminary, refusal of armed violence, arrest, and execution at Colotlan, while excluding its questionable ordination chronology",
-      "supports": ["magallanes.pastoralWork", "seminary", "violence.rejection", "arrest", "execution", "historicalCertainty"]
+      "reuseBasis": "Official tertiary biography used cautiously for Magallanes's pastoral works, clandestine seminary, refusal of armed violence, arrest, and execution at Colotlán, while rejecting its impossible 1888 ordination date and false claim that all twenty-four companions were executed with him",
+      "supports": ["magallanes.pastoralWork", "seminary", "violence.rejection", "arrest", "execution", "sourceError.ordination", "sourceError.groupConflation", "historicalCertainty"]
     },
     {
-      "id": "magallanes-causesanti-index",
-      "title": "Cristobal Magallanes Jara",
+      "id": "magallanes-causesanti-card",
+      "title": "Cristóbal Magallanes Jara",
       "authorOrInstitution": "Dicastery for the Causes of Saints",
       "publisher": "Holy See",
       "url": "https://www.causesanti.va/it/santi-e-beati/cristobal-magallanes-jara.html",
       "accessedDate": "2026-08-11",
-      "tier": 1,
-      "reuseBasis": "Formal cause index used for Christopher's 1869 birth and 25 May 1927 death, the cause's May 25 proper commemoration, and the group's individual dossier scope distinct from the app's May 21 optional memorial",
-      "supports": ["magallanes.birth", "magallanes.death", "cause.scope", "cause.properCommemoration", "calendar.scopeDifference"]
+      "tier": 3,
+      "reuseBasis": "Tertiary Dicastery saint card used cautiously for Christopher's 1869 birth, 25 May 1927 death, roster spellings, and an unexplained May 25 date displayed on the page, while rejecting its impossible 1888 ordination date and false all-twenty-four-together execution conflation",
+      "supports": ["magallanes.birth", "magallanes.death", "roster.spellings", "displayedDate.unexplained", "sourceError.ordination", "sourceError.groupConflation", "historicalCertainty"]
+    },
+    {
+      "id": "magallanes-maldonado-vatican",
+      "title": "Pedro de Jesús Maldonado Lucero",
+      "authorOrInstitution": "Office for the Liturgical Celebrations of the Supreme Pontiff",
+      "publisher": "Holy See",
+      "url": "https://www.vatican.va/news_services/liturgy/documents/ns_lit_doc_20000521_maldonado-lucero_sp.html",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Dedicated official canonization biography used for Pedro de Jesús Maldonado Lucero's arrest and beating on 10 February 1937 and death in a Chihuahua hospital on 11 February 1937, correcting the decretal's erroneous 1927 year",
+      "supports": ["maldonado.identity", "maldonado.arrest", "maldonado.death", "maldonado.1937", "maldonado.discrepancy"]
     },
     {
       "id": "magallanes-usccb-liturgy",
@@ -98,9 +109,9 @@
     },
     {
       "id": "cristero-lopez-historiography",
-      "title": "La guerra cristera (Mexico, 1926-1929): una aproximacion historiografica",
-      "authorOrInstitution": "Damian Lopez",
-      "publisher": "Historiografias",
+      "title": "La guerra cristera (México, 1926-1929): una aproximación historiográfica",
+      "authorOrInstitution": "Damián López",
+      "publisher": "Historiografías",
       "url": "https://doi.org/10.26754/ojs_historiografias/hrht.201112523",
       "publicationDate": "2011",
       "accessedDate": "2026-08-11",
@@ -118,18 +129,23 @@
     "warnings": []
   },
   "whyItMatters": "The twenty-five martyrs show many forms of faithful ministry under persecution, not one military legend. Their deaths expose the wrong of state repression and religious coercion, while independent history also records armed resistance, rebel violence, and local conflict. Their memorial calls Catholics to protect conscience, serve threatened communities, forgive without erasing accountability, and refuse collective hatred.",
-  "oneMinuteSummary": "Christopher Magallanes Jara and twenty-four companions were twenty-two diocesan priests and three lay Catholics killed in distinct places and circumstances in Mexico between 1915 and 1937. The Church examined their individual causes, recognized martyrdom, and canonized them together in 2000. Magallanes served parishioners through education, charity, mission, and a clandestine seminary; Vatican biographical material says he rejected armed violence before his arrest and execution in 1927. The wider Cristero conflict cannot be reduced to their stories. Contemporary Church sources document severe state restrictions, expulsions, suppression of worship, and killings, while independent scholarship also describes federal counterinsurgency, agrarian disputes, armed Catholic rebellion, clerical differences, and Cristero violence that harmed Catholic civilians. The companions were not one military unit and did not share one political role. Their memorial condemns persecution without blaming all Mexicans or all government workers, and honors courageous ministry without romanticizing war, retaliation, or avoidable exposure to violence.",
+  "oneMinuteSummary": "Christopher Magallanes Jara and twenty-four companions were twenty-two diocesan priests and three lay Catholics killed in distinct Mexican cases between 1915 and 1937. The Church examined their distinct martyrdom histories within the group cause, recognized martyrdom, and canonized them together in 2000. Magallanes served through education, charity, mission, and a clandestine seminary and rejected armed violence before his execution in 1927. David Galván was killed in 1915; Pedro de Jesús Maldonado died after a beating in 1937. The wider Cristero conflict cannot be reduced to these histories. Church sources document severe state restrictions, suppressed worship, and killings, while independent scholarship also describes counterinsurgency, agrarian disputes, armed Catholic rebellion, clerical differences, and Cristero violence against Catholics. The memorial condemns persecution without collective blame and honors courageous ministry without romanticizing war, retaliation, or avoidable exposure to violence.",
   "life": {
     "sections": [
       {
         "heading": "Twenty-five distinct witnesses",
-        "body": "The canonization documents identify twenty-two diocesan priests and three laymen, killed in different places and years. The group profile preserves their formal common recognition while refusing to assign Christopher's lifespan, biography, or choices to every companion.",
-        "sourceIds": ["magallanes-decretal", "magallanes-canonization-homily"]
+        "body": "The twenty-two priests are Cristóbal Magallanes Jara, Agustín Caloca Cortés, José María Robles Hurtado, David Galván Bermúdez, Justino Orona Madrigal, Atilano Cruz Alvarado, Román Adame Rosales, Julio Álvarez Mendoza, Pedro Esqueda Ramírez, Rodrigo Aguilar Alemán, Tranquilino Ubiarco Robles, Jenaro Sánchez Delgadillo, José Isabel Flores Varela, Sabas Reyes Salazar, Toribio Romo González, Luis Batis Sáinz, Mateo Correa Magallanes, Pedro de Jesús Maldonado Lucero, Jesús Méndez Montoya, David Uribe Velasco, Margarito Flores García, and Miguel de la Mora de la Mora. The three laymen are Manuel Morales, Salvador Lara Puente, and David Roldán Lara.",
+        "sourceIds": ["magallanes-decretal", "magallanes-causesanti-card"]
+      },
+      {
+        "heading": "Cases spanning 1915 to 1937",
+        "body": "The decretal records David Galván Bermúdez killed in Guadalajara on January 30, 1915. It incorrectly gives 1927 for Pedro de Jesús Maldonado Lucero; the dedicated Vatican biography records his beating on February 10, 1937, and death in a Chihuahua hospital on February 11. These endpoints show why the group must not be narrated as one incident.",
+        "sourceIds": ["magallanes-decretal", "magallanes-maldonado-vatican"]
       },
       {
         "heading": "Christopher's pastoral ministry",
-        "body": "Christopher was born in 1869 and died on May 25, 1927. He served through parish ministry, mission among Indigenous communities, education, charitable institutions, and formation of seminarians when public structures were suppressed. The official biography presents him as opposing armed violence. These details describe Christopher, not automatically all twenty-four companions; a questionable 1888 ordination chronology is omitted.",
-        "sourceIds": ["magallanes-vatican-news", "magallanes-decretal", "magallanes-causesanti-index"]
+        "body": "Cristóbal was born in 1869 and died at Colotlán on May 25, 1927. He served through parish ministry, mission among Indigenous communities, education, charitable institutions, and seminarian formation, and rejected armed violence. The decretal says only Agustín Caloca died with him at Colotlán. The tertiary pages' impossible 1888 ordination date and claim that all twenty-four companions were executed with him are rejected.",
+        "sourceIds": ["magallanes-vatican-news", "magallanes-decretal", "magallanes-causesanti-card"]
       },
       {
         "heading": "Persecution and state violence",
@@ -147,9 +163,9 @@
         "sourceIds": ["magallanes-decretal", "magallanes-canonization-homily", "cristero-lawrence"]
       },
       {
-        "heading": "Two calendar scopes",
-        "body": "The app follows the May 21 optional memorial used by the wider liturgical calendar, while the Dicastery's cause index records May 25 as the cause's proper commemoration. The difference is one of calendar scope, not competing death dates: May 25 is also Christopher's documented date of death.",
-        "sourceIds": ["magallanes-usccb-liturgy", "magallanes-causesanti-index"]
+        "heading": "Calendar evidence",
+        "body": "The app retains the official May 21 optional memorial supported by the liturgical source. The Dicastery saint card displays May 25, which is also Cristóbal's death date, but does not explain the date's calendar scope. Without a particular Ordo, this profile does not label it a proper commemoration or reconcile it with May 21.",
+        "sourceIds": ["magallanes-usccb-liturgy", "magallanes-causesanti-card", "magallanes-decretal"]
       }
     ],
     "gospelTheme": "The Lamb gathers a people from every nation who worship God amid tribulation; Christian witness refuses both coerced abandonment of faith and hatred of an opposing people.",

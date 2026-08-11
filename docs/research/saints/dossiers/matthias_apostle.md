@@ -6,7 +6,7 @@
 - Profile kind: biblical
 - Celebration IDs: `matthias_apostle`; `saint_matthias_apostle`
 - Canonical name and aliases: Saint Matthias, Apostle; Matthias the Apostle
-- Feast date and calendar scope: May 14, feast, red. This is the proper date, not a promise of universal occurrence: a higher celebration can take precedence; the Ascension does so in Nigeria in 2026.
+- Feast date and calendar scope: May 14, feast, red. No particular local collision or transfer is asserted without an authoritative local Ordo.
 - Lifespan and life length: omitted. Acts supplies no birth, age, death date, or reliable chronology from which either can be calculated.
 - Identity conflicts resolved: the Matthias chosen in Acts is secure. Eusebius's tradition that he belonged to the seventy is reported as reception, while mutually incompatible travel, death, and relic traditions are excluded from biography.
 
@@ -22,7 +22,7 @@ Before any Task 2 edit, `dart run tool/saint_research_queue.dart --ids matthias_
 | matthias-benedict-audience | 1 | Pope Benedict XVI | Judas Iscariot and Matthias | Holy See | https://www.vatican.va/content/benedict-xvi/en/audiences/2006/documents/hf_ben-xvi_aud_20061018.html | 2026-08-11 | Formal catechesis used for the Church's reception of Matthias as an apostolic witness and for the explicit acknowledgment that reliable information about his later life is lacking |
 | matthias-eusebius-history | 1 | Eusebius of Caesarea | Ecclesiastical History, Book I, Chapter 12 | Bibliothek der Kirchenvaeter, University of Fribourg | https://bkv.unifr.ch/en/works/cpg-3495/compare/the-church-history-of-eusebius/14/kirchengeschichte-bkv-2 | 2026-08-11 | Early primary reception used only for Eusebius's report of a tradition that Matthias belonged to the seventy disciples, not as proof of later journeys or death |
 | matthias-nce | 2 | New Catholic Encyclopedia | Matthias, Apostle, St. | Encyclopedia.com | https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/matthias-apostle-st | 2026-08-11 | Historical reference control used to distinguish the Acts account from legendary later careers and to explain the symbolic restoration of the Twelve |
-| matthias-cei-liturgy | 1 | Italian Episcopal Conference | Liturgy of the Day: Saint Matthias, Apostle | Chiesa Cattolica Italiana | https://www.chiesacattolica.it/liturgia-del-giorno/?data-liturgia=20260514 | 2026-08-11 | Official liturgical page used for the proper date, rank, red color, and readings while allowing higher-ranking local celebrations to take precedence |
+| matthias-cei-liturgy | 1 | Italian Episcopal Conference | Liturgy of the Day: Saint Matthias, Apostle | Chiesa Cattolica Italiana | https://www.chiesacattolica.it/liturgia-del-giorno/?data-liturgia=20260514 | 2026-08-11 | Official liturgical page used for the May 14 date, feast rank, red color, and readings |
 
 ## Claim ledger
 
@@ -34,7 +34,7 @@ Before any Task 2 edit, `dart run tool/saint_research_queue.dart --ids matthias_
 | the Twelve | Restoring the Twelve carries symbolic and missionary continuity. | matthias-nce; matthias-acts-usccb | High interpretive conclusion | The vacancy concerns ecclesial mission, not replacing Judas's personality. |
 | the seventy | Eusebius reports a tradition that Matthias was among the seventy. | matthias-eusebius-history | Low as independently verified biography | It remains reception evidence rather than merged biblical fact. |
 | later ministry and death | Scripture is silent; later travel, martyrdom, burial, and relic accounts conflict. | matthias-benedict-audience; matthias-nce | Low for specific later stories | No single itinerary, death, or relic claim is asserted. |
-| feast | May 14 is a red feast on its proper calendar, with possible local displacement by a higher celebration. | matthias-cei-liturgy | High liturgical evidence | Nigeria's 2026 Ascension collision is named to prevent a false universal calendar claim. |
+| feast | The official source presents May 14 as a feast with red color and assigns Acts 1 and John 15. | matthias-cei-liturgy | High liturgical evidence | No local collision or transfer is inferred without an authoritative local Ordo. |
 | patronage, symbols | Both arrays remain empty. | matthias-acts-usccb; matthias-cei-liturgy | High editorial conclusion | Popular axes, books, lots, carpenters, and locations are not entered as reviewed formal compatibility tokens. |
 | historicalCertainty | Election is canonical; subsequent biography is sparse and tradition-dependent. | matthias-acts-usccb; matthias-eusebius-history; matthias-nce | Mixed | The profile locates the exact boundary between text and reception. |
 
@@ -51,7 +51,7 @@ All sources are paraphrased. No biblical translation, papal address, encyclopedi
 
 ## Content review
 
-The factual pass checked identity, candidate requirements, communal prayer, election, the symbolic Twelve, early reception, feast rank and color, local precedence, and the evidence boundary after Acts. Unsupported lifespan, patronage, symbols, journeys, death, and relic certainty were removed.
+The factual pass checked identity, candidate requirements, communal prayer, election, the symbolic Twelve, early reception, feast rank and color, and the evidence boundary after Acts. Unsupported local precedence examples, lifespan, patronage, symbols, journeys, death, and relic certainty were removed.
 
 ## Theological review
 
