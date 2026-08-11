@@ -16,8 +16,8 @@
 | isidore-benedict-audience | 1 | Pope Benedict XVI | General Audience: Saint Isidore of Seville | The Holy See | https://www.vatican.va/content/benedict-xvi/en/audiences/2008/documents/hf_ben-xvi_aud_20080618.html | 2026-08-11 | Formal catechesis for Seville office, death, breadth and limits of collecting, Jewish relations, and Christ-centred study and service |
 | isidore-loc-etymologies | 1 | Saint Isidore of Seville; manuscript associated with Saint Braulio of Zaragoza | Etymology, Books 1-9 | Library of Congress, World Digital Library collection | https://www.loc.gov/item/2021668096/ | 2026-08-11 | Digitized historical manuscript record as primary-artifact evidence for the encyclopedic work and its transmission |
 | isidore-bmcr-etymologies | 2 | Rolando Ferri, Università di Pisa | The Etymologies of Isidore of Seville, with the collaboration of M. Hall | Bryn Mawr Classical Review | https://bmcr.brynmawr.edu/2007/2007.11.05/ | 2026-08-11 | Independent scholarship for scope, unfinished state, etymological method, extensive copying, source limits, and preserved vocabulary |
-| isidore-medieval-review-jews | 2 | Rachel Stocking | Review of Wolfram Drews, The Unknown Neighbor: The Jew in the Thought of Isidore of Seville | The Medieval Review, Indiana University | https://scholarworks.iu.edu/journals/index.php/tmr/article/view/16263 | 2026-08-11 | Independent specialist control for forced baptism, De fide, Toledo IV, coercive canons, child separation, policy influence, and scholarly disagreement |
-| isidore-encyclopedia | 2 | New Catholic Encyclopedia contributors | Isidore of Seville, St. | New Catholic Encyclopedia via Encyclopedia.com | https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/isidore-seville-st | 2026-08-11 | Recognized reference for dates, office, Doctor title, works, councils, and source limitations |
+| isidore-medieval-review-jews | 2 | Rachel Stocking | 06.10.35, Drews, Unknown Neighbor | The Medieval Review, Indiana University | https://scholarworks.iu.edu/journals/index.php/tmr/article/view/16263 | 2026-08-11 | Independent specialist control for forced baptism, De fide, Toledo IV, coercive canons, child separation, policy influence, and scholarly disagreement |
+| isidore-encyclopedia | 2 | J. T. Crouch | Isidore of Seville, St. | New Catholic Encyclopedia via Encyclopedia.com | https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/isidore-seville-st | 2026-08-11 | Recognized reference for dates, office, Doctor title, works, councils, and source limitations |
 | isidore-vatican-news | 3 | Dicastery for Communication | Saint Isidore, Bishop of Seville and Doctor of the Church | Vatican News | https://www.vaticannews.va/es/santos/04/04/s--isidro--obispo-de-sevilla-y-doctor-de-la-iglesia.html | 2026-08-11 | Official tertiary source for April 4, Doctor title, and explicit statement that Internet patronage was proposed but never officially proclaimed |
 
 ## Claim ledger
@@ -64,3 +64,9 @@ Christ as truth is the center of learning and correction. Preserving knowledge i
 - Revision: 1
 - Status: published
 - Warnings: none
+- Command: `dart run tool/validate_saint_profiles.dart --published-only`
+  - Result: PASS — `Saint profile validation: 158 total, 158 legacy, 36 researched, 36 validated, 0 errors, 0 warnings.`
+- Command: `dart run tool/saint_research_queue.dart --ids saint_joseph_spouse_of_blessed_virgin_mary,turibius_of_mogrovejo,francis_of_paola,isidore_of_seville`
+  - Result: PASS — `Saint research queue: 36/158 published, 0 in progress, 122 remaining.` and `Research gate PASS: 36/158 published; requested batch valid.`
+- Command: `git diff --check`
+  - Result: PASS — exit 0 with no whitespace errors.

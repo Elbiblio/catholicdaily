@@ -18,7 +18,7 @@
 | joseph-luke-2 | 1 | Gospel according to Luke | Luke, Chapter 2 | United States Conference of Catholic Bishops | https://bible.usccb.org/bible/luke/2 | 2026-08-11 | Canonical Scripture for Bethlehem, Temple observance, Passover pilgrimage, anxious search, parental language, and Nazareth; paraphrased |
 | joseph-redemptoris-custos | 1 | Pope John Paul II | Redemptoris Custos | The Holy See | https://www.vatican.va/content/john-paul-ii/en/apost_exhortations/documents/hf_jp-ii_exh_15081989_redemptoris-custos.html | 2026-08-11 | Formal apostolic exhortation for Gospel-grounded marriage, fatherhood as self-giving service, work, and guardianship; original synthesis |
 | joseph-quemadmodum-deus | 1 | Sacred Congregation of Rites under Pope Pius IX | Quemadmodum Deus | Acta Sanctae Sedis, The Holy See | https://www.vatican.va/archive/ass/documents/ASS-06-1870-71-ocr.pdf | 2026-08-11 | Formal 1870 decree for patronage of the Catholic Church; Latin title and scope checked directly |
-| joseph-encyclopedia-devotion | 2 | New Catholic Encyclopedia contributors | Joseph, St., Devotion to | New Catholic Encyclopedia via Encyclopedia.com | https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/joseph-st-devotion | 2026-08-11 | Independent recognized reference distinguishing Gospel data, formal patronage, and later apocryphal age, widower, children, and flowering-staff stories |
+| joseph-encyclopedia-devotion | 2 | F. L. Filas | Joseph, St., Devotion to | New Catholic Encyclopedia via Encyclopedia.com | https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/joseph-st-devotion | 2026-08-11 | Independent recognized reference distinguishing Gospel data, formal patronage, and later apocryphal age, widower, children, and flowering-staff stories |
 
 ## Claim ledger
 
@@ -63,3 +63,9 @@ Jesus Christ is the center and goal of Joseph's service. Joseph's righteousness 
 - Revision: 1
 - Status: published
 - Warnings: none
+- Command: `dart run tool/validate_saint_profiles.dart --published-only`
+  - Result: PASS — `Saint profile validation: 158 total, 158 legacy, 36 researched, 36 validated, 0 errors, 0 warnings.`
+- Command: `dart run tool/saint_research_queue.dart --ids saint_joseph_spouse_of_blessed_virgin_mary,turibius_of_mogrovejo,francis_of_paola,isidore_of_seville`
+  - Result: PASS — `Saint research queue: 36/158 published, 0 in progress, 122 remaining.` and `Research gate PASS: 36/158 published; requested batch valid.`
+- Command: `git diff --check`
+  - Result: PASS — exit 0 with no whitespace errors.

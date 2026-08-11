@@ -7,7 +7,7 @@
 - Celebration IDs: `turibius_of_mogrovejo`, `saint_turibius_of_mogrovejo_bishop`
 - Canonical name and aliases: Saint Turibius of Mogrovejo, Bishop; Toribio Alfonso de Mogrovejo
 - Feast date and calendar scope: March 23; optional memorial in the General Roman Calendar
-- Identity conflicts resolved: The Real Academia de la Historia gives Mayorga de Campos and November 16, 1538, while other official biographies give November 18 and the historic Mayorga-Villaquejida dispute persists. The profile uses only 1538 and Mayorga de Campos as the recognized biographical location. Exact travel distance, tour counts, sacramental totals, and disciplinary scale are omitted because sources define visits differently and the archive is fragmentary.
+- Identity conflicts resolved: The Real Academia de la Historia gives Mayorga de Campos and November 16, 1538, while other official biographies give November 18 and the historic Mayorga-Villaquejida dispute persists. The profile uses only 1538 and Mayorga de Campos as the recognized biographical location. From November 1538 to March 23, 1606 is about 67 years, which supplies the controlled `lifeLength`. Exact travel distance, tour counts, sacramental totals, and disciplinary scale are omitted because sources define visits differently and the archive is fragmentary.
 
 ## Source ledger
 
@@ -15,7 +15,7 @@
 |---|---:|---|---|---|---|---|---|
 | turibius-sanctum-turibium | 1 | Pope John Paul II | Sanctum Turibium | The Holy See | https://www.vatican.va/content/john-paul-ii/la/apost_letters/1983/documents/hf_jp-ii_apl_19830510_sanctum-turibium.html | 2026-08-11 | Formal declaration and confirmation of patronage of all Latin American bishops |
 | turibius-benedict-message | 1 | Pope Benedict XVI | Message for the Fourth Centenary of the Death of Saint Turibius of Mogrovejo | The Holy See | https://www.vatican.va/content/benedict-xvi/en/messages/pont-messages/2006/documents/hf_ben-xvi_mes_20060323_toribio-mogrovejo.html | 2026-08-11 | Formal source for office, council, seminary, legislation, language learning, personal preaching, travel, and human dignity |
-| turibius-unesco-council | 1 | Memory of the World Committee for Latin America and the Caribbean | Originals of the Lima Council by its Archbishop Toribio Mogrovejo, 1582-1583 | UNESCO | https://www.unesco.org/en/memory-world/lac/originals-lima-council-its-archbishop-toribio-mogrovejo-1582-1583 | 2026-08-11 | Archival description of original proceedings for dates, conciliar authorship, three languages, and 1584 printing |
+| turibius-unesco-council | 3 | Memory of the World Committee for Latin America and the Caribbean | Originals of the Lima Council by its Archbishop Toribio Mogrovejo, 1582-1583 | UNESCO | https://www.unesco.org/en/memory-world/lac/originals-lima-council-its-archbishop-toribio-mogrovejo-1582-1583 | 2026-08-11 | UNESCO registry and catalog summary for cataloged council dates, its description of the trilingual catechetical order, and its identification of the 1584 printing |
 | turibius-loc-catechism | 1 | Third Provincial Council of Lima | Catechism in the Spanish Language and Quechua: Ordered by Authority of the Provincial Council of Lima in the Year 1583 | Library of Congress; original at the National Library of Peru | https://www.loc.gov/item/2021666928/ | 2026-08-11 | Digitized primary artifact confirming council-authorized Indigenous-language catechesis without sole-author attribution |
 | turibius-francis-indigenous | 1 | Pope Francis | Meeting with Indigenous People of the Amazon Region | The Holy See | https://www.vatican.va/content/francesco/en/speeches/2018/january/documents/papa-francesco_20180119_peru-puertomaldonado-popoliamazzonia.html | 2026-08-11 | Formal source quoting the Third Council's acknowledgement of grave wrongs and continuing coercion against Indigenous people |
 | turibius-coello-colonial | 2 | Alexandre Coello de la Rosa | Patrimonialismo, privilegios políticos e Iglesia en la Lima colonial (1580-1592) | Histórica, Pontificia Universidad Católica del Perú | https://revistas.pucp.edu.pe/index.php/historica/article/download/8595/8951/ | 2026-08-11 | Independent colonial-history control for abuse protests, nonviolent conversion, jurisdiction and resource conflicts, Spanish hegemony, and institutional limits |
@@ -26,7 +26,7 @@
 
 | Profile field | Claim or editorial conclusion | Source IDs | Certainty | Reconciliation note |
 |---|---|---|---|---|
-| identity, dates | Toribio Alfonso de Mogrovejo lived 1538-1606 and served as Lima's second archbishop. | turibius-rah-biography; turibius-benedict-message | High | Exact birth day is omitted because official sources conflict; March 23, 1606 is retained. |
+| identity, dates, lifeLength | Toribio Alfonso de Mogrovejo lived from November 1538 to March 23, 1606, about 67 years, and served as Lima's second archbishop. | turibius-rah-biography; turibius-benedict-message | High | Exact birth day is omitted because official sources conflict; the controlled age reflects the supported months and year rather than the rejected legacy arithmetic. |
 | life.crown_nomination | A Spanish canon lawyer and inquisitor, Turibius was selected by Philip II before receiving the formation and orders required for Lima. | turibius-rah-biography; turibius-coello-colonial | High | This establishes his location inside Crown and inquisitorial power; it is not recast as outsider status. |
 | life.council | Turibius presided at the 1582-1583 Third Provincial Council and participated in shared reform legislation. | turibius-benedict-message; turibius-unesco-council | Documented | Council and theological collaborators retain authorship; he is not made sole legislator. |
 | life.languages | The council ordered standardized materials in Castilian, Quechua, and Aymara, and Turibius sought language competence for direct ministry. | turibius-benedict-message; turibius-unesco-council; turibius-loc-catechism | Documented | Linguistic accommodation is honored while its role in colonial conversion and discipline is also stated. |
@@ -67,3 +67,9 @@ Christ's servant leadership judges the use of Church office. Evangelization is n
 - Revision: 1
 - Status: published
 - Warnings: none
+- Command: `dart run tool/validate_saint_profiles.dart --published-only`
+  - Result: PASS — `Saint profile validation: 158 total, 158 legacy, 36 researched, 36 validated, 0 errors, 0 warnings.`
+- Command: `dart run tool/saint_research_queue.dart --ids saint_joseph_spouse_of_blessed_virgin_mary,turibius_of_mogrovejo,francis_of_paola,isidore_of_seville`
+  - Result: PASS — `Saint research queue: 36/158 published, 0 in progress, 122 remaining.` and `Research gate PASS: 36/158 published; requested batch valid.`
+- Command: `git diff --check`
+  - Result: PASS — exit 0 with no whitespace errors.

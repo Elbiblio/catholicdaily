@@ -7,7 +7,7 @@
   "alternateNames": ["Toribio Alfonso de Mogrovejo"],
   "ecclesialTitle": "Second Archbishop of Lima and patron of Latin American bishops",
   "lifeSpan": "1538-1606",
-  "lifeLength": "about 68 years",
+  "lifeLength": "about 67 years",
   "vocation": "Archbishop, canon lawyer, pastoral visitor, and ecclesial reformer",
   "places": ["Mayorga de Campos", "Granada", "Lima", "Andean Peru", "Saña"],
   "patronage": ["Latin American bishops"],
@@ -49,9 +49,9 @@
       "publisher": "UNESCO",
       "url": "https://www.unesco.org/en/memory-world/lac/originals-lima-council-its-archbishop-toribio-mogrovejo-1582-1583",
       "accessedDate": "2026-08-11",
-      "tier": 1,
-      "reuseBasis": "Archival description of the original council manuscripts used for exact council dates, shared conciliar authorship, trilingual catechetical order, and the 1584 South American printing",
-      "supports": ["life.council", "life.languages", "life.printing", "institutionalContext"]
+      "tier": 3,
+      "reuseBasis": "UNESCO registry and catalog summary used for the cataloged council dates, its description of the trilingual catechetical order, and its identification of the 1584 South American printing",
+      "supports": ["life.council", "life.languages", "life.printing"]
     },
     {
       "id": "turibius-loc-catechism",
