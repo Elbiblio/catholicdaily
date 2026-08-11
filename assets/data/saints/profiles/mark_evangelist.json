@@ -20,18 +20,18 @@
   "sources": [
     {
       "id": "mark-usccb-gospel",
-      "title": "The Gospel According to Mark: Introduction",
+      "title": "THE GOSPEL ACCORDING TO MARK",
       "authorOrInstitution": "United States Conference of Catholic Bishops",
       "publisher": "United States Conference of Catholic Bishops",
       "url": "https://bible.usccb.org/bible/mark/0",
       "accessedDate": "2026-08-11",
-      "tier": 1,
+      "tier": 2,
       "reuseBasis": "Canonical Catholic Bible introduction used for the Gospel's Christology and discipleship, its internal anonymity apart from the ancient heading, traditional attribution to John Mark, Peter and Rome associations, and dating before or around 70",
       "supports": ["identity.evangelist", "life.gospel", "gospel.anonymous", "tradition.john_mark", "tradition.peter", "tradition.rome", "dates.gospel", "theology.christ", "theology.cross", "theology.discipleship", "historicalCertainty"]
     },
     {
       "id": "mark-irenaeus",
-      "title": "Against Heresies, Book III, Chapter 1",
+      "title": "Against Heresies (Book III, Chapter 1)",
       "authorOrInstitution": "Irenaeus of Lyons",
       "publisher": "New Advent transcription",
       "url": "https://www.newadvent.org/fathers/0103301.htm",
@@ -43,7 +43,7 @@
     },
     {
       "id": "mark-carlson-papias",
-      "title": "The Imposition of Authorship: Michel Foucault's Author-Function and Papias of Hierapolis on the Gospel of Mark",
+      "title": "The Imposition of Authorship: Michel Foucault’s Author-Function and Papias of Hierapolis on the Gospel of Mark",
       "authorOrInstitution": "Stephen C. Carlson",
       "publisher": "Harvard Theological Review; Cambridge University Press",
       "url": "https://www.cambridge.org/core/journals/harvard-theological-review/article/imposition-of-authorship-michel-foucaults-authorfunction-and-papias-of-hierapolis-on-the-gospel-of-mark/F1B7B9D65CBACCE86296457BFAF85968",
@@ -55,7 +55,7 @@
     },
     {
       "id": "mark-encyclopedia-religion",
-      "title": "Mark, the Evangelist",
+      "title": "Mark the Evangelist",
       "authorOrInstitution": "Encyclopedia of Religion",
       "publisher": "Macmillan Reference USA; Encyclopedia.com",
       "url": "https://www.encyclopedia.com/environment/encyclopedias-almanacs-transcripts-and-maps/mark-evangelist",
@@ -88,7 +88,7 @@
     },
     {
       "id": "mark-met-lion",
-      "title": "Plaque with Saint Mark",
+      "title": "Evangelist Saint Mark writing the Gospel with his symbol, the Lion, holding a scroll",
       "authorOrInstitution": "The Metropolitan Museum of Art",
       "publisher": "The Metropolitan Museum of Art",
       "url": "https://www.metmuseum.org/art/collection/search/464339",
@@ -107,7 +107,7 @@
     "warnings": []
   },
   "whyItMatters": "Mark directs attention away from the evangelist's uncertain biography and toward Jesus Christ proclaimed in the canonical Gospel. Early testimony and later church memory deserve a fair hearing, but they do not erase historical questions. This balance teaches Christians to receive Scripture attentively, hand on the Gospel humbly, and distinguish faith's center from cherished but later traditions.",
-  "oneMinuteSummary": "The Gospel according to Mark is canonical Scripture and a foundational proclamation of Jesus Christ, especially his deeds, suffering, death, and the demanding education of disciples. The text does not name its author internally; the title is ancient, and early second-century testimony associated a Mark with Peter's recollections. Irenaeus later described Mark as Peter's disciple and interpreter. Catholic tradition commonly identifies him with John Mark, who appears in Acts and several letters, and connects the Gospel with Rome, but modern historical judgment treats those identifications and settings as traditional and debated rather than certain. The Coptic Orthodox Church receives Mark as founder of the church in Alexandria and as a martyr, yet the dates and detailed death story vary and appear in later sources. They are presented as a living ecclesial tradition, not a reconstructed first-century chronology. The winged lion is well-established medieval iconography linked to the Gospel's opening in the wilderness and prophetic imagery; it is not an eyewitness attribute. Celebrated as a Feast on April 25, Mark invites the Church to listen closely to the Gospel, follow the crucified Christ, and proclaim him without pretending that every question about the human author has been settled.",
+  "oneMinuteSummary": "The canonical Gospel according to Mark proclaims Jesus Christ through his deeds, suffering, death, and the demanding formation of disciples. The text does not name its author internally, though its heading is ancient. Early testimony associated a Mark with Peter's preaching, and Catholic tradition commonly identifies him with the New Testament John Mark and connects the Gospel with Rome; these associations remain traditional and debated rather than certain. The Coptic Orthodox Church receives Mark as founder and martyr of Alexandria, but its precise chronology and detailed death story come from later tradition. The winged lion is established medieval iconography, not eyewitness biography. Celebrated as a Feast on April 25, Mark invites attentive reception of Scripture, humble proclamation of the crucified Christ, and honesty about the difference between canonical text, early testimony, and later ecclesial memory.",
   "life": {
     "sections": [
       {

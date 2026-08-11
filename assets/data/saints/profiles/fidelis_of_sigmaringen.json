@@ -20,7 +20,7 @@
   "sources": [
     {
       "id": "fidelis-capdox",
-      "title": "Saint Fidelis von Sigmaringen",
+      "title": "Saint Fidelis von Sigmaringen, Capuchin martyr",
       "authorOrInstitution": "Capuchin Friars Australia",
       "publisher": "CapDox",
       "url": "https://www.capdox.capuchin.org.au/saints-blesseds/saint-fidelis-von-sigmaringen/",
@@ -31,10 +31,10 @@
     },
     {
       "id": "fidelis-deutsche-biographie",
-      "title": "Fidelis von Sigmaringen",
-      "authorOrInstitution": "Wolfgang Müller",
-      "publisher": "Neue Deutsche Biographie; Deutsche Biographie",
-      "url": "https://www.deutsche-biographie.de/sfz16019.html",
+      "title": "Fidelis von Sigmaringen (eigentlich Markus Roy)",
+      "authorOrInstitution": "Bonaventura von Mehr, OFMCap",
+      "publisher": "Neue Deutsche Biographie 5; Deutsche Biographie",
+      "url": "https://www.deutsche-biographie.de/gnd118532901.html#ndbcontent",
       "publicationDate": "1961",
       "accessedDate": "2026-08-11",
       "tier": 2,
@@ -54,7 +54,7 @@
     },
     {
       "id": "fidelis-bw-archive",
-      "title": "Fidelis von Sigmaringen (1577/78-1622)",
+      "title": "Fidelis von Sigmaringen. Herkunft, Wirken und Verehrung des hohenzollerischen Landespatrons",
       "authorOrInstitution": "Landesarchiv Baden-Württemberg",
       "publisher": "Landesarchiv Baden-Württemberg",
       "url": "https://www.landesarchiv-bw.de/de/themen/praesentationen---themenzugaenge/73752",
@@ -84,7 +84,7 @@
     "warnings": []
   },
   "whyItMatters": "Fidelis joins legal training, religious conviction, and costly witness in a history where Church mission was entangled with military occupation and coercive law. Remembering him truthfully calls lawyers and Christians to defend vulnerable people, preach without state pressure, refuse confessional hatred, and mourn every murder rather than making violence sacred.",
-  "oneMinuteSummary": "Mark Roy was born around 1578, studied philosophy and law, and worked as a lawyer before entering the Capuchins in 1612 with the name Fidelis. He was ordained, served in community leadership, preached, and was sent to the Prättigau, a largely Reformed region under Austrian occupation. The mission cannot be narrated as a simple contest between heroic Catholics and hostile Protestants. Austrian troops enforced political and religious control, and Fidelis helped draft a mandate that restricted Reformed worship, expelled ministers, and imposed Catholic preaching. Historical accounts connect that policy with rising resistance. During the uprising of April 24, 1622, Fidelis was attacked and killed after preaching at Seewis. His murder was wrong; it is also wrong to use it to blame Reformed Christians collectively or excuse coercive Catholic measures. A reported final debate is legend, and inflammatory labels and graphic details are omitted. Canonized in 1746 and remembered as a patron of lawyers, Fidelis can form a more accountable witness: careful legal service, conviction without compulsion, solidarity with people caught under unequal power, and courage that seeks peace rather than domination.",
+  "oneMinuteSummary": "Born Mark Roy around 1578, Fidelis studied civil and canon law before entering the Capuchins in 1612 and serving as a priest and preacher. His 1622 mission in the largely Reformed Prättigau unfolded under Austrian military occupation. Fidelis helped draft a mandate that restricted Reformed worship, expelled ministers, and imposed Catholic preaching, contributing to an already volatile conflict. During the uprising of April 24, he was attacked and killed after preaching at Seewis. His murder was wrong, but it cannot excuse coercive Catholic policy or collective blame against Reformed Christians. A reported final debate is legendary, so its inflammatory rhetoric and graphic details are omitted. Canonized in 1746 and remembered as a patron of lawyers, Fidelis invites careful legal service, conviction without compulsion, solidarity with people under unequal power, and courage directed toward peace rather than domination.",
   "life": {
     "sections": [
       {
