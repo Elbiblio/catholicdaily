@@ -15,7 +15,7 @@
 |---|---:|---|---|---|---|---|---|
 | george-vatican-news | 3 | Vatican News | St. George, Martyr | Dicastery for Communication | https://www.vaticannews.va/en/saints/04/23/st--george--martyr.html | 2026-08-11 | Official Catholic narrative for April 23 and explicit apocryphal status of the Passion; unsupported biography rejected |
 | george-catholic-encyclopedia | 3 | Herbert Thurston | St. George | The Catholic Encyclopedia; New Advent transcription | https://www.newadvent.org/cathen/06453a.htm | 2026-08-11 | Older Catholic reference summary for the sparse core at Lydda, early cult, unreliable Acts, and late dragon legend |
-| george-english-heritage | 2 | English Heritage | 9 things you didn't know about St George | English Heritage | https://www.english-heritage.org.uk/visit/whats-on/st-georges-day/9-things-you-didnt-know-about-St-George | 2026-08-11 | Recognized public-history control for biographical uncertainty, early Lydda reception, and later dragon development |
+| george-english-heritage | 3 | English Heritage | 9 things you didn't know about St George | English Heritage | https://www.english-heritage.org.uk/visit/whats-on/st-georges-day/9-things-you-didnt-know-about-St-George | 2026-08-11 | Recognized public-history control for biographical uncertainty, early Lydda reception, and later dragon development |
 | george-royal-garter | 1 | The Royal Household | The Order of the Garter | The Royal Household | https://www.royal.uk/the-order-of-the-garter | 2026-08-11 | Formal institutional record used narrowly for the Order and later English reception, not ancient biography |
 
 ## Claim ledger

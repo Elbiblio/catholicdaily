@@ -48,7 +48,7 @@
       "publisher": "English Heritage",
       "url": "https://www.english-heritage.org.uk/visit/whats-on/st-georges-day/9-things-you-didnt-know-about-St-George",
       "accessedDate": "2026-08-11",
-      "tier": 2,
+      "tier": 3,
       "reuseBasis": "Recognized public-history control used for the uncertainty of George's life, early Lydda cult, and the much later growth and popularization of dragon imagery",
       "supports": ["places", "cult.early", "sourceLimits", "legend.dragon", "reception.england", "historicalCertainty"]
     },
