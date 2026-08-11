@@ -42,6 +42,16 @@ void main() {
     expect(profile!.name, 'Saint Bede the Venerable');
   });
 
+  test('preserves Anthony Zaccaria legacy celebration routing', () async {
+    final profile = await SaintProfileService.instance.findByCelebrationId(
+      'saint_anthony_zaccaria_priest',
+    );
+
+    expect(profile, isNotNull);
+    expect(profile!.id, 'anthony_zaccaria');
+    expect(profile.name, 'Saint Anthony Mary Zaccaria, Priest');
+  });
+
   test('preserves reviewed Batch 5 identity mappings', () async {
     final gregory = await SaintProfileService.instance.findById(
       'gregory_vii_pope',

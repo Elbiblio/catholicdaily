@@ -4,7 +4,7 @@
 
 - Stable ID: `anthony_zaccaria`
 - Profile kind: individual
-- Celebration IDs: `anthony_zaccaria`, `saint_anthony_mary_zaccaria`
+- Celebration IDs: `anthony_zaccaria`, `saint_anthony_zaccaria_priest`, `saint_anthony_mary_zaccaria`
 - Canonical name and aliases: Saint Anthony Mary Zaccaria, Priest; Anthony Maria Zaccaria; Antonio Maria Zaccaria
 - Feast date and calendar scope: July 5; optional memorial in the General Roman Calendar, white
 - Identity conflicts resolved: Live Wikidata Q380099 resolves to Anthony Mary Zaccaria. The 1502–1539 span is retained without a computed age. The formal calendar's “Anthony Mary” naming replaces the shorter legacy form. Medical practice and ordination dates remain disputed, three collaborating families replace a sole-founder account, and layered or rejected writings are kept out of Anthony's direct voice.
