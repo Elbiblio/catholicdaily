@@ -45,7 +45,7 @@ Before the Task 1 overlays were indexed, the exact four-ID queue reported `48/15
 
 ## Copyright and media decision
 
-The formal letter, reference work, liturgical page, and early translation are paraphrased in original prose. No modern translation or collect is reproduced. No image is included because file-specific reusable licensing was not established.
+The formal letter, reference work, liturgical page, and Spanish primary text are synthesized in original prose. No passage from the primary work or liturgical collect is reproduced. No image is included because file-specific reusable licensing was not established.
 
 ## Content review
 
