@@ -12,7 +12,7 @@
   "places": ["Rome, Italy", "Tor de' Specchi, Rome"],
   "patronage": [],
   "symbols": [],
-  "briefBio": "Frances of Rome lived most of her adult life as a wife and mother amid war, epidemic disease, and poverty in Rome. She organized care with other women, made an oblation with nine companions in 1425, and entered their common life after widowhood. Her witness requires consent, safe family responsibilities, and boundaries, not romanticized coercion.",
+  "briefBio": "Frances of Rome lived most of her adult life as a wife and mother while wars, famine, pestilence, and poverty afflicted Rome. She organized care with other women, made an oblation with nine companions in 1425, and entered their common life after widowhood. Her witness requires consent, safe family responsibilities, and boundaries, not romanticized coercion.",
   "wikipediaUrl": "https://en.wikipedia.org/wiki/Frances_of_Rome",
   "wikidataId": "Q239129",
   "feastDates": ["March 9"],
@@ -47,23 +47,23 @@
       "authorOrInstitution": "Ashley Tickle Odebiyi",
       "publisher": "Church History, Cambridge University Press for the American Society of Church History",
       "url": "https://resolve.cambridge.org/core/services/aop-cambridge-core/content/view/0FD95FFC21010221B9C70D2C15D4BBDD/S0009640725000733a.pdf/betwixt_and_between_noncloistered_religious_women_in_late_medieval_rome.pdf",
-      "publicationDate": "2025",
+      "publicationDate": "2024-09-01",
       "accessedDate": "2026-08-11",
       "tier": 2,
       "reuseBasis": "Peer-reviewed open-access scholarship used for arranged-marriage context, the 1425 non-cloistered community, gender and class restrictions, service at Santa Maria in Cappella, and the tension between hagiographic charity stories and household duties",
       "supports": ["life.marriage", "life.oblation", "community", "life.service", "genderContext", "hagiographyContext", "familyDutySafeguard"]
     },
     {
-      "id": "frances-usccb-resource",
-      "title": "St. Frances of Rome",
-      "authorOrInstitution": "Catholic News Service and United States Conference of Catholic Bishops",
-      "publisher": "United States Conference of Catholic Bishops",
-      "url": "https://www.usccb.org/prayer-and-worship/liturgical-year/lent/upload/lent-st-frances-of-rome.pdf",
-      "publicationDate": "2015",
+      "id": "frances-sodano-santa-maria-nova-homily",
+      "title": "Santa Messa nella basilica di Santa Maria Nova a Roma",
+      "authorOrInstitution": "Cardinal Angelo Sodano",
+      "publisher": "The Holy See, Secretariat of State",
+      "url": "https://www.vatican.va/roman_curia/secretariat_state/2006/documents/rc_seg-st_20060305_st-maria-nova_it.html",
+      "publicationDate": "2006-03-05",
       "accessedDate": "2026-08-11",
-      "tier": 3,
-      "reuseBasis": "Officially hosted biographical summary used for feast, marriage and children, wartime disruption, epidemic charity, Oblate development, and explicit identification of guardian-angel and motorist associations as tradition",
-      "supports": ["identity", "dates", "feastDate", "life.marriage", "life.motherhood", "life.war", "life.service", "community", "tradition.angels", "tradition.motorists"]
+      "tier": 1,
+      "reuseBasis": "Formal Holy See homily used for wars, famine, and pestilence as the setting of Frances's service, poverty relief, the 1425 oblation, received guardian-angel tradition, and the retrospective report of Pius XI's 1925 motorist patronage",
+      "supports": ["life.war", "life.famine", "life.epidemic_context", "life.poverty_service", "life.oblation", "tradition.angels", "tradition.motorists"]
     }
   ],
   "editorial": {
@@ -75,18 +75,18 @@
     "warnings": []
   },
   "whyItMatters": "Frances shows a lay vocation growing through household responsibilities, civic crisis, friendship among women, and later common life. Her history does not command anyone to accept coercion, unsafe marriage, or neglect of dependents. It invites prayerful discernment with consent, honest boundaries, shared service, and fidelity to the people actually entrusted to one's care.",
-  "oneMinuteSummary": "Born in Rome in 1384, Frances entered a marriage arranged within elite family expectations and became a mother. The sources remember decades of marriage and household responsibility while war, political upheaval, famine, epidemic disease, and poverty harmed the city. She and her sister-in-law Vannozza served people who were sick or poor, including work connected with Santa Maria in Cappella. Some charity episodes survive through canonization testimony and hagiography with miraculous details; they cannot become instructions to dispose of family resources without consent or to leave dependents unsafe. On August 15, 1425, Frances and nine companions made an oblation associated with the Olivetan Benedictines. Their non-cloistered identity allowed prayer and service in the city; papal approval and the Tor de' Specchi house followed in 1433. After her husband's death in 1436, Frances joined the community's common life and served there until her death in 1440. Devotion also remembers visions and a guardian angel. Those traditions belong to her received spiritual portrait but are not used to construct secure chronology or to claim that private experiences override conscience, duties, or wise counsel.",
+  "oneMinuteSummary": "Born in Rome in 1384, Frances entered a marriage arranged within elite family expectations and became a mother. The sources remember decades of marriage and household responsibility while wars, political upheaval, famine, pestilence, and poverty harmed the city. She and her sister-in-law Vannozza served people who were sick or poor, including work connected with Santa Maria in Cappella. The sources place this charity in a city affected by pestilence; they do not establish that Frances personally treated plague patients. Some charity episodes survive through canonization testimony and hagiography with miraculous details; they cannot become instructions to dispose of family resources without consent or to leave dependents unsafe. On August 15, 1425, Frances and nine companions made an oblation associated with the Olivetan Benedictines. Their non-cloistered identity allowed prayer and service in the city; papal approval and the Tor de' Specchi house followed in 1433. After her husband's death in 1436, Frances joined the community's common life and served there until her death in 1440. Devotion also remembers visions and a guardian angel. Those traditions belong to her received spiritual portrait but are not used to construct secure chronology or to claim that private experiences override conscience, duties, or wise counsel.",
   "life": {
     "sections": [
       {
         "heading": "Marriage, motherhood, and constrained choices",
         "body": "Frances married young within the alliance-making expectations of an elite Roman family and had children. The sources do not authorize Christians to turn that social constraint into a universal model for women. Marriage requires free consent and safety; no devotional example obliges a person to accept coercion, abuse, or the silencing of conscience. Frances's historical path is one vocation, not a rule imposed on every life.",
-        "sourceIds": ["frances-leo-oblation-message", "frances-new-catholic-encyclopedia", "frances-odebiyi-noncloistered", "frances-usccb-resource"]
+        "sourceIds": ["frances-leo-oblation-message", "frances-new-catholic-encyclopedia", "frances-odebiyi-noncloistered"]
       },
       {
         "heading": "Service in a wounded city",
-        "body": "Civil conflict, displacement, disease, and poverty repeatedly troubled fifteenth-century Rome. Frances and Vannozza were remembered for hospital work, almsgiving, and direct care. Hagiographic accounts intensify some episodes with miraculous replenishment of household stores. The secure moral center is organized mercy; modern imitation must also respect family resources, infection control, professional competence, and the agency of those receiving care.",
-        "sourceIds": ["frances-new-catholic-encyclopedia", "frances-odebiyi-noncloistered", "frances-usccb-resource"]
+        "body": "Wars, internal conflict, famine, pestilence, and poverty repeatedly troubled fifteenth-century Rome. Frances and Vannozza were remembered for hospital work, almsgiving, and direct care, but the sources do not establish that she personally treated plague patients. Hagiographic accounts intensify some episodes with miraculous replenishment of household stores. The secure moral center is organized mercy; modern imitation must also respect family resources, infection control, professional competence, and the agency of those receiving care.",
+        "sourceIds": ["frances-new-catholic-encyclopedia", "frances-odebiyi-noncloistered", "frances-sodano-santa-maria-nova-homily"]
       },
       {
         "heading": "A community within lay life",
@@ -96,16 +96,16 @@
       {
         "heading": "Widowhood and common life",
         "body": "The Tor de' Specchi community received approval and a common house in 1433. Frances did not leave her household to enter it immediately. After her husband's death in 1436, she joined the common life and served the community until 1440. The sequence matters: later religious life did not erase earlier marriage and motherhood or justify abandoning obligations before they had changed.",
-        "sourceIds": ["frances-new-catholic-encyclopedia", "frances-odebiyi-noncloistered", "frances-usccb-resource"]
+        "sourceIds": ["frances-new-catholic-encyclopedia", "frances-odebiyi-noncloistered"]
       },
       {
         "heading": "Visions received as tradition",
         "body": "Later devotion strongly associates Frances with visions and the guidance of a guardian angel, and official Catholic sources continue to recall that spiritual tradition. These accounts are not treated as documentary chronology or as permission to bypass Scripture, conscience, competent counsel, consent, or safety. Private spiritual experience is judged by its fruit in Christlike love and responsible communion.",
-        "sourceIds": ["frances-leo-oblation-message", "frances-usccb-resource"]
+        "sourceIds": ["frances-leo-oblation-message", "frances-sodano-santa-maria-nova-homily"]
       }
     ],
     "gospelTheme": "Love for Christ takes flesh in consent, fidelity, shared responsibility, and truthful service of neighbors without sacrificing the safety of those already entrusted to us.",
-    "struggle": "Frances lived amid constrained choices for women, household and parenting duties, bereavement, political violence, epidemic disease, poverty, and tension between family resources and public charity.",
+    "struggle": "Frances lived amid constrained choices for women, household and parenting duties, bereavement, political violence, famine, pestilence, poverty, and tension between family resources and public charity.",
     "response": "She prayed, cared for her household, organized service with other women, formed a non-cloistered oblate community, and entered its common life when widowhood changed her responsibilities."
   },
   "virtues": [
@@ -113,7 +113,7 @@
       "name": "Integrated lay fidelity",
       "evidence": "Frances's long marriage and motherhood preceded her entry into the community, while prayer and charity developed within those responsibilities.",
       "imitation": "Discern a next step with everyone directly affected, making consent, dependents' needs, and safety part of the spiritual decision rather than obstacles to it.",
-      "sourceIds": ["frances-leo-oblation-message", "frances-new-catholic-encyclopedia", "frances-usccb-resource"]
+      "sourceIds": ["frances-leo-oblation-message", "frances-new-catholic-encyclopedia"]
     },
     {
       "name": "Collaborative mercy",

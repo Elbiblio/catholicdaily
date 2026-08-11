@@ -53,6 +53,42 @@
       "supports": ["chronology", "dateConflict", "placeConflict", "historicalCertainty"]
     },
     {
+      "id": "patrick-macneill-palladius",
+      "title": "The Hymn of St. Secundinus in honour of St. Patrick",
+      "authorOrInstitution": "Eoin MacNeill",
+      "publisher": "Irish Historical Studies, Cambridge University Press",
+      "url": "https://www.cambridge.org/core/journals/irish-historical-studies/article/abs/hymn-of-st-secundinus-in-honour-of-st-patrick/249A6B59DDFF8EE6447AFB81F6941E36",
+      "publicationDate": "1940-09",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Peer-reviewed historical study used for Prosper's contemporary record of Palladius's 431 mission to Irish Christians and the distinction between that mission and Patrick's later traditional chronology",
+      "supports": ["chronology", "life.mission", "historicalContext", "historicalCertainty"]
+    },
+    {
+      "id": "patrick-krappe-snakes",
+      "title": "St. Patrick and the Snakes",
+      "authorOrInstitution": "Alexander H. Krappe",
+      "publisher": "Traditio, Cambridge University Press",
+      "url": "https://www.cambridge.org/core/journals/traditio/article/abs/st-patrick-and-the-snakes/4D6F136CA81572733A990BB738DC4E83",
+      "publicationDate": "1947",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Peer-reviewed comparative folklore study used to classify the snake-expulsion narrative as a widespread hagiographic motif rather than Patrick's surviving testimony; no exact first date is claimed",
+      "supports": ["legend.snakes", "historicalCertainty"]
+    },
+    {
+      "id": "patrick-cronin-adair-shamrock",
+      "title": "The Wearing of the Green: A History of St Patrick's Day",
+      "authorOrInstitution": "Mike Cronin and Daryl Adair",
+      "publisher": "Routledge",
+      "url": "https://api.pageplace.de/preview/DT0400.9781134242313_A24507054/preview-9781134242313_A24507054.pdf",
+      "publicationDate": "2002",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Scholarly cultural history used for the shamrock as a documented St Patrick's Day emblem by 1681 and for the Trinity-teaching story as a later fable rather than primary evidence",
+      "supports": ["legend.shamrock", "symbols", "symbols.shamrock_tradition", "historicalCertainty"]
+    },
+    {
       "id": "patrick-irish-bishops-2014",
       "title": "Bishops' message for the Solemnity of Saint Patrick",
       "authorOrInstitution": "Irish Catholic Bishops' Conference",
@@ -73,8 +109,8 @@
       "publicationDate": "2014-03-17",
       "accessedDate": "2026-08-11",
       "tier": 3,
-      "reuseBasis": "Reputable interview with a professor of ecclesiastical history used to control earlier Christianity and Palladius, the rise of seventh-century hagiography, the twelfth-century snakes story, and the seventeenth-century shamrock association",
-      "supports": ["life.mission", "historicalContext", "legend.snakes", "legend.shamrock", "symbols", "symbols.shamrock_tradition", "historicalCertainty"]
+      "reuseBasis": "Reputable interview with a professor of ecclesiastical history used as supplementary context for seventh-century hagiography and the later development of snake and shamrock traditions; material historical claims are controlled by Tier 2 sources",
+      "supports": ["hagiographyContext", "legend.snakes", "legend.shamrock", "historicalCertainty"]
     }
   ],
   "editorial": {
@@ -86,7 +122,7 @@
     "warnings": []
   },
   "whyItMatters": "Patrick's two surviving writings are more demanding than the legends. A person once enslaved speaks with humility about grace, serves far from home, and publicly opposes Christians who kill and sell captives. His mission cannot justify coercion or nationalist triumph: Christian witness listens, honors freedom, accepts local accountability, and confronts exploitation.",
-  "oneMinuteSummary": "Patrick says he was born into a Christian family in Roman Britain and was taken captive at about sixteen with many others. Enslaved in Ireland for six years, he turned to God in prayer and eventually escaped. Captivity was exploitation, not a spiritual good; grace met him within harm without making the harm necessary. His Confessio later presents him as a bishop who returned to serve in Ireland, baptized converts, ordained clergy, refused personal payments, and remained despite danger and homesickness. The precise route, birthplace, mission dates, and death year remain debated, so the profile keeps a fifth-century span. Patrick was not the first Christian presence in Ireland, and Palladius's earlier mission prevents a single-hero story. In his Letter to the soldiers of Coroticus, Patrick denounces the killing and capture of baptized people, demands the captives' release, rejects wealth taken through violence, and grieves with the enslaved. Later hagiography enlarged his image. The snakes story appears centuries later, and the shamrock association is first evidenced much later still. The shamrock can remain an honest traditional symbol only when it is not confused with Patrick's own testimony.",
+  "oneMinuteSummary": "Patrick says he was born into a Christian family in Roman Britain and was taken captive at about sixteen with many others. Enslaved in Ireland for six years, he turned to God in prayer and eventually escaped. Captivity was exploitation, not a spiritual good; grace met him within harm without making the harm necessary. His Confessio later presents him as a bishop who returned to serve in Ireland, baptized converts, ordained clergy, refused personal payments, and remained despite danger and homesickness. The precise route, birthplace, mission dates, and death year remain debated, so the profile keeps a fifth-century span. Patrick was not the first Christian presence in Ireland: Prosper's contemporary chronicle records Palladius's mission to Irish Christians in 431, preventing a single-hero story. In his Letter to the soldiers of Coroticus, Patrick denounces the killing and capture of baptized people, demands the captives' release, rejects wealth taken through violence, and grieves with the enslaved. Later hagiography enlarged his image. The snake-expulsion story and the shamrock teaching belong to later tradition, not to Patrick's surviving writings. The shamrock can remain an honest traditional symbol only when it is not confused with Patrick's own testimony.",
   "life": {
     "sections": [
       {
@@ -97,7 +133,7 @@
       {
         "heading": "A humble account of mission",
         "body": "Patrick writes as a bishop whose love for Christ brought him back among the Irish. He acknowledges limited education, opposition from some superiors, danger, and dependence on grace. He reports baptizing and ordaining local Christians and refusing gifts offered for his ministry. These claims describe his self-understanding; they do not license pressure, cultural contempt, or a claim that one foreign missionary created Irish Christianity alone.",
-        "sourceIds": ["patrick-confessio", "patrick-epistola", "patrick-maynooth-legends"]
+        "sourceIds": ["patrick-confessio", "patrick-epistola", "patrick-macneill-palladius"]
       },
       {
         "heading": "A public stand against slave raiding",
@@ -107,7 +143,7 @@
       {
         "heading": "History before national legend",
         "body": "Scholars still dispute Patrick's exact dates and birthplace. Christianity existed in Ireland before him, and Palladius had been sent there earlier. Seventh-century hagiography and later national memory made Patrick a wonder-worker and single conqueror. The snakes and shamrock stories are later traditions, not evidence from his writings. Honoring Ireland's patron does not require erasing other Christians or using mission as a national victory story.",
-        "sourceIds": ["patrick-breeze-chronology", "patrick-irish-bishops-2014", "patrick-maynooth-legends"]
+        "sourceIds": ["patrick-breeze-chronology", "patrick-macneill-palladius", "patrick-krappe-snakes", "patrick-cronin-adair-shamrock", "patrick-maynooth-legends"]
       }
     ],
     "gospelTheme": "The love of Christ sends witnesses as humble servants who respect freedom, remain accountable to the people they serve, and defend neighbors against exploitation.",
