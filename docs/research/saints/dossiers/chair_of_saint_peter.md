@@ -14,6 +14,7 @@
 | ID | Tier | Author/institution | Title | Publisher | URL | Accessed | Reuse basis |
 |---|---:|---|---|---|---|---|---|
 | usccb-chair-readings | 1 | United States Conference of Catholic Bishops | Feast of the Chair of Saint Peter, Apostle | United States Conference of Catholic Bishops | https://bible.usccb.org/bible/readings/022220.cfm | 2026-08-11 | Formal liturgical readings for Matthew 16:13-19 and 1 Peter 5:1-4; original prose |
+| usccb-john-21 | 1 | United States Conference of Catholic Bishops | John, Chapter 21 | United States Conference of Catholic Bishops | https://bible.usccb.org/bible/john/21 | 2026-08-11 | Direct Scripture page for Jesus' threefold question, Peter's rehabilitation after denial, and the commission to feed and tend the flock; paraphrased without extended quotation |
 | francis-chair-service | 1 | Pope Francis | Homily at the Conclusion of the Ordinary General Assembly of the Synod of Bishops | The Holy See | https://www.vatican.va/content/francesco/en/homilies/2024/documents/20241027-omelia-conclusione-sinodo.pdf | 2026-08-11 | Formal papal homily for love, unity, mercy, and non-dominating service; no collect or extended quotation reproduced |
 | fabric-chair-archive | 1 | Fabric of Saint Peter in the Vatican | The Cathedra of Saint Peter on Display to the Faithful | Holy See Press Office | https://press.vatican.va/content/salastampa/en/info/2024/10/25/241025a.html | 2026-08-11 | Official archival and conservation account for the composite object, Carolingian association, ivory debate, and developing devotion |
 | vatican-news-chair | 3 | Vatican News | Feast of the Chair of Saint Peter the Apostle | Dicastery for Communication | https://www.vaticannews.va/en/liturgical-holidays/feast-of-the-chair-of-saint-peter-the-apostle.html | 2026-08-11 | Tertiary Catholic observance summary used cautiously for date and cathedra symbolism, not precise origin claims |
@@ -25,7 +26,10 @@
 |---|---|---|---|---|
 | feastDate | February 22 is the feast of the Chair of Saint Peter. | usccb-chair-readings; vatican-news-chair | Documented | State directly. |
 | life.petrine_ministry | Matthew 16 and 1 Peter 5 join Petrine commission to confessed faith and non-dominating pastoral example. | usccb-chair-readings | Documented | Make this the observance's scriptural center. |
+| scripture.john21 | The risen Jesus addresses Peter three times after his threefold denial and joins Peter's restored love to the commands to feed and tend Christ's flock. | usccb-john-21 | Documented | Use direct primary provenance for restoration and pastoral commission without reproducing the translation. |
 | life.service | Recent formal Catholic teaching interprets the Chair through love, unity, mercy, listening, and service. | francis-chair-service | Documented | Use to reject domination or silencing in the name of unity. |
+| symbols.keys | The keys are explicitly given to Peter in the feast's Matthew 16 Gospel. | usccb-chair-readings | Documented | Retain Keys as a source-established symbol. |
+| symbols.chair | The cathedra is explicitly presented as the chair associated with Peter's ministry and as a sign of primacy, teaching, pastoral care, and unity. | fabric-chair-archive; vatican-news-chair | Documented | Retain Chair or cathedra while keeping its symbolism distinct from claims about the wooden object's first-century provenance. |
 | life.physical_chair | The physical throne is composite, strongly associated with the Carolingian period, and became an object of Peter-related devotion in the medieval period. | fabric-chair-archive; smith-chair-relic-history | High | Distinguish this evidence from the theology of the feast. |
 | rejectedProvenance | The throne can be proven to be Peter's first-century chair. | fabric-chair-archive; smith-chair-relic-history | Low | Reject; the evidence does not establish that provenance. |
 | rejectedOrigins | The feast began at one exact early date or originated securely in Antioch. | vatican-news-chair | Mixed | Omit unsupported precision and simplified origin narrative. |
@@ -47,7 +51,7 @@
 
 ## Copyright and media decision
 
-All profile prose and the prayer are original. Scripture and liturgical sources are summarized without reproducing long translations or a collect. The official archive's technical description is paraphrased. No image is included because no file-specific authorship and reusable license were established.
+All profile prose and the prayer are original. The Matthew 16, John 21, and 1 Peter 5 texts and liturgical sources are summarized without reproducing long translations or a collect. The official archive's technical description is paraphrased. No image is included because no file-specific authorship and reusable license were established.
 
 ## Content review
 

@@ -28,7 +28,18 @@
       "accessedDate": "2026-08-11",
       "tier": 1,
       "reuseBasis": "Formal liturgical readings used for Matthew 16:13-19 and 1 Peter 5:1-4, joining Peter's confession and the keys with accountable pastoral service that does not dominate",
-      "supports": ["feast", "scripture.matthew16", "scripture.1peter5", "life.petrine_ministry", "virtues.accountable_service"]
+      "supports": ["feast", "scripture.matthew16", "scripture.1peter5", "life.petrine_ministry", "virtues.accountable_service", "symbols.keys"]
+    },
+    {
+      "id": "usccb-john-21",
+      "title": "John, Chapter 21",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/john/21",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Direct Scripture page used for the risen Jesus' threefold question to Peter, Peter's rehabilitation after denial, and the repeated commission to feed and tend Christ's flock; the profile paraphrases rather than reproduces the translation",
+      "supports": ["scripture.john21", "life.petrine_ministry", "life.service", "gospelTheme"]
     },
     {
       "id": "francis-chair-service",
@@ -96,9 +107,9 @@
         "sourceIds": ["usccb-chair-readings", "vatican-news-chair"]
       },
       {
-        "heading": "Confession and commission under Christ",
-        "body": "In Matthew 16 Peter confesses Jesus as the Christ and receives the images of rock and keys. This commission remains Christ-centered: Peter does not replace the Lord or possess the Church. The office serves the faith confessed and must answer to the one who gives it.",
-        "sourceIds": ["usccb-chair-readings"]
+        "heading": "Confession, restoration, and commission under Christ",
+        "body": "In Matthew 16 Peter confesses Jesus as the Christ and receives the images of rock and keys. After Peter's denial, John 21 presents the risen Jesus asking three times about his love and entrusting him repeatedly with care of the flock. This restoration and commission remain Christ-centered: Peter does not replace the Lord or possess the Church. The office serves the faith confessed and must answer to the one who gives it.",
+        "sourceIds": ["usccb-chair-readings", "usccb-john-21"]
       },
       {
         "heading": "A chair measured by service",
@@ -118,9 +129,9 @@
   "virtues": [
     {
       "name": "Accountable service",
-      "evidence": "The feast's reading from 1 Peter commands shepherds not to dominate but to become examples, while Pope Francis describes the Chair through service, love, unity, and mercy.",
+      "evidence": "The risen Jesus restores Peter and entrusts him with care of the flock; the feast's reading from 1 Peter commands shepherds not to dominate but to become examples, while Pope Francis describes the Chair through service, love, unity, and mercy.",
       "imitation": "If you hold responsibility, invite one specific form of review, explain how concerns can be raised safely, and follow through without retaliation or defensiveness.",
-      "sourceIds": ["usccb-chair-readings", "francis-chair-service"]
+      "sourceIds": ["usccb-chair-readings", "usccb-john-21", "francis-chair-service"]
     },
     {
       "name": "Unity grounded in truth",
