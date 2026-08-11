@@ -19,6 +19,7 @@ class SaintLifeGuideView extends StatelessWidget {
   Widget build(BuildContext context) {
     final guide = profile.guide;
     if (guide == null) return const SizedBox.shrink();
+    final usesObservanceCopy = _usesObservanceCopy(profile);
 
     return Center(
       child: ConstrainedBox(
@@ -31,7 +32,9 @@ class SaintLifeGuideView extends StatelessWidget {
               const SizedBox(height: 28),
             ],
             SaintProfileSection(
-              title: 'Why this saint matters today',
+              title: usesObservanceCopy
+                  ? 'Why this observance matters today'
+                  : 'Why this saint matters today',
               icon: Icons.lightbulb_outline_rounded,
               child: _EmphasisPanel(child: Text(guide.whyItMatters)),
             ),
@@ -41,31 +44,52 @@ class SaintLifeGuideView extends StatelessWidget {
               child: Text(guide.oneMinuteSummary),
             ),
             SaintProfileSection(
-              title: 'Their life and journey',
+              title: usesObservanceCopy
+                  ? 'What the Church celebrates'
+                  : 'Their life and journey',
               icon: Icons.route_rounded,
               child: _LifeSections(sections: guide.lifeSections),
             ),
             SaintProfileSection(
-              title: 'The Gospel visible in their life',
+              title: usesObservanceCopy
+                  ? 'The Gospel at the heart of this observance'
+                  : 'The Gospel visible in their life',
               icon: Icons.menu_book_rounded,
               child: Text(guide.gospelTheme),
             ),
             SaintProfileSection(
-              title: 'The struggle and response',
+              title: usesObservanceCopy
+                  ? 'The challenge and our response'
+                  : 'The struggle and response',
               icon: Icons.change_circle_outlined,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _LabelledText(label: 'The struggle', text: guide.struggle),
+                  _LabelledText(
+                    label: usesObservanceCopy
+                        ? 'The challenge'
+                        : 'The struggle',
+                    text: guide.struggle,
+                  ),
                   const SizedBox(height: 16),
-                  _LabelledText(label: 'Their response', text: guide.response),
+                  _LabelledText(
+                    label: usesObservanceCopy
+                        ? 'Our response'
+                        : 'Their response',
+                    text: guide.response,
+                  ),
                 ],
               ),
             ),
             SaintProfileSection(
-              title: 'Virtues to imitate',
+              title: usesObservanceCopy
+                  ? 'Dispositions to cultivate'
+                  : 'Virtues to imitate',
               icon: Icons.volunteer_activism_outlined,
-              child: _VirtueList(virtues: guide.virtues),
+              child: _VirtueList(
+                virtues: guide.virtues,
+                usesObservanceCopy: usesObservanceCopy,
+              ),
             ),
             SaintProfileSection(
               title: 'Live it today',
@@ -160,6 +184,14 @@ class SaintLifeGuideView extends StatelessWidget {
       _ => true,
     };
   }
+
+  static bool _usesObservanceCopy(SaintProfile profile) =>
+      switch (profile.kind) {
+        SaintProfileKind.marian ||
+        SaintProfileKind.collective ||
+        SaintProfileKind.observance => true,
+        _ => false,
+      };
 
   static bool _hasSourcedDevotionalDetails(SaintProfile profile) {
     if (profile.patronage.isEmpty && profile.symbols.isEmpty) return false;
@@ -324,9 +356,10 @@ class _LabelledText extends StatelessWidget {
 }
 
 class _VirtueList extends StatelessWidget {
-  const _VirtueList({required this.virtues});
+  const _VirtueList({required this.virtues, required this.usesObservanceCopy});
 
   final List<SaintVirtue> virtues;
+  final bool usesObservanceCopy;
 
   @override
   Widget build(BuildContext context) {
@@ -337,7 +370,11 @@ class _VirtueList extends StatelessWidget {
             padding: EdgeInsets.only(
               bottom: index == virtues.length - 1 ? 0 : 12,
             ),
-            child: _VirtueCard(number: index + 1, virtue: virtues[index]),
+            child: _VirtueCard(
+              number: index + 1,
+              virtue: virtues[index],
+              usesObservanceCopy: usesObservanceCopy,
+            ),
           ),
       ],
     );
@@ -345,10 +382,15 @@ class _VirtueList extends StatelessWidget {
 }
 
 class _VirtueCard extends StatelessWidget {
-  const _VirtueCard({required this.number, required this.virtue});
+  const _VirtueCard({
+    required this.number,
+    required this.virtue,
+    required this.usesObservanceCopy,
+  });
 
   final int number;
   final SaintVirtue virtue;
+  final bool usesObservanceCopy;
 
   @override
   Widget build(BuildContext context) {
@@ -380,9 +422,17 @@ class _VirtueCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          _LabelledText(label: 'Seen in their life', text: virtue.evidence),
+          _LabelledText(
+            label: usesObservanceCopy
+                ? 'Grounded in this observance'
+                : 'Seen in their life',
+            text: virtue.evidence,
+          ),
           const SizedBox(height: 12),
-          _LabelledText(label: 'Imitate it', text: virtue.imitation),
+          _LabelledText(
+            label: usesObservanceCopy ? 'Cultivate it' : 'Imitate it',
+            text: virtue.imitation,
+          ),
         ],
       ),
     );

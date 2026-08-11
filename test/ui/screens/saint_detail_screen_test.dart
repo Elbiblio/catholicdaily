@@ -148,6 +148,107 @@ void main() {
     expect(sourcesRequested, isTrue);
   });
 
+  testWidgets('non-person celebrations use observance-centered guide copy', (
+    tester,
+  ) async {
+    for (final kind in ['observance', 'collective', 'marian']) {
+      final json = _profileJson();
+      json['profileKind'] = kind;
+      json['lifeSpan'] = '';
+      json['lifeLength'] = '';
+
+      await tester.pumpWidget(
+        _host(
+          SaintLifeGuideView(
+            profile: SaintProfile.fromJson(json),
+            onShowSources: () {},
+          ),
+        ),
+      );
+
+      for (final heading in const [
+        'Why this observance matters today',
+        'What the Church celebrates',
+        'The Gospel at the heart of this observance',
+        'The challenge and our response',
+        'Dispositions to cultivate',
+      ]) {
+        expect(find.text(heading), findsOneWidget, reason: 'kind=$kind');
+      }
+      expect(find.text('The challenge'), findsOneWidget, reason: 'kind=$kind');
+      expect(find.text('Our response'), findsOneWidget, reason: 'kind=$kind');
+      expect(
+        find.text('Grounded in this observance'),
+        findsOneWidget,
+        reason: 'kind=$kind',
+      );
+      expect(find.text('Cultivate it'), findsOneWidget, reason: 'kind=$kind');
+
+      for (final personCopy in const [
+        'Why this saint matters today',
+        'Their life and journey',
+        'The Gospel visible in their life',
+        'The struggle and response',
+        'Their response',
+        'Virtues to imitate',
+        'Seen in their life',
+        'Imitate it',
+      ]) {
+        expect(find.text(personCopy), findsNothing, reason: 'kind=$kind');
+      }
+    }
+  });
+
+  testWidgets('real Mother of Africa asset renders as an observance', (
+    tester,
+  ) async {
+    final profile = await tester.runAsync(
+      () => SaintProfileService.instance.findById('our_lady_mother_of_africa'),
+    );
+
+    expect(profile, isNotNull);
+    expect(profile!.kind, SaintProfileKind.observance);
+    expect(profile.lifeSpan, isEmpty);
+    expect(profile.lifeLength, isEmpty);
+
+    await tester.pumpWidget(
+      _host(SaintLifeGuideView(profile: profile, onShowSources: () {})),
+    );
+
+    expect(find.text('What the Church celebrates'), findsOneWidget);
+    expect(
+      find.text('The Gospel at the heart of this observance'),
+      findsOneWidget,
+    );
+    expect(find.text('Dispositions to cultivate'), findsOneWidget);
+    expect(find.text('Their life and journey'), findsNothing);
+    expect(find.text('The Gospel visible in their life'), findsNothing);
+    expect(find.text('Their response'), findsNothing);
+    expect(find.text('Seen in their life'), findsNothing);
+  });
+
+  testWidgets('group profiles retain person-centered guide copy', (
+    tester,
+  ) async {
+    final json = _profileJson();
+    json['profileKind'] = 'group';
+
+    await tester.pumpWidget(
+      _host(
+        SaintLifeGuideView(
+          profile: SaintProfile.fromJson(json),
+          onShowSources: () {},
+        ),
+      ),
+    );
+
+    expect(find.text('Their life and journey'), findsOneWidget);
+    expect(find.text('The Gospel visible in their life'), findsOneWidget);
+    expect(find.text('Their response'), findsOneWidget);
+    expect(find.text('Seen in their life'), findsOneWidget);
+    expect(find.text('What the Church celebrates'), findsNothing);
+  });
+
   testWidgets('real curated profiles expose their sourced symbols', (
     tester,
   ) async {
@@ -193,7 +294,14 @@ void main() {
       expect(find.text('Lived'), findsNothing);
       expect(find.text('Length'), findsNothing);
       expect(find.text('Verified words from the saint.'), findsNothing);
-      expect(find.text('The Gospel visible in their life'), findsOneWidget);
+      expect(
+        find.text(
+          kind == 'marian'
+              ? 'The Gospel at the heart of this observance'
+              : 'The Gospel visible in their life',
+        ),
+        findsOneWidget,
+      );
       expect(find.text('Reflect'), findsOneWidget);
       expect(find.text('Scripture companion'), findsOneWidget);
       expect(find.text('Prayer'), findsOneWidget);

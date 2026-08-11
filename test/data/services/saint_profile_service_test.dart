@@ -65,6 +65,38 @@ void main() {
     expect(museum.tier, SaintSourceTier.discovery);
   });
 
+  test('Batch 4 one-minute summaries contain 100 to 150 words', () async {
+    const batch4Ids = [
+      'vincent_ferrer',
+      'martin_i_pope',
+      'anselm_of_canterbury',
+      'adalbert_of_prague',
+      'george_of_lydda',
+      'fidelis_of_sigmaringen',
+      'mark_evangelist',
+      'louis_grignion_de_montfort',
+      'peter_chanel',
+      'our_lady_mother_of_africa',
+      'pius_v_pope',
+      'philip_and_james_apostles',
+    ];
+    final failures = <String>[];
+
+    for (final id in batch4Ids) {
+      final profile = await SaintProfileService.instance.findById(id);
+      final summary = profile!.guide!.oneMinuteSummary.trim();
+      final wordCount = summary
+          .split(RegExp(r'\s+'))
+          .where((word) => word.isNotEmpty)
+          .length;
+      if (wordCount < 100 || wordCount > 150) {
+        failures.add('$id: $wordCount words');
+      }
+    }
+
+    expect(failures, isEmpty);
+  });
+
   test(
     'resolves a notification title to a stable curated profile id',
     () async {
