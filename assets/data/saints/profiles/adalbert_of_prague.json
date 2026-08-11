@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 2,
+  "id": "adalbert_of_prague",
+  "profileKind": "individual",
+  "celebrationIds": ["adalbert_of_prague", "saint_adalbert_bishop_and_martyr"],
+  "name": "Saint Adalbert, Bishop and Martyr",
+  "alternateNames": ["Adalbert of Prague", "Vojtěch of Prague", "Wojciech"],
+  "ecclesialTitle": "Bishop of Prague and martyr",
+  "lifeSpan": "c. 956-997",
+  "lifeLength": "about 41 years",
+  "vocation": "Bishop, Benedictine monk, and missionary",
+  "places": ["Libice", "Prague", "Rome", "Gniezno", "Baltic coast"],
+  "patronage": ["Bohemia", "Poland"],
+  "symbols": [],
+  "briefBio": "Born Vojtěch, Adalbert became the second bishop of Prague and the first native Czech to hold that see. Conflict in Prague led to repeated departures, and in Rome he entered Benedictine life. His final mission, undertaken with papal permission and Polish political backing, ended in his killing on the Baltic coast in 997. Early accounts preserve valuable testimony but are Christian hagiographies, so contested speeches, motives, and death details are not reported as certain history.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Adalbert_of_Prague",
+  "wikidataId": "Q215047",
+  "feastDates": ["April 23"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "adalbert-jp2-audience",
+      "title": "An important chapter in European history",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/john-paul-ii/en/audiences/1997/documents/hf_jp-ii_aud_30041997.html",
+      "publicationDate": "1997-04-30",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal audience used for 956-997, Libice, first native Czech bishop of Prague, repeated departures, Aventine Benedictine life, mission through Gniezno to the Baltic, death, later ecclesial and political reception, and explicit patronage of Bohemia and Poland; paraphrased",
+      "supports": ["identity", "dates", "places", "life.bishop", "life.monastic", "life.mission", "life.martyrdom", "life.reception", "patronage", "patronage.bohemia", "patronage.poland", "historicalContext"]
+    },
+    {
+      "id": "adalbert-nce",
+      "title": "Adalbert of Prague, St.",
+      "authorOrInstitution": "O. P. Sherbowitz-Wetzor; New Catholic Encyclopedia",
+      "publisher": "Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/adalbert-prague-st",
+      "publicationDate": null,
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Specialist Catholic reference entry used for probable birth at Libice in 956, the baptismal name Vojtěch, succession as Prague's second bishop and first Czech holder, repeated departures, Roman monastic life, final mission, death on April 23, 997, and feast; its evaluative language about opponents is not adopted",
+      "supports": ["identity", "names", "dates", "places", "life.second_bishop", "life.first_czech_bishop", "life.prague_conflict", "life.monastic", "life.mission", "life.martyrdom", "feast", "sourceLimits"]
+    },
+    {
+      "id": "adalbert-wood-missions",
+      "title": "Western Missionaries in Eastern Europe, 962-1009",
+      "authorOrInstitution": "Ian N. Wood",
+      "publisher": "The Earliest States of Eastern Europe",
+      "url": "https://dgve.igh.ru/issues/37/articles/140?locale=en",
+      "publicationDate": "2014",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Scholarly study used to place Adalbert's well-attested mission within religious and diplomatic activity, political backing, state formation, papal and secular patronage, and missionaries' distinct aims",
+      "supports": ["life.mission", "life.political_backing", "life.state_formation", "life.missionary_agency", "historicalContext", "sourceLimits"]
+    },
+    {
+      "id": "adalbert-hospitality",
+      "title": "Spaces of Hospitality on the Missionary Baltic Rim, Tenth-Twelfth Centuries",
+      "authorOrInstitution": "Wojtek Jezierski",
+      "publisher": "Palgrave Macmillan; Springer Nature",
+      "url": "https://link.springer.com/chapter/10.1007/978-3-030-98527-1_2",
+      "publicationDate": "2022-08-14",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Open-access scholarly chapter used for the date and source character of the earliest vitae, their companion testimony and cultural bias, political backing, Prussian host agency and assembly, expulsion before the later fatal attack, and uncertainty about speeches, place, and motive",
+      "supports": ["life.mission", "life.prussian_hosts", "life.expulsion", "life.martyrdom", "life.political_backing", "sources.early_vitae", "legend.speeches", "legend.death_details", "historicalCertainty", "sourceLimits"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Adalbert's life joins episcopal responsibility, monastic conversion, cross-cultural mission, and martyrdom, but it cannot be reduced to a nation's possession or a tale of a superior missionary confronting contemptible outsiders. Christian witness enters another community as a guest, must tell the truth about its political backing, and must respect refusal. His death condemns killing; it does not erase the agency, fears, or dignity of the people he approached.",
+  "oneMinuteSummary": "Adalbert was born Vojtěch, probably at Libice around 956. He became Prague's second bishop and the first native Czech or Bohemian to occupy the see. Efforts at reform unfolded amid clerical, dynastic, social, and political conflict, and he left Prague more than once. In Rome he entered the Benedictine community of Saints Boniface and Alexius on the Aventine, while remaining willing to return when papal authority and circumstances required it. After another failed return, he pursued missionary work with papal authorization and the backing of the Polish ruler Bolesław. That support provided access and protection but also tied mission to diplomacy and emerging state power. Adalbert and two companions then entered a Prussian community on the Baltic rim. The earliest vitae were written soon after his death and drew on companion testimony, yet they are culturally biased hagiographies that place speeches and motives into the encounter. A local assembly initially rejected and expelled the missionaries; a later group killed Adalbert in 997. The murder was wrong, but exact claims about a sacred grove, seven spears, beheading, the attacker's motive, or ransom mechanics are not secure enough here. His relics and memory became important to both ecclesial and political identity in Central Europe. John Paul II explicitly called him patron of Bohemia and Poland, but neither nation owns his holiness. His witness directs modern mission toward Christ, consent, cultural humility, peace, and accountable independence from coercive power.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Prague's first native Czech bishop",
+        "body": "Born Vojtěch and later known as Adalbert, he succeeded Thietmar as Prague's second bishop and was the first native Czech or Bohemian to hold the see. His reforming ministry encountered overlapping ecclesial, social, dynastic, and political conflicts. Older accounts can turn those who opposed him into a contemptuous stereotype; the evidence supports serious conflict, not dismissal of an entire people or culture.",
+        "sourceIds": ["adalbert-jp2-audience", "adalbert-nce"]
+      },
+      {
+        "heading": "Repeated departure and Benedictine conversion",
+        "body": "Adalbert left Prague, entered the Benedictine monastery of Saints Boniface and Alexius on Rome's Aventine, and later returned when asked. The second failure of his episcopal return did not make monastic life an escape from responsibility: it became a place of conversion, obedience, discernment, and preparation for a different ministry.",
+        "sourceIds": ["adalbert-jp2-audience", "adalbert-nce"]
+      },
+      {
+        "heading": "A mission carrying political backing",
+        "body": "His final mission had papal authorization and the support of Bolesław, whose hospitality and power helped him reach Gniezno and the Baltic. Scholarship places such missions within diplomacy and state formation as well as evangelization. Adalbert had religious purposes distinct from his patrons, yet good intention did not remove the unequal power visible to host communities. Mission today must disclose such entanglement and make acceptance or refusal genuinely free.",
+        "sourceIds": ["adalbert-jp2-audience", "adalbert-wood-missions", "adalbert-hospitality"]
+      },
+      {
+        "heading": "Martyrdom remembered without ownership",
+        "body": "Early vitae based partly on companion testimony describe an assembly that expelled the missionaries and a later attack in which Adalbert was killed. Those texts remain hagiographic and culturally biased, so their speeches, precise location, ritual details, and motives require caution. His relics helped shape Church and state memory in Bohemia and Poland, both of which officially honor him as patron. That shared reception is not a license for nationalist ownership or contempt toward Prussian hosts.",
+        "sourceIds": ["adalbert-jp2-audience", "adalbert-hospitality"]
+      }
+    ],
+    "gospelTheme": "Christ sends disciples in peace as vulnerable guests who offer the Gospel without owning the people they meet and who respect a community's freedom to refuse.",
+    "struggle": "Adalbert faced contested episcopal authority, repeated displacement, the pull of political patrons, cross-cultural misunderstanding, rejection, and finally lethal violence.",
+    "response": "He accepted monastic conversion, remained available to ecclesial responsibility, traveled with companions, and sought to proclaim Christ; his record must also be read with honesty about power, host agency, and the limits of missionary hagiography."
+  },
+  "virtues": [
+    {
+      "name": "Renewed obedience",
+      "evidence": "After leaving a deeply conflicted see, Adalbert entered Benedictine life and remained willing to return when asked rather than treating either office or withdrawal as his private possession.",
+      "imitation": "When a ministry fails, step back with accountable guidance, name what belongs to you and what does not, and return only with clear authority, support, and safeguards for those affected.",
+      "sourceIds": ["adalbert-jp2-audience", "adalbert-nce"]
+    },
+    {
+      "name": "Courage with truthful limits",
+      "evidence": "Adalbert undertook a dangerous mission, while scholarly controls show that courage coexisted with political backing, cross-cultural tension, and uncertain narrative detail.",
+      "imitation": "Before a courageous act, disclose who funds or protects it, ask how others experience that power, and refuse to exaggerate danger, success, or divine endorsement.",
+      "sourceIds": ["adalbert-wood-missions", "adalbert-hospitality"]
+    },
+    {
+      "name": "Peaceful witness across difference",
+      "evidence": "The earliest accounts preserve an encounter in which the host assembly rejected and expelled the missionaries before a separate fatal attack; rejection and murder are not the same act.",
+      "imitation": "Enter another community only by invitation where possible, learn its language and history, state your purpose plainly, accept a peaceful refusal, and leave without threat, insult, or material penalty.",
+      "sourceIds": ["adalbert-hospitality"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray with Luke 10:5-11. Imagine Christ sending you without a claim of ownership over another household or culture. Ask for the grace to offer peace first, receive hospitality gratefully, speak honestly, and accept refusal without contempt. Entrust both the witness and the hearer to Christ rather than to force or prestige.",
+    "action": "Before one outreach across a cultural or religious boundary, consult a member of the host community about language, history, consent, and safety. Publish who authorizes and funds the work, ensure aid is never conditional on religious participation, and provide a clear consequence-free way to decline or end contact."
+  },
+  "reflectionQuestions": [
+    "What political, financial, or cultural power travels with my witness, even when I believe my motives are good?",
+    "Can I honor a martyr's courage while listening fairly to the community that received, feared, or rejected the mission?"
+  ],
+  "scripture": {
+    "reference": "Luke 10:5-11",
+    "connection": "Jesus tells the sent disciples to offer peace, receive hospitality, proclaim God's nearness, and move on when they are not received. Adalbert's contested encounter makes the guest's humility, the host's agency, and freedom from coercion essential to Christian mission."
+  },
+  "prayer": "Lord Jesus Christ, you send your disciples as guests bearing peace. Through the intercession of Saint Adalbert, give us courage without conquest, conviction without contempt, and zeal accountable to truth. Receive all who have suffered religious or political violence, including peoples misrepresented by Christian storytellers. Teach us to disclose our power, honor consent, accept refusal, and resist every attempt to possess a saint for national pride. May our witness point to you alone. Amen."
+}

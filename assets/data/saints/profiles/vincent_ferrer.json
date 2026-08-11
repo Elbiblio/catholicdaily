@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 2,
+  "id": "vincent_ferrer",
+  "profileKind": "individual",
+  "celebrationIds": ["vincent_ferrer", "saint_vincent_ferrer_priest"],
+  "name": "Saint Vincent Ferrer, Priest",
+  "alternateNames": ["Vicent Ferrer"],
+  "ecclesialTitle": "Dominican priest and preacher",
+  "lifeSpan": "1350-1419",
+  "lifeLength": "about 69 years",
+  "vocation": "Dominican priest, theologian, and itinerant preacher",
+  "places": ["Valencia", "Avignon", "Castile and Aragon", "Vannes"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Vincent Ferrer was a Dominican priest whose preaching crossed late-medieval Europe during the Western Schism. His own spiritual counsel says preaching should arise from prayer and love rather than pride or scorn. Historical study also requires truth about his shifting apocalyptic claims and his participation in anti-Jewish preaching and coercive segregation. Later miracle and mass-conversion stories are not treated as established history.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Vincent_Ferrer",
+  "wikidataId": "Q317131",
+  "feastDates": ["April 5"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "vincent-vatican-spiritual",
+      "title": "Saint Vincent Ferrer: How to preach",
+      "authorOrInstitution": "Saint Vincent Ferrer; Pontifical University Saint Thomas Aquinas",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/spirit/documents/spirit_20010405_vincenzo-ferrer_en.html",
+      "publicationDate": "2001-04-05",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Primary spiritual instruction and liturgical material used for preaching from prayer, simple speech, love without pride or scorn, Dominican identity, life years, and death at Vannes; paraphrased without reproducing the reading or prayer",
+      "supports": ["identity", "dates", "places", "life.dominican", "life.preaching", "virtues.prayerful_love", "theology.christ"]
+    },
+    {
+      "id": "vincent-jones-preaching",
+      "title": "Narrative and Counter-Narrative: Dominican and Muslim Preaching in Medieval Iberia",
+      "authorOrInstitution": "Linda G. Jones",
+      "publisher": "Cambridge University Press; Amsterdam University Press",
+      "url": "https://www.cambridge.org/core/books/abs/friars-and-their-influence-in-medieval-spain/narrative-and-counternarrative-dominican-and-muslim-preaching-in-medieval-iberia/73CA20823D6FAAF222499A8A5937D03A",
+      "publicationDate": "2018",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Scholarly chapter used for mixed-audience preaching in Castile and Aragon, the scarcity of evidence for Muslim response, and the apocryphal character of mass Muslim-conversion and Granada stories",
+      "supports": ["life.iberian_preaching", "life.mixed_audiences", "legend.mass_conversions", "legend.granada", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "vincent-daileader-review",
+      "title": "17.05.03, Daileader, Saint Vincent Ferrer, His World and Life",
+      "authorOrInstitution": "Taryn E. L. Chubb",
+      "publisher": "The Medieval Review, Indiana University",
+      "url": "https://scholarworks.iu.edu/journals/index.php/tmr/article/view/23589",
+      "publicationDate": "2017",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Specialist review of source-critical biography used for Western Schism involvement, political and peacemaking activity, changing apocalyptic preaching, coercive attendance at sermons, Valladolid legislation, and the limits of vision and miracle hagiography",
+      "supports": ["life.schism", "life.politics", "life.peacemaking", "life.apocalypticism", "life.compulsory_sermons", "life.valladolid", "life.anti_judaism", "legend.vision", "legend.miracles", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "vincent-losada-antijudaism",
+      "title": "Ley divina y ley terrena: antijudaísmo y estrategias de conversión en la campaña castellana de San Vicente Ferrer (1411-1412)",
+      "authorOrInstitution": "Carolina M. Losada",
+      "publisher": "Hispania Sacra, Consejo Superior de Investigaciones Científicas",
+      "url": "https://hispaniasacra.revistas.csic.es/index.php/hispaniasacra/article/view/362",
+      "publicationDate": "2013-12-31",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Peer-reviewed historical study used for the convergence of Vincent's 1411-1412 Castilian preaching campaign with segregation laws designed to constrain Jewish social and economic life and compel conversion",
+      "supports": ["life.castilian_campaign", "life.anti_judaism", "life.segregation", "life.coercive_conversion", "harmfulLegacy", "historicalContext"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Vincent's counsel that a preacher speak from prayer and love remains searching, but his public influence also warns that religious urgency can wound consciences when joined to fear, segregation, or political force. Christian preaching is truthful only when it points to Christ without manufactured certainty, contempt, or pressure and remains accountable to people harmed by its methods.",
+  "oneMinuteSummary": "Born in Valencia in 1350, Vincent Ferrer entered the Dominicans, taught theology, and became a renowned itinerant preacher. His career unfolded inside the Western Schism. He supported the Avignon claimant Benedict XIII for many years, served close to his court, and later became caught in the political and ecclesial effort to end the division. Vincent preached moral reform, mediated some local conflicts, and urged preachers to pray, use accessible examples, and speak without pride or scorn. Yet source-critical scholarship also documents changing predictions about Antichrist and the end times; reported visions were not directly acknowledged by Vincent. In Castile and Aragon his preaching addressed Christians, Jews, and Muslims. Jewish attendance was sometimes compelled, and his campaign converged with the 1412 segregation laws intended to restrict Jewish life and drive conversion. Those policies were harmful, and reported numbers of converts cannot turn pressure into free faith. Evidence for thousands of Muslim conversions or a near-conversion of Granada's ruler is meagre or apocryphal. Early and later hagiographies foreground wonders while often minimizing consequences, so miracle stories are not used as proof of sanctity or authority. Vincent is best approached through Christ's call to preaching rooted in love, together with repentance for coercion and a firm defense of every person's freedom of conscience.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A preacher formed during the Western Schism",
+        "body": "Vincent's Dominican study and ministry developed while rival papal obediences divided Western Christianity. He defended and served the Avignon line, especially Benedict XIII, before that relationship deteriorated amid efforts to restore unity. His story does not reward factional certainty: a gifted churchman could be sincere, influential, and still need correction within a confused institutional conflict.",
+        "sourceIds": ["vincent-vatican-spiritual", "vincent-daileader-review"]
+      },
+      {
+        "heading": "Prayer and love as a test of preaching",
+        "body": "In his spiritual instruction, Vincent tells preachers to pray first, speak plainly, use concrete examples, and avoid pride or scorn. He wants correction to be recognizable as love for the hearer. That primary counsel supplies a demanding standard by which his preaching and every later preacher's methods must be judged.",
+        "sourceIds": ["vincent-vatican-spiritual"]
+      },
+      {
+        "heading": "Apocalyptic urgency without manufactured certainty",
+        "body": "Vincent publicly preached about Antichrist and connected apocalyptic expectation to the schism, while the dates and emphases in his preaching changed. A famous commissioning vision is preserved in versions Vincent did not directly attest. Christian hope in Christ's return must therefore not be turned into confident timetables, emotional leverage, or proof that a preacher cannot be questioned.",
+        "sourceIds": ["vincent-daileader-review"]
+      },
+      {
+        "heading": "Conversion amid segregation and coercion",
+        "body": "Vincent preached to mixed audiences, but Jewish hearers were sometimes required to attend. His Castilian campaign coincided with, and participated in the setting of, segregation laws meant to restrict Jewish social and economic life and compel conversion. Later claims of vast Jewish or Muslim conversion totals cannot establish free assent, and stories about Granada are apocryphal. Faith cannot be measured by crowds produced under unequal power.",
+        "sourceIds": ["vincent-jones-preaching", "vincent-daileader-review", "vincent-losada-antijudaism"]
+      }
+    ],
+    "gospelTheme": "Jesus sends witnesses to proclaim God's reign in truth and love; the message cannot be separated from respect for the hearer's God-given conscience and freedom.",
+    "struggle": "Vincent faced a divided Church, political demands, moral disorder, and his own intense apocalyptic convictions, while his preaching operated within institutions that pressured Jewish and Muslim minorities.",
+    "response": "He studied, traveled, preached, prayed, and sometimes mediated conflict, yet his record also includes changing predictions and participation in coercive anti-Jewish structures that Christian memory must name and reject."
+  },
+  "virtues": [
+    {
+      "name": "Prayerful communication",
+      "evidence": "Vincent's own instruction begins the preacher's work with recourse to God and asks for speech that is simple, concrete, loving, and free of pride or scorn.",
+      "imitation": "Before a difficult conversation, pray for the other person's good, state one verifiable claim plainly, and invite correction without using fear, status, or spiritual pressure.",
+      "sourceIds": ["vincent-vatican-spiritual"]
+    },
+    {
+      "name": "Zeal accountable to truth",
+      "evidence": "His changing apocalyptic claims and hagiographic amplification show that urgency and popular response do not remove the need for evidence, restraint, and review.",
+      "imitation": "When a religious claim feels urgent, distinguish revelation from interpretation, remove unsupported dates or guarantees, and ask a qualified reviewer to test the evidence before sharing it.",
+      "sourceIds": ["vincent-daileader-review"]
+    },
+    {
+      "name": "Repentant regard for conscience",
+      "evidence": "The record of compulsory sermons and segregation aimed at conversion shows the harm caused when preaching and political power constrain a minority community.",
+      "imitation": "Make participation genuinely voluntary, protect a clear right to decline without penalty, and listen to people whose communities have been targeted by religious coercion before designing outreach.",
+      "sourceIds": ["vincent-daileader-review", "vincent-losada-antijudaism"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray with 2 Corinthians 4:5 and place one message you want others to accept before Christ. Ask whether you are proclaiming Jesus or your own certainty. Name any fear, prediction, social pressure, or contempt you are tempted to use, renounce it, and ask for love that protects the hearer's freedom.",
+    "action": "Review one sermon, lesson, invitation, or religious post for unsupported certainty and coercive pressure. Remove a threat or inflated claim, add the evidence and its limits, make refusal consequence-free, and invite review from someone outside your usual audience, especially where a minority community could be harmed."
+  },
+  "reflectionQuestions": [
+    "When does my urgency to persuade stop listening to the other person's conscience, evidence, and freedom?",
+    "What harmful result have I excused because the speaker was popular, sincere, or associated with a good religious cause?"
+  ],
+  "scripture": {
+    "reference": "2 Corinthians 4:5",
+    "connection": "Paul says that Christians proclaim Jesus Christ as Lord, not themselves. Vincent's best counsel directs the preacher away from pride; his harmful context warns that neither charisma, crowds, nor fear may replace Christ or command another person's conscience."
+  },
+  "prayer": "Lord Jesus Christ, you are the truth we proclaim and the judge of every preacher. Through the intercession of Saint Vincent Ferrer, teach us to speak from prayer, humility, and patient love. Forgive Christian words and laws that pressured Jewish people, Muslims, or any neighbor to abandon conscience. Free us from inflated stories, fearful predictions, and the desire to control. Make our witness honest, accountable, and gentle, so that every person is respected and you alone are glorified. Amen."
+}

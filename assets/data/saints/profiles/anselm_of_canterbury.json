@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 2,
+  "id": "anselm_of_canterbury",
+  "profileKind": "individual",
+  "celebrationIds": ["anselm_of_canterbury", "saint_anselm_bishop_and_doctor_of_the_church"],
+  "name": "Saint Anselm, Bishop and Doctor of the Church",
+  "alternateNames": ["Anselm of Canterbury", "Anselm of Aosta"],
+  "ecclesialTitle": "Archbishop of Canterbury and Doctor of the Church",
+  "lifeSpan": "c. 1033/34-1109",
+  "lifeLength": "about 75 to 76 years",
+  "vocation": "Benedictine monk, abbot, archbishop, philosopher, and theologian",
+  "places": ["Aosta", "Bec", "Canterbury", "Rome"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Anselm moved from the Benedictine monastery of Bec to the archbishopric of Canterbury, joining disciplined prayer to rigorous reasoning. His writings seek understanding from within faith rather than replacing faith with argument. As archbishop he endured two periods of exile amid disputes with English kings. His account of Christ's saving work must be read as voluntary self-giving and restored communion, not as a Father punishing an unwilling Son.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Anselm_of_Canterbury",
+  "wikidataId": "Q43939",
+  "feastDates": ["April 21"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "anselm-benedict-letter",
+      "title": "Letter on the occasion of the ninth centenary of the death of Saint Anselm",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/letters/2009/documents/hf_ben-xvi_let_20090307_st-anselmo.html",
+      "publicationDate": "2009-03-07",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal letter used for the traditional 1033 birth year, death in 1109, Aosta, Bec and Canterbury, Benedictine and episcopal identity, major works, prayerful theology, and conflicts over the Church's freedom; paraphrased",
+      "supports": ["identity", "dates", "places", "life.monastic", "life.archbishop", "life.exile", "works.proslogion", "works.cur_deus_homo", "virtues.prayerful_reason", "virtues.accountable_leadership"]
+    },
+    {
+      "id": "anselm-proslogion",
+      "title": "Proslogion",
+      "authorOrInstitution": "Saint Anselm of Canterbury; translated by Sidney Norton Deane",
+      "publisher": "Fordham University Internet Medieval Sourcebook",
+      "url": "https://sourcebooks.web.fordham.edu/basis/anselm-proslogium.asp",
+      "publicationDate": "1903",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Primary theological text used for faith seeking understanding, prayer as the setting of inquiry, human dependence on grace, and intellectual humility; ideas paraphrased without reproducing the translation",
+      "supports": ["life.prayer_and_reason", "works.proslogion", "virtues.prayerful_reason", "theology.faith_seeking_understanding", "sourceLimits"]
+    },
+    {
+      "id": "anselm-cur-deus-homo",
+      "title": "Cur Deus Homo",
+      "authorOrInstitution": "Saint Anselm of Canterbury; translated by Sidney Norton Deane",
+      "publisher": "Fordham University Internet Medieval Sourcebook",
+      "url": "https://sourcebooks.web.fordham.edu/basis/anselm-curdeus.asp",
+      "publicationDate": "1903",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Primary theological dialogue used for reason serving faith, the need for interpretive humility, Christ's voluntary self-offering, and satisfaction as the restoration of the order damaged by sin; paraphrased",
+      "supports": ["works.cur_deus_homo", "theology.reason", "theology.incarnation", "theology.voluntary_self_gift", "theology.satisfaction", "sourceLimits"]
+    },
+    {
+      "id": "anselm-sep",
+      "title": "Saint Anselm",
+      "authorOrInstitution": "Thomas Williams",
+      "publisher": "Stanford Encyclopedia of Philosophy",
+      "url": "https://plato.stanford.edu/entries/anselm/index.html",
+      "publicationDate": "2023-07-16",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Expert philosophical biography used for the traditional 1033 birth year, limited evidence about Anselm's early life, Bec and Canterbury chronology, royal conflicts and exiles, major writings, and faith as active love seeking deeper knowledge",
+      "supports": ["identity", "dates", "places", "life.early_limits", "life.bec", "life.archbishop", "life.exile", "works", "theology.faith_seeking_understanding", "historicalCertainty"]
+    },
+    {
+      "id": "anselm-sep-atonement",
+      "title": "Atonement",
+      "authorOrInstitution": "Joshua C. Thurow",
+      "publisher": "Stanford Encyclopedia of Philosophy",
+      "url": "https://plato.stanford.edu/archives/sum2023/entries/atonement/",
+      "publicationDate": "2023-04-05",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Scholarly overview used to distinguish Anselm's satisfaction account from penal-substitution theories and to situate it among accounts of reconciliation",
+      "supports": ["theology.atonement", "theology.satisfaction", "theology.reconciliation", "theology.not_penal_substitution", "sourceLimits"]
+    },
+    {
+      "id": "anselm-restorative",
+      "title": "Anselmian Atonement and Restorative Justice",
+      "authorOrInstitution": "Theodoor van Willigenburg",
+      "publisher": "The Saint Anselm Journal; Catholic University of America Press",
+      "url": "https://research.vu.nl/en/publications/anselmian-atonement-and-restorative-justice/",
+      "publicationDate": "2022-11",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Peer-reviewed interpretation used to resist equating satisfaction with punishment and to present Anselm's Benedictine moral framework in restorative terms without claiming it settles all atonement debates",
+      "supports": ["theology.satisfaction", "theology.restoration", "theology.not_punishment", "historicalContext", "sourceLimits"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Anselm shows that Christian thought can be both prayerful and exacting: questions are welcomed, but reason remains accountable to love, worship, Scripture, and the Church's received faith. His public ministry also asks leaders to protect the Church's mission without turning every institutional contest into proof of personal holiness. His atonement reasoning is best received through Christ's free, reconciling self-gift, not through a punitive caricature.",
+  "oneMinuteSummary": "Born at Aosta around 1033 or early 1034, Anselm became a monk and then abbot at Bec in Normandy. There he wrote works in which prayer and disciplined argument belong together. The phrase commonly used to describe his method, faith seeking understanding, names an inquiry already awakened by trust and love; it does not make proof a substitute for faith. Chosen archbishop of Canterbury in 1093, Anselm entered prolonged disputes with Kings William II and Henry I over appointments, property, allegiance, and the Church's freedom. He spent two periods outside England and eventually reached negotiated settlements. The conflicts matter, but neither kings nor archbishop should be reduced to a simple morality tale, and picturesque appointment anecdotes are not secure enough for this profile. In Cur Deus Homo, Anselm asks why the God-man is fitting for human salvation. His account uses the language of satisfaction: sin disorders the relation owed to God, and humanity cannot repair it unaided. Yet Christ offers himself freely; the Son is not an unwilling victim punished by the Father. Later penal theories must not simply be read back into Anselm. His lasting invitation is to seek Christ with the mind in prayer, to admit the limits of an argument, and to exercise Church authority with courage, patience, and accountability.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A monk formed at Bec",
+        "body": "Evidence for Anselm's childhood is thinner than later storytelling suggests. The secure outline places him at Aosta, then at Bec, where he entered the Benedictine community, studied under Lanfranc, and became prior and abbot. Monastic prayer, common discipline, teaching, and pastoral responsibility formed the setting of his intellectual work.",
+        "sourceIds": ["anselm-benedict-letter", "anselm-sep"]
+      },
+      {
+        "heading": "Faith seeking understanding",
+        "body": "The Proslogion is addressed to God before it offers an argument. Anselm asks for understanding from within faith, recognizing that desire, attention, and grace shape the search for truth. His method invites honest reasoning while resisting both anti-intellectual piety and the claim that a successful argument gives mastery over God.",
+        "sourceIds": ["anselm-proslogion", "anselm-sep"]
+      },
+      {
+        "heading": "An archbishop amid contested authority",
+        "body": "As archbishop of Canterbury, Anselm disputed with William II and Henry I over royal control, Church property, appointments, and investiture. Two extended absences from England involved appeals to Rome and patient negotiation as well as confrontation. His defense of ecclesial responsibility can inspire courage, but responsible memory also tests a leader's means, counsel, and consequences instead of canonizing every institutional position.",
+        "sourceIds": ["anselm-benedict-letter", "anselm-sep"]
+      },
+      {
+        "heading": "The God-man's free work of reconciliation",
+        "body": "Cur Deus Homo reasons that humanity cannot heal the disorder of sin by its own resources and that the God-man freely accomplishes what reconciliation requires. Anselm's satisfaction language is not identical to later penal substitution, and his dialogue expressly refuses the picture of Christ compelled to die against his will. The argument should lead to gratitude for divine initiative and restored communion, not to depicting the Father as cruel or suffering as valuable in itself.",
+        "sourceIds": ["anselm-cur-deus-homo", "anselm-sep-atonement", "anselm-restorative"]
+      }
+    ],
+    "gospelTheme": "In Jesus Christ, divine truth invites loving understanding and divine mercy restores communion through the Son's free self-gift.",
+    "struggle": "Anselm faced the limits of human language about God, the demands of monastic and episcopal office, and political conflicts in which fidelity, authority, and workable settlement had to be discerned together.",
+    "response": "He prayed, argued carefully, revised his explanations, sought counsel and papal judgment, endured exile, and continued negotiating rather than treating either intellectual confidence or institutional resistance as an end in itself."
+  },
+  "virtues": [
+    {
+      "name": "Prayerful reason",
+      "evidence": "The Proslogion places sustained reasoning inside a direct address to God, asking for the understanding needed to love and rejoice in the truth.",
+      "imitation": "Begin one difficult question with prayer, write the strongest evidence for and against your view, and end by naming what remains uncertain before acting.",
+      "sourceIds": ["anselm-proslogion", "anselm-sep"]
+    },
+    {
+      "name": "Intellectual humility",
+      "evidence": "Anselm's dialogues distinguish what Christians confess from the provisional arguments used to explore its fittingness; later scholarship likewise warns against collapsing his account into later theories.",
+      "imitation": "Label a conclusion as doctrine, interpretation, or open question, and revise it when the sources do not support the certainty you first claimed.",
+      "sourceIds": ["anselm-cur-deus-homo", "anselm-sep-atonement"]
+    },
+    {
+      "name": "Accountable leadership",
+      "evidence": "His archiepiscopal career combined resistance to royal control with appeals, absences, counsel, and negotiated settlements rather than a single triumphant confrontation.",
+      "imitation": "When conscience requires resistance, state the principle and the people affected, invite independent counsel, document the costs, and keep a path open for a just settlement.",
+      "sourceIds": ["anselm-benedict-letter", "anselm-sep"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray slowly with 1 Peter 3:15-16. Bring Christ one belief you want to defend. Ask for a reason joined to gentleness, a conscience willing to be corrected, and love for the person who remains unconvinced. Then write one sentence each for what faith confesses, what your reasoning suggests, and what you still do not know.",
+    "action": "Choose one decision in which your authority affects others. Ask a knowledgeable person who can disagree safely to review your evidence, likely harms, and route of appeal. Record one correction you will accept and one concrete safeguard for those with less power before proceeding."
+  },
+  "reflectionQuestions": [
+    "Where have I confused defending the faith with defending my own argument, office, or reputation?",
+    "Does my account of Christ's saving work reveal his free reconciling love, or does it make coercion and suffering seem holy in themselves?"
+  ],
+  "scripture": {
+    "reference": "1 Peter 3:15-16",
+    "connection": "Peter joins readiness to give a reason for Christian hope with gentleness, reverence, and a clear conscience. That union tests both Anselm's prayerful arguments and every exercise of teaching authority."
+  },
+  "prayer": "Lord Jesus Christ, eternal Wisdom and willing giver of yourself, draw our minds into the love that seeks truth. Through the intercession of Saint Anselm, make our questions prayerful, our arguments honest, and our authority accountable. Correct every image of you that glorifies coercion or cruelty. Teach your Church to defend her mission with courage and gentleness, to accept wise correction, and to seek reconciliation without surrendering truth. Amen."
+}

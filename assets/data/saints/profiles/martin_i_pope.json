@@ -1,0 +1,161 @@
+{
+  "schemaVersion": 2,
+  "id": "martin_i_pope",
+  "profileKind": "individual",
+  "celebrationIds": ["martin_i_pope", "saint_martin_i_pope_and_martyr"],
+  "name": "Saint Martin I, Pope and Martyr",
+  "alternateNames": ["Pope Martin I"],
+  "ecclesialTitle": "Pope and martyr",
+  "lifeSpan": "died 655",
+  "lifeLength": "birth year unknown",
+  "vocation": "Bishop of Rome and defender of Christ's full humanity",
+  "places": ["Todi", "Rome", "Constantinople", "Cherson"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Martin I became bishop of Rome in 649 and presided over the Lateran synod that opposed Monothelitism and defended Christ's true human will. His resistance unfolded inside a struggle over doctrine, imperial unity, and control of the Roman Church. Imperial agents arrested him; a treason proceeding excluded the theological issue, and he endured degrading custody, imprisonment, and exile before dying in 655. The abuse was an injustice, not the source of his holiness.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Pope_Martin_I",
+  "wikidataId": "Q172390",
+  "feastDates": ["April 13"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {
+      "id": "martin-vatican-registry",
+      "title": "Martin I, Martyr",
+      "authorOrInstitution": "The Holy See",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/vatican/de/holy-father/martino-i.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Official papal registry used for Todi origin, status as the seventy-fourth pope, and the 649-655 pontificate dates",
+      "supports": ["identity", "ecclesialTitle", "places", "dates", "life.pontificate"]
+    },
+    {
+      "id": "martin-benedict-maximus",
+      "title": "General Audience: St Maximus the Confessor",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/audiences/2008/documents/hf_ben-xvi_aud_20080625.html",
+      "publicationDate": "2008-06-25",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal catechesis used for the two wills of Christ, the 649 Lateran synod, imperial prohibition of discussion, Martin's arrest, trial, commuted death sentence, exile, suffering, and death in 655",
+      "supports": ["life.christology", "life.lateran_synod", "life.imperial_edict", "life.arrest", "life.trial", "life.exile", "dates", "theology.christ"]
+    },
+    {
+      "id": "martin-vatican-news-feast",
+      "title": "St. Martin I, Pope and Martyr",
+      "authorOrInstitution": "Dicastery for Communication",
+      "publisher": "Vatican News",
+      "url": "https://www.vaticannews.va/en/saints/04/13/st--martin-i--pope-and-martyr.html",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Official tertiary calendar page used only to confirm the April 13 commemoration and the title Pope and Martyr",
+      "supports": ["identity", "ecclesialTitle", "feastDate"]
+    },
+    {
+      "id": "martin-jts-lateran",
+      "title": "The Acts of the Lateran Synod of 649. Translated with notes by Richard Price, with contributions by Phil Booth and Catherine Cubitt",
+      "authorOrInstitution": "Eileen Rubery",
+      "publisher": "The Journal of Theological Studies, Oxford University Press",
+      "url": "https://academic.oup.com/jts/article-pdf/68/1/384/16705412/flx050.pdf",
+      "publicationDate": "2017-02-08",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Scholarly review used for the synod's non-ecumenical status, Martin's presidency, imperial consequences, and later endorsement of its Christology at Constantinople III",
+      "supports": ["life.lateran_synod", "life.synod_status", "life.imperial_politics", "life.reception", "historicalCertainty"]
+    },
+    {
+      "id": "martin-nce-biography",
+      "title": "Martin I, Pope, St.",
+      "authorOrInstitution": "R. E. Sullivan",
+      "publisher": "New Catholic Encyclopedia via Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/martin-i-pope-st",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Recognized historical reference used for unknown birth year, Roman and Constantinopolitan context, synod, refusal of violent resistance, brutal transport, humiliation, treason charge, imprisonment, sentence, exile, and pontificate-end ambiguity",
+      "supports": ["identity", "dates", "life.apocrisiarius", "life.lateran_synod", "life.nonviolence", "life.arrest", "life.mistreatment", "life.trial", "life.imprisonment", "life.exile", "historicalConflict"]
+    },
+    {
+      "id": "martin-treccani-biography",
+      "title": "MARTINO I, papa, santo",
+      "authorOrInstitution": "Georg Jenal",
+      "publisher": "Dizionario Biografico degli Italiani, Istituto della Enciclopedia Italiana",
+      "url": "https://www.treccani.it/enciclopedia/martino-i-papa-santo_%28Dizionario-Biografico%29/",
+      "publicationDate": "2008",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Critical biography used for unknown birth date, the intertwined theological and imperial conflict, Greek monastic preparation of the synod, limits of its acts, disputed involvement with Olympius, arrest, transport, treason-only proceedings, degrading treatment, imprisonment, and exile",
+      "supports": ["dates", "life.christology", "life.lateran_synod", "life.synod_preparation", "life.imperial_politics", "life.olympius_dispute", "life.arrest", "life.mistreatment", "life.trial", "life.imprisonment", "life.exile", "sourceLimits", "historicalCertainty"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Martin shows that conscience can resist both enforced silence and institutional self-protection, but fidelity is not proved by how much abuse a person endures. His witness asks Christians to seek truth about Christ, distinguish doctrine from factional accusation, refuse violent defense, and protect those whom states or churches humiliate for speaking responsibly.",
+  "oneMinuteSummary": "Martin was born at Todi, but his birth year is not securely known. After service as a Roman cleric and papal representative in Constantinople, he became bishop of Rome in 649 without awaiting imperial approval. The empire faced military crisis and religious division, and Constans II's Typos tried to suppress debate about whether Christ possessed a true human will. Martin presided over the Lateran synod of 649, which affirmed divine and human wills and operations in the one person of Christ. Modern study shows the synod was a Roman provincial gathering rather than an ecumenical council and that Maximus the Confessor and Greek monks had prepared much of its theology and bilingual acts. Its teaching was nevertheless influential and later received at the Third Council of Constantinople. The dispute was also political. Imperial officials connected Martin with the rebel exarch Olympius, though the extent of that relationship is unclear. When agents entered the Lateran to arrest him, Martin declined resistance to avoid bloodshed. He was transported while ill, isolated, publicly degraded, and tried on treason charges; the court refused to make the theological question the issue. A death sentence was commuted to exile at Cherson, where he died in 655. The Church remembers him as martyr, but deprivation and humiliation are evils. His holiness lies in faithful, nonviolent conscience centered on the full humanity and divinity of Christ, not in glorifying what captors did to him.",
+  "life": {
+    "sections": [
+      {
+        "heading": "The full humanity of Christ at stake",
+        "body": "Monothelitism tried to speak of one will in Christ, partly as an imperial path toward religious unity. Martin's synod defended a true human will as well as a divine will in the one person of the Son. The concern was saving, not abstract: if Christ lacks a human will, he has not assumed and healed human life in its fullness.",
+        "sourceIds": ["martin-benedict-maximus", "martin-nce-biography", "martin-treccani-biography"]
+      },
+      {
+        "heading": "A synod shaped by many hands",
+        "body": "Martin presided over the Lateran synod in 649, but Maximus and Greek-speaking monks had prepared much of its argument and acts. The gathering was provincial, not ecumenical, even though its doctrine later received ecumenical confirmation. Remembering collaboration and limits prevents papal courage from becoming a single-hero story.",
+        "sourceIds": ["martin-jts-lateran", "martin-treccani-biography"]
+      },
+      {
+        "heading": "Doctrine entangled with imperial politics",
+        "body": "Martin's consecration without imperial approval, his rejection of the Typos, and the unresolved question of his relationship to Olympius all intensified conflict with Constantinople. At trial the state pursued treason rather than an open theological hearing. Conscience should not be confused with a political faction, and accusations should be tested rather than sanctified by either civil or church office.",
+        "sourceIds": ["martin-nce-biography", "martin-treccani-biography"]
+      },
+      {
+        "heading": "Arrest, degradation, and exile",
+        "body": "Martin refused armed resistance when imperial agents came, fearing bloodshed. While already ill he endured harsh transport, isolation, public humiliation, imprisonment, a death sentence, and exile at Cherson. These acts violated his dignity. Christian remembrance honors his nonviolent fidelity and must never imply that mistreatment becomes good because a victim remains faithful.",
+        "sourceIds": ["martin-benedict-maximus", "martin-nce-biography", "martin-treccani-biography"]
+      }
+    ],
+    "gospelTheme": "In Gethsemane the true human will of Jesus is neither erased nor coerced; in freedom the Son entrusts himself to the Father, revealing obedience as loving communion rather than domination.",
+    "struggle": "Martin faced a doctrinal dispute inseparable from imperial survival, papal independence, regional rivalry, disputed political accusations, grave illness, custody, and abandonment.",
+    "response": "He convened a synod, defended Christ's full humanity, circulated its teaching, declined violent resistance, and maintained his confession through an unjust treason process and exile."
+  },
+  "virtues": [
+    {
+      "name": "Conscience grounded in Christ",
+      "evidence": "Martin opposed an imperial order of silence because he judged Christ's true human will essential to the mystery of salvation.",
+      "imitation": "State the truth at issue in Christ-centered terms, document the evidence, distinguish it from party loyalty, and use accountable channels even when an authority prefers silence.",
+      "sourceIds": ["martin-benedict-maximus", "martin-treccani-biography"]
+    },
+    {
+      "name": "Collaborative discernment",
+      "evidence": "The Lateran synod's theology and acts were shaped by Martin, Maximus, Greek monks, bishops, and earlier preparation rather than one leader alone.",
+      "imitation": "Credit the people who prepared a decision, record minority concerns, and keep the scope of a meeting's authority as clear as its conclusion.",
+      "sourceIds": ["martin-jts-lateran", "martin-treccani-biography"]
+    },
+    {
+      "name": "Nonviolent courage",
+      "evidence": "Martin chose not to resist arrest when resistance could bring violence upon the people around him, then continued to bear witness under political prosecution.",
+      "imitation": "If speaking carries risk, make a safety plan with trusted people, preserve records, avoid reckless escalation, and refuse to make preventable injury a test of faithfulness.",
+      "sourceIds": ["martin-nce-biography", "martin-treccani-biography"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray slowly with Luke 22:42. Bring one conflict of conscience to Jesus, naming both what you desire and what truth requires. Ask whether your position protects the full dignity and freedom of persons, and whether loyalty to a faction, institution, or reputation is disguising itself as obedience to God.",
+    "action": "For one contested decision, write a one-page conscience record: the precise claim, evidence, competent reviewers, people at risk, lawful reporting path, and nonviolent safety plan. Share it with a trusted accountable adviser, correct any partisan overstatement, and do not seek danger or isolation as proof of courage."
+  },
+  "reflectionQuestions": [
+    "Can I explain the truth I am defending without turning every opponent into an enemy of Christ?",
+    "When authority demands silence, what accountable and nonviolent action protects both conscience and the people who may bear the consequences?"
+  ],
+  "scripture": {
+    "reference": "Luke 22:42",
+    "connection": "Jesus names his human desire and freely entrusts it to the Father. The verse helps explain why Martin's Christological stand matters: salvation does not erase human willing, and obedience to God must not be confused with an abuser's control."
+  },
+  "prayer": "Lord Jesus Christ, true God and true man, you offered your human will freely to the Father in love. Through the intercession of Saint Martin I, give your Church courage to seek truth without factionalism and to resist enforced silence without violence. Protect prisoners, exiles, and all who are degraded by state or religious power. Keep us from glorifying their suffering. Make our consciences humble, well formed, accountable, and steadfast in your mercy. Amen."
+}
