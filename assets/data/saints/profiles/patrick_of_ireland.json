@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 2,
+  "id": "patrick_of_ireland",
+  "profileKind": "individual",
+  "celebrationIds": ["patrick_of_ireland", "saint_patrick_bishop"],
+  "name": "Saint Patrick",
+  "alternateNames": ["Patricius", "Pádraig"],
+  "ecclesialTitle": "Missionary bishop and patron of Ireland",
+  "lifeSpan": "5th century",
+  "lifeLength": "exact dates unknown",
+  "vocation": "Missionary bishop and pastor in Ireland",
+  "places": ["Roman Britain", "Ireland"],
+  "patronage": ["Ireland"],
+  "symbols": ["shamrock in later tradition"],
+  "briefBio": "Patrick's own writings present a Romano-British youth taken captive and enslaved in Ireland, a convert who escaped, and a later bishop serving in Ireland. His Letter to Coroticus condemns killing, captivity, and slave trading. Snakes and shamrocks belong to much later legend, not his surviving testimony.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Saint_Patrick",
+  "wikidataId": "Q165479",
+  "feastDates": ["March 17"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "patrick-confessio",
+      "title": "Confession",
+      "authorOrInstitution": "Saint Patrick; translated by Pádraig McCarthy",
+      "publisher": "St Patrick's Confessio, Royal Irish Academy",
+      "url": "https://www.confessio.ie/etexts/confessio_english",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Primary text used for family background, capture at about sixteen, six years of enslavement, conversion, escape, call narrative, episcopal mission, humility, local service, and refusal of gifts; paraphrased without long translation",
+      "supports": ["identity", "life.captivity", "life.enslavement", "life.conversion", "life.escape", "life.mission", "life.bishop", "virtues.humility", "virtues.perseverance", "theology.christ", "scripture"]
+    },
+    {
+      "id": "patrick-epistola",
+      "title": "Letter to the soldiers of Coroticus",
+      "authorOrInstitution": "Saint Patrick; translated by Pádraig McCarthy",
+      "publisher": "St Patrick's Confessio, Royal Irish Academy",
+      "url": "https://www.confessio.ie/etexts/epistola_english",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Primary text used for Patrick's office in Ireland, the killing and capture of newly baptized Christians, his demand for captives' release, rejection of stolen wealth and complicity, grief, and opposition to enslavement; paraphrased",
+      "supports": ["identity", "life.bishop", "life.mission", "life.coroticus", "life.enslavement", "life.captives", "virtues.justice", "virtues.solidarity", "theology.christ"]
+    },
+    {
+      "id": "patrick-breeze-chronology",
+      "title": "Somerset, Bannaventa Tabernae, and the Dates of St Patrick",
+      "authorOrInstitution": "Andrew Breeze",
+      "publisher": "Journal for Late Antique Religion and Culture, Cardiff University Press",
+      "url": "https://jlarc.cardiffuniversitypress.org/articles/10.18573/jlarc.140",
+      "publicationDate": "2023-05-02",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Peer-reviewed historical study used as evidence of continuing birthplace and date debate and of the fifth-century setting; its proposed precision is not treated as consensus",
+      "supports": ["chronology", "dateConflict", "placeConflict", "historicalCertainty"]
+    },
+    {
+      "id": "patrick-irish-bishops-2014",
+      "title": "Bishops' message for the Solemnity of Saint Patrick",
+      "authorOrInstitution": "Irish Catholic Bishops' Conference",
+      "publisher": "Irish Catholic Bishops' Conference",
+      "url": "https://www.catholicbishops.ie/2014/03/14/bishops-message-solemnity-saint-patrick/",
+      "publicationDate": "2014-03-14",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal episcopal message used for the March 17 solemnity in Ireland, national patronage, Patrick as migrant and servant away from home, and a contemporary application of welcome to migrants and people seeking asylum",
+      "supports": ["feastDate", "patronage", "patronage.ireland", "life.migration", "life.service", "practice.hospitality"]
+    },
+    {
+      "id": "patrick-maynooth-legends",
+      "title": "Scholar addresses facts and fictions of St Patrick",
+      "authorOrInstitution": "Susan Gately reporting historical analysis by Salvador Ryan",
+      "publisher": "CatholicIreland.net",
+      "url": "https://www.catholicireland.net/facts-fictions-st-patrick/",
+      "publicationDate": "2014-03-17",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Reputable interview with a professor of ecclesiastical history used to control earlier Christianity and Palladius, the rise of seventh-century hagiography, the twelfth-century snakes story, and the seventeenth-century shamrock association",
+      "supports": ["life.mission", "historicalContext", "legend.snakes", "legend.shamrock", "symbols", "symbols.shamrock_tradition", "historicalCertainty"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Patrick's two surviving writings are more demanding than the legends. A person once enslaved speaks with humility about grace, serves far from home, and publicly opposes Christians who kill and sell captives. His mission cannot justify coercion or nationalist triumph: Christian witness listens, honors freedom, accepts local accountability, and confronts exploitation.",
+  "oneMinuteSummary": "Patrick says he was born into a Christian family in Roman Britain and was taken captive at about sixteen with many others. Enslaved in Ireland for six years, he turned to God in prayer and eventually escaped. Captivity was exploitation, not a spiritual good; grace met him within harm without making the harm necessary. His Confessio later presents him as a bishop who returned to serve in Ireland, baptized converts, ordained clergy, refused personal payments, and remained despite danger and homesickness. The precise route, birthplace, mission dates, and death year remain debated, so the profile keeps a fifth-century span. Patrick was not the first Christian presence in Ireland, and Palladius's earlier mission prevents a single-hero story. In his Letter to the soldiers of Coroticus, Patrick denounces the killing and capture of baptized people, demands the captives' release, rejects wealth taken through violence, and grieves with the enslaved. Later hagiography enlarged his image. The snakes story appears centuries later, and the shamrock association is first evidenced much later still. The shamrock can remain an honest traditional symbol only when it is not confused with Patrick's own testimony.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Captivity was enslavement",
+        "body": "Patrick's Confessio says raiders took him from his family in Britain at about sixteen and carried him with thousands of captives to Ireland. He worked for six years before escaping. He also describes prayer and conversion during those years, but enslavement remains a grave injustice. God did not need exploitation in order to love him, and no survivor owes gratitude for abuse.",
+        "sourceIds": ["patrick-confessio", "patrick-breeze-chronology"]
+      },
+      {
+        "heading": "A humble account of mission",
+        "body": "Patrick writes as a bishop whose love for Christ brought him back among the Irish. He acknowledges limited education, opposition from some superiors, danger, and dependence on grace. He reports baptizing and ordaining local Christians and refusing gifts offered for his ministry. These claims describe his self-understanding; they do not license pressure, cultural contempt, or a claim that one foreign missionary created Irish Christianity alone.",
+        "sourceIds": ["patrick-confessio", "patrick-epistola", "patrick-maynooth-legends"]
+      },
+      {
+        "heading": "A public stand against slave raiding",
+        "body": "After Coroticus's soldiers killed and captured newly baptized Christians, Patrick sent envoys and then a public letter. He demanded release, condemned the sale of free people, warned against benefiting from stolen goods, and mourned with those carried away. His forceful language serves the victims' freedom; modern Christians must oppose trafficking, forced labor, and every system that turns persons into property.",
+        "sourceIds": ["patrick-epistola"]
+      },
+      {
+        "heading": "History before national legend",
+        "body": "Scholars still dispute Patrick's exact dates and birthplace. Christianity existed in Ireland before him, and Palladius had been sent there earlier. Seventh-century hagiography and later national memory made Patrick a wonder-worker and single conqueror. The snakes and shamrock stories are later traditions, not evidence from his writings. Honoring Ireland's patron does not require erasing other Christians or using mission as a national victory story.",
+        "sourceIds": ["patrick-breeze-chronology", "patrick-irish-bishops-2014", "patrick-maynooth-legends"]
+      }
+    ],
+    "gospelTheme": "The love of Christ sends witnesses as humble servants who respect freedom, remain accountable to the people they serve, and defend neighbors against exploitation.",
+    "struggle": "Patrick knew forced displacement, enslavement, separation from family, danger, criticism, homesickness, pastoral limits, and violence against members of the communities he served.",
+    "response": "He prayed, returned as a missionary bishop, served local Christians, refused personal gain, wrote an honest defense of his ministry, and demanded freedom for captives."
+  },
+  "virtues": [
+    {
+      "name": "Humility before grace",
+      "evidence": "Patrick's Confessio foregrounds his limitations and repeatedly attributes conversion and mission to God's gift rather than personal greatness.",
+      "imitation": "Tell the truth about one limitation, seek local knowledge, and credit the people and grace that make your service possible.",
+      "sourceIds": ["patrick-confessio"]
+    },
+    {
+      "name": "Locally rooted perseverance",
+      "evidence": "He remained among the people he served despite longing for home, danger, criticism, and the costs of travel and ministry.",
+      "imitation": "Before offering witness or aid, listen to local leaders and affected people, learn the history, agree on accountability, and preserve a free refusal without penalty.",
+      "sourceIds": ["patrick-confessio", "patrick-irish-bishops-2014"]
+    },
+    {
+      "name": "Solidarity against enslavement",
+      "evidence": "Patrick's Letter names the killing and sale of captives, seeks their return, refuses complicity, and shares the community's grief.",
+      "imitation": "Learn one verified local sign of trafficking or forced labor and the safe reporting route; follow survivor-centred guidance rather than confronting suspected exploiters alone.",
+      "sourceIds": ["patrick-epistola"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray with 2 Corinthians 5:14 and ask how Christ's love can move you toward humble witness without pressure, cultural superiority, or national pride. Name any harm you are tempted to excuse because a religious outcome appears good.",
+    "action": "Support a locally led, safeguarding-compliant church, migrant, refugee, or anti-trafficking organization. Follow its training and survivor-centred protocols, never trade aid for religious participation, and never investigate or confront suspected traffickers on your own."
+  },
+  "reflectionQuestions": [
+    "Does my way of sharing faith leave another person genuinely free to question, decline, and remain respected?",
+    "Where am I called to oppose exploitation and restore freedom instead of benefiting from silence or a comforting legend?"
+  ],
+  "scripture": {
+    "reference": "2 Corinthians 5:14-15",
+    "connection": "Patrick describes the love of Christ as the power drawing him into service. That love is cruciform rather than coercive: the witness no longer lives for self, profit, or national glory, but for the risen Christ and the freedom of neighbors."
+  },
+  "prayer": "Lord Jesus Christ, your love called Patrick from self-reliance into humble service. Heal people wounded by captivity, trafficking, displacement, and religious coercion. Through Saint Patrick's intercession, give your Church courage to defend freedom, patience to listen, and integrity to witness without pressure or pride. Bless Ireland and every migrant people with justice, welcome, and peace. Amen."
+}

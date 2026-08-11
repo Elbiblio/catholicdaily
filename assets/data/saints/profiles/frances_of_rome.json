@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 2,
+  "id": "frances_of_rome",
+  "profileKind": "individual",
+  "celebrationIds": ["frances_of_rome", "saint_frances_of_rome_religious"],
+  "name": "Saint Frances of Rome",
+  "alternateNames": ["Francesca Romana", "Francesca Bussa de' Ponziani"],
+  "ecclesialTitle": "Laywoman, mother, widow, and foundress of the Oblates of Tor de' Specchi",
+  "lifeSpan": "1384–1440",
+  "lifeLength": "about 56 years",
+  "vocation": "Wife, mother, organizer of charity, Benedictine oblate, and community foundress",
+  "places": ["Rome, Italy", "Tor de' Specchi, Rome"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Frances of Rome lived most of her adult life as a wife and mother amid war, epidemic disease, and poverty in Rome. She organized care with other women, made an oblation with nine companions in 1425, and entered their common life after widowhood. Her witness requires consent, safe family responsibilities, and boundaries, not romanticized coercion.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Frances_of_Rome",
+  "wikidataId": "Q239129",
+  "feastDates": ["March 9"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "frances-leo-oblation-message",
+      "title": "Message to the Oblates of Saint Frances of Rome of Tor de' Specchi on the 600th anniversary of the Oblation",
+      "authorOrInstitution": "Pope Leo XIV",
+      "publisher": "Holy See Press Office",
+      "url": "https://press.vatican.va/content/salastampa/en/bollettino/pubblico/2025/08/15/250815d.html",
+      "publicationDate": "2025-08-15",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal message used for Frances as wife and mother, the 1425 oblation with nine companions, service of people in poverty, Benedictine inspiration, and received angel devotion; anachronistic details are rejected",
+      "supports": ["identity", "life.marriage", "life.motherhood", "life.oblation", "community", "life.poverty_service", "virtues.charity", "tradition.angels"]
+    },
+    {
+      "id": "frances-new-catholic-encyclopedia",
+      "title": "Frances of Rome, St.",
+      "authorOrInstitution": "M. Monaco",
+      "publisher": "New Catholic Encyclopedia via Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/frances-rome-st",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Recognized historical reference used for dates, marriage, hospital and poor relief, the 1425 group, 1433 approval, entry into common life after widowhood, canonization, and feast",
+      "supports": ["identity", "dates", "life.marriage", "life.service", "life.oblation", "life.widowhood", "community", "canonization", "feastDate"]
+    },
+    {
+      "id": "frances-odebiyi-noncloistered",
+      "title": "Betwixt and Between: Non-Cloistered Religious Women in Late Medieval Rome",
+      "authorOrInstitution": "Ashley Tickle Odebiyi",
+      "publisher": "Church History, Cambridge University Press for the American Society of Church History",
+      "url": "https://resolve.cambridge.org/core/services/aop-cambridge-core/content/view/0FD95FFC21010221B9C70D2C15D4BBDD/S0009640725000733a.pdf/betwixt_and_between_noncloistered_religious_women_in_late_medieval_rome.pdf",
+      "publicationDate": "2025",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Peer-reviewed open-access scholarship used for arranged-marriage context, the 1425 non-cloistered community, gender and class restrictions, service at Santa Maria in Cappella, and the tension between hagiographic charity stories and household duties",
+      "supports": ["life.marriage", "life.oblation", "community", "life.service", "genderContext", "hagiographyContext", "familyDutySafeguard"]
+    },
+    {
+      "id": "frances-usccb-resource",
+      "title": "St. Frances of Rome",
+      "authorOrInstitution": "Catholic News Service and United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://www.usccb.org/prayer-and-worship/liturgical-year/lent/upload/lent-st-frances-of-rome.pdf",
+      "publicationDate": "2015",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Officially hosted biographical summary used for feast, marriage and children, wartime disruption, epidemic charity, Oblate development, and explicit identification of guardian-angel and motorist associations as tradition",
+      "supports": ["identity", "dates", "feastDate", "life.marriage", "life.motherhood", "life.war", "life.service", "community", "tradition.angels", "tradition.motorists"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Frances shows a lay vocation growing through household responsibilities, civic crisis, friendship among women, and later common life. Her history does not command anyone to accept coercion, unsafe marriage, or neglect of dependents. It invites prayerful discernment with consent, honest boundaries, shared service, and fidelity to the people actually entrusted to one's care.",
+  "oneMinuteSummary": "Born in Rome in 1384, Frances entered a marriage arranged within elite family expectations and became a mother. The sources remember decades of marriage and household responsibility while war, political upheaval, famine, epidemic disease, and poverty harmed the city. She and her sister-in-law Vannozza served people who were sick or poor, including work connected with Santa Maria in Cappella. Some charity episodes survive through canonization testimony and hagiography with miraculous details; they cannot become instructions to dispose of family resources without consent or to leave dependents unsafe. On August 15, 1425, Frances and nine companions made an oblation associated with the Olivetan Benedictines. Their non-cloistered identity allowed prayer and service in the city; papal approval and the Tor de' Specchi house followed in 1433. After her husband's death in 1436, Frances joined the community's common life and served there until her death in 1440. Devotion also remembers visions and a guardian angel. Those traditions belong to her received spiritual portrait but are not used to construct secure chronology or to claim that private experiences override conscience, duties, or wise counsel.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Marriage, motherhood, and constrained choices",
+        "body": "Frances married young within the alliance-making expectations of an elite Roman family and had children. The sources do not authorize Christians to turn that social constraint into a universal model for women. Marriage requires free consent and safety; no devotional example obliges a person to accept coercion, abuse, or the silencing of conscience. Frances's historical path is one vocation, not a rule imposed on every life.",
+        "sourceIds": ["frances-leo-oblation-message", "frances-new-catholic-encyclopedia", "frances-odebiyi-noncloistered", "frances-usccb-resource"]
+      },
+      {
+        "heading": "Service in a wounded city",
+        "body": "Civil conflict, displacement, disease, and poverty repeatedly troubled fifteenth-century Rome. Frances and Vannozza were remembered for hospital work, almsgiving, and direct care. Hagiographic accounts intensify some episodes with miraculous replenishment of household stores. The secure moral center is organized mercy; modern imitation must also respect family resources, infection control, professional competence, and the agency of those receiving care.",
+        "sourceIds": ["frances-new-catholic-encyclopedia", "frances-odebiyi-noncloistered", "frances-usccb-resource"]
+      },
+      {
+        "heading": "A community within lay life",
+        "body": "In 1425 Frances and nine companions made an oblation connected with Benedictine spirituality. They initially remained non-cloistered women whose prayer, simple life, and public charity formed a recognizable community. Their path widened the ways women could pursue serious religious commitment in Rome, even while gender, class, and Church restrictions limited their public action.",
+        "sourceIds": ["frances-leo-oblation-message", "frances-new-catholic-encyclopedia", "frances-odebiyi-noncloistered"]
+      },
+      {
+        "heading": "Widowhood and common life",
+        "body": "The Tor de' Specchi community received approval and a common house in 1433. Frances did not leave her household to enter it immediately. After her husband's death in 1436, she joined the common life and served the community until 1440. The sequence matters: later religious life did not erase earlier marriage and motherhood or justify abandoning obligations before they had changed.",
+        "sourceIds": ["frances-new-catholic-encyclopedia", "frances-odebiyi-noncloistered", "frances-usccb-resource"]
+      },
+      {
+        "heading": "Visions received as tradition",
+        "body": "Later devotion strongly associates Frances with visions and the guidance of a guardian angel, and official Catholic sources continue to recall that spiritual tradition. These accounts are not treated as documentary chronology or as permission to bypass Scripture, conscience, competent counsel, consent, or safety. Private spiritual experience is judged by its fruit in Christlike love and responsible communion.",
+        "sourceIds": ["frances-leo-oblation-message", "frances-usccb-resource"]
+      }
+    ],
+    "gospelTheme": "Love for Christ takes flesh in consent, fidelity, shared responsibility, and truthful service of neighbors without sacrificing the safety of those already entrusted to us.",
+    "struggle": "Frances lived amid constrained choices for women, household and parenting duties, bereavement, political violence, epidemic disease, poverty, and tension between family resources and public charity.",
+    "response": "She prayed, cared for her household, organized service with other women, formed a non-cloistered oblate community, and entered its common life when widowhood changed her responsibilities."
+  },
+  "virtues": [
+    {
+      "name": "Integrated lay fidelity",
+      "evidence": "Frances's long marriage and motherhood preceded her entry into the community, while prayer and charity developed within those responsibilities.",
+      "imitation": "Discern a next step with everyone directly affected, making consent, dependents' needs, and safety part of the spiritual decision rather than obstacles to it.",
+      "sourceIds": ["frances-leo-oblation-message", "frances-new-catholic-encyclopedia", "frances-usccb-resource"]
+    },
+    {
+      "name": "Collaborative mercy",
+      "evidence": "Frances served with Vannozza and gathered companions whose shared commitment became the Oblates of Tor de' Specchi.",
+      "imitation": "Join a trustworthy team where roles, resources, consent, and boundaries are agreed instead of making another person's need depend on your private initiative.",
+      "sourceIds": ["frances-leo-oblation-message", "frances-odebiyi-noncloistered"]
+    },
+    {
+      "name": "Discernment across changing seasons",
+      "evidence": "She remained in household life after the 1425 oblation and joined common religious life only after widowhood changed her vocation's concrete demands.",
+      "imitation": "Name what this season truly requires, what must wait, and whose counsel can test whether a desired change honors both calling and responsibility.",
+      "sourceIds": ["frances-new-catholic-encyclopedia", "frances-odebiyi-noncloistered"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Review your present commitments with Christ: family, vocation, health, prayer, and service. Ask for one faithful order among them. A spiritual desire never requires accepting coercion, remaining in danger, concealing abuse, or neglecting a dependent person's safety.",
+    "action": "With freely given consent from those directly affected, choose one bounded act of service through a vetted community or organization. Agree on time and resources, protect household needs and privacy, follow safety guidance, and revise the commitment if it harms a dependent or crosses a sound boundary."
+  },
+  "reflectionQuestions": [
+    "What conversation about consent, safety, resources, or family responsibility must be part of my discernment rather than postponed in the name of generosity?",
+    "Am I using service to escape duties that are mine, or using duties as an excuse never to share responsibility with others?"
+  ],
+  "scripture": {
+    "reference": "1 John 3:18",
+    "connection": "Frances's secure legacy is love enacted in a household, a hospital, a wounded city, and a community. Love in deed and truth includes the truth about consent, limits, dependents, and the forms of help that genuinely protect life."
+  },
+  "prayer": "Lord Jesus Christ, you sanctified ordinary homes and gathered disciples into a new family of grace. Through the intercession of Saint Frances of Rome, order our prayer, relationships, work, and service in your love. Protect people facing coercion or danger, strengthen parents and caregivers, and teach communities to share mercy with consent, wisdom, and safe boundaries. Amen."
+}

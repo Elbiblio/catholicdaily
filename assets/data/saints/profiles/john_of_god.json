@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 2,
+  "id": "john_of_god",
+  "profileKind": "individual",
+  "celebrationIds": ["john_of_god", "saint_john_of_god_religious"],
+  "name": "Saint John of God",
+  "alternateNames": ["João Cidade", "Juan Ciudad", "John Ciudad"],
+  "ecclesialTitle": "Founder in spirit of the Brothers Hospitallers",
+  "lifeSpan": "c. 1495–1550",
+  "lifeLength": "about 55 years",
+  "vocation": "Lay hospital founder and servant of people who were sick or poor",
+  "places": ["Granada, Spain"],
+  "patronage": ["hospitals", "the sick", "nurses"],
+  "symbols": [],
+  "briefBio": "After an intense public conversion in Granada, John experienced humiliation, confinement, and abusive treatment in the Royal Hospital. Without assigning him a retrospective diagnosis or treating harm as holy, his story continues in practical service: he organized shelter and care for people rejected elsewhere and inspired the later Brothers Hospitallers.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/John_of_God",
+  "wikidataId": "Q320171",
+  "feastDates": ["March 8"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "john-castro-life",
+      "title": "History of the Life and Holy Works of John of God",
+      "authorOrInstitution": "Francisco de Castro; translated by Benedict O'Grady, O.H.",
+      "publisher": "Hospitaller Order of Saint John of God, India",
+      "url": "https://www.johnofgodindia.in/uploads/resource/image_3.pdf",
+      "publicationDate": "1585",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Near-contemporary primary hagiographic biography based on early testimony, used critically for conversion, public humiliation, confinement, abusive treatment, first care work, companions, and death; dramatic framing is qualified",
+      "supports": ["identity", "dates", "life.conversion", "life.crisis", "life.humiliation", "life.institutional_mistreatment", "life.hospital", "life.companions", "life.death", "historicalCertainty"]
+    },
+    {
+      "id": "john-vatican-letter",
+      "title": "St John of God: Christ is faithful and provides all things",
+      "authorOrInstitution": "Saint John of God; prepared by the Pontifical University of Saint Thomas Aquinas",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/spirit/documents/spirit_20010308_giovanni-dio_en.html",
+      "publicationDate": "2001-03-08",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Primary letter excerpt used for the open house in Granada, varied needs, material provision, debt, Christ-centred charity, and John's own limits; paraphrased without period labels",
+      "supports": ["life.hospital", "life.inclusive_care", "life.material_care", "virtues.charity", "theology.christ"]
+    },
+    {
+      "id": "john-order-mission-history",
+      "title": "The Missionary Dimension of the Hospitaller Order of St John of God: Prophets in the World of Health Care",
+      "authorOrInstitution": "Hospitaller Order of Saint John of God",
+      "publisher": "General Curia of the Hospitaller Order of Saint John of God",
+      "url": "https://www.ohsjd.org/Resource/Inglese1997_1perpdf.pdf",
+      "publicationDate": "1997",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Official institutional history used to distinguish John's helpers and hospitals from the Order's papal recognition and organization after his death",
+      "supports": ["life.companions", "life.hospital", "order.development", "order.approval", "chronology"]
+    },
+    {
+      "id": "john-leone-ethics",
+      "title": "St John of God's Ethics",
+      "authorOrInstitution": "Salvino Leone and the General Bioethics Commission",
+      "publisher": "Hospitaller Order of Saint John of God",
+      "url": "https://www.ohsjd.org/Resource/EticaJuandediana-S.Leone_Rev_ENG.Fate.pdf",
+      "publicationDate": "2012",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Source-critical and bioethical study used for the hierarchy of early evidence, inhumane hospital treatment, John's developing care ethic, institutional charity, and identification of later legendary topoi",
+      "supports": ["sourceCriticism", "life.institutional_mistreatment", "life.hospital", "virtues.hospitality", "practice.ethics", "laterLegends"]
+    },
+    {
+      "id": "john-new-catholic-encyclopedia",
+      "title": "John of God, St.",
+      "authorOrInstitution": "T. J. Munn",
+      "publisher": "New Catholic Encyclopedia via Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/john-god-st",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent recognized reference used for broad chronology, conversion, confinement, organized hospital care, posthumous Order development, feast, and formal patronage; stigmatizing period vocabulary is not repeated",
+      "supports": ["identity", "dates", "life.conversion", "life.crisis", "life.hospital", "order.development", "feastDate", "patronage", "patronage.hospitals", "patronage.sick", "patronage.nurses", "historicalCertainty"]
+    },
+    {
+      "id": "john-francis-world-day-sick",
+      "title": "Message for the Twenty-Fifth World Day of the Sick 2017",
+      "authorOrInstitution": "Pope Francis",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/francesco/en/messages/sick/documents/papa-francesco_20161208_giornata-malato.html",
+      "publicationDate": "2016-12-08",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal message used for healthcare professionalism, dignity, protection of vulnerable people, institutional and family roles, and John of God's patronage of hospitals and healthcare workers",
+      "supports": ["patronage", "patronage.hospitals", "patronage.healthcare_workers", "practice.professional_care", "practice.dignity", "practice.safeguarding"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "John of God makes compassion concrete in shelter, nursing, medicines, organization, and shared responsibility. His crisis and mistreatment must never be romanticized as treatment or diagnosed from a distance. His legacy asks Christians to accompany prayer with competent clinical and social care, protect consent and dignity, and build accountable services rather than seek heroic access to vulnerable people.",
+  "oneMinuteSummary": "John Ciudad's origins and exact birth details are not equally secure, though tradition places his birth around 1495. After varied work and military service, he settled in Granada. Hearing John of Ávila preach in 1539 precipitated an intense public conversion expressed through extreme behavior and self-harm. Crowds mocked and assaulted him, and he was taken to the Royal Hospital, where Castro's early biography describes shackling, flogging, confinement, and neglect. The evidence supports a serious mental-health crisis and abusive institutional treatment; it cannot establish a modern diagnosis or the claim that he was simply pretending. After release, John gathered food, bedding, medicine, helpers, and funds for people who were sick, poor, homeless, disabled, or in mental distress. His own letter describes an open house serving more people than he could easily support. He developed practical systems of care and attracted companions, but the formally approved Hospitaller Order took shape after his death in 1550. Later biographies added pomegranate visions, angelic helpers, and other dramatic stories; these are not used as secure chronology. His durable witness is mercy made competent, collaborative, and hospitable.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Conversion and public crisis",
+        "body": "After John of Ávila's preaching, John entered an intense period of remorse and extreme public behavior. Castro describes crying out, giving possessions away, rolling in mud, and injuring himself while crowds mocked and struck him. Calling this a mental-health crisis names the seriousness without inventing a diagnosis. Self-harm, humiliation, and assault were not holy methods and should never be imitated.",
+        "sourceIds": ["john-castro-life", "john-new-catholic-encyclopedia", "john-leone-ethics"]
+      },
+      {
+        "heading": "Institutional mistreatment",
+        "body": "People who believed John to be dangerous or unwell brought him to Granada's Royal Hospital. The early account reports restraints, stripping, flogging, confinement, and similar punishment of other patients. John protested their treatment and began helping with cleaning and care when permitted. Neither prayer nor a later vocation makes that abuse therapeutic. People in crisis deserve evidence-based care, legal rights, consent wherever possible, and protection from degrading treatment.",
+        "sourceIds": ["john-castro-life", "john-leone-ethics", "john-new-catholic-encyclopedia"]
+      },
+      {
+        "heading": "A house open to many needs",
+        "body": "After leaving the hospital, John collected firewood, food, beds, medicines, donations, and helpers. He rented space and welcomed people excluded elsewhere. His letter presents a crowded house containing sick and healthy residents, children, pilgrims, people with disabilities, and people burdened in mind or body. Prayer animated the work, but food, warmth, hygiene, nursing, finance, and organization made care real.",
+        "sourceIds": ["john-castro-life", "john-vatican-letter", "john-new-catholic-encyclopedia"]
+      },
+      {
+        "heading": "A charism becoming an Order",
+        "body": "John's work attracted companions and influenced other hospitals, but he did not leave the later Order in its final canonical form. Antón Martín and other followers continued and expanded the mission. Papal recognition, rules, a general chapter, and stable governance came after John's death. This distinction matters: durable mercy depends on trained people, shared authority, standards, and institutions able to correct failures.",
+        "sourceIds": ["john-castro-life", "john-order-mission-history", "john-new-catholic-encyclopedia", "john-leone-ethics"]
+      }
+    ],
+    "gospelTheme": "Christ's love becomes truthful care when every suffering person is received as a neighbor with dignity, real needs, rights, and gifts.",
+    "struggle": "John's conversion unfolded through mental distress, self-harm, public humiliation, institutional violence, poverty, overwhelming demand, debt, and the limitations of one person's effort.",
+    "response": "He moved toward practical, inclusive hospitality, enlisted helpers and donors, organized material and nursing care, and inspired a community that later developed accountable structures."
+  },
+  "virtues": [
+    {
+      "name": "Concrete hospitality",
+      "evidence": "John's house combined welcome with food, warmth, beds, medicines, cleaning, and care for people with varied needs.",
+      "imitation": "Ask an established service what it actually needs, then offer the requested time, funds, or skill within its professional and safeguarding standards.",
+      "sourceIds": ["john-castro-life", "john-vatican-letter", "john-leone-ethics"]
+    },
+    {
+      "name": "Dignity after humiliation",
+      "evidence": "Having experienced public and institutional degradation, John objected to the punishment and neglect of other patients and sought a more humane way of care.",
+      "imitation": "Refuse diagnostic labels, jokes, or spiritual blame about another person's distress; listen respectfully and help connect the person with qualified support.",
+      "sourceIds": ["john-castro-life", "john-leone-ethics"]
+    },
+    {
+      "name": "Mercy that accepts structure",
+      "evidence": "John recruited assistance and organized a hospital; his companions later developed the mission through rules, governance, and ecclesial accountability.",
+      "imitation": "Serve as part of a supervised team, document concerns through proper channels, and welcome correction when safety or quality requires a different approach.",
+      "sourceIds": ["john-order-mission-history", "john-new-catholic-encyclopedia", "john-francis-world-day-sick"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Bring one experience of distress or helplessness to Christ the compassionate healer. Ask for courage to seek or support qualified care. Prayer accompanies treatment and human presence; it never replaces needed clinical assessment, medication, therapy, crisis response, or social support.",
+    "action": "Support a verified health, mental-health, disability, homelessness, or social-care service only within its screening, training, supervision, confidentiality, safeguarding, and role boundaries. Do not offer clinical advice or seek unsupervised access to vulnerable people. Connect immediate danger or acute crisis promptly with local emergency or crisis services."
+  },
+  "reflectionQuestions": [
+    "When someone is in distress, do I listen and route help responsibly, or rush to diagnose, shame, spiritualize, or rescue beyond my competence?",
+    "Does my compassion strengthen trustworthy care and the other person's agency, or depend on my being the central helper?"
+  ],
+  "scripture": {
+    "reference": "1 John 3:16-18",
+    "connection": "The reading appointed for John's memorial joins Christ's self-giving love to care in deed and truth. Deeds are truthful when they meet real needs through competent help and protect the person from neglect, exploitation, and display."
+  },
+  "prayer": "Lord Jesus Christ, physician of souls and bodies, through the intercession of Saint John of God make our compassion wise and concrete. Comfort people in mental or physical distress, protect them from shame and abuse, and guide them to qualified care. Strengthen clinicians, families, caregivers, and safeguarded services. Teach us our limits, and let prayer lead to responsible action without ever replacing needed treatment. Amen."
+}
