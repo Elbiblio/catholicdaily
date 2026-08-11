@@ -25,8 +25,8 @@
       "url": "https://www.causesanti.va/it/santi-e-beati/camillo-de-lellis.html",
       "accessedDate": "2026-08-11",
       "tier": 1,
-      "reuseBasis": "Formal cause and cult record used for Camillus's 1550–1614 chronology, Bucchianico origin, soldiering and gambling losses, chronic leg wound, hospital service, 1575 conversion, formation and approval of the Ministers of the Sick, priesthood, red-cross habit, death, canonization, and formal patronages; devotional details are controlled by independent scholarship",
-      "supports": ["identity", "alternateNames", "ecclesialTitle", "lifeSpan", "places", "life.soldiering", "life.gambling", "life.wound", "life.hospital", "life.conversion", "life.founding", "life.priesthood", "life.death", "reception.canonization", "patronage", "historicalCertainty"]
+      "reuseBasis": "Formal cause and cult record used for Camillus's 1550–1614 chronology, Bucchianico origin, soldiering and gambling losses, chronic leg wound, hospital service, 1575 conversion, formation and approval of the Ministers of the Sick, priesthood, red-cross habit, death, and canonization; devotional details are controlled by independent scholarship",
+      "supports": ["identity", "alternateNames", "ecclesialTitle", "lifeSpan", "places", "life.soldiering", "life.gambling", "life.wound", "life.hospital", "life.conversion", "life.founding", "life.priesthood", "life.death", "reception.canonization", "historicalCertainty"]
     },
     {
       "id": "camillus-testament",
