@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:catholic_daily/data/models/saint_profile_source.dart';
 import 'package:catholic_daily/data/services/improved_liturgical_calendar_service.dart';
 import 'package:catholic_daily/data/services/optional_memorial_service.dart';
 import 'package:catholic_daily/data/services/reading_catalog_service.dart';
@@ -38,6 +39,30 @@ void main() {
 
     expect(profile, isNotNull);
     expect(profile!.name, 'Saint Bede the Venerable');
+  });
+
+  test('preserves reviewed Batch 3 publication precision', () async {
+    final frances = await SaintProfileService.instance.findById(
+      'frances_of_rome',
+    );
+
+    final odebiyi = frances!.sources.singleWhere(
+      (source) => source.id == 'frances-odebiyi-noncloistered',
+    );
+
+    expect(odebiyi.publicationDate, '2024-09');
+  });
+
+  test('preserves reviewed Batch 3 source genres', () async {
+    final casimir = await SaintProfileService.instance.findById(
+      'casimir_of_poland',
+    );
+
+    final museum = casimir!.sources.singleWhere(
+      (source) => source.id == 'casimir-lithuanian-art-museum',
+    );
+
+    expect(museum.tier, SaintSourceTier.discovery);
   });
 
   test(
