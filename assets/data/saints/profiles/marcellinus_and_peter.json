@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 2,
+  "id": "marcellinus_and_peter",
+  "profileKind": "group",
+  "celebrationIds": ["marcellinus_and_peter", "saints_marcellinus_and_peter_martyrs"],
+  "name": "Saints Marcellinus and Peter, Martyrs",
+  "alternateNames": ["Marcellinus and Peter", "Saints Peter the Exorcist and Marcellinus the Priest"],
+  "ecclesialTitle": "Early Roman martyrs",
+  "vocation": "Christian martyrs remembered together at Rome; traditionally priest and exorcist",
+  "places": ["Via Labicana, Rome", "Catacombs of Saints Marcellinus and Peter, ad Duas Lauros"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Marcellinus and Peter are early Roman martyrs remembered together. A fourth-century epigram by Pope Damasus says an executioner told him in boyhood that the pair were killed secretly among thickets after preparing their own grave; Lucilla later buried them at their honored site. Graffiti and the cemetery preserve an early cult. A much later Passion adds prison conversions, dialogue, healing, burial, and miracle detail that cannot be treated as eyewitness biography.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Marcellinus_and_Peter",
+  "wikidataId": "Q449701",
+  "feastDates": ["June 2"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "marcellinus-peter-damasus-29",
+      "title": "Damasus epigrammata 29",
+      "authorOrInstitution": "Pope Damasus I; digital edition by P. Tomasi",
+      "publisher": "Musisque Deoque",
+      "url": "https://www.mqdq.it/testo/testo/ordinata/pf1451548",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Primary fourth-century Latin epigram in a critical digital edition used for Damasus's explicitly second-hand report from the executioner: clandestine killing among thickets, the martyrs preparing the grave, concealment, and Lucilla's later burial of their bodies; no conversion of the executioner is claimed",
+      "supports": ["identity", "group", "life.martyrdom", "life.damasus_report", "life.executioner", "life.hidden_execution", "life.grave", "life.lucilla", "historicalCertainty"]
+    },
+    {
+      "id": "marcellinus-peter-oxford-graffiti",
+      "title": "E05251: Visitor Graffiti from the Cemetery Ad Sanctos Marcellinum et Petrum",
+      "authorOrInstitution": "University of Oxford Cult of Saints project",
+      "publisher": "University of Oxford",
+      "url": "https://portal.sds.ox.ac.uk/articles/online_resource/E05251_Visitor_graffiti_from_the_cemetery_Ad_Sanctos_Marcellinum_et_Petrum_inter_duas_lauros_via_Labicana_Rome_invoking_the_eponyms_of_the_cemetery_Marcellinus_and_Petrus_martyrs_of_Rome_S00577_Executed_on_a_wall_in_a_passage_close_to_the_c/13868135",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Critical record of primary visitor graffiti used for invocation of Marcellinus and Peter at their Via Labicana cemetery and material evidence of early cult; the graffiti do not establish a complete biography or exact death year",
+      "supports": ["identity", "places", "cult.early", "life.shared_memory", "historicalCertainty"]
+    },
+    {
+      "id": "marcellinus-peter-oxford-passio",
+      "title": "E02500: The Martyrdom of Marcellinus and Petrus",
+      "authorOrInstitution": "University of Oxford Cult of Saints project",
+      "publisher": "University of Oxford",
+      "url": "https://portal.sds.ox.ac.uk/articles/online_resource/E02500_The_Martyrdom_of_Marcellinus_and_Petrus_priest_and_exorcist_martyrs_of_Rome_S00577_is_written_in_Latin_presumably_in_Rome_between_the_late_4th_and_the_8th_c_perhaps_in_the_early_7th_c_It_narrates_the_trials_endured_by_the_saints_and_/13822550",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Critical record of the later Latin Passion used to date and classify its prison conversions, healing, speeches, execution dialogue, burial narrative, and miracle elaboration as later hagiography rather than contemporary evidence",
+      "supports": ["tradition.roles", "legend.prison_conversions", "legend.healing", "legend.speeches", "legend.execution_dialogue", "legend.burial", "legend.miracles", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "marcellinus-peter-nce",
+      "title": "Marcellinus and Peter, Ss.",
+      "authorOrInstitution": "New Catholic Encyclopedia",
+      "publisher": "Gale; Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/marcellinus-and-peter-ss",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Recognized reference control used for their Roman martyr identity, received priest and exorcist roles, Damasus's report and early cult, and the distinction between the epitaph and a legendary later Passion; exact death-year precision is not adopted",
+      "supports": ["identity", "group", "tradition.roles", "life.martyrdom", "life.damasus_report", "cult.early", "legend.passio", "historicalCertainty"]
+    },
+    {
+      "id": "marcellinus-peter-catacombs",
+      "title": "The Catacombs of Saints Marcellino and Peter",
+      "authorOrInstitution": "Pontifical Commission for Sacred Archaeology",
+      "publisher": "Pontifical Commission for Sacred Archaeology",
+      "url": "https://www.catacombeditalia.va/content/archeologiasacra/en/publications/catacomba-ssmarcellino-pietro11-eng.html",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Official archaeological synthesis used for the cemetery at the ancient Via Labicana, its dedication to the martyrs, burial memory in the Diocletianic period, later basilica and pilgrimage reception, and the limits of archaeology as biographical proof",
+      "supports": ["places", "burial", "cult.early", "reception.basilica", "chronology.cautious", "historicalCertainty"]
+    },
+    {
+      "id": "marcellinus-peter-liturgy-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — June",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/JunUC.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the June 2 optional memorial of Marcellinus and Peter and its red liturgical color; the calendar key establishes that an entry without an indicated rank is optional",
+      "supports": ["celebrationIds", "feastDates", "calendar.rank", "calendar.color", "ecclesialTitle"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Their memorial shows how the Church can keep names faithfully without pretending to possess a complete biography. Damasus preserves a grave second-hand memory of state killing, archaeology preserves an early place of prayer, and later storytellers expand the account. Christians honor the martyrs through truthful, nonviolent fidelity and practical protection for people facing coercion.",
+  "oneMinuteSummary": "Marcellinus and Peter are early Roman martyrs celebrated together on June 2. Pope Damasus's fourth-century epigram says that, when he was a boy, their executioner told him of a secret killing among thickets: the two prepared a grave, their bodies were concealed, and Lucilla later buried them at the honored site. This is second-hand testimony, not an eyewitness trial record, but early graffiti and the Via Labicana cemetery confirm a durable shared cult. Tradition calls Marcellinus a priest and Peter an exorcist. A much later Latin Passion expands the memory with prison conversions, healing, speeches, dialogue, detailed burial, and miracles; those elements belong to hagiographic reception, not secure biography. Their exact ages and death year remain uncertain. Martyrdom does not make execution good or require anyone to seek danger. Their witness supports courageous truth, nonviolence, wise safety planning, and honest remembrance in Christ.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Two names in an early Roman memory",
+        "body": "Marcellinus and Peter were remembered together as martyrs at the cemetery on the ancient Via Labicana. Visitor graffiti invoke them by name, while archaeological and literary evidence establishes an early, durable cult. Tradition identifies Marcellinus as a priest and Peter as an exorcist, but their birth, ages, and detailed ministries are not securely recoverable.",
+        "sourceIds": ["marcellinus-peter-oxford-graffiti", "marcellinus-peter-nce", "marcellinus-peter-catacombs"]
+      },
+      {
+        "heading": "What Damasus actually reports",
+        "body": "In a fourth-century epigram, Damasus says their executioner told him when he was a boy that an enraged official ordered a hidden killing among thickets so the tomb could not be found. The pair prepared their grave; their bodies lay concealed before Lucilla buried them at the place of honor. Damasus reports testimony received from another person. He does not say the executioner converted, and the poem is not a court transcript.",
+        "sourceIds": ["marcellinus-peter-damasus-29", "marcellinus-peter-nce"]
+      },
+      {
+        "heading": "A later Passion expands the story",
+        "body": "A Latin Passion written centuries after the deaths connects the pair with prison conversions, healing, a jailer's household, speeches, execution dialogue, expanded burial action, and miracles. Its priest and exorcist identification belongs to received tradition, but the dramatic narrative cannot silently fill gaps in Damasus or archaeology. The profile does not turn these additions into eyewitness biography.",
+        "sourceIds": ["marcellinus-peter-oxford-passio", "marcellinus-peter-nce"]
+      },
+      {
+        "heading": "Martyr memory serves life and truth",
+        "body": "The sources remember people killed under persecuting power, conventionally in the Diocletianic period, but do not establish a precise year or manner beyond Damasus's limited report. Execution remains an evil inflicted on them, not a spiritual achievement they had to seek. Christian courage today can include nonviolent refusal, documentation, escape, legal counsel, trauma-informed care, and protection of dependants.",
+        "sourceIds": ["marcellinus-peter-damasus-29", "marcellinus-peter-catacombs", "marcellinus-peter-liturgy-calendar"]
+      }
+    ],
+    "gospelTheme": "Christ calls disciples to faithful witness under hostile power while teaching them to be wise and innocent; truthfulness and protection of life belong together.",
+    "struggle": "Sparse evidence invites dramatic invention, while martyr language can glorify state killing, shame people who escape danger, or pressure victims and dependants toward preventable harm.",
+    "response": "Keep the early testimony and later tradition distinct, name execution as evil, and practice courageous fidelity with nonviolence, preparation, lawful help, and care for those exposed to retaliation."
+  },
+  "virtues": [
+    {
+      "name": "Faithful courage",
+      "evidence": "Damasus's early memorial preserves their composure under a deliberate attempt to kill them secretly and erase their burial memory.",
+      "imitation": "If authority demands harm or dishonesty, pause, document what is safe to document, seek trusted legal or safeguarding counsel, and choose a nonviolent response that also protects dependants.",
+      "sourceIds": ["marcellinus-peter-damasus-29"]
+    },
+    {
+      "name": "Truthful remembrance",
+      "evidence": "The fourth-century epigram and early cult evidence are limited, while the later Passion adds an extensive narrative from a different period and genre.",
+      "imitation": "When telling their story, identify Damasus's account as second-hand and label the prison-conversion and miracle material as later tradition.",
+      "sourceIds": ["marcellinus-peter-damasus-29", "marcellinus-peter-oxford-graffiti", "marcellinus-peter-oxford-passio", "marcellinus-peter-nce"]
+    },
+    {
+      "name": "Communal fidelity",
+      "evidence": "Their names were preserved together through burial memory, visitor invocation, and a shared liturgical memorial rather than through a recoverable individual biography.",
+      "imitation": "Preserve the name and needs of one person facing persecution or retaliation through confidential accompaniment, competent referral, and community prayer without publicizing them unsafely.",
+      "sourceIds": ["marcellinus-peter-oxford-graffiti", "marcellinus-peter-catacombs", "marcellinus-peter-liturgy-calendar"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray with Matthew 10:16-22. Ask Christ for courage joined to prudence, and remember by name people whose faith or truthful work places them under coercive power. Do not ask them to prove courage through greater exposure.",
+    "action": "Learn the safe referral route for legal, safeguarding, domestic-abuse, or persecution support in your setting. Share it confidentially when needed, follow the endangered person's lead, and never publish identifying details without informed consent."
+  },
+  "reflectionQuestions": [
+    "Do I confuse Christian courage with dramatic exposure, or can I honor prudent escape, documentation, and protection as faithful responses?",
+    "When evidence is sparse, am I willing to preserve a holy memory without embellishing it into certainty?"
+  ],
+  "scripture": {
+    "reference": "Matthew 10:16-22",
+    "connection": "Jesus warns that witness may encounter courts and hostile power, while also commanding disciples to be wise and innocent. Marcellinus and Peter's memory therefore supports courage without violence and prudence without shame."
+  },
+  "prayer": "Lord Jesus Christ, faithful witness and refuge of the oppressed, through Saints Marcellinus and Peter give courage to those facing coercion and wisdom to those planning for safety. Preserve the names of people whom violence tries to erase, restrain every persecuting power, and make your Church truthful in memory, nonviolent in action, and practical in protection. Amen."
+}

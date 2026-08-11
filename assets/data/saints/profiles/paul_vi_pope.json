@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 2,
+  "id": "paul_vi_pope",
+  "profileKind": "individual",
+  "celebrationIds": ["paul_vi_pope", "saint_paul_vi_pope"],
+  "name": "Saint Paul VI, Pope",
+  "alternateNames": ["Pope Paul VI", "Giovanni Battista Montini"],
+  "ecclesialTitle": "Pope",
+  "lifeSpan": "1897–1978",
+  "lifeLength": "80 years",
+  "vocation": "Priest, archbishop of Milan, and Bishop of Rome",
+  "places": ["Concesio", "Brescia", "Rome", "Milan"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Giovanni Battista Montini was born in 1897, ordained a priest in 1920, became archbishop of Milan, and was elected Pope Paul VI in 1963. He guided the Second Vatican Council's final three sessions and the demanding work of implementation, traveled widely, advanced dialogue and social teaching, and insisted that evangelization unite proclamation with Christian witness. He died in 1978 and was canonized in 2018.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Pope_Paul_VI",
+  "wikidataId": "Q16975",
+  "feastDates": ["May 29"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {
+      "id": "paul-vi-vatican-biography",
+      "title": "Biographical Profile of His Holiness Pope Paul VI",
+      "authorOrInstitution": "The Holy See",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/paul-vi/en/biografia/documents/hf_p-vi_spe_20190722_biografia.html",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Official biographical synthesis used for Montini's family and formation, diplomatic and wartime service, Milan ministry, election and death, council leadership, apostolic travel, major writings, and the controversies that marked reception; the ordination date is controlled by the later formal decree",
+      "supports": ["identity", "alternateNames", "lifeSpan", "lifeLength", "life.formation", "life.diplomacy", "life.milan", "life.election", "life.council", "life.travel", "life.death", "reception.contested"]
+    },
+    {
+      "id": "paul-vi-ecclesiae-sanctae",
+      "title": "Ecclesiae Sanctae",
+      "authorOrInstitution": "Pope Paul VI",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/paul-vi/en/motu_proprio/documents/hf_p-vi_motu-proprio_19660806_ecclesiae-sanctae.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Primary papal implementation norms used to show the staged, collaborative, and in places experimental work of applying Vatican II through bishops, episcopal conferences, commissions, review, and feedback",
+      "supports": ["life.council_implementation", "life.consultation", "virtues.patient_implementation", "historicalCertainty"]
+    },
+    {
+      "id": "paul-vi-populorum-progressio",
+      "title": "Populorum Progressio",
+      "authorOrInstitution": "Pope Paul VI",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/paul-vi/en/encyclicals/documents/hf_p-vi_enc_26031967_populorum.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Primary social encyclical used for integral human development, solidarity across nations, hunger and poverty, justice, and the connection between development and peace",
+      "supports": ["life.social_teaching", "life.peace", "virtues.solidarity", "practice.action", "gospelTheme"]
+    },
+    {
+      "id": "paul-vi-evangelii-nuntiandi",
+      "title": "Evangelii Nuntiandi",
+      "authorOrInstitution": "Pope Paul VI",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/paul-vi/en/apost_exhortations/documents/hf_p-vi_exh_19751208_evangelii-nuntiandi.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Primary apostolic exhortation used for evangelization centered on Jesus Christ, the credibility of lived witness, conversion and communion, lay responsibility, and service within family, society, economics, politics, and culture",
+      "supports": ["life.evangelization", "gospelTheme", "virtues.credible_witness", "practice.spiritual", "practice.action"]
+    },
+    {
+      "id": "paul-vi-marialis-cultus",
+      "title": "Marialis Cultus",
+      "authorOrInstitution": "Pope Paul VI",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/paul-vi/en/apost_exhortations/documents/hf_p-vi_exh_19740202_marialis-cultus.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Primary apostolic exhortation used for Paul VI's account of postconciliar liturgical renewal, episcopal collaboration, fruitful participation, Christ-centered Marian devotion, and the need for correct and vigilant application",
+      "supports": ["life.liturgical_reform", "life.council_implementation", "life.collaboration", "reception.contested"]
+    },
+    {
+      "id": "paul-vi-calendar-decree",
+      "title": "Decree on the Inscription of the Celebration of Saint Paul VI, Pope, in the General Roman Calendar",
+      "authorOrInstitution": "Congregation for Divine Worship and the Discipline of the Sacraments",
+      "publisher": "Holy See Press Office",
+      "url": "https://press.vatican.va/content/salastampa/en/bollettino/pubblico/2019/02/06/190206b.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal liturgical decree used for the May 29 optional memorial, 29 May 1920 priestly ordination, council completion and renewal, dialogue and evangelization, death in 1978, and canonization in 2018",
+      "supports": ["celebrationIds", "feastDates", "calendar.rank", "calendar.color", "life.ordination", "life.council", "life.death", "life.canonization"]
+    },
+    {
+      "id": "paul-vi-chadwick-council",
+      "title": "Paul VI and Vatican II",
+      "authorOrInstitution": "Henry Chadwick",
+      "publisher": "Cambridge University Press",
+      "url": "https://www.cambridge.org/core/journals/journal-of-ecclesiastical-history/article/abs/paul-vi-and-vatican-ii/0F3A4E2DEE3D7018DEA4AB529713838F",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent scholarly review used as a historiographical control for treating Paul VI's council leadership within collective conciliar work and complex ecclesiological debates rather than as a solitary achievement or simple administrative story",
+      "supports": ["life.council", "life.collective_leadership", "sourceLimits", "reception.contested"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Paul VI served Christ during a period when the Church had to receive a council, reform institutions and worship, speak about peace and unequal development, and communicate the Gospel in changing cultures. His holiness invites patient courage and credible witness without requiring uncritical approval of every prudential judgment or every local implementation made during his pontificate.",
+  "oneMinuteSummary": "Giovanni Battista Montini, born in 1897, became Pope Paul VI in 1963. He guided the final three sessions of the Second Vatican Council and then faced the slower work of receiving its teaching through commissions, episcopal collaboration, experimentation, and correction. His liturgical leadership sought fuller participation and a renewed worship centered on Christ. Populorum Progressio joined peace to integral human development and solidarity with people burdened by hunger and poverty. Evangelii Nuntiandi taught that evangelization requires both explicit proclamation of Jesus and a life that makes the Gospel credible. His pontificate also involved sharp disagreement and difficult decisions whose reception remains contested. Canonization in 2018 recognizes a life of Christian holiness; it does not make every administrative or prudential choice beyond historical study or respectful criticism. Paul VI invites steady service when faithful renewal is complex.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Formation for patient service",
+        "body": "Giovanni Battista Montini was born at Concesio in 1897 and ordained a priest on 29 May 1920. Work in papal diplomacy and the Secretariat of State exposed him to war, displacement, relief efforts, and international affairs. As archbishop of Milan he combined pastoral visitation, evangelization, and attention to the industrial city before his election as pope in 1963.",
+        "sourceIds": ["paul-vi-vatican-biography", "paul-vi-calendar-decree"]
+      },
+      {
+        "heading": "Guiding a council he did not begin",
+        "body": "John XXIII convoked and opened Vatican II; Paul VI guided its final three sessions and promulgated its completed documents with the council fathers. Implementation was collective and gradual. Ecclesiae Sanctae assigns work to bishops, episcopal conferences, and commissions and includes review and experimental norms. Paul VI's leadership should therefore be neither erased nor turned into solitary authorship of the council.",
+        "sourceIds": ["paul-vi-vatican-biography", "paul-vi-ecclesiae-sanctae", "paul-vi-chadwick-council"]
+      },
+      {
+        "heading": "Renewal of worship and evangelization",
+        "body": "Paul VI promulgated revised Roman liturgical books in response to the council. Marialis Cultus describes the aim as fruitful participation and worship ordered through Christ in the Spirit to the Father, while acknowledging the need for vigilant, correct application. Evangelii Nuntiandi later joined proclamation of Jesus with credible personal and communal witness and the mission of laypeople within ordinary society.",
+        "sourceIds": ["paul-vi-marialis-cultus", "paul-vi-evangelii-nuntiandi"]
+      },
+      {
+        "heading": "Peace, development, and a contested reception",
+        "body": "Populorum Progressio treats hunger, poverty, unequal development, solidarity, and peace as moral concerns, calling Christians beyond private charity toward social responsibility. Other papal decisions generated intense disagreement, and historical interpretation of the period remains complex. Paul VI's canonization honors his fidelity to Christ, prayer, and service; it does not declare every prudential decision, process, or later local change immune from evidence-based criticism.",
+        "sourceIds": ["paul-vi-populorum-progressio", "paul-vi-vatican-biography", "paul-vi-chadwick-council", "paul-vi-calendar-decree"]
+      }
+    ],
+    "gospelTheme": "Jesus Christ remains the center of evangelization: the Church proclaims him credibly when words, worship, solidarity, dialogue, and ordinary conduct bear the same Gospel.",
+    "struggle": "Renewal can be reduced either to personality, nostalgia, or slogans, while conflict tempts people to treat every prudential choice as sacred or every difficulty as proof of bad faith.",
+    "response": "Paul VI's witness calls for prayerful implementation, consultation, honest evaluation, care for people affected by change, and perseverance in Christ-centered proclamation and social solidarity."
+  },
+  "virtues": [
+    {
+      "name": "Patient courage",
+      "evidence": "Paul VI accepted responsibility for completing Vatican II and organized a staged implementation involving bishops, conferences, commissions, feedback, and revision.",
+      "imitation": "For one needed reform, name the non-negotiable purpose, consult affected people, test a bounded step, review its effects, and correct avoidable harm.",
+      "sourceIds": ["paul-vi-ecclesiae-sanctae", "paul-vi-calendar-decree", "paul-vi-chadwick-council"]
+    },
+    {
+      "name": "Credible Gospel witness",
+      "evidence": "Evangelii Nuntiandi makes lived witness indispensable while still directing evangelization toward explicit proclamation of Jesus Christ and conversion within the Church's communion.",
+      "imitation": "Before speaking about faith today, repair one contradiction between your message and your treatment of family, colleagues, neighbors, or people who disagree.",
+      "sourceIds": ["paul-vi-evangelii-nuntiandi"]
+    },
+    {
+      "name": "Global solidarity",
+      "evidence": "Populorum Progressio connects authentic development and peace with action against hunger, poverty, and structures that leave peoples unable to shape their future.",
+      "imitation": "Pair one charitable gift with an informed action that supports fair access, accountable development, or the dignity and voice of people directly affected.",
+      "sourceIds": ["paul-vi-populorum-progressio"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Read Mark 1:14-20 and a short section of Evangelii Nuntiandi. Ask Jesus where your words about the Gospel need the support of repentance, reliable service, or patient listening, then choose one concrete response.",
+    "action": "Review one change in your parish, household, or workplace with people who carry its consequences. Keep its good purpose visible, record what is working, and revise one practice that causes unnecessary exclusion or confusion."
+  },
+  "reflectionQuestions": [
+    "When change is difficult, do I seek evidence, consultation, and correction, or retreat into slogans about heroes and villains?",
+    "What would make my proclamation of Christ more credible to a person affected by poverty, conflict, or an institutional decision?"
+  ],
+  "scripture": {
+    "reference": "Mark 1:14-20",
+    "connection": "Jesus himself is the content and caller at the heart of evangelization. Paul VI's teaching insists that the Church's words, structures, worship, and witness must serve this encounter with Christ rather than preserving an institution's image."
+  },
+  "prayer": "Lord Jesus Christ, center of the Gospel and peace of the world, through Saint Paul VI's intercession give your Church courage for faithful renewal, patience in implementation, humility under truthful criticism, and solidarity with peoples denied dignity and opportunity. Make our worship lead to you, our dialogue serve truth, and our lives confirm the good news we proclaim. Amen."
+}

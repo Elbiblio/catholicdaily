@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 2,
+  "id": "visitation_of_mary",
+  "profileKind": "observance",
+  "celebrationIds": ["visitation_of_mary", "the_visitation_of_the_blessed_virgin_mary"],
+  "name": "The Visitation of the Blessed Virgin Mary",
+  "alternateNames": ["The Visitation", "Feast of the Visitation"],
+  "ecclesialTitle": "Feast of the Visitation of the Blessed Virgin Mary",
+  "vocation": "Liturgical observance of Mary's visit to Elizabeth and Christ's presence among them",
+  "places": ["The hill country of Judah"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "This feast is not a biography or a separate lifespan for Mary or Elizabeth. It celebrates Luke 1:39–56: Mary visits her relative Elizabeth while both are pregnant; Elizabeth receives her with Spirit-filled joy; John leaps in the womb; and Mary praises God in the Magnificat. The Church receives the encounter as Christ's hidden presence becoming welcome, mutual care, praise, and hope for the lowly and hungry.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Visitation_(Christianity)",
+  "wikidataId": "Q691810",
+  "feastDates": ["May 31"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {
+      "id": "visitation-usccb-luke1",
+      "title": "Luke, Chapter 1",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/luke/1",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Direct Scripture page used for Luke 1:39–56: the hill-country visit, Mary's greeting, Elizabeth's Spirit-filled recognition, John's leap, blessing of Mary's faith, the Magnificat, and Mary's stay of about three months; the translation is paraphrased rather than reproduced",
+      "supports": ["observanceIdentity", "places", "life.encounter", "life.relative", "life.spirit", "life.john_leap", "life.faith", "life.magnificat", "life.three_months", "scripture", "gospelTheme"]
+    },
+    {
+      "id": "visitation-marialis-cultus",
+      "title": "Marialis Cultus",
+      "authorOrInstitution": "Pope Paul VI",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/paul-vi/en/apost_exhortations/documents/hf_p-vi_exh_19740202_marialis-cultus.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal teaching used for the May 31 Visitation as a feast of a salvific event, Mary carrying her Son, the liturgy's interpretation of the visit as charitable assistance, proclamation of God's mercy, the Magnificat as the Church's prayer, and Marian devotion centered on Christ",
+      "supports": ["profileKind", "feastDates", "calendar.rank", "life.salvific_event", "life.christ_presence", "life.charitable_reception", "life.mercy", "life.magnificat", "gospelTheme"]
+    },
+    {
+      "id": "visitation-john-paul-2000",
+      "title": "Marian Celebration to Conclude the Month of May",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/john-paul-ii/en/speeches/2000/apr-jun/documents/hf_jp-ii_spe_20000531_visitazione.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal address used for the Visitation as God's visit to his people in Christ, joy in the Holy Spirit, the Magnificat's praise of divine mercy toward the humble and lowly, and a Christ-directed reception of Marian accompaniment",
+      "supports": ["life.christ_presence", "life.joy", "life.spirit", "life.magnificat", "life.lowly", "gospelTheme", "scripture"]
+    },
+    {
+      "id": "visitation-vatican-news",
+      "title": "Feast of the Visitation of the Blessed Virgin Mary",
+      "authorOrInstitution": "Vatican News",
+      "publisher": "Dicastery for Communication",
+      "url": "https://www.vaticannews.va/en/liturgical-holidays/feast-of-the-visitation-of-the-blessed-virgin-mary.html",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Official Catholic historical synthesis used cautiously for the feast's medieval Franciscan reception, extension to the wider Latin Church, movement to May 31 in the revised calendar, and themes of service and the Magnificat; narrative expansions are not treated as facts from Luke",
+      "supports": ["feastDates", "life.liturgical_history", "reception.franciscan", "life.service", "life.magnificat", "historicalCertainty"]
+    },
+    {
+      "id": "visitation-liturgy-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — May",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/MayUC.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the May 31 feast of the Visitation and its white liturgical color",
+      "supports": ["celebrationIds", "feastDates", "calendar.rank", "calendar.color"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "The Visitation shows what happens when Christ's presence is welcomed in an ordinary human encounter: greeting becomes blessing, pregnancy becomes a setting for mutual dignity rather than romanticized hardship, and praise becomes solidarity with the lowly and hungry. The feast teaches believers to carry Christ toward others through attentive, safe, concrete care.",
+  "oneMinuteSummary": "On May 31 the Church celebrates the Visitation, not a separate biography of Mary or Elizabeth. Luke tells how Mary entered Judah's hill country and greeted her pregnant relative Elizabeth. Elizabeth, filled with the Holy Spirit, recognized the mother of her Lord; the child John leaped, and she blessed Mary's trusting response to God. Mary answered with the Magnificat, praising God's mercy, care for the lowly, and provision for the hungry. The liturgy receives this encounter as a salvific event: Mary carries Christ, God's visit brings joy, and faith becomes charitable presence. Luke does not say Mary traveled alone, call Elizabeth her cousin, or describe the medical conditions of either pregnancy. The feast therefore inspires responsive care without praising risk or exhausting service. Welcome Christ, listen to another person's real needs, and let praise become safe solidarity.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A feast of an encounter, not a lifespan",
+        "body": "The Visitation is a liturgical observance centered on Luke 1:39–56. It does not create another biography for Mary or Elizabeth. The Church celebrates a salvific event in which Mary carries the incarnate Son into an encounter that reveals God's mercy and prepares for the mission of Christ.",
+        "sourceIds": ["visitation-usccb-luke1", "visitation-marialis-cultus", "visitation-liturgy-calendar"]
+      },
+      {
+        "heading": "Greeting becomes Spirit-filled recognition",
+        "body": "Mary goes to the hill country and greets Elizabeth. Elizabeth is filled with the Holy Spirit, calls Mary the mother of her Lord, blesses her faith, and interprets John's leap as joy. Luke identifies the women as relatives but does not specify cousinhood, travel companions, route, or medical details. The leap belongs to Luke's theological narrative; it is not a modern diagnostic or partisan proof.",
+        "sourceIds": ["visitation-usccb-luke1", "visitation-john-paul-2000"]
+      },
+      {
+        "heading": "The Magnificat turns joy toward mercy",
+        "body": "Mary's song magnifies God, rejoices in the Savior, and names mercy that lifts the lowly and fills the hungry. John Paul II reads the encounter as God's visit to the people in Christ and joy in the Holy Spirit. The song forms Christian hope and social conscience, but it does not dictate one partisan program or excuse believers from listening to people directly affected by poverty.",
+        "sourceIds": ["visitation-usccb-luke1", "visitation-john-paul-2000", "visitation-marialis-cultus"]
+      },
+      {
+        "heading": "Care received safely in real families",
+        "body": "Paul VI says the liturgy receives Mary's visit as charitable assistance, although Luke does not state her travel motive in those words. Christian imitation is therefore not a command for pregnant people to undertake risky travel, conceal symptoms, or exhaust themselves. Care should follow consent and actual need, share burdens, respect family circumstances, and seek qualified medical or safeguarding help when appropriate.",
+        "sourceIds": ["visitation-usccb-luke1", "visitation-marialis-cultus", "visitation-vatican-news"]
+      }
+    ],
+    "gospelTheme": "Christ comes hidden among ordinary people, and the Holy Spirit turns welcome into recognition, praise, and merciful care for those whom the world overlooks.",
+    "struggle": "The Visitation can be flattened into sentimental travel detail, used to romanticize pregnancy hardship, or detached from the Magnificat's demand that praise attend to lowly and hungry neighbors.",
+    "response": "Receive the event as Luke and the liturgy give it: welcome Christ, honor both women and both children, listen before helping, protect health and consent, and let gratitude become concrete solidarity."
+  },
+  "virtues": [
+    {
+      "name": "Attentive welcome",
+      "evidence": "Mary's greeting opens an encounter in which Elizabeth, filled with the Spirit, recognizes Christ's presence and blesses Mary's faith.",
+      "imitation": "Give one person unhurried attention today. Ask what welcome or support would actually help, and receive their answer without taking control.",
+      "sourceIds": ["visitation-usccb-luke1", "visitation-john-paul-2000"]
+    },
+    {
+      "name": "Merciful solidarity",
+      "evidence": "The Magnificat praises God's mercy toward the lowly and hungry, while the liturgy interprets Mary's visit through charitable assistance.",
+      "imitation": "Meet one concrete need identified by the person affected—food, transport, childcare, accompaniment, or advocacy—within your competence and their consent.",
+      "sourceIds": ["visitation-usccb-luke1", "visitation-marialis-cultus", "visitation-john-paul-2000"]
+    },
+    {
+      "name": "Joy rooted in Christ",
+      "evidence": "Elizabeth's Spirit-filled recognition, John's leap, and Mary's song all direct joy toward the Lord and God's saving mercy rather than toward either woman's achievement.",
+      "imitation": "Name one sign of God's mercy in another person's life and celebrate it without comparison, intrusion, or making their story about you.",
+      "sourceIds": ["visitation-usccb-luke1", "visitation-john-paul-2000"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray Luke 1:39–56 slowly with attention to greeting, listening, blessing, Christ's hidden presence, and Mary's praise. Ask the Spirit to reveal one lowly or hungry neighbor whose dignity you are overlooking.",
+    "action": "Offer specific, consent-based support to a pregnant person, caregiver, older relative, or family under strain. Protect rest and medical advice, share a practical burden, and do not make help conditional on gratitude or spiritual performance."
+  },
+  "reflectionQuestions": [
+    "When I enter another person's situation, do I listen for Christ and their actual needs, or arrive with assumptions about how I will help?",
+    "Where must my praise of God's mercy become practical solidarity with someone lowly, hungry, pregnant, caregiving, or isolated?"
+  ],
+  "scripture": {
+    "reference": "Luke 1:39-56",
+    "connection": "Luke supplies the whole event: Mary's greeting, Elizabeth's Spirit-filled recognition, John's joy, blessing of faith, and the Magnificat. The feast keeps Christ's presence, human welcome, praise, and mercy together without filling narrative silence with unsafe assumptions."
+  },
+  "prayer": "God our Savior, in the Visitation you made the hidden presence of Christ a source of joy, blessing, and praise. Through Mary's intercession, fill us with your Spirit, teach us to listen before helping, protect pregnant people and families, and turn our Magnificat into safe care for the lowly and hungry. May every welcome lead us more deeply to Jesus Christ our Lord. Amen."
+}

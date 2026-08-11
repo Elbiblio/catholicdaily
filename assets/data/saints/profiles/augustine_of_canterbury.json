@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 2,
+  "id": "augustine_of_canterbury",
+  "profileKind": "individual",
+  "celebrationIds": ["augustine_of_canterbury", "saint_augustine_of_canterbury_bishop"],
+  "name": "Saint Augustine of Canterbury",
+  "alternateNames": ["Augustine of Canterbury"],
+  "ecclesialTitle": "Bishop and missionary to the English peoples",
+  "vocation": "Benedictine monk, missionary, and first archbishop of Canterbury",
+  "places": ["Rome", "Frankish Gaul", "Kent", "Canterbury"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Augustine was a Roman monk whom Pope Gregory the Great sent with companions to evangelize in England. They reached Kent in 597, where Queen Bertha's Christian practice, Frankish assistance, and King Æthelberht's permission created an opening for the mission. Augustine became bishop at Canterbury. His work mattered, but Christianity already had deep British roots and England's conversion was the work of many communities over generations.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Augustine_of_Canterbury",
+  "wikidataId": "Q32520",
+  "feastDates": ["May 27"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "augustine-bede-history",
+      "title": "Bede's Ecclesiastical History of England",
+      "authorOrInstitution": "Bede; translated by A. M. Sellar",
+      "publisher": "Christian Classics Ethereal Library",
+      "url": "https://www.ccel.org/ccel/b/bede/history/cache/history.pdf",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Primary early medieval narrative used critically for the 597 arrival, Frankish interpreters, Bertha and Æthelberht, Saint Martin's church, voluntary royal conversion, Augustine's ministry, and Gregory's adaptive instruction; miracles, speeches, and polemical judgments are not adopted as neutral history",
+      "supports": ["identity", "life.roman_monk", "life.597_mission", "life.frankish_help", "life.bertha", "life.aethelberht", "life.st_martin", "life.voluntary_conversion", "life.gregory_counsel", "life.bishop", "historicalCertainty"]
+    },
+    {
+      "id": "augustine-meens-background",
+      "title": "A Background to Augustine's Mission to Anglo-Saxon England",
+      "authorOrInstitution": "Rob Meens",
+      "publisher": "Cambridge University Press",
+      "url": "https://www.cambridge.org/core/journals/anglo-saxon-england/article/background-to-augustines-mission-to-anglosaxon-england/A46030658037909874AAC85BCA0120EB",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Peer-reviewed historical control used for British Christian continuity, the importance of Frankish clerical assistance, Gregory's correspondence, and the Roman and Irish emphasis shaping Bede's later account",
+      "supports": ["life.preexisting_christianity", "life.frankish_help", "sourceLimits.bede", "historicalCertainty", "pastoralSafety.mission"]
+    },
+    {
+      "id": "augustine-english-heritage",
+      "title": "Who Was St Augustine?",
+      "authorOrInstitution": "English Heritage",
+      "publisher": "English Heritage",
+      "url": "https://www.english-heritage.org.uk/visit/places/st-augustines-abbey/history-and-stories/who-was-st-augustine/",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Recognized historical synthesis used for the lack of secure early-life information, Bertha's agency and existing worship at Saint Martin's, the mission's gradual reception, Augustine's death-date uncertainty, and the many-agent character of English Christianization",
+      "supports": ["life.early_years_unknown", "life.bertha", "life.st_martin", "life.gradual_reception", "chronology.death", "historicalCertainty"]
+    },
+    {
+      "id": "augustine-benedict-gregory",
+      "title": "General Audience of 28 May 2008: Saint Gregory the Great (1)",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/audiences/2008/documents/hf_ben-xvi_aud_20080528.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal catechesis used for Augustine's leadership of Gregory's missionary group and for a received Catholic interpretation of Gregory's pastoral and peacemaking purpose",
+      "supports": ["life.roman_monk", "life.gregory_commission", "life.missionary_group", "reception.catholic"]
+    },
+    {
+      "id": "augustine-liturgy-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — May",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/MayUC.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for Augustine's May 27 optional memorial; the calendar key establishes that an entry without an indicated rank is optional",
+      "supports": ["celebrationIds", "feastDates", "calendar.rank", "calendar.color"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Augustine's mission shows the Gospel carried through dependence: Gregory sent, Frankish Christians assisted, Bertha had already sustained Christian worship, Æthelberht allowed a hearing, and companions shared the work. Honoring him truthfully means proclaiming Christ without coercion, cultural contempt, or the erasure of Christians whose witness preceded or followed his.",
+  "oneMinuteSummary": "Augustine was a monk in Rome whom Gregory the Great sent with companions to evangelize in England. Reaching Kent in 597, they entered a setting already shaped by British Christianity, Frankish connections, Queen Bertha's faith, and worship at Saint Martin's church. King Æthelberht offered hospitality and freedom to preach; Bede says he accepted baptism without compelling his people to follow. Augustine became bishop at Canterbury and helped establish a durable Roman mission, but he did not single-handedly found English Christianity. Bede wrote more than a century later and favored particular Roman and Irish contributions, while modern scholarship restores neglected British and Frankish agency. Gregory's counsel to adapt local religious sites rather than destroy them shows pastoral flexibility within a premodern mission still entangled with royal power. Augustine's memorial calls Christians to collaborative, patient, non-coercive witness to Christ.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A Roman monk sent with companions",
+        "body": "Augustine's birth and early years are not securely known. He was a monk in Rome when Gregory the Great appointed him to lead a missionary company toward the English peoples. The journey depended on companions, Frankish interpreters, local permissions, and papal correspondence; it was never the achievement of an isolated hero.",
+        "sourceIds": ["augustine-bede-history", "augustine-english-heritage", "augustine-benedict-gregory"]
+      },
+      {
+        "heading": "Kent already contained Christian relationships",
+        "body": "When the mission reached Kent in 597, Queen Bertha was already Christian and worshiped at Saint Martin's with her bishop Liudhard. Æthelberht received the missionaries cautiously, provided hospitality, and allowed them to teach. Bede presents his later baptism as voluntary and says the king did not compel subjects to convert. Bertha's agency, Frankish help, and older British Christianity prevent any claim that Augustine brought Christ to an empty land.",
+        "sourceIds": ["augustine-bede-history", "augustine-meens-background", "augustine-english-heritage"]
+      },
+      {
+        "heading": "Pastoral adaptation and institutional growth",
+        "body": "Augustine became bishop and established his seat at Canterbury. Gregory later counseled the mission to cleanse and reuse suitable religious buildings and redirect familiar communal customs instead of destroying everything at once. That counsel models patience and discernment, but its premodern setting included royal influence and polemical assumptions. It cannot authorize coercion, manipulation, or contempt for another culture.",
+        "sourceIds": ["augustine-bede-history", "augustine-benedict-gregory"]
+      },
+      {
+        "heading": "A real beginning, not the whole story",
+        "body": "Augustine's Canterbury mission became a lasting center, yet Christian life in Britain predated it and the wider conversion of England unfolded unevenly through Roman, Frankish, British, Irish, and English agents. Bede's account is indispensable but shaped by his eighth-century ecclesial purposes. The reviewed controls disagree over 604 or a later year for Augustine's death, so the profile does not invent a lifespan or age.",
+        "sourceIds": ["augustine-meens-background", "augustine-english-heritage", "augustine-bede-history"]
+      }
+    ],
+    "gospelTheme": "Christ sends disciples to bear the Gospel in dependence on others, offering peace and receiving hospitality rather than conquering people or cultures.",
+    "struggle": "Mission can become a heroic story that erases prior Christian communities, local agency, and the dangers created when religious persuasion is joined to political power.",
+    "response": "Augustine's memory is received with historical humility: recognize the whole network of witnesses, respect conscience, adapt patiently, and let truthful service make Christ credible."
+  },
+  "virtues": [
+    {
+      "name": "Collaborative mission",
+      "evidence": "Augustine's work depended on Gregory's sending, a company of missionaries, Frankish interpreters, Bertha's established faith, Æthelberht's permission, and local communities.",
+      "imitation": "Before beginning a faith initiative, identify who is already serving, ask what they know, and share decisions and credit rather than arriving as a rescuer.",
+      "sourceIds": ["augustine-bede-history", "augustine-meens-background", "augustine-english-heritage"]
+    },
+    {
+      "name": "Respect for conscience",
+      "evidence": "Bede says Æthelberht received the faith without forcing his subjects, and Gregory's adaptive counsel preferred gradual redirection to indiscriminate destruction.",
+      "imitation": "Explain your faith clearly, invite questions, and refuse pressure, material leverage, deception, or political power as methods of conversion.",
+      "sourceIds": ["augustine-bede-history"]
+    },
+    {
+      "name": "Historical humility",
+      "evidence": "Modern scholarship identifies British continuity and Frankish assistance that Bede's influential narrative minimizes, while early details about Augustine himself remain sparse.",
+      "imitation": "When telling a community's origin story, name earlier and less powerful contributors and distinguish evidence from inherited simplification.",
+      "sourceIds": ["augustine-meens-background", "augustine-english-heritage"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Read Luke 10:1-9 slowly. Notice that Jesus sends disciples in pairs, makes them receivers of hospitality, and places peace before proclamation. Pray for missionaries and for the peoples and churches whose wisdom they must honor.",
+    "action": "Learn the faith history of the place where you live from more than one community. Thank one person or group whose contribution is often omitted, and ask before proposing what they need."
+  },
+  "reflectionQuestions": [
+    "Whose faith, labor, or local knowledge disappears when I tell a mission or parish success story?",
+    "How can I speak of Christ with conviction while protecting another person's freedom to question, decline, or take time?"
+  ],
+  "scripture": {
+    "reference": "Luke 10:1-9",
+    "connection": "Jesus sends disciples together and makes them dependent on the welcome of others. Augustine's mission likewise relied on companions, interpreters, Bertha, Æthelberht, and existing Christian networks, so Christian mission must remain peaceful, collaborative, and free from coercion."
+  },
+  "prayer": "Lord Jesus Christ, who send disciples in peace, purify our witness of pride and coercion. Through Saint Augustine's intercession, give missionaries courage joined to humility, gratitude for those who came before, respect for every conscience, and patience to learn from the people they serve. Gather divided Christians in truth and charity, and let every mission reveal your freedom-giving love. Amen."
+}
