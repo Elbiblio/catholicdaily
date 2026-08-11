@@ -227,6 +227,35 @@ void main() {
     expect(find.text('Seen in their life'), findsNothing);
   });
 
+  testWidgets('real Fatima asset renders as an observance, not a biography', (
+    tester,
+  ) async {
+    final profile = await tester.runAsync(
+      () => SaintProfileService.instance.findById('our_lady_of_fatima'),
+    );
+
+    expect(profile, isNotNull);
+    expect(profile!.kind, SaintProfileKind.observance);
+    expect(profile.lifeSpan, isEmpty);
+    expect(profile.lifeLength, isEmpty);
+
+    await tester.pumpWidget(
+      _host(SaintLifeGuideView(profile: profile, onShowSources: () {})),
+    );
+
+    expect(find.text('Why this observance matters today'), findsOneWidget);
+    expect(find.text('What the Church celebrates'), findsOneWidget);
+    expect(
+      find.text('The Gospel at the heart of this observance'),
+      findsOneWidget,
+    );
+    expect(find.text('Dispositions to cultivate'), findsOneWidget);
+    expect(find.text('Their life and journey'), findsNothing);
+    expect(find.text('The Gospel visible in their life'), findsNothing);
+    expect(find.text('Their response'), findsNothing);
+    expect(find.text('Seen in their life'), findsNothing);
+  });
+
   testWidgets('group profiles retain person-centered guide copy', (
     tester,
   ) async {

@@ -110,6 +110,38 @@ void main() {
     expect(failures, isEmpty);
   });
 
+  test('Batch 5 one-minute summaries contain 100 to 150 words', () async {
+    const batch5Ids = [
+      'john_of_avila',
+      'nereus_and_achilleus',
+      'pancras_of_rome',
+      'our_lady_of_fatima',
+      'matthias_apostle',
+      'john_i_pope',
+      'bernardine_of_siena',
+      'christopher_magallanes',
+      'rita_of_cascia',
+      'bede_the_venerable',
+      'gregory_vii_pope',
+      'mary_magdalene_de_pazzi',
+    ];
+    final failures = <String>[];
+
+    for (final id in batch5Ids) {
+      final profile = await SaintProfileService.instance.findById(id);
+      final summary = profile!.guide!.oneMinuteSummary.trim();
+      final wordCount = summary
+          .split(RegExp(r'\s+'))
+          .where((word) => word.isNotEmpty)
+          .length;
+      if (wordCount < 100 || wordCount > 150) {
+        failures.add('$id: $wordCount words');
+      }
+    }
+
+    expect(failures, isEmpty);
+  });
+
   test(
     'resolves a notification title to a stable curated profile id',
     () async {
