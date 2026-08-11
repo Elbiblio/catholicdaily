@@ -28,7 +28,7 @@
       "accessedDate": "2026-08-11",
       "tier": 1,
       "reuseBasis": "Formal liturgical readings used for Matthew 16:13-19 and 1 Peter 5:1-4, joining Peter's confession and the keys with accountable pastoral service that does not dominate",
-      "supports": ["feast", "scripture.matthew16", "scripture.1peter5", "life.petrine_ministry", "virtues.accountable_service", "symbols.keys"]
+      "supports": ["feast", "scripture.matthew16", "scripture.1peter5", "life.petrine_ministry", "virtues.accountable_service", "symbols", "symbols.keys"]
     },
     {
       "id": "usccb-john-21",
@@ -63,7 +63,7 @@
       "accessedDate": "2026-08-11",
       "tier": 1,
       "reuseBasis": "Official archival and conservation account used for the object's composite construction, Carolingian association, disputed ivory dating, documented medieval devotion, and Bernini setting",
-      "supports": ["life.physical_chair", "historicalCertainty", "symbols.chair"]
+      "supports": ["life.physical_chair", "historicalCertainty", "symbols", "symbols.chair"]
     },
     {
       "id": "vatican-news-chair",
@@ -74,7 +74,7 @@
       "accessedDate": "2026-08-11",
       "tier": 3,
       "reuseBasis": "Official Catholic saint-of-day synthesis used cautiously for the February 22 observance and the cathedra as a sign of episcopal teaching, pastoral care, and unity; precise origin stories are not adopted",
-      "supports": ["feastDate", "observanceIdentity", "symbols.chair", "life.unity"]
+      "supports": ["feastDate", "observanceIdentity", "symbols", "symbols.chair", "life.unity"]
     },
     {
       "id": "smith-chair-relic-history",

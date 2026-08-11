@@ -1,6 +1,7 @@
 import 'package:catholic_daily/data/models/saint_profile.dart';
 import 'package:catholic_daily/data/services/improved_liturgical_calendar_service.dart';
 import 'package:catholic_daily/data/services/optional_memorial_service.dart';
+import 'package:catholic_daily/data/services/saint_profile_service.dart';
 import 'package:catholic_daily/ui/screens/saint_detail_screen.dart';
 import 'package:catholic_daily/ui/widgets/saint_profile/saint_life_guide_view.dart';
 import 'package:catholic_daily/ui/widgets/saint_profile/saint_sources_sheet.dart';
@@ -145,6 +146,30 @@ void main() {
     );
     await tester.tap(find.text('Sources and review'));
     expect(sourcesRequested, isTrue);
+  });
+
+  testWidgets('real curated profiles expose their sourced symbols', (
+    tester,
+  ) async {
+    const cases = {'peter_damian': 'Cross', 'chair_of_saint_peter': 'Keys'};
+
+    for (final entry in cases.entries) {
+      final profile = await tester.runAsync(
+        () => SaintProfileService.instance.findById(entry.key),
+      );
+      expect(profile, isNotNull, reason: '${entry.key} must be curated');
+
+      await tester.pumpWidget(
+        _host(SaintLifeGuideView(profile: profile!, onShowSources: () {})),
+      );
+
+      expect(
+        find.text('Patronage and symbols'),
+        findsOneWidget,
+        reason: '${entry.key} has source-supported symbols',
+      );
+      expect(find.text(entry.value), findsOneWidget);
+    }
   });
 
   testWidgets('omits non-applicable lifespan and optional quotation', (
