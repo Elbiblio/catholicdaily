@@ -67,6 +67,17 @@
       "supports": ["inquisition.office", "inquisition.institution", "torture", "execution", "institutionalHarm"]
     },
     {
+      "id": "pius-usccb-calendar-2026",
+      "title": "Liturgical Calendar for the Dioceses of the United States of America - 2026",
+      "authorOrInstitution": "United States Conference of Catholic Bishops, Secretariat of Divine Worship",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://www.usccb.org/resources/2026cal.pdf",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal episcopal liturgical calendar used for Saint Pius V on April 30 and for the bracket convention that identifies the celebration as an Optional Memorial",
+      "supports": ["feast", "calendar.date", "calendar.rank"]
+    },
+    {
       "id": "pius-nce",
       "title": "Pius V, Pope, St.",
       "authorOrInstitution": "New Catholic Encyclopedia",

@@ -84,6 +84,17 @@
       "supports": ["colonialContext", "assimilation", "basilica.architecture", "power.safeguard", "historicalCertainty"]
     },
     {
+      "id": "mother-africa-ibadan-feast",
+      "title": "Our Lady Mother of Africa",
+      "authorOrInstitution": "Rev. Fr. Samuel Frederick",
+      "publisher": "Catholic Archdiocese of Ibadan",
+      "url": "https://www.ibadanarchdiocese.org/reflectiondetail?tab=2852",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Official Nigerian archdiocesan liturgical reflection used for the annual April 30 Feast of Our Lady Mother of Africa and its assigned Acts 1 and John 2 readings",
+      "supports": ["feast", "calendar.nigeria", "calendar.rank", "liturgy.readings"]
+    },
+    {
       "id": "mother-africa-nigeria-calendar",
       "title": "Liturgical Calendar: Nigeria, 2026",
       "authorOrInstitution": "GCatholic.org",
@@ -91,7 +102,7 @@
       "url": "https://gcatholic.org/calendar/2026/NG-en",
       "accessedDate": "2026-08-11",
       "tier": 3,
-      "reuseBasis": "Current calendar cross-check used only for the April 30 Feast of Our Lady Mother of Africa in Nigeria; it does not establish the title's theology or the Algiers shrine history",
+      "reuseBasis": "Supplementary current-calendar cross-check for the April 30 Feast in Nigeria; the official Archdiocese of Ibadan source supplies the primary Nigerian liturgical evidence",
       "supports": ["feast", "calendar.nigeria", "calendar.rank"]
     }
   ],
@@ -120,7 +131,7 @@
       {
         "heading": "Nigeria, African agency, and peace",
         "body": "The observance is a Feast in Nigeria on April 30. Ecclesia in Africa records African bishops praying with Mary for communion, justice, love, and peace, and calls the Church to dialogue with Muslims and African traditional religion. The Algiers basilica now emphasizes prayer and peace among Christians and Muslims. Africa is plural, and its churches and communities are agents of their own discipleship and future.",
-        "sourceIds": ["mother-africa-nigeria-calendar", "mother-africa-ecclesia", "mother-africa-basilica-muslim-country"]
+        "sourceIds": ["mother-africa-ibadan-feast", "mother-africa-nigeria-calendar", "mother-africa-ecclesia", "mother-africa-basilica-muslim-country"]
       }
     ],
     "gospelTheme": "At Cana Mary directs attention to Jesus, while in the upper room she prays within the community awaiting the Spirit; Christian hope for Africa remains Christ's gift received in communal faith and service.",

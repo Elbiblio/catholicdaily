@@ -62,14 +62,80 @@
     },
     {
       "id": "philip-james-vatican-liturgy",
-      "title": "Word of the Day: Saints Philip and James, Apostles, Feast",
+      "title": "Gospel and Word of the Day - 03 May 2025 - Vatican News",
       "authorOrInstitution": "Vatican News",
       "publisher": "Dicastery for Communication",
-      "url": "https://www.vaticannews.va/en/word-of-the-day/2027/05/03.html",
+      "url": "https://www.vaticannews.va/en/word-of-the-day/2025/05/03.html",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Past-dated Vatican News devotional page used only as a supplementary reception and lectionary cross-check; formal calendar and canonical Scripture sources establish the date, rank, identities, and scenes",
+      "supports": ["liturgy.readings", "reception"]
+    },
+    {
+      "id": "philip-james-usccb-calendar-2025",
+      "title": "Liturgical Calendar for the Dioceses of the United States of America - 2025",
+      "authorOrInstitution": "United States Conference of Catholic Bishops, Secretariat of Divine Worship",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://www.usccb.org/resources/2025cal.pdf",
       "accessedDate": "2026-08-11",
       "tier": 1,
-      "reuseBasis": "Official liturgical page used for the joint May 3 Feast and its readings from 1 Corinthians 15 and John 14; the page is not used to merge the apostles' identities",
-      "supports": ["profileKind", "jointCelebration", "feast", "calendar.rank", "liturgy.readings", "scripture"]
+      "reuseBasis": "Formal episcopal liturgical calendar used for the joint celebration of Saints Philip and James, Apostles, as a Feast on May 3",
+      "supports": ["profileKind", "jointCelebration", "feast", "calendar.date", "calendar.rank", "liturgy.readings"]
+    },
+    {
+      "id": "philip-john1-usccb",
+      "title": "John, Chapter 1",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/john/1",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Direct canonical text used for Jesus' call of Philip, his Bethsaida origin, his finding Nathanael, and his exact invitation to 'come and see'",
+      "supports": ["philip.identity", "philip.bethsaida", "philip.call", "philip.nathanael", "philip.comeAndSee", "scripture"]
+    },
+    {
+      "id": "philip-john6-usccb",
+      "title": "John, Chapter 6",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/john/6",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Direct canonical text used for Jesus' question to Philip about feeding the crowd and Philip's practical response",
+      "supports": ["philip.bread", "scripture"]
+    },
+    {
+      "id": "philip-john12-usccb",
+      "title": "John, Chapter 12",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/john/12",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Direct canonical text used for Greek visitors approaching Philip and for Philip and Andrew bringing the request to Jesus",
+      "supports": ["philip.greeks", "philip.andrew", "scripture"]
+    },
+    {
+      "id": "philip-john14-usccb",
+      "title": "John, Chapter 14",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/john/14",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Direct canonical text used for Philip's request to see the Father and Jesus' response about the Son's revealing presence",
+      "supports": ["philip.father", "scripture"]
+    },
+    {
+      "id": "james-luke6-usccb",
+      "title": "Luke, Chapter 6",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/luke/6",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Direct canonical text used for Jesus' choice of the Twelve and the explicit identification of James as son of Alphaeus",
+      "supports": ["james.identity", "james.alphaeus", "james.apostleLists", "scripture"]
     }
   ],
   "editorial": {
@@ -87,17 +153,17 @@
       {
         "heading": "One feast, two apostles",
         "body": "The Roman liturgy celebrates Philip and James together on May 3, but a shared date does not create a shared biography. They are distinct members of the Twelve. The group profile preserves both identities and lets the evidence for each stand on its own.",
-        "sourceIds": ["philip-james-vatican-liturgy", "philip-benedict-audience", "james-alphaeus-nce"]
+        "sourceIds": ["philip-james-usccb-calendar-2025", "philip-john1-usccb", "james-luke6-usccb"]
       },
       {
         "heading": "Philip: called, questioning, inviting",
         "body": "Philip came from Bethsaida. In John, Jesus calls him; he invites Nathanael to come and see, responds practically when a crowd needs bread, helps Greek visitors approach Jesus, and asks at the supper to see the Father. Jesus answers by drawing him more deeply into the mystery of the Son's unity with the Father.",
-        "sourceIds": ["philip-benedict-audience", "philip-nce", "philip-james-vatican-liturgy"]
+        "sourceIds": ["philip-john1-usccb", "philip-john6-usccb", "philip-john12-usccb", "philip-john14-usccb", "philip-benedict-audience"]
       },
       {
         "heading": "James son of Alphaeus: a sparse record",
         "body": "James son of Alphaeus appears in the New Testament lists of the Twelve and is present within the apostolic community, but the texts provide no separate ministry narrative. His obscurity is not a defect to repair by borrowing another person's deeds. A named place among the Twelve is meaningful even when an individual story is not preserved.",
-        "sourceIds": ["james-alphaeus-nce"]
+        "sourceIds": ["james-luke6-usccb", "james-alphaeus-nce"]
       },
       {
         "heading": "Identity disputes and later traditions",
@@ -114,13 +180,13 @@
       "name": "Open invitation",
       "evidence": "When Nathanael objects, Philip does not force an argument; he invites him to come and encounter Jesus directly.",
       "imitation": "Invite one person to read a Gospel passage, pray, or join a work of service, making it easy for them to decline and leaving the encounter with Christ free of pressure.",
-      "sourceIds": ["philip-benedict-audience", "philip-nce"]
+      "sourceIds": ["philip-john1-usccb", "philip-benedict-audience", "philip-nce"]
     },
     {
       "name": "Faithful presence without display",
       "evidence": "James son of Alphaeus is consistently named among the apostles even though no separate teaching or achievement can be assigned to him securely.",
       "imitation": "Thank a quiet collaborator by naming their distinct contribution, then take one necessary task that may remain unseen instead of competing for recognition.",
-      "sourceIds": ["james-alphaeus-nce"]
+      "sourceIds": ["james-luke6-usccb", "james-alphaeus-nce"]
     }
   ],
   "practice": {
