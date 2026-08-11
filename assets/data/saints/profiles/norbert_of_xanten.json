@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 2,
+  "id": "norbert_of_xanten",
+  "profileKind": "individual",
+  "celebrationIds": ["norbert_of_xanten", "saint_norbert_bishop"],
+  "name": "Saint Norbert of Xanten, Bishop",
+  "alternateNames": ["Norbert of Xanten", "Norbert of Prémontré"],
+  "ecclesialTitle": "Archbishop of Magdeburg and founder of the Premonstratensian community",
+  "lifeSpan": "c. 1080/85–1134",
+  "vocation": "Priest, itinerant preacher, community founder, and archbishop",
+  "places": ["Xanten", "Prémontré", "Magdeburg", "Rome"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Norbert left courtly and canonical privilege after a conversion process remembered around 1115. Ordained deacon and priest, he became an authorized itinerant preacher and gathered a community at Prémontré that professed common life in 1121. As archbishop of Magdeburg from 1126, he pursued reform amid resistance and imperial-papal conflict. His early Lives preserve essential testimony but shape events as hagiography, so dramatic storms, miracles, speeches, and polemical claims require caution.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Norbert_of_Xanten",
+  "wikidataId": "Q160374",
+  "feastDates": ["June 6"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "norbert-vita-a-antry",
+      "title": "Life of Lord Norbert, Archbishop of Magdeburg: Vita A",
+      "authorOrInstitution": "Anonymous; translated and edited by Theodore J. Antry, O. Praem.",
+      "publisher": "Order of Canons Regular of Prémontré",
+      "url": "https://premontre.org/wp-content/uploads/2021/02/vita.pdf",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Modern English translation of an early hagiographic Life used, by fact-level paraphrase only, for Norbert's reported conversion, ordination, authorized preaching, settlement at Prémontré, episcopal reform, conflict, and death; supernatural scenes and composed speeches are not treated as neutral eyewitness reporting",
+      "supports": ["identity", "life.conversion_tradition", "life.ordination", "life.preaching", "life.premontre", "life.archbishop", "life.conflict", "life.death", "historicalCertainty"]
+    },
+    {
+      "id": "norbert-strahov-biographies",
+      "title": "Biographies of Saint Norbert",
+      "authorOrInstitution": "Royal Canonry of Premonstratensians at Strahov",
+      "publisher": "Royal Canonry of Premonstratensians at Strahov",
+      "url": "https://www.strahovskyklaster.cz/en/for-researchers/publication-activity/biographies-of-saint-norbert",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Source-history control used for the posthumous Vita A and Vita B traditions, their uncertain authorship and dating, and the need to distinguish shared early evidence from each Life's literary and institutional purposes",
+      "supports": ["sourceHistory", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "norbert-ndb-seibert",
+      "title": "Norbert von Xanten",
+      "authorOrInstitution": "Hubertus Seibert",
+      "publisher": "Neue Deutsche Biographie; Deutsche Biographie",
+      "url": "https://www.deutsche-biographie.de/gnd118588567.html#ndbcontent",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent scholarly reference used for the uncertain birth chronology, Xanten and court context, reported 1115 turning point, itinerant preaching, Prémontré settlement, 1126 archbishopric, resistance, papal-imperial politics, and documentary limits",
+      "supports": ["identity", "lifeSpan", "places", "life.context", "life.conversion_tradition", "life.preaching", "life.premontre", "life.archbishop", "life.politics", "sourceLimits"]
+    },
+    {
+      "id": "norbert-francis-letter",
+      "title": "Letter to the Abbot General of the Canons Regular of Prémontré on the 900th Anniversary of the Abbey of Prémontré",
+      "authorOrInstitution": "Pope Francis",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/francesco/en/letters/2021/documents/papa-francesco_20210606_lettera-abate-premostratensi.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal reception used for conversion as discernment, authorized preaching, Hugh's companionship, common profession in 1121, hospitality, service of poor and pilgrims, later Eucharistic reception, and the ecclesial character of reform",
+      "supports": ["life.conversion", "life.preaching", "life.community", "life.profession", "life.hospitality", "reception.eucharistic", "virtues.discernment", "virtues.communal_service"]
+    },
+    {
+      "id": "norbert-universal-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — June",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/JunUC.shtml",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for Norbert's June 6 optional memorial and white liturgical color; the calendar key establishes that an entry without a printed rank is optional",
+      "supports": ["celebrationIds", "feastDates", "calendar.rank", "calendar.color", "ecclesialTitle"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Norbert's story joins personal conversion to accountable ecclesial reform. He did not remain a solitary critic: he sought formation, authorization, companions, a rule of life, hospitality, and demanding public service. His witness can inspire honest repair while warning against romanticizing crisis, harsh penance, coercive polemic, or unchecked religious power.",
+  "oneMinuteSummary": "Norbert of Xanten moved from privileged service at court and a comfortable canonical position toward a searching conversion remembered around 1115. After formation and ordination, he received authorization for itinerant preaching. At Prémontré he and companions shaped a common canonical life, making profession in 1121 and serving worship, hospitality, poor people, and pilgrims. Elected archbishop of Magdeburg in 1126, Norbert pursued reform amid local resistance and the wider papal-imperial conflicts of his age. The early Lives are indispensable but hagiographic: their dramatic storm, voices, miracles, speeches, and polemical episodes cannot all be repeated as secure fact. Later devotion calls him an apostle of the Eucharist, a reception that should not be projected backward as a contemporary title. Norbert's durable lesson is conversion made accountable through prayer, community, service, and patient reform—not fear, coercion, unsafe austerity, or domination.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A conversion remembered through hagiography",
+        "body": "Norbert belonged to the chapter at Xanten and moved within royal and ecclesiastical privilege. His early Life dramatizes a turning point around 1115 through a violent storm, a fall, and a heavenly question. Independent reference evidence supports a major change in direction, but the literary scene should be received as hagiographic interpretation rather than a recoverable transcript. Conversion unfolds through examination, counsel, and repair, not through seeking danger.",
+        "sourceIds": ["norbert-vita-a-antry", "norbert-strahov-biographies", "norbert-ndb-seibert", "norbert-francis-letter"]
+      },
+      {
+        "heading": "Preaching under authority and with companions",
+        "body": "After formation, Norbert was ordained deacon and priest and began preaching reform. Conflict followed, but his later itinerancy was not simply self-appointed: papal authorization and continuing ecclesial discernment mattered. Hugh became a durable companion. This pattern makes zeal accountable and prevents a charismatic personality from becoming its own standard of truth.",
+        "sourceIds": ["norbert-vita-a-antry", "norbert-ndb-seibert", "norbert-francis-letter"]
+      },
+      {
+        "heading": "Prémontré: prayer becoming common service",
+        "body": "Norbert gathered a community at Prémontré around 1120, with common profession at Christmas 1121. Their canonical life joined liturgical prayer, shared discipline, preaching, hospitality, and care for poor people and pilgrims. The foundation's importance lies less in a lone founder's charisma than in a stable community able to carry a mission beyond him.",
+        "sourceIds": ["norbert-vita-a-antry", "norbert-ndb-seibert", "norbert-francis-letter"]
+      },
+      {
+        "heading": "Archbishop amid contested power",
+        "body": "As archbishop of Magdeburg from 1126, Norbert faced resistance while attempting reform and became involved in papal-imperial politics. Hagiographic opponents, anti-heresy language, and later Eucharistic shorthand must not authorize contempt, coercion, or state domination. His sanctity does not make every tactic beyond review; reform needs due process, listening, safeguards, and limits on power.",
+        "sourceIds": ["norbert-vita-a-antry", "norbert-ndb-seibert", "norbert-francis-letter"]
+      }
+    ],
+    "gospelTheme": "Jesus calls privileged disciples to conversion that bears fruit in communion, truthful preaching, hospitality, and service rather than self-protective status.",
+    "struggle": "Reform can become dramatic self-display, harshness, polemic, or control, while fear of conflict can leave real failures untouched.",
+    "response": "Discern honestly, accept formation and oversight, gather trustworthy companions, build practices that outlast personality, and evaluate reform by its fidelity to Christ and its care for people affected."
+  },
+  "virtues": [
+    {
+      "name": "Accountable conversion",
+      "evidence": "Norbert's changed direction developed through counsel, formation, ordination, authorization, and a rule of common life rather than remaining one dramatic private experience.",
+      "imitation": "Name one privilege or habit that blunts your service. Discuss a proportionate repair with a wise, trustworthy person and schedule a review rather than making an impulsive vow.",
+      "sourceIds": ["norbert-vita-a-antry", "norbert-ndb-seibert", "norbert-francis-letter"]
+    },
+    {
+      "name": "Community-building zeal",
+      "evidence": "At Prémontré, preaching became a shared pattern of prayer, hospitality, service, and durable commitment carried by companions.",
+      "imitation": "Turn one good intention into a small shared practice with named roles, safeguarding boundaries, and a date to ask whether it truly serves people.",
+      "sourceIds": ["norbert-francis-letter", "norbert-vita-a-antry"]
+    },
+    {
+      "name": "Courage under scrutiny",
+      "evidence": "Norbert accepted difficult public responsibility as archbishop, while the record also exposes conflict and the need to assess reform within its political setting.",
+      "imitation": "Before challenging a harmful practice, gather evidence, hear affected people, use the proper process, and invite correction of your own methods.",
+      "sourceIds": ["norbert-ndb-seibert", "norbert-vita-a-antry"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray with Luke 19:1-10. Ask Jesus to show where conversion needs concrete restitution or changed conduct. Choose one safe, proportionate repair and place it under wise accountability.",
+    "action": "Help one parish or community effort become less personality-dependent: clarify its purpose, share responsibility, document a safeguarding route, and ask a person affected by it what should change."
+  },
+  "reflectionQuestions": [
+    "Where am I mistaking a strong feeling or forceful personality for tested discernment?",
+    "Does the reform I want increase truth, participation, safety, and service, or mainly increase my control?"
+  ],
+  "scripture": {
+    "reference": "Luke 19:1-10",
+    "connection": "Encounter with Jesus moves Zacchaeus from status and possession toward welcome and repair. Norbert's conversion likewise matters because it becomes accountable service rather than remaining a dramatic story."
+  },
+  "prayer": "Lord Jesus Christ, call us from privilege without service and zeal without wisdom. Through Saint Norbert's intercession, give us honest conversion, trustworthy companions, reverence in prayer, hospitality toward those in need, and courage for reform governed by truth, due process, and love. Protect us from coercion and pride, and make every change serve your Body. Amen."
+}

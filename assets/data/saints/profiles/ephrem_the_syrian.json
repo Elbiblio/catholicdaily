@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 2,
+  "id": "ephrem_the_syrian",
+  "profileKind": "individual",
+  "celebrationIds": ["ephrem_the_syrian", "saint_ephrem_deacon_and_doctor_of_the_church"],
+  "name": "Saint Ephrem the Syrian, Deacon and Doctor of the Church",
+  "alternateNames": ["Ephrem of Nisibis", "Ephraem the Syrian"],
+  "ecclesialTitle": "Deacon and Doctor of the Church",
+  "lifeSpan": "c. 306–373",
+  "vocation": "Deacon, teacher, poet, hymnographer, and theologian",
+  "places": ["Nisibis", "Edessa"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Ephrem was born around 306 in Nisibis, served the Church as a deacon and teacher, and moved with displaced Christians to Edessa after Rome ceded Nisibis to Persia in 363. He died in 373. His authentic Syriac hymns teach through Scripture, symbol, paradox, and worship, centering on Christ's incarnation and saving work. Later biographies and the large pseudo-Ephrem corpus require careful separation from his securely attributed writings.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Ephrem_the_Syrian",
+  "wikidataId": "Q200608",
+  "feastDates": ["June 9"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "ephrem-hymns-faith-cambridge",
+      "title": "Ephrem the Syrian, Hymns on Faith 4, 10, 24, 31, 36, 51, 54, 77, 78, and 79",
+      "authorOrInstitution": "Ephrem the Syrian; translated by Mark DelCogliano and Andrew Radde-Gallwitz",
+      "publisher": "Cambridge University Press",
+      "url": "https://www.cambridge.org/core/books/abs/cambridge-edition-of-early-christian-writings/ephrem-the-syrian-hymns-on-faith-4-10-24-31-36-51-54-77-78-and-79/FE09C624BA1A96AA2EDC290F8FA2F4B5",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Critical modern translation of selected authentic Syriac hymns used by fact-level paraphrase for Ephrem's Christ-centered theology through Scripture, symbol, paradox, embodied worship, and the limits of human language; no translation text is reproduced",
+      "supports": ["life.writings", "life.poetic_theology", "gospelTheme", "virtues.reverent_learning", "sourceLimits"]
+    },
+    {
+      "id": "ephrem-brock-guide",
+      "title": "Ephrem: A Brief Guide to the Main Editions and Translations",
+      "authorOrInstitution": "Sebastian P. Brock",
+      "publisher": "Syriaca.org",
+      "url": "https://syri.ac/brock/ephrem",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Scholarly attribution and bibliography guide used to distinguish Ephrem's authentic Syriac works and critical editions from Greek, Armenian, Latin, and later pseudo-Ephrem material",
+      "supports": ["life.writings", "corpus.authentic", "corpus.pseudonymous", "sourceHistory", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "ephrem-benedict-audience",
+      "title": "General Audience of 28 November 2007: Saint Ephrem",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/audiences/2007/documents/hf_ben-xvi_aud_20071128.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal catechesis used for approximate birth at Nisibis, formation, diaconal service, displacement to Edessa in 363, death in 373, poetic method, and Christ-centered theology; its plague-care statement is retained only as later ecclesial reception, not secure contemporary biography",
+      "supports": ["identity", "lifeSpan", "places", "life.deacon", "life.displacement", "life.death", "life.poetic_theology", "reception.plague_tradition"]
+    },
+    {
+      "id": "ephrem-benedict-xv-doctor",
+      "title": "Principi Apostolorum Petro",
+      "authorOrInstitution": "Pope Benedict XV",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/benedict-xv/en/encyclicals/documents/hf_ben-xv_enc_05101920_principi-apostolorum-petro.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal declaration used only for Ephrem's recognition as Doctor of the Universal Church and later ecclesial reception; its hagiographic life claims and period polemics do not control fourth-century biography",
+      "supports": ["ecclesialTitle", "reception.doctor", "historicalCertainty"]
+    },
+    {
+      "id": "ephrem-botha-anti-judaism",
+      "title": "Polarity: The Theology of Anti-Judaism in Ephrem the Syrian's Hymns on Easter",
+      "authorOrInstitution": "P. J. Botha",
+      "publisher": "HTS Teologiese Studies / Theological Studies",
+      "url": "https://hts.org.za/index.php/hts/article/view/2294/0",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Peer-reviewed historical control used to acknowledge anti-Jewish polemical rhetoric in parts of Ephrem's corpus, its role in Christian boundary-making, and the need to refuse its repetition or generalization in contemporary discipleship",
+      "supports": ["historicalContext", "reception.harm", "pastoralSafety", "sourceLimits"]
+    },
+    {
+      "id": "ephrem-universal-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — June",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/JunUC.shtml",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for Ephrem's June 9 optional memorial and white liturgical color; the calendar key establishes that an entry without a printed rank is optional",
+      "supports": ["celebrationIds", "feastDates", "calendar.rank", "calendar.color", "ecclesialTitle"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Ephrem shows that rigorous theology can become prayer, song, and Scripture-shaped imagination. His displacement also gives his teaching the weight of a refugee Christian serving a community under upheaval. Reading him well requires wonder and source discipline: authentic Syriac poetry must be distinguished from later stories and attributed texts, while ancient polemic must never become contempt for Jewish people.",
+  "oneMinuteSummary": "Ephrem was born around 306 in Nisibis and served as a deacon, teacher, poet, and theologian. When Rome ceded Nisibis to Persia in 363, he joined the displaced Christian community that settled in Edessa, where he continued teaching until his death in 373. His authentic Syriac hymns make theology memorable through biblical images, paradox, symbol, and worship. They direct wonder toward Jesus Christ, whose incarnation and saving work exceed simplistic explanation. Ephrem was later declared a Doctor of the Church. Yet much attributed to him comes from later Greek, Armenian, Latin, or anonymous traditions; even popular monastic and plague-care narratives need qualification. Some authentic polemical language about Jews also belongs to a harmful ancient boundary-making context and must not be imitated. Ephrem teaches disciplined wonder: read Scripture prayerfully, test attributions, protect human dignity, and let beautiful words lead to Christlike mercy rather than pride.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A deacon formed at Nisibis",
+        "body": "Ephrem was born approximately in 306 at Nisibis and was formed within its Christian community. The secure title is deacon; describing him as a monk in the later institutional sense goes beyond the evidence. His ministry included teaching and writing, and his theology remained closely tied to Scripture, worship, and the life of the Church.",
+        "sourceIds": ["ephrem-benedict-audience", "ephrem-brock-guide"]
+      },
+      {
+        "heading": "Teaching through displacement",
+        "body": "In 363, the transfer of Nisibis to Persian rule displaced many Christians, including Ephrem, to Edessa. He continued serving there until his death in 373. His life should not turn refugees into spiritual scenery: displacement means real loss, and faithful communities respond through welcome, continuity of prayer, education, and practical care.",
+        "sourceIds": ["ephrem-benedict-audience"]
+      },
+      {
+        "heading": "Poetry as disciplined theology",
+        "body": "The authentic Syriac Hymns on Faith reason with biblical images, paradox, and symbol rather than reducing divine mystery to slogans. Ephrem's poetry is not decorative theology; it trains humility before Christ's incarnation and saving work. A poem still needs interpretation: images should not be literalized or detached from Scripture, worship, and the wider argument.",
+        "sourceIds": ["ephrem-hymns-faith-cambridge", "ephrem-brock-guide", "ephrem-benedict-audience"]
+      },
+      {
+        "heading": "Reception needs attribution and moral discernment",
+        "body": "Later generations honored Ephrem as Doctor of the Church and attached many writings and stories to his name. Critical guides separate authentic Syriac works from pseudo-Ephrem collections; plague nursing is later reception rather than secure contemporary evidence. Historical reading must also name anti-Jewish polemic without repeating it. Jewish dignity is not negotiable, and Christian identity cannot be built through contempt.",
+        "sourceIds": ["ephrem-brock-guide", "ephrem-benedict-audience", "ephrem-benedict-xv-doctor", "ephrem-botha-anti-judaism"]
+      }
+    ],
+    "gospelTheme": "The Word became flesh in Jesus Christ, drawing human language into praise while teaching believers humility before a mystery no image or formula can exhaust.",
+    "struggle": "Religious speech can become shallow certainty, borrowed quotation, contempt for outsiders, or beautiful language disconnected from mercy and truth.",
+    "response": "Read Scripture slowly, verify attribution, let symbols deepen rather than replace understanding, reject dehumanizing polemic, and turn wonder into concrete welcome and care."
+  },
+  "virtues": [
+    {
+      "name": "Reverent intelligence",
+      "evidence": "Ephrem's authentic hymns use layered biblical images and paradox to confess Christ while preserving humility about the limits of human speech.",
+      "imitation": "Choose one Gospel image for Christ. Read its passage in context, write what it reveals and what it does not claim, then pray without forcing the mystery into a slogan.",
+      "sourceIds": ["ephrem-hymns-faith-cambridge", "ephrem-benedict-audience"]
+    },
+    {
+      "name": "Faithfulness in displacement",
+      "evidence": "After the forced departure from Nisibis, Ephrem continued teaching and serving the Christian community at Edessa.",
+      "imitation": "Support one displaced person or family through a competent local organization, asking what is needed rather than using their hardship to illustrate your own spiritual lesson.",
+      "sourceIds": ["ephrem-benedict-audience"]
+    },
+    {
+      "name": "Truthful tradition",
+      "evidence": "Modern scholarship distinguishes Ephrem's authentic Syriac corpus from extensive later attribution, while historical study exposes rhetoric that should not be morally repeated.",
+      "imitation": "Before sharing a saint quotation, verify it in a critical or institutional source. If a revered text demeans a people, name the harm and refuse to pass it on as Christian wisdom.",
+      "sourceIds": ["ephrem-brock-guide", "ephrem-botha-anti-judaism"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Read John 1:1-18 twice. On the second reading, pause at one image for Christ. Hold it in silence, then write a four-line original prayer that praises Jesus without claiming to explain him completely.",
+    "action": "Verify one quotation attributed to Ephrem before sharing it, and contribute time, supplies, or money within your means to a trustworthy service for displaced people. Follow its safeguarding guidance."
+  },
+  "reflectionQuestions": [
+    "Does my religious language create humble attention to Christ, or certainty that makes me less willing to listen?",
+    "Whose dignity could be harmed if I repeat an old polemic, unverified quotation, or romantic story without context?"
+  ],
+  "scripture": {
+    "reference": "John 1:1-18",
+    "connection": "John announces the eternal Word made flesh, full of grace and truth. Ephrem's poetic theology keeps returning to this paradox: the Christ who exceeds language truly enters human history and makes the Father known."
+  },
+  "prayer": "Word made flesh, Jesus Christ, through Saint Ephrem teach us to read Scripture with wonder, think with humility, and praise with truthful words. Sustain displaced people, make our communities places of welcome, and cleanse Christian speech of contempt and false attribution. Let beauty lead us to mercy, study lead us to prayer, and every image lead us more deeply to you. Amen."
+}

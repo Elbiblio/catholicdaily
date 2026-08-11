@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 2,
+  "id": "romuald_of_ravenna",
+  "profileKind": "individual",
+  "celebrationIds": ["romuald_of_ravenna", "saint_romuald_abbot"],
+  "name": "Saint Romuald of Ravenna, Abbot",
+  "alternateNames": ["Romuald", "Romuald of Ravenna"],
+  "ecclesialTitle": "Abbot and eremitical reformer",
+  "lifeSpan": "c. 950–1027",
+  "vocation": "Monk, hermit, community founder, and reformer",
+  "places": ["Ravenna", "Peregrino", "Camaldoli", "Val di Castro"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Romuald, born around the mid-tenth century near Ravenna, became a monk and itinerant eremitical reformer. He helped form small communities whose ordered solitude, common prayer, and hospitality shaped the later Camaldolese tradition. He died on June 19, 1027. Peter Damian's near-contemporary Life is vital but promotes an eremitical ideal through dramatic penances, visions, miracles, and an impossible age; institutional evidence also places Camaldoli's foundation later than the familiar exact date of 1012.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Romuald",
+  "wikidataId": "Q379691",
+  "feastDates": ["June 19"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "romuald-peter-damian-vita",
+      "title": "Vita beati Romualdi",
+      "authorOrInstitution": "Peter Damian",
+      "publisher": "Patrologia Latina Database; ARTFL Project, University of Chicago",
+      "url": "https://artflsrv04.uchicago.edu/philologic5/PLD/navigate/7600/3",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Near-contemporary Latin hagiography used for the broad movement from Ravenna monastic life through itinerant reform and small eremitical communities to death; family-violence origins, extreme penances, coercive episodes, visions, demons, miracles, relic stories, and age 120 are not treated as secure or imitable",
+      "supports": ["identity", "places", "life.monastic", "life.itinerant", "life.communities", "life.death", "tradition.family", "tradition.ascetic", "tradition.miracles", "historicalCertainty"]
+    },
+    {
+      "id": "romuald-phipps-vita",
+      "title": "Romuald—Model Hermit: Eremitical Theory in Saint Peter Damian's Vita Beati Romualdi, Chapters 16–27",
+      "authorOrInstitution": "Colin Phipps",
+      "publisher": "Cambridge University Press",
+      "url": "https://www.cambridge.org/core/journals/studies-in-church-history/article/abs/romuald-model-hermit-eremitical-theory-in-saint-peter-damians-vita-beati-romualdi-chapters-1627/74D80ADCCEB4F037C4877111F1B14F5B",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent scholarly analysis used to read Peter Damian's Life as a literary and theological construction of an eremitical model, not a transparent chronological transcript or direct rule written by Romuald",
+      "supports": ["sourceGenre", "sourceHistory", "sourceLimits", "life.eremitical_model", "historicalCertainty"]
+    },
+    {
+      "id": "romuald-camaldoli-history",
+      "title": "History — Camaldoli",
+      "authorOrInstitution": "Fondazione Comunità Monastica di Camaldoli",
+      "publisher": "Fondazione Comunità Monastica di Camaldoli",
+      "url": "https://www.camaldolicultura.it/en/storia/",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Institutional historical synthesis used for the eremitical and cenobitic pattern, documentary estimates placing the foundation around 1023–1026, a 1027 charter, later testimony behind the exact 1012 tradition, hospitality, and the later development of customary and congregation",
+      "supports": ["places", "life.camaldoli", "life.community", "life.hospitality", "chronology.camaldoli", "reception.camaldolese", "sourceLimits"]
+    },
+    {
+      "id": "romuald-jp2-camaldoli",
+      "title": "Incontro con i monaci camaldolesi nell'eremo fondato da San Romualdo",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/john-paul-ii/it/speeches/1993/september/documents/hf_jp-ii_spe_19930917_camaldoli.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal reception used for the Camaldolese coordination of solitude and community, liturgical prayer, lectio divina, ecclesial communion, hospitality, and respectful ecumenical and interreligious dialogue",
+      "supports": ["reception.camaldolese", "life.prayer", "life.community", "life.hospitality", "virtues.bounded_solitude", "virtues.communion"]
+    },
+    {
+      "id": "romuald-universal-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — June",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/JunUC.shtml",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for Romuald's June 19 optional memorial and white liturgical color; the calendar key establishes that an entry without a printed rank is optional",
+      "supports": ["celebrationIds", "feastDates", "calendar.rank", "calendar.color", "ecclesialTitle"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Romuald's received charism refuses a false choice between silence and communion. Solitude can expose distraction and open attention to God, while common prayer, a rule, hospitality, and ecclesial accountability keep it from becoming escape or private absolutism. His story inspires sustainable reform only when extreme hagiographic practices are not copied and later institutional developments are not projected back onto him.",
+  "oneMinuteSummary": "Romuald was born around 950 near Ravenna and became a monk, hermit, and itinerant reformer. He moved among communities, seeking a disciplined eremitical life that remained connected to worship, rule, and ecclesial communion. His influence was foundational for the later Camaldolese tradition, which holds solitude and common life together with hospitality. He died on June 19, 1027. Peter Damian wrote his Life within about fifteen years, making it an important near-contemporary witness; it is also a literary program for eremitical reform, not a neutral transcript. Its claim that Romuald lived 120 years conflicts with modern chronology, and its family-violence story, extreme fasting, sleep loss, coercive discipline, visions, demons, and miracles are not safe imitation prompts. The familiar exact Camaldoli foundation date of 1012 is also later than surviving documentation. Romuald invites bounded silence, shared accountability, hospitality, and reform that protects health, dependants, and human dignity.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A reformer known through a purposeful Life",
+        "body": "Romuald was born around the middle of the tenth century near Ravenna and entered monastic life before becoming an itinerant eremitical reformer. Peter Damian wrote his Life around 1042, close enough to preserve important memory but with a clear spiritual and reforming purpose. Its report of age 120 is rejected, and its dramatic account of family violence is labeled as hagiographic tradition rather than imposed as inherited guilt.",
+        "sourceIds": ["romuald-peter-damian-vita", "romuald-phipps-vita"]
+      },
+      {
+        "heading": "Solitude ordered toward communion",
+        "body": "Romuald helped shape small communities of hermits rather than treating isolation as an end in itself. Later Camaldolese reception coordinates cell and common prayer, Scripture, ecclesial unity, and a rule. No surviving writing can securely be quoted as Romuald's own “Brief Rule,” so the profile describes a received charism without inventing direct authorship.",
+        "sourceIds": ["romuald-peter-damian-vita", "romuald-phipps-vita", "romuald-jp2-camaldoli"]
+      },
+      {
+        "heading": "Camaldoli without a false exact date",
+        "body": "Romuald was foundational to the settlement and spiritual pattern later identified with Camaldoli. Institutional research explains that the traditional year 1012 first appears in much later testimony, while documentary reconstruction points approximately to 1023–1026 and a charter of 1027. The later congregation, customs, and legal organization developed beyond his lifetime, so he is not presented as sole founder of a finished modern order.",
+        "sourceIds": ["romuald-camaldoli-history", "romuald-jp2-camaldoli"]
+      },
+      {
+        "heading": "Silence that safeguards life",
+        "body": "Peter Damian's Life uses severe diets, sleep loss, confinement, visions, demons, miracles, and relic episodes to embody an eremitical ideal. These are neither medical guidance nor universal spiritual requirements. Healthy solitude is scheduled, bounded, and accountable; it never hides abuse, becomes punishment, abandons dependants, or replaces mental-health and medical care. Hospitality and communion test whether silence opens a person to Christ and neighbor.",
+        "sourceIds": ["romuald-peter-damian-vita", "romuald-phipps-vita", "romuald-jp2-camaldoli", "romuald-camaldoli-history"]
+      }
+    ],
+    "gospelTheme": "Jesus withdraws to pray and then returns to teach, heal, and call a community; solitude serves loving communion and mission rather than escape.",
+    "struggle": "Noise can prevent honest prayer, but isolation can also conceal suffering, sever responsibility, intensify illness, or become a source of spiritual pride and control.",
+    "response": "Practice bounded silence within a stable rule, remain accountable to trustworthy community, protect health and dependants, and measure contemplation by patient hospitality and service."
+  },
+  "virtues": [
+    {
+      "name": "Bounded attentiveness",
+      "evidence": "Romuald's eremitical legacy places solitude within prayer, Scripture, rule, and a community rather than presenting disappearance as holiness.",
+      "imitation": "Set a short period of device-free silence with a clear start and end. Tell anyone who depends on you, remain reachable for emergencies, and stop if isolation worsens distress.",
+      "sourceIds": ["romuald-jp2-camaldoli", "romuald-camaldoli-history"]
+    },
+    {
+      "name": "Reform with humility",
+      "evidence": "Romuald moved among communities seeking a more faithful life, while later institutions developed his influence beyond anything one person completed.",
+      "imitation": "For one recurring distraction or harmful pattern, choose a modest rule, invite one trusted person to review it, and revise it according to its effects on health and relationships.",
+      "sourceIds": ["romuald-peter-damian-vita", "romuald-phipps-vita", "romuald-camaldoli-history"]
+    },
+    {
+      "name": "Contemplative hospitality",
+      "evidence": "Camaldolese reception links liturgical and solitary prayer with ecclesial communion, hospitality, and respectful dialogue.",
+      "imitation": "Let today's quiet produce one act of attentive welcome: listen without interruption, make space for a guest, or support someone whose responsibilities leave little silence.",
+      "sourceIds": ["romuald-jp2-camaldoli", "romuald-camaldoli-history"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Read Mark 1:35-39, then keep ten minutes of device-free silence. Ask Jesus what prayer is preparing you to do for another person. Keep the practice shorter if health, anxiety, trauma, or caregiving responsibilities require it.",
+    "action": "Create a one-week rule with one brief silence period, one community check-in, and one act of hospitality. Review it with a trusted person and remove anything that causes neglect, secrecy, or harm."
+  },
+  "reflectionQuestions": [
+    "Does my solitude return me to people with greater patience and honesty, or help me avoid responsibilities and difficult support?",
+    "What boundary would make silence safer and more fruitful for my health, dependants, and community?"
+  ],
+  "scripture": {
+    "reference": "Mark 1:35-39",
+    "connection": "Jesus prays in a deserted place, yet he is neither lost nor detached from mission: the disciples find him and he goes on to preach. Romuald's best legacy holds silence and communion together in the same movement of love."
+  },
+  "prayer": "Lord Jesus Christ, who sought quiet prayer and returned in compassion, through Saint Romuald teach us silence without escape, discipline without harm, and reform without pride. Guard every vulnerable person from secrecy and coercion. Make our solitude accountable, our common life prayerful, and our hospitality generous, so that contemplation deepens love for you and for every neighbor. Amen."
+}

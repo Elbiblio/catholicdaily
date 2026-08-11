@@ -1,0 +1,200 @@
+{
+  "schemaVersion": 2,
+  "id": "saint_barnabas_apostle",
+  "profileKind": "individual",
+  "celebrationIds": ["saint_barnabas_apostle", "barnabas_apostle"],
+  "name": "Saint Barnabas, Apostle",
+  "alternateNames": ["Barnabas", "Joseph called Barnabas"],
+  "ecclesialTitle": "Apostle and companion in mission",
+  "vocation": "Early Christian missionary, teacher, encourager, and community leader",
+  "places": ["Jerusalem", "Antioch", "Cyprus"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Acts introduces Joseph, a Cypriot Levite called Barnabas, as a generous member of the Jerusalem Church who vouched for Saul and encouraged believers at Antioch. Sent with Saul by a praying community, he served in mission and the Jerusalem deliberation over Gentile believers. Scripture also records his failure in the Antioch table-fellowship crisis and a sharp disagreement with Paul over Mark. Later martyrdom, relic, and authorship traditions do not supply secure biography.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Barnabas",
+  "wikidataId": "Q185856",
+  "feastDates": ["June 11"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "barnabas-acts-4",
+      "title": "Acts of the Apostles, Chapter 4",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/acts/4",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Canonical Scripture used for Joseph's name Barnabas, its interpretation as son of encouragement, his Cypriot and Levite identity, and his gift for community need; generosity is not converted into a command to impoverish dependants",
+      "supports": ["identity", "alternateNames", "places", "life.generosity", "virtues.encouragement", "virtues.generosity"]
+    },
+    {
+      "id": "barnabas-acts-9",
+      "title": "Acts of the Apostles, Chapter 9",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/acts/9",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Canonical Scripture used for Barnabas presenting Saul to the apostles and supplying concrete testimony about his encounter with Christ and preaching; this does not become a demand for trust without communal evidence and safeguards",
+      "supports": ["life.saul", "virtues.discerning_encouragement"]
+    },
+    {
+      "id": "barnabas-acts-11",
+      "title": "Acts of the Apostles, Chapter 11",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/acts/11",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Canonical Scripture used for Jerusalem's sending of Barnabas to Antioch, his recognition and encouragement of grace there, partnership with Saul, sustained teaching, and famine relief",
+      "supports": ["life.antioch", "life.encouragement", "life.teaching", "life.relief", "virtues.discerning_encouragement"]
+    },
+    {
+      "id": "barnabas-acts-13",
+      "title": "Acts of the Apostles, Chapter 13",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/acts/13",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Canonical Scripture used for the Antioch community's prayer and sending, mission with Saul and Mark, Barnabas's designation as apostle, and proclamation centered on Jesus Christ",
+      "supports": ["ecclesialTitle", "life.mission", "life.community_sending", "gospelTheme"]
+    },
+    {
+      "id": "barnabas-acts-15",
+      "title": "Acts of the Apostles, Chapter 15",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/acts/15",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Canonical Scripture used for Barnabas's participation in the Jerusalem deliberation about Gentile believers and the sharp disagreement after which he took Mark to Cyprus",
+      "supports": ["life.jerusalem", "life.disagreement", "virtues.accountability"]
+    },
+    {
+      "id": "barnabas-galatians-2",
+      "title": "Galatians, Chapter 2",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/galatians/2",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Paul's primary letter used for Barnabas's recognized partnership in mission, concern for poor people, and failure under pressure in the Antioch table-fellowship crisis; the intra-Christian conflict is not generalized against Jewish people",
+      "supports": ["life.partnership", "life.poor", "life.antioch_failure", "virtues.accountability", "historicalCertainty"]
+    },
+    {
+      "id": "barnabas-cyprus-hagiography",
+      "title": "In the Footsteps of the Apostles: The Hagiography of the Apostle Barnabas and the First Bishops of Cyprus",
+      "authorOrInstitution": "Stephanos Efthymiadis",
+      "publisher": "Cambridge University Press",
+      "url": "https://www.cambridge.org/core/books/abs/hagiography-of-byzantine-cyprus/in-the-footsteps-of-the-apostles-the-hagiography-of-the-apostle-barnabas-and-the-first-bishops-of-cyprus/D55B0DDE80BB30F74CB793BE8C437748",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent scholarship used to locate detailed Cyprus martyrdom and relic narratives within later Byzantine hagiography and ecclesial identity rather than silently treating them as first-century eyewitness biography",
+      "supports": ["tradition.cyprus", "tradition.martyrdom", "tradition.relics", "sourceHistory", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "barnabas-epistle-nce",
+      "title": "Barnabas, Epistle of",
+      "authorOrInstitution": "New Catholic Encyclopedia",
+      "publisher": "Gale; Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/barnabas-epistle",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Recognized reference control used for the anonymous Epistle of Barnabas and the lack of secure authorship by Paul's companion; later attributions are not used to enlarge the apostle's biography",
+      "supports": ["tradition.epistle", "authorship", "sourceLimits"]
+    },
+    {
+      "id": "barnabas-universal-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — June",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/JunUC.shtml",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal universal calendar used for Barnabas's June 11 memorial and red liturgical color; this corrects a prior app mapping that labeled the celebration a feast",
+      "supports": ["celebrationIds", "feastDates", "calendar.rank", "calendar.color", "ecclesialTitle"]
+    },
+    {
+      "id": "barnabas-lagos-calendar",
+      "title": "Thursday, June 11, 2026 ST BARNABAS, Ap. (MEMORIAL)",
+      "authorOrInstitution": "Catholic Archdiocese of Lagos",
+      "publisher": "Catholic Archdiocese of Lagos",
+      "url": "https://lagosarchdiocese.org/thursday-june-11-2026-st-barnabas-ap-memorial/",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal local liturgical page used to confirm Memorial rank in the Nigerian target context and the day's Acts and Matthew readings",
+      "supports": ["celebrationIds", "feastDates", "calendar.rank", "calendar.nigeria", "scripture"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Barnabas models encouragement with substance: he shares resources, recognizes grace, makes room for a distrusted convert, accepts communal sending, and invests again in Mark after conflict. Scripture also lets Paul name Barnabas's failure under social pressure. His holiness therefore inspires generous accompaniment that remains discerning, accountable, inclusive, and centered on Christ.",
+  "oneMinuteSummary": "Acts introduces Joseph, a Cypriot Levite whom the apostles called Barnabas, “son of encouragement.” He shared property for community need, vouched for the formerly violent Saul, recognized God's grace at Antioch, and brought Saul into a year of teaching. A praying community sent Barnabas and Saul on mission; later they joined the Jerusalem deliberation about Gentile believers. Scripture does not flatten him into a flawless hero. Paul says Barnabas was carried into hypocritical withdrawal from Gentile table fellowship, and Acts records a sharp disagreement over Mark after which Barnabas returned to Cyprus with him. These texts commend encouragement, generosity, communal discernment, and accountability. Acts calls Barnabas an apostle, though not one of the Twelve. Detailed Cyprus martyrdom, relic discoveries, and authorship of the anonymous Epistle of Barnabas belong to later tradition, not secure biography. His memorial invites courageous welcome without naïveté, coercion, reckless giving, or forced reconciliation.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Encouragement made concrete",
+        "body": "Acts introduces Joseph, called Barnabas, as a Cypriot Levite who placed proceeds from property at the apostles' feet for community need. He later presented Saul to a fearful Jerusalem community and reported his encounter and preaching. This was not naïve endorsement of danger: Barnabas supplied testimony within communal discernment rather than demanding trust without evidence or safeguards.",
+        "sourceIds": ["barnabas-acts-4", "barnabas-acts-9"]
+      },
+      {
+        "heading": "Recognizing grace at Antioch",
+        "body": "Jerusalem sent Barnabas to Antioch, where he rejoiced at God's grace, encouraged perseverance, sought Saul, and taught with him for a year. The community also organized relief. Barnabas's encouragement notices God's work across cultural boundaries and strengthens it through teaching, partnership, and material solidarity.",
+        "sourceIds": ["barnabas-acts-11"]
+      },
+      {
+        "heading": "Mission and accountability",
+        "body": "The Antioch community prayed, fasted, laid hands on Barnabas and Saul, and sent them; mission was communal and accountable, not a lone adventure. Barnabas also joined the Jerusalem deliberation about Gentile believers. Yet Galatians reports that social pressure drew him into exclusionary table-fellowship conduct. A saint can be a real witness and still need truthful correction.",
+        "sourceIds": ["barnabas-acts-13", "barnabas-acts-15", "barnabas-galatians-2"]
+      },
+      {
+        "heading": "Conflict, continued service, and later memory",
+        "body": "Acts records a sharp disagreement when Barnabas wanted to take Mark again and Paul refused; they separated, and Barnabas went with Mark to Cyprus. The text does not require a villain or report a later reunion. Detailed martyrdom and relic stories appear in later Cypriot hagiography, while the Epistle of Barnabas is anonymous. These traditions cannot supply dates, age, or a complete first-century ending.",
+        "sourceIds": ["barnabas-acts-15", "barnabas-cyprus-hagiography", "barnabas-epistle-nce"]
+      }
+    ],
+    "gospelTheme": "Jesus sends disciples to announce that God's reign has drawn near, relying on grace, shared mission, hospitality, and truthful witness rather than coercion or status.",
+    "struggle": "Encouragement can become enabling, generosity can become reckless, social pressure can produce exclusion, and conflict can be rewritten into simplistic heroes and villains.",
+    "response": "Recognize grace with evidence, share within real responsibilities, submit mission to community discernment, receive correction, and allow safe separation while continuing faithful service."
+  },
+  "virtues": [
+    {
+      "name": "Discerning encouragement",
+      "evidence": "Barnabas spoke for Saul by reporting concrete evidence and later recognized grace at Antioch before strengthening it through teaching and partnership.",
+      "imitation": "Encourage one person by naming specific evidence of growth and offering a bounded next opportunity with appropriate supervision, consent, and safeguarding.",
+      "sourceIds": ["barnabas-acts-9", "barnabas-acts-11"]
+    },
+    {
+      "name": "Responsible generosity",
+      "evidence": "Barnabas contributed property for community need, and the Antioch ministry connected teaching with organized famine relief and remembrance of poor people.",
+      "imitation": "Give time or resources within your means to a transparent need, without neglecting dependants or pressuring another person to match your sacrifice.",
+      "sourceIds": ["barnabas-acts-4", "barnabas-acts-11", "barnabas-galatians-2"]
+    },
+    {
+      "name": "Correctable leadership",
+      "evidence": "Galatians preserves Barnabas's failure under pressure, while Acts preserves both his mission and his unresolved disagreement with Paul.",
+      "imitation": "Ask a trusted person who is affected by your leadership where social pressure makes you exclude or withdraw, then make one observable repair without demanding immediate reconciliation.",
+      "sourceIds": ["barnabas-galatians-2", "barnabas-acts-15"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Read Acts 11:21-26 and Matthew 10:7-13. Thank Christ for one sign of grace in another person, then ask how to encourage it through truth, teaching, and service rather than praise alone.",
+    "action": "Offer a bounded second chance or mentoring step where it is safe: define expectations, supervision, consent, and review. Where violence or abuse is involved, follow professional safeguarding processes instead of arranging informal access."
+  },
+  "reflectionQuestions": [
+    "Does my encouragement rest on truthful attention and wise boundaries, or on avoiding a difficult assessment?",
+    "Where might fear of a group or influential people be pulling me away from equal fellowship in Christ?"
+  ],
+  "scripture": {
+    "reference": "Acts 11:21-26",
+    "connection": "Barnabas sees the grace of God at Antioch, rejoices, encourages fidelity, and brings Saul to help teach. Encouragement becomes a communal ministry that recognizes Christ's work and equips others to continue it."
+  },
+  "prayer": "Lord Jesus Christ, who sends your disciples together, through Saint Barnabas make us generous without recklessness, encouraging without naïveté, and courageous enough to receive correction. Help us recognize your grace across boundaries, protect those at risk, repair exclusion, and accompany growth with truth. Keep every mission noncoercive, accountable, and centered on your Gospel. Amen."
+}
