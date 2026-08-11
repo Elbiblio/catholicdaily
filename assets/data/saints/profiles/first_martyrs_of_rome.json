@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 2,
+  "id": "first_martyrs_of_rome",
+  "profileKind": "group",
+  "celebrationIds": ["first_martyrs_of_rome", "the_first_martyrs_of_the_holy_roman_church"],
+  "name": "The First Martyrs of the Holy Roman Church",
+  "alternateNames": ["First Martyrs of the Church of Rome", "First Martyrs of Rome"],
+  "ecclesialTitle": "Unnamed martyrs of the early Church at Rome",
+  "vocation": "Christians of the first Roman community remembered together as martyrs",
+  "places": ["Rome"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "The Church remembers unnamed Christians killed at Rome during Nero's reign, traditionally connected with the aftermath of the great fire of 64. Tacitus, writing decades later, says Nero blamed Christians and punished a large number; 1 Clement preserves an early Roman memory of many witnesses who suffered. The sources do not provide their names, exact number, or individual biographies, and modern scholars debate how Tacitus's account should be reconstructed.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/First_Martyrs_of_the_Church_of_Rome",
+  "wikidataId": "Q640666",
+  "feastDates": ["June 30"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "rome-martyrs-tacitus",
+      "title": "The Annals, Book XV, Chapter 44",
+      "authorOrInstitution": "Cornelius Tacitus; translated by Alfred John Church and William Jackson Brodribb",
+      "publisher": "Perseus Digital Library, Tufts University",
+      "url": "https://www.perseus.tufts.edu/hopper/text?doc=Tac.+Ann.+15.44",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Primary Roman literary account used for the fire of 64, Nero's attempt to redirect suspicion, the identification and punishment of Christians in Rome, the reported large number, public cruelty, and the pity that arose; the hostile rhetoric and several-decades-later composition are explicit source limitations, and no graphic wording is reproduced",
+      "supports": ["identity", "places", "life.fire", "life.nero", "life.christians", "life.multitude", "life.public_cruelty", "sourceLimits"]
+    },
+    {
+      "id": "rome-martyrs-clement",
+      "title": "First Epistle of Clement to the Corinthians, Chapters 5–6",
+      "authorOrInstitution": "Clement of Rome; translated by Alexander Roberts and James Donaldson",
+      "publisher": "New Advent",
+      "url": "https://www.newadvent.org/fathers/1010.htm",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Early Roman Christian witness used for the community's memory of Peter and Paul followed by a great multitude who endured suffering; it does not name the victims, date the episode, mention the fire, or establish that every detail belongs to one event",
+      "supports": ["life.early_roman_memory", "life.multitude", "life.peter_paul_context", "life.unnamed", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "rome-martyrs-jp2",
+      "title": "General Audience of 4 July 1979",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/john-paul-ii/en/audiences/1979/documents/hf_jp-ii_aud_19790704.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal reception used for the June 30 liturgical memory, its connection with Nero's Rome, Tacitus and Clement as witnesses, and the ecclesial meaning of testimony united to Christ; it is used as reception rather than as an independent contemporary chronicle",
+      "supports": ["identity", "feastDates", "life.liturgical_memory", "life.nero", "life.tacitus", "life.clement", "life.christ_center", "reception"]
+    },
+    {
+      "id": "rome-martyrs-cook",
+      "title": "The Historicity of the Neronian Persecution: A Response to Brent Shaw",
+      "authorOrInstitution": "John Granger Cook",
+      "publisher": "Cambridge University Press",
+      "url": "https://www.cambridge.org/core/journals/new-testament-studies/article/historicity-of-the-neronian-persecution-a-response-to-brent-shaw/72A73656C0F1372963C197F8945D38D3",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Peer-reviewed historical control used for the modern dispute over Tacitus, the need to separate the punishment following the fire from Peter and Paul's martyrdom traditions, later Christian references to Nero, and the limits of calling a local episode a systematic empire-wide persecution",
+      "supports": ["life.fire", "life.nero", "life.peter_paul_context", "life.local_scope", "reception.disputed", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "rome-martyrs-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — June",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/JunUC.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the June 30 optional memorial and title; the calendar key establishes that an entry without a printed rank is optional, while red is the established martyr color in the app calendar",
+      "supports": ["identity", "celebrationIds", "feastDates", "calendar.rank", "calendar.color"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Their names are lost, but their dignity is not: the First Martyrs of Rome ask us to resist scapegoating, stand beside targeted people, and keep Christ—not violence—at the center of witness.",
+  "oneMinuteSummary": "The First Martyrs of the Holy Roman Church are unnamed Christians remembered after Saints Peter and Paul. Tacitus, writing decades after Rome's great fire of 64, reports that Nero shifted suspicion onto Christians and punished a large number with public cruelty. An early Roman Christian letter, 1 Clement, remembers a great multitude who suffered after speaking of Peter and Paul, but it does not tie every detail to the fire. Modern scholars debate parts of the reconstruction, so the memorial should not become a catalogue of invented names, an empire-wide chronology, or graphic spectacle. Nor does it license blame against Jewish people or any other community. The martyrs' witness points to Christ and calls believers to reject scapegoating, protect people targeted by power, tell the truth carefully, and practice courage without seeking danger or treating death as desirable.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A community made into a scapegoat",
+        "body": "Tacitus places the episode after the great fire of Rome in 64. He says Nero redirected suspicion toward people called Christians and that many were punished. His account is an important Roman witness, but it was composed decades later and speaks with open contempt for Christians. It establishes neither individual biographies nor every later devotional detail.",
+        "sourceIds": ["rome-martyrs-tacitus", "rome-martyrs-cook"]
+      },
+      {
+        "heading": "An early Roman memory of many witnesses",
+        "body": "First Clement, written from the Roman church near the end of the first century, recalls Peter and Paul and then a great multitude who endured suffering. It gives no list of names and does not mention the fire. The liturgy gathers these anonymous lives into one memory without pretending that the evidence can recover each story.",
+        "sourceIds": ["rome-martyrs-clement", "rome-martyrs-jp2"]
+      },
+      {
+        "heading": "What the evidence does not permit",
+        "body": "Modern discussion includes a serious dispute about how Tacitus learned and shaped the story. Peter and Paul's deaths have their own traditions and should not simply be fused with every victim in Tacitus. The evidence supports a local Roman memory under Nero, not a detailed list, an exact victim count, or a single empire-wide campaign beginning on one day.",
+        "sourceIds": ["rome-martyrs-tacitus", "rome-martyrs-clement", "rome-martyrs-cook"]
+      },
+      {
+        "heading": "Witness centered on Christ, not cruelty",
+        "body": "The Church's reception honors fidelity joined to Christ's self-giving love. Remembering persecution should deepen solidarity with people targeted today. It must never glorify execution, invite believers to seek danger, reproduce degrading descriptions, or turn ancient Roman hostility into collective blame against Jewish people or any living group.",
+        "sourceIds": ["rome-martyrs-jp2", "rome-martyrs-calendar"]
+      }
+    ],
+    "gospelTheme": "Christ receives the witness of people whose names history loses and forms a Church that refuses the scapegoating of the vulnerable.",
+    "struggle": "A politically exposed minority was blamed and publicly punished, while the surviving sources leave the victims unnamed and are themselves shaped by hostility, memory, and debate.",
+    "response": "The Church remembers the martyrs together, keeps their witness joined to Christ, and learns to oppose false accusation and abusive power without romanticizing suffering."
+  },
+  "virtues": [
+    {
+      "name": "Courageous fidelity",
+      "evidence": "Early Roman and later liturgical memory preserve a community that remained associated with Christ under lethal pressure even though individual names were lost.",
+      "imitation": "Tell one necessary truth calmly, with support and appropriate safety, when silence would leave another person isolated.",
+      "sourceIds": ["rome-martyrs-clement", "rome-martyrs-jp2"]
+    },
+    {
+      "name": "Solidarity against scapegoating",
+      "evidence": "Tacitus's narrative exposes a ruler redirecting public suspicion toward a despised minority and records that the cruelty eventually stirred pity.",
+      "imitation": "Interrupt one rumor or dehumanizing generalization and check the evidence before passing it on.",
+      "sourceIds": ["rome-martyrs-tacitus", "rome-martyrs-cook"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray slowly through Hebrews 12:1–2, entrusting to Christ all persecuted people whose names and stories are unknown.",
+    "action": "Verify one claim about a blamed group before sharing it, and offer practical support through a safe, accountable local channel if someone is being targeted."
+  },
+  "reflectionQuestions": [
+    "Whose dignity becomes easiest for me to overlook when public fear seeks someone to blame?",
+    "How can I practice truthful courage without seeking danger or turning another person's suffering into inspiration for myself?"
+  ],
+  "scripture": {
+    "reference": "Hebrews 12:1–2",
+    "connection": "The cloud of witnesses directs attention beyond itself to Jesus, whose endurance is not a command to accept abuse but the source of faithful, communal perseverance."
+  },
+  "prayer": "God of truth and mercy, receive the witness of the unnamed martyrs of Rome. Keep us close to Christ, free us from scapegoating and contempt, and give us wise courage to protect those targeted by power. Through Christ our Lord. Amen."
+}

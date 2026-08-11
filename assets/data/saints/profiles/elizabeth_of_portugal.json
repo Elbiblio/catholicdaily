@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 2,
+  "id": "elizabeth_of_portugal",
+  "profileKind": "individual",
+  "celebrationIds": ["elizabeth_of_portugal", "saint_elizabeth_of_portugal"],
+  "name": "Saint Elizabeth of Portugal",
+  "alternateNames": ["Elizabeth of Aragon", "Isabel of Portugal", "Rainha Santa Isabel"],
+  "ecclesialTitle": "Queen of Portugal, widow, and peacemaker",
+  "lifeSpan": "1271–1336",
+  "vocation": "Queen, wife, mother, widow, Franciscan tertiary, and patron of works of mercy",
+  "places": ["Aragon", "Portugal", "Coimbra", "Estremoz"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Elizabeth of Aragon became queen of Portugal through marriage to King Denis. She exercised political and household agency, supported religious and charitable institutions, and repeatedly worked to reconcile members of her divided royal family. After Denis's death she lived beside the Poor Clare monastery she had founded at Coimbra as a Franciscan tertiary rather than an enclosed nun. Later miracle stories express her reputation for mercy but are not treated as contemporary biography.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Elizabeth_of_Aragon",
+  "wikidataId": "Q235857",
+  "feastDates": ["July 4"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "elizabeth-dias-marriage",
+      "title": "Dinis e Isabel: uma difícil relação conjugal e política",
+      "authorOrInstitution": "Nuno Pizarro Dias",
+      "publisher": "Revista Portuguesa de História, University of Coimbra",
+      "url": "https://ap1.sib.uc.pt/bitstream/10316.2/46279/1/dinis_e_isabel__uma_dificil_relacao_conjugal.pdf",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Scholarly historical study used for the political character of Elizabeth and Denis's marriage, Elizabeth's household and diplomatic agency, the couple's children, the conflicts involving Afonso, and the limits of devotional simplifications of royal family life; Portuguese prose is summarized rather than translated at length",
+      "supports": ["identity", "life.marriage", "life.children", "life.political_agency", "life.dynastic_conflict", "life.mediation", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "elizabeth-coimbra",
+      "title": "Isabel de Aragão",
+      "authorOrInstitution": "Paulo Simões Lopes; University of Coimbra",
+      "publisher": "University of Coimbra",
+      "url": "https://www.uc.pt/person/universcidade/univercidade/urbanidade/isabel-de-aragao/",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Institutional historical synthesis used for Elizabeth's Aragonese origin, Portuguese queenship, charitable and religious foundations at Coimbra, final journey to Estremoz, burial, cult, and the later devotional reception of the roses story; traditions are labeled rather than reported as verified events",
+      "supports": ["identity", "alternateNames", "lifeSpan", "places", "life.queenship", "life.mercy", "life.coimbra", "life.estremoz", "reception.roses", "reception.cult"]
+    },
+    {
+      "id": "elizabeth-newadvent",
+      "title": "St. Elizabeth of Portugal",
+      "authorOrInstitution": "Florence Capes",
+      "publisher": "New Advent",
+      "url": "https://www.newadvent.org/cathen/05391a.htm",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Historical ecclesial reference used for the 1271–1336 chronology, family relationships, care for poor and sick people, mediation traditions, widowhood at Coimbra, Franciscan tertiary status, death at Estremoz, and canonization in 1625; hagiographic episodes are controlled by modern scholarship and not repeated as certain",
+      "supports": ["identity", "lifeSpan", "life.family", "life.mercy", "life.mediation", "life.widowhood", "life.franciscan_tertiary", "life.estremoz", "reception.canonization"]
+    },
+    {
+      "id": "elizabeth-rodrigues-pilgrimage",
+      "title": "Walking to/with Queen Saint Elizabeth: ‘Where Your Very Steps Lead Me’",
+      "authorOrInstitution": "Vera Lúcia Rodrigues",
+      "publisher": "Religions (MDPI)",
+      "url": "https://www.mdpi.com/2077-1444/16/11/1454",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Peer-reviewed reception study used for the continuing Portuguese memory of Rainha Santa Isabel, the distinction between historical queen and evolving saintly image, Coimbra pilgrimage and material memory, and the way charity and peacemaking shape present reception",
+      "supports": ["alternateNames", "life.coimbra", "reception.cult", "reception.pilgrimage", "reception.mercy", "reception.peacemaking", "sourceLimits"]
+    },
+    {
+      "id": "elizabeth-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — July",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/JulUC.shtml",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the July 4 optional memorial and canonical title; the calendar key establishes that an entry without a printed rank is optional, while white is the established non-martyr color in the app calendar",
+      "supports": ["identity", "celebrationIds", "feastDates", "calendar.rank", "calendar.color"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Elizabeth shows that mercy and peacemaking can use real resources, political intelligence, and patient courage while respecting safety, truth, and the agency of everyone involved.",
+  "oneMinuteSummary": "Elizabeth of Aragon entered a dynastic marriage with King Denis and became queen of Portugal. She was not merely a passive royal wife: records and scholarship show household, charitable, religious, and political agency within a difficult marriage and a divided dynasty. Elizabeth supported people in poverty and religious communities, and she worked for reconciliation during conflicts involving her husband, son, and wider family. Specific battlefield scenes and the famous miracle of roses belong to later devotional tradition and should not be treated as secure eyewitness history. After Denis died, she lived beside the Poor Clare monastery she had founded at Coimbra as a Franciscan tertiary, not an enclosed Poor Clare. She died at Estremoz in 1336 after another peace-making journey. Her example joins prayer, material generosity, and careful mediation without requiring anyone to remain in abuse, enter violence, neglect dependants, or confuse peace with silence about harm.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A queen with political agency",
+        "body": "Born into the ruling house of Aragon in 1271, Elizabeth married Denis of Portugal as part of a dynastic alliance. Their marriage was politically consequential and personally difficult. She managed a royal household, maintained networks, held resources, and acted within court politics; reducing her to quiet endurance hides both the constraints and the agency documented in her life.",
+        "sourceIds": ["elizabeth-dias-marriage", "elizabeth-coimbra", "elizabeth-newadvent"]
+      },
+      {
+        "heading": "Mercy made material",
+        "body": "Elizabeth directed royal resources toward people in poverty, care for sick people, and religious institutions. Coimbra became a lasting center of her foundations and memory. Later stories, especially the roses miracle, communicate her reputation for generosity but developed through devotional reception and cannot replace evidence about how royal patronage and organized service actually worked.",
+        "sourceIds": ["elizabeth-coimbra", "elizabeth-newadvent", "elizabeth-rodrigues-pilgrimage"]
+      },
+      {
+        "heading": "Peacemaking inside a divided family",
+        "body": "Conflict between Denis and their son Afonso placed Elizabeth in a dangerous political position. Sources remember repeated mediation, though precise dramatic scenes are difficult to verify. Her peace work is best understood as active communication and negotiated restraint, not as proof that a spouse must tolerate abuse or that an unprotected person should step into armed conflict.",
+        "sourceIds": ["elizabeth-dias-marriage", "elizabeth-newadvent"]
+      },
+      {
+        "heading": "Widowhood, Franciscan life, and final journey",
+        "body": "After Denis died in 1325, Elizabeth lived near the Poor Clare monastery she had established at Coimbra. She was associated with Franciscan tertiary life but did not become an enclosed Poor Clare. In 1336 she traveled to Estremoz amid another family dispute and died there. Her continuing cult and pilgrimage memory developed around Coimbra; canonization followed in 1625.",
+        "sourceIds": ["elizabeth-newadvent", "elizabeth-coimbra", "elizabeth-rodrigues-pilgrimage"]
+      }
+    ],
+    "gospelTheme": "Christ's peace takes form through truthful reconciliation, wise use of resources, and concrete care for people whose needs power can overlook.",
+    "struggle": "Elizabeth navigated a difficult royal marriage, competing family loyalties, armed political conflict, and the moral risks attached to wealth and influence.",
+    "response": "She used her position for works of mercy and negotiated peace, then shaped widowhood through prayer and Franciscan service without withdrawing from responsibility."
+  },
+  "virtues": [
+    {
+      "name": "Resourceful mercy",
+      "evidence": "Elizabeth's royal patronage supported people in need and durable religious and charitable institutions, especially around Coimbra.",
+      "imitation": "Choose one resource you actually control—money, time, access, or attention—and direct it through a trustworthy channel toward a specific need.",
+      "sourceIds": ["elizabeth-coimbra", "elizabeth-newadvent"]
+    },
+    {
+      "name": "Prudent peacemaking",
+      "evidence": "Elizabeth repeatedly used relationship, communication, and political standing amid conflicts within the Portuguese royal family.",
+      "imitation": "If a conflict is safe to address, clarify one person's concern and one verifiable fact before proposing a next conversation; use trained support when risk or abuse is present.",
+      "sourceIds": ["elizabeth-dias-marriage", "elizabeth-newadvent"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray Matthew 5:9 and ask Christ to show you the difference between genuine peace, avoidance, and silence imposed by fear.",
+    "action": "Make one bounded work of mercy today, or ask a trusted mediator, counselor, safeguarding lead, or appropriate authority for help with a conflict that is not safe to handle alone."
+  },
+  "reflectionQuestions": [
+    "Which resource or relationship entrusted to me could become concrete mercy rather than private comfort?",
+    "Where do I need to pursue reconciliation, and where does truthful peace first require boundaries, protection, or outside help?"
+  ],
+  "scripture": {
+    "reference": "Matthew 5:9",
+    "connection": "The blessing of peacemakers concerns active participation in God's peace; it does not demand denial of harm, unsafe exposure, or reconciliation without truth and accountability."
+  },
+  "prayer": "God of mercy and peace, you gave Elizabeth responsibilities within a divided household and kingdom. Teach us to use what we have for those in need, to seek truth without violence, and to protect every person's dignity. Through Christ our Lord. Amen."
+}

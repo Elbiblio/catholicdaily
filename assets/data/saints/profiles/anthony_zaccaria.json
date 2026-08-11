@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 2,
+  "id": "anthony_zaccaria",
+  "profileKind": "individual",
+  "celebrationIds": ["anthony_zaccaria", "saint_anthony_mary_zaccaria"],
+  "name": "Saint Anthony Mary Zaccaria, Priest",
+  "alternateNames": ["Anthony Maria Zaccaria", "Antonio Maria Zaccaria"],
+  "ecclesialTitle": "Priest and founder of the Clerics Regular of Saint Paul",
+  "lifeSpan": "1502–1539",
+  "vocation": "Priest, reformer, medical graduate, spiritual writer, and founder",
+  "places": ["Cremona", "Padua", "Milan", "Vicenza"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Anthony Mary Zaccaria trained in medicine at Padua, studied theology, and was ordained around 1528/29. In Milan he collaborated with Bartolomeo Ferrari, Giacomo Antonio Morigia, Ludovica Torelli, women religious, and married laypeople in a three-family reform movement. His authenticated letters urge Christ-centered renewal shaped by Saint Paul, charity, prayer, and responsible action. Later devotional claims, disputed writings, and sole-founder accounts require qualification.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Anthony_Mary_Zaccaria",
+  "wikidataId": "Q380099",
+  "feastDates": ["July 5"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "zaccaria-letters",
+      "title": "The Letters of St. Anthony Zaccaria",
+      "authorOrInstitution": "Anthony Mary Zaccaria; Barnabite Fathers USA editorial introduction",
+      "publisher": "Barnabite Fathers USA",
+      "url": "https://www.barnabites.com/the-letters/",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Authenticated primary writings and editorial introduction used for the eleven surviving letters, their recipients and chronology, Zaccaria's Pauline and Christ-centered spirituality, collaboration with the Angelic Sisters and married laypeople, concrete reform counsel, and the small scale and situational limits of the corpus; modern translation is paraphrased rather than copied",
+      "supports": ["identity", "life.letters", "life.pauline_spirituality", "life.christ_center", "life.collaboration", "life.angelic_sisters", "life.married_laypeople", "sourceLimits"]
+    },
+    {
+      "id": "zaccaria-writings",
+      "title": "Writings of St. Anthony Mary Zaccaria",
+      "authorOrInstitution": "Giovanni M. Scalese, CRSP; translated and revised by Anthony M. Bianco, CRSP, and Gabriel M. Patil, CRSP",
+      "publisher": "Barnabite Fathers USA",
+      "url": "https://www.barnabites.com/writings/",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Order attribution guide used to distinguish the authenticated eleven letters and sermons from the layered Constitutions and disputed or rejected sayings, to note that no autograph of the Constitutions survives and they were never promulgated, and to prevent later devotional texts from becoming direct quotations",
+      "supports": ["life.letters", "life.sermons", "life.constitutions", "reception.dettti_notabili", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "zaccaria-jp2",
+      "title": "Address to the Clerics Regular of Saint Paul (Barnabites), 6 July 2002",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/john-paul-ii/en/speeches/2002/july/documents/hf_jp-ii_spe_20020706_s-antonio-maria-zaccaria.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal reception used for Zaccaria's Pauline reform charism, collaboration among Clerics Regular, Angelic Sisters, and laypeople, Eucharistic devotion, formation, mission, and the need to express his heritage in contemporary service; it is used as ecclesial reception rather than independent sixteenth-century biography",
+      "supports": ["identity", "ecclesialTitle", "life.pauline_spirituality", "life.three_families", "life.eucharist", "life.formation", "life.mission", "reception"]
+    },
+    {
+      "id": "zaccaria-canonization-office",
+      "title": "Sant'Antonio Maria Zaccaria",
+      "authorOrInstitution": "Dicastery for the Causes of Saints",
+      "publisher": "The Holy See",
+      "url": "https://www.causesanti.va/it/santi-e-beati/antonio-maria-zaccaria.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal institutional biography used for the 1502–1539 chronology, Cremona origin, Padua medical formation, priesthood, activity in Milan and Vicenza, collaboration with Bartolomeo Ferrari, Giacomo Antonio Morigia, and Ludovica Torelli, the three related foundations, death, and canonization; devotional elements are not treated as independent proof",
+      "supports": ["identity", "lifeSpan", "places", "life.medical_training", "life.priesthood", "life.milan", "life.vicenza", "life.ferrari", "life.morigia", "life.torelli", "life.three_families", "life.death", "reception.canonization"]
+    },
+    {
+      "id": "zaccaria-prosperi",
+      "title": "The New Heaven of the Devout: Antonio Maria Zaccaria and the Reform of the Church",
+      "authorOrInstitution": "Adriano Prosperi",
+      "publisher": "Journal of Jesuit Studies (Brill)",
+      "url": "https://brill.com/view/journals/jjs/2/3/article-p361_1.pdf",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent scholarly control used for the early-sixteenth-century Italian reform setting, lay and female agency, relationships among Zaccaria, Torelli, Ferrari, and Morigia, contested reception of the movement, and the danger of reading later institutional identities or polemics back into its beginnings",
+      "supports": ["life.reform_context", "life.collaboration", "life.torelli", "life.ferrari", "life.morigia", "life.lay_agency", "life.female_agency", "life.controversy", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "zaccaria-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — July",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/JulUC.shtml",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the canonical name Saint Anthony Mary Zaccaria, Priest, and the July 5 optional memorial; the calendar key establishes that an entry without a printed rank is optional, while white is the established non-martyr color in the app calendar",
+      "supports": ["identity", "celebrationIds", "feastDates", "calendar.rank", "calendar.color", "ecclesialTitle"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Anthony Mary Zaccaria shows reform as shared conversion: Christ-centered prayer, competent service, Eucharistic life, and collaboration across clergy, women religious, and lay households.",
+  "oneMinuteSummary": "Anthony Mary Zaccaria was born at Cremona in 1502, completed medical studies at Padua, pursued theology, and was ordained around 1528/29. In Milan he joined reform-minded collaborators rather than acting as a solitary founder. With Bartolomeo Ferrari, Giacomo Antonio Morigia, Ludovica Torelli, the Angelic Sisters, and married laypeople, he helped form three related communities serving renewal in Church and society. His eleven authenticated letters reveal urgent, practical, Christ-centered spirituality shaped by Saint Paul; the surviving Constitutions are layered, and sayings called Detti Notabili are disputed or rejected as his work. He promoted Eucharistic devotion but should not be credited with inventing every later practice associated with the movement. Anthony died in 1539 after a short, demanding ministry. His reform is not coercive intensity: prayer, penance, obedience, and service must respect health, conscience, safeguarding, medical care, shared leadership, and due process.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Medicine, theology, and priesthood",
+        "body": "Born at Cremona in 1502, Anthony studied philosophy and medicine at Padua and completed his degree in 1524. Sources disagree about whether he then practiced medicine, so the secure claim is his medical training. His theological formation is less fully documented, and ordination is dated around 1528/29 rather than forced into a false precision.",
+        "sourceIds": ["zaccaria-canonization-office", "zaccaria-prosperi"]
+      },
+      {
+        "heading": "Reform through three collaborating families",
+        "body": "In Milan, Anthony worked with Bartolomeo Ferrari and Giacomo Antonio Morigia in the emerging Clerics Regular of Saint Paul, with Ludovica Torelli and the Angelic Sisters, and with married laypeople. This three-family ecology prevents a sole-founder story: women, men, clergy, and households contributed distinct agency to a shared Catholic reform movement.",
+        "sourceIds": ["zaccaria-jp2", "zaccaria-canonization-office", "zaccaria-prosperi"]
+      },
+      {
+        "heading": "A small, demanding written legacy",
+        "body": "Eleven authenticated letters and a sermon corpus preserve Anthony's direct pastoral voice, centered on Christ, Saint Paul, decisive action, and growth in charity. The Constitutions survive without an autograph, contain layers, and were never promulgated by him. The Detti Notabili and many circulating quotations cannot responsibly be assigned to Anthony as certain words.",
+        "sourceIds": ["zaccaria-letters", "zaccaria-writings"]
+      },
+      {
+        "heading": "Eucharistic renewal without invented credit",
+        "body": "Anthony and his collaborators promoted public devotion, preaching, formation, service, and renewed attention to the Eucharist. Later histories sometimes credit him with inventing Forty Hours or every associated custom; the evidence supports promotion, not sole invention. He became ill after strenuous work near Vicenza and died at Cremona in 1539. Later visions and marvels remain devotional reception, not required biography.",
+        "sourceIds": ["zaccaria-jp2", "zaccaria-canonization-office", "zaccaria-prosperi"]
+      }
+    ],
+    "gospelTheme": "Christ renews the Church through conversion expressed in shared gifts, accountable service, Eucharistic communion, and love that becomes concrete action.",
+    "struggle": "Anthony faced spiritual inertia, institutional suspicion, a short working life, and the temptation common to reform movements to confuse urgency with domination or exhaustion.",
+    "response": "He formed collaborating communities, wrote direct pastoral counsel, joined prayer to service, and called Christians to sustained renewal centered on Christ and Saint Paul."
+  },
+  "virtues": [
+    {
+      "name": "Collaborative zeal",
+      "evidence": "Anthony's reform developed with Ferrari, Morigia, Torelli, the Angelic Sisters, and married laypeople rather than through one heroic founder acting alone.",
+      "imitation": "Invite one person with a different role or experience to shape a work of service before decisions are fixed, and name their contribution clearly.",
+      "sourceIds": ["zaccaria-jp2", "zaccaria-canonization-office", "zaccaria-prosperi"]
+    },
+    {
+      "name": "Practical conversion",
+      "evidence": "Anthony's authenticated letters press recipients to move from spiritual delay toward concrete, Christ-centered charity and responsible action.",
+      "imitation": "Choose one modest act of prayer and one matching act of service that can be completed without sacrificing health or existing duties.",
+      "sourceIds": ["zaccaria-letters"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Read Romans 12:1–8 and ask Christ how your particular gift can serve a community rather than your reputation.",
+    "action": "Complete one overdue act of service with a collaborator, a realistic limit, and any professional or medical support the work requires."
+  },
+  "reflectionQuestions": [
+    "Where has spiritual urgency become pressure, and what would accountable, shared reform look like instead?",
+    "Which gift in another person do I need to welcome so that service becomes genuinely collaborative?"
+  ],
+  "scripture": {
+    "reference": "Romans 12:1–8",
+    "connection": "Paul joins renewed minds, sober self-judgment, and diverse gifts in one body; zeal is therefore communal and responsible, not coercive or self-destructive."
+  },
+  "prayer": "Lord Jesus Christ, renew your Church in truth and charity. Teach us to pray, serve, and work together with wise zeal; protect health and conscience, and make every gift serve your body. You live and reign for ever and ever. Amen."
+}

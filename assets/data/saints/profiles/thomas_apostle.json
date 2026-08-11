@@ -1,0 +1,161 @@
+{
+  "schemaVersion": 2,
+  "id": "thomas_apostle",
+  "profileKind": "biblical",
+  "celebrationIds": ["thomas_apostle", "saint_thomas_apostle"],
+  "name": "Saint Thomas, Apostle",
+  "alternateNames": ["Thomas the Apostle", "Thomas Didymus", "Thomas the Twin"],
+  "ecclesialTitle": "Apostle and witness to the Resurrection",
+  "vocation": "One of the Twelve, disciple of Jesus, and apostolic witness",
+  "places": ["Judea", "Jerusalem", "Sea of Galilee"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Thomas is one of the Twelve and appears most fully in John's Gospel. He is willing to accompany Jesus toward danger, asks how the disciples can know the way, refuses second-hand certainty about the Resurrection, and then confesses the risen Jesus as Lord and God. Ancient reception links Thomas with Syria, Persia, and India, but the detailed mission, martyrdom, relic, and building stories come from later traditions and cannot supply an exact lifespan.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Thomas_the_Apostle",
+  "wikidataId": "Q43669",
+  "feastDates": ["July 3"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "thomas-john-11",
+      "title": "John, Chapter 11",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/john/11",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Canonical Scripture used for Thomas as Didymus and one of the disciples, his willingness to accompany Jesus and face danger, and the Lazarus context; the copyrighted translation is not reproduced beyond unavoidable biblical names and concepts",
+      "supports": ["identity", "alternateNames", "life.twelve", "life.lazarus", "life.courage", "life.misunderstanding"]
+    },
+    {
+      "id": "thomas-john-14",
+      "title": "John, Chapter 14",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/john/14",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Canonical Scripture used for Thomas's honest question about the way and Jesus's answer that centers the disciples on his own person, truth, life, and relation to the Father; no extended translation is reproduced",
+      "supports": ["life.question", "life.way", "life.christ_center", "gospelTheme"]
+    },
+    {
+      "id": "thomas-john-20",
+      "title": "John, Chapter 20",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/john/20",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Canonical Scripture used for Thomas's absence from the first appearance, his request for evidence, Jesus's peaceful return, Thomas's confession, the blessing of later believers, and the Gospel's purpose of life-giving faith; no extended translation is reproduced",
+      "supports": ["life.absence", "life.evidence", "life.encounter", "life.confession", "life.faith", "life.resurrection", "ecclesialTitle"]
+    },
+    {
+      "id": "thomas-john-21",
+      "title": "John, Chapter 21",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/john/21",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Canonical Scripture used for Thomas named among the disciples at the Sea of Tiberias and participating in the post-Resurrection fishing appearance; no unsupported later itinerary is read back into the scene",
+      "supports": ["life.galilee", "life.disciples", "places", "life.resurrection_witness"]
+    },
+    {
+      "id": "thomas-benedict-audience",
+      "title": "General Audience of 27 September 2006: Thomas, ‘the twin’",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/audiences/2006/documents/hf_ben-xvi_aud_20060927.html",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal catechesis used for the four Johannine scenes, doubt that can mature into faith, Thomas's importance in early reception, the apocryphal status of writings attributed to him, and ancient Syria, Persia, and India mission traditions; reception is not converted into an exact itinerary",
+      "supports": ["identity", "alternateNames", "life.john_scenes", "life.doubt", "life.faith", "life.galilee", "reception.apocrypha", "reception.syria", "reception.persia", "reception.india", "sourceLimits"]
+    },
+    {
+      "id": "thomas-cooper-reception",
+      "title": "Thomas the Twin: Constructing an Apostolic Personality",
+      "authorOrInstitution": "Adam Cooper",
+      "publisher": "Cambridge University Press",
+      "url": "https://www.cambridge.org/core/journals/new-blackfriars/article/abs/thomas-the-twin-constructing-an-apostolic-personality/6E557697F457B5B430C90102B8476C7B",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Peer-reviewed reception study used for the contrast between sparse Synoptic lists and John's four scenes, Didymus and Twin naming, fourth-century Edessan devotion, later Syria-to-India traditions, and scholarly caution about their historical value",
+      "supports": ["identity", "alternateNames", "life.synoptic_lists", "life.john_scenes", "reception.edessa", "reception.india", "reception.relics", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "thomas-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — July",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/JulUC.shtml",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the July 3 feast, apostolic title, and red liturgical color in the app calendar",
+      "supports": ["identity", "celebrationIds", "feastDates", "calendar.rank", "calendar.color", "ecclesialTitle"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Thomas shows that truthful questions can belong inside discipleship: Jesus meets him in the community and draws his demand for evidence toward a mature confession and mission.",
+  "oneMinuteSummary": "Thomas is one of the Twelve, called Didymus or the Twin in John's Gospel. When Jesus turns toward Judea after Lazarus dies, Thomas is ready to accompany him despite danger. At the Last Supper, his direct question lets Jesus explain that the way is found in Christ himself. After Easter, Thomas will not pretend certainty on the basis of the others' report. Jesus returns in peace, addresses his demand for evidence, and Thomas answers with the Gospel's climactic confession of Jesus as Lord and God. He later appears among the disciples by the Sea of Tiberias. Ancient Christian reception associates him with Edessa, Syria, Persia, and India, but detailed routes, dates, martyrdom, relic, and building stories come through later and often apocryphal sources. Thomas invites honest inquiry, patient community, evidence-aware faith, and courageous allegiance to the risen Christ.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Ready to accompany Jesus",
+        "body": "John identifies Thomas as Didymus, the Twin. When Jesus decides to return to Judea after Lazarus's death, danger is real and the disciples are uneasy. Thomas responds with costly loyalty. His words mix courage with incomplete understanding, a pattern that makes him a recognizable disciple rather than a caricature.",
+        "sourceIds": ["thomas-john-11", "thomas-benedict-audience"]
+      },
+      {
+        "heading": "A question that opens the way",
+        "body": "During Jesus's farewell discourse, Thomas admits that the disciples do not know where Jesus is going and asks how they can know the way. Jesus answers by centering the way, truth, and life in himself and his relation to the Father. Thomas's question serves the whole community because he voices what others may not understand.",
+        "sourceIds": ["thomas-john-14", "thomas-benedict-audience"]
+      },
+      {
+        "heading": "Encounter and confession",
+        "body": "Thomas is absent when the risen Jesus first appears. He refuses to borrow the others' certainty and names what evidence he would need. A week later Jesus returns with peace, addresses him directly, and Thomas confesses the risen Jesus as his Lord and God. The scene moves from honest resistance to personal faith without teaching Christians to shame questions.",
+        "sourceIds": ["thomas-john-20", "thomas-benedict-audience"]
+      },
+      {
+        "heading": "Apostolic memory beyond the Gospel",
+        "body": "Thomas is named again among the disciples by the Sea of Tiberias. Later writings and communities connect him with Edessa, Syria, Persia, and India. These traditions are ancient and important to Christian identity, but detailed itineraries, a death in 72, relic transfers, and particular churches are not supplied by the canonical Gospels and remain reception rather than secure biography.",
+        "sourceIds": ["thomas-john-21", "thomas-benedict-audience", "thomas-cooper-reception"]
+      }
+    ],
+    "gospelTheme": "The risen Jesus meets honest uncertainty with peace and calls Thomas from demanded proof into a personal, life-giving confession of faith.",
+    "struggle": "Thomas wants truth he can responsibly own, not confidence performed for his peers, yet his demand also risks closing him to trustworthy communal testimony.",
+    "response": "He remains with the disciples, receives Christ's approach, and answers the encounter with faith rather than defensiveness."
+  },
+  "virtues": [
+    {
+      "name": "Truthful inquiry",
+      "evidence": "Thomas voices what he does not understand in John 14 and refuses to claim Easter certainty he does not yet possess in John 20.",
+      "imitation": "Name one real faith question precisely, then bring it to Scripture and a trustworthy, patient person rather than hiding or dramatizing it.",
+      "sourceIds": ["thomas-john-14", "thomas-john-20"]
+    },
+    {
+      "name": "Courageous allegiance",
+      "evidence": "Thomas is prepared to accompany Jesus toward Judea and later confesses the risen Jesus personally as Lord and God.",
+      "imitation": "Take one safe, concrete step that follows Christ even when belonging or reputation makes honesty costly.",
+      "sourceIds": ["thomas-john-11", "thomas-john-20"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Read John 20:24–31 slowly and tell Christ both what you need help believing and what you can already confess with trust.",
+    "action": "Receive one sincere question today without ridicule; help the person identify evidence, community, or expertise that can support a truthful next step."
+  },
+  "reflectionQuestions": [
+    "Where am I tempted either to fake certainty or to use questions as a reason never to act?",
+    "What would it look like to remain in a trustworthy community while my understanding matures?"
+  ],
+  "scripture": {
+    "reference": "John 20:24–29",
+    "connection": "Jesus neither abandons Thomas nor leaves him at the level of a test; the encounter leads to a confession centered on who the risen Christ is."
+  },
+  "prayer": "Risen Lord Jesus, you met Thomas with peace and truth. Receive our honest questions, keep us near your people, and lead us from fear or pretense into faithful confession and courageous love. You live and reign for ever and ever. Amen."
+}
