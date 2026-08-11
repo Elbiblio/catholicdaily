@@ -50,7 +50,7 @@ void main() {
       (source) => source.id == 'frances-odebiyi-noncloistered',
     );
 
-    expect(odebiyi.publicationDate, '2024-09');
+    expect(odebiyi.publicationDate, '2025-03-03');
   });
 
   test('preserves reviewed Batch 3 source genres', () async {
