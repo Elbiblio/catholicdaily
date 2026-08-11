@@ -1,0 +1,161 @@
+{
+  "schemaVersion": 2,
+  "id": "francis_of_paola",
+  "profileKind": "individual",
+  "celebrationIds": ["francis_of_paola", "saint_francis_of_paola_hermit"],
+  "name": "Saint Francis of Paola, Hermit",
+  "alternateNames": ["Francesco di Paola"],
+  "ecclesialTitle": "Hermit and founder of the Order of Minims",
+  "lifeSpan": "1416-1507",
+  "lifeLength": "about 91 years",
+  "vocation": "Hermit, founder, spiritual counsellor, and peacemaker",
+  "places": ["Paola", "Calabria", "Naples", "France"],
+  "patronage": ["Italian seafarers"],
+  "symbols": [],
+  "briefBio": "Francis began an eremitical life in Calabria and founded the Order of Minims, whose vowed Lenten discipline joined conversion, prayer, humility, and charity. At royal and papal request he spent his final decades in France as a spiritual counsellor and a participant in diplomacy. Miracle stories, including the cloak crossing, belong to hagiographic tradition rather than secure chronology.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Francis_of_Paola",
+  "wikidataId": "Q315640",
+  "feastDates": ["April 2"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "francis-jp2-minims",
+      "title": "Speech to the Participants in the General Chapter of the Order of Minims",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/john-paul-ii/en/speeches/2000/jul-sep/documents/hf_jp-ii_spe_20000703_minimi.html",
+      "publicationDate": "2000-07-03",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal address used for Francis as founder, the three Minim branches, death on 2 April 1507, the fourth vow for friars and nuns, and Lenten life as conversion, prayer, charity, and discipline",
+      "supports": ["identity", "dates", "founder", "order.minims", "order.fourth_vow", "life.lenten_charism", "feastDate", "theology.conversion"]
+    },
+    {
+      "id": "francis-minim-rule",
+      "title": "Life and Rule of the Friars of the Order of Minims of Brother Francis of Paola",
+      "authorOrInstitution": "Saint Francis of Paola and the Order of Minims",
+      "publisher": "Order of Minims",
+      "url": "https://www.ordinedeiminimi.it/frati-regola.htm",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Primary Rule in the Order's official presentation used for vowed abstinence, common life, humility, reconciliation, and explicit relief for illness or weakness under medical and superior guidance; paraphrased",
+      "supports": ["order.rule", "life.asceticism", "life.community", "virtues.humility", "virtues.reconciliation", "practice.health_safeguards"]
+    },
+    {
+      "id": "francis-primary-letter",
+      "title": "Letter of Saint Francis of Paola (1486)",
+      "authorOrInstitution": "Saint Francis of Paola",
+      "publisher": "The Holy See spirituality archive",
+      "url": "https://www.vatican.va/spirit/documents/spirit_20010402_francesco-paola_fr.html",
+      "publicationDate": "1486",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Primary spiritual letter used for patience, forgiveness, charity, peace, and conversion; paraphrased without reproducing the translation",
+      "supports": ["virtues.charity", "virtues.reconciliation", "theology.christ", "practice.peace"]
+    },
+    {
+      "id": "francis-treccani",
+      "title": "Francesco di Paola, santo",
+      "authorOrInstitution": "Gennaro Moretti",
+      "publisher": "Enciclopedia Italiana, Treccani",
+      "url": "https://www.treccani.it/enciclopedia/francesco-di-paola-santo_%28Enciclopedia-Italiana%29/",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Recognized independent historical reference used for 1416-1507 chronology, eremitical beginnings, foundation, Louis XI's request, Sixtus IV's direction, French residence, diplomatic role, and the cloak crossing as a miracle remembered by tradition",
+      "supports": ["dates", "life.hermit", "founder", "life.france", "life.royal_diplomacy", "laterLegends", "historicalCertainty"]
+    },
+    {
+      "id": "francis-pius-seafarers",
+      "title": "Radio Message for the 450th Anniversary of the Death of Saint Francis of Paola",
+      "authorOrInstitution": "Pope Pius XII",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/pius-xii/it/speeches/1957/documents/hf_p-xii_spe_19570616_anniversario-francesco-da-paola.html",
+      "publicationDate": "1957-06-16",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal evidence for the 1943 confirmation of Francis as heavenly patron of Italian maritime-care associations, shipping companies, and mariners; patronage rendered as a concise UI token",
+      "supports": ["patronage", "patronage.italian_seafarers", "receivedTradition"]
+    },
+    {
+      "id": "usccb-lent-fasting",
+      "title": "Fast and Abstinence",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://www.usccb.org/prayer-worship/liturgical-year/lent",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Current episcopal guidance used for the pastoral principle that fasting follows Church norms, exempts illness and pregnancy or nursing, and must not jeopardize health",
+      "supports": ["practice.fasting", "practice.health_safeguards", "practice.vocation"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Francis joins humility to influence: a hermit who chose the name “Minims”—the least—later stood near kings without making power his identity. His severe communal discipline belongs to a tested religious vocation with its own safeguards, not to casual imitation. His witness invites sustainable self-denial that frees love, honest reconciliation, and counsel that seeks peace without claiming control of outcomes.",
+  "oneMinuteSummary": "Born at Paola in Calabria in 1416, Francis embraced a hermit's life and gathered companions who became the Order of Minims. Their name expressed the desire to be least, and their Rule shaped a vowed “Lenten life” of conversion, prayer, charity, common discipline, and abstinence. The Rule itself also allowed food needed in illness on medical and religious authority and relief for weakness, so Francis' austerity must not be detached from vocation, community, and care. In 1483 he went to France after the gravely ill Louis XI requested him and Pope Sixtus IV pressed him to go. Francis did not promise the king a miraculous cure; he remained as a spiritual counsellor and became involved in papal and royal diplomacy. Historical sources associate him with efforts toward reconciliation involving France, Brittany, and other powers, but no single treaty should be credited to him alone. He died in France on 2 April 1507. Stories such as crossing the Strait of Messina on his cloak express later devotion and his association with seafarers; they are not used as established biography. The Church formally recognizes his patronage of Italian seafarers.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A hermit who founded the Minims",
+        "body": "Francis' solitary life in Calabria attracted companions and developed into a distinct religious order, not a branch casually interchangeable with another Franciscan family. “Minims” expressed a commitment to become least in the Gospel sense. The charism joined prayer and penance to fraternal charity and ecclesial community.",
+        "sourceIds": ["francis-jp2-minims", "francis-treccani"]
+      },
+      {
+        "heading": "A demanding Rule with real safeguards",
+        "body": "Minim friars and nuns professed a fourth vow of perpetual Lenten life, including a strict abstinence proper to their vocation. The Rule also directs that a sick brother receive food needed on a physician's judgment and permits relief for weakness. This is vowed communal discipline, not a universal diet, medical treatment, or challenge for private spiritual ambition.",
+        "sourceIds": ["francis-jp2-minims", "francis-minim-rule", "usccb-lent-fasting"]
+      },
+      {
+        "heading": "Truthful counsel near royal power",
+        "body": "Louis XI sought Francis while gravely ill, and Sixtus IV urged the reluctant hermit to travel to France. Francis remained there after the king's death as a spiritual adviser. His presence also served diplomacy, including efforts connected with peace and royal marriage, but complex settlements belonged to many actors and institutions.",
+        "sourceIds": ["francis-treccani", "francis-primary-letter"]
+      },
+      {
+        "heading": "History and miracle tradition",
+        "body": "The cloak crossing of the Strait, prophetic episodes, and many healings are central to later hagiography. A recognized historical reference explicitly presents the sea crossing among miracles remembered by tradition. The profile neither mocks that devotion nor treats it as independently verified chronology; Francis' documented foundation, counsel, and call to conversion are sufficient.",
+        "sourceIds": ["francis-treccani", "francis-pius-seafarers"]
+      }
+    ],
+    "gospelTheme": "Christ's greatness appears in becoming least, allowing penance to make room for charity, and using influence to serve reconciliation rather than self-importance.",
+    "struggle": "Francis carried a severe religious vocation, responsibility for a growing community, reluctant proximity to royal power, and demands for healing or political influence that he could not rightly control.",
+    "response": "He formed a Rule and community, kept conversion and charity together, offered truthful spiritual counsel, and used access to power in the service of peace while remaining a Minim."
+  },
+  "virtues": [
+    {
+      "name": "Humility with responsibility",
+      "evidence": "Francis founded a community named for being least while accepting the demanding work of rule, governance, travel, and counsel.",
+      "imitation": "Take one necessary task that brings no status, complete it well, and make sure that humility does not become an excuse to avoid accountability.",
+      "sourceIds": ["francis-jp2-minims", "francis-minim-rule"]
+    },
+    {
+      "name": "Reconciliation",
+      "evidence": "Francis' letter urges forgiveness, peace, and charity, and historical sources place his counsel within efforts to reduce conflict at the French court.",
+      "imitation": "Before a difficult conversation, name the harm accurately, seek a safe setting, listen without surrendering truth, and propose one repair that all affected people can freely consider.",
+      "sourceIds": ["francis-primary-letter", "francis-treccani"]
+    },
+    {
+      "name": "Disciplined freedom",
+      "evidence": "The Minim Rule gives penance a communal form and also provides relief for illness and weakness rather than making bodily harm a proof of holiness.",
+      "imitation": "Choose a modest sacrifice that frees time, attention, or money for love and can be sustained without harming health, duties, recovery, or dependants.",
+      "sourceIds": ["francis-minim-rule", "usccb-lent-fasting"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Ask Christ where appetite, status, or defensiveness is crowding out charity. Choose one bounded form of restraint for today—such as a period without entertainment or an unnecessary purchase—and use the freed attention or money for prayer, repair, or mercy. Do not add food restriction outside current Church norms or without regard for health.",
+    "action": "Make one sustainable act of reconciliation: acknowledge a specific wrong without excuses, ask what repair would help, and respect safety and consent. If you are considering fasting beyond ordinary Church discipline, first consult an appropriate clinician when health may be affected and a competent spiritual guide who knows your vocation; minors and people with illness, pregnancy, nursing, frailty, or eating-disorder risk should not endanger health."
+  },
+  "reflectionQuestions": [
+    "Does my self-denial actually make me more available to Christ and neighbor, or has it become a way to seek control, admiration, or harm?",
+    "When I have influence, do I help truthful reconciliation grow among many responsible people, or make myself the indispensable hero?"
+  ],
+  "scripture": {
+    "reference": "Mark 9:35",
+    "connection": "Jesus teaches that the first must become last and servant of all. Francis' name for the Minims turns that reversal into a communal vocation: being least is measured by service, not by spectacular austerity."
+  },
+  "prayer": "Lord Jesus Christ, you became the servant of all. Through the intercession of Saint Francis of Paola, make us humble without evasion, disciplined without harm, and courageous in reconciliation. Purify our desires so that every sacrifice frees love. Protect those whose health makes fasting unsafe, guide religious communities in wise observance, and teach leaders to use influence for peace rather than glory. Amen."
+}

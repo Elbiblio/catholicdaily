@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 2,
+  "id": "isidore_of_seville",
+  "profileKind": "individual",
+  "celebrationIds": ["isidore_of_seville", "saint_isidore_bishop_and_doctor_of_the_church"],
+  "name": "Saint Isidore of Seville",
+  "alternateNames": ["Isidorus Hispalensis"],
+  "ecclesialTitle": "Bishop and Doctor of the Church",
+  "lifeSpan": "c. 560-636",
+  "lifeLength": "about 76 years",
+  "vocation": "Bishop, theologian, teacher, and encyclopedic compiler",
+  "places": ["Visigothic Spain", "Seville", "Toledo"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Isidore served as bishop of Seville and assembled classical and Christian learning in works including the twenty-book Etymologies. His influence as a teacher and Doctor of the Church is substantial, but his compilation was unfinished, often transmitted earlier writers without modern attribution, and included unreliable etymologies. His anti-Jewish writing and leadership at the Fourth Council of Toledo also contributed to coercive policies with enduring harm.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Isidore_of_Seville",
+  "feastDates": ["April 4"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "isidore-benedict-audience",
+      "title": "General Audience: Saint Isidore of Seville",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/audiences/2008/documents/hf_ben-xvi_aud_20080618.html",
+      "publicationDate": "2008-06-18",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal catechesis used for Isidore's Seville episcopate, death in 636, breadth of classical and Christian collecting, limitations in order and discernment, tensions concerning Jews, and Christ-centred balance of study and service",
+      "supports": ["identity", "dates", "life.bishop", "life.learning", "life.compilation", "life.limits", "life.jews", "virtues.study_and_service", "theology.christ"]
+    },
+    {
+      "id": "isidore-loc-etymologies",
+      "title": "Etymology, Books 1-9",
+      "authorOrInstitution": "Saint Isidore of Seville; manuscript associated with Saint Braulio of Zaragoza",
+      "publisher": "Library of Congress, World Digital Library collection",
+      "url": "https://www.loc.gov/item/2021668096/",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Digitized historical manuscript record used as primary-artifact evidence for the Etymologies as an extensive encyclopedia of late-antique learning and for its manuscript transmission",
+      "supports": ["life.etymologies", "life.reception", "works"]
+    },
+    {
+      "id": "isidore-bmcr-etymologies",
+      "title": "The Etymologies of Isidore of Seville, with the collaboration of M. Hall",
+      "authorOrInstitution": "Rolando Ferri, Università di Pisa",
+      "publisher": "Bryn Mawr Classical Review",
+      "url": "https://bmcr.brynmawr.edu/2007/2007.11.05/",
+      "publicationDate": "2007",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent scholarly review used for the Etymologies' twenty-book scope, unfinished state, priority of word origin over accurate definition, extensive transcription of earlier sources, and genuine preservation of otherwise rare vocabulary",
+      "supports": ["life.etymologies", "life.compilation", "life.attribution", "life.limits", "life.preservation", "historicalCertainty"]
+    },
+    {
+      "id": "isidore-medieval-review-jews",
+      "title": "Review of Wolfram Drews, The Unknown Neighbor: The Jew in the Thought of Isidore of Seville",
+      "authorOrInstitution": "Rachel Stocking",
+      "publisher": "The Medieval Review, Indiana University",
+      "url": "https://scholarworks.iu.edu/journals/index.php/tmr/article/view/16263",
+      "publicationDate": "2006",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent specialist review used for Sisebut's forced baptisms, Isidore's anti-Jewish De fide, his presidency at Toledo IV, canon 57's contradictory rejection and enforcement of coercion, child separation, policy influence, and scholarly disputes over his role",
+      "supports": ["life.anti_judaism", "life.council", "life.coercion", "life.influence", "historicalConflict", "harmfulLegacy"]
+    },
+    {
+      "id": "isidore-encyclopedia",
+      "title": "Isidore of Seville, St.",
+      "authorOrInstitution": "New Catholic Encyclopedia contributors",
+      "publisher": "New Catholic Encyclopedia via Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/isidore-seville-st",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Recognized reference used for c. 560-636 chronology, office, Doctor title, works, council activity, and the absence of a surviving contemporary biography beyond brief notices and Isidore's own writings",
+      "supports": ["identity", "dates", "ecclesialTitle", "life.bishop", "works", "sourceLimits"]
+    },
+    {
+      "id": "isidore-vatican-news",
+      "title": "Saint Isidore, Bishop of Seville and Doctor of the Church",
+      "authorOrInstitution": "Dicastery for Communication",
+      "publisher": "Vatican News",
+      "url": "https://www.vaticannews.va/es/santos/04/04/s--isidro--obispo-de-sevilla-y-doctor-de-la-iglesia.html",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Official tertiary profile used for April 4 and Doctor title and, critically, its explicit statement that proposed Internet patronage never received an official proclamation; legendary childhood material is rejected",
+      "supports": ["feastDate", "ecclesialTitle", "patronage.internet_not_formal", "laterLegends"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Isidore's vast learning shows the value of preserving and organizing knowledge, while the defects of his method and the harm of his anti-Jewish legacy make scrutiny part of faithful study. Learning in Christ's service requires attribution, verification, correction, and humility before people whom inherited systems misrepresent or coerce. A Doctor can teach the Church, and still require honest moral judgment.",
+  "oneMinuteSummary": "Isidore became bishop of Seville around the turn of the seventh century and died in 636. His writings ranged across Scripture, theology, liturgy, history, language, law, nature, and practical arts. The Etymologies gathered that material into twenty books and profoundly shaped medieval learning. Its strength was preservation and arrangement: it carried fragments of classical and Christian sources into later centuries. Its limitations are equally important. Isidore called the work unfinished; modern scholarship shows extensive borrowing or near-transcription from earlier authors, often without the attribution expected today, and many entries privilege speculative word origins over accurate definition. Isidore also wrote a deeply hostile treatise against Jews and presided at the Fourth Council of Toledo in 633. The council opposed new forced baptisms while coercing people already baptized under King Sisebut, separating some Jewish children from parents, and imposing other repressive measures. Scholars debate Isidore's precise posture, but neither his criticism of some coercion nor his later title as Doctor cancels his contribution to anti-Jewish ideology and policy. Claims that he is formally patron of the Internet remain proposals: Vatican News explicitly notes that no official proclamation occurred, so Internet and computer patronage are omitted.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A bishop collecting a changing world",
+        "body": "Isidore succeeded his brother Leander at Seville and carried episcopal government alongside intense study. He drew from a library of pagan classical and Christian works and tried not to lose what earlier generations had learned. Benedict XVI praises that breadth while acknowledging that the collection was not always ordered or filtered as carefully as one might desire.",
+        "sourceIds": ["isidore-benedict-audience", "isidore-encyclopedia"]
+      },
+      {
+        "heading": "The achievement and limits of the Etymologies",
+        "body": "The twenty books range from liberal arts through medicine, law, Scripture, liturgy, nature, technology, and daily life. They preserved rare material and vocabulary, but the work remained unfinished. It often copied earlier authors closely and treated a word's supposed origin as more important than an accurate definition. Readers should value transmission without mistaking compilation for modern research or every attribution for certainty.",
+        "sourceIds": ["isidore-loc-etymologies", "isidore-bmcr-etymologies"]
+      },
+      {
+        "heading": "Councils, teaching, and coercive power",
+        "body": "Isidore's councils joined ecclesial, legal, and political authority in Visigothic Spain. At Toledo IV, canon 57 rejected future forced baptism but required people previously baptized by force to remain Christian; other measures separated Jewish children and restricted Jewish life. Isidore's own anti-Jewish writing used hostile inherited stereotypes. The extent and intention of his influence are debated, but the coercion and its harmful legacy are not optional footnotes.",
+        "sourceIds": ["isidore-medieval-review-jews", "isidore-benedict-audience", "isidore-encyclopedia"]
+      },
+      {
+        "heading": "Doctor, not patron of the Internet",
+        "body": "The Church venerates Isidore as bishop and Doctor, and his April 4 memorial rightly honors learning joined to pastoral service. A modern campaign proposed him as patron of the Internet because of his encyclopedic work. Vatican News states that an official proclamation never followed. The profile therefore lists no Internet, computer, programmer, or online-user patronage.",
+        "sourceIds": ["isidore-encyclopedia", "isidore-vatican-news"]
+      }
+    ],
+    "gospelTheme": "Christ is the truth who frees learning to serve love: receiving inherited knowledge gratefully, testing it honestly, correcting error, and refusing to use teaching or law to degrade another people.",
+    "struggle": "Isidore worked amid political and religious consolidation, the loss and transmission of older learning, the limits of compilation, and a Christian culture that turned anti-Jewish theology into coercive law.",
+    "response": "He gathered a remarkable inheritance and joined contemplation to episcopal service; he also repeated harmful stereotypes and led institutions whose coercive decisions require repentance, correction, and truthful remembrance."
+  },
+  "virtues": [
+    {
+      "name": "Diligent preservation",
+      "evidence": "Isidore gathered classical, practical, biblical, and theological material on an exceptional scale, preserving knowledge and vocabulary that might otherwise have disappeared.",
+      "imitation": "Preserve one vulnerable record responsibly: identify its creator and context, keep the original wording intact, add source metadata, and make clear what remains uncertain.",
+      "sourceIds": ["isidore-benedict-audience", "isidore-loc-etymologies", "isidore-bmcr-etymologies"]
+    },
+    {
+      "name": "Study joined to service",
+      "evidence": "Isidore's own teaching and Benedict XVI's reading of it hold contemplation and active love together rather than allowing learning to become withdrawal from neighbors.",
+      "imitation": "End one period of study by giving its fruit away: clarify a source, teach without condescension, correct a harmful error, or make reliable information accessible to someone excluded from it.",
+      "sourceIds": ["isidore-benedict-audience"]
+    },
+    {
+      "name": "Teachability through correction",
+      "evidence": "The Etymologies' unfinished, derivative, and sometimes inaccurate character and Isidore's anti-Jewish legacy show why even influential teachers must be read critically.",
+      "imitation": "When evidence corrects you, name the error publicly where it spread, credit the better source, repair harm where possible, and update the record instead of defending your reputation.",
+      "sourceIds": ["isidore-bmcr-etymologies", "isidore-medieval-review-jews"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Place one belief you strongly repeat before Christ, who is the truth. Ask whether it comes from a primary source, a reliable interpreter, inherited prejudice, or repetition. Pray for the people affected if the claim is wrong, and ask for courage to correct it without protecting your pride.",
+    "action": "Audit one article, lesson, post, or parish resource you influence. Trace three material claims to their sources, add missing attribution and certainty labels, remove a claim you cannot support, and correct any language that stereotypes Jews or another community. Publish the correction where the original claim appeared."
+  },
+  "reflectionQuestions": [
+    "Do I cite sources so that others can test and correct my work, or use the appearance of learning to make myself unanswerable?",
+    "Which harmful inheritance have I treated as a minor historical flaw when its effects still require truth, repair, and solidarity?"
+  ],
+  "scripture": {
+    "reference": "John 14:6",
+    "connection": "Jesus does not merely possess useful information; he is the truth who leads to the Father. Christian learning therefore serves communion with him when it is honest, accountable, and freed from coercion and contempt."
+  },
+  "prayer": "Lord Jesus Christ, way, truth, and life, through the intercession of Saint Isidore give us patient minds and honest hearts. Teach us to preserve what is good, name our sources, test inherited claims, and welcome correction. Forgive Christian teaching and law that demeaned Jewish people or compelled belief. Strengthen all who repair that harm, and make our learning a humble service of truth, justice, and love. Amen."
+}

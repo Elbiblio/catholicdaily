@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 2,
+  "id": "saint_joseph_spouse_of_blessed_virgin_mary",
+  "profileKind": "biblical",
+  "celebrationIds": ["saint_joseph_spouse_of_blessed_virgin_mary", "saint_joseph_spouse_of_the_blessed_virgin_mary"],
+  "name": "Saint Joseph, Spouse of the Blessed Virgin Mary",
+  "alternateNames": ["Joseph of Nazareth"],
+  "ecclesialTitle": "Spouse of the Blessed Virgin Mary and guardian of the Redeemer",
+  "lifeSpan": "",
+  "lifeLength": "",
+  "vocation": "Husband of Mary, legal father and guardian of Jesus, and worker",
+  "places": ["Nazareth", "Bethlehem", "Egypt", "Jerusalem"],
+  "patronage": ["the universal Church"],
+  "symbols": [],
+  "briefBio": "Matthew and Luke present Joseph as Mary's husband, a righteous man who receives Jesus into the house of David, names him, protects him from danger, and shares the hidden family life of Nazareth. The Gospels give no age, death date, speech, or complete biography. The Church receives his fatherhood as loving service to Christ and formally venerates him as patron of the universal Church.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Saint_Joseph",
+  "wikidataId": "Q128267",
+  "feastDates": ["March 19"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "joseph-matthew-1",
+      "title": "Matthew, Chapter 1",
+      "authorOrInstitution": "Gospel according to Matthew",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/matthew/1",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Canonical Scripture used for Joseph as Mary's husband, son of David, righteous man, recipient of God's direction, and the one who receives Mary and names Jesus; paraphrased",
+      "supports": ["identity", "profileKind", "life.marriage", "life.righteousness", "life.obedience", "life.naming", "virtues.attentive_obedience", "scripture"]
+    },
+    {
+      "id": "joseph-matthew-2",
+      "title": "Matthew, Chapter 2",
+      "authorOrInstitution": "Gospel according to Matthew",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/matthew/2",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Canonical Scripture used for flight from Herod, refuge in Egypt, return after danger, and settlement at Nazareth; paraphrased",
+      "supports": ["life.protection", "life.egypt", "life.return", "places", "virtues.protective_care"]
+    },
+    {
+      "id": "joseph-luke-2",
+      "title": "Luke, Chapter 2",
+      "authorOrInstitution": "Gospel according to Luke",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/luke/2",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Canonical Scripture used for Bethlehem, presentation in the Temple, yearly Passover pilgrimage, anxious search for Jesus, and family life at Nazareth; paraphrased",
+      "supports": ["life.bethlehem", "life.temple", "life.family", "life.nazareth", "places", "virtues.steadfast_presence"]
+    },
+    {
+      "id": "joseph-redemptoris-custos",
+      "title": "Redemptoris Custos",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/john-paul-ii/en/apost_exhortations/documents/hf_jp-ii_exh_15081989_redemptoris-custos.html",
+      "publicationDate": "1989-08-15",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal apostolic exhortation used for the Church's Gospel-grounded teaching on Joseph's marriage, fatherhood as self-giving service, work, and guardianship; original synthesis",
+      "supports": ["identity", "vocation", "life.fatherhood", "life.work", "theology.christ", "virtues.non_possessive_fatherhood", "practice.family_care"]
+    },
+    {
+      "id": "joseph-quemadmodum-deus",
+      "title": "Quemadmodum Deus",
+      "authorOrInstitution": "Sacred Congregation of Rites under Pope Pius IX",
+      "publisher": "Acta Sanctae Sedis, The Holy See",
+      "url": "https://www.vatican.va/archive/ass/documents/ASS-06-1870-71-ocr.pdf",
+      "publicationDate": "1870-12-08",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal decree used only for Joseph's declaration as patron of the Catholic Church; Latin title and decree scope checked directly",
+      "supports": ["patronage", "patronage.universal_church", "receivedTradition"]
+    },
+    {
+      "id": "joseph-encyclopedia-devotion",
+      "title": "Joseph, St., Devotion to",
+      "authorOrInstitution": "New Catholic Encyclopedia contributors",
+      "publisher": "New Catholic Encyclopedia via Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/joseph-st-devotion",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent recognized reference used to distinguish sparse Gospel evidence and formal patronage from later apocryphal age, widower, children, and flowering-staff stories",
+      "supports": ["historicalCertainty", "laterTraditions", "lifeSpanConflict", "patronage", "feastDate"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Joseph shows that care is faithful when it protects another person's dignity and freedom rather than claiming ownership. His authority is received as a task of service to Jesus and Mary. In families, workplaces, and communities, his witness calls every person—not one gender alone—to listen to God, share responsibility, act against danger, and let love make room for another's vocation.",
+  "oneMinuteSummary": "The canonical Gospels say little about Joseph, and that restraint matters. Matthew calls him Mary's husband, a son of David, and a righteous man. When he learns that Mary's child is conceived by the Holy Spirit, he receives her without public shaming and names the child Jesus. When Herod threatens the child, Joseph takes the family to Egypt and later returns, settling at Nazareth. Luke places him with Mary at Bethlehem, the presentation in Jerusalem, the yearly Passover pilgrimage, and the anxious search for the twelve-year-old Jesus. Joseph is present as husband and legal father, but Jesus belongs first to the Father and to his saving mission. Church teaching therefore describes Joseph's fatherhood as a gift of self expressed in care and work, not possession or coercive control. Exact age, death, previous marriage, children, and flowering-staff stories come from later traditions rather than Matthew or Luke. His March 19 solemnity and formal patronage of the universal Church are received ecclesial facts, but the profile does not turn devotional legend into biography.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Righteousness without public shaming",
+        "body": "Matthew introduces Joseph inside a painful uncertainty. He intends a quiet course rather than exposing Mary to disgrace. When God's message clarifies what he could not know, he changes course and receives her into his home. The text supports conscientious mercy and teachability; it does not authorize suspicion, surveillance, or unilateral control in a family.",
+        "sourceIds": ["joseph-matthew-1", "joseph-redemptoris-custos"]
+      },
+      {
+        "heading": "Attention that becomes protective action",
+        "body": "Joseph responds to each warning in Matthew by acting: he names Jesus, leaves when Herod threatens the child, waits until danger changes, and establishes the household at Nazareth. Protection here means moving people away from violence and carrying responsibility. It must never be used to demand silence, obedience to abuse, or unsafe submission.",
+        "sourceIds": ["joseph-matthew-1", "joseph-matthew-2"]
+      },
+      {
+        "heading": "A fatherhood that does not possess",
+        "body": "Luke calls Joseph and Mary Jesus' parents and records their anxious search after the Passover. Jesus' answer directs them to his Father's purpose, which they do not yet understand. Joseph remains part of the home at Nazareth without replacing God or treating the child as property. Received Church teaching sees his fatherhood as loving service to Christ's mission.",
+        "sourceIds": ["joseph-luke-2", "joseph-redemptoris-custos"]
+      },
+      {
+        "heading": "Scripture before devotional detail",
+        "body": "Neither Matthew nor Luke supplies Joseph's age, death, speeches, or a full account of his trade and home. Later Christian writings and art filled those gaps with an elderly widower, children from an earlier marriage, and a flowering staff. Such traditions can belong to devotional history, but they are not presented here as Gospel events or secure biography.",
+        "sourceIds": ["joseph-matthew-1", "joseph-luke-2", "joseph-encyclopedia-devotion"]
+      }
+    ],
+    "gospelTheme": "God entrusts the incarnate Son to a household where attentive obedience becomes merciful, practical, and non-possessive care.",
+    "struggle": "Joseph faces uncertainty, threatened reputation, displacement under political violence, economic responsibility, and the limits of what a parent can understand or control.",
+    "response": "He listens, revises his plan when God discloses more, acts promptly to protect Jesus and Mary, works for the household, and serves a mission that is not his to possess."
+  },
+  "virtues": [
+    {
+      "name": "Attentive obedience",
+      "evidence": "Matthew repeatedly describes Joseph receiving direction and turning it into concrete action, including changing a decision he had already made.",
+      "imitation": "Before acting in a family conflict, pray, listen to the people affected, check the facts, and be willing to revise a plan that would expose someone to shame or danger.",
+      "sourceIds": ["joseph-matthew-1", "joseph-matthew-2"]
+    },
+    {
+      "name": "Protective care",
+      "evidence": "Joseph takes Jesus and Mary away from Herod's violence and does not return until the threat has changed.",
+      "imitation": "If someone faces abuse or credible danger, believe the need for safety, respect their agency, and help them reach qualified local safeguarding, emergency, legal, or pastoral support.",
+      "sourceIds": ["joseph-matthew-2"]
+    },
+    {
+      "name": "Non-possessive fatherhood",
+      "evidence": "Joseph's legal fatherhood gives Jesus a home and Davidic identity, while Church teaching describes it as self-giving service to the person and mission of Christ.",
+      "imitation": "Use any parental, professional, or pastoral authority to help another person grow before God; do not confuse responsibility with ownership, forced compliance, or control of their vocation.",
+      "sourceIds": ["joseph-matthew-1", "joseph-luke-2", "joseph-redemptoris-custos"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Read Matthew 1:18-25 slowly. Name one responsibility you are carrying and one part of another person's life that is not yours to control. Ask Christ for Joseph's readiness to listen, protect, and serve without possessing.",
+    "action": "With the person's consent, remove one practical burden from a family member, caregiver, worker, or neighbor this week. Offer a specific task, time, expense, or safe accompaniment; accept a refusal, preserve confidentiality, and involve qualified help when risk exceeds your role."
+  },
+  "reflectionQuestions": [
+    "When new truth unsettles my plan, can I listen and change without shaming the people entrusted to my care?",
+    "Does my use of authority create safety and room for another person's God-given vocation, or does it make their dependence on me the goal?"
+  ],
+  "scripture": {
+    "reference": "Matthew 1:24",
+    "connection": "Joseph wakes and does what God asks, receiving Mary into his home. His obedience protects communion and serves the coming of Jesus; it is active fidelity, not a warrant for coercing someone else."
+  },
+  "prayer": "Lord Jesus Christ, you received the faithful care of Saint Joseph without ceasing to belong to your heavenly Father. Teach us to listen before we act, to work with integrity, and to protect without possessing. Heal families wounded by domination, neglect, or fear. Give parents, guardians, spouses, and caregivers wisdom, mutual respect, and courage to seek safety when needed. Through Joseph's intercession, make our hidden service a home for your love. Amen."
+}

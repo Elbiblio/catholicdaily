@@ -1,0 +1,185 @@
+{
+  "schemaVersion": 2,
+  "id": "turibius_of_mogrovejo",
+  "profileKind": "individual",
+  "celebrationIds": ["turibius_of_mogrovejo", "saint_turibius_of_mogrovejo_bishop"],
+  "name": "Saint Turibius of Mogrovejo, Bishop",
+  "alternateNames": ["Toribio Alfonso de Mogrovejo"],
+  "ecclesialTitle": "Second Archbishop of Lima and patron of Latin American bishops",
+  "lifeSpan": "1538-1606",
+  "lifeLength": "about 68 years",
+  "vocation": "Archbishop, canon lawyer, pastoral visitor, and ecclesial reformer",
+  "places": ["Mayorga de Campos", "Granada", "Lima", "Andean Peru", "Saña"],
+  "patronage": ["Latin American bishops"],
+  "symbols": [],
+  "briefBio": "Turibius entered colonial Peru as a Spanish crown nominee and became Lima's second archbishop. He convened councils, strengthened clergy formation, promoted catechesis in Castilian, Quechua, and Aymara, spent much of his episcopate on visitations, and challenged particular abuses against Indigenous communities. His reforms remained within a coercive colonial Church-state order whose hierarchy and harms he did not overturn.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Turibius_of_Mogrovejo",
+  "wikidataId": "Q467993",
+  "feastDates": ["March 23"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "turibius-sanctum-turibium",
+      "title": "Sanctum Turibium",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/john-paul-ii/la/apost_letters/1983/documents/hf_jp-ii_apl_19830510_sanctum-turibium.html",
+      "publicationDate": "1983-05-10",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal apostolic letter used for the declaration and confirmation of Saint Turibius as patron before God of all bishops of Latin America; concise English UI wording",
+      "supports": ["identity", "patronage", "patronage.latin_american_bishops", "ecclesialTitle"]
+    },
+    {
+      "id": "turibius-benedict-message",
+      "title": "Message for the Fourth Centenary of the Death of Saint Turibius of Mogrovejo",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/messages/pont-messages/2006/documents/hf_ben-xvi_mes_20060323_toribio-mogrovejo.html",
+      "publicationDate": "2006-03-23",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal message used for office, Third Provincial Council, seminary, pastoral legislation, language learning, direct preaching, and the dignity of every person",
+      "supports": ["identity", "life.archbishop", "life.council", "life.seminary", "life.languages", "life.visitation", "virtues.human_dignity", "theology.christ"]
+    },
+    {
+      "id": "turibius-unesco-council",
+      "title": "Originals of the Lima Council by its Archbishop Toribio Mogrovejo, 1582-1583",
+      "authorOrInstitution": "Memory of the World Committee for Latin America and the Caribbean",
+      "publisher": "UNESCO",
+      "url": "https://www.unesco.org/en/memory-world/lac/originals-lima-council-its-archbishop-toribio-mogrovejo-1582-1583",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Archival description of the original council manuscripts used for exact council dates, shared conciliar authorship, trilingual catechetical order, and the 1584 South American printing",
+      "supports": ["life.council", "life.languages", "life.printing", "institutionalContext"]
+    },
+    {
+      "id": "turibius-loc-catechism",
+      "title": "Catechism in the Spanish Language and Quechua: Ordered by Authority of the Provincial Council of Lima in the Year 1583",
+      "authorOrInstitution": "Third Provincial Council of Lima",
+      "publisher": "Library of Congress; original at the National Library of Peru",
+      "url": "https://www.loc.gov/item/2021666928/",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Digitized primary printed artifact used to confirm council-authorized Indigenous-language catechesis without crediting Turibius as sole author or translator",
+      "supports": ["life.council", "life.languages", "life.catechesis", "attribution"]
+    },
+    {
+      "id": "turibius-francis-indigenous",
+      "title": "Meeting with Indigenous People of the Amazon Region",
+      "authorOrInstitution": "Pope Francis",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/francesco/en/speeches/2018/january/documents/papa-francesco_20180119_peru-puertomaldonado-popoliamazzonia.html",
+      "publicationDate": "2018-01-19",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal address quoting the Third Council's acknowledgement that great wrongs and coercion against Indigenous people continued in Turibius's era",
+      "supports": ["life.indigenous_dignity", "life.colonial_abuse", "life.council", "institutionalLimits"]
+    },
+    {
+      "id": "turibius-coello-colonial",
+      "title": "Patrimonialismo, privilegios políticos e Iglesia en la Lima colonial (1580-1592)",
+      "authorOrInstitution": "Alexandre Coello de la Rosa",
+      "publisher": "Histórica, Pontificia Universidad Católica del Perú",
+      "url": "https://revistas.pucp.edu.pe/index.php/historica/article/download/8595/8951/",
+      "publicationDate": "2000",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent colonial-history scholarship used for criticism of corregidores and labor abuses, just treatment and nonviolent conversion, conflicts over jurisdiction and resources, continued Spanish hegemony, and institutional limits",
+      "supports": ["life.indigenous_dignity", "life.colonial_abuse", "life.conflicts", "colonialPower", "institutionalLimits", "historicalCertainty"]
+    },
+    {
+      "id": "turibius-guibovich-visits",
+      "title": "Las visitas del arzobispo Mogrovejo: las fuentes documentales y sus problemas",
+      "authorOrInstitution": "Pedro Guibovich Pérez",
+      "publisher": "Revista del Archivo General de la Nación del Perú",
+      "url": "https://revista.agn.gob.pe/ojs/index.php/ragn/article/download/80/91?inline=1",
+      "publicationDate": "2019",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Archival scholarship used for extensive visitations, direct contact, demographic and fiscal recordkeeping, civil conflicts, fragmentary evidence, and episcopal justice that repressed Indigenous beliefs and imposed Christian norms",
+      "supports": ["life.visitation", "life.travel", "life.records", "life.coercion", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "turibius-rah-biography",
+      "title": "Santo Toribio Alfonso de Mogrovejo",
+      "authorOrInstitution": "Javier Burrieza Sánchez",
+      "publisher": "Real Academia de la Historia, Historia Hispánica",
+      "url": "https://historia-hispanica.rah.es/biografias/42840-santo-toribio-alfonso-de-mogrovejo",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Recognized historical authority used for birth and death chronology, canon-law and inquisitorial background, crown nomination, office, and the Mayorga-Villaquejida birthplace dispute",
+      "supports": ["identity", "dates", "places", "life.canon_law", "life.inquisition", "life.crown_nomination", "placeConflict"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Turibius shows that pastoral energy and institutional reform can defend real people, yet good intentions do not place a leader outside the power system he serves. His legacy asks Christian leaders to cross distances, learn languages, hear communities directly, correct abuse, and submit their own methods and institutions to scrutiny—especially where religion, government, wealth, and cultural power are entangled.",
+  "oneMinuteSummary": "Born in Spain in 1538, Toribio Alfonso de Mogrovejo trained in canon law and served as an inquisitor before Philip II selected the lay jurist for the archbishopric of Lima. He arrived in Peru in 1581 as part of the Spanish Crown's colonial Church-state order. As archbishop he convened councils and synods, established a seminary, worked on clergy discipline, and spent much of his episcopate in extended visitations. The Third Provincial Council of Lima in 1582-1583 acknowledged abuses and coercion against Indigenous people and ordered standardized catechetical materials in Castilian, Quechua, and Aymara. Those texts were a serious effort to communicate across language and to restrain some abuses, but they also served conversion and social discipline within colonial rule. Independent scholarship records Turibius challenging corrupt officials, exploitation of Indigenous labor, and misuse of community resources while also defending episcopal jurisdiction and accepting Spanish sovereignty. His visitations brought direct contact and pastoral care, yet also gathered fiscal information, repressed Indigenous religious practices, and imposed Christian norms. Fragmentary archives make heroic travel totals and the scale of discipline uncertain. Turibius died during visitation at Saña in 1606. His sanctity cannot be told as a civilizing triumph; it is a call to accountable reform that names both courageous resistance to dehumanization and the limits of reform from within coercive power.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A crown nominee inside colonial power",
+        "body": "Turibius was a Spanish canon lawyer and inquisitor when Philip II chose him for Lima despite his lack of missionary and clerical experience. His episcopal authority entered Peru through royal patronage and served within an imperial order. That setting does not erase his later courage, but it prevents a story in which the Church arrives as a neutral outsider to colonial domination.",
+        "sourceIds": ["turibius-rah-biography", "turibius-coello-colonial"]
+      },
+      {
+        "heading": "Council, language, and pastoral reform",
+        "body": "The Third Provincial Council brought bishops and theologians into a shared reform project. It standardized teaching in Castilian, Quechua, and Aymara, acknowledged grave wrongs against Indigenous people, strengthened pastoral discipline, and helped produce the first South American printing in 1584. The work respected the necessity of local languages while also advancing conversion under colonial authority; Turibius was president, not sole author or translator.",
+        "sourceIds": ["turibius-benedict-message", "turibius-unesco-council", "turibius-loc-catechism", "turibius-francis-indigenous"]
+      },
+      {
+        "heading": "Presence across difficult distances",
+        "body": "Turibius spent much of his long episcopate away from Lima on extended visitations. He sought direct pastoral contact, preached, inspected parishes, and learned languages. The visits also recorded populations, tribute, tithes, and clerical support and exercised ecclesiastical justice. Severe archival loss means exact distance, tour counts, sacramental totals, and the full scale of discipline should not be repeated with false confidence.",
+        "sourceIds": ["turibius-benedict-message", "turibius-guibovich-visits"]
+      },
+      {
+        "heading": "Defense joined to institutional limits",
+        "body": "Evidence supports Turibius protesting exploitation, corrupt local officials, misuse of Indigenous resources, and coercive conversion. It also shows conflicts over episcopal jurisdiction, parish income, tribute, and labor. He did not reject Spanish sovereignty, and church discipline under his leadership could repress Indigenous beliefs and compel Christian norms. Honest remembrance holds reform and complicity together instead of turning either into the whole story.",
+        "sourceIds": ["turibius-francis-indigenous", "turibius-coello-colonial", "turibius-guibovich-visits"]
+      }
+    ],
+    "gospelTheme": "Jesus defines authority as service, so Christian leadership must draw near, recognize every person's dignity, resist dehumanization, and remain accountable for the harms its own institutions can cause.",
+    "struggle": "Turibius faced immense distances, clerical disorder, colonial exploitation, disputes among Crown, viceroys, religious orders, and diocesan clergy, and the moral contradiction of reforming abuses without leaving the coercive imperial structure.",
+    "response": "He traveled, listened across languages, built formation and common standards, confronted particular abuses, and accepted conflict; his response also remained limited by colonial assumptions and coercive ecclesiastical methods that require honest judgment."
+  },
+  "virtues": [
+    {
+      "name": "Pastoral presence",
+      "evidence": "Turibius spent much of his episcopate on visitations rather than governing only from Lima, though the surviving records do not sustain every heroic travel total.",
+      "imitation": "Before changing a service for a community, meet people where they are, compensate local expertise, use accessible communication, and let direct testimony alter the plan.",
+      "sourceIds": ["turibius-benedict-message", "turibius-guibovich-visits"]
+    },
+    {
+      "name": "Defense of human dignity",
+      "evidence": "Official and independent sources record his insistence on every person's dignity and his challenges to particular abuses of Indigenous labor, resources, and conversion.",
+      "imitation": "Name dehumanizing conduct precisely, preserve evidence safely, follow the affected community's lead, and use an accountable reporting or advocacy channel rather than speaking over them.",
+      "sourceIds": ["turibius-benedict-message", "turibius-francis-indigenous", "turibius-coello-colonial"]
+    },
+    {
+      "name": "Reform open to scrutiny",
+      "evidence": "His councils and seminary built durable standards, while the colonial record shows that reforming leaders can still reproduce coercion and institutional self-interest.",
+      "imitation": "Invite people with less institutional power to review one policy, publish how decisions are made, and create a protected way to report harm without retaliation.",
+      "sourceIds": ["turibius-unesco-council", "turibius-coello-colonial", "turibius-guibovich-visits"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray with Mark 10:42-45 and place one leadership role before Christ the servant. Ask whose language, history, or experience your usual process cannot hear. Listen without preparing a defense, and confess both personal choices and institutional patterns that diminish another person's dignity.",
+    "action": "Review one decision that affects a cultural or linguistic community with people from that community before it is finalized. Provide translation or accessibility, compensate expertise where appropriate, record dissent, protect participants from retaliation, and publish one concrete change or a truthful explanation of what remains unresolved."
+  },
+  "reflectionQuestions": [
+    "Whose voice is missing from the decisions I influence, and what material barrier—not presumed lack of interest—keeps that person unheard?",
+    "Can I name the good an institution does while still tracing the power, coercion, or self-interest that limits its reform?"
+  ],
+  "scripture": {
+    "reference": "Mark 10:42-45",
+    "connection": "Jesus contrasts rulers who dominate with the Son of Man who serves. Turibius' reforms are most faithful where they draw leadership toward people and resist dehumanization; his colonial limits warn that Christian office must continually be judged by Christ's non-dominating service."
+  },
+  "prayer": "Lord Jesus Christ, you came not to be served but to serve. Through the intercession of Saint Turibius, give pastors courage to cross distances, learn from other languages and cultures, and defend every person's dignity. Forgive the coercion and contempt carried through Christian institutions. Strengthen Indigenous communities and all harmed by colonial legacies. Make leaders transparent, teachable, and ready to surrender privilege so that your Gospel is witnessed without domination. Amen."
+}
