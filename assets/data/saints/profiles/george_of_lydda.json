@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 2,
+  "id": "george_of_lydda",
+  "profileKind": "individual",
+  "celebrationIds": ["george_of_lydda", "saint_george_martyr"],
+  "name": "Saint George, Martyr",
+  "alternateNames": ["George of Lydda"],
+  "ecclesialTitle": "Early Christian martyr",
+  "lifeSpan": "early fourth century",
+  "lifeLength": "unknown",
+  "vocation": "Christian martyr",
+  "places": ["Lydda"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "George is securely remembered as an early Christian martyr honored at Lydda, but the surviving evidence does not yield a dependable biography. His Acts were already regarded as unreliable in antiquity, and the dragon story belongs to much later medieval legend. The Church may receive his martyr memory as a call to courageous fidelity without turning picturesque tradition into history.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Saint_George",
+  "wikidataId": "Q48438",
+  "feastDates": ["April 23"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "george-vatican-news",
+      "title": "St. George, Martyr",
+      "authorOrInstitution": "Vatican News",
+      "publisher": "Dicastery for Communication",
+      "url": "https://www.vaticannews.va/en/saints/04/23/st--george--martyr.html",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Official Catholic narrative used for the April 23 observance and its explicit notice that the surviving Passion is apocryphal; confident biographical detail is not adopted",
+      "supports": ["feast", "reception.catholic", "sourceLimits", "legend.dragon"]
+    },
+    {
+      "id": "george-catholic-encyclopedia",
+      "title": "St. George",
+      "authorOrInstitution": "Herbert Thurston",
+      "publisher": "The Catholic Encyclopedia; New Advent transcription",
+      "url": "https://www.newadvent.org/cathen/06453a.htm",
+      "publicationDate": "1909",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Older Catholic reference summary used for the sparse historical core at Lydda, early cult evidence, rejection of unreliable Acts, and the late development of the dragon legend",
+      "supports": ["identity", "places", "life.martyr_memory", "cult.early", "sourceLimits", "legend.acts", "legend.dragon", "historicalCertainty"]
+    },
+    {
+      "id": "george-english-heritage",
+      "title": "9 Things You Didn't Know About St George",
+      "authorOrInstitution": "English Heritage",
+      "publisher": "English Heritage",
+      "url": "https://www.english-heritage.org.uk/visit/whats-on/st-georges-day/9-things-you-didnt-know-about-St-George",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Recognized public-history control used for the uncertainty of George's life, early Lydda cult, and the much later growth and popularization of dragon imagery",
+      "supports": ["places", "cult.early", "sourceLimits", "legend.dragon", "reception.england", "historicalCertainty"]
+    },
+    {
+      "id": "george-royal-garter",
+      "title": "The Order of the Garter",
+      "authorOrInstitution": "The Royal Household",
+      "publisher": "The Royal Household",
+      "url": "https://www.royal.uk/the-order-of-the-garter",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal institutional record used narrowly for George's established place in the Order of the Garter and the later English reception of his feast, not as evidence for his ancient biography",
+      "supports": ["reception.garter", "reception.england", "feast"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "George's memory teaches that Christian courage does not need an embellished biography. The historical record is thin, yet an early community kept the memory of a martyr at Lydda. Honoring that witness while naming the dragon as legend trains believers to be brave and truthful at the same time.",
+  "oneMinuteSummary": "A Christian martyr named George was honored at Lydda in the early centuries of the Church. Beyond that core, his dates, birthplace, military career, manner of trial, and death cannot be reconstructed securely. Ancient and modern source criticism regard the surviving Acts as unreliable, so the familiar year 303 and detailed speeches are not stated as certain facts. Pilgrimage and church evidence shows that devotion to George at Lydda was established early. The famous combat with a dragon emerged many centuries later and became especially popular through medieval storytelling; it is a legend of faithful resistance, not eyewitness biography. George's later place in English devotion and the Order of the Garter is a history of reception, not proof about his life. His April 23 celebration can therefore form a sober courage: Christians may remember a martyr, refuse to manufacture detail, and resist evil through fidelity to Christ rather than fantasies of violence or invulnerability.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A martyr remembered at Lydda",
+        "body": "The strongest historical core is modest: George was remembered as a Christian martyr at or near Lydda, where an early cult and pilgrimage tradition developed. The sources do not permit a complete life story, but they do show that his name was not created by the medieval dragon tale.",
+        "sourceIds": ["george-catholic-encyclopedia", "george-english-heritage"]
+      },
+      {
+        "heading": "Biography beyond the evidence",
+        "body": "The narrative Acts of George were judged unreliable long ago, and scholars cannot securely identify him with an unnamed martyr described by Eusebius. Military rank, exact origin, dramatic courtroom speeches, and the precise year 303 therefore remain traditional or conjectural rather than documented biography.",
+        "sourceIds": ["george-vatican-news", "george-catholic-encyclopedia", "george-english-heritage"]
+      },
+      {
+        "heading": "The dragon belongs to later legend",
+        "body": "Dragon imagery attached itself to George long after the early martyr cult and was amplified by medieval literature. It can symbolize resistance to evil, but the story is not used to reconstruct his death, endorse combat, or promise that faith makes a person physically unbeatable.",
+        "sourceIds": ["george-vatican-news", "george-catholic-encyclopedia", "george-english-heritage"]
+      },
+      {
+        "heading": "A saint received by later communities",
+        "body": "George later became deeply embedded in English public and royal memory, including the Order of the Garter. That reception explains familiar flags, ceremonies, and feast customs while remaining distinct from what can be known about the ancient martyr himself.",
+        "sourceIds": ["george-english-heritage", "george-royal-garter"]
+      }
+    ],
+    "gospelTheme": "Jesus calls disciples to confess him faithfully and truthfully, without depending on power, spectacle, or a heroic image of themselves.",
+    "struggle": "George's witness survives through a historically sparse martyr memory surrounded by later stories that can easily eclipse both truth and the nonviolent fidelity of Christian martyrdom.",
+    "response": "The Church kept his name in worship, while responsible remembrance separates the early cult from unreliable Acts and medieval legend and directs courage toward Christ."
+  },
+  "virtues": [
+    {
+      "name": "Courage without self-display",
+      "evidence": "The durable core of George's memory is not a catalog of victories but fidelity to Christ unto death in the early martyr tradition at Lydda.",
+      "imitation": "Choose one truthful act that may cost approval, carry it out without exaggerating the danger, and seek support rather than trying to appear invulnerable.",
+      "sourceIds": ["george-catholic-encyclopedia", "george-english-heritage"]
+    },
+    {
+      "name": "Honesty about uncertainty",
+      "evidence": "The sources preserve an early cult while openly acknowledging that George's Acts and detailed biography cannot bear historical confidence.",
+      "imitation": "When retelling an inspiring religious story, label what is documented, traditional, or legendary and remove any detail you cannot responsibly support.",
+      "sourceIds": ["george-vatican-news", "george-catholic-encyclopedia"]
+    },
+    {
+      "name": "Resistance to evil without glorifying violence",
+      "evidence": "The dragon is a late symbolic legend, not a historical command to seek combat or treat opponents as monsters.",
+      "imitation": "Name the actual harm in one conflict, protect anyone at risk, and answer it with lawful, proportionate, non-dehumanizing action rather than heroic fantasy.",
+      "sourceIds": ["george-catholic-encyclopedia", "george-english-heritage"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray slowly with Revelation 12:11. Ask Christ for the courage of truthful testimony. Name one fear you are hiding and one legendary or exaggerated claim you may be using to feel stronger; offer both to him and choose honesty over spectacle.",
+    "action": "Fact-check one story, caption, or talk about George or another saint. Preserve the meaningful tradition, label legend clearly, remove unsupported dates or speeches, and redirect the lesson toward a concrete nonviolent act of fidelity."
+  },
+  "reflectionQuestions": [
+    "Where am I tempted to make a good witness look more impressive by adding certainty the evidence does not provide?",
+    "What courageous but nonviolent act of fidelity to Christ is actually required of me now?"
+  ],
+  "scripture": {
+    "reference": "Revelation 12:11",
+    "connection": "The faithful overcome through the Lamb and the word of their testimony, not through a dragon-slayer's supposed invulnerability. George's martyr memory points to Christ's victory while the late legend must remain clearly labeled."
+  },
+  "prayer": "Lord Jesus Christ, faithful witness and victorious Lamb, through the intercession of Saint George give us courage without vanity and truth without fear. Keep us from confusing legend with history or strength with violence. Help us protect the vulnerable, resist evil without dehumanizing anyone, and confess your name with humble fidelity when obedience is costly. Amen."
+}

@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 2,
+  "id": "fidelis_of_sigmaringen",
+  "profileKind": "individual",
+  "celebrationIds": ["fidelis_of_sigmaringen", "saint_fidelis_of_sigmaringen_priest_and_martyr"],
+  "name": "Saint Fidelis of Sigmaringen, Priest and Martyr",
+  "alternateNames": ["Mark Roy", "Fidelis von Sigmaringen"],
+  "ecclesialTitle": "Capuchin priest and martyr",
+  "lifeSpan": "c. 1578-1622",
+  "lifeLength": "about 44 years",
+  "vocation": "Lawyer, Capuchin priest, and missionary",
+  "places": ["Sigmaringen", "Freiburg im Breisgau", "Feldkirch", "Prättigau", "Seewis"],
+  "patronage": ["lawyers"],
+  "symbols": [],
+  "briefBio": "Born Mark Roy around 1578, Fidelis trained in civil and canon law before becoming a Capuchin priest. His 1622 mission in the Prättigau unfolded under Austrian military occupation and a coercive religious mandate he helped draft. An uprising ended in his killing at Seewis. His witness may inspire legal care, truthful preaching, and courage, but Christian memory must neither demonize Reformed neighbors nor excuse coercion or romanticize murder.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Fidelis_of_Sigmaringen",
+  "wikidataId": "Q470613",
+  "feastDates": ["April 24"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "fidelis-capdox",
+      "title": "Saint Fidelis von Sigmaringen",
+      "authorOrInstitution": "Capuchin Friars Australia",
+      "publisher": "CapDox",
+      "url": "https://www.capdox.capuchin.org.au/saints-blesseds/saint-fidelis-von-sigmaringen/",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Official Capuchin narrative used for legal formation, entrance into the order, the Austrian occupation, Fidelis's role in a punitive mandate, and his death; polemical labels, graphic detail, and final dialogue are not adopted",
+      "supports": ["identity", "dates", "vocation", "life.law", "life.capuchin", "life.mission", "life.mandate", "life.death", "historicalContext", "sourceLimits"]
+    },
+    {
+      "id": "fidelis-deutsche-biographie",
+      "title": "Fidelis von Sigmaringen",
+      "authorOrInstitution": "Wolfgang Müller",
+      "publisher": "Neue Deutsche Biographie; Deutsche Biographie",
+      "url": "https://www.deutsche-biographie.de/sfz16019.html",
+      "publicationDate": "1961",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Scholarly biographical reference used for education, legal work, Capuchin chronology, mission among Austrian troops and Reformed communities, authorship of the religious penalty mandate, uprising, death, and later canonization",
+      "supports": ["identity", "dates", "places", "vocation", "life.law", "life.capuchin", "life.mission", "life.mandate", "life.uprising", "life.death", "reception.canonization", "historicalCertainty"]
+    },
+    {
+      "id": "fidelis-new-catholic-encyclopedia",
+      "title": "Fidelis of Sigmaringen, St.",
+      "authorOrInstitution": "New Catholic Encyclopedia",
+      "publisher": "Gale; Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/fidelis-sigmaringen-st",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Specialist reference used for October 1578, Mark Roy, doctorates in civil and canon law, Capuchin ministry, Propaganda Fide mission, death on April 24, canonization, and patronage of lawyers",
+      "supports": ["identity", "dates", "places", "vocation", "life.law", "life.capuchin", "life.mission", "life.death", "reception.canonization", "patronage", "patronage.lawyers"]
+    },
+    {
+      "id": "fidelis-bw-archive",
+      "title": "Fidelis von Sigmaringen (1577/78-1622)",
+      "authorOrInstitution": "Landesarchiv Baden-Württemberg",
+      "publisher": "Landesarchiv Baden-Württemberg",
+      "url": "https://www.landesarchiv-bw.de/de/themen/praesentationen---themenzugaenge/73752",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Recognized archival historical account used for the Counter-Reformation setting, leadership of the mission, death during the uprising, and later cult and canonization",
+      "supports": ["dates", "life.mission", "life.uprising", "life.death", "historicalContext", "reception.canonization"]
+    },
+    {
+      "id": "fidelis-freiburg",
+      "title": "Fidelis von Sigmaringen",
+      "authorOrInstitution": "Archdiocese of Freiburg; Herder saint lexicon",
+      "publisher": "Archdiocese of Freiburg",
+      "url": "https://www.ebfr.de/detail/heiliger/id/510-fidelis-von-sigmaringen/",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Diocesan tertiary summary used for feast, c. 1577 or 1578 dating, law and Capuchin vocation, Austrian military context, death, the legendary status of a final anti-Reformed dialogue, and lawyer patronage",
+      "supports": ["feast", "identity", "dates", "vocation", "life.law", "life.capuchin", "life.mission", "life.death", "historicalContext", "legend.final_dialogue", "patronage", "patronage.lawyers", "sourceLimits"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Fidelis joins legal training, religious conviction, and costly witness in a history where Church mission was entangled with military occupation and coercive law. Remembering him truthfully calls lawyers and Christians to defend vulnerable people, preach without state pressure, refuse confessional hatred, and mourn every murder rather than making violence sacred.",
+  "oneMinuteSummary": "Mark Roy was born around 1578, studied philosophy and law, and worked as a lawyer before entering the Capuchins in 1612 with the name Fidelis. He was ordained, served in community leadership, preached, and was sent to the Prättigau, a largely Reformed region under Austrian occupation. The mission cannot be narrated as a simple contest between heroic Catholics and hostile Protestants. Austrian troops enforced political and religious control, and Fidelis helped draft a mandate that restricted Reformed worship, expelled ministers, and imposed Catholic preaching. Historical accounts connect that policy with rising resistance. During the uprising of April 24, 1622, Fidelis was attacked and killed after preaching at Seewis. His murder was wrong; it is also wrong to use it to blame Reformed Christians collectively or excuse coercive Catholic measures. A reported final debate is legend, and inflammatory labels and graphic details are omitted. Canonized in 1746 and remembered as a patron of lawyers, Fidelis can form a more accountable witness: careful legal service, conviction without compulsion, solidarity with people caught under unequal power, and courage that seeks peace rather than domination.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Law studied before religious life",
+        "body": "Born Mark Roy around 1578, Fidelis received advanced training in civil and canon law and practiced before turning to Capuchin life. Later Catholic memory especially associates him with lawyers. The record can encourage legal competence ordered to service without relying on idealized courtroom anecdotes as proof.",
+        "sourceIds": ["fidelis-capdox", "fidelis-deutsche-biographie", "fidelis-new-catholic-encyclopedia"]
+      },
+      {
+        "heading": "A Capuchin priest and preacher",
+        "body": "He entered the Capuchins in 1612, was ordained, and served as preacher and superior. His change of vocation was a disciplined commitment to communal religious life, not a rejection of law itself; legal formation remained part of the gifts and responsibilities he carried.",
+        "sourceIds": ["fidelis-capdox", "fidelis-deutsche-biographie", "fidelis-new-catholic-encyclopedia"]
+      },
+      {
+        "heading": "Mission under occupation and coercive law",
+        "body": "Fidelis's Prättigau mission operated alongside Austrian troops in a Reformed region. He helped author a mandate that restricted local worship, removed ministers, and required Catholic preaching. Even where accounts distinguish compulsory attendance from forced sacramental conversion, the policy used unequal political power and helped intensify resistance. Christian mission must reject such compulsion.",
+        "sourceIds": ["fidelis-capdox", "fidelis-deutsche-biographie", "fidelis-bw-archive", "fidelis-freiburg"]
+      },
+      {
+        "heading": "Killed amid an uprising",
+        "body": "Fidelis was killed at Seewis on April 24, 1622, during the uprising against Austrian rule. Murder is never made acceptable by grievance, and military occupation is not made just by a missionary's death. Later polemical speeches and a final anti-Reformed exchange are not presented as fact. The memory calls every Christian community to truth, lament, and peace.",
+        "sourceIds": ["fidelis-deutsche-biographie", "fidelis-new-catholic-encyclopedia", "fidelis-bw-archive", "fidelis-freiburg"]
+      }
+    ],
+    "gospelTheme": "Christ sends disciples to bear truthful witness while honoring conscience, seeking peace, and refusing to make political force an instrument of faith.",
+    "struggle": "Fidelis ministered in a volatile borderland where confessional division, Austrian occupation, punitive law, local resistance, and religious preaching became dangerously entangled.",
+    "response": "He preached and remained with the mission despite danger, but the record also requires naming his role in a coercive mandate and rejecting both his murder and collective blame against Reformed Christians."
+  },
+  "virtues": [
+    {
+      "name": "Skilled service under moral review",
+      "evidence": "Fidelis's education and work in civil and canon law preceded his Capuchin ministry and later patronal association with lawyers.",
+      "imitation": "Use one professional skill this week to clarify a right, reduce a barrier, or help someone with less institutional power, and invite review of any hidden coercive effect.",
+      "sourceIds": ["fidelis-deutsche-biographie", "fidelis-new-catholic-encyclopedia"]
+    },
+    {
+      "name": "Conviction accountable to conscience",
+      "evidence": "The Prättigau mandate shows how religious aims become harmful when joined to occupation, penalties, and restrictions on another community's worship.",
+      "imitation": "Before asking someone to accept a religious invitation, remove penalties and power leverage, state their freedom to decline, and seek an independent check from someone affected by the policy.",
+      "sourceIds": ["fidelis-capdox", "fidelis-deutsche-biographie", "fidelis-freiburg"]
+    },
+    {
+      "name": "Courage directed toward peace",
+      "evidence": "Fidelis's death occurred in a genuine uprising and is remembered as martyrdom, yet the historical setting refuses a simple story of one innocent religious group against an evil other.",
+      "imitation": "In a religious conflict, condemn the specific harm, refuse collective labels, name your own community's misuse of power, and support a practical step that protects all sides from violence.",
+      "sourceIds": ["fidelis-bw-archive", "fidelis-freiburg"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray with James 3:17 before speaking about a religious or political opponent. Ask for wisdom that is pure, peaceable, gentle, and open to reason. Confess any wish to control another conscience or to excuse violence committed by your own side.",
+    "action": "Review one rule, invitation, or professional process that affects people with less power. Add a clear freedom to decline, remove an avoidable penalty, provide an impartial appeal route, and ask an affected person whether the change is genuinely safe."
+  },
+  "reflectionQuestions": [
+    "Where has my religious certainty become entangled with pressure, status, law, or a desire to control another person's choices?",
+    "Can I condemn Fidelis's murder while also telling the truth about coercive Catholic policy and the fears of Reformed communities?"
+  ],
+  "scripture": {
+    "reference": "James 3:17",
+    "connection": "The wisdom from above is peaceable, gentle, and open to reason. Fidelis's confessional setting shows why zeal and professional skill need this Gospel test whenever religious mission intersects with political power."
+  },
+  "prayer": "Jesus Christ, Prince of Peace, through the intercession of Saint Fidelis make our convictions truthful, gentle, and free from coercion. Receive all who suffered in the Prättigau conflict. Forgive the misuse of religion and law, guard every conscience, and keep us from blaming whole communities for violence. Give lawyers courage to protect the vulnerable and give your Church a witness that serves rather than controls. Amen."
+}

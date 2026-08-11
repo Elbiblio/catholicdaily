@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 2,
+  "id": "mark_evangelist",
+  "profileKind": "individual",
+  "celebrationIds": ["mark_evangelist", "saint_mark_evangelist"],
+  "name": "Saint Mark, Evangelist",
+  "alternateNames": ["Mark the Evangelist"],
+  "ecclesialTitle": "Evangelist",
+  "lifeSpan": "first century",
+  "lifeLength": "unknown",
+  "vocation": "Evangelist in the apostolic Church",
+  "places": [],
+  "patronage": [],
+  "symbols": ["winged lion"],
+  "briefBio": "The canonical Gospel according to Mark proclaims Jesus through his deeds, the cross, and the demanding path of discipleship. The work itself is anonymous, while early Christian reception attributed it to Mark and linked him with Peter and Rome. Identification with the New Testament John Mark remains debated; Alexandrian foundation and martyr traditions are later, and the winged lion is established iconography rather than biography.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Mark_the_Evangelist",
+  "wikidataId": "Q31966",
+  "feastDates": ["April 25"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "mark-usccb-gospel",
+      "title": "The Gospel According to Mark: Introduction",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "United States Conference of Catholic Bishops",
+      "url": "https://bible.usccb.org/bible/mark/0",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Canonical Catholic Bible introduction used for the Gospel's Christology and discipleship, its internal anonymity apart from the ancient heading, traditional attribution to John Mark, Peter and Rome associations, and dating before or around 70",
+      "supports": ["identity.evangelist", "life.gospel", "gospel.anonymous", "tradition.john_mark", "tradition.peter", "tradition.rome", "dates.gospel", "theology.christ", "theology.cross", "theology.discipleship", "historicalCertainty"]
+    },
+    {
+      "id": "mark-irenaeus",
+      "title": "Against Heresies, Book III, Chapter 1",
+      "authorOrInstitution": "Irenaeus of Lyons",
+      "publisher": "New Advent transcription",
+      "url": "https://www.newadvent.org/fathers/0103301.htm",
+      "publicationDate": "c. 180",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Primary early Christian reception used for Irenaeus's testimony that Mark, Peter's disciple and interpreter, handed on Peter's preaching; treated as ancient testimony rather than modern proof",
+      "supports": ["reception.early", "tradition.mark_author", "tradition.peter"]
+    },
+    {
+      "id": "mark-carlson-papias",
+      "title": "The Imposition of Authorship: Michel Foucault's Author-Function and Papias of Hierapolis on the Gospel of Mark",
+      "authorOrInstitution": "Stephen C. Carlson",
+      "publisher": "Harvard Theological Review; Cambridge University Press",
+      "url": "https://www.cambridge.org/core/journals/harvard-theological-review/article/imposition-of-authorship-michel-foucaults-authorfunction-and-papias-of-hierapolis-on-the-gospel-of-mark/F1B7B9D65CBACCE86296457BFAF85968",
+      "publicationDate": "2025",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Peer-reviewed scholarship used to control the formally anonymous Gospel, the complexity of Papias's early second-century testimony preserved in Eusebius, and debates about how authorship was attached",
+      "supports": ["gospel.anonymous", "reception.papias", "tradition.mark_author", "tradition.peter", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "mark-encyclopedia-religion",
+      "title": "Mark, the Evangelist",
+      "authorOrInstitution": "Encyclopedia of Religion",
+      "publisher": "Macmillan Reference USA; Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/environment/encyclopedias-almanacs-transcripts-and-maps/mark-evangelist",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Scholarly reference control used for the uncertain identification with John Mark, possible Peter and Rome associations, later Alexandria tradition, legendary martyr narrative, and April 25 reception",
+      "supports": ["feast", "tradition.john_mark", "tradition.peter", "tradition.rome", "tradition.alexandria", "legend.martyrdom", "sourceLimits", "historicalCertainty"]
+    },
+    {
+      "id": "mark-coptic-history",
+      "title": "Coptic History",
+      "authorOrInstitution": "Coptic Orthodox Church",
+      "publisher": "Coptic Orthodox Church",
+      "url": "https://copticorthodox.church/en/coptic-church/coptic-history/",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Official Coptic narrative used to represent the living Alexandrian tradition that Mark founded the church there and died as a martyr; variant arrival dates and detailed death claims are not treated as established history",
+      "supports": ["reception.coptic", "tradition.alexandria", "tradition.martyrdom", "sourceLimits"]
+    },
+    {
+      "id": "mark-new-catholic-encyclopedia",
+      "title": "Mark, Evangelist, St.",
+      "authorOrInstitution": "New Catholic Encyclopedia",
+      "publisher": "Gale; Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/mark-evangelist-st",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Specialist Catholic reference used for canonical Mark associations, the legendary status of Alexandria martyr details, April 25, and medieval winged-lion iconography",
+      "supports": ["feast", "tradition.john_mark", "tradition.alexandria", "legend.martyrdom", "symbols", "symbols.winged_lion", "reception.iconography"]
+    },
+    {
+      "id": "mark-met-lion",
+      "title": "Plaque with Saint Mark",
+      "authorOrInstitution": "The Metropolitan Museum of Art",
+      "publisher": "The Metropolitan Museum of Art",
+      "url": "https://www.metmuseum.org/art/collection/search/464339",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Museum object record used as material evidence for medieval reception of Mark with a lion and a Gospel inscription, not as evidence about his first-century life",
+      "supports": ["symbols", "symbols.winged_lion", "reception.iconography"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Mark directs attention away from the evangelist's uncertain biography and toward Jesus Christ proclaimed in the canonical Gospel. Early testimony and later church memory deserve a fair hearing, but they do not erase historical questions. This balance teaches Christians to receive Scripture attentively, hand on the Gospel humbly, and distinguish faith's center from cherished but later traditions.",
+  "oneMinuteSummary": "The Gospel according to Mark is canonical Scripture and a foundational proclamation of Jesus Christ, especially his deeds, suffering, death, and the demanding education of disciples. The text does not name its author internally; the title is ancient, and early second-century testimony associated a Mark with Peter's recollections. Irenaeus later described Mark as Peter's disciple and interpreter. Catholic tradition commonly identifies him with John Mark, who appears in Acts and several letters, and connects the Gospel with Rome, but modern historical judgment treats those identifications and settings as traditional and debated rather than certain. The Coptic Orthodox Church receives Mark as founder of the church in Alexandria and as a martyr, yet the dates and detailed death story vary and appear in later sources. They are presented as a living ecclesial tradition, not a reconstructed first-century chronology. The winged lion is well-established medieval iconography linked to the Gospel's opening in the wilderness and prophetic imagery; it is not an eyewitness attribute. Celebrated as a Feast on April 25, Mark invites the Church to listen closely to the Gospel, follow the crucified Christ, and proclaim him without pretending that every question about the human author has been settled.",
+  "life": {
+    "sections": [
+      {
+        "heading": "A canonical Gospel centered on Jesus",
+        "body": "Mark's Gospel announces Jesus as Messiah and Son of God through urgent action, conflict, compassion, the cross, and the disciples' slow learning. The evangelist's first service is therefore the inspired text itself, which confronts readers with Christ rather than offering a polished portrait of successful followers.",
+        "sourceIds": ["mark-usccb-gospel"]
+      },
+      {
+        "heading": "An anonymous work with ancient attribution",
+        "body": "The Gospel does not identify its writer within the narrative, although its heading is ancient. Papias's testimony, preserved later by Eusebius, and Irenaeus connect a Mark with Peter's preaching. These are important witnesses to early reception, yet their wording and application remain subjects of scholarly debate.",
+        "sourceIds": ["mark-usccb-gospel", "mark-irenaeus", "mark-carlson-papias"]
+      },
+      {
+        "heading": "John Mark, Peter, and Rome",
+        "body": "Christian tradition often identifies the evangelist with John Mark known from Acts and New Testament letters and locates his Gospel in relation to Peter and Rome. The connections are possible and ancient, but the evidence does not allow every association to be stated as modern historical certainty. The profile therefore honors the tradition without collapsing distinct questions into one answer.",
+        "sourceIds": ["mark-usccb-gospel", "mark-irenaeus", "mark-carlson-papias", "mark-encyclopedia-religion"]
+      },
+      {
+        "heading": "Alexandria, martyr memory, and the lion",
+        "body": "The Coptic Church's living memory receives Mark as founder and martyr of Alexandria, while historical controls identify the detailed foundation and death accounts as later tradition or legend. Centuries afterward the winged lion became a stable image of the evangelist. Both belong to reception history and must not be mistaken for direct first-century documentation.",
+        "sourceIds": ["mark-encyclopedia-religion", "mark-coptic-history", "mark-new-catholic-encyclopedia", "mark-met-lion"]
+      }
+    ],
+    "gospelTheme": "The crucified and risen Jesus calls imperfect disciples to follow, understand, and proclaim him, even when their insight and courage are incomplete.",
+    "struggle": "Mark's Gospel portrays misunderstanding and fear among disciples, while the evangelist's own identity became surrounded by overlapping canonical associations, early testimony, and later ecclesial traditions.",
+    "response": "The Church receives the Gospel as Scripture, weighs the early witnesses honestly, honors Alexandrian memory without converting legend into chronology, and continues proclaiming Christ."
+  },
+  "virtues": [
+    {
+      "name": "Attention to Jesus before the messenger",
+      "evidence": "The canonical Gospel is rich in proclamation of Christ while remaining internally anonymous, keeping the saving message from depending on a complete author biography.",
+      "imitation": "Read one Markan scene twice, first noting what Jesus does and says and then what the disciples misunderstand, before drawing any lesson about yourself or another person.",
+      "sourceIds": ["mark-usccb-gospel", "mark-carlson-papias"]
+    },
+    {
+      "name": "Humble transmission",
+      "evidence": "Early reception portrays Mark as handing on apostolic preaching, while the surviving evidence still requires restraint about identity and process.",
+      "imitation": "When sharing the Gospel, distinguish the biblical text, your interpretation, and later tradition; cite the source and admit where a historical question remains open.",
+      "sourceIds": ["mark-irenaeus", "mark-carlson-papias"]
+    },
+    {
+      "name": "Discipleship through failure and return",
+      "evidence": "Mark's Gospel repeatedly shows followers who misunderstand Jesus and face fear as the cross approaches, yet the summons to follow and proclaim remains.",
+      "imitation": "Name one way you have misunderstood or avoided Jesus' call, seek correction from Scripture and the Church, and take one small act of obedient service without waiting to appear heroic.",
+      "sourceIds": ["mark-usccb-gospel"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Read Mark 8:27-35 aloud. Pause after Peter's confession, Jesus' teaching about the cross, and the call to follow. Ask Christ to correct any image of him built around triumph without self-giving love, then sit in silence before answering.",
+    "action": "Share one passage from Mark with a friend or small group. State what the text says, label one traditional association as tradition, name one open historical question, and invite the other person to notice something you missed."
+  },
+  "reflectionQuestions": [
+    "What does Mark's portrait of the crucified Messiah correct in the kind of success I expect from Jesus?",
+    "Can I value early and living Church tradition while speaking honestly about what remains debated or legendary?"
+  ],
+  "scripture": {
+    "reference": "Mark 8:34",
+    "connection": "The Gospel's call to take up the cross and follow Jesus centers discipleship on Christ rather than the certainty, status, or heroic reputation of the messenger. Mark's own layered reception makes that humility especially fitting."
+  },
+  "prayer": "Lord Jesus Christ, Son of God, through the intercession of Saint Mark open our ears to your Gospel. Correct our misunderstandings, meet us in fear, and teach us to follow you on the way of the cross. Make us careful readers, humble messengers, and honest stewards of tradition, so that our words draw attention to you and not to our own certainty. Amen."
+}

@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 2,
+  "id": "louis_grignion_de_montfort",
+  "profileKind": "individual",
+  "celebrationIds": ["louis_grignion_de_montfort", "saint_louis_grignion_de_montfort_priest"],
+  "name": "Saint Louis Grignion de Montfort, Priest",
+  "alternateNames": ["Louis-Marie Grignion de Montfort", "Louis de Montfort"],
+  "ecclesialTitle": "Missionary priest and founder",
+  "lifeSpan": "1673-1716",
+  "lifeLength": "43 years",
+  "vocation": "Priest, parish missionary, spiritual writer, and founder",
+  "places": ["Montfort-sur-Meu", "Rennes", "Paris", "Poitiers", "Nantes", "La Rochelle", "Saint-Laurent-sur-Sèvre"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Louis-Marie Grignion de Montfort was a French priest who preached parish missions, served poor people, helped found the Daughters of Wisdom and Company of Mary, and taught renewal of baptismal promises through Christ-centered Marian devotion. His early-modern language of servitude or slavery of love must be translated as free self-gift to Jesus through Mary, never ownership, coercion, abuse, or surrender of conscience.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Louis_de_Montfort",
+  "feastDates": ["April 28"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {
+      "id": "louis-jp2-2004",
+      "title": "Letter to the Montfort Religious Family",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/john-paul-ii/en/letters/2004/documents/hf_jp-ii_let_20040113_famiglie-monfortane.html",
+      "publicationDate": "2004-01-13",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal interpretation used for Christ as sole Savior and mediator, authentic Christ-centered Marian devotion, consecration to Christ, baptismal self-gift, freedom of God's children, and contextual interpretation of slavery-of-love language",
+      "supports": ["theology.christ", "theology.mary", "theology.mediation", "theology.baptism", "language.servitude", "safeguard.freedom", "reception.later", "historicalCertainty"]
+    },
+    {
+      "id": "louis-true-devotion",
+      "title": "True Devotion to the Blessed Virgin",
+      "authorOrInstitution": "Saint Louis-Marie Grignion de Montfort",
+      "publisher": "Montfortian International Centre",
+      "url": "https://montfortian.info/writings/files/The-True-Devotion-to-Mary.pdf",
+      "publicationDate": "early eighteenth century; modern translation",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Primary spiritual work used for Christ as the ultimate end, voluntary self-gift to Jesus, baptismal renewal, and the historical servitude metaphor; ideas are summarized without reproducing the copyrighted translation",
+      "supports": ["life.writing", "theology.christ", "theology.mary", "theology.baptism", "language.servitude", "safeguard.freedom", "sourceLimits"]
+    },
+    {
+      "id": "louis-redemptoris-mater",
+      "title": "Redemptoris Mater",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/john-paul-ii/en/encyclicals/documents/hf_jp-ii_enc_25031987_redemptoris-mater.html",
+      "publicationDate": "1987-03-25",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Papal encyclical used for paragraph 48's interpretation of Montfort's proposal as consecration to Christ through Mary for faithful living of baptismal commitments",
+      "supports": ["theology.christ", "theology.mary", "theology.baptism", "reception.later"]
+    },
+    {
+      "id": "louis-jp2-1997",
+      "title": "Message to the Montfortian Religious Family on the 50th Anniversary of the Canonization of St Louis Marie Grignion de Montfort",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/john-paul-ii/en/messages/pont_messages/1997/documents/hf_jp-ii_mes_19970621_montfort.html",
+      "publicationDate": "1997-06-21",
+      "accessedDate": "2026-08-11",
+      "tier": 1,
+      "reuseBasis": "Formal papal message used for needed changes in historical language, mission preaching, concern for poor people, lay service, simplicity and charity, renewal of baptismal promises, and practical adaptation today",
+      "supports": ["life.mission", "life.service", "life.foundations", "theology.christ", "theology.mary", "theology.baptism", "language.modernization", "practice.adaptation"]
+    },
+    {
+      "id": "louis-universalis",
+      "title": "Louis-Marie Grignion de Montfort",
+      "authorOrInstitution": "Encyclopædia Universalis",
+      "publisher": "Encyclopædia Universalis",
+      "url": "https://www.universalis.fr/encyclopedie/louis-marie-grignion-de-montfort/",
+      "accessedDate": "2026-08-11",
+      "tier": 2,
+      "reuseBasis": "Independent scholarly reference used for 1673-1716, education and ordination, western French missions, hospital service, foundations, the 1706 Rome commission, institutional conflicts, death, canonization, and later publication and influence of True Devotion",
+      "supports": ["identity", "dates", "places", "vocation", "life.formation", "life.mission", "life.service", "life.foundations", "life.conflict", "life.death", "life.writing", "reception.canonization", "reception.later"]
+    },
+    {
+      "id": "louis-company-life",
+      "title": "A Summary of the Life of St. Louis Marie",
+      "authorOrInstitution": "Montfort Missionaries, General Delegation of Great Britain and Ireland",
+      "publisher": "Company of Mary",
+      "url": "https://www.montfort.org.uk/life_summary.php",
+      "accessedDate": "2026-08-11",
+      "tier": 3,
+      "reuseBasis": "Official order narrative used for birth and formation, ordination, mission sequence, Poitiers hospital, Daughters of Wisdom and Company of Mary, 1706 Missionary Apostolic commission, death at 43, and canonization; estimated mission totals are omitted",
+      "supports": ["identity", "dates", "places", "vocation", "life.formation", "life.mission", "life.service", "life.foundations", "life.death", "life.writing", "reception.canonization", "sourceLimits"]
+    }
+  ],
+  "editorial": {
+    "state": "published",
+    "researcher": "Catholic Daily editorial research",
+    "reviewer": "Catholic Daily factual and theological review",
+    "reviewedAt": "2026-08-11",
+    "revision": 1,
+    "warnings": []
+  },
+  "whyItMatters": "Louis teaches a Marian discipleship whose destination is Jesus Christ and whose foundation is Baptism. His mission to ordinary and poor people challenges devotion to become service. Reading him responsibly also requires translating early-modern servitude language into free, adult, Christ-centered self-gift and refusing every use of religion to manipulate, dominate, or silence conscience.",
+  "oneMinuteSummary": "Louis-Marie Grignion was born in Brittany in 1673, studied in Rennes and Paris, and was ordained in 1700. He served at a hospital in Poitiers, preached parish missions across western France, worked with Marie-Louise Trichet in founding the Daughters of Wisdom, and sought to establish the Company of Mary. After difficulties with some local authorities and the prohibition of a large Calvary project, he continued mission work under the commission of Missionary Apostolic received in Rome in 1706. He died at Saint-Laurent-sur-Sèvre on April 28, 1716, aged 43, and was canonized in 1947. His writings later exercised broad influence, especially True Devotion to the Blessed Virgin. Montfort insists that Jesus Christ is the ultimate end and presents Marian consecration as a way of renewing baptismal self-gift to Christ. His early-modern language includes servitude and slavery of love. John Paul II both called for changes in language and interpreted the metaphor as voluntary, loving self-gift within the freedom of God's children. It can never justify human ownership, coercive control, abuse, manipulation, surrender of conscience, or bypassing Scripture and sacramental life. Practiced safely, Montfortian devotion means freely choosing Christ, asking Mary's help to live Baptism, serving poor neighbors, and remaining accountable to the Church and sound conscience.",
+  "life": {
+    "sections": [
+      {
+        "heading": "Formation for a missionary priesthood",
+        "body": "Born in Montfort-sur-Meu in 1673, Louis studied in Rennes and at Saint-Sulpice in Paris before ordination in 1700. His priesthood developed around a desire to teach the faith in accessible language and bring parish communities back to the promises of Baptism.",
+        "sourceIds": ["louis-universalis", "louis-company-life", "louis-jp2-1997"]
+      },
+      {
+        "heading": "Mission, poor neighbors, and new communities",
+        "body": "Louis moved between hospital service in Poitiers and parish missions in western France. With Marie-Louise Trichet he helped begin the Daughters of Wisdom, and he labored to establish the Company of Mary. Later reception rightly connects his preaching with concern for poor people and the participation of lay Christians in service.",
+        "sourceIds": ["louis-jp2-1997", "louis-universalis", "louis-company-life"]
+      },
+      {
+        "heading": "Perseverance under limits and conflict",
+        "body": "His unconventional methods met resistance, including removal from work and the prohibition of the Pontchâteau Calvary project. A 1706 journey to Rome resulted in a Missionary Apostolic commission, after which he continued preaching rather than turning frustration into a claim that every personal plan carried divine immunity from review.",
+        "sourceIds": ["louis-universalis", "louis-company-life"]
+      },
+      {
+        "heading": "Consecration ordered entirely to Christ",
+        "body": "Montfort's primary work makes Jesus the ultimate end of devotion and frames self-offering through Mary as renewal of baptismal belonging to Christ. Later papal teaching reads the spirituality in the same Christ-centered and baptismal key: Mary assists discipleship and never replaces the Savior, the Holy Spirit, Scripture, sacraments, or responsible conscience.",
+        "sourceIds": ["louis-true-devotion", "louis-redemptoris-mater", "louis-jp2-2004"]
+      },
+      {
+        "heading": "Historical servitude language translated safely",
+        "body": "Louis used early-modern language of servitude and slavery of love to express radical, voluntary self-gift to Jesus. John Paul II interpreted it through reciprocal love and the freedom of God's children and acknowledged that changes in language are needed. Today the metaphor must never endorse ownership, domination, manipulation, abuse, forced obedience, or surrender of conscience.",
+        "sourceIds": ["louis-true-devotion", "louis-jp2-2004", "louis-jp2-1997"]
+      }
+    ],
+    "gospelTheme": "At Baptism the disciple freely belongs to Jesus Christ; Mary serves this union by her example, intercession, and obedient attention to her Son.",
+    "struggle": "Louis faced institutional rejection and the challenge of preaching to ordinary communities, while his intense early-modern rhetoric can be misunderstood today as permission for domination or fear-based devotion.",
+    "response": "He continued parish mission and service, founded communities, called people back to baptismal promises, and wrote a Marian spirituality that responsible Catholic reception explicitly centers on Christ and freedom."
+  },
+  "virtues": [
+    {
+      "name": "Baptismal fidelity",
+      "evidence": "Louis made renewal of baptismal promises a recurring mission practice, and formal Church teaching interprets his consecration as a means of living those commitments faithfully in Christ.",
+      "imitation": "Renew one baptismal promise in your own words, choose one behavior that makes it concrete, and review it with a trusted pastor or mature Christian rather than relying on a dramatic private pledge.",
+      "sourceIds": ["louis-redemptoris-mater", "louis-jp2-1997", "louis-jp2-2004"]
+    },
+    {
+      "name": "Accessible service",
+      "evidence": "Louis's missions, hospital involvement, foundations, and later papal reception connect clear preaching with practical concern for poor people and lay participation in service.",
+      "imitation": "Ask a local service organization what ordinary help is needed, complete one unglamorous task on its terms, and avoid using the encounter to recruit, pressure, or advertise yourself.",
+      "sourceIds": ["louis-jp2-1997", "louis-universalis", "louis-company-life"]
+    },
+    {
+      "name": "Freedom in self-gift",
+      "evidence": "Montfort's difficult servitude metaphor is authoritatively interpreted as voluntary loving self-gift to Christ within the freedom of God's children, not domination by another human being.",
+      "imitation": "Before making a devotional commitment, check that it is freely chosen, revocable without threat, compatible with conscience and safeguarding, and ordered to Christ, Scripture, sacramental life, and love of neighbor.",
+      "sourceIds": ["louis-true-devotion", "louis-jp2-2004"]
+    }
+  ],
+  "practice": {
+    "spiritual": "Pray with John 2:5 and one baptismal promise. Ask Mary to direct you to whatever Jesus says, then name a free and proportionate response. If the practice produces terror, secrecy, compulsion, contempt for conscience, or dependence on a controlling person, stop and seek wise pastoral and safeguarding help.",
+    "action": "Carry out one requested act of service for a person or organization supporting poor neighbors. Obtain consent, follow their stated need, do not attach devotional pressure, and reflect afterward on how baptismal belonging to Christ became concrete love."
+  },
+  "reflectionQuestions": [
+    "Does my Marian devotion lead me more clearly to Jesus, Baptism, Scripture, sacramental life, freedom, and service, or does it make me fearful and dependent on human control?",
+    "What freely chosen act of love can renew my baptismal commitment without dramatic promises, guaranteed outcomes, or disregard for my responsibilities?"
+  ],
+  "scripture": {
+    "reference": "John 2:5",
+    "connection": "Mary's direction at Cana is toward Jesus: do what he tells you. This gives Montfortian devotion its safe center and measure, so consecration through Mary serves free baptismal obedience to Christ rather than replacing him or surrendering conscience to another person."
+  },
+  "prayer": "Lord Jesus Christ, our only Savior, through the intercession of Mary and Saint Louis de Montfort renew the grace of our Baptism. Purify our devotion of fear, exaggeration, and every desire to control. Teach us to receive Mary's help by turning toward you, listening to your word, sharing sacramental life, protecting conscience, and serving poor neighbors with consent and humility. Make our self-gift free, truthful, and fruitful in love. Amen."
+}
