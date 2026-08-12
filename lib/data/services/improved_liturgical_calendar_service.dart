@@ -207,6 +207,10 @@ class ImprovedLiturgicalCalendarService {
   }
 
   LiturgicalColor _getLiturgicalColor(LiturgicalSeason season, DateTime date, int weekNumber, DateTime easterSunday) {
+    if (date.month == 8 && date.day == 15) {
+      return LiturgicalColor.white;
+    }
+
     // Check for special days
     if (date.weekday == DateTime.sunday) {
       // Gaudete Sunday (3rd Advent)

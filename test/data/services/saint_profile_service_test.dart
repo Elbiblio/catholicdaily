@@ -149,6 +149,43 @@ void main() {
     }
   });
 
+  test('preserves reviewed Batch 9 identities and profile kinds', () async {
+    const expected = {
+      'the_assumption_of_the_blessed_virgin_mary': ('Q162691', 'observance'),
+      'stephen_of_hungary': ('Q177903', 'individual'),
+      'john_eudes': ('Q441714', 'individual'),
+      'queenship_of_blessed_virgin_mary': ('Q1358870', 'observance'),
+      'rose_of_lima': ('Q244383', 'individual'),
+      'bartholomew_apostle': ('Q43982', 'individual'),
+      'joseph_of_calasanz': ('Q360589', 'individual'),
+      'louis_ix_of_france': ('Q346', 'individual'),
+      'passion_of_john_the_baptist': ('Q2511873', 'observance'),
+      'nativity_of_blessed_virgin_mary': ('Q501107', 'observance'),
+      'peter_claver': ('Q167458', 'individual'),
+      'most_holy_name_of_mary': ('Q1537037', 'observance'),
+    };
+
+    for (final entry in expected.entries) {
+      final profile = await SaintProfileService.instance.findById(entry.key);
+
+      expect(profile, isNotNull, reason: entry.key);
+      expect(profile!.wikidataId, entry.value.$1, reason: entry.key);
+      expect(profile.kind.name, entry.value.$2, reason: entry.key);
+    }
+
+    for (final id in const [
+      'the_assumption_of_the_blessed_virgin_mary',
+      'queenship_of_blessed_virgin_mary',
+      'passion_of_john_the_baptist',
+      'nativity_of_blessed_virgin_mary',
+      'most_holy_name_of_mary',
+    ]) {
+      final profile = await SaintProfileService.instance.findById(id);
+      expect(profile!.lifeSpan, isEmpty, reason: id);
+      expect(profile.lifeLength, isEmpty, reason: id);
+    }
+  });
+
   test('preserves reviewed Batch 3 publication precision', () async {
     final frances = await SaintProfileService.instance.findById(
       'frances_of_rome',
@@ -333,6 +370,38 @@ void main() {
     expect(failures, isEmpty);
   });
 
+  test('Batch 9 one-minute summaries contain 100 to 150 words', () async {
+    const batch9Ids = [
+      'the_assumption_of_the_blessed_virgin_mary',
+      'stephen_of_hungary',
+      'john_eudes',
+      'queenship_of_blessed_virgin_mary',
+      'rose_of_lima',
+      'bartholomew_apostle',
+      'joseph_of_calasanz',
+      'louis_ix_of_france',
+      'passion_of_john_the_baptist',
+      'nativity_of_blessed_virgin_mary',
+      'peter_claver',
+      'most_holy_name_of_mary',
+    ];
+    final failures = <String>[];
+
+    for (final id in batch9Ids) {
+      final profile = await SaintProfileService.instance.findById(id);
+      final summary = profile!.guide!.oneMinuteSummary.trim();
+      final wordCount = summary
+          .split(RegExp(r'\s+'))
+          .where((word) => word.isNotEmpty)
+          .length;
+      if (wordCount < 100 || wordCount > 150) {
+        failures.add('$id: $wordCount words');
+      }
+    }
+
+    expect(failures, isEmpty);
+  });
+
   test('preserves reviewed Batch 7 calendar ranks and colors', () async {
     final cases = [
       (
@@ -503,6 +572,102 @@ void main() {
       final celebration = celebrations.singleWhere(
         (candidate) => candidate.id == entry.$2,
       );
+
+      expect(celebration.rank, entry.$3, reason: entry.$2);
+      expect(celebration.color, entry.$4, reason: entry.$2);
+    }
+  });
+
+  test('preserves reviewed Batch 9 calendar ranks and colors', () async {
+    final assumption = ImprovedLiturgicalCalendarService.instance
+        .getLiturgicalDay(DateTime(2026, 8, 15));
+    expect(assumption.title, 'The Assumption');
+    expect(assumption.rank, 'Solemnity');
+    expect(assumption.color, LiturgicalColor.white);
+
+    final cases = [
+      (
+        DateTime(2026, 8, 16),
+        'stephen_of_hungary',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 8, 19),
+        'john_eudes',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 8, 22),
+        'queenship_of_blessed_virgin_mary',
+        CelebrationRank.obligatoryMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 8, 23),
+        'rose_of_lima',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 8, 24),
+        'bartholomew_apostle',
+        CelebrationRank.feast,
+        LiturgicalColor.red,
+      ),
+      (
+        DateTime(2026, 8, 25),
+        'joseph_of_calasanz',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 8, 25),
+        'louis_ix_of_france',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 8, 29),
+        'passion_of_john_the_baptist',
+        CelebrationRank.obligatoryMemorial,
+        LiturgicalColor.red,
+      ),
+      (
+        DateTime(2026, 9, 8),
+        'nativity_of_blessed_virgin_mary',
+        CelebrationRank.feast,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 9, 9),
+        'peter_claver',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 9, 12),
+        'most_holy_name_of_mary',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+    ];
+
+    for (final entry in cases) {
+      final celebrations = await SaintCalendarService.instance
+          .getSaintCelebrationsForDate(date: entry.$1);
+      final matching = celebrations
+          .where((candidate) => candidate.id == entry.$2)
+          .toList(growable: false);
+      expect(
+        matching,
+        hasLength(1),
+        reason:
+            '${entry.$1.toIso8601String()}: '
+            '${celebrations.map((candidate) => candidate.id).join(', ')}',
+      );
+      final celebration = matching.single;
 
       expect(celebration.rank, entry.$3, reason: entry.$2);
       expect(celebration.color, entry.$4, reason: entry.$2);

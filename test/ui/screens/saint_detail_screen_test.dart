@@ -423,6 +423,78 @@ void main() {
     },
   );
 
+  testWidgets(
+    'Batch 9 real observances and representative person or group copy remain distinct',
+    (tester) async {
+      for (final id in const [
+        'the_assumption_of_the_blessed_virgin_mary',
+        'queenship_of_blessed_virgin_mary',
+        'passion_of_john_the_baptist',
+        'nativity_of_blessed_virgin_mary',
+        'most_holy_name_of_mary',
+      ]) {
+        final profile = await tester.runAsync(
+          () => SaintProfileService.instance.findById(id),
+        );
+
+        expect(profile, isNotNull, reason: id);
+        expect(profile!.kind, SaintProfileKind.observance, reason: id);
+        expect(profile.lifeSpan, isEmpty, reason: id);
+        expect(profile.lifeLength, isEmpty, reason: id);
+
+        await tester.pumpWidget(
+          _host(SaintLifeGuideView(profile: profile, onShowSources: () {})),
+        );
+
+        for (final heading in const [
+          'Why this observance matters today',
+          'What the Church celebrates',
+          'The Gospel at the heart of this observance',
+          'Dispositions to cultivate',
+        ]) {
+          expect(find.text(heading), findsWidgets, reason: id);
+        }
+        for (final personHeading in const [
+          'Lived',
+          'Length',
+          'Their life and journey',
+          'The Gospel visible in their life',
+          'Their response',
+          'Seen in their life',
+        ]) {
+          expect(find.text(personHeading), findsNothing, reason: id);
+        }
+      }
+
+      for (final id in const ['peter_claver', 'pontian_and_hippolytus']) {
+        final profile = await tester.runAsync(
+          () => SaintProfileService.instance.findById(id),
+        );
+
+        expect(profile, isNotNull, reason: id);
+        expect(profile!.kind, isNot(SaintProfileKind.observance), reason: id);
+
+        await tester.pumpWidget(
+          _host(SaintLifeGuideView(profile: profile, onShowSources: () {})),
+        );
+
+        expect(find.text('Their life and journey'), findsOneWidget, reason: id);
+        expect(
+          find.text('The Gospel visible in their life'),
+          findsOneWidget,
+          reason: id,
+        );
+        expect(find.text('Their response'), findsOneWidget, reason: id);
+        expect(find.text('Seen in their life'), findsWidgets, reason: id);
+        expect(
+          find.text('What the Church celebrates'),
+          findsNothing,
+          reason: id,
+        );
+      }
+    },
+  );
+
   testWidgets('group profiles retain person-centered guide copy', (
     tester,
   ) async {
