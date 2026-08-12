@@ -36,8 +36,8 @@
       "url": "https://saintcharbel.com/saint-charbel-biography/",
       "accessedDate": "2026-08-12",
       "tier": 3,
-      "reuseBasis": "Institutional monastery biography used cautiously for birth name and dates, Lebanese Maronite Order formation, vows, priesthood, sixteen years in community at Annaya, permission for the Saints Peter and Paul hermitage in 1875, manual work, final illness, death, burial, and later devotional reports; miracle and bodily claims remain reception",
-      "supports": ["identity", "alternateNames", "lifeSpan", "places", "life.formation", "life.vows", "life.priesthood", "life.community", "life.hermitage", "life.work", "life.illness", "life.death", "reception.tomb", "reception.miracles", "sourceLimits"]
+      "reuseBasis": "Institutional monastery biography used cautiously for birth name and dates, Lebanese Maronite Order formation, vows, priesthood, sixteen years in community at Annaya, permission for the Saints Peter and Paul hermitage in 1875, manual work, death, burial, and later devotional reports; miracle and bodily claims remain reception",
+      "supports": ["identity", "alternateNames", "lifeSpan", "places", "life.formation", "life.vows", "life.priesthood", "life.community", "life.hermitage", "life.work", "life.death", "reception.tomb", "reception.miracles", "sourceLimits"]
     },
     {
       "id": "sharbel-heyberger-identity",
@@ -69,7 +69,7 @@
     "sections": [
       {"heading": "A Maronite monastic vocation", "body": "Born Youssef Antoun Makhlouf in Bekaa Kafra in 1828, he entered Maronite monastic formation in 1851, took the name Sharbel, professed vows, and was ordained. His vocation belongs to the Syriac Maronite tradition in communion with the Catholic Church, not to a generic Western hermit stereotype.", "sourceIds": ["sharbel-paul-vi-canonization", "sharbel-annaya-biography", "sharbel-heyberger-identity"]},
       {"heading": "Community before hermitage", "body": "Sharbel lived for years within the community at Annaya before receiving permission in 1875 to enter the nearby hermitage. Prayer, liturgy, work, rule, and accountable authority formed his solitude. Healthy solitude remains bounded, freely discerned, and compatible with physical and psychological care.", "sourceIds": ["sharbel-annaya-biography", "sharbel-paul-vi-canonization"]},
-      {"heading": "Illness, death, and careful memory", "body": "Institutional accounts say Sharbel became ill while celebrating the liturgy and died on December 24, 1898. Illness is not proof of holiness, and severe ascetic practice is not a treatment plan. No one should imitate food restriction, exposure, sleep loss, or isolation that risks health.", "sourceIds": ["sharbel-annaya-biography"]},
+      {"heading": "Death and careful memory", "body": "The Annaya account records that Sharbel died on December 24, 1898, after twenty-three years in the hermitage. Severe ascetic practice is not a treatment plan or universal model. No one should imitate food restriction, exposure, sleep loss, or isolation that risks health.", "sourceIds": ["sharbel-annaya-biography", "sharbel-paul-vi-canonization"]},
       {"heading": "Devotion and healing claims", "body": "Posthumous devotion includes reports about Sharbel's remains and healings through his intercession. The profile records that reception without declaring every report verified or medically explained. Prayer never replaces clinical assessment, prescribed care, safeguarding, or truthful reporting of outcomes.", "sourceIds": ["sharbel-annaya-biography", "sharbel-heyberger-identity", "sharbel-paul-vi-canonization"]}
     ],
     "gospelTheme": "Christ calls disciples into prayer that bears fruit in faithful work, ecclesial communion, and love rather than withdrawal from responsibility.",
