@@ -88,6 +88,10 @@
     "assets/data/saints/profiles/sharbel_makhluf.json",
     "assets/data/saints/profiles/james_apostle.json",
     "assets/data/saints/profiles/peter_chrysologus.json",
-    "assets/data/saints/profiles/eusebius_of_vercelli.json"
+    "assets/data/saints/profiles/eusebius_of_vercelli.json",
+    "assets/data/saints/profiles/peter_julian_eymard.json",
+    "assets/data/saints/profiles/dedication_of_basilica_of_saint_mary_major.json",
+    "assets/data/saints/profiles/cajetan_of_thiene.json",
+    "assets/data/saints/profiles/sixtus_ii_pope.json"
   ]
 }
