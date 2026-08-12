@@ -83,11 +83,9 @@
             "url": "https://openlibrary.org/books/OL21137861M/Life_in_a_Jewish_family",
             "accessedDate": "2026-08-12",
             "tier": 1,
-            "reuseBasis": "Represented primary autobiographical writing, in a modern English translation, used for Stein's own account of Jewish family life and intellectual formation through 1916; its unfinished scope does not establish her later Carmel, deportation, death, or martyr reception",
+            "reuseBasis": "Bibliographic catalog record used only for authorship, title, unfinished-autobiography description, the 1986 ICS Publications edition, and Josephine Koeppel translation metadata; the catalog does not support claims about the autobiography's contents or Stein's life",
             "supports": [
-                "life.jewish_family",
-                "life.philosophy",
-                "works.autobiography",
+                "works.autobiography_bibliography",
                 "sourceLimits"
             ]
         },
@@ -195,8 +193,7 @@
                 "body": "Edith grew within a Jewish family and pursued philosophy, teaching, and a disciplined search for truth. Her later baptism must not be narrated as contempt for Judaism or disappearance of family identity.",
                 "sourceIds": [
                     "stein-jp2-canonization",
-                    "stein-jp2-europe",
-                    "stein-life-jewish-family"
+                    "stein-jp2-europe"
                 ]
             },
             {
@@ -239,7 +236,6 @@
             "imitation": "Check one claim about another faith or the Shoah against a Jewish or memorial institution before repeating it.",
             "sourceIds": [
                 "stein-jp2-canonization",
-                "stein-life-jewish-family",
                 "stein-cologne-archive"
             ]
         },
