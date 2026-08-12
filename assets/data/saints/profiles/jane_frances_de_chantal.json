@@ -39,8 +39,6 @@
             "reuseBasis": "Formal papal homily used for Jane's vocation as wife and mother, widowhood and bereavement, concern for her children's future, difficulty forgiving, friendship with Francis de Sales, and Visitation co-founding and leadership; ascetic details are not made universal prescriptions",
             "supports": [
                 "identity",
-                "lifeSpan",
-                "places",
                 "life.marriage",
                 "life.children",
                 "life.widowhood",
@@ -60,6 +58,9 @@
             "tier": 2,
             "reuseBasis": "Independent peer-reviewed philosophy reference used for chronology, family and widowhood, intellectual and spiritual agency, correspondence, Visitation leadership, and the need to interpret her thought beyond passive-obedience stereotypes",
             "supports": [
+                "identity",
+                "lifeSpan",
+                "places",
                 "life.family",
                 "life.widowhood",
                 "life.leadership",
@@ -67,15 +68,34 @@
             ]
         },
         {
+            "id": "chantal-selected-letters",
+            "title": "Selected Letters of Saint Jane Frances de Chantal",
+            "authorOrInstitution": "Jane Frances de Chantal; translated by the Sisters of the Visitation, Harrow",
+            "publisher": "R. & T. Washbourne, 1918; Internet Archive scan",
+            "url": "https://archive.org/details/selectedletterso00chanuoft",
+            "accessedDate": "2026-08-12",
+            "tier": 1,
+            "reuseBasis": "Represented primary correspondence in an early English selection used for Jane's own practical, familial, grief, health, governance, and spiritual voice; translators selected from the manuscript-based Annecy edition and acknowledge omissions and non-literal rendering, so no verbatim quotation or exhaustive conclusion is used",
+            "supports": [
+                "works.letters",
+                "life.family",
+                "life.grief",
+                "life.correspondence",
+                "life.leadership",
+                "safeguard.health",
+                "sourceLimits"
+            ]
+        },
+        {
             "id": "chantal-wright-friendship",
-            "title": "The Visitation of Holy Mary: The First Years (1610–1618)",
+            "title": "“Hearts Have a Secret Language”: The Spiritual Language of Francis de Sales and Jane de Chantal",
             "authorOrInstitution": "Wendy M. Wright",
             "publisher": "Vincentian Heritage Journal, DePaul University",
             "url": "https://via.library.depaul.edu/vhj/vol11/iss1/4/",
             "accessedDate": "2026-08-12",
             "tier": 2,
-            "reuseBasis": "Independent scholarly article used for the early Visitation, Jane and Francis de Sales's mutual spiritual friendship, collaborative founding, women's leadership, and adaptation of religious life; relationship is not reduced to unilateral obedience",
-            "supports": ["life.sales", "life.friendship", "life.visitation", "life.leadership", "historicalCertainty"]
+            "reuseBasis": "Independent scholarly article used narrowly for the relational and symbolic language of Jane and Francis de Sales's spiritual friendship; it controls a mutual-friendship interpretation without making the relationship a model of unilateral obedience or supporting unrelated chronology",
+            "supports": ["life.sales", "life.friendship", "sourceLimits"]
         },
         {
             "id": "chantal-calendar",
@@ -113,7 +133,8 @@
                 "body": "Jane's family vocation and bereavement are integral, not a disposable prelude to religious life.",
                 "sourceIds": [
                     "chantal-jp2-annecy",
-                    "chantal-iep-profile"
+                    "chantal-iep-profile",
+                    "chantal-selected-letters"
                 ]
             },
             {
@@ -121,6 +142,7 @@
                 "body": "Her relationship with Francis de Sales developed through correspondence and discernment, not erased agency.",
                 "sourceIds": [
                     "chantal-iep-profile",
+                    "chantal-selected-letters",
                     "chantal-wright-friendship"
                 ]
             },
@@ -129,7 +151,8 @@
                 "body": "Jane co-founded and governed a community shaped by charity and practical adaptation.",
                 "sourceIds": [
                     "chantal-jp2-annecy",
-                    "chantal-wright-friendship"
+                    "chantal-iep-profile",
+                    "chantal-selected-letters"
                 ]
             }
         ],
@@ -143,7 +166,8 @@
             "evidence": "Her correspondence preserves bereavement and ongoing family love.",
             "imitation": "Name a loss without forcing resolution and seek appropriate support.",
             "sourceIds": [
-                "chantal-iep-profile"
+                "chantal-iep-profile",
+                "chantal-selected-letters"
             ]
         },
         {
@@ -152,7 +176,8 @@
             "imitation": "Share authority and invite protected feedback.",
             "sourceIds": [
                 "chantal-jp2-annecy",
-                "chantal-wright-friendship"
+                "chantal-iep-profile",
+                "chantal-selected-letters"
             ]
         }
     ],

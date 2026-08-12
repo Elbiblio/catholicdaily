@@ -76,6 +76,38 @@
             ]
         },
         {
+            "id": "stein-life-jewish-family",
+            "title": "Life in a Jewish Family: Her Unfinished Autobiographical Account",
+            "authorOrInstitution": "Edith Stein; translated by Josephine Koeppel, OCD",
+            "publisher": "ICS Publications, 1986; Open Library catalog record",
+            "url": "https://openlibrary.org/books/OL21137861M/Life_in_a_Jewish_family",
+            "accessedDate": "2026-08-12",
+            "tier": 1,
+            "reuseBasis": "Represented primary autobiographical writing, in a modern English translation, used for Stein's own account of Jewish family life and intellectual formation through 1916; its unfinished scope does not establish her later Carmel, deportation, death, or martyr reception",
+            "supports": [
+                "life.jewish_family",
+                "life.philosophy",
+                "works.autobiography",
+                "sourceLimits"
+            ]
+        },
+        {
+            "id": "stein-cologne-archive",
+            "title": "Edith-Stein-Archiv zu Köln",
+            "authorOrInstitution": "Edith-Stein-Archiv zu Köln",
+            "publisher": "Edith-Stein-Archiv zu Köln; Karmel Maria vom Frieden",
+            "url": "https://www.edith-stein-archiv.de/",
+            "accessedDate": "2026-08-12",
+            "tier": 1,
+            "reuseBasis": "Official Carmelite research archive used to verify the surviving autograph, typescript, photograph, and documentary corpus, its preservation by the Cologne Carmel, and Stein's connection with Carmel; archival survival does not make later devotional quotations authentic without an exact manuscript or edition",
+            "supports": [
+                "life.carmel",
+                "works.archive",
+                "sourceLimits",
+                "historicalCertainty"
+            ]
+        },
+        {
             "id": "stein-yad-vashem-record",
             "title": "Stein Edith Teresia Hedwig",
             "authorOrInstitution": "Yad Vashem",
@@ -94,10 +126,26 @@
             ]
         },
         {
+            "id": "stein-ushmm-dutch-deportations",
+            "title": "Deportation of Dutch Jews",
+            "authorOrInstitution": "United States Holocaust Memorial Museum",
+            "publisher": "Holocaust Encyclopedia, United States Holocaust Memorial Museum",
+            "url": "https://encyclopedia.ushmm.org/content/en/timeline-event/holocaust/1942-1945/deportation-of-dutch-jews",
+            "accessedDate": "2026-08-12",
+            "tier": 2,
+            "reuseBasis": "Independent Holocaust-history control used for the German occupation, systematic deportation of Jews from the Netherlands, transit-camp system, and Auschwitz destination context; it does not independently identify Stein or establish a theological martyr category",
+            "supports": [
+                "context.nazi_netherlands",
+                "context.deportation",
+                "context.shoah",
+                "sourceLimits"
+            ]
+        },
+        {
             "id": "stein-sojka-controversies",
             "title": "The Controversies over the Figure of Edith Stein",
             "authorOrInstitution": "Jacek Sójka",
-            "publisher": "Człowiek i Społeczeństwo",
+            "publisher": "Zeszyty Naukowe Centrum Badań im. Edyty Stein, no. 11 (2014)",
             "url": "https://pressto.amu.edu.pl/index.php/cbes/article/view/4459",
             "accessedDate": "2026-08-12",
             "tier": 2,
@@ -147,7 +195,8 @@
                 "body": "Edith grew within a Jewish family and pursued philosophy, teaching, and a disciplined search for truth. Her later baptism must not be narrated as contempt for Judaism or disappearance of family identity.",
                 "sourceIds": [
                     "stein-jp2-canonization",
-                    "stein-jp2-europe"
+                    "stein-jp2-europe",
+                    "stein-life-jewish-family"
                 ]
             },
             {
@@ -155,7 +204,8 @@
                 "body": "She entered the Catholic Church and later Carmel as Teresa Benedicta. Christian reception honors that vocation without claiming that Jewishness was cancelled or that family grief and disagreement were insignificant.",
                 "sourceIds": [
                     "stein-jp2-canonization",
-                    "stein-jp2-europe"
+                    "stein-jp2-europe",
+                    "stein-cologne-archive"
                 ]
             },
             {
@@ -163,7 +213,8 @@
                 "body": "Nazi racial policy targeted Edith and Rosa as Jews. They were arrested, transported through Westerbork, deported, and murdered at Auschwitz-Birkenau. Genocide was evil inflicted on them, not sacrifice engineered by God or proof for another religion.",
                 "sourceIds": [
                     "stein-yad-vashem-record",
-                    "stein-jp2-europe"
+                    "stein-jp2-europe",
+                    "stein-ushmm-dutch-deportations"
                 ]
             },
             {
@@ -188,7 +239,8 @@
             "imitation": "Check one claim about another faith or the Shoah against a Jewish or memorial institution before repeating it.",
             "sourceIds": [
                 "stein-jp2-canonization",
-                "stein-yad-vashem-record"
+                "stein-life-jewish-family",
+                "stein-cologne-archive"
             ]
         },
         {
@@ -197,7 +249,8 @@
             "imitation": "Interrupt one antisemitic trope, document threats safely, and support Jewish neighbors without making them symbols for Christian purposes.",
             "sourceIds": [
                 "stein-yad-vashem-record",
-                "stein-jp2-europe"
+                "stein-jp2-europe",
+                "stein-ushmm-dutch-deportations"
             ]
         }
     ],

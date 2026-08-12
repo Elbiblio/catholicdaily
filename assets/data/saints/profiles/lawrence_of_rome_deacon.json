@@ -38,7 +38,6 @@
             "reuseBasis": "Early Roman calendar used for Lawrence's August 10 commemoration on the Via Tiburtina; it does not supply birth, gridiron, treasure dialogue, converts, or a complete biography",
             "supports": [
                 "identity",
-                "lifeSpan",
                 "places",
                 "cult.early",
                 "feastDates",
@@ -48,7 +47,7 @@
         {
             "id": "lawrence-ambrose-duties",
             "title": "On the Duties of the Clergy, Book II",
-            "authorOrInstitution": "Ambrose of Milan; translated by H. de Romestin",
+            "authorOrInstitution": "Ambrose of Milan; translated by H. de Romestin, E. de Romestin, and H. T. F. Duckworth",
             "publisher": "Nicene and Post-Nicene Fathers, Second Series, vol. 10, via New Advent",
             "url": "https://www.newadvent.org/fathers/34012.htm",
             "accessedDate": "2026-08-12",
@@ -98,6 +97,24 @@
             "supports": ["identity", "ecclesialTitle", "lifeSpan", "life.deacon", "life.258", "context.valerian", "cult.early", "tradition.passion", "sourceLimits"]
         },
         {
+            "id": "lawrence-catacomb-archaeology",
+            "title": "Catacomb of St. Lorenzo (or Ciriaca)",
+            "authorOrInstitution": "Pontifical Commission for Sacred Archaeology",
+            "publisher": "Holy See",
+            "url": "https://www.catacombeditalia.va/content/archeologiasacra/en/catacombs/by-provinces/rome/catacomb-of-st-lorenzo.html",
+            "accessedDate": "2026-08-12",
+            "tier": 1,
+            "reuseBasis": "Official archaeological site record used for the third-century cemetery, fourth-century monumentalization around a distinguished grave, Lawrence's burial area, and the Constantinian basilica connected to the tomb; archaeology supports an early burial cult but not the gridiron, treasure dialogue, Huesca origin, or named converts",
+            "supports": [
+                "places",
+                "cult.early",
+                "cult.archaeology",
+                "burial.lawrence",
+                "sourceLimits",
+                "historicalCertainty"
+            ]
+        },
+        {
             "id": "lawrence-calendar",
             "title": "Liturgical Calendar: Universal Calendar \u2014 August",
             "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
@@ -133,6 +150,7 @@
                 "body": "The Depositio records Lawrence on August 10 at the Via Tiburtina. It secures an early cult but not his birth, age, origin, or manner of death.",
                 "sourceIds": [
                     "lawrence-depositio-354",
+                    "lawrence-catacomb-archaeology",
                     "lawrence-lapidge-roman-martyrs"
                 ]
             },
@@ -171,6 +189,7 @@
             "imitation": "Tell the secure core and label later traditions honestly.",
             "sourceIds": [
                 "lawrence-depositio-354",
+                "lawrence-catacomb-archaeology",
                 "lawrence-lapidge-roman-martyrs"
             ]
         }

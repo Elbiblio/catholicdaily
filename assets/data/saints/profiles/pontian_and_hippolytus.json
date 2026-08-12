@@ -20,7 +20,7 @@
     ],
     "patronage": [],
     "symbols": [],
-    "briefBio": "Pontian was bishop of Rome and Hippolytus a Roman presbyter associated with opposition and a disputed body of writings. The Liberian Catalogue records their deportation to Sardinia in 235; the early martyr calendar commemorates them together on August 13 while locating their burials separately. Later Christian memory interprets their shared commemoration as reconciliation, but the early records do not narrate that event. Exact mine, torture, death, and Hippolytan authorship claims remain contested.",
+    "briefBio": "Pontian was bishop of Rome and Hippolytus a Roman presbyter associated with opposition and a disputed body of writings. The Liberian Catalogue records their deportation to Sardinia in 235; the early martyr calendar commemorates them together on August 13 while locating their burials separately. Later Christian memory interprets their shared commemoration as reconciliation, but the early records do not narrate that event. Detailed death stories and Hippolytan authorship claims remain contested.",
     "wikipediaUrl": "https://en.wikipedia.org/wiki/Pope_Pontian",
     "feastDates": [
         "August 13"
@@ -63,6 +63,41 @@
                 "cult.shared",
                 "burial.distinct",
                 "feastDates"
+            ]
+        },
+        {
+            "id": "pair-eusebius-history-six",
+            "title": "Church History, Book VI",
+            "authorOrInstitution": "Eusebius of Caesarea; translated by Arthur Cushman McGiffert",
+            "publisher": "Nicene and Post-Nicene Fathers, Second Series, vol. 1, via New Advent",
+            "url": "https://www.newadvent.org/fathers/250106.htm",
+            "accessedDate": "2026-08-12",
+            "tier": 1,
+            "reuseBasis": "Ancient Church-history witness used for early reception of Hippolytus as a church leader and author and for a surviving list of attributed works; Eusebius does not identify his see, pair him with Pontian, narrate reconciliation, or settle whether the later Hippolytan corpus belongs to one author",
+            "supports": [
+                "life.hippolytus",
+                "reception.hippolytus_author",
+                "corpus.early_list",
+                "sourceLimits",
+                "historicalCertainty"
+            ]
+        },
+        {
+            "id": "pair-pontian-inscription",
+            "title": "Recent Discoveries in the Catacomb of S. Callistus",
+            "authorOrInstitution": "H. Stuart Jones",
+            "publisher": "The Journal of Theological Studies, vol. os-XIII, no. 52 (1912), pp. 597–603; public-domain scan via Theology on the Web",
+            "url": "https://biblicalstudies.org.uk/pdf/jts/013_596.pdf",
+            "accessedDate": "2026-08-12",
+            "tier": 2,
+            "reuseBasis": "Archaeological report used for the recovered fragments of Pontian's Greek episcopal epitaph in the papal crypt and the later-added martyr monogram; its century-old interpretations are limited to the reported object and checked against the early catalogues, not used to prove a detailed death narrative",
+            "supports": [
+                "life.pontian",
+                "burial.pontian",
+                "inscription.pontian",
+                "reception.martyr",
+                "sourceLimits",
+                "historicalCertainty"
             ]
         },
         {
@@ -113,7 +148,7 @@
         "warnings": []
     },
     "whyItMatters": "Their shared memorial offers hope that conflict need not have the last word, while historical restraint prevents a plausible reconciliation from becoming invented dialogue or forced unity.",
-    "oneMinuteSummary": "Pontian was bishop of Rome and Hippolytus a Roman presbyter remembered amid early third-century church conflict. The Liberian Catalogue records that both were deported to Sardinia in 235. The early Roman martyr calendar commemorates them together on August 13 but preserves different burial places: Hippolytus on the Via Tiburtina and Pontian at the cemetery of Callistus. Their joint memory encouraged a tradition of reconciliation, yet the early records do not narrate when or how reconciliation occurred. Modern scholarship also disputes whether the many works attributed to Hippolytus belong to one author and how his opposition should be reconstructed. No synthetic Wikidata entity or shared lifespan is used. Later mine, torture, animal, and detailed death stories are not secure biography. Reconciliation today requires truth, consent, accountability, and safety; it never means forced reunion, silence about harm, or surrender to abusive authority.",
+    "oneMinuteSummary": "Pontian was bishop of Rome and Hippolytus a Roman presbyter remembered amid early third-century church conflict. The Liberian Catalogue records that both were deported to Sardinia in 235. The early Roman martyr calendar commemorates them together on August 13 but preserves different burial places: Hippolytus on the Via Tiburtina and Pontian at the cemetery of Callistus. Their joint memory encouraged a tradition of reconciliation, yet the early records do not narrate when or how reconciliation occurred. An excavated inscription identifies Pontian as bishop, while Eusebius preserves an early list of writings attributed to Hippolytus. Modern scholarship disputes whether the wider corpus belongs to one author and how his opposition should be reconstructed. No synthetic Wikidata entity or shared lifespan is used. Reconciliation today requires truth, consent, accountability, and safety; it never means forced reunion, silence about harm, or surrender to abusive authority.",
     "life": {
         "sections": [
             {
@@ -121,6 +156,8 @@
                 "body": "Pontian and Hippolytus had distinct offices and histories; their group profile does not merge identities.",
                 "sourceIds": [
                     "pair-liberian-catalogue",
+                    "pair-eusebius-history-six",
+                    "pair-pontian-inscription",
                     "pair-baldovin-hippolytus"
                 ]
             },
@@ -129,13 +166,15 @@
                 "body": "Early records preserve shared Sardinian deportation and later joint commemoration with distinct Roman burial sites.",
                 "sourceIds": [
                     "pair-liberian-catalogue",
-                    "pair-depositio-354"
+                    "pair-depositio-354",
+                    "pair-pontian-inscription"
                 ]
             },
             {
                 "heading": "Reconciliation with restraint",
                 "body": "Reconciliation is a plausible received interpretation, not an early narrated scene; the Hippolytan corpus and schism remain disputed.",
                 "sourceIds": [
+                    "pair-eusebius-history-six",
                     "pair-baldovin-hippolytus",
                     "pair-depositio-354"
                 ]
@@ -159,6 +198,7 @@
             "evidence": "Hippolytus's identity, schism, and corpus remain contested.",
             "imitation": "State what is known, inferred, and unresolved before arguing from history.",
             "sourceIds": [
+                "pair-eusebius-history-six",
                 "pair-baldovin-hippolytus"
             ]
         }
