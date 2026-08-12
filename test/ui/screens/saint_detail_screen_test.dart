@@ -564,6 +564,75 @@ void main() {
     },
   );
 
+  testWidgets(
+    'Batch 11 Aparecida remains observance-centered while individual, biblical, and group copy remain person-centered',
+    (tester) async {
+      final observance = await tester.runAsync(
+        () => SaintProfileService.instance.findById('our_lady_of_aparecida'),
+      );
+
+      expect(observance, isNotNull);
+      expect(observance!.kind, SaintProfileKind.observance);
+      expect(observance.lifeSpan, isEmpty);
+      expect(observance.lifeLength, isEmpty);
+
+      await tester.pumpWidget(
+        _host(SaintLifeGuideView(profile: observance, onShowSources: () {})),
+      );
+
+      for (final heading in const [
+        'Why this observance matters today',
+        'What the Church celebrates',
+        'The Gospel at the heart of this observance',
+        'Dispositions to cultivate',
+      ]) {
+        expect(find.text(heading), findsWidgets, reason: heading);
+      }
+      for (final personHeading in const [
+        'Lived',
+        'Length',
+        'Their life and journey',
+        'The Gospel visible in their life',
+        'Their response',
+        'Seen in their life',
+      ]) {
+        expect(find.text(personHeading), findsNothing, reason: personHeading);
+      }
+
+      for (final id in const [
+        'john_xxiii_pope',
+        'luke_evangelist',
+        'john_de_brebeuf_and_isaac_jogues',
+        'simon_and_jude_apostles',
+      ]) {
+        final profile = await tester.runAsync(
+          () => SaintProfileService.instance.findById(id),
+        );
+
+        expect(profile, isNotNull, reason: id);
+        expect(profile!.kind, isNot(SaintProfileKind.observance), reason: id);
+
+        await tester.pumpWidget(
+          _host(SaintLifeGuideView(profile: profile, onShowSources: () {})),
+        );
+
+        expect(find.text('Their life and journey'), findsOneWidget, reason: id);
+        expect(
+          find.text('The Gospel visible in their life'),
+          findsOneWidget,
+          reason: id,
+        );
+        expect(find.text('Their response'), findsOneWidget, reason: id);
+        expect(find.text('Seen in their life'), findsWidgets, reason: id);
+        expect(
+          find.text('What the Church celebrates'),
+          findsNothing,
+          reason: id,
+        );
+      }
+    },
+  );
+
   testWidgets('group profiles retain person-centered guide copy', (
     tester,
   ) async {

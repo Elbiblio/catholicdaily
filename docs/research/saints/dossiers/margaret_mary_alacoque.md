@@ -58,4 +58,4 @@ The 1915 corpus is used as attributed primary evidence; modern editorial matter,
 - Status: published
 - Warnings: none
 - Published validator command: `dart run tool/validate_saint_profiles.dart --published-only`
-- Observed result: `Saint profile validation: 158 total, 158 legacy, 128 researched, 128 validated, 0 errors, 0 warnings.`
+- Observed result: `Saint profile validation: 158 total, 158 legacy, 132 researched, 132 validated, 0 errors, 0 warnings.`

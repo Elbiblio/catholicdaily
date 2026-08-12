@@ -59,4 +59,4 @@ The public profile is original synthesis. The old MacMahon translation is credit
 - Status: published
 - Warnings: none
 - Published validator command: `dart run tool/validate_saint_profiles.dart --published-only`
-- Observed result: `Saint profile validation: 158 total, 158 legacy, 124 researched, 124 validated, 0 errors, 0 warnings.`
+- Observed result: `Saint profile validation: 158 total, 158 legacy, 132 researched, 132 validated, 0 errors, 0 warnings.`

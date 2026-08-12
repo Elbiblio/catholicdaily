@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:catholic_daily/data/models/saint_profile_source.dart';
 import 'package:catholic_daily/data/services/improved_liturgical_calendar_service.dart';
+import 'package:catholic_daily/data/models/liturgical_region.dart';
+import 'package:catholic_daily/data/services/offline_ordo_lookup_service.dart';
 import 'package:catholic_daily/data/services/optional_memorial_service.dart';
 import 'package:catholic_daily/data/services/reading_catalog_service.dart';
 import 'package:catholic_daily/data/services/saint_calendar_service.dart';
@@ -216,6 +218,42 @@ void main() {
       'cosmas_and_damian',
       'lawrence_ruiz',
       'denis_of_paris',
+    ]) {
+      final profile = await SaintProfileService.instance.findById(id);
+      expect(profile!.lifeSpan, isEmpty, reason: id);
+      expect(profile.lifeLength, isEmpty, reason: id);
+    }
+  });
+
+  test('preserves reviewed Batch 11 identities and profile kinds', () async {
+    const expected = <String, (String?, String)>{
+      'john_xxiii_pope': ('Q23873', 'individual'),
+      'our_lady_of_aparecida': (null, 'observance'),
+      'callistus_i_pope': ('Q122376', 'individual'),
+      'hedwig_of_silesia': ('Q57520', 'individual'),
+      'margaret_mary_alacoque': ('Q235853', 'individual'),
+      'luke_evangelist': ('Q128538', 'biblical'),
+      'john_de_brebeuf_and_isaac_jogues': ('Q2653872', 'group'),
+      'paul_of_the_cross': ('Q370261', 'individual'),
+      'john_paul_ii_pope': ('Q989', 'individual'),
+      'john_of_capistrano': ('Q310359', 'individual'),
+      'anthony_mary_claret': ('Q162973', 'individual'),
+      'simon_and_jude_apostles': ('Q10400498', 'group'),
+    };
+
+    for (final entry in expected.entries) {
+      final profile = await SaintProfileService.instance.findById(entry.key);
+
+      expect(profile, isNotNull, reason: entry.key);
+      expect(profile!.wikidataId, entry.value.$1, reason: entry.key);
+      expect(profile.kind.name, entry.value.$2, reason: entry.key);
+    }
+
+    for (final id in const [
+      'our_lady_of_aparecida',
+      'luke_evangelist',
+      'john_de_brebeuf_and_isaac_jogues',
+      'simon_and_jude_apostles',
     ]) {
       final profile = await SaintProfileService.instance.findById(id);
       expect(profile!.lifeSpan, isEmpty, reason: id);
@@ -457,6 +495,38 @@ void main() {
     final failures = <String>[];
 
     for (final id in batch10Ids) {
+      final profile = await SaintProfileService.instance.findById(id);
+      final summary = profile!.guide!.oneMinuteSummary.trim();
+      final wordCount = summary
+          .split(RegExp(r'\s+'))
+          .where((word) => word.isNotEmpty)
+          .length;
+      if (wordCount < 100 || wordCount > 150) {
+        failures.add('$id: $wordCount words');
+      }
+    }
+
+    expect(failures, isEmpty);
+  });
+
+  test('Batch 11 one-minute summaries contain 100 to 150 words', () async {
+    const batch11Ids = [
+      'john_xxiii_pope',
+      'our_lady_of_aparecida',
+      'callistus_i_pope',
+      'hedwig_of_silesia',
+      'margaret_mary_alacoque',
+      'luke_evangelist',
+      'john_de_brebeuf_and_isaac_jogues',
+      'paul_of_the_cross',
+      'john_paul_ii_pope',
+      'john_of_capistrano',
+      'anthony_mary_claret',
+      'simon_and_jude_apostles',
+    ];
+    final failures = <String>[];
+
+    for (final id in batch11Ids) {
       final profile = await SaintProfileService.instance.findById(id);
       final summary = profile!.guide!.oneMinuteSummary.trim();
       final wordCount = summary
@@ -829,6 +899,96 @@ void main() {
       expect(matching.single.rank, entry.$3, reason: entry.$2);
       expect(matching.single.color, entry.$4, reason: entry.$2);
     }
+  });
+
+  test('preserves reviewed Batch 11 calendar ranks and colors', () async {
+    final cases = [
+      (
+        DateTime(2026, 10, 11),
+        'john_xxiii_pope',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 10, 14),
+        'callistus_i_pope',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.red,
+      ),
+      (
+        DateTime(2026, 10, 16),
+        'hedwig_of_silesia',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 10, 16),
+        'margaret_mary_alacoque',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 10, 18),
+        'luke_evangelist',
+        CelebrationRank.feast,
+        LiturgicalColor.red,
+      ),
+      (
+        DateTime(2026, 10, 19),
+        'john_de_brebeuf_and_isaac_jogues',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.red,
+      ),
+      (
+        DateTime(2026, 10, 19),
+        'paul_of_the_cross',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 10, 22),
+        'john_paul_ii_pope',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 10, 23),
+        'john_of_capistrano',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 10, 24),
+        'anthony_mary_claret',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 10, 28),
+        'simon_and_jude_apostles',
+        CelebrationRank.feast,
+        LiturgicalColor.red,
+      ),
+    ];
+
+    for (final entry in cases) {
+      final celebrations = await SaintCalendarService.instance
+          .getSaintCelebrationsForDate(date: entry.$1);
+      final matching = celebrations
+          .where((candidate) => candidate.id == entry.$2)
+          .toList();
+      expect(matching, hasLength(1), reason: entry.$2);
+      expect(matching.single.rank, entry.$3, reason: entry.$2);
+      expect(matching.single.color, entry.$4, reason: entry.$2);
+    }
+
+    final aparecida = OfflineOrdoLookupService.instance.resolve(
+      DateTime(2026, 10, 12),
+      region: LiturgicalRegion.brazil,
+    );
+    expect(aparecida.title, 'Our Lady of Aparecida');
+    expect(aparecida.rank, 'Solemnity');
+    expect(aparecida.color, LiturgicalColor.white);
   });
 
   test(

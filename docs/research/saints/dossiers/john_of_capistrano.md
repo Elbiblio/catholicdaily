@@ -30,6 +30,7 @@
 
 | Profile field | Claim or editorial conclusion | Source IDs | Certainty | Reconciliation note |
 |---|---|---|---|---|
+| reception.correspondence_corpus | A 2018 critical edition catalogs Capistrano's 1451–1456 Poland-and-Silesia correspondence in Latin with English translation. | capistrano-correspondence | Documented bibliographic record | The repository landing page exposes metadata, not letter content, so it carries no substantive event claim. |
 | identity; lifeSpan; authority | Capistrano was friar, priest and legal actor; formal reception supplies 1386–1456. | capistrano-causes; capistrano-supplication | Documented; formal and primary | Primary petition is not targeted communities' voice. |
 | life.inquisition | He held inquisitorial office and acted as executor of restrictions against Jews. | capistrano-sedda-inquisitor | Documented | Office distinctions do not reduce coercion. |
 | history.anti_jewish_rhetoric | His sermons contained pervasive, unusually virulent anti-Jewish rhetoric. | capistrano-sedda-sermons; capistrano-ben-sasson | Documented; specialist synthesis | Never repeat medieval accusations as fact. |
