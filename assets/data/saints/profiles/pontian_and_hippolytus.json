@@ -1,0 +1,179 @@
+{
+    "schemaVersion": 2,
+    "id": "pontian_and_hippolytus",
+    "profileKind": "group",
+    "celebrationIds": [
+        "pontian_and_hippolytus",
+        "saints_pontian_pope_and_hippolytus_priest_martyrs"
+    ],
+    "name": "Saints Pontian, Pope, and Hippolytus, Priest, Martyrs",
+    "alternateNames": [
+        "Pontian and Hippolytus"
+    ],
+    "ecclesialTitle": "Pope and priest, martyrs",
+    "vocation": "Distinct early Roman church leaders remembered together after exile",
+    "places": [
+        "Rome",
+        "Sardinia",
+        "Catacomb of Callistus",
+        "Via Tiburtina"
+    ],
+    "patronage": [],
+    "symbols": [],
+    "briefBio": "Pontian was bishop of Rome and Hippolytus a Roman presbyter associated with opposition and a disputed body of writings. The Liberian Catalogue records their deportation to Sardinia in 235; the early martyr calendar commemorates them together on August 13 while locating their burials separately. Later Christian memory interprets their shared commemoration as reconciliation, but the early records do not narrate that event. Exact mine, torture, death, and Hippolytan authorship claims remain contested.",
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Pope_Pontian",
+    "feastDates": [
+        "August 13"
+    ],
+    "historicalCertainty": "mixed",
+    "sources": [
+        {
+            "id": "pair-liberian-catalogue",
+            "title": "The Liberian Catalogue",
+            "authorOrInstitution": "Anonymous Roman compiler; translated by Roger Pearse",
+            "publisher": "Tertullian.org",
+            "url": "https://www.tertullian.org/fathers/chronography_of_354_13_bishops_of_rome.htm",
+            "accessedDate": "2026-08-12",
+            "tier": 1,
+            "reuseBasis": "Early Roman episcopal catalogue used for Pontian's episcopate, deposition, and deportation with Hippolytus to Sardinia in 235; it does not narrate reconciliation or detailed deaths",
+            "supports": [
+                "identity",
+                "group",
+                "places",
+                "life.pontian",
+                "life.hippolytus",
+                "life.deportation",
+                "life.235",
+                "sourceLimits"
+            ]
+        },
+        {
+            "id": "pair-depositio-354",
+            "title": "The Chronography of 354 AD, Part 12: Commemorations of the Martyrs",
+            "authorOrInstitution": "Anonymous Roman compiler; English translation hosted by Roger Pearse",
+            "publisher": "Tertullian.org; source text in Monumenta Germaniae Historica, Chronica Minora I",
+            "url": "https://www.tertullian.org/fathers/chronography_of_354_12_depositions_martyrs.htm",
+            "accessedDate": "2026-08-12",
+            "tier": 1,
+            "reuseBasis": "Early Roman calendar used for their joint August 13 commemoration and distinct burial locations, Hippolytus on the Via Tiburtina and Pontian at Callistus",
+            "supports": [
+                "identity",
+                "group",
+                "places",
+                "cult.shared",
+                "burial.distinct",
+                "feastDates"
+            ]
+        },
+        {
+            "id": "pair-baldovin-hippolytus",
+            "title": "Hippolytus and the Apostolic Tradition: Recent Research and Commentary",
+            "authorOrInstitution": "John F. Baldovin, SJ",
+            "publisher": "Theological Studies, vol. 64 (2003), pp. 520–542",
+            "url": "https://theologicalstudies.net/wp-content/uploads/2022/08/64.3.3.pdf",
+            "accessedDate": "2026-08-12",
+            "tier": 2,
+            "reuseBasis": "Independent peer-reviewed review used for recent research on Hippolytus, the conventional Roman third-century synthesis, disputed attribution of the Apostolic Tradition and wider corpus, and limits on reconstructing one author or a simple schism narrative",
+            "supports": [
+                "life.hippolytus",
+                "context.schism",
+                "reception.reconciliation",
+                "corpus.disputed",
+                "historicalCertainty",
+                "sourceLimits"
+            ]
+        },
+        {
+            "id": "pair-calendar",
+            "title": "Liturgical Calendar: Universal Calendar \u2014 August",
+            "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+            "publisher": "Catholic Bishops' Conference of England and Wales",
+            "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/AugUC.shtml",
+            "accessedDate": "2026-08-12",
+            "tier": 1,
+            "reuseBasis": "Formal calendar used for the collective title, August 13 optional memorial, and red color",
+            "supports": [
+                "identity",
+                "profileKind",
+                "group",
+                "celebrationIds",
+                "ecclesialTitle",
+                "feastDates",
+                "calendar.rank",
+                "calendar.color"
+            ]
+        }
+    ],
+    "editorial": {
+        "state": "published",
+        "researcher": "Catholic Daily editorial research",
+        "reviewer": "Catholic Daily factual and theological review",
+        "reviewedAt": "2026-08-12",
+        "revision": 1,
+        "warnings": []
+    },
+    "whyItMatters": "Their shared memorial offers hope that conflict need not have the last word, while historical restraint prevents a plausible reconciliation from becoming invented dialogue or forced unity.",
+    "oneMinuteSummary": "Pontian was bishop of Rome and Hippolytus a Roman presbyter remembered amid early third-century church conflict. The Liberian Catalogue records that both were deported to Sardinia in 235. The early Roman martyr calendar commemorates them together on August 13 but preserves different burial places: Hippolytus on the Via Tiburtina and Pontian at the cemetery of Callistus. Their joint memory encouraged a tradition of reconciliation, yet the early records do not narrate when or how reconciliation occurred. Modern scholarship also disputes whether the many works attributed to Hippolytus belong to one author and how his opposition should be reconstructed. No synthetic Wikidata entity or shared lifespan is used. Later mine, torture, animal, and detailed death stories are not secure biography. Reconciliation today requires truth, consent, accountability, and safety; it never means forced reunion, silence about harm, or surrender to abusive authority.",
+    "life": {
+        "sections": [
+            {
+                "heading": "Two distinct leaders",
+                "body": "Pontian and Hippolytus had distinct offices and histories; their group profile does not merge identities.",
+                "sourceIds": [
+                    "pair-liberian-catalogue",
+                    "pair-baldovin-hippolytus"
+                ]
+            },
+            {
+                "heading": "Exile and separate burials",
+                "body": "Early records preserve shared Sardinian deportation and later joint commemoration with distinct Roman burial sites.",
+                "sourceIds": [
+                    "pair-liberian-catalogue",
+                    "pair-depositio-354"
+                ]
+            },
+            {
+                "heading": "Reconciliation with restraint",
+                "body": "Reconciliation is a plausible received interpretation, not an early narrated scene; the Hippolytan corpus and schism remain disputed.",
+                "sourceIds": [
+                    "pair-baldovin-hippolytus",
+                    "pair-depositio-354"
+                ]
+            }
+        ],
+        "gospelTheme": "Christ calls divided disciples toward truthful peace without erasing persons, accountability, or justice.",
+        "struggle": "A tidy reconciliation story can hide disputed evidence or pressure harmed people into unsafe reunion.",
+        "response": "Preserve distinct identities, qualify reconstruction, and pursue peace through truth, consent, repair, and safe boundaries."
+    },
+    "virtues": [
+        {
+            "name": "Hope for reconciliation",
+            "evidence": "Their distinct names and burials entered one liturgical memorial.",
+            "imitation": "Take one accountable step toward repair without demanding contact or absolution.",
+            "sourceIds": [
+                "pair-depositio-354"
+            ]
+        },
+        {
+            "name": "Intellectual humility",
+            "evidence": "Hippolytus's identity, schism, and corpus remain contested.",
+            "imitation": "State what is known, inferred, and unresolved before arguing from history.",
+            "sourceIds": [
+                "pair-baldovin-hippolytus"
+            ]
+        }
+    ],
+    "practice": {
+        "spiritual": "Pray Ephesians 4:1\u20133 for peace joined to patience and truth.",
+        "action": "For one conflict, write separate needs for truth, repair, boundaries, and possible contact; seek mediation only when safe."
+    },
+    "reflectionQuestions": [
+        "Am I confusing reconciliation with forced access or silence?",
+        "Can I honor shared memory without merging distinct people and disputed histories?"
+    ],
+    "scripture": {
+        "reference": "Ephesians 4:1\u20133",
+        "connection": "Paul calls for peace through humility and patience, not coerced uniformity."
+    },
+    "prayer": "Lord Jesus, through Saints Pontian and Hippolytus give your Church truth without contempt and peace without coercion. Protect the harmed, humble the powerful, and guide divided people toward accountable repair when it is safe. Amen."
+}

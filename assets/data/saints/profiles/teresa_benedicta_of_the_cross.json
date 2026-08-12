@@ -1,0 +1,217 @@
+{
+    "schemaVersion": 2,
+    "id": "teresa_benedicta_of_the_cross",
+    "profileKind": "individual",
+    "celebrationIds": [
+        "teresa_benedicta_of_the_cross",
+        "saint_teresa_benedicta_of_the_cross_virgin_and_martyr"
+    ],
+    "name": "Saint Teresa Benedicta of the Cross, Virgin and Martyr",
+    "alternateNames": [
+        "Edith Stein"
+    ],
+    "ecclesialTitle": "Virgin and Martyr",
+    "lifeSpan": "1891\u20131942",
+    "vocation": "German Jewish philosopher, educator, Carmelite nun, and Shoah victim",
+    "places": [
+        "Breslau",
+        "Cologne",
+        "Echt",
+        "Auschwitz-Birkenau"
+    ],
+    "patronage": [
+        "Europe"
+    ],
+    "symbols": [],
+    "briefBio": "Edith Stein was born into a Jewish family, became a philosopher and educator, entered the Catholic Church, and later became the Carmelite Teresa Benedicta of the Cross. Nazi racial law continued to target her as Jewish. Deported from the Netherlands with her sister Rosa in 1942, she was murdered at Auschwitz-Birkenau. Baptism did not erase her Jewish birth, family, or the antisemitic reason for her deportation. The Church formally receives her as martyr and co-patroness of Europe, while historical discussion of that martyr category must never obscure the Shoah or appropriate Jewish suffering.",
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Edith_Stein",
+    "wikidataId": "Q76749",
+    "feastDates": [
+        "August 9"
+    ],
+    "historicalCertainty": "mixed",
+    "sources": [
+        {
+            "id": "stein-jp2-canonization",
+            "title": "Canonization of Edith Stein, 11 October 1998",
+            "authorOrInstitution": "Pope John Paul II",
+            "publisher": "The Holy See",
+            "url": "https://www.vatican.va/content/john-paul-ii/en/homilies/1998/documents/hf_jp-ii_hom_11101998_stein.html",
+            "accessedDate": "2026-08-12",
+            "tier": 1,
+            "reuseBasis": "Formal canonization homily used for Edith Stein's Jewish family, philosophical search, baptism, Carmel, Nazi persecution, deportation with Rosa, Church reception as martyr, and canonization; theological interpretation is not substituted for independent Shoah evidence",
+            "supports": [
+                "identity",
+                "alternateNames",
+                "lifeSpan",
+                "places",
+                "life.jewish_family",
+                "life.philosophy",
+                "life.baptism",
+                "life.carmel",
+                "life.rosa",
+                "life.deportation",
+                "reception.martyr",
+                "reception.canonization"
+            ]
+        },
+        {
+            "id": "stein-jp2-europe",
+            "title": "Spes Aedificandi",
+            "authorOrInstitution": "Pope John Paul II",
+            "publisher": "The Holy See",
+            "url": "https://www.vatican.va/content/john-paul-ii/en/motu_proprio/documents/hf_jp-ii_motu-proprio_01101999_co-patronesses-europe.html",
+            "accessedDate": "2026-08-12",
+            "tier": 1,
+            "reuseBasis": "Formal motu proprio used for Teresa Benedicta's designation as co-patroness of Europe, her intellectual and Carmelite vocation, Jewish identity, Nazi racial persecution, and the duty to oppose racism and antisemitism",
+            "supports": [
+                "identity",
+                "patronage",
+                "patronage.europe",
+                "life.philosophy",
+                "life.carmel",
+                "life.jewish_identity",
+                "context.nazism",
+                "safeguard.antisemitism"
+            ]
+        },
+        {
+            "id": "stein-yad-vashem-record",
+            "title": "Stein Edith Teresia Hedwig",
+            "authorOrInstitution": "Yad Vashem",
+            "publisher": "The Central Database of Shoah Victims' Names, Yad Vashem",
+            "url": "https://collections.yadvashem.org/en/names/9627362",
+            "accessedDate": "2026-08-12",
+            "tier": 1,
+            "reuseBasis": "Shoah victim archive record used for Edith Stein's identity, 1891 birth year, Auschwitz as place of murder, and death date 9 August 1942; the archive is not used to validate theological martyr claims or fabricated last words",
+            "supports": [
+                "identity",
+                "lifeSpan",
+                "places",
+                "life.murder",
+                "context.shoah",
+                "historicalCertainty"
+            ]
+        },
+        {
+            "id": "stein-sojka-controversies",
+            "title": "The Controversies over the Figure of Edith Stein",
+            "authorOrInstitution": "Jacek Sójka",
+            "publisher": "Człowiek i Społeczeństwo",
+            "url": "https://pressto.amu.edu.pl/index.php/cbes/article/view/4459",
+            "accessedDate": "2026-08-12",
+            "tier": 2,
+            "reuseBasis": "Independent scholarly article used for disputes surrounding Edith Stein's Christian reception and martyr designation, and for maintaining Jewish identity and Shoah context without turning genocide into a conversion narrative",
+            "supports": [
+                "reception.martyr",
+                "reception.controversy",
+                "life.jewish_identity",
+                "context.shoah",
+                "historicalCertainty",
+                "sourceLimits"
+            ]
+        },
+        {
+            "id": "stein-calendar",
+            "title": "Liturgical Calendar: Universal Calendar \u2014 August",
+            "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+            "publisher": "Catholic Bishops' Conference of England and Wales",
+            "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/AugUC.shtml",
+            "accessedDate": "2026-08-12",
+            "tier": 1,
+            "reuseBasis": "Formal calendar used for the canonical title, August 9 optional memorial, and red color; the key establishes that an entry without a printed rank is optional",
+            "supports": [
+                "identity",
+                "celebrationIds",
+                "ecclesialTitle",
+                "feastDates",
+                "calendar.rank",
+                "calendar.color"
+            ]
+        }
+    ],
+    "editorial": {
+        "state": "published",
+        "researcher": "Catholic Daily editorial research",
+        "reviewer": "Catholic Daily factual and theological review",
+        "reviewedAt": "2026-08-12",
+        "revision": 1,
+        "warnings": []
+    },
+    "whyItMatters": "Edith Stein joins rigorous thought, prayer, and solidarity while requiring truthful Shoah remembrance. Her Jewish identity cannot be erased by Christian reception, and her murder cannot be made spiritually necessary or used as a conversion argument.",
+    "oneMinuteSummary": "Edith Stein was born in Breslau in 1891 into a Jewish family whose bonds remained important throughout her life. A philosopher and educator, she entered the Catholic Church in 1922 and later became the Carmelite Teresa Benedicta of the Cross. Baptism did not erase her Jewish birth, family, or the racial category imposed by Nazi persecution. After moving to Echt in the Netherlands, she and her sister Rosa were arrested in 1942, sent through Westerbork, deported, and murdered at Auschwitz-Birkenau. The Shoah was genocide, not a redemptive event, divine punishment, or instrument for conversion. The Church formally canonized Teresa Benedicta as a martyr and named her co-patroness of Europe; historians may still examine that category without denying her holiness. Her witness calls Christians to truth, intellectual honesty, resistance to antisemitism, protection of endangered neighbors, and remembrance centered on victims rather than devotional legend or fabricated last words.",
+    "life": {
+        "sections": [
+            {
+                "heading": "Jewish daughter and philosopher",
+                "body": "Edith grew within a Jewish family and pursued philosophy, teaching, and a disciplined search for truth. Her later baptism must not be narrated as contempt for Judaism or disappearance of family identity.",
+                "sourceIds": [
+                    "stein-jp2-canonization",
+                    "stein-jp2-europe"
+                ]
+            },
+            {
+                "heading": "Catholic and Carmelite vocation",
+                "body": "She entered the Catholic Church and later Carmel as Teresa Benedicta. Christian reception honors that vocation without claiming that Jewishness was cancelled or that family grief and disagreement were insignificant.",
+                "sourceIds": [
+                    "stein-jp2-canonization",
+                    "stein-jp2-europe"
+                ]
+            },
+            {
+                "heading": "Murdered in the Shoah",
+                "body": "Nazi racial policy targeted Edith and Rosa as Jews. They were arrested, transported through Westerbork, deported, and murdered at Auschwitz-Birkenau. Genocide was evil inflicted on them, not sacrifice engineered by God or proof for another religion.",
+                "sourceIds": [
+                    "stein-yad-vashem-record",
+                    "stein-jp2-europe"
+                ]
+            },
+            {
+                "heading": "Martyr reception and historical care",
+                "body": "The Church canonized Teresa Benedicta as martyr and co-patroness of Europe. Formal theological reception and historical analysis answer different questions. Neither permits fabricated last words, victim blame, erasure of Jewish victims, or use of the Shoah as a conversion narrative.",
+                "sourceIds": [
+                    "stein-jp2-canonization",
+                    "stein-jp2-europe",
+                    "stein-yad-vashem-record",
+                    "stein-sojka-controversies"
+                ]
+            }
+        ],
+        "gospelTheme": "Christ calls disciples to truth and costly solidarity while commanding remembrance that protects, rather than appropriates, the suffering of others.",
+        "struggle": "Christian devotion can erase Edith's Jewish identity, turn genocide into providential drama, or center canonization instead of victims and antisemitism.",
+        "response": "Hold her Jewish family, intellectual vocation, Carmelite life, Nazi racial persecution, Shoah murder, and formal Church reception together without collapsing their distinct meanings."
+    },
+    "virtues": [
+        {
+            "name": "Intellectual honesty",
+            "evidence": "Stein's philosophical and religious journey remained a sustained search rather than a slogan.",
+            "imitation": "Check one claim about another faith or the Shoah against a Jewish or memorial institution before repeating it.",
+            "sourceIds": [
+                "stein-jp2-canonization",
+                "stein-yad-vashem-record"
+            ]
+        },
+        {
+            "name": "Solidarity against antisemitism",
+            "evidence": "Her fate followed Nazi racial persecution of Jews, including baptized Jews.",
+            "imitation": "Interrupt one antisemitic trope, document threats safely, and support Jewish neighbors without making them symbols for Christian purposes.",
+            "sourceIds": [
+                "stein-yad-vashem-record",
+                "stein-jp2-europe"
+            ]
+        }
+    ],
+    "practice": {
+        "spiritual": "Pray Psalm 31 without claiming to explain genocide; lament before God and remember Edith, Rosa, and the millions of Jewish victims.",
+        "action": "Learn from a reputable Jewish or Shoah institution, then take one concrete anti-antisemitism or bystander-protection step in your community."
+    },
+    "reflectionQuestions": [
+        "Do I tell Edith's story in a way that preserves her Jewish identity and centers the evil of the Shoah?",
+        "Where can rigorous truth-seeking move me from admiration to protection of people targeted now?"
+    ],
+    "scripture": {
+        "reference": "Psalm 31:2\u20136",
+        "connection": "The psalm entrusts life to God amid murderous power; it offers lament and refuge, not an explanation that makes genocide meaningful."
+    },
+    "prayer": "God of Abraham, source of truth and refuge of the persecuted, remember Edith, Rosa, and all victims of the Shoah. Through Saint Teresa Benedicta strengthen us against antisemitism, racism, lies, and indifference. Make our study honest, our prayer humble, and our solidarity practical, through Christ our Lord. Amen."
+}

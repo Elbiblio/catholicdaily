@@ -1,0 +1,191 @@
+{
+    "schemaVersion": 2,
+    "id": "lawrence_of_rome_deacon",
+    "profileKind": "individual",
+    "celebrationIds": [
+        "lawrence_of_rome_deacon",
+        "saint_lawrence_deacon_and_martyr"
+    ],
+    "name": "Saint Lawrence, Deacon and Martyr",
+    "alternateNames": [
+        "Laurence of Rome"
+    ],
+    "ecclesialTitle": "Deacon and Martyr",
+    "lifeSpan": "died 258",
+    "vocation": "Roman deacon and martyr",
+    "places": [
+        "Rome",
+        "Via Tiburtina"
+    ],
+    "patronage": [],
+    "symbols": [],
+    "briefBio": "Lawrence is an early Roman deacon and martyr whose August 10 burial commemoration appears in the fourth-century Roman calendar. Ambrose later presents him as a servant of the poor and connects him with Sixtus II. The famous treasure dialogue, execution on a gridiron, Huesca origin, named converts, and relic journeys belong to later reception rather than near-contemporary evidence. His feast honors diaconal service and faithful witness without making torture graphic, desirable, or a test that endangered people must imitate.",
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Saint_Lawrence",
+    "wikidataId": "Q17590",
+    "feastDates": [
+        "August 10"
+    ],
+    "historicalCertainty": "mixed",
+    "sources": [
+        {
+            "id": "lawrence-depositio-354",
+            "title": "The Chronography of 354 AD, Part 12: Commemorations of the Martyrs",
+            "authorOrInstitution": "Anonymous Roman compiler; English translation hosted by Roger Pearse",
+            "publisher": "Tertullian.org; source text in Monumenta Germaniae Historica, Chronica Minora I",
+            "url": "https://www.tertullian.org/fathers/chronography_of_354_12_depositions_martyrs.htm",
+            "accessedDate": "2026-08-12",
+            "tier": 1,
+            "reuseBasis": "Early Roman calendar used for Lawrence's August 10 commemoration on the Via Tiburtina; it does not supply birth, gridiron, treasure dialogue, converts, or a complete biography",
+            "supports": [
+                "identity",
+                "lifeSpan",
+                "places",
+                "cult.early",
+                "feastDates",
+                "sourceLimits"
+            ]
+        },
+        {
+            "id": "lawrence-ambrose-duties",
+            "title": "On the Duties of the Clergy, Book II",
+            "authorOrInstitution": "Ambrose of Milan; translated by H. de Romestin",
+            "publisher": "Nicene and Post-Nicene Fathers, Second Series, vol. 10, via New Advent",
+            "url": "https://www.newadvent.org/fathers/34012.htm",
+            "accessedDate": "2026-08-12",
+            "tier": 1,
+            "reuseBasis": "Fourth-century ecclesial reception used for Lawrence as deacon, service to poor people, Sixtus association, and the developed treasure and martyr dialogue; narrative details are classified as later reception rather than eyewitness history",
+            "supports": [
+                "identity",
+                "ecclesialTitle",
+                "life.deacon",
+                "reception.poor",
+                "reception.sixtus",
+                "tradition.treasure",
+                "tradition.dialogue",
+                "historicalCertainty"
+            ]
+        },
+        {
+            "id": "lawrence-lapidge-roman-martyrs",
+            "title": "The Roman Martyrs: Introduction, Translations, and Commentary",
+            "authorOrInstitution": "Michael Lapidge",
+            "publisher": "Oxford University Press",
+            "url": "https://academic.oup.com/book/11048",
+            "accessedDate": "2026-08-12",
+            "tier": 2,
+            "reuseBasis": "Independent source-critical monograph used to distinguish Lawrence's early Roman cult from later Passion narratives, including developed origin, treasure, execution, conversion, and relic traditions",
+            "supports": [
+                "identity",
+                "places",
+                "cult.early",
+                "reception.later",
+                "tradition.gridiron",
+                "tradition.origin",
+                "tradition.converts",
+                "sourceLimits",
+                "historicalCertainty"
+            ]
+        },
+        {
+            "id": "lawrence-moraglia-jubilee",
+            "title": "Saint Lawrence, Deacon and Martyr",
+            "authorOrInstitution": "Francesco Moraglia; Congregation for the Clergy",
+            "publisher": "The Holy See",
+            "url": "https://www.vatican.va/roman_curia/congregations/cclergy/documents/rc_con_cclergy_doc_19022000_slaw_en.html",
+            "accessedDate": "2026-08-12",
+            "tier": 1,
+            "reuseBasis": "Formal Holy See-hosted ecclesial study used for Lawrence as Roman deacon, his death in the 258 Valerian persecution, early cult, and explicit distinction between the historical core and developed legendary Passion material; devotional interpretation is not treated as eyewitness evidence",
+            "supports": ["identity", "ecclesialTitle", "lifeSpan", "life.deacon", "life.258", "context.valerian", "cult.early", "tradition.passion", "sourceLimits"]
+        },
+        {
+            "id": "lawrence-calendar",
+            "title": "Liturgical Calendar: Universal Calendar \u2014 August",
+            "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+            "publisher": "Catholic Bishops' Conference of England and Wales",
+            "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/AugUC.shtml",
+            "accessedDate": "2026-08-12",
+            "tier": 1,
+            "reuseBasis": "Formal calendar used for the canonical title, August 10 feast, and red color",
+            "supports": [
+                "identity",
+                "celebrationIds",
+                "ecclesialTitle",
+                "feastDates",
+                "calendar.rank",
+                "calendar.color"
+            ]
+        }
+    ],
+    "editorial": {
+        "state": "published",
+        "researcher": "Catholic Daily editorial research",
+        "reviewer": "Catholic Daily factual and theological review",
+        "reviewedAt": "2026-08-12",
+        "revision": 1,
+        "warnings": []
+    },
+    "whyItMatters": "Lawrence joins ordered service of vulnerable people to courage under coercive power. Historical restraint keeps later drama from eclipsing the secure early cult or making inflicted torture a Christian ideal.",
+    "oneMinuteSummary": "Lawrence was a Roman deacon remembered as a martyr in 258. The early Roman calendar records his August 10 commemoration on the Via Tiburtina but supplies no birth year or detailed execution story. By the later fourth century, Ambrose linked Lawrence with Pope Sixtus II and celebrated his service to poor people through the famous account of the Church's true treasure. The gridiron execution, extended dialogue, Huesca origin, census of the poor, named converts, and many relic claims belong to developing Passion and cult traditions, not near-contemporary biography. His feast can therefore center what is secure and spiritually fruitful: diaconal service, communal fidelity, and refusal to make wealth more important than persons. Martyrdom never makes state violence good or requires danger-seeking. People under threat may flee, document abuse, seek legal and trauma-informed help, and protect dependants without shame.",
+    "life": {
+        "sections": [
+            {
+                "heading": "An early Roman martyr",
+                "body": "The Depositio records Lawrence on August 10 at the Via Tiburtina. It secures an early cult but not his birth, age, origin, or manner of death.",
+                "sourceIds": [
+                    "lawrence-depositio-354",
+                    "lawrence-lapidge-roman-martyrs"
+                ]
+            },
+            {
+                "heading": "Deacon and servant of the poor",
+                "body": "Ambrose receives Lawrence as deacon and presents poor people as the Church's treasure. That theological memory supports dignified service, not romantic poverty or control of recipients.",
+                "sourceIds": [
+                    "lawrence-ambrose-duties"
+                ]
+            },
+            {
+                "heading": "Later Passion traditions",
+                "body": "The treasure dialogue and detailed execution story developed in later reception. The gridiron, named converts, Huesca biography, and relic journeys are not treated as eyewitness facts.",
+                "sourceIds": [
+                    "lawrence-ambrose-duties",
+                    "lawrence-lapidge-roman-martyrs"
+                ]
+            }
+        ],
+        "gospelTheme": "Christ is served in vulnerable neighbors, whose dignity outweighs possessions and prestige.",
+        "struggle": "Graphic legend can eclipse service and pressure threatened people to prove faith through exposure.",
+        "response": "Preserve early evidence, label later tradition, serve people with consent and competence, and resist coercion nonviolently."
+    },
+    "virtues": [
+        {
+            "name": "Diaconal service",
+            "evidence": "Fourth-century reception remembers Lawrence's ministry through care for poor people.",
+            "imitation": "Support one person through a reputable service without publicizing their need.",
+            "sourceIds": [
+                "lawrence-ambrose-duties"
+            ]
+        },
+        {
+            "name": "Truthful courage",
+            "evidence": "The early calendar preserves his martyr memory without dramatic detail.",
+            "imitation": "Tell the secure core and label later traditions honestly.",
+            "sourceIds": [
+                "lawrence-depositio-354",
+                "lawrence-lapidge-roman-martyrs"
+            ]
+        }
+    ],
+    "practice": {
+        "spiritual": "Pray Matthew 25:34\u201340 and ask Christ to correct any habit that values resources above persons.",
+        "action": "Give time or money through a transparent service that protects consent, privacy, and safety."
+    },
+    "reflectionQuestions": [
+        "Do I recognize vulnerable people as persons with agency rather than objects of charity?",
+        "Can I honor martyrdom without glamorizing torture or demanding danger from others?"
+    ],
+    "scripture": {
+        "reference": "Matthew 25:34\u201340",
+        "connection": "Christ identifies himself with people in need, illuminating Lawrence's received diaconal memory."
+    },
+    "prayer": "Lord Jesus Christ, through Saint Lawrence make your Church generous, truthful, and brave. Teach us to honor people above possessions, protect those under threat, and serve without spectacle or control. Amen."
+}

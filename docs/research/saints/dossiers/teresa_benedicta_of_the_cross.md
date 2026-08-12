@@ -1,0 +1,46 @@
+# Saint Teresa Benedicta of the Cross, Virgin and Martyr
+
+## Identity resolution
+- Stable ID: `teresa_benedicta_of_the_cross`
+- Profile kind: individual
+- Celebration IDs: `teresa_benedicta_of_the_cross`, `saint_teresa_benedicta_of_the_cross_virgin_and_martyr`
+- Canonical name and aliases: Saint Teresa Benedicta of the Cross, Virgin and Martyr; Edith Stein
+- Feast date and calendar scope: August 9; optional memorial, red
+- Identity conflicts resolved: Live Q76749 identifies Edith Stein. The 1891–1942 span is retained without computed age. Her Jewish identity and murder as a Jew remain explicit. Europe alone has formal patronage support. Church martyr reception is distinguished from historical debate.
+
+## Source ledger
+| ID | Tier | Author/institution | Title | Publisher | URL | Accessed | Reuse basis |
+|---|---:|---|---|---|---|---|---|
+| stein-jp2-canonization | 1 | Pope John Paul II | Canonization of Edith Stein, 11 October 1998 | The Holy See | https://www.vatican.va/content/john-paul-ii/en/homilies/1998/documents/hf_jp-ii_hom_11101998_stein.html | 2026-08-12 | Formal canonization homily used for Edith Stein's Jewish family, philosophical search, baptism, Carmel, Nazi persecution, deportation with Rosa, Church reception as martyr, and canonization; theological interpretation is not substituted for independent Shoah evidence |
+| stein-jp2-europe | 1 | Pope John Paul II | Spes Aedificandi | The Holy See | https://www.vatican.va/content/john-paul-ii/en/motu_proprio/documents/hf_jp-ii_motu-proprio_01101999_co-patronesses-europe.html | 2026-08-12 | Formal motu proprio used for Teresa Benedicta's designation as co-patroness of Europe, her intellectual and Carmelite vocation, Jewish identity, Nazi racial persecution, and the duty to oppose racism and antisemitism |
+| stein-yad-vashem-record | 1 | Yad Vashem | Stein Edith Teresia Hedwig | The Central Database of Shoah Victims' Names, Yad Vashem | https://collections.yadvashem.org/en/names/9627362 | 2026-08-12 | Shoah victim archive record used for Edith Stein's identity, 1891 birth year, Auschwitz as place of murder, and death date 9 August 1942; the archive is not used to validate theological martyr claims or fabricated last words |
+| stein-sojka-controversies | 2 | Jacek Sójka | The Controversies over the Figure of Edith Stein | Człowiek i Społeczeństwo | https://pressto.amu.edu.pl/index.php/cbes/article/view/4459 | 2026-08-12 | Independent scholarly article used for disputes surrounding Edith Stein's Christian reception and martyr designation, and for maintaining Jewish identity and Shoah context without turning genocide into a conversion narrative |
+| stein-calendar | 1 | Liturgy Office, Catholic Bishops' Conference of England and Wales | Liturgical Calendar: Universal Calendar — August | Catholic Bishops' Conference of England and Wales | https://www.liturgyoffice.org.uk/Calendar/Universal/AugUC.shtml | 2026-08-12 | Formal calendar used for the canonical title, August 9 optional memorial, and red color; the key establishes that an entry without a printed rank is optional |
+
+## Claim ledger
+| Profile field | Claim or editorial conclusion | Source IDs | Certainty | Reconciliation note |
+|---|---|---|---|---|
+| identity, lifeSpan | Edith Stein lived 1891–1942 and retained Jewish family identity after baptism. | stein-jp2-canonization; stein-jp2-europe; stein-yad-vashem-record | Documented | Baptism does not erase Jewishness. |
+| life.shoah | Edith and Rosa were deported and murdered as Jews at Auschwitz-Birkenau. | stein-yad-vashem-record; stein-jp2-europe | Documented | Genocide is not redemptive or a conversion instrument. |
+| reception.martyr | The Church formally canonized her as martyr; historical grounds remain debated. | stein-jp2-canonization; stein-yad-vashem-record; stein-sojka-controversies | Mixed | Preserve theological reception and historical analysis without conflation. |
+| patronage | Europe is formally supported. | stein-jp2-europe | Documented | No generic witness patronage. |
+| feastDates | August 9 is optional, red. | stein-calendar | Documented | Formal calendar. |
+
+## Copyright and media decision
+Original synthesis; all modern prose is paraphrased. No fabricated last words or unlicensed image is used.
+
+## Content review
+Identity, Jewish family, philosophy, Carmel, Rosa, Westerbork, Auschwitz-Birkenau, and calendar were checked. Summary is 100–150 words.
+
+## Theological review
+The Shoah remains genocidal evil. Christian reception never erases Jewish victims, blames them, or appropriates their murder for conversion. Prayer is original.
+
+## Final validation
+- Researcher: Catholic Daily editorial research
+- Reviewer: Catholic Daily factual and theological review
+- Review date: 2026-08-12
+- Revision: 1
+- Status: published
+- Warnings: none
+- Published validator command: `dart run tool/validate_saint_profiles.dart --published-only`
+- Observed result: `Saint profile validation: 158 total, 158 legacy, 96 researched, 96 validated, 0 errors, 0 warnings.`

@@ -1,0 +1,172 @@
+{
+    "schemaVersion": 2,
+    "id": "jane_frances_de_chantal",
+    "profileKind": "individual",
+    "celebrationIds": [
+        "jane_frances_de_chantal",
+        "saint_jane_frances_de_chantal_religious"
+    ],
+    "name": "Saint Jane Frances de Chantal, Religious",
+    "alternateNames": [
+        "Jeanne-Fran\u00e7oise Fr\u00e9myot de Chantal"
+    ],
+    "ecclesialTitle": "Religious",
+    "lifeSpan": "1572\u20131641",
+    "vocation": "Wife, mother, widow, spiritual correspondent, and co-founder of the Visitation",
+    "places": [
+        "Dijon",
+        "Annecy",
+        "Moulins"
+    ],
+    "patronage": [],
+    "symbols": [],
+    "briefBio": "Jane Frances married Christophe de Rabutin, raised a family, endured his accidental death, and carried grief and household responsibilities before co-founding the Visitation with Francis de Sales. Her letters show practical leadership, affection, grief, discernment, and sustained family relationships. Her religious vocation was not permission to abandon dependants, suppress mourning, or obey coercively. The Visitation's gentler founding vision valued charity and adaptation, while later austerities must not be copied in ways that harm physical or mental health.",
+    "wikipediaUrl": "https://en.wikipedia.org/wiki/Jane_Frances_de_Chantal",
+    "wikidataId": "Q234521",
+    "feastDates": [
+        "August 12"
+    ],
+    "historicalCertainty": "documented",
+    "sources": [
+        {
+            "id": "chantal-jp2-annecy",
+            "title": "Homélie à Annecy, 7 octobre 1986",
+            "authorOrInstitution": "Pope John Paul II",
+            "publisher": "The Holy See",
+            "url": "https://www.vatican.va/content/john-paul-ii/fr/homilies/1986/documents/hf_jp-ii_hom_19861007_annency-francia.html",
+            "accessedDate": "2026-08-12",
+            "tier": 1,
+            "reuseBasis": "Formal papal homily used for Jane's vocation as wife and mother, widowhood and bereavement, concern for her children's future, difficulty forgiving, friendship with Francis de Sales, and Visitation co-founding and leadership; ascetic details are not made universal prescriptions",
+            "supports": [
+                "identity",
+                "lifeSpan",
+                "places",
+                "life.marriage",
+                "life.children",
+                "life.widowhood",
+                "life.grief",
+                "life.sales",
+                "life.visitation",
+                "life.leadership"
+            ]
+        },
+        {
+            "id": "chantal-iep-profile",
+            "title": "Jeanne-Françoise Frémyot, Baronne de Chantal (1572—1641)",
+            "authorOrInstitution": "John J. Conley",
+            "publisher": "Internet Encyclopedia of Philosophy",
+            "url": "https://iep.utm.edu/jeanne-francoice-fremyot-de-chantal/",
+            "accessedDate": "2026-08-12",
+            "tier": 2,
+            "reuseBasis": "Independent peer-reviewed philosophy reference used for chronology, family and widowhood, intellectual and spiritual agency, correspondence, Visitation leadership, and the need to interpret her thought beyond passive-obedience stereotypes",
+            "supports": [
+                "life.family",
+                "life.widowhood",
+                "life.leadership",
+                "historicalCertainty"
+            ]
+        },
+        {
+            "id": "chantal-wright-friendship",
+            "title": "The Visitation of Holy Mary: The First Years (1610–1618)",
+            "authorOrInstitution": "Wendy M. Wright",
+            "publisher": "Vincentian Heritage Journal, DePaul University",
+            "url": "https://via.library.depaul.edu/vhj/vol11/iss1/4/",
+            "accessedDate": "2026-08-12",
+            "tier": 2,
+            "reuseBasis": "Independent scholarly article used for the early Visitation, Jane and Francis de Sales's mutual spiritual friendship, collaborative founding, women's leadership, and adaptation of religious life; relationship is not reduced to unilateral obedience",
+            "supports": ["life.sales", "life.friendship", "life.visitation", "life.leadership", "historicalCertainty"]
+        },
+        {
+            "id": "chantal-calendar",
+            "title": "Liturgical Calendar: Universal Calendar \u2014 August",
+            "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+            "publisher": "Catholic Bishops' Conference of England and Wales",
+            "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/AugUC.shtml",
+            "accessedDate": "2026-08-12",
+            "tier": 1,
+            "reuseBasis": "Formal calendar used for the canonical title, August 12 optional memorial, and white color",
+            "supports": [
+                "identity",
+                "celebrationIds",
+                "ecclesialTitle",
+                "feastDates",
+                "calendar.rank",
+                "calendar.color"
+            ]
+        }
+    ],
+    "editorial": {
+        "state": "published",
+        "researcher": "Catholic Daily editorial research",
+        "reviewer": "Catholic Daily factual and theological review",
+        "reviewedAt": "2026-08-12",
+        "revision": 1,
+        "warnings": []
+    },
+    "whyItMatters": "Jane's letters and life integrate family love, grief, friendship, and religious leadership. She offers a vocation shaped by discernment and responsibility rather than abandonment, emotional suppression, or unsafe obedience.",
+    "oneMinuteSummary": "Jane Frances was born in Dijon in 1572, married Christophe de Rabutin, and became a mother and household leader. His accidental death left her widowed and grieving; later holiness does not make that loss easy or divinely required. Her friendship with Francis de Sales developed through mutual discernment, and in 1610 they founded the Visitation. Family obligations were negotiated, but the transition also caused pain, including reported resentment from her son; it should not be romanticized as effortless abandonment. Jane's letters reveal affection, practical governance, spiritual struggle, and leadership beyond a passive disciple stereotype. She died in 1641. Her witness supports honest grief, collaborative authority, and prayer adapted to real capacities. It does not authorize leaving dependants without care, coercive direction, emotional silence, punitive fasting, sleep deprivation, or self-harm. Spiritual guidance should respect conscience, consent, safeguarding, health, and access to competent medical or psychological support.",
+    "life": {
+        "sections": [
+            {
+                "heading": "Marriage, motherhood, and grief",
+                "body": "Jane's family vocation and bereavement are integral, not a disposable prelude to religious life.",
+                "sourceIds": [
+                    "chantal-jp2-annecy",
+                    "chantal-iep-profile"
+                ]
+            },
+            {
+                "heading": "Friendship and discernment",
+                "body": "Her relationship with Francis de Sales developed through correspondence and discernment, not erased agency.",
+                "sourceIds": [
+                    "chantal-iep-profile",
+                    "chantal-wright-friendship"
+                ]
+            },
+            {
+                "heading": "Visitation leadership",
+                "body": "Jane co-founded and governed a community shaped by charity and practical adaptation.",
+                "sourceIds": [
+                    "chantal-jp2-annecy",
+                    "chantal-wright-friendship"
+                ]
+            }
+        ],
+        "gospelTheme": "Christ receives grief and calls people into loving responsibilities through freedom, friendship, and service.",
+        "struggle": "Her story can be misused to praise abandonment, suppressed grief, or coercive obedience.",
+        "response": "Read her letters, preserve family agency, and practice accountable direction compatible with health and safeguarding."
+    },
+    "virtues": [
+        {
+            "name": "Honest grief",
+            "evidence": "Her correspondence preserves bereavement and ongoing family love.",
+            "imitation": "Name a loss without forcing resolution and seek appropriate support.",
+            "sourceIds": [
+                "chantal-iep-profile"
+            ]
+        },
+        {
+            "name": "Collaborative leadership",
+            "evidence": "The Visitation emerged through Jane's sustained co-founding and governance.",
+            "imitation": "Share authority and invite protected feedback.",
+            "sourceIds": [
+                "chantal-jp2-annecy",
+                "chantal-wright-friendship"
+            ]
+        }
+    ],
+    "practice": {
+        "spiritual": "Pray John 11:32\u201336, allowing grief before Christ without spiritual performance.",
+        "action": "Review one commitment so dependants, rest, consent, and health are genuinely protected."
+    },
+    "reflectionQuestions": [
+        "Do I permit grief to be truthful rather than measuring faith by emotional silence?",
+        "Does spiritual guidance strengthen conscience and responsibility or demand dependence?"
+    ],
+    "scripture": {
+        "reference": "John 11:32\u201336",
+        "connection": "Jesus receives grief and weeps; mourning need not be denied to become faithful."
+    },
+    "prayer": "Lord Jesus, through Saint Jane Frances teach us to love family faithfully, grieve honestly, discern freely, and lead collaboratively. Protect us from coercion and harmful zeal, and make our communities gentle, accountable, and merciful. Amen."
+}
