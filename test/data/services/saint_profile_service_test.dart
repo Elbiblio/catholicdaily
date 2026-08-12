@@ -83,6 +83,37 @@ void main() {
     expect(fisherAndMore.lifeLength, isEmpty);
   });
 
+  test('preserves reviewed Batch 7 identities and profile kinds', () async {
+    const expected = {
+      'first_martyrs_of_rome': ('Q640666', 'group'),
+      'thomas_apostle': ('Q43669', 'biblical'),
+      'elizabeth_of_portugal': ('Q235857', 'individual'),
+      'anthony_zaccaria': ('Q380099', 'individual'),
+      'maria_goretti': ('Q234697', 'individual'),
+      'henry_ii_emperor': ('Q103556', 'individual'),
+      'camillus_de_lellis': ('Q332656', 'individual'),
+      'our_lady_of_mount_carmel': ('Q1065053', 'observance'),
+      'apollinaris_of_ravenna': ('Q320199', 'individual'),
+      'lawrence_of_brindisi': ('Q313803', 'individual'),
+      'mary_magdalene': ('Q63070', 'individual'),
+      'bridget_of_sweden': ('Q204996', 'individual'),
+    };
+
+    for (final entry in expected.entries) {
+      final profile = await SaintProfileService.instance.findById(entry.key);
+
+      expect(profile, isNotNull, reason: entry.key);
+      expect(profile!.wikidataId, entry.value.$1, reason: entry.key);
+      expect(profile.kind.name, entry.value.$2, reason: entry.key);
+    }
+
+    final mountCarmel = await SaintProfileService.instance.findById(
+      'our_lady_of_mount_carmel',
+    );
+    expect(mountCarmel!.lifeSpan, isEmpty);
+    expect(mountCarmel.lifeLength, isEmpty);
+  });
+
   test('preserves reviewed Batch 3 publication precision', () async {
     final frances = await SaintProfileService.instance.findById(
       'frances_of_rome',
@@ -201,6 +232,126 @@ void main() {
     }
 
     expect(failures, isEmpty);
+  });
+
+  test('Batch 7 one-minute summaries contain 100 to 150 words', () async {
+    const batch7Ids = [
+      'first_martyrs_of_rome',
+      'thomas_apostle',
+      'elizabeth_of_portugal',
+      'anthony_zaccaria',
+      'maria_goretti',
+      'henry_ii_emperor',
+      'camillus_de_lellis',
+      'our_lady_of_mount_carmel',
+      'apollinaris_of_ravenna',
+      'lawrence_of_brindisi',
+      'mary_magdalene',
+      'bridget_of_sweden',
+    ];
+    final failures = <String>[];
+
+    for (final id in batch7Ids) {
+      final profile = await SaintProfileService.instance.findById(id);
+      final summary = profile!.guide!.oneMinuteSummary.trim();
+      final wordCount = summary
+          .split(RegExp(r'\s+'))
+          .where((word) => word.isNotEmpty)
+          .length;
+      if (wordCount < 100 || wordCount > 150) {
+        failures.add('$id: $wordCount words');
+      }
+    }
+
+    expect(failures, isEmpty);
+  });
+
+  test('preserves reviewed Batch 7 calendar ranks and colors', () async {
+    final cases = [
+      (
+        DateTime(2026, 6, 30),
+        'first_martyrs_of_rome',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.red,
+      ),
+      (
+        DateTime(2026, 7, 3),
+        'thomas_apostle',
+        CelebrationRank.feast,
+        LiturgicalColor.red,
+      ),
+      (
+        DateTime(2026, 7, 4),
+        'elizabeth_of_portugal',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 7, 5),
+        'anthony_zaccaria',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 7, 6),
+        'maria_goretti',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.red,
+      ),
+      (
+        DateTime(2026, 7, 13),
+        'henry_ii_emperor',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 7, 14),
+        'camillus_de_lellis',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 7, 16),
+        'our_lady_of_mount_carmel',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 7, 20),
+        'apollinaris_of_ravenna',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.red,
+      ),
+      (
+        DateTime(2026, 7, 21),
+        'lawrence_of_brindisi',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 7, 22),
+        'mary_magdalene',
+        CelebrationRank.feast,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 7, 23),
+        'bridget_of_sweden',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+    ];
+
+    for (final entry in cases) {
+      final celebrations = await SaintCalendarService.instance
+          .getSaintCelebrationsForDate(date: entry.$1);
+      final celebration = celebrations.singleWhere(
+        (candidate) => candidate.id == entry.$2,
+      );
+
+      expect(celebration.rank, entry.$3, reason: entry.$2);
+      expect(celebration.color, entry.$4, reason: entry.$2);
+    }
   });
 
   test(
