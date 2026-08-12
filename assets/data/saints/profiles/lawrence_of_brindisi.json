@@ -11,7 +11,7 @@
   "places": ["Brindisi", "Venice", "Prague", "Vienna", "Lisbon"],
   "patronage": [],
   "symbols": [],
-  "briefBio": "Lawrence of Brindisi was a Capuchin priest whose language study, preaching, biblical exegesis, order government, and diplomacy moved across religiously divided Europe. His posthumously edited works show deep engagement with Scripture and rabbinic literature, but also confessional and anti-Jewish polemic that cannot be repeated as Christian contempt. He served beside armed forces as chaplain and envoy; later victory-miracle stories are not treated as historical causation. Declared a Doctor of the Church in 1959, he invites disciplined learning ordered toward peace, correction, and human dignity.",
+  "briefBio": "Lawrence of Brindisi was a Capuchin priest whose language study, preaching, biblical exegesis, order government, and diplomacy moved across religiously divided Europe. His posthumously edited works show deep engagement with Scripture and rabbinic literature, but passages in the Mariale also use collective condemnatory language about Jews that cannot be repeated as Christian contempt. He served beside armed forces as chaplain and envoy; later victory-miracle stories are not treated as historical causation. Declared a Doctor of the Church in 1959, he invites disciplined learning ordered toward peace, correction, and human dignity.",
   "wikipediaUrl": "https://en.wikipedia.org/wiki/Lawrence_of_Brindisi",
   "wikidataId": "Q313803",
   "feastDates": ["July 21"],
@@ -36,8 +36,8 @@
       "url": "https://books.google.com/books/about/Opera_omnia.html?id=es0nAAAAMAAJ",
       "accessedDate": "2026-08-11",
       "tier": 1,
-      "reuseBasis": "Bibliographic access to the critical Opera omnia used to establish the posthumous editorial corpus, its Latin sermons and Mariale, its manuscript-based Capuchin publication beginning in 1928, and the need to cite a defined work and edition rather than circulating unattributed internet sayings; primary theological claims are summarized without quotation",
-      "supports": ["identity", "life.writings", "life.mariale", "life.sermons", "reception.edition", "sourceLimits"]
+      "reuseBasis": "Bibliographic access to the critical Opera omnia used to establish the posthumous editorial corpus, its Latin sermons and Mariale, its manuscript-based Capuchin publication beginning in 1928, and the need to cite a defined work and edition rather than circulating unattributed internet sayings; Mariale pages 66 and 171 are the exact primary loci reviewed for collective condemnatory language about Jews, summarized without quotation",
+      "supports": ["identity", "life.writings", "life.mariale", "life.sermons", "life.anti_jewish_polemic", "reception.edition", "sourceLimits"]
     },
     {
       "id": "lawrence-drenas",
@@ -52,7 +52,7 @@
     },
     {
       "id": "lawrence-cargnoni",
-      "title": "Il significato storico del titolo ‘Doctor Apostolicus’",
+      "title": "Il significato storico, teologico e spirituale del titolo “Doctor Apostolicus” conferito a san Lorenzo da Brindisi, nel cinquantesimo anniversario (1959–2009)",
       "authorOrInstitution": "Costanzo Cargnoni",
       "publisher": "Italia Francescana, Conferenza Italiana dei Ministri Provinciali Cappuccini",
       "url": "https://www.fraticappuccini.it/new_site/pubblicazioni/CIMP_Cap/italia_francescana/ItFr85-2010-3/257-302_2010-2-03_Approfo-Cargnoni.pdf",
@@ -93,7 +93,7 @@
     "warnings": []
   },
   "whyItMatters": "Lawrence challenges readers to unite prayer and serious study while subjecting inherited polemic, political influence, and religious speech to the Gospel's demands for truth, peace, and the dignity of living communities.",
-  "oneMinuteSummary": "Lawrence of Brindisi was born Giulio Cesare Russo in 1559. He entered the Capuchins, became a priest, learned biblical languages, preached widely, governed his order, and wrote sermons, exegesis, and confessional controversy later edited from manuscripts. Popes and rulers also used him as missionary, military chaplain, and diplomat in a Europe divided by Catholic-Protestant conflict and war with Ottoman forces. Later accounts credit his presence with battle victory; the profile does not treat miracle claims as military causation. Lawrence's knowledge of Hebrew and rabbinic texts was remarkable, yet parts of his corpus use supersessionist and anti-Jewish rhetoric. Catholic reception today must reject collective guilt, divine rejection, hatred, and coerced conversion. He died in Lisbon in 1619 while pursuing a diplomatic appeal, was canonized in 1881, and became a Doctor of the Church in 1959. Learning serves holiness when it produces humility, peace, and truthful encounter.",
+  "oneMinuteSummary": "Lawrence of Brindisi was born Giulio Cesare Russo in 1559. He entered the Capuchins, became a priest, learned biblical languages, preached widely, governed his order, and wrote sermons, exegesis, and confessional controversy later edited from manuscripts. Popes and rulers also used him as missionary, military chaplain, and diplomat in a Europe divided by Catholic-Protestant conflict and war with Ottoman forces. Later accounts credit his presence with battle victory; the profile does not treat miracle claims as military causation. Lawrence's knowledge of Hebrew and rabbinic texts was remarkable, yet Mariale passages use collective condemnatory language about Jews. Catholic reception today must reject collective guilt, divine rejection, hatred, and coerced conversion. He died in Lisbon in 1619 while pursuing a diplomatic appeal, was canonized in 1881, and became a Doctor of the Church in 1959. Learning serves holiness when it produces humility, peace, and truthful encounter.",
   "life": {
     "sections": [
       {
@@ -108,7 +108,7 @@
       },
       {
         "heading": "Jewish learning and anti-Jewish polemic",
-        "body": "Lawrence knew Hebrew and rabbinic literature and preached in settings aimed at Jewish conversion. That learning coexists with supersessionist and condemnatory passages in his early-modern corpus. Nostra Aetate supplies the binding safeguard: Jews are not collectively guilty for Christ's death, rejected by God, or legitimate targets of hatred. Sainthood does not make harmful rhetoric reusable.",
+        "body": "Lawrence knew Hebrew and rabbinic literature and preached in settings aimed at Jewish conversion. That learning coexists with collective condemnatory language about Jews in passages of the Mariale. Nostra Aetate supplies the binding safeguard: Jews are not collectively guilty for Christ's death, rejected by God, or legitimate targets of hatred. Sainthood does not make harmful rhetoric reusable.",
         "sourceIds": ["lawrence-benedict-audience", "lawrence-opera-omnia", "lawrence-cargnoni", "lawrence-nostra-aetate"]
       },
       {

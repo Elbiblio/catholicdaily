@@ -25,7 +25,6 @@
 | Profile field | Claim or editorial conclusion | Source IDs | Certainty | Reconciliation note |
 |---|---|---|---|---|
 | identity | Bridget lived c. 1303–1373 as Swedish wife, mother, widow, foundress, pilgrim, adviser, and visionary. | bridget-benedict-audience; bridget-spes-aedificandi | Documented | Keep circa birth year; no computed age. |
-| identity.wikidata | Q204996 is canonical; Q17166839 redirects to it. | bridget-benedict-audience | High — live identity verification | Store Q204996 only. |
 | life.family | Bridget married Ulf, had eight children, and joined household responsibility with charity and pilgrimage. | bridget-benedict-audience; bridget-spes-aedificandi | Documented | Medieval young marriage is not a modern child-marriage model; preserve spouse and children's agency. |
 | life.founding | As a widow Bridget planned the Order of the Most Holy Savior but did not herself become its consecrated member. | bridget-benedict-audience; bridget-spes-aedificandi | Documented | Calendar title “Religious” is received without simulating a profession she did not make. |
 | life.travel | Bridget moved to Rome and made pilgrimages including the Holy Land. | bridget-benedict-audience; bridget-spes-aedificandi | Documented | Pilgrimage must remain safe, accessible, funded, and compatible with dependants and health. |
@@ -42,7 +41,7 @@ The profile is original synthesis. Vatican, Catechism, OUP translation and schol
 
 ## Content review
 
-- Rechecked canonical live Q204996 and redirect Q17166839, c. 1303–1373 chronology, family, widowhood, charity, founding, Rome, pilgrimage, textual transmission, co-patronage, and July 23 optional memorial.
+- Rechecked canonical live Q204996, c. 1303–1373 chronology, family, widowhood, charity, founding, Rome, pilgrimage, textual transmission, co-patronage, and July 23 optional memorial.
 - Distinguished Bridget's experiences from dictation, Latin translation, scribal witnesses, editorial organization, modern translation, and Church discernment.
 - Preserved spouse, children, confessors, editors, daughter Catherine, and community agency without making them props.
 - Omitted computed age, alleged predictions, exact divine quotations, unsafe ascetic detail, generic patronage, and symbols.
