@@ -36,7 +36,7 @@
 
 ## Copyright and media decision
 
-Vatican, OMD, Pascucci, and Urbaniana materials remain copyrighted. The profile uses original paraphrase, no quotation object, no manuscript reproduction, and no unlicensed media.
+Vatican, OMD, and Pascucci materials remain copyrighted. Pomara Saverino's Firenze University Press volume is available under CC BY 4.0, but the profile still uses attributed original paraphrase. No quotation object, manuscript reproduction, or unlicensed media is used.
 
 ## Content review
 
