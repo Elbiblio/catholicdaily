@@ -23,6 +23,7 @@
 | identity / lifespan | Rose/Isabel, Lima, 1586–1617, Q244383 | rose-hart-2026; rose-jp2-angelus | Documented | No computed age or contested exact death-hour details. |
 | Dominican / family / work | Tertiary living amid household responsibilities and labor | rose-hart-2026; rose-jp2-angelus | Documented with limits | Not simulated as an enclosed nun or isolated spiritual hero. |
 | care | Prayer received alongside care for poor and sick neighbors | rose-jp2-angelus; rose-hart-2026 | Moderate ecclesial reception | No cure guarantee or substitution for professional care. |
+| canonization | Rose was canonized in 1671 | rose-hart-2026 | Documented | Canonization reception does not authenticate every later miracle or ascetic detail. |
 | asceticism | Severe practices occur in hagiographic and cultural transmission | rose-graziano; rose-hart-2026 | Mixed | No imitation, retrospective diagnosis, self-harm, food restriction, or sleep deprivation. |
 | colonial and racial context | Her cult helped form criollo identity amid a stratified colonial society | rose-morgan; rose-jp2-angelus | Documented reception | No settled genealogy inferred from one descriptor; no Indigenous or African erasure. |
 | arrays | Patronage and symbols empty | rose-morgan; rose-calendar | Documented omission | Generic legacy tokens and unreviewed emblems fail strict formal controls. |
