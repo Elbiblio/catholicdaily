@@ -114,6 +114,41 @@ void main() {
     expect(mountCarmel.lifeLength, isEmpty);
   });
 
+  test('preserves reviewed Batch 8 identities and profile kinds', () async {
+    const expected = {
+      'sharbel_makhluf': ('Q331876', 'individual'),
+      'james_apostle': ('Q43999', 'biblical'),
+      'peter_chrysologus': ('Q328742', 'individual'),
+      'eusebius_of_vercelli': ('Q181489', 'individual'),
+      'peter_julian_eymard': ('Q560994', 'individual'),
+      'dedication_of_basilica_of_saint_mary_major': ('Q186282', 'observance'),
+      'cajetan_of_thiene': ('Q379914', 'individual'),
+      'sixtus_ii_pope': (null, 'group'),
+      'teresa_benedicta_of_the_cross': ('Q76749', 'individual'),
+      'lawrence_of_rome_deacon': ('Q17590', 'individual'),
+      'jane_frances_de_chantal': ('Q234521', 'individual'),
+      'pontian_and_hippolytus': (null, 'group'),
+    };
+
+    for (final entry in expected.entries) {
+      final profile = await SaintProfileService.instance.findById(entry.key);
+
+      expect(profile, isNotNull, reason: entry.key);
+      expect(profile!.wikidataId, entry.value.$1, reason: entry.key);
+      expect(profile.kind.name, entry.value.$2, reason: entry.key);
+    }
+
+    for (final id in const [
+      'dedication_of_basilica_of_saint_mary_major',
+      'sixtus_ii_pope',
+      'pontian_and_hippolytus',
+    ]) {
+      final profile = await SaintProfileService.instance.findById(id);
+      expect(profile!.lifeSpan, isEmpty, reason: id);
+      expect(profile.lifeLength, isEmpty, reason: id);
+    }
+  });
+
   test('preserves reviewed Batch 3 publication precision', () async {
     final frances = await SaintProfileService.instance.findById(
       'frances_of_rome',
@@ -266,6 +301,38 @@ void main() {
     expect(failures, isEmpty);
   });
 
+  test('Batch 8 one-minute summaries contain 100 to 150 words', () async {
+    const batch8Ids = [
+      'sharbel_makhluf',
+      'james_apostle',
+      'peter_chrysologus',
+      'eusebius_of_vercelli',
+      'peter_julian_eymard',
+      'dedication_of_basilica_of_saint_mary_major',
+      'cajetan_of_thiene',
+      'sixtus_ii_pope',
+      'teresa_benedicta_of_the_cross',
+      'lawrence_of_rome_deacon',
+      'jane_frances_de_chantal',
+      'pontian_and_hippolytus',
+    ];
+    final failures = <String>[];
+
+    for (final id in batch8Ids) {
+      final profile = await SaintProfileService.instance.findById(id);
+      final summary = profile!.guide!.oneMinuteSummary.trim();
+      final wordCount = summary
+          .split(RegExp(r'\s+'))
+          .where((word) => word.isNotEmpty)
+          .length;
+      if (wordCount < 100 || wordCount > 150) {
+        failures.add('$id: $wordCount words');
+      }
+    }
+
+    expect(failures, isEmpty);
+  });
+
   test('preserves reviewed Batch 7 calendar ranks and colors', () async {
     final cases = [
       (
@@ -339,6 +406,94 @@ void main() {
         'bridget_of_sweden',
         CelebrationRank.optionalMemorial,
         LiturgicalColor.white,
+      ),
+    ];
+
+    for (final entry in cases) {
+      final celebrations = await SaintCalendarService.instance
+          .getSaintCelebrationsForDate(date: entry.$1);
+      final celebration = celebrations.singleWhere(
+        (candidate) => candidate.id == entry.$2,
+      );
+
+      expect(celebration.rank, entry.$3, reason: entry.$2);
+      expect(celebration.color, entry.$4, reason: entry.$2);
+    }
+  });
+
+  test('preserves reviewed Batch 8 calendar ranks and colors', () async {
+    final cases = [
+      (
+        DateTime(2026, 7, 24),
+        'sharbel_makhluf',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 7, 25),
+        'james_apostle',
+        CelebrationRank.feast,
+        LiturgicalColor.red,
+      ),
+      (
+        DateTime(2026, 7, 30),
+        'peter_chrysologus',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 8, 2),
+        'eusebius_of_vercelli',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 8, 2),
+        'peter_julian_eymard',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 8, 5),
+        'dedication_of_basilica_of_saint_mary_major',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 8, 7),
+        'cajetan_of_thiene',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 8, 7),
+        'sixtus_ii_pope',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.red,
+      ),
+      (
+        DateTime(2026, 8, 9),
+        'teresa_benedicta_of_the_cross',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.red,
+      ),
+      (
+        DateTime(2026, 8, 10),
+        'lawrence_of_rome_deacon',
+        CelebrationRank.feast,
+        LiturgicalColor.red,
+      ),
+      (
+        DateTime(2026, 8, 12),
+        'jane_frances_de_chantal',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 8, 13),
+        'pontian_and_hippolytus',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.red,
       ),
     ];
 

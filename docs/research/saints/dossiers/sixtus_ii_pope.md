@@ -63,4 +63,4 @@ The profile is original synthesis. The public-domain ancient translation is cred
 - Status: published
 - Warnings: none
 - Published validator command: `dart run tool/validate_saint_profiles.dart --published-only`
-- Observed result: `Saint profile validation: 158 total, 158 legacy, 92 researched, 92 validated, 0 errors, 0 warnings.`
+- Observed result: `Saint profile validation: 158 total, 158 legacy, 96 researched, 96 validated, 0 errors, 0 warnings.`

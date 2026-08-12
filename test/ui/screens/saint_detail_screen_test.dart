@@ -357,6 +357,72 @@ void main() {
     },
   );
 
+  testWidgets(
+    'Batch 8 Saint Mary Major observance and real person or group copy remain distinct',
+    (tester) async {
+      final maryMajor = await tester.runAsync(
+        () => SaintProfileService.instance.findById(
+          'dedication_of_basilica_of_saint_mary_major',
+        ),
+      );
+
+      expect(maryMajor, isNotNull);
+      expect(maryMajor!.kind, SaintProfileKind.observance);
+      expect(maryMajor.lifeSpan, isEmpty);
+      expect(maryMajor.lifeLength, isEmpty);
+
+      await tester.pumpWidget(
+        _host(SaintLifeGuideView(profile: maryMajor, onShowSources: () {})),
+      );
+
+      for (final heading in const [
+        'Why this observance matters today',
+        'What the Church celebrates',
+        'The Gospel at the heart of this observance',
+        'Dispositions to cultivate',
+      ]) {
+        expect(find.text(heading), findsOneWidget);
+      }
+      for (final personHeading in const [
+        'Lived',
+        'Length',
+        'Their life and journey',
+        'The Gospel visible in their life',
+        'Their response',
+        'Seen in their life',
+      ]) {
+        expect(find.text(personHeading), findsNothing);
+      }
+
+      for (final id in const ['sharbel_makhluf', 'sixtus_ii_pope']) {
+        final profile = await tester.runAsync(
+          () => SaintProfileService.instance.findById(id),
+        );
+
+        expect(profile, isNotNull, reason: id);
+        expect(profile!.kind, isNot(SaintProfileKind.observance), reason: id);
+
+        await tester.pumpWidget(
+          _host(SaintLifeGuideView(profile: profile, onShowSources: () {})),
+        );
+
+        expect(find.text('Their life and journey'), findsOneWidget, reason: id);
+        expect(
+          find.text('The Gospel visible in their life'),
+          findsOneWidget,
+          reason: id,
+        );
+        expect(find.text('Their response'), findsOneWidget, reason: id);
+        expect(find.text('Seen in their life'), findsWidgets, reason: id);
+        expect(
+          find.text('What the Church celebrates'),
+          findsNothing,
+          reason: id,
+        );
+      }
+    },
+  );
+
   testWidgets('group profiles retain person-centered guide copy', (
     tester,
   ) async {
