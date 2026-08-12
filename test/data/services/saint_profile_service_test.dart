@@ -186,6 +186,43 @@ void main() {
     }
   });
 
+  test('preserves reviewed Batch 10 identities and profile kinds', () async {
+    const expected = <String, (String?, String)>{
+      'our_lady_of_sorrows': ('Q20170562', 'observance'),
+      'robert_bellarmine': ('Q298664', 'individual'),
+      'januarius_of_benevento': ('Q315312', 'individual'),
+      'matthew_apostle': ('Q43600', 'biblical'),
+      'cosmas_and_damian': ('Q76486', 'group'),
+      'lawrence_ruiz': ('Q669138', 'group'),
+      'wenceslaus_of_bohemia': ('Q196527', 'individual'),
+      'faustina_kowalska': ('Q18978', 'individual'),
+      'bruno_of_cologne': ('Q312314', 'individual'),
+      'our_lady_of_the_rosary': (null, 'observance'),
+      'denis_of_paris': (null, 'group'),
+      'john_leonardi': ('Q1355472', 'individual'),
+    };
+
+    for (final entry in expected.entries) {
+      final profile = await SaintProfileService.instance.findById(entry.key);
+
+      expect(profile, isNotNull, reason: entry.key);
+      expect(profile!.wikidataId, entry.value.$1, reason: entry.key);
+      expect(profile.kind.name, entry.value.$2, reason: entry.key);
+    }
+
+    for (final id in const [
+      'our_lady_of_sorrows',
+      'our_lady_of_the_rosary',
+      'cosmas_and_damian',
+      'lawrence_ruiz',
+      'denis_of_paris',
+    ]) {
+      final profile = await SaintProfileService.instance.findById(id);
+      expect(profile!.lifeSpan, isEmpty, reason: id);
+      expect(profile.lifeLength, isEmpty, reason: id);
+    }
+  });
+
   test('preserves reviewed Batch 3 publication precision', () async {
     final frances = await SaintProfileService.instance.findById(
       'frances_of_rome',
@@ -388,6 +425,38 @@ void main() {
     final failures = <String>[];
 
     for (final id in batch9Ids) {
+      final profile = await SaintProfileService.instance.findById(id);
+      final summary = profile!.guide!.oneMinuteSummary.trim();
+      final wordCount = summary
+          .split(RegExp(r'\s+'))
+          .where((word) => word.isNotEmpty)
+          .length;
+      if (wordCount < 100 || wordCount > 150) {
+        failures.add('$id: $wordCount words');
+      }
+    }
+
+    expect(failures, isEmpty);
+  });
+
+  test('Batch 10 one-minute summaries contain 100 to 150 words', () async {
+    const batch10Ids = [
+      'our_lady_of_sorrows',
+      'robert_bellarmine',
+      'januarius_of_benevento',
+      'matthew_apostle',
+      'cosmas_and_damian',
+      'lawrence_ruiz',
+      'wenceslaus_of_bohemia',
+      'faustina_kowalska',
+      'bruno_of_cologne',
+      'our_lady_of_the_rosary',
+      'denis_of_paris',
+      'john_leonardi',
+    ];
+    final failures = <String>[];
+
+    for (final id in batch10Ids) {
       final profile = await SaintProfileService.instance.findById(id);
       final summary = profile!.guide!.oneMinuteSummary.trim();
       final wordCount = summary
@@ -671,6 +740,94 @@ void main() {
 
       expect(celebration.rank, entry.$3, reason: entry.$2);
       expect(celebration.color, entry.$4, reason: entry.$2);
+    }
+  });
+
+  test('preserves reviewed Batch 10 calendar ranks and colors', () async {
+    final cases = [
+      (
+        DateTime(2026, 9, 15),
+        'our_lady_of_sorrows',
+        CelebrationRank.obligatoryMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 9, 17),
+        'robert_bellarmine',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 9, 19),
+        'januarius_of_benevento',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.red,
+      ),
+      (
+        DateTime(2026, 9, 21),
+        'matthew_apostle',
+        CelebrationRank.feast,
+        LiturgicalColor.red,
+      ),
+      (
+        DateTime(2026, 9, 26),
+        'cosmas_and_damian',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.red,
+      ),
+      (
+        DateTime(2026, 9, 28),
+        'lawrence_ruiz',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.red,
+      ),
+      (
+        DateTime(2026, 9, 28),
+        'wenceslaus_of_bohemia',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.red,
+      ),
+      (
+        DateTime(2026, 10, 5),
+        'faustina_kowalska',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 10, 6),
+        'bruno_of_cologne',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 10, 7),
+        'our_lady_of_the_rosary',
+        CelebrationRank.obligatoryMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 10, 9),
+        'denis_of_paris',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.red,
+      ),
+      (
+        DateTime(2026, 10, 9),
+        'john_leonardi',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+    ];
+
+    for (final entry in cases) {
+      final celebrations = await SaintCalendarService.instance
+          .getSaintCelebrationsForDate(date: entry.$1);
+      final matching = celebrations
+          .where((candidate) => candidate.id == entry.$2)
+          .toList();
+      expect(matching, hasLength(1), reason: entry.$2);
+      expect(matching.single.rank, entry.$3, reason: entry.$2);
+      expect(matching.single.color, entry.$4, reason: entry.$2);
     }
   });
 
