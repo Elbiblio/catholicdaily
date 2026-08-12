@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 2,
+  "id": "sharbel_makhluf",
+  "profileKind": "individual",
+  "celebrationIds": ["sharbel_makhluf", "saint_sharbel_makhl_f_priest"],
+  "name": "Saint Sharbel Makhlūf, Priest",
+  "alternateNames": ["Charbel Makhlouf", "Youssef Antoun Makhlouf"],
+  "ecclesialTitle": "Priest",
+  "lifeSpan": "1828–1898",
+  "vocation": "Lebanese Maronite monk, priest, and hermit",
+  "places": ["Bekaa Kafra", "Mayfouq", "Annaya"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Born Youssef Antoun Makhlouf in Lebanon, Sharbel entered the Lebanese Maronite Order, professed vows at Annaya, became a priest, and later received permission for eremitical life. His documented witness joins Maronite liturgy, manual work, community formation, and sustained prayer. He left no writings, so detailed sayings and inner experiences require caution. Devotion grew strongly after his 1898 death, including reports about his body and healings. Those claims belong to ecclesial and popular reception and never replace diagnosis, treatment, consent, or evidence. Canonized in 1977, Sharbel invites bounded silence and faithful work, not isolation, self-harm, or medical neglect.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Charbel_Makhlouf",
+  "wikidataId": "Q331876",
+  "feastDates": ["July 24"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "sharbel-paul-vi-canonization",
+      "title": "Canonisation de l'ermite libanais Charbel Makhlouf, 9 octobre 1977",
+      "authorOrInstitution": "Pope Paul VI",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/paul-vi/fr/homilies/1977/documents/hf_p-vi_hom_19771009.html",
+      "accessedDate": "2026-08-12",
+      "tier": 1,
+      "reuseBasis": "Formal canonization homily used for Sharbel's Maronite monastic and eremitical vocation, Annaya reception, 1977 canonization, prayer and ascetic witness, and his significance for Lebanon and the wider Church; severe practices are not converted into universal prescriptions",
+      "supports": ["identity", "ecclesialTitle", "lifeSpan", "places", "life.maronite", "life.monk", "life.hermit", "reception.canonization", "reception.lebanon"]
+    },
+    {
+      "id": "sharbel-annaya-biography",
+      "title": "Saint Charbel Biography",
+      "authorOrInstitution": "Monastery of Saint Maron, Annaya",
+      "publisher": "Deir Annaya",
+      "url": "https://saintcharbel.com/saint-charbel-biography/",
+      "accessedDate": "2026-08-12",
+      "tier": 3,
+      "reuseBasis": "Institutional monastery biography used cautiously for birth name and dates, Lebanese Maronite Order formation, vows, priesthood, sixteen years in community at Annaya, permission for the Saints Peter and Paul hermitage in 1875, manual work, final illness, death, burial, and later devotional reports; miracle and bodily claims remain reception",
+      "supports": ["identity", "alternateNames", "lifeSpan", "places", "life.formation", "life.vows", "life.priesthood", "life.community", "life.hermitage", "life.work", "life.illness", "life.death", "reception.tomb", "reception.miracles", "sourceLimits"]
+    },
+    {
+      "id": "sharbel-heyberger-identity",
+      "title": "Saint Charbel Makhlouf, or the Consecration of Maronite Identity",
+      "authorOrInstitution": "Bernard Heyberger",
+      "publisher": "Edinburgh University Press via Cambridge Core",
+      "url": "https://www.cambridge.org/core/books/abs/middle-eastern-and-european-christianity-16th20th-century/saint-charbel-makhlouf-or-the-consecration-of-maronite-identity/6E162ED236542FE44A694A80EB6E74CE",
+      "accessedDate": "2026-08-12",
+      "tier": 2,
+      "reuseBasis": "Independent scholarly chapter used for the scarcity of contemporary biographical evidence and writings, the difference between Sharbel's documented life and later hagiographic abundance, and the formation of Maronite and Lebanese identity around his cult between Vatican II, canonization, and civil conflict",
+      "supports": ["identity", "lifeSpan", "life.no_writings", "reception.hagiography", "reception.maronite_identity", "reception.lebanon", "historicalCertainty", "sourceLimits"]
+    },
+    {
+      "id": "sharbel-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — July",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/JulUC.shtml",
+      "accessedDate": "2026-08-12",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the canonical title Saint Sharbel Makhlūf, Priest, July 24 optional memorial, and white color; the calendar key establishes that an entry without a printed rank is optional",
+      "supports": ["identity", "celebrationIds", "ecclesialTitle", "feastDates", "calendar.rank", "calendar.color"]
+    }
+  ],
+  "editorial": {"state": "published", "researcher": "Catholic Daily editorial research", "reviewer": "Catholic Daily factual and theological review", "reviewedAt": "2026-08-12", "revision": 1, "warnings": []},
+  "whyItMatters": "Sharbel shows that silence can make room for Christ when it remains connected to liturgy, work, responsible authority, and the Church. His reception also teaches discernment: devotion and hope accompany competent healthcare rather than replacing it.",
+  "oneMinuteSummary": "Sharbel Makhlūf was born Youssef Antoun Makhlouf in Lebanon in 1828. He entered the Lebanese Maronite Order, professed vows at Saint Maron Monastery in Annaya, was ordained a priest, and spent sixteen years in community before receiving permission for eremitical life in 1875. His days joined Maronite worship, Scripture, manual labor, silence, and prayer. Because Sharbel left no writings and little contemporary personal evidence, later sayings and detailed inner experiences should not be treated as transcripts. After his death in 1898, devotion expanded around his tomb, reports concerning his body, and attributed healings. These belong to formal and popular reception, not automatic medical proof. Prayer for healing can accompany diagnosis, treatment, consent, and honest uncertainty. Canonized in 1977, Sharbel offers a disciplined, ecclesial solitude that never excuses disappearance, unsafe fasting, untreated illness, or neglect of dependants.",
+  "life": {
+    "sections": [
+      {"heading": "A Maronite monastic vocation", "body": "Born Youssef Antoun Makhlouf in Bekaa Kafra in 1828, he entered Maronite monastic formation in 1851, took the name Sharbel, professed vows, and was ordained. His vocation belongs to the Syriac Maronite tradition in communion with the Catholic Church, not to a generic Western hermit stereotype.", "sourceIds": ["sharbel-paul-vi-canonization", "sharbel-annaya-biography", "sharbel-heyberger-identity"]},
+      {"heading": "Community before hermitage", "body": "Sharbel lived for years within the community at Annaya before receiving permission in 1875 to enter the nearby hermitage. Prayer, liturgy, work, rule, and accountable authority formed his solitude. Healthy solitude remains bounded, freely discerned, and compatible with physical and psychological care.", "sourceIds": ["sharbel-annaya-biography", "sharbel-paul-vi-canonization"]},
+      {"heading": "Illness, death, and careful memory", "body": "Institutional accounts say Sharbel became ill while celebrating the liturgy and died on December 24, 1898. Illness is not proof of holiness, and severe ascetic practice is not a treatment plan. No one should imitate food restriction, exposure, sleep loss, or isolation that risks health.", "sourceIds": ["sharbel-annaya-biography"]},
+      {"heading": "Devotion and healing claims", "body": "Posthumous devotion includes reports about Sharbel's remains and healings through his intercession. The profile records that reception without declaring every report verified or medically explained. Prayer never replaces clinical assessment, prescribed care, safeguarding, or truthful reporting of outcomes.", "sourceIds": ["sharbel-annaya-biography", "sharbel-heyberger-identity", "sharbel-paul-vi-canonization"]}
+    ],
+    "gospelTheme": "Christ calls disciples into prayer that bears fruit in faithful work, ecclesial communion, and love rather than withdrawal from responsibility.",
+    "struggle": "Sharbel's sparse documentary record was followed by abundant hagiography, while intense ascetic and healing language can be misused to encourage unsafe isolation or medical neglect.",
+    "response": "He pursued an authorized Maronite vocation of liturgy, work, community, and hermitage; readers receive that witness with historical restraint and health-safe discernment."
+  },
+  "virtues": [
+    {"name": "Accountable silence", "evidence": "Sharbel's hermitage followed lengthy formation and permission within a monastic community.", "imitation": "Schedule ten quiet minutes within your real duties, tell an accountable person if solitude is worsening distress, and return ready to serve.", "sourceIds": ["sharbel-annaya-biography", "sharbel-paul-vi-canonization"]},
+    {"name": "Faithful work", "evidence": "Maronite accounts place manual labor alongside prayer and worship in his monastic life.", "imitation": "Complete one ordinary task attentively and offer it to Christ without seeking recognition or exhausting yourself.", "sourceIds": ["sharbel-annaya-biography"]}
+  ],
+  "practice": {"spiritual": "Pray Mark 6:30–32 for a short, bounded period of quiet, asking Christ for rest that renews responsible love.", "action": "If you are seeking healing, write one prayer intention and one concrete healthcare step—an appointment, medication question, or support request—and pursue both honestly."},
+  "reflectionQuestions": ["Does my silence return me to people with greater patience, or help me avoid duties and needed care?", "Can I pray for healing while accepting evidence, treatment, uncertainty, and another person's freedom?"],
+  "scripture": {"reference": "Mark 6:30–32", "connection": "Jesus calls the apostles to a quiet place and rest; Christian withdrawal is restorative and relational, not abandonment or harm."},
+  "prayer": "Lord Jesus Christ, you called Sharbel to seek you in the Maronite Church through prayer, work, and silence. Teach us to rest without abandoning love, to hope without denying evidence, and to seek wise care in illness. Through his intercession, strengthen Lebanon and all who suffer, and make our hidden fidelity fruitful in mercy. Amen."
+}
