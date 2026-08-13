@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 2,
+  "id": "our_lady_of_loreto",
+  "profileKind": "observance",
+  "celebrationIds": ["our_lady_of_loreto"],
+  "name": "Our Lady of Loreto",
+  "alternateNames": ["Blessed Virgin Mary of Loreto"],
+  "ecclesialTitle": "Marian observance",
+  "places": ["Loreto"],
+  "patronage": ["air travellers"],
+  "symbols": [],
+  "briefBio": "Our Lady of Loreto is a Marian observance centered on the Holy House shrine at Loreto and the Incarnation: the Word became flesh through Mary's free response. The General Roman Calendar has kept December 10 as an optional memorial since 2019. A medieval tradition identifies the shrine's three-walled chamber with Mary's home at Nazareth and narrates its flight through Dalmatia to Italy. Records indicate earlier Marian devotion at Loreto, while the developed Holy House and miraculous-flight narrative is documented in the early 1470s; architecture, art, replicas, and pilgrimage then made the chamber a powerful devotional space. Archaeology identifies a probable first-century domestic structure and later churches and pilgrimage at a Nazareth site, but does not prove that Loreto's walls came from Mary's dwelling. Church reception also formally names Mary of Loreto patroness of air travellers; this is spiritual patronage, not guaranteed safety. The observance invites contemplation and responsible pilgrimage, not relic certainty, magical protection, cures, hazardous travel, crusader rhetoric, or a simulated biography of Mary.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Our_Lady_of_Loreto",
+  "feastDates": ["December 10"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "loreto-calendar-decree",
+      "title": "Decree on the celebration of the Blessed Virgin Mary of Loreto to be inscribed in the General Roman Calendar",
+      "authorOrInstitution": "Congregation for Divine Worship and the Discipline of the Sacraments",
+      "publisher": "The Holy See, 7 October 2019",
+      "url": "https://www.vatican.va/roman_curia/congregations/ccdds/documents/rc_con_ccdds_doc_20191007_decreto-celebrazione-verginediloreto_en.html",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal decree used for the December 10 universal optional memorial, Incarnation and Annunciation focus, pilgrimage and Holy Family reception; its language of veneration and shrine tradition is not archaeological authentication of the building",
+      "supports": ["identity", "celebrationIds", "feastDates", "calendar.rank", "theology.incarnation", "theology.annunciation", "reception.pilgrimage", "sourceLimits"]
+    },
+    {
+      "id": "loreto-aviation",
+      "title": "Decree extending the Loreto Jubilee until 10 December 2021",
+      "authorOrInstitution": "Apostolic Penitentiary",
+      "publisher": "The Holy See, 16 July 2020",
+      "url": "https://www.vatican.va/roman_curia/tribunals/apost_penit/documents/rc_trib_appen_pro_20200716_decreto-proroga-giubileolauretano_en.html",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal decree used for the centenary statement that Benedict XV constituted the Blessed Virgin Mary of Loreto principal patroness of all air travellers; patronage is devotional and does not guarantee flight or travel safety",
+      "supports": ["patronage", "reception.aviation", "safeguard.no_protection_guarantee"]
+    },
+    {
+      "id": "loreto-sanger",
+      "title": "Dwelling and the Everyday at Loreto",
+      "authorOrInstitution": "Alice E. Sanger",
+      "publisher": "Open Arts Journal 11 (2024), pp. 94–102; DOI 10.5456/issn.2050-3679/2024s05",
+      "url": "https://openartsjournal.org/wp-content/uploads/2024/09/oaj-issue-11-final_article_5.pdf",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Readable independent art-historical study, especially pp. 94–99, used for medieval founding tradition, the house as a walk-in relic, late-fifteenth-century basilica setting, sixteenth-century marble casing, pilgrims, material contrasts, and domestic devotional meaning; it does not authenticate Nazareth provenance",
+      "supports": ["tradition.translation", "history.shrine_architecture", "history.marble_casing", "reception.pilgrimage", "theology.domestic_life", "sourceLimits"]
+    },
+    {
+      "id": "loreto-hamilton",
+      "title": "Translating the Sacred: Piety, Politics and the Changing Image of the Holy House of Loreto",
+      "authorOrInstitution": "Adrianne Hamilton",
+      "publisher": "University of Oregon MA thesis, 2008",
+      "url": "https://scholarsbank.uoregon.edu/server/api/core/bitstreams/cd9b4884-ee0b-451f-842b-60331768b4e4/content",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Full readable architectural and devotional history used at pp. 18–24 to distinguish earlier Marian shrine evidence from the early-1470s documented Holy House and flight narrative, and pp. 82–84 for replica networks and papal appropriation; legend and reception are not converted into relic certainty",
+      "supports": ["tradition.1291_1294", "history.earlier_shrine", "history.flight_narrative_1470s", "history.architecture", "reception.replicas", "reception.politics", "sourceLimits"]
+    },
+    {
+      "id": "nazareth-dark",
+      "title": "Early Roman-period Nazareth and the Sisters of Nazareth convent",
+      "authorOrInstitution": "Ken Dark",
+      "publisher": "The Antiquaries Journal 92 (2012), pp. 37–64; Cambridge University Press; DOI 10.1017/S0003581512001308",
+      "url": "https://centaur.reading.ac.uk/29782/1/Ken%20Dark%20Nazareth%20paper%20from%20Ant%20J%20.pdf",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Readable peer-reviewed archaeological study used for a probable first-century domestic structure, later burial, Byzantine churches, Crusader refurbishment, and pilgrimage at a Nazareth site; it does not establish continuous veneration of the domestic structure, Mary's house, or the provenance of Loreto's walls",
+      "supports": ["archaeology.nazareth_domestic", "archaeology.later_churches", "reception.pilgrimage", "safeguard.no_provenance_proof", "sourceLimits"]
+    },
+    {
+      "id": "calendar-universal-december",
+      "title": "Liturgical Calendar: Universal Calendar — December",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/DecUC.shtml",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for Our Lady of Loreto on December 10 and universal optional-memorial rank; the page states that a celebration with no printed rank is an optional memorial and does not establish color or house provenance",
+      "supports": ["identity", "celebrationIds", "feastDates", "calendar.rank"]
+    },
+    {
+      "id": "girm-color",
+      "title": "General Instruction of the Roman Missal, nos. 345–346",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "USCCB, Chapter VI: The Requisites for the Celebration of Mass",
+      "url": "https://www.usccb.org/prayer-and-worship/the-mass/general-instruction-of-the-roman-missal/girm-chapter-6",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal liturgical norm used only for white at celebrations of the Blessed Virgin Mary; title, date, and universal rank come from separate calendar and decree evidence",
+      "supports": ["calendar.color"]
+    }
+  ],
+  "editorial": {"state": "published", "researcher": "Catholic Daily editorial research", "reviewer": "Catholic Daily factual and theological review", "reviewedAt": "2026-08-13", "revision": 1, "warnings": []},
+  "whyItMatters": "Loreto turns attention from spectacular travel claims to the Incarnation's domestic nearness: Mary consented, Christ entered ordinary human life, and homes can become places of welcome. Honest devotion preserves wonder while refusing relic certainty, unsafe pilgrimage, and protection guarantees.",
+  "oneMinuteSummary": "Our Lady of Loreto is a Marian observance, not a separate person-biography. Since 2019, December 10 has been a universal optional memorial centered on the Incarnation, Mary's response at the Annunciation, and the Holy Family's ordinary life. Medieval tradition identifies Loreto's three-walled chamber as Mary's Nazareth home and narrates its flight through Dalmatia to Italy in 1291–1294. Independent scholarship locates the documented development of that translation story later and traces how pilgrimage, architecture, art, and replicas spread the devotion. Archaeology identifies a probable first-century domestic structure and later churches and pilgrimage at a Nazareth site, but cannot prove that Loreto's walls belonged to Mary or crossed the Adriatic. Church reception formally calls Mary of Loreto patroness of air travellers; patronage is prayer, not guaranteed safety. Visit shrines responsibly, follow travel and medical guidance, and reject magical-house claims, cures, relic certainty, crusader rhetoric, and unsafe pilgrimage.",
+  "life": {
+    "sections": [
+      {"heading": "An observance of the Incarnation", "body": "The 2019 decree places Loreto on December 10 and directs prayer toward the Word made flesh, Mary's free response, and the Holy Family. The title does not create a second biography or prove a building's identity.", "sourceIds": ["loreto-calendar-decree", "calendar-universal-december", "girm-color"]},
+      {"heading": "The translation narrative", "body": "Medieval tradition says angels carried Mary's house from Nazareth through Dalmatia to Loreto in 1291–1294. Records indicate earlier Marian devotion at Loreto, while the developed Holy House and flight narrative is documented in the early 1470s; human-transport explanations remain hypotheses.", "sourceIds": ["loreto-sanger", "loreto-hamilton"]},
+      {"heading": "Architecture, pilgrimage, and replicas", "body": "The late-fifteenth-century basilica and sixteenth-century marble casing framed a modest chamber as a walk-in relic. Pilgrims, images, and architectural replicas carried Loreto's domestic and Incarnation meanings far beyond Italy.", "sourceIds": ["loreto-sanger", "loreto-hamilton", "loreto-calendar-decree"]},
+      {"heading": "Nazareth and aviation without false proof", "body": "Nazareth archaeology illuminates a probable first-century domestic structure and later churches and pilgrimage at the site, but not Loreto provenance or continuous veneration of that structure. Aviation patronage is spiritual care, not a substitute for safe practice.", "sourceIds": ["nazareth-dark", "loreto-aviation"]}
+    ],
+    "gospelTheme": "In the Incarnation, God enters ordinary embodied life and invites a free human response.",
+    "struggle": "A beloved shrine can be turned into archaeological certainty, magic, cure claims, unsafe travel, or triumphalist possession of sacred space.",
+    "response": "Contemplate Christ's nearness, honor tradition with honest labels, travel responsibly, and make homes and communities places of consent and welcome."
+  },
+  "virtues": [
+    {"name": "Attentive consent", "evidence": "Loreto's formal liturgy centers Mary's listening and free response to the angel in the mystery of the Incarnation.", "imitation": "Before accepting a new responsibility, listen carefully, ask needed questions, and give or withhold consent freely.", "sourceIds": ["loreto-calendar-decree"]},
+    {"name": "Hospitable presence", "evidence": "Loreto's domestic scale, pilgrimage history, and replica traditions made ordinary dwelling a setting for contemplating Christ's presence.", "imitation": "Make one concrete change that improves safety, access, or welcome in a home, parish, airport, or shared space.", "sourceIds": ["loreto-sanger", "loreto-hamilton", "loreto-aviation"]}
+  ],
+  "practice": {"spiritual": "Pray slowly with Luke's Annunciation, attending to God's initiative and Mary's free response.", "action": "Review one planned journey for accessibility, rest, weather, transport rules, and emergency contacts; prayer accompanies rather than replaces preparation."},
+  "reflectionQuestions": ["Does my devotion to sacred places deepen welcome in ordinary homes and communities?", "Can I preserve wonder without claiming archaeology, cures, or protection that the evidence and faith do not guarantee?"],
+  "scripture": {"reference": "Luke 1:26–38", "connection": "Loreto's official liturgical meaning is the Annunciation and Incarnation, where God's call meets Mary's attentive and free response."},
+  "prayer": "God of the Word made flesh, in the observance of Our Lady of Loreto teach us to welcome Christ in ordinary life. Give travellers prudence, workers care, households safety, and pilgrims humility. Keep us from magic, false certainty, cure claims, and reckless journeys. Through Mary's example, make our yes free and our welcome concrete. Amen."
+}

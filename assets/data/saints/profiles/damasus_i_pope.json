@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 2,
+  "id": "damasus_i_pope",
+  "profileKind": "individual",
+  "celebrationIds": ["damasus_i_pope", "saint_damasus_i_pope"],
+  "name": "Saint Damasus I, Pope",
+  "alternateNames": ["Damasus of Rome"],
+  "ecclesialTitle": "Pope",
+  "lifeSpan": "c. 305–384",
+  "vocation": "Bishop of Rome",
+  "places": ["Rome"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Damasus was bishop of Rome from 366 until his death on December 11, 384. His episcopate began with rival elections: Damasus and Ursinus led opposed communities whose conflict produced lethal street and basilica violence. A contemporary non-Christian historian reports 137 bodies in one basilica; partisan Christian narratives require caution, but the bloodshed cannot be sanitized or assigned wholly to one source's enemies. Damasus later reshaped Rome's martyr memory through verse inscriptions, access routes, decoration, and building work at burial sites. His epigrams preserve traditions while also curating civic concord and episcopal authority; their claims are not neutral eyewitness biographies or relic authentication. Roman synods and disputes with eastern churches show late-antique networks, not modern universal papal administration. Jerome's preface documents Damasus prompting revision of the four Latin Gospels against Greek manuscripts, not commissioning the entire Vulgate. Damasus's learning and cultic legacy must not excuse factional violence, elite power, coercion, or devotional anti-Jewish and anti-heretical rhetoric.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Pope_Damasus_I",
+  "wikidataId": "Q130997",
+  "feastDates": ["December 11"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {
+      "id": "damasus-ammianus",
+      "title": "Res Gestae 27.3.11–13: the contest of Damasus and Ursinus",
+      "authorOrInstitution": "Ammianus Marcellinus; translation by John C. Rolfe",
+      "publisher": "LacusCurtius, University of Chicago; Loeb Classical Library text",
+      "url": "https://penelope.uchicago.edu/Thayer/E/Roman/Texts/Ammian/27*.html",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Readable primary account by a contemporary non-Christian elite observer used for rival ambition, supporters of both parties entering lethal conflict, civil intervention, and 137 bodies found in the basilica of Sicininus; it does not assign every death personally to Damasus or provide a neutral total history",
+      "supports": ["history.election_366", "history.factional_violence", "history.137_dead", "history.civil_authority", "sourceLimits"]
+    },
+    {
+      "id": "damasus-whiting",
+      "title": "Ursinus, Luciferians, and The Bishops of Rome",
+      "authorOrInstitution": "Colin M. Whiting",
+      "publisher": "The Journal of Theological Studies 73(2), 2022, pp. 676–730; Oxford University Press; DOI 10.1093/jts/flac087",
+      "url": "https://academic.oup.com/jts/article-abstract/73/2/676/6717712",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Readable scholarly abstract used to identify Quae gesta sunt as an Ursinus-supporter narrative, distinguish its community from the Luciferian Libellus precum, and describe unresolved social ruptures opposed to Damasus; claims are limited exactly to the accessible abstract",
+      "supports": ["history.partisan_sources", "history.ursinian_community", "history.luciferian_distinction", "history.social_rupture", "sourceLimits"]
+    },
+    {
+      "id": "damasus-ocd",
+      "title": "Damasus I, Bishop of Rome, 366–384 CE",
+      "authorOrInstitution": "Samuel James Beeching Barnish; revised by Marianne Sághy",
+      "publisher": "Oxford Classical Dictionary, Oxford University Press, current version 25 February 2019",
+      "url": "https://academic.oup.com/edited-volume/61673/chapter-abstract/548722968?login=false",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Readable independent synthesis used for Damasus's 366–384 episcopate, double election and Ursinian schism, martyr cult, Christian tomb inscriptions, epigrams, Jerome, Roman authority claims, and strained eastern relations; Bible shorthand is narrowed by Jerome's primary Gospel preface",
+      "supports": ["identity", "vocation", "lifeSpan", "history.episcopate", "history.ursinian_schism", "works.epigrams", "reception.martyr_cult", "history.jerome", "history.eastern_relations", "sourceLimits"]
+    },
+    {
+      "id": "damasus-carletti",
+      "title": "L'autoepitaffio di Papa Damaso",
+      "authorOrInstitution": "Carlo Carletti",
+      "publisher": "L'Osservatore Romano, 11 December 2009; The Holy See",
+      "url": "https://www.vatican.va/news_services/or/or_quo/cultura/286q04a1.html",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Readable named-author institutional scholarly synthesis used for birth at Rome around 305–306 and death there on 11 December 384; it cites Jerome's De viris illustribus 103 for Damasus's age and historical period, while the approximate birth does not support an exact age",
+      "supports": ["lifeSpan", "history.birth_approximate", "history.death_11_december_384", "sourceLimits"]
+    },
+    {
+      "id": "damasus-ihm",
+      "title": "Damasi epigrammata",
+      "authorOrInstitution": "Damasus I; critical edition by Maximilian Ihm",
+      "publisher": "Lipsiae: B. G. Teubner, 1895",
+      "url": "https://archive.org/details/damasiepigrammat00damauoft/page/n7/mode/2up",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Readable scan of the Latin critical edition used as the primary textual control for the surviving and transmitted Damasian epigram corpus, martyr elogia, self-commemoration, and editorial fragments; poetic claims are not treated as neutral eyewitness biographies",
+      "supports": ["works.epigram_corpus", "works.martyr_elogia", "works.self_commemoration", "sourceLimits"]
+    },
+    {
+      "id": "damasus-davison",
+      "title": "Damasus' curation of the Catacombs of St Callixtus: a consideration of heterotopia, martyrs, identity and authority",
+      "authorOrInstitution": "Carolyn Davison",
+      "publisher": "Queen's University Belfast PhD thesis, 2024",
+      "url": "https://pure.qub.ac.uk/en/studentTheses/damasus-curation-of-the-catacombs-of-st-callixtus-a-consideration/",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Readable repository abstract and consulted thesis chapters used at chapter 3 for directed pilgrim routes, light, galleries, and epigrams and chapter 5 from p. 180 for pre-existing decoration, additions, martyr veneration, unity, and authority; reconstruction remains contextual interpretation rather than relic authentication",
+      "supports": ["archaeology.callixtus", "history.pilgrim_routes", "works.epigrams", "reception.martyr_cult", "history.authority", "sourceLimits"]
+    },
+    {
+      "id": "damasus-saghy",
+      "title": "Scinditur in partes populus: Pope Damasus and the Martyrs of Rome",
+      "authorOrInstitution": "Marianne Sághy",
+      "publisher": "Early Medieval Europe 9(3), 2000, pp. 273–287; Wiley; DOI 10.1111/1468-0254.00070",
+      "url": "https://onlinelibrary.wiley.com/doi/10.1111/1468-0254.00070",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Readable scholarly abstract used for Damasus's martyr epigrams in Virgilian hexameters, their placement at tombs, creation of Roman holy patrons, promotion of concord after factional violence, and strategic authority claims at contested sites",
+      "supports": ["works.epigraphic_program", "reception.roman_martyrs", "history.concord", "history.contested_sites", "history.authority", "sourceLimits"]
+    },
+    {
+      "id": "damasus-jerome-preface",
+      "title": "Jerome's Letter to Pope Damasus: Preface to the Gospels",
+      "authorOrInstitution": "Jerome",
+      "publisher": "Wikisource transcription and English translation",
+      "url": "https://en.wikisource.org/wiki/Jerome%27s_Letter_to_Pope_Damasus:_Preface_to_the_Gospels",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Readable primary preface used for Damasus prompting Jerome to compare variant Latin Gospel texts with older Greek manuscripts and for the explicit scope of the four Gospels; it does not support a commission for the whole Bible or sole creation of the later Vulgate",
+      "supports": ["history.jerome", "works.gospel_revision", "works.four_gospels", "safeguard.no_whole_vulgate_claim", "sourceLimits"]
+    },
+    {
+      "id": "damasus-constantinople-letter",
+      "title": "Synodical Letter of the Council of Constantinople, 382",
+      "authorOrInstitution": "Bishops assembled at Constantinople in 382",
+      "publisher": "Nicene and Post-Nicene Fathers, New Advent",
+      "url": "https://www.newadvent.org/fathers/3809.htm",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Readable primary synodical letter used for eastern bishops addressing Damasus and other bishops assembled at Rome, their inability to attend fully, and contested late-antique interchurch relations; polemical labels are historical evidence and are not repeated devotionally",
+      "supports": ["history.roman_synod_382", "history.eastern_bishops", "history.interchurch_relations", "safeguard.no_polemical_devotion", "sourceLimits"]
+    },
+    {
+      "id": "calendar-universal-december",
+      "title": "Liturgical Calendar: Universal Calendar — December",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/DecUC.shtml",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for Saint Damasus I, Pope, on December 11 and universal optional-memorial rank; the page states that a celebration with no printed rank is an optional memorial and does not establish color or biography",
+      "supports": ["identity", "celebrationIds", "ecclesialTitle", "feastDates", "calendar.rank"]
+    },
+    {
+      "id": "girm-color",
+      "title": "General Instruction of the Roman Missal, nos. 345–346",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "USCCB, Chapter VI: The Requisites for the Celebration of Mass",
+      "url": "https://www.usccb.org/prayer-and-worship/the-mass/general-instruction-of-the-roman-missal/girm-chapter-6",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal liturgical norm used only for white at celebrations of saints who were not martyrs; title, date, and rank come from the separate calendar source",
+      "supports": ["calendar.color"]
+    }
+  ],
+  "editorial": {"state": "published", "researcher": "Catholic Daily editorial research", "reviewer": "Catholic Daily factual and theological review", "reviewedAt": "2026-08-13", "revision": 1, "warnings": []},
+  "whyItMatters": "Damasus's surviving inscriptions show how memory, sacred space, and authority are constructed. His legacy asks Christians to preserve martyrs' witness and Scripture carefully while refusing sanitized violence, leader immunity, relic certainty, polemical contempt, and anachronistic power claims.",
+  "oneMinuteSummary": "Damasus, bishop of Rome from 366 to 384, entered office through rival elections with Ursinus. A contemporary non-Christian historian reports deadly fighting by both parties' supporters and 137 bodies in one basilica; partisan Christian accounts require criticism, but the violence cannot be erased. Damasus later marked Roman martyr sites with verse inscriptions, routes, decoration, and building work. The epigrams preserve traditions while also shaping civic concord and episcopal authority, so they are not neutral eyewitness biographies or relic proof. Eastern bishops' letter to a Roman gathering in 382 shows interchurch consultation and tension, not modern universal papal government. Jerome's own preface records Damasus prompting revision of the four Latin Gospels against Greek manuscripts; it does not say Damasus commissioned the whole Bible. Honor his care for Scripture and martyr memory without excusing factional bloodshed, elite control, coercion, anti-Jewish or anti-heretical contempt, or martyr-seeking.",
+  "life": {
+    "sections": [
+      {"heading": "A disputed election and real bloodshed", "body": "Damasus, born probably around 305, and Ursinus were elected by rival communities in 366. Ammianus reports supporters of both sides in lethal conflict and 137 dead at one basilica. Ursinian and Luciferian sources reflect distinct opposed communities and must be read as partisan witnesses.", "sourceIds": ["damasus-carletti", "damasus-ammianus", "damasus-whiting", "damasus-ocd"]},
+      {"heading": "Martyr memory written in stone", "body": "Damasus's Latin verse elogia were installed at Roman martyr sites. Archaeology and the critical corpus show curated routes, decoration, remembered stories, and self-commemoration; poetry shaped authority and concord rather than neutrally recording each martyr's life.", "sourceIds": ["damasus-ihm", "damasus-davison", "damasus-saghy"]},
+      {"heading": "Rome, synods, and contested communion", "body": "Eastern bishops addressed Damasus and other bishops gathered at Rome in 382 amid doctrinal and jurisdictional disputes. This networked late-antique consultation cannot be projected directly into modern papal administration, and inherited polemical labels must not become contempt.", "sourceIds": ["damasus-constantinople-letter", "damasus-ocd"]},
+      {"heading": "Jerome and the Latin Gospels", "body": "Jerome's preface tells Damasus that he is revising variant Latin forms of the four Gospels by comparison with Greek manuscripts. Later biblical reception grew beyond this documented request; claims that Damasus commissioned the entire Vulgate overstate the source.", "sourceIds": ["damasus-jerome-preface", "damasus-ocd", "calendar-universal-december", "girm-color"]}
+    ],
+    "gospelTheme": "Christian memory serves truth when it preserves witness without hiding violence or turning authority into domination.",
+    "struggle": "Sacred office, inscriptions, councils, and biblical patronage can be used to sanitize faction, authenticate relics, or project later power backward.",
+    "response": "Read partisan evidence critically, name institutional harm, preserve texts carefully, and exercise authority through truth, accountability, and peace."
+  },
+  "virtues": [
+    {"name": "Care for Christian memory", "evidence": "Damasus invested in access, decoration, and inscriptions at Roman martyr sites, leaving a major epigraphic record of late-antique devotion.", "imitation": "Document one community memory with dates, provenance, multiple voices, and clear uncertainty instead of polishing it into legend.", "sourceIds": ["damasus-ihm", "damasus-davison", "damasus-saghy"]},
+    {"name": "Care for scriptural text", "evidence": "Jerome's preface records a request associated with Damasus to compare Latin Gospel variants with Greek manuscripts.", "imitation": "Before quoting Scripture in a dispute, check its context and a reliable translation, then refuse to use it as a weapon against a people or person.", "sourceIds": ["damasus-jerome-preface"]}
+  ],
+  "practice": {"spiritual": "Pray for Church communities divided by elections, authority, or inherited polemic, asking for truth before easy concord.", "action": "Review one institutional history or memorial: identify whose suffering or dissent is missing and add a sourced, non-retaliatory record."},
+  "reflectionQuestions": ["Do I call unity what is actually silence about violence or power?", "How can remembrance honor witnesses without turning poetry, relics, or office into unquestionable proof?"],
+  "scripture": {"reference": "Ephesians 4:25", "connection": "Speaking truth as members of one another challenges communities to seek concord without erasing factional harm."},
+  "prayer": "God of truth and communion, through Saint Damasus teach us to preserve Scripture and the martyrs' memory without hiding violence. Free leaders from ambition, communities from faction, and our speech from contempt. Give historians honesty, churches accountability, divided peoples safety, and all believers courage to seek peace through truth and repair. Amen."
+}

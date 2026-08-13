@@ -144,6 +144,10 @@
     "assets/data/saints/profiles/andrew_apostle.json",
     "assets/data/saints/profiles/john_damascene.json",
     "assets/data/saints/profiles/nicholas_of_myra.json",
-    "assets/data/saints/profiles/the_immaculate_conception_of_the_blessed_virgin_mary.json"
+    "assets/data/saints/profiles/the_immaculate_conception_of_the_blessed_virgin_mary.json",
+    "assets/data/saints/profiles/juan_diego.json",
+    "assets/data/saints/profiles/our_lady_of_loreto.json",
+    "assets/data/saints/profiles/damasus_i_pope.json",
+    "assets/data/saints/profiles/our_lady_of_guadalupe.json"
   ]
 }
