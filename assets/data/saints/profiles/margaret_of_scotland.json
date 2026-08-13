@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 2,
+  "id": "margaret_of_scotland",
+  "profileKind": "individual",
+  "celebrationIds": ["margaret_of_scotland", "saint_margaret_of_scotland"],
+  "name": "Saint Margaret of Scotland",
+  "alternateNames": ["Margaret of Wessex", "Margaret, Queen of Scots"],
+  "ecclesialTitle": "Queen and married woman",
+  "lifeSpan": "c. 1045–1093",
+  "vocation": "Queen consort, wife, mother, patron, and reformer",
+  "places": ["Hungary", "Dunfermline", "Edinburgh"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Margaret was born in exile into the English royal house, probably in Hungary, and returned to England before displacement after the Norman Conquest brought her family to Scotland. She married Malcolm III around 1070, became queen consort, raised a large royal family, supported learning and worship, founded a community at Dunfermline, and exercised courtly influence through patronage, counsel, and organized charity. A Life traditionally attributed to her adviser Turgot, written after her death for her daughter Matilda, is near-contemporary but also constructs an ideal holy queen, wife, and mother. Its reform, fasting, almsgiving, captive-ransoming, illness, and death narratives must be read by genre and alongside the agency of poor people, captives, clerics, Gaelic communities, household workers, and Margaret herself. Malcolm and their son Edward died during warfare in 1093; Margaret, already ill, died days later. Her memory belongs to neither monarchy nor Scottish, English, or Hungarian nationalism.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Saint_Margaret_of_Scotland",
+  "wikidataId": "Q230507",
+  "feastDates": ["November 16"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "margaret-turgot-vita",
+      "title": "The Life of St Margaret, Queen of Scotland",
+      "authorOrInstitution": "Traditionally attributed to Turgot of Durham; translated by William Forbes-Leith, S.J.",
+      "publisher": "William Paterson, Edinburgh, second edition, 1884; digital copy hosted by Royal Dunfermline",
+      "url": "https://www.royaldunfermline.com/resources/life_of_%20st_margaret_turgot.pdf",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Full public-domain translation of the near-contemporary Life used for received family, court, reform, books, charity, captives, fasting, illness, warfare news, and death; authorship has been debated and the text's dynastic-hagiographic purpose means intimate scenes, ascetic precision, and ideal roles are not neutral reportage or commands",
+      "supports": ["identity", "alternateNames", "lifeSpan", "vocation", "places", "life.exile", "life.marriage", "life.children", "life.court", "life.reform", "life.charity", "life.captives", "life.books", "tradition.fasting", "life.illness", "history.war", "life.death", "sourceLimits"]
+    },
+    {
+      "id": "margaret-harrill",
+      "title": "Politics and Sainthood: Literary Representations of St Margaret of Scotland in England and Scotland from the Eleventh to the Fifteenth Century",
+      "authorOrInstitution": "Claire Louise Harrill",
+      "publisher": "University of Birmingham doctoral thesis, 2016",
+      "url": "https://etheses.bham.ac.uk/id/eprint/7548/1/Harrill17PhD.pdf",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Readable full independent research used for the uncertain 1045–1050 birth window and birthplace, Margaret's queenship and agency, the Life's commission for Matilda and dynastic aims, family and reform reception, later cult, and changing English-Scottish political uses; prevents passive-wife, monarchy, and nationalist readings",
+      "supports": ["identity", "lifeSpan", "life.birth_uncertainty", "life.queenship", "life.agency", "life.children", "life.reform", "works.vita_context", "reception.dynastic", "reception.english", "reception.scottish", "safeguard.no_monarchy", "safeguard.no_national_ownership", "historicalCertainty", "sourceLimits"]
+    },
+    {
+      "id": "margaret-keene",
+      "title": "Saint Margaret, Queen of the Scots: Her Life and Memory",
+      "authorOrInstitution": "Catherine Keene",
+      "publisher": "Central European University doctoral dissertation, January 2011, especially pp. 1–22, 93–199, and 200–216",
+      "url": "https://www.etd.ceu.edu/2011/keene_katie.pdf",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Readable full independent critical study used to triangulate Margaret's Hungarian and Anglo-Scottish background, flight and political marriage, queenship, children, patronage, piety, fasting, death, Vita authorship and purpose, and early cult; preserves gender and hagiographic limits without inventing intention or treating royal roles as norms",
+      "supports": ["identity", "lifeSpan", "life.birth_uncertainty", "life.exile", "life.marriage", "life.queenship", "life.children", "life.agency", "life.patronage", "tradition.fasting", "life.illness", "life.death", "works.vita_context", "reception.cult", "safeguard.gender", "safeguard.no_monarchy", "sourceLimits"]
+    },
+    {
+      "id": "margaret-hargreaves",
+      "title": "Not 'For Medicinal Use Only': Healthcare Narratives in Saints' Lives from Twelfth-Century England",
+      "authorOrInstitution": "Barbara Mary Hargreaves",
+      "publisher": "Durham University doctoral thesis, 2021, especially pp. 113–118 and 248–250",
+      "url": "https://etheses.dur.ac.uk/13959/1/Thesis.final.March21.pdf",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Readable full independent study used for health, diet, fasting, fertility, illness, death, and hagiographic-body analysis; it identifies tensions and probable exaggeration rather than diagnosing Margaret, and supports rejecting unsafe fasting, reproductive duty, grief romanticization, and medical neglect",
+      "supports": ["tradition.fasting", "life.motherhood", "life.illness", "life.death", "history.health_narrative", "safeguard.no_diagnosis", "safeguard.no_unsafe_fasting", "safeguard.no_reproductive_coercion", "sourceLimits"]
+    },
+    {
+      "id": "margaret-dunfermline",
+      "title": "Dunfermline Abbey and Palace: History and Stories",
+      "authorOrInstitution": "Historic Environment Scotland",
+      "publisher": "Historic Environment Scotland",
+      "url": "https://www.historicenvironment.scot/visit/all/dunfermline-abbey-and-palace/history-and-stories/",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "National heritage record used for Margaret and Malcolm's eleventh-century Dunfermline setting, the priory foundation around 1070, later abbey development under David I, royal burials, and the 1250 shrine translation; material heritage does not prove every hagiographic claim or confer national ownership",
+      "supports": ["places", "history.dunfermline", "life.foundation", "reception.shrine", "reception.scottish", "sourceLimits"]
+    },
+    {
+      "id": "margaret-hungarian-reception",
+      "title": "Skóciai Szent Margit",
+      "authorOrInstitution": "Hungarian Catholic Church",
+      "publisher": "Magyar Katolikus Egyház, Saints of the Day for November 16",
+      "url": "https://katolikus.hu/szent/lista/11/16",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal contemporary Hungarian Catholic reception used only to document that Margaret of Scotland is commemorated in Hungary on November 16; its precise local birthplace claim is not adopted because independent scholarship leaves the birthplace uncertain",
+      "supports": ["reception.hungarian", "feastDates", "sourceLimits"]
+    },
+    {
+      "id": "margaret-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — November",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/NovUC.shtml",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the title Saint Margaret of Scotland, November 16 date, and optional-memorial rank; the page states that entries without a printed rank are optional memorials",
+      "supports": ["identity", "celebrationIds", "feastDates", "calendar.rank"]
+    },
+    {
+      "id": "margaret-girm-color",
+      "title": "General Instruction of the Roman Missal, nos. 345–346",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "USCCB, Chapter VI: The Requisites for the Celebration of Mass",
+      "url": "https://www.usccb.org/prayer-and-worship/the-mass/general-instruction-of-the-roman-missal/girm-chapter-6",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal liturgical norm used only for the white color assigned to celebrations of saints who were not martyrs; date and rank come from the calendar source",
+      "supports": ["calendar.color"]
+    }
+  ],
+  "editorial": {"state": "published", "researcher": "Catholic Daily editorial research", "reviewer": "Catholic Daily factual and theological review", "reviewedAt": "2026-08-13", "revision": 1, "warnings": []},
+  "whyItMatters": "Margaret's memory places prayer, family, public influence, charity, migration, and grief inside structures of privilege and conflict. It invites accountable service while resisting coerced roles, romanticized austerity, monarchy, and national possession.",
+  "oneMinuteSummary": "Margaret, born around 1045 into an English royal family living in exile, probably spent her earliest years in Hungary. After further displacement she married Malcolm III around 1070 and became queen consort of Scotland. She raised a large family, supported learning and worship, founded a community at Dunfermline, advised within the court, organized charity, and was remembered for helping captives. The near-contemporary Life traditionally attributed to Turgot was written after her death for her daughter Matilda; it preserves valuable testimony while constructing an ideal queen, wife, mother, and ascetic. Its reform and fasting scenes must not justify contempt for Gaelic Christians, monarchy, coerced family roles, unsafe dieting, or medical neglect. Malcolm and their son Edward died during warfare in 1093; Margaret, already seriously ill, died days later. Scottish, English, and Hungarian communities remember her, but no nation owns her. Charity must preserve recipients' voice, consent, and material justice.",
+  "life": {
+    "sections": [
+      {"heading": "Exile, marriage, and queenship", "body": "Margaret's early life crossed Hungary, England, and Scotland amid dynastic upheaval. Her marriage to Malcolm created a powerful household, but a saintly-queen narrative cannot make monarchy sacred or turn marriage and motherhood into compulsory vocations.", "sourceIds": ["margaret-turgot-vita", "margaret-harrill", "margaret-keene"]},
+      {"heading": "Reform with historical limits", "body": "The Life presents Margaret debating practices and aligning worship with customs she knew. This is evidence of female courtly and religious agency, not permission to caricature Gaelic Christians as backward or to erase clergy and communities who negotiated change.", "sourceIds": ["margaret-turgot-vita", "margaret-harrill"]},
+      {"heading": "Charity, captives, and recipients", "body": "Margaret's household patronage, almsgiving, hospitality, and ransoming of captives became central to her memory. Ethical imitation asks how resources were obtained and listens to poor people, captives, workers, and local communities as agents rather than props for royal virtue.", "sourceIds": ["margaret-turgot-vita", "margaret-harrill"]},
+      {"heading": "Fasting, illness, war, and death", "body": "Turgot combines severe fasting, declining health, news of battlefield deaths, and a holy death. Critical and medical-historical analysis exposes tensions in this crafted account: grief and illness are not moral tests, and fasting must never endanger health, pregnancy, or treatment.", "sourceIds": ["margaret-turgot-vita", "margaret-keene", "margaret-hargreaves"]},
+      {"heading": "Dunfermline and shared reception", "body": "Dunfermline became the center of Margaret's cult, while English, Scottish, and Hungarian communities received her memory differently. Heritage and devotion can connect places only when they reject royal propaganda, ethnic superiority, and ownership of a saint.", "sourceIds": ["margaret-dunfermline", "margaret-harrill", "margaret-hungarian-reception"]}
+    ],
+    "gospelTheme": "Public influence is judged by concrete mercy, truthful memory, peace, and respect for every person's dignity and agency.",
+    "struggle": "Royal hagiography can hide coercion, war, labor, cultural conflict, unsafe austerity, and the voices of people receiving charity.",
+    "response": "Use privilege accountably, preserve consent and local agency, care for health and grief, and refuse nationalist or dynastic possession."
+  },
+  "virtues": [
+    {"name": "Accountable generosity", "evidence": "Margaret's received memory centers organized care, hospitality, almsgiving, and assistance to captives within a wealthy royal household.", "imitation": "Give through a recipient-led organization and ask what accountability, consent, and long-term support it requires.", "sourceIds": ["margaret-turgot-vita", "margaret-harrill"]},
+    {"name": "Public agency", "evidence": "The Life and later literary reception portray Margaret reading, counseling, patronizing institutions, and participating in reform rather than merely influencing a husband in private.", "imitation": "Use one position of influence to open a real decision-making place for someone usually affected but unheard.", "sourceIds": ["margaret-turgot-vita", "margaret-harrill"]}
+  ],
+  "practice": {"spiritual": "Bring a family duty, grief, or public responsibility to God without treating exhaustion, hunger, or silence as proof of holiness.", "action": "Support a service led by poor people, migrants, captives, or survivors, and follow its stated needs instead of staging your generosity."},
+  "reflectionQuestions": ["Whose labor and agency disappear in stories of a generous powerful person?", "Have I treated a family role, nation, or political order as if holiness required it?"],
+  "scripture": {"reference": "Isaiah 58:6–8", "connection": "The prophet tests fasting by liberation, bread, shelter, and solidarity, challenging austerity that harms the body or ignores unjust structures."},
+  "prayer": "God of mercy and peace, through Saint Margaret's intercession, guide families, migrants, rulers, grieving people, and all who share resources. Free us from coercion, unsafe fasting, war, monarchy worship, cultural contempt, and national pride. Make our charity accountable, our memory truthful, and our care attentive to every person's voice and health. Amen."
+}

@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 2,
+  "id": "dedication_of_basilicas_of_peter_and_paul",
+  "profileKind": "observance",
+  "celebrationIds": ["dedication_of_basilicas_of_peter_and_paul", "the_dedication_of_the_basilicas_of_saints_peter_and_paul_apostles"],
+  "name": "The Dedication of the Basilicas of Saints Peter and Paul, Apostles",
+  "alternateNames": ["Dedication of Saint Peter's Basilica and Saint Paul Outside the Walls"],
+  "ecclesialTitle": "Optional memorial of two Roman basilica dedications",
+  "places": ["Vatican Hill", "Via Ostiense", "Rome"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "This November 18 observance commemorates two distinct Roman basilicas and the Church's received memory of the apostles Peter and Paul. The first Saint Peter's rose in the fourth century over a Vatican necropolis and a site already associated with Peter; the present basilica replaced it and was dedicated by Urban VIII on November 18, 1626. Saint Paul Outside the Walls developed at a separate memorial on the Via Ostiense. Its late-fourth-century basilica survived until the fire of 1823; the rebuilt church was dedicated by Pius IX on December 10, 1854. The common November memorial expresses apostolic fellowship and church unity without pretending that both present buildings share one dedication date. Ancient testimony, monuments, graves, inscriptions, and excavations support histories of veneration; they do not provide laboratory certainty that particular human remains belong to an apostle. Pilgrimage and indulgences are never guaranteed protection, healing, salvation, or substitutes for justice and care.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Dedication_of_Saints_Peter_and_Paul",
+  "wikidataId": "Q5249824",
+  "feastDates": ["November 18"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "basilicas-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — November",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/NovUC.shtml",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the exact November 18 title and optional-memorial rank; the page states that entries without a printed rank are optional memorials and does not supply the color",
+      "supports": ["identity", "celebrationIds", "ecclesialTitle", "feastDates", "calendar.rank"]
+    },
+    {
+      "id": "basilicas-usccb-color",
+      "title": "Correction to 2011 Liturgical Calendar",
+      "authorOrInstitution": "Secretariat of Divine Worship, United States Conference of Catholic Bishops",
+      "publisher": "USCCB Committee on Divine Worship Newsletter, January 2010, p. 4",
+      "url": "https://www.usccb.org/upload/divine-worship-newsletter-2010-01.pdf",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal episcopal liturgical correction used for the November 18 optional memorial, its proper readings, and the explicit white color; this source, not a generic saint-color inference, establishes white",
+      "supports": ["identity", "feastDates", "calendar.rank", "calendar.color", "calendar.readings"]
+    },
+    {
+      "id": "basilicas-cei-martyrology",
+      "title": "Dedicazione delle basiliche dei santi Pietro e Paolo, Apostoli",
+      "authorOrInstitution": "Italian Episcopal Conference",
+      "publisher": "Chiesacattolica.it, Roman Martyrology notice for 18 November",
+      "url": "https://www.chiesacattolica.it/santo-del-giorno/?data-liturgia=20251118",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal martyrology and calendar notice used for optional rank, the Constantinian and rebuilt Saint Peter's, the Theodosian and fire-rebuilt Saint Paul's, the distinction between Saint Paul's December 10 dedication and the common November commemoration, and its ecclesial theme of apostolic fraternity and unity",
+      "supports": ["identity", "feastDates", "calendar.rank", "history.st_peter", "history.st_paul", "history.distinct_dedications", "observance.apostolic_fraternity", "observance.church_unity"]
+    },
+    {
+      "id": "basilicas-st-peter-necropolis",
+      "title": "The Necropolis",
+      "authorOrInstitution": "Pietro Zander; Fabric of Saint Peter",
+      "publisher": "Papal Basilica of Saint Peter",
+      "url": "https://www.basilicasanpietro.va/en/san-pietro/the-necropolis",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Official readable archaeology overview used for the Vatican necropolis, second-century structures, twentieth-century excavations, the Trophy of Gaius setting, and Constantine's fourth-century basilica construction; institutional identification of Peter's tomb is reported as received interpretation, not scientific certainty about remains",
+      "supports": ["places", "history.vatican_necropolis", "history.excavations", "history.trophy_of_gaius", "history.constantinian_basilica", "tradition.peter_tomb", "sourceLimits"]
+    },
+    {
+      "id": "basilicas-st-peter-building",
+      "title": "When was Saint Peter's Basilica built?",
+      "authorOrInstitution": "Fabric of Saint Peter",
+      "publisher": "Papal Basilica of Saint Peter",
+      "url": "https://www.basilicasanpietro.va/en/faq/when-was-st-peters-basilica-built",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Official concise building history used for construction of the present Saint Peter's from 1506 to 1626 and its replacement of the fourth-century Constantinian basilica; the exact dedication date and Urban VIII attribution come from the separate official centenary notice",
+      "supports": ["history.st_peter_old", "history.st_peter_rebuilding", "history.st_peter_current", "sourceLimits"]
+    },
+    {
+      "id": "basilicas-st-peter-dedication",
+      "title": "Bernini and the Barberini in St. Peter's Basilica",
+      "authorOrInstitution": "Fabric of Saint Peter",
+      "publisher": "Papal Basilica of Saint Peter, 2026",
+      "url": "https://www.basilicasanpietro.va/en/news/bernini-and-the-barberini-in-st-peters-basilica",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Official centenary notice used narrowly for the dedication of the present Saint Peter's on 18 November 1626 during the pontificate of Urban VIII; it does not authenticate apostolic remains",
+      "supports": ["history.st_peter_dedication", "history.urban_viii", "sourceLimits"]
+    },
+    {
+      "id": "basilicas-st-paul-history",
+      "title": "The History of the Basilica",
+      "authorOrInstitution": "Papal Basilica of Saint Paul Outside the Walls",
+      "publisher": "Basilica Papale di San Paolo Fuori le Mura",
+      "url": "https://basilicasanpaolo.org/en/history/",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Official readable history used for the separate Via Ostiense site, Constantinian and Theodosian basilicas, 1823 fire, reconstruction, Pius IX's 10 December 1854 dedication, and limited 2006 excavation; apostolic burial statements are treated as institutional tradition alongside material evidence",
+      "supports": ["places", "history.st_paul_site", "history.st_paul_old", "history.st_paul_fire", "history.st_paul_rebuilding", "history.st_paul_dedication", "history.st_paul_excavation", "tradition.paul_tomb", "sourceLimits"]
+    },
+    {
+      "id": "basilicas-st-paul-tomb",
+      "title": "Saint Paul's Tomb",
+      "authorOrInstitution": "Papal Basilica of Saint Paul Outside the Walls",
+      "publisher": "Basilica Papale di San Paolo Fuori le Mura",
+      "url": "https://basilicasanpaolo.org/en/tomb/",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Official readable site description used for the marble sarcophagus exposed by 2006 excavation, the fourth-century PAVLO APOSTOLO MART(YRI) memorial slab, and the Constantinian and Theodosian layers; these material features document ancient commemoration, not scientific identification of remains",
+      "supports": ["history.st_paul_excavation", "history.st_paul_sarcophagus", "history.st_paul_memorial_slab", "tradition.paul_tomb", "sourceLimits"]
+    },
+    {
+      "id": "basilicas-thacker",
+      "title": "The Cult of Peter and the Development of Martyr Cult in Rome: The Origins of the Presentation of Peter and Paul as Martyrs",
+      "authorOrInstitution": "Alan Thacker",
+      "publisher": "In The Early Reception and Appropriation of the Apostle Peter (60–800 CE), Brill, 2020, pp. 250–276",
+      "url": "https://www.jstor.org/stable/10.1163/j.ctv2gjwnm0.20",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Open full independent scholarly chapter used for the gradual development of Peter and Paul's Roman martyr cults, the chronology and limits of early literary evidence, distinct apostolic memories, and the need to separate reception from secure contemporary biography or relic proof",
+      "supports": ["history.early_cult", "history.peter_paul_reception", "tradition.martyr_memory", "safeguard.no_relic_certainty", "historicalCertainty", "sourceLimits"]
+    }
+  ],
+  "editorial": {"state": "published", "researcher": "Catholic Daily editorial research", "reviewer": "Catholic Daily factual and theological review", "reviewedAt": "2026-08-13", "revision": 1, "warnings": []},
+  "whyItMatters": "The two basilicas embody layered worship, architecture, loss, rebuilding, and apostolic memory. Their shared observance invites ecclesial unity while teaching honest distinctions between sites, dates, material evidence, and faith claims.",
+  "oneMinuteSummary": "This November 18 optional memorial honors two distinct Roman basilicas, not a joint episode in Peter and Paul's lives. Old Saint Peter's was built over a Vatican necropolis and an early place of Peter-veneration; the present basilica replaced it and was dedicated in 1626. Saint Paul Outside the Walls developed separately on the Via Ostiense. Its late-fourth-century church burned in 1823, and the rebuilt basilica was dedicated in 1854. The common observance joins two sites symbolically without giving them one construction history or dedication date. Ancient testimony, memorial structures, inscriptions, graves, and limited excavations illuminate long veneration, but archaeology does not turn every relic attribution into laboratory certainty. Churches serve the living Body of Christ; monuments, pilgrimages, relics, and indulgences do not guarantee healing, safety, salvation, or national prestige. Shared apostolic memory calls believers toward unity, truth, hospitality, conservation, justice, and responsible care.",
+  "life": {
+    "sections": [
+      {"heading": "Two basilicas, two histories", "body": "Saint Peter's stands at the Vatican; Saint Paul Outside the Walls stands on the Via Ostiense. Each developed through different buildings, disasters, rebuilding projects, and dedications. The common memorial must not merge their sites or timelines.", "sourceIds": ["basilicas-cei-martyrology", "basilicas-st-peter-building", "basilicas-st-peter-dedication", "basilicas-st-paul-history"]},
+      {"heading": "Saint Peter's and the Vatican necropolis", "body": "Excavations exposed a Roman necropolis, second-century structures, and the setting associated with the Trophy of Gaius beneath the basilica. These finds document ancient burial and veneration; identifying particular remains as Peter's remains a received interpretation, not laboratory certainty.", "sourceIds": ["basilicas-st-peter-necropolis", "basilicas-thacker"]},
+      {"heading": "Saint Paul's, fire, and rebuilding", "body": "The Via Ostiense basilica grew from ancient memorial practice, was enlarged in late antiquity, burned in 1823, and was rebuilt and dedicated in 1854. Limited modern excavation makes the sarcophagus and ancient memorial slab visible while leaving appropriate evidentiary limits.", "sourceIds": ["basilicas-st-paul-history", "basilicas-st-paul-tomb", "basilicas-thacker"]},
+      {"heading": "A shared liturgical memory", "body": "The formal calendar joins the basilicas on November 18 as an optional memorial in white, expressing apostolic fraternity and ecclesial unity. That symbolism does not collapse Peter into Paul, buildings into apostles, or faith into archaeology.", "sourceIds": ["basilicas-calendar", "basilicas-usccb-color", "basilicas-cei-martyrology"]}
+    ],
+    "gospelTheme": "Christ gathers living communities from distinct histories into one Church founded on faithful witness, hospitality, and truth.",
+    "struggle": "Sacred buildings and relic traditions can be confused with proof, possession, prestige, guaranteed protection, or substitutes for human care.",
+    "response": "Honor each site's evidence and limits, conserve shared heritage, welcome pilgrims safely, and build unity through justice and service."
+  },
+  "virtues": [
+    {"name": "Truthful unity", "evidence": "The liturgy commemorates two basilicas together while formal and historical sources preserve their distinct locations and dedication histories.", "imitation": "Build cooperation between two communities by naming both their shared purpose and the differences that must not be erased.", "sourceIds": ["basilicas-calendar", "basilicas-cei-martyrology", "basilicas-st-paul-history"]},
+    {"name": "Stewardship", "evidence": "Both sites preserve layered remains and buildings shaped by burial, construction, fire, excavation, conservation, worship, and visitors.", "imitation": "Support one local sacred or civic heritage site through accessible, transparent conservation that serves its living community.", "sourceIds": ["basilicas-st-peter-necropolis", "basilicas-st-paul-history"]}
+  ],
+  "practice": {"spiritual": "Pray for unity with a Christian community whose history differs from yours, without demanding that either community surrender truth or identity.", "action": "Learn whose labor maintains a local place of worship or memory, then support safe access, fair work, and responsible conservation."},
+  "reflectionQuestions": ["Do I use a sacred place or relic claim as a shortcut around evidence and discipleship?", "Can I seek unity while preserving distinct people, places, histories, and responsibilities?"],
+  "scripture": {"reference": "1 Peter 2:4–5", "connection": "The letter calls believers living stones, keeping church buildings ordered to the people and worship they serve rather than treating stone as a guarantee."},
+  "prayer": "God who gathers living stones, through the witness of Saints Peter and Paul, bless the communities who worship, work, conserve, and welcome at their Roman basilicas. Make us truthful about evidence, humble before mystery, united without erasure, and free from relic magic, prestige, exploitation, and false guarantees. Build us into a Church of justice, hospitality, and peace. Amen."
+}

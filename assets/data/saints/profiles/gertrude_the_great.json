@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 2,
+  "id": "gertrude_the_great",
+  "profileKind": "individual",
+  "celebrationIds": ["gertrude_the_great", "saint_gertrude_virgin"],
+  "name": "Saint Gertrude, Virgin",
+  "alternateNames": ["Gertrude the Great", "Gertrude of Helfta"],
+  "ecclesialTitle": "Virgin",
+  "lifeSpan": "1256–c. 1302",
+  "vocation": "Nun, theologian, and writer of the Helfta community",
+  "places": ["Helfta", "Saxony"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Gertrude entered the women's community that moved to Helfta when she was a child and received an unusually rich education in Scripture, liturgy, music, and the liberal arts. She became a theologian and visionary writer within a collaborative culture led by women. The Legatus divinae pietatis centers her spiritual life, but only Book II presents itself in her first-person voice; sisters compiled and shaped the other books, and no autograph survives. Helfta followed the Rule of Benedict, drew strongly on Cistercian life, and was never firmly incorporated into the Cistercian Order, so Gertrude is best called a nun of Helfta rather than assigned a simple modern label. Her visions and heart imagery influenced later devotion to Christ's love. They are private revelation, not additions to public Revelation, magical promises, diagnoses, or commands to surrender conscience, safety, food, sleep, or healthcare.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Gertrude_the_Great",
+  "wikidataId": "Q61934",
+  "feastDates": ["November 16"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "gertrude-legatus",
+      "title": "Legatus Divinae Pietatis",
+      "authorOrInstitution": "Gertrude of Helfta and the Helfta community",
+      "publisher": "IntraText CT, Latin text based on the received Legatus corpus",
+      "url": "https://www.intratext.com/IXT/LAT0714/_INDEX.HTM",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Searchable full Latin primary corpus used for Gertrude's first-person Book II, biblical and liturgical spirituality, heart and vision language, illness and death reception, and the work's hagiographic aims; the composite text is not treated as an autograph, neutral biography, medical record, or source of guaranteed promises",
+      "supports": ["identity", "life.education", "works.legatus", "works.book_two", "spirituality.scripture", "spirituality.liturgy", "spirituality.heart", "tradition.visions", "tradition.illness", "tradition.death", "sourceLimits"]
+    },
+    {
+      "id": "gertrude-kirakosian",
+      "title": "From the Material to the Mystical in Late Medieval Piety: The Vernacular Transmission of Gertrude of Helfta's Visions",
+      "authorOrInstitution": "Racha Kirakosian",
+      "publisher": "Cambridge University Press, 2021; DOI 10.1017/9781108893657; readable front matter and Chapter 1, pp. 12–18",
+      "url": "https://api.pageplace.de/preview/DT0400.9781108897303_A45556533/preview-9781108897303_A45556533.pdf",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Readable scholarly book content used for Helfta's institutional precision, the community's women's education and literary agency, collective and intergenerational authorship, manuscript transmission, Book II's distinct voice, uncertain family background, and Sacred Heart reception; prevents solitary-genius and fixed-order myths",
+      "supports": ["identity", "lifeSpan", "vocation", "places", "history.helfta", "history.institutional_status", "history.womens_agency", "works.collective_authorship", "works.manuscripts", "works.book_two", "reception.sacred_heart", "historicalCertainty", "sourceLimits"]
+    },
+    {
+      "id": "gertrude-benedict",
+      "title": "General Audience: Saint Gertrude the Great",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "The Holy See, 6 October 2010",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/audiences/2010/documents/hf_ben-xvi_aud_20101006.html",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal modern reception used for Gertrude's 1256 birth tradition, childhood entry, education, Scripture and liturgy, relationships with the women of Helfta, service, and ecclesial reception; devotional claims are treated as reception and its simplified Benedictine wording is qualified by current institutional scholarship",
+      "supports": ["identity", "lifeSpan", "life.childhood", "life.education", "history.womens_community", "spirituality.scripture", "spirituality.liturgy", "reception.ecclesial", "sourceLimits"]
+    },
+    {
+      "id": "gertrude-dilexit-nos",
+      "title": "Dilexit Nos, nos. 109–110",
+      "authorOrInstitution": "Pope Francis",
+      "publisher": "The Holy See, 24 October 2024",
+      "url": "https://www.vatican.va/content/francesco/en/encyclicals/documents/20241024-enciclica-dilexit-nos.html",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal ecclesial reception used for Gertrude of Helfta's place among medieval women whose prayer rested in Christ's heart and for her contribution to later Sacred Heart devotion; the encyclical's simplified Cistercian label is qualified by institutional scholarship",
+      "supports": ["identity", "spirituality.heart", "reception.sacred_heart", "reception.ecclesial", "sourceLimits"]
+    },
+    {
+      "id": "gertrude-catechism",
+      "title": "Catechism of the Catholic Church, nos. 66–67",
+      "authorOrInstitution": "Catholic Church",
+      "publisher": "The Holy See",
+      "url": "https://www.vatican.va/content/catechism/en/part_one/section_one/chapter_two/article_1/iii_christ_jesus_mediator_and_fullness_of_all_revelation.index.html",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal doctrinal control used for the finality of public Revelation in Christ and the limited, non-superseding role of private revelations; it supports the profile's refusal to treat visionary material as a binding addition to faith",
+      "supports": ["theology.public_revelation", "theology.private_revelation", "safeguard.no_binding_vision"]
+    },
+    {
+      "id": "gertrude-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — November",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/NovUC.shtml",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the title Saint Gertrude, Virgin, November 16 date, and optional-memorial rank; the page states that entries without a printed rank are optional memorials",
+      "supports": ["identity", "celebrationIds", "ecclesialTitle", "feastDates", "calendar.rank"]
+    },
+    {
+      "id": "gertrude-girm-color",
+      "title": "General Instruction of the Roman Missal, nos. 345–346",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "USCCB, Chapter VI: The Requisites for the Celebration of Mass",
+      "url": "https://www.usccb.org/prayer-and-worship/the-mass/general-instruction-of-the-roman-missal/girm-chapter-6",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal liturgical norm used only for the white color assigned to celebrations of saints who were not martyrs; date and rank come from the calendar source",
+      "supports": ["calendar.color"]
+    }
+  ],
+  "editorial": {"state": "published", "researcher": "Catholic Daily editorial research", "reviewer": "Catholic Daily factual and theological review", "reviewedAt": "2026-08-13", "revision": 1, "warnings": []},
+  "whyItMatters": "Gertrude's theology grew through Scripture, liturgy, friendship, and a women's writing community. Her reception teaches contemplative trust while requiring honest authorship, freedom of conscience, and clear limits around private revelation.",
+  "oneMinuteSummary": "Gertrude, born in 1256, entered the community later known as Helfta as a child and became a learned nun, theologian, and visionary writer. Helfta followed the Rule of Benedict and had strong Cistercian orientation, yet it was never firmly incorporated into that order; 'nun of Helfta' is the precise description. Its women acquired books, copied texts, taught, and developed a collaborative intellectual culture. The Legatus divinae pietatis centers Gertrude, but only Book II speaks in her distinctive first-person voice; sisters compiled and edited the wider work, and no autograph survives. Her biblical, liturgical visions and imagery of Christ's heart shaped later Sacred Heart devotion. These writings witness to received spiritual experience, not public Revelation or automatic historical reportage. No prayer attributed to Gertrude guarantees release of souls, healing, safety, or a fixed result. Contemplation never requires coercive direction, self-harm, body shame, unsafe fasting, sleep deprivation, or refusal of healthcare.",
+  "life": {
+    "sections": [
+      {"heading": "A nun of Helfta", "body": "Helfta followed the Rule of Benedict and drew on Cistercian practice but was not firmly incorporated into the Cistercian Order. Calling Gertrude simply Benedictine or Cistercian conceals a flexible women's institution under diocesan authority.", "sourceIds": ["gertrude-kirakosian", "gertrude-benedict"]},
+      {"heading": "Women's learning and collaborative authorship", "body": "The Helfta sisters acquired and copied books, read Scripture and scholastic works, celebrated the liturgy, and produced texts together. Gertrude's voice matters, but so do the unnamed and named women who recorded, edited, and transmitted it.", "sourceIds": ["gertrude-kirakosian", "gertrude-legatus"]},
+      {"heading": "Visions, Scripture, and Christ's heart", "body": "The Legatus expresses prayer through biblical, liturgical, bodily, and heart imagery. Later Sacred Heart devotion received this language, but private visions neither add to public Revelation nor bind another person's conscience.", "sourceIds": ["gertrude-legatus", "gertrude-kirakosian", "gertrude-benedict", "gertrude-dilexit-nos", "gertrude-catechism"]},
+      {"heading": "Illness without spiritualized harm", "body": "The received corpus includes illness, weakness, and preparation for death within hagiographic theology. It cannot support retrospective diagnosis, body shame, magical promises, deliberate injury, or replacing medical and safeguarding care with spiritual direction.", "sourceIds": ["gertrude-legatus", "gertrude-kirakosian"]}
+    ],
+    "gospelTheme": "Christ's love is received through Scripture, worship, friendship, and mercy rather than fear or spiritual control.",
+    "struggle": "Visionary authority can be detached from its community and used to promise outcomes, shame bodies, or coerce vulnerable people.",
+    "response": "Read spiritual texts in context, honor women's collaborative agency, test private claims, and protect conscience, health, and safety."
+  },
+  "virtues": [
+    {"name": "Contemplative friendship", "evidence": "Gertrude's spirituality developed among educated women who prayed, taught, copied, edited, and interpreted together.", "imitation": "Share one honest prayer or difficult question with a trustworthy friend who respects your freedom and boundaries.", "sourceIds": ["gertrude-kirakosian", "gertrude-benedict"]},
+    {"name": "Discernment", "evidence": "The composite Legatus distinguishes first-person witness, communal editing, hagiography, and later transmission rather than offering a transparent transcript.", "imitation": "When encountering a promised spiritual result, ask who authored it, when it appears, and whether the Church presents it as binding.", "sourceIds": ["gertrude-legatus", "gertrude-kirakosian", "gertrude-catechism"]}
+  ],
+  "practice": {"spiritual": "Pray slowly with one Gospel sentence about Christ's love, allowing silence without forcing an image, feeling, or answer.", "action": "Credit a woman or hidden collaborator whose intellectual or pastoral labor is usually folded into another person's reputation."},
+  "reflectionQuestions": ["Do I confuse intense spiritual language with a command that overrides conscience or care?", "Whose collaborative labor disappears when I tell the story of a celebrated author?"],
+  "scripture": {"reference": "John 15:9–12", "connection": "Jesus joins abiding in his love to a command of mutual love, offering a measure for contemplation that protects relationship rather than control."},
+  "prayer": "God of steadfast love, through Saint Gertrude's intercession, root us in Scripture, worship, wise friendship, and mercy. Teach us to honor women's learning, discern private claims without fear, and reject coercion, magical promises, body shame, self-harm, and medical neglect. Hold the sick and vulnerable in safe and compassionate care. Amen."
+}

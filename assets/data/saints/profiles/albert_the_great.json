@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 2,
+  "id": "albert_the_great",
+  "profileKind": "individual",
+  "celebrationIds": ["albert_the_great", "saint_albert_the_great_bishop_and_doctor_of_the_church"],
+  "name": "Saint Albert the Great, Bishop and Doctor of the Church",
+  "alternateNames": ["Albertus Magnus", "Albert of Cologne"],
+  "ecclesialTitle": "Bishop and Doctor of the Church",
+  "lifeSpan": "c. 1200–1280",
+  "vocation": "Dominican friar, teacher, scholar, and bishop",
+  "places": ["Paris", "Cologne", "Regensburg"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Albert joined the Dominican Order, studied and taught across its new schools, became a master at Paris, and helped establish the Dominican studium at Cologne, where Thomas Aquinas was among his students. His vast project interpreted Aristotle alongside Arabic and Jewish learning and ranged through theology, philosophy, animals, plants, minerals, and other parts of medieval natural philosophy. Albert also served as Dominican provincial and, from 1260 to 1262, as bishop of Regensburg before returning to study, preaching, and mediation. His writings value observation, yet he was not a modern laboratory scientist; his natural philosophy used medieval categories, and later magic and alchemical works circulated falsely under his name. He also preached a crusade, a historical action that cannot be sanctified as a model for religious violence. Declared a Doctor of the Church in 1931, Albert encourages disciplined inquiry joined to humility, source criticism, and accountable service.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Albertus_Magnus",
+  "wikidataId": "Q60059",
+  "feastDates": ["November 15"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "albert-sep",
+      "title": "Albert the Great",
+      "authorOrInstitution": "Bruno Tremblay",
+      "publisher": "The Stanford Encyclopedia of Philosophy, first published 30 November 2025, Metaphysics Research Lab, Stanford University",
+      "url": "https://plato.stanford.edu/entries/albert-great/",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Readable independent scholarly survey used for Albert's approximate chronology, Dominican formation, Paris and Cologne teaching, Thomas Aquinas, provincial and episcopal service, corpus, natural philosophy, later cult, and the warning against calling him a modern scientist; its notice of crusade preaching is retained without approval",
+      "supports": ["identity", "lifeSpan", "vocation", "places", "life.dominican", "life.paris_cologne", "life.thomas", "life.provincial", "life.bishop", "life.crusade", "works.corpus", "science.context", "reception.doctor", "historicalCertainty", "sourceLimits"]
+    },
+    {
+      "id": "albert-de-animalibus",
+      "title": "Diui Alberti Magni de Animalibus libri vigintisex Nouissime Impressi",
+      "authorOrInstitution": "Albertus Magnus; Giovanni and Gregorio de Gregori, printers",
+      "publisher": "Venice, 1495; digitized by Universitätsbibliothek Freiburg",
+      "url": "https://dl.ub.uni-freiburg.de/diglit/albertus1495",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Full digitized early printed witness to Albert's De animalibus used to establish the existence, scale, and premodern textual setting of his zoological work; the 1495 print is a textual witness, not authentication of the corpus, modern experimental science, medical advice, or permission to reproduce page images",
+      "supports": ["works.animals", "works.textual_witness", "science.premodern", "mediaDecision", "sourceLimits"]
+    },
+    {
+      "id": "albert-editio-coloniensis",
+      "title": "The Online Edition of the Works of Saint Albert the Great",
+      "authorOrInstitution": "Albertus-Magnus-Institut",
+      "publisher": "Albertus-Magnus-Institut, Archdiocese of Cologne; Aschendorff Verlag",
+      "url": "https://www.albertus-magnus-institut.de/EditioDigitalis_Flyer.pdf",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Readable institutional edition guide used to distinguish the manuscript-based critical Editio Coloniensis from older incomplete, flawed, or partly inauthentic editions; it controls corpus authentication and prevents treating the 1495 witness by itself as proof of Albert's authorship",
+      "supports": ["works.critical_edition", "works.authorship_control", "tradition.pseudo_albert", "sourceLimits"]
+    },
+    {
+      "id": "albert-dominican-history",
+      "title": "History of the Order of Preachers",
+      "authorOrInstitution": "Order of Preachers",
+      "publisher": "Ordo Praedicatorum",
+      "url": "https://www.op.org/our-story/",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Official Dominican history used narrowly for Albert's 1248 establishment of the Dominican studium generale in Cologne, Thomas Aquinas's study under him, and the Order's received understanding of study as serving preaching",
+      "supports": ["life.cologne_studium", "life.thomas", "reception.dominican_study"]
+    },
+    {
+      "id": "albert-rinotas",
+      "title": "Albertus Magnus on Alchemy: Between Ars and Scientia",
+      "authorOrInstitution": "Athanasios Rinotas",
+      "publisher": "Science in Context (2026), pp. 1–17; Cambridge University Press; DOI 10.1017/S0269889726100982",
+      "url": "https://www.cambridge.org/core/services/aop-cambridge-core/content/view/4CEF030A2A623B0675A164CE99BB4125/S0269889726100982a.pdf/albertus_magnus_on_alchemy_between_ars_and_scientia.pdf",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Open peer-reviewed full article used for the medieval meanings of ars and scientia, Albert's changing and nuanced treatment of alchemy in authentic works, Arabic-to-Latin intellectual transmission, and the later alchemical texts not written by him; prevents magic legend and modern-science anachronism",
+      "supports": ["works.alchemy", "science.medieval_terms", "history.arabic_latin_transmission", "tradition.pseudo_albert", "safeguard.no_magic", "safeguard.no_modern_scientist", "sourceLimits"]
+    },
+    {
+      "id": "albert-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — November",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/NovUC.shtml",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the exact title, November 15 date, and optional-memorial rank; the page states that entries without a printed rank are optional memorials",
+      "supports": ["identity", "celebrationIds", "ecclesialTitle", "feastDates", "calendar.rank"]
+    },
+    {
+      "id": "albert-girm-color",
+      "title": "General Instruction of the Roman Missal, nos. 345–346",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "USCCB, Chapter VI: The Requisites for the Celebration of Mass",
+      "url": "https://www.usccb.org/prayer-and-worship/the-mass/general-instruction-of-the-roman-missal/girm-chapter-6",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal liturgical norm used only for the white color assigned to celebrations of saints who were not martyrs; date and rank come from the calendar source",
+      "supports": ["calendar.color"]
+    }
+  ],
+  "editorial": {"state": "published", "researcher": "Catholic Daily editorial research", "reviewer": "Catholic Daily factual and theological review", "reviewedAt": "2026-08-13", "revision": 1, "warnings": []},
+  "whyItMatters": "Albert's work shows that faith need not fear patient learning. His mixed medieval legacy also teaches readers to test attributions, resist triumphalist myths, and place knowledge at the service of truth and peace.",
+  "oneMinuteSummary": "Albert the Great, born around 1200, became a Dominican friar, master at Paris, founder-teacher at Cologne, provincial, and briefly bishop of Regensburg. Thomas Aquinas studied with him, but Albert's achievement was not merely preparing for a greater pupil: he built an immense theological and philosophical corpus that engaged Greek, Arabic, and Jewish learning and examined animals, plants, minerals, and the physical world. His appeals to observation belong to medieval natural philosophy, not a modern experimental method. Authentic texts discuss alchemy in medieval categories, while many magical and alchemical works later circulated falsely under his name. Albert also preached a crusade, which must be remembered without turning religious violence into holiness. Honored as a Doctor of the Church, he invites careful study, intellectual humility, responsible teaching, and source criticism. Neither ancient medicine nor legendary magic should replace evidence-based care or ethical judgment.",
+  "life": {
+    "sections": [
+      {"heading": "Learning across languages and traditions", "body": "Albert's intellectual project received Aristotle through a world of Greek, Arabic, Jewish, and Latin interpretation. Calling that inheritance simply a Western triumph erases translators, commentators, and contested medieval contexts.", "sourceIds": ["albert-sep", "albert-rinotas"]},
+      {"heading": "Paris, Cologne, and Thomas Aquinas", "body": "After teaching at Paris, Albert helped establish the Dominican school at Cologne and taught Thomas Aquinas. Their relationship belongs to an institutional community of study; Albert should not be reduced to a supporting character in Thomas's biography.", "sourceIds": ["albert-sep", "albert-dominican-history"]},
+      {"heading": "Nature observed in medieval categories", "body": "De animalibus and Albert's other natural works attend closely to the physical world. Observation mattered, but his questions, explanations, and standards were medieval; the title 'first modern scientist' hides rather than explains his achievement. An early print witnesses circulation, while the critical edition—not that print alone—controls authentication.", "sourceIds": ["albert-de-animalibus", "albert-editio-coloniensis", "albert-sep", "albert-rinotas"]},
+      {"heading": "Authority, conflict, and later legend", "body": "Albert served as provincial and bishop, then returned to study and mediation. His crusade preaching must not authorize anti-Muslim violence. Later magical and alchemical attributions require textual criticism, not credulous repetition or blanket denial of his authentic interest in alchemy.", "sourceIds": ["albert-sep", "albert-rinotas"]}
+    ],
+    "gospelTheme": "Love of God and neighbor welcomes truth from careful study and directs learning toward patient, peaceful service.",
+    "struggle": "Intellectual prestige can become domination, anachronistic hero-making, false attribution, or a sacred excuse for violence and unsafe claims.",
+    "response": "Study sources in context, credit every contributor, revise errors, and use knowledge to protect rather than control people."
+  },
+  "virtues": [
+    {"name": "Intellectual humility", "evidence": "Albert's broad corpus preserves real observation alongside inherited theories and changing judgments that require historical interpretation.", "imitation": "Before repeating one impressive claim, locate its source, date, genre, and strongest scholarly qualification.", "sourceIds": ["albert-sep", "albert-rinotas"]},
+    {"name": "Patient teaching", "evidence": "His work in Paris and Cologne formed communities of study and included teaching a younger Thomas Aquinas.", "imitation": "Help one learner ask a better question without using expertise to shame or silence them.", "sourceIds": ["albert-sep", "albert-dominican-history"]}
+  ],
+  "practice": {"spiritual": "Offer one difficult question to God without demanding a quick answer, then read a trustworthy source slowly and gratefully.", "action": "Correct one unsupported quotation, miracle, medical claim, or historical attribution you have shared, and name the evidence for the correction."},
+  "reflectionQuestions": ["Where do I prefer an inspiring legend to the slower truth of sources?", "Does my learning make other people safer and freer to seek truth?"],
+  "scripture": {"reference": "Wisdom 7:17–22", "connection": "Wisdom receives knowledge of creation as gift, joining inquiry to gratitude rather than possession or intellectual superiority."},
+  "prayer": "God of truth, through Saint Albert's intercession, make us attentive students and responsible teachers. Free us from false attribution, magic, pride, violence, and contempt for other peoples' learning. Guide our study toward wonder, honest correction, safe care, and peaceful service. Amen."
+}
