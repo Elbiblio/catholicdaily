@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 2,
+  "id": "andrew_apostle",
+  "profileKind": "individual",
+  "celebrationIds": ["andrew_apostle", "saint_andrew_apostle"],
+  "name": "Saint Andrew, Apostle",
+  "alternateNames": ["Andrew the Apostle", "Andrew the First-Called"],
+  "ecclesialTitle": "Apostle",
+  "lifeSpan": "first century",
+  "vocation": "Apostle and witness to Jesus Christ",
+  "places": ["Galilee", "Jerusalem", "Patras"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Andrew appears in the New Testament as Simon Peter's brother and one of the Twelve. Mark narrates Jesus calling the brothers from their nets; John instead introduces Andrew as a disciple of John the Baptist who follows Jesus and brings Simon. These distinct canonical scenes should not be forced into one timetable. John's Gospel also remembers Andrew noticing a boy's modest food and helping Philip bring Greek visitors to Jesus. Acts lists him in the Jerusalem community. Scripture does not provide his birth year, age, later itinerary, manner of death, relic history, diagonal cross, or national patronages. Eusebius records a later Scythian mission tradition; Byzantine, Patras, relic, cross, and Scottish traditions developed later. Those receptions are significant without becoming eyewitness biography, proof of relic identity, or national possession. Andrew's witness encourages invitation and service, never conquest, coercion, or dangerous martyrdom imitation.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Andrew_the_Apostle",
+  "wikidataId": "Q43399",
+  "feastDates": ["November 30"],
+  "historicalCertainty": "biblical",
+  "sources": [
+    {
+      "id": "andrew-mark",
+      "title": "The Gospel according to Mark, chapter 1",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "USCCB Bible, New American Bible Revised Edition",
+      "url": "https://bible.usccb.org/bible/mark/1",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Canonical Synoptic text used for Jesus calling Simon and Andrew from casting nets and their immediate response; this boat-and-net call is kept distinct from John's scene of Andrew first following Jesus and bringing Simon rather than silently harmonized",
+      "supports": ["identity", "life.fisherman", "life.synoptic_call", "sourceLimits"]
+    },
+    {
+      "id": "andrew-john",
+      "title": "The Gospel according to John, chapters 1, 6, and 12",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "USCCB Bible, New American Bible Revised Edition",
+      "url": "https://bible.usccb.org/bible/john/1",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Canonical text used for Andrew as Simon Peter's brother, his response to Jesus, bringing Simon, noticing the boy and food, and approaching Jesus with Philip for Greek visitors; the linked Bible provides navigation to chapters 6 and 12, and these scenes are not expanded into a synthetic chronology",
+      "supports": ["identity", "life.brother", "life.call", "life.brings_peter", "life.loaves", "life.greeks", "scripture", "sourceLimits"]
+    },
+    {
+      "id": "andrew-acts",
+      "title": "Acts of the Apostles, chapter 1",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "USCCB Bible, New American Bible Revised Edition",
+      "url": "https://bible.usccb.org/bible/acts/1",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Canonical text used for Andrew in the apostolic group gathered in Jerusalem and for the community's resurrection-witness frame; it supplies no later mission, death, relic, or national tradition",
+      "supports": ["life.jerusalem", "vocation", "reception.apostolic", "sourceLimits"]
+    },
+    {
+      "id": "andrew-eusebius",
+      "title": "Church History, Book III, chapter 1",
+      "authorOrInstitution": "Eusebius of Caesarea",
+      "publisher": "New Advent, Fathers of the Church collection",
+      "url": "https://www.newadvent.org/fathers/250103.htm",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Readable ancient ecclesiastical history used for Eusebius's received tradition assigning Scythia to Andrew; this later notice is labeled tradition and does not establish a complete itinerary or modern national claim",
+      "supports": ["tradition.mission", "history.early_reception", "sourceLimits"]
+    },
+    {
+      "id": "andrew-benedict",
+      "title": "General Audience: Andrew, the Protoclete",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "The Holy See, 14 June 2006",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/audiences/2006/documents/hf_ben-xvi_aud_20060614.html",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal reception used for the Gospel scenes, Byzantine title First-Called, later Patras crucifixion and diagonal-cross traditions, and Paul VI's 1964 return of a relic received as Andrew's; later traditions remain qualified rather than authenticated biography or relic science",
+      "supports": ["alternateNames", "reception.first_called", "tradition.patras", "tradition.cross", "tradition.relics", "sourceLimits"]
+    },
+    {
+      "id": "andrew-dvornik",
+      "title": "The Idea of Apostolicity in Byzantium and the Legend of the Apostle Andrew",
+      "authorOrInstitution": "Francis Dvornik",
+      "publisher": "Dumbarton Oaks Studies 4, Harvard University Press, 1958",
+      "url": "https://macedonia.kroraina.com/en/fdap/fdap_5.htm",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Readable scholarly chapter used for the layered growth and institutional uses of Andrew traditions in Byzantine apostolicity; it prevents treating later ecclesial claims as first-century documentation",
+      "supports": ["history.byzantine_reception", "history.apostolicity_claims", "safeguard.no_national_possession", "sourceLimits"]
+    },
+    {
+      "id": "andrew-relic-study",
+      "title": "Translations de reliques prestigieuses d’Orient en Italie, fin du XIe-début du XIIIe siècle",
+      "authorOrInstitution": "Edina Bozoky",
+      "publisher": "Cahiers d'études italiennes 25 (2017), DOI 10.4000/cei.3534, OpenEdition Journals",
+      "url": "https://journals.openedition.org/cei/3534?lang=fr",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Independent study used for the 1208 transfer from Constantinople to Amalfi of relics received as Andrew's and for the mixture of factual and hagiographic motifs in translation narratives; it neither authenticates the remains nor proves an earlier transfer to Constantinople",
+      "supports": ["tradition.relics", "history.amalfi_1208", "history.translation_narratives", "safeguard.no_relic_certainty", "sourceLimits"]
+    },
+    {
+      "id": "andrew-scotland",
+      "title": "Who was St Andrew?",
+      "authorOrInstitution": "Historic Environment Scotland",
+      "publisher": "Historic Environment Scotland Blog, 13 December 2021",
+      "url": "https://blog.historicenvironment.scot/2021/12/who-was-st-andrew/",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Public-history account used for the later growth of Scottish patronal, St Andrews, relic, and saltire traditions; these are national reception history, not apostolic-era proof or exclusive possession",
+      "supports": ["reception.scotland", "reception.st_andrews", "tradition.saltire", "safeguard.no_national_possession", "sourceLimits"]
+    },
+    {
+      "id": "andrew-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — November",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/NovUC.shtml",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the exact November 30 title and feast rank; it does not establish biography, later patronage, or liturgical color",
+      "supports": ["identity", "celebrationIds", "ecclesialTitle", "feastDates", "calendar.rank"]
+    },
+    {
+      "id": "andrew-girm-color",
+      "title": "General Instruction of the Roman Missal, nos. 345–346",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "USCCB, Chapter VI: The Requisites for the Celebration of Mass",
+      "url": "https://www.usccb.org/prayer-and-worship/the-mass/general-instruction-of-the-roman-missal/girm-chapter-6",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal liturgical norm used only for red at celebrations of Apostles; title, date, and feast rank come from the calendar source",
+      "supports": ["calendar.color"]
+    }
+  ],
+  "editorial": {"state": "published", "researcher": "Catholic Daily editorial research", "reviewer": "Catholic Daily factual and theological review", "reviewedAt": "2026-08-13", "revision": 1, "warnings": []},
+  "whyItMatters": "Andrew's canonical witness is quiet and relational: he follows Jesus, brings another person, notices a small resource, and helps a visitor approach. Later traditions can enrich memory when they are not mistaken for proof or possession.",
+  "oneMinuteSummary": "Andrew is named in the New Testament as Simon Peter's brother, a fisherman called by Jesus, and one of the Twelve. John's Gospel depicts him bringing Simon to Jesus, noticing a boy's five barley loaves and two fish, and joining Philip in approaching Jesus for Greek visitors. Acts places him in the apostolic community gathered in Jerusalem. Scripture supplies no exact birth year, age, later route, death account, relic history, diagonal cross, or national patronage. Eusebius preserves a later Scythian mission tradition; Byzantine Christians called Andrew the First-Called, and later Patras, relic, cross, and Scottish traditions developed around him. Their reception is historically real without proving every episode or giving any nation ownership of an apostle. Andrew's example invites attentive, noncoercive witness: notice what people offer, help them approach Christ freely, reject conquest and ethnic superiority, and never demand dangerous suffering as proof of faith.",
+  "life": {
+    "sections": [
+      {"heading": "Two canonical call scenes", "body": "Mark narrates Jesus calling Simon and Andrew from their nets; John introduces Andrew as John the Baptist's disciple who follows Jesus and brings Simon. Their different shapes should be heard rather than forced into one timetable.", "sourceIds": ["andrew-mark", "andrew-john"]},
+      {"heading": "Attention to people and small gifts", "body": "Before the feeding, Andrew notices a boy and his food; later he and Philip help Greek visitors approach Jesus. Neither scene licenses taking resources, romanticizing poverty, or controlling access to faith.", "sourceIds": ["andrew-john"]},
+      {"heading": "Apostolic witness and later mission memory", "body": "Acts places Andrew with the Jerusalem community. Eusebius's Scythian notice and Byzantine apostolicity claims are later reception, not a complete first-century travel record.", "sourceIds": ["andrew-acts", "andrew-eusebius", "andrew-dvornik"]},
+      {"heading": "Patras, relics, cross, and Scotland", "body": "Patras death, relic translation, diagonal-cross, and Scottish traditions accumulated across centuries. They deserve precise labels and cannot authenticate remains, mandate suffering, or turn an apostle into national property.", "sourceIds": ["andrew-benedict", "andrew-relic-study", "andrew-scotland", "andrew-calendar", "andrew-girm-color"]}
+    ],
+    "gospelTheme": "Jesus calls disciples who notice others, share access, and bear witness without coercion.",
+    "struggle": "Apostolic memory can be inflated into exact biography, relic certainty, conquest, nationalism, or a demand that vulnerable people imitate martyrdom.",
+    "response": "Distinguish canonical witness from later tradition, invite without pressure, share attention and resources, and protect people from preventable harm."
+  },
+  "virtues": [
+    {"name": "Attentive invitation", "evidence": "John remembers Andrew bringing Simon and helping Greek visitors approach Jesus.", "imitation": "Offer one person accurate information and room to choose, without pressure or gatekeeping.", "sourceIds": ["andrew-john"]},
+    {"name": "Hope with limited resources", "evidence": "Andrew notices the boy and the small supply of food while honestly naming its inadequacy.", "imitation": "Notice a modest contribution, ask consent before using it, and combine realism with generosity.", "sourceIds": ["andrew-john"]}
+  ],
+  "practice": {"spiritual": "Pray for the humility to bring people toward Christ without making yourself the destination.", "action": "Help someone access food, worship, or community support without taking over their decision."},
+  "reflectionQuestions": ["Do I invite people freely, or use relationship and tradition as leverage?", "Can I honor a later sacred tradition without claiming certainty its evidence cannot bear?"],
+  "scripture": {"reference": "John 1:40–42", "connection": "Andrew brings Simon to Jesus; his witness points beyond himself and leaves Christ at the center."},
+  "prayer": "Lord Jesus, you called Andrew to follow and to bring others near. Give us his attentive faith without coercion, conquest, or pride. Teach us to distinguish Scripture from later tradition, to honor cultures without claiming ownership, and to protect every person from demands for dangerous suffering. Make our witness truthful, gentle, and centered on you. Amen."
+}

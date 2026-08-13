@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 2,
+  "id": "the_immaculate_conception_of_the_blessed_virgin_mary",
+  "profileKind": "observance",
+  "celebrationIds": ["the_immaculate_conception_of_the_blessed_virgin_mary", "the_immaculate_conception"],
+  "name": "The Immaculate Conception of the Blessed Virgin Mary",
+  "alternateNames": ["Solemnity of the Immaculate Conception", "Mary's Immaculate Conception"],
+  "ecclesialTitle": "Solemnity of the Blessed Virgin Mary",
+  "places": [],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "The December 8 solemnity celebrates Catholic teaching that Mary, from the first moment of her own conception, was preserved from original sin by a singular grace of God in view of the merits of Jesus Christ. It is not the virginal conception of Jesus, not a claim that marital sex, bodies, pregnancy, disability, ancestry, or Jewish humanity are stained, and not a medical theory about embryos or genetics. Scripture does not state the doctrine in those later technical words; Genesis 3, Ephesians 1, and Luke 1 are received typologically and liturgically within the Church's reading centered on Christ. The teaching developed through feast history, medieval disagreement, distinctions about universal redemption, and the 1854 definition in Ineffabilis Deus. An Orthodox Church in America catechetical answer instead emphasizes inherited consequences rather than inherited guilt, Mary's freedom, and her need for Christ as Savior. These accounts should not be collapsed or ranked. Mary's grace never licenses purity policing, reproductive pressure, antisemitism, fertility promises, or ranking human worth.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Immaculate_Conception",
+  "wikidataId": "Q3538509",
+  "feastDates": ["December 8"],
+  "historicalCertainty": "doctrinal",
+  "sources": [
+    {
+      "id": "immaculate-oca",
+      "title": "Sinlessness of Mary",
+      "authorOrInstitution": "Orthodox Church in America",
+      "publisher": "OCA Questions & Answers: Saints",
+      "url": "https://www.oca.org/questions/saints/sinlessness-of-mary",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Directly readable OCA catechetical answer used narrowly for one Orthodox articulation: inherited consequences rather than inherited guilt, Mary's real freedom, Christ as her Savior, serious differences from Roman Catholic accounts, and caution that Orthodox mariology is not one exhaustively systematized formula; it is not presented as a universal Orthodox consensus",
+      "supports": ["theology.east_west", "theology.orthodox_catholic", "theology.inherited_consequences", "theology.mary_freedom", "theology.christ_savior", "safeguard.no_ecumenical_caricature", "sourceLimits"]
+    },
+    {
+      "id": "immaculate-ineffabilis",
+      "title": "Ineffabilis Deus",
+      "authorOrInstitution": "Pope Pius IX",
+      "publisher": "The Holy See, Apostolic Constitution, 8 December 1854",
+      "url": "https://www.vatican.va/content/pius-ix/it/documents/18541208-costituzione-apostolica-ineffabilis-deus.html",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Official defining text used for Mary's preservation from original sin from the first moment of her conception by singular grace, in view of Christ's merits, and for the historical development presented by the constitution; the definition is not a biological or medical claim",
+      "supports": ["identity", "doctrine.definition", "doctrine.first_moment", "doctrine.singular_grace", "doctrine.christ_merits", "history.definition_1854", "sourceLimits"]
+    },
+    {
+      "id": "immaculate-catechism",
+      "title": "Catechism of the Catholic Church, nos. 490–493",
+      "authorOrInstitution": "The Holy See",
+      "publisher": "Catechism of the Catholic Church",
+      "url": "https://www.vatican.va/content/catechism/en/part_one/section_two/chapter_two/artcile_3/paragraph_2_conceived_by_the_power_of_the_holy_spirit_and_born_of_the_virgin_mary.html",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal doctrinal synthesis used for Mary's grace, preservative redemption through Christ, holiness, and free assent; it distinguishes this Marian doctrine within the mystery of Christ rather than treating Mary as unredeemed or divine",
+      "supports": ["doctrine.grace", "doctrine.preservative_redemption", "doctrine.christ_center", "theology.free_assent"]
+    },
+    {
+      "id": "immaculate-scripture",
+      "title": "Readings for the Solemnity of the Immaculate Conception, 8 December 2026",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "USCCB Bible, New American Bible Revised Edition",
+      "url": "https://bible.usccb.org/bible/readings/120826.cfm",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Canonical liturgical readings used for Genesis 3, election in Christ in Ephesians 1, and Gabriel's greeting and Mary's response in Luke 1; these texts are received typologically and liturgically, not claimed to contain the later technical definition verbatim",
+      "supports": ["scripture.genesis3", "scripture.ephesians1", "scripture.luke1", "theology.typology", "sourceLimits"]
+    },
+    {
+      "id": "immaculate-dabic",
+      "title": "Od Marijine osobne svetosti do njezine izvorne svetosti. Dogma o Marijinu Bezgrešnom Začeću",
+      "authorOrInstitution": "Goran Dabić",
+      "publisher": "Bogoslovska smotra 75.1 (2005), pp. 117–130, Catholic Faculty of Theology, University of Zagreb",
+      "url": "https://hrcak.srce.hr/24687",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Open scholarly article used for the development from affirmations of Mary's personal holiness toward the defined doctrine, theological terminology, and the need to distinguish historical stages rather than project the 1854 formula unchanged into every earlier source",
+      "supports": ["history.development", "history.terminology", "history.early_holiness", "doctrine.distinctions", "sourceLimits"]
+    },
+    {
+      "id": "immaculate-owens",
+      "title": "Historical Development of the Dogma of the Immaculate Conception: Obstacles Inhibiting Understanding and Acceptance",
+      "authorOrInstitution": "Gerard Owens, C.Ss.R.",
+      "publisher": "Proceedings of the Catholic Theological Society of America 9 (1954), pp. 67–101, Boston College Libraries",
+      "url": "https://ejournals.bc.edu/index.php/ctsa/article/view/2371",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Open full historical-theological study used for medieval objections concerning universal original sin, disagreement among major theologians, clarification of the feast's object, and the eventual account of preservative redemption; older scholarship is not the sole control for present ecumenical terminology",
+      "supports": ["history.medieval_controversy", "history.bernard", "history.scholastics", "history.feast_object", "doctrine.preservative_redemption", "sourceLimits"]
+    },
+    {
+      "id": "immaculate-liturgical-history",
+      "title": "Nova traditio. La fête de la Conception de la Vierge Marie au Mont Saint-Michel (XIIe–XVe siècles)",
+      "authorOrInstitution": "Marie-Bénédicte Dary",
+      "publisher": "Tabularia (2023), DOI 10.4000/tabularia.6710, OpenEdition Journals",
+      "url": "https://journals.openedition.org/tabularia/6710?lang=en",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Full scholarly study used narrowly for the twelfth- through fifteenth-century feast of Mary's Conception at Mont-Saint-Michel and its Norman liturgical reception; this local history neither represents the entire West nor proves use of the 1854 definition",
+      "supports": ["history.feast", "history.mont_saint_michel", "history.norman_reception", "sourceLimits"]
+    },
+    {
+      "id": "immaculate-arcic",
+      "title": "Mary: Grace and Hope in Christ, selected nos. 5–30, 40–63, and 76–80",
+      "authorOrInstitution": "Anglican–Roman Catholic International Commission",
+      "publisher": "ARCIC, completed at Seattle on 2 February 2004 and publicly presented on 16 May 2005; Dicastery for Promoting Christian Unity",
+      "url": "https://www.christianunity.va/content/unitacristiani/en/dialoghi/sezione-occidentale/comunione-anglicana/dialogo/arcic-ii/en.html",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal ecumenical dialogue text used for grace and hope in Christ, biblical patterns, development, the 1854 definition, and qualified convergence; it guards against treating distinct Christian vocabularies or historical disagreements as simple bad faith",
+      "supports": ["theology.christ_center", "theology.ecumenical", "history.development", "doctrine.definition", "safeguard.no_triumphalism"]
+    },
+    {
+      "id": "immaculate-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — December",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/DecUC.shtml",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the exact December 8 title and solemnity rank; it does not establish the doctrine's content, its history, or liturgical color",
+      "supports": ["identity", "celebrationIds", "ecclesialTitle", "feastDates", "calendar.rank"]
+    },
+    {
+      "id": "immaculate-girm-color",
+      "title": "General Instruction of the Roman Missal, nos. 345–346",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "USCCB, Chapter VI: The Requisites for the Celebration of Mass",
+      "url": "https://www.usccb.org/prayer-and-worship/the-mass/general-instruction-of-the-roman-missal/girm-chapter-6",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal liturgical norm used only for white at celebrations of the Blessed Virgin Mary; title, date, and solemnity rank come from the calendar source",
+      "supports": ["calendar.color"]
+    }
+  ],
+  "editorial": {"state": "published", "researcher": "Catholic Daily editorial research", "reviewer": "Catholic Daily factual and theological review", "reviewedAt": "2026-08-13", "revision": 1, "warnings": []},
+  "whyItMatters": "The solemnity proclaims the priority of Christ's grace in Mary's redemption. Its long development teaches doctrinal patience and rejects every attempt to turn grace into shame about bodies, ancestry, pregnancy, or human worth.",
+  "oneMinuteSummary": "The Immaculate Conception means that Mary, from the first moment of her conception, was preserved from original sin by God's singular grace in view of the merits of Jesus Christ. It is not Jesus' virginal conception and does not say that sex, bodies, pregnancy, disability, ancestry, or Jewish humanity are dirty. Scripture does not state the later technical definition verbatim. The solemnity receives Genesis 3, Ephesians 1, and Luke 1 typologically within the mystery of Christ. Feast traditions and theological reflection developed over centuries. Medieval theologians disagreed about universal redemption and Mary's sanctification before preservative redemption clarified how she too is saved by Christ. Pius IX defined the doctrine in 1854. One OCA catechetical account instead stresses inherited consequences, Mary's freedom, and Christ as Savior. Neither account should be caricatured. The feast offers no purity test, fertility promise, medical guarantee, reproductive pressure, antisemitism, or ranking of human worth.",
+  "life": {
+    "sections": [
+      {"heading": "A doctrine about Mary's conception", "body": "The definition concerns Mary's first moment of conception through grace and Christ's merits. It is distinct from Jesus' virginal conception and is neither embryology nor a judgment against bodies, sex, or pregnancy.", "sourceIds": ["immaculate-ineffabilis", "immaculate-catechism"]},
+      {"heading": "Scripture received in the liturgy", "body": "Genesis 3, Ephesians 1, and Luke 1 shape the solemnity's biblical horizon. They are read typologically in Christ; none contains the 1854 formula verbatim or licenses anti-Jewish supersession.", "sourceIds": ["immaculate-scripture", "immaculate-arcic"]},
+      {"heading": "Feast, disagreement, and definition", "body": "The feast and its object developed amid medieval debate over original sin, Mary's holiness, and universal redemption. Historical development is not proof that earlier Christians all held an identical formula.", "sourceIds": ["immaculate-dabic", "immaculate-owens", "immaculate-liturgical-history", "immaculate-ineffabilis"]},
+      {"heading": "Grace without purity policing", "body": "Catholic teaching defines preservative grace through Christ. An OCA answer emphasizes inherited consequences, Mary's freedom, and Christ as Savior. Neither account can rank bodies, ancestry, fertility, disability, or reproductive choices.", "sourceIds": ["immaculate-catechism", "immaculate-oca", "immaculate-arcic", "immaculate-calendar", "immaculate-girm-color"]}
+    ],
+    "gospelTheme": "God's grace in Christ precedes human achievement and calls forth a free response.",
+    "struggle": "A doctrine of grace can be confused with Jesus' conception, biological purity, sexual shame, reproductive pressure, anti-Judaism, or triumph over other Christians.",
+    "response": "Center Christ's redeeming grace, distinguish theology from medicine, honor bodies and conscience, and discuss Christian differences accurately and without contempt."
+  },
+  "virtues": [
+    {"name": "Grateful receptivity", "evidence": "The doctrine presents Mary's holiness as God's grace through Christ, not autonomous achievement or biological superiority.", "imitation": "Receive one needed form of help without treating dependence as failure, then respect another person's freedom to choose differently.", "sourceIds": ["immaculate-ineffabilis", "immaculate-catechism"]},
+    {"name": "Doctrinal patience", "evidence": "The feast and theological language developed through genuine disagreement before the 1854 definition.", "imitation": "Describe a disputed belief in terms its adherents recognize and name its historical development without ridicule.", "sourceIds": ["immaculate-dabic", "immaculate-owens", "immaculate-liturgical-history"]}
+  ],
+  "practice": {"spiritual": "Thank Christ for grace that precedes achievement, and entrust every body and history to God's mercy without shame.", "action": "Challenge one purity-based, antisemitic, ableist, or reproductive-pressure claim with accurate doctrine and compassionate support."},
+  "reflectionQuestions": ["Do I understand the Immaculate Conception as Mary's redemption by Christ rather than biological superiority?", "Does my language about purity honor bodies, pregnancy, disability, ancestry, and conscience?"],
+  "scripture": {"reference": "Luke 1:28, 38", "connection": "Gabriel's greeting and Mary's free response belong to the solemnity's biblical reception, while the later definition depends on the Church's developed reading centered on Christ."},
+  "prayer": "God of prevenient grace, you preserved Mary through the merits of Christ and called forth her free response. Keep us from confusing doctrine with biology or using devotion to shame bodies, ancestry, pregnancy, disability, or conscience. Purify us of antisemitism, reproductive pressure, and triumphalism. Center us in Christ, honor every person's dignity, and teach us patient, truthful dialogue. Amen."
+}

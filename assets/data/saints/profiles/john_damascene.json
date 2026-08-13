@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 2,
+  "id": "john_damascene",
+  "profileKind": "individual",
+  "celebrationIds": ["john_damascene", "saint_john_damascene_priest_and_doctor_of_the_church"],
+  "name": "Saint John Damascene, Priest and Doctor of the Church",
+  "alternateNames": ["John of Damascus", "John Damascene"],
+  "ecclesialTitle": "Priest and Doctor of the Church",
+  "lifeSpan": "later seventh century–c. 750",
+  "vocation": "Monk, priest, theologian, and hymnographer",
+  "places": ["Damascus", "Jerusalem"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "John of Damascus was an Arabic-speaking Christian theologian writing in Greek under early Umayyad rule, probably born in Damascus in the later seventh century and active as a monk near Jerusalem. Later biographies connect his family with fiscal administration and place him at Mar Saba, but their late date and scholarly questions prevent a confident career or monastery narrative. His works organize patristic theology, defend sacred images through the Incarnation, articulate Christ's two natures in one person, and include an early Christian classification of Islam. Critical editions distinguish authentic works from texts later assigned to him. His treatment of Islam must be read in its eighth-century polemical setting and never used to demean Muslims, Jews, Arabs, or iconoclasts. Images are honored relative to their prototypes, not worshiped as magic objects. Scholarship, prayer, and tradition require source criticism, intellectual humility, religious freedom, and refusal of hatred.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/John_of_Damascus",
+  "wikidataId": "Q51884",
+  "feastDates": ["December 4"],
+  "historicalCertainty": "historical",
+  "sources": [
+    {
+      "id": "john-damascene-chrysostomides",
+      "title": "John of Damascus’s Theology of Icons in the Context of Eighth-Century Palestinian Iconoclasm",
+      "authorOrInstitution": "Anna Chrysostomides",
+      "publisher": "Dumbarton Oaks Papers 75 (2021), pp. 263–296, Harvard University",
+      "url": "https://qmro.qmul.ac.uk/xmlui/handle/123456789/94733",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Open repository article used for John's image theology within eighth-century Palestine and its Christian, Jewish, and Muslim contexts; this historical framing prevents an isolated Christian-only story or collective blame against neighboring communities",
+      "supports": ["history.palestine", "history.jewish_context", "history.muslim_context", "theology.images", "safeguard.no_collective_blame", "sourceLimits"]
+    },
+    {
+      "id": "john-damascene-edition",
+      "title": "Die Edition: Johannes von Damaskus",
+      "authorOrInstitution": "Bayerische Akademie der Wissenschaften",
+      "publisher": "Patristische Kommission, Die Schriften des Johannes von Damaskos",
+      "url": "https://patristik.badw.de/die-edition.html",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Institutional critical-edition overview used for the edited corpus, manuscript-based attribution work, and the need to distinguish authentic, doubtful, and spurious writings rather than treating every transmitted title as John's",
+      "supports": ["works.corpus", "works.critical_editions", "works.authorship_limits", "sourceLimits"]
+    },
+    {
+      "id": "john-damascene-images",
+      "title": "On Holy Images",
+      "authorOrInstitution": "John of Damascus; translated by Mary H. Allies",
+      "publisher": "Project Gutenberg, from the 1898 Thomas Baker edition",
+      "url": "https://www.gutenberg.org/files/49917/old/49917-h/49917-h.html",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Readable public-domain translation used for John's Incarnation-based defense of images and the distinction between worship due to God and relative honor; it is not evidence that images possess magical power",
+      "supports": ["theology.incarnation", "theology.images", "theology.honor_distinction", "safeguard.no_icon_magic"]
+    },
+    {
+      "id": "john-damascene-orthodox-faith",
+      "title": "An Exact Exposition of the Orthodox Faith, Book III",
+      "authorOrInstitution": "John of Damascus",
+      "publisher": "New Advent, Nicene and Post-Nicene Fathers",
+      "url": "https://www.newadvent.org/fathers/33043.htm",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Readable primary theological text used for one person of Christ in two complete natures, the Incarnation, and careful doctrinal synthesis; it is not a substitute for critical-edition attribution controls",
+      "supports": ["works.exposition", "theology.christology", "theology.incarnation"]
+    },
+    {
+      "id": "john-damascene-griffith",
+      "title": "The Manṣūr Family and Saint John of Damascus: Christians and Muslims in Umayyad Times",
+      "authorOrInstitution": "Sidney H. Griffith",
+      "publisher": "In Antoine Borrut and Fred M. Donner (eds.), Christians and Others in the Umayyad State, Oriental Institute Seminars 1 (2016), pp. 29–51",
+      "url": "https://oi.uchicago.edu/sites/default/files/uploads/shared/docs/lamine1.pdf",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Full scholarly chapter used for the Manṣūr family and Umayyad context, limits of John's late biography including questioned Mar Saba placement, the Islam chapter in On Heresies, and disputed attribution of the Conversation of a Saracen and a Christian; polemic is contextualized rather than weaponized",
+      "supports": ["lifeSpan", "places", "history.umayyad_context", "history.biography_limits", "history.mar_saba_questioned", "works.islam_chapter", "works.disputed_islam_texts", "safeguard.no_anti_muslim", "sourceLimits"]
+    },
+    {
+      "id": "john-damascene-louth",
+      "title": "St John Damascene: Tradition and Originality in Byzantine Theology",
+      "authorOrInstitution": "Andrew Louth",
+      "publisher": "Oxford University Press, Oxford Early Christian Studies, 2002",
+      "url": "https://academic.oup.com/book/12886",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Independent scholarly monograph overview used for John's approximate chronology, Damascus and Palestinian monastic setting, Fountain of Knowledge, icon theology, hymnography, and originality within received tradition; uncertainties are retained",
+      "supports": ["identity", "lifeSpan", "vocation", "places", "works.fountain", "works.hymns", "history.byzantine_theology", "historicalCertainty"]
+    },
+    {
+      "id": "john-damascene-benedict",
+      "title": "General Audience: Saint John Damascene",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "The Holy See, 6 May 2009",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/audiences/2009/documents/hf_ben-xvi_aud_20090506.html",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal ecclesial reception used for John's theological synthesis, defense of images, monastic reception, Second Nicaea, and recognition as Doctor of the Church; biographical details are controlled by critical scholarship",
+      "supports": ["ecclesialTitle", "reception.catholic", "reception.nicaea_ii", "theology.images", "works.synthesis"]
+    },
+    {
+      "id": "john-damascene-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — December",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/DecUC.shtml",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the exact December 4 title and optional-memorial rank; no printed rank means optional memorial, and the source does not establish color or biography",
+      "supports": ["identity", "celebrationIds", "ecclesialTitle", "feastDates", "calendar.rank"]
+    },
+    {
+      "id": "john-damascene-girm-color",
+      "title": "General Instruction of the Roman Missal, nos. 345–346",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "USCCB, Chapter VI: The Requisites for the Celebration of Mass",
+      "url": "https://www.usccb.org/prayer-and-worship/the-mass/general-instruction-of-the-roman-missal/girm-chapter-6",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal liturgical norm used only for white at celebrations of saints who were not martyrs; title, date, and rank come from the calendar source",
+      "supports": ["calendar.color"]
+    }
+  ],
+  "editorial": {"state": "published", "researcher": "Catholic Daily editorial research", "reviewer": "Catholic Daily factual and theological review", "reviewedAt": "2026-08-13", "revision": 1, "warnings": []},
+  "whyItMatters": "John shows how inherited teaching can be organized creatively amid political and religious change. His image theology protects the Incarnation; critical scholarship protects his legacy from false attribution, magic, and religious hatred.",
+  "oneMinuteSummary": "John of Damascus was an Arabic-speaking Christian theologian writing in Greek under Umayyad rule. He was probably born in Damascus in the later seventh century and died around 750, after monastic life near Jerusalem. Late biographies associate his family with government finance but do not justify a precise career or placement at Mar Saba. John's Fountain of Knowledge synthesized earlier Christian teaching. His Exact Exposition articulates Christ's two complete natures in one person; his image treatises argue that the Incarnation permits depiction while worship belongs to God alone. His On Heresies includes an early Christian account of Islam, but other anti-Islamic texts attributed to him are disputed. Historical polemic cannot license contempt for Muslims, Jews, Arabs, or iconoclasts. Critical editions and context matter. John invites disciplined learning joined to prayer: honor images without magic, confess Christ without caricaturing neighbors, and receive tradition creatively without pretending every inherited text is authentic.",
+  "life": {
+    "sections": [
+      {"heading": "A life known through late witnesses", "body": "John's Damascus origin, later-seventh-century birth, and Jerusalem-area monastic setting are probable. Late lives cannot prove an exact government career, and recent scholarship questions the traditional Mar Saba placement.", "sourceIds": ["john-damascene-griffith", "john-damascene-louth"]},
+      {"heading": "Tradition organized and tested", "body": "The Fountain of Knowledge and Exact Exposition order patristic teaching, including Christ's two natures in one person. Modern critical editions separate secure works from doubtful attributions.", "sourceIds": ["john-damascene-edition", "john-damascene-orthodox-faith", "john-damascene-louth"]},
+      {"heading": "Images because of the Incarnation", "body": "In eighth-century Palestine among Christian, Jewish, and Muslim neighbors, John argues that God became visible in Christ and distinguishes worship from relative honor. This rejects icon magic and collective blame.", "sourceIds": ["john-damascene-images", "john-damascene-chrysostomides", "john-damascene-benedict"]},
+      {"heading": "Writing near Islam", "body": "John's Islam chapter belongs to an early Christian-Muslim polemical context; related dialogues have disputed attribution. It must be studied critically and never converted into dehumanization or modern collective blame.", "sourceIds": ["john-damascene-griffith", "john-damascene-edition", "john-damascene-calendar", "john-damascene-girm-color"]}
+    ],
+    "gospelTheme": "The Word became flesh, so Christian truth engages history, matter, reason, and neighbors without idolatry or hatred.",
+    "struggle": "Tradition can be flattened into uncritical attribution, miraculous legend, icon magic, or polemic against whole religious communities.",
+    "response": "Test texts, distinguish honor from worship, read controversy in context, and join conviction to intellectual humility and human dignity."
+  },
+  "virtues": [
+    {"name": "Disciplined learning", "evidence": "John organized a wide inheritance while modern editors expose the manuscript and attribution questions within his corpus.", "imitation": "Check one attributed quotation against a critical edition or responsible scholarly source before sharing it.", "sourceIds": ["john-damascene-edition", "john-damascene-louth"]},
+    {"name": "Incarnational discernment", "evidence": "His image theology connects material representation to the Word made flesh while reserving worship for God.", "imitation": "Use a sacred image as a prompt to prayer without treating the object as magical or judging another person's devotional practice.", "sourceIds": ["john-damascene-images", "john-damascene-benedict"]}
+  ],
+  "practice": {"spiritual": "Pray before an image of Christ, consciously directing worship to God rather than the material object.", "action": "Correct one decontextualized religious claim about Muslims, Jews, Christians, or another community with a careful source."},
+  "reflectionQuestions": ["Do I test inherited claims with the same care I ask of others?", "Does my defense of faith preserve the dignity and freedom of people who disagree?"],
+  "scripture": {"reference": "John 1:14", "connection": "The Word becoming flesh grounds John's defense of depicting Christ and his refusal to treat matter as beneath God's saving work."},
+  "prayer": "God of truth, through Saint John Damascene teach us to love the Word made flesh, to study tradition carefully, and to worship you alone. Free us from false attribution, magical devotion, religious contempt, and easy certainty. Give Christians and Muslims, Jews and all neighbors safety, honest dialogue, and peace. Make learning serve humility and love. Amen."
+}

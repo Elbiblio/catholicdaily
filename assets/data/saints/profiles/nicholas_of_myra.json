@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 2,
+  "id": "nicholas_of_myra",
+  "profileKind": "individual",
+  "celebrationIds": ["nicholas_of_myra", "saint_nicholas_bishop"],
+  "name": "Saint Nicholas, Bishop",
+  "alternateNames": ["Nicholas of Myra", "Saint Nicholas of Myra"],
+  "ecclesialTitle": "Bishop",
+  "lifeSpan": "traditionally early fourth century",
+  "vocation": "Bishop remembered in the early cult of Myra",
+  "places": ["Myra", "Demre", "Bari"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Nicholas is remembered as an early-fourth-century bishop of Myra, but contemporary documents do not supply secure birth and death dates, age, family biography, Council of Nicaea attendance, or the story that he struck Arius. Archaeology at ancient Myra and evidence of an early cult establish historical settings and reception, not a complete life or identification of bones. The earliest surviving complete Life is medieval hagiography. Its stories of secret dowries, rescue, justice, sailors, children, and gifts shaped Christian devotion while also requiring safeguards: charity needs consent and accountability, women are not commodities, poverty is not shame, and children must not be frightened, watched, ranked as good or bad, or promised magical rewards. Relics attributed to Nicholas were removed from Myra to Norman Bari in 1087 amid political and economic interests; received relic tradition is not scientific proof or national ownership. European Saint Nicholas customs and the modern American Santa are layered developments, not an unbroken biography or permission for consumerism.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Saint_Nicholas",
+  "wikidataId": "Q44269",
+  "feastDates": ["December 6"],
+  "historicalCertainty": "traditional",
+  "sources": [
+    {
+      "id": "nicholas-michael-life",
+      "title": "Life of Saint Nicholas by Michael the Archimandrite",
+      "authorOrInstitution": "Michael the Archimandrite; English translation by John Quinn and Bryson Sewell",
+      "publisher": "Roger Pearse, 2014, translation from Gustav Anrich's Greek edition",
+      "url": "https://www.roger-pearse.com/weblog/wp-content/uploads/2015/03/vita-per-Michaelem.pdf",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Readable translation of the earliest surviving complete Life, composed in the ninth century and largely preserved in later manuscripts, used for dowry, bishop, justice, rescue, sailor, and gift stories strictly as hagiographic reception rather than contemporary biography",
+      "supports": ["tradition.earliest_complete_life", "tradition.dowries", "tradition.bishop", "tradition.rescues", "tradition.sailors", "tradition.gifts", "sourceLimits"]
+    },
+    {
+      "id": "nicholas-english",
+      "title": "The Saint Who Would Be Santa Claus: The True Life and Trials of Nicholas of Myra",
+      "authorOrInstitution": "Adam C. English",
+      "publisher": "Baylor University Press, 2012, open preview",
+      "url": "https://api.pageplace.de/preview/DT0400.9781602586369_A40051084/preview-9781602586369_A40051084.pdf",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Readable scholarly preview used for the absence of contemporary biography, uncertainty about exact dates and Nicaea attendance, conflation with Nicholas of Sion, and the difference between cautious reconstruction and later legend",
+      "supports": ["identity", "lifeSpan", "history.evidence_gap", "history.nicaea_uncertain", "history.sion_conflation", "historicalCertainty", "sourceLimits"]
+    },
+    {
+      "id": "nicholas-demre-archaeology",
+      "title": "Antalya Demre Müze Müdürlüğü",
+      "authorOrInstitution": "Republic of Türkiye, Ministry of Culture and Tourism",
+      "publisher": "General Directorate of Cultural Heritage and Museums",
+      "url": "https://kvmgm.ktb.gov.tr/TR-281279/antalya-demre-muze-mudurlugu.html",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Official archaeological and museum context used for ancient Myra, the Church of Saint Nicholas at Demre, excavated architectural layers, and continuing cult reception; buildings and tomb traditions do not identify a body or prove every life episode",
+      "supports": ["places", "history.myra", "history.demre_church", "history.archaeology", "reception.cult", "safeguard.no_relic_certainty", "sourceLimits"]
+    },
+    {
+      "id": "nicholas-hayes",
+      "title": "The Cult of St Nicholas of Myra in Norman Bari, c. 1071–c. 1111",
+      "authorOrInstitution": "Dawn Marie Hayes",
+      "publisher": "Journal of Ecclesiastical History 67.3 (2016), pp. 492–512; DOI 10.1017/S0022046915003371",
+      "url": "https://www.researchgate.net/publication/303900007_The_Cult_of_St_Nicholas_of_Myra_in_Norman_Bari_c_1071-c_1111",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Accessible scholarly article used for the 1087 removal of remains attributed to Nicholas, Norman Bari's political and ecclesiastical setting, cult promotion, and economic interests; it does not authenticate the remains or justify ownership",
+      "supports": ["history.bari_1087", "history.relic_removal", "history.norman_context", "history.cult_politics", "safeguard.no_relic_ownership", "sourceLimits"]
+    },
+    {
+      "id": "nicholas-bari",
+      "title": "La traslazione delle reliquie di San Nicola",
+      "authorOrInstitution": "Pontifical Basilica of Saint Nicholas, Bari",
+      "publisher": "Basilica San Nicola",
+      "url": "https://www.basilicasannicola.it/info/147/la-traslazione-delle-reliquie-di-san-nicola",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Institutional reception account used for Bari's tradition of the 1087 transfer and present devotion; its frank description of the removal does not become scientific identification or exclusive national possession",
+      "supports": ["reception.bari", "tradition.relics", "history.bari_1087", "sourceLimits"]
+    },
+    {
+      "id": "nicholas-santa-history",
+      "title": "The Changing Geography of the Gift Giver",
+      "authorOrInstitution": "Abraham Parrish",
+      "publisher": "Library of Congress, Worlds Revealed, 13 December 2024",
+      "url": "https://blogs.loc.gov/maps/2024/12/the-changing-geography-of-the-gift-giver/",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Institutional public history used for Dutch Sinterklaas, early American Saint Nicholas references, Washington Irving, nineteenth-century print culture, and the changing geography of Santa; it prevents a simple unbroken line from the historical bishop",
+      "supports": ["reception.sinterklaas", "reception.american_santa", "history.santa_development", "safeguard.no_consumerism", "sourceLimits"]
+    },
+    {
+      "id": "nicholas-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — December",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/DecUC.shtml",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for Saint Nicholas, Bishop, December 6, and optional-memorial rank; no printed rank means optional memorial, and the calendar does not establish biography or color",
+      "supports": ["identity", "celebrationIds", "ecclesialTitle", "feastDates", "calendar.rank"]
+    },
+    {
+      "id": "nicholas-girm-color",
+      "title": "General Instruction of the Roman Missal, nos. 345–346",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "USCCB, Chapter VI: The Requisites for the Celebration of Mass",
+      "url": "https://www.usccb.org/prayer-and-worship/the-mass/general-instruction-of-the-roman-missal/girm-chapter-6",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal liturgical norm used only for white at celebrations of saints who were not martyrs; title, date, and rank come from the calendar source",
+      "supports": ["calendar.color"]
+    }
+  ],
+  "editorial": {"state": "published", "researcher": "Catholic Daily editorial research", "reviewer": "Catholic Daily factual and theological review", "reviewedAt": "2026-08-13", "revision": 1, "warnings": []},
+  "whyItMatters": "Nicholas's enduring reception joins pastoral justice, discreet generosity, migration of relic traditions, and changing gift customs. Honest devotion protects recipients and children while refusing false certainty, ownership, and consumer pressure.",
+  "oneMinuteSummary": "Nicholas is traditionally remembered as an early-fourth-century bishop of Myra, but no contemporary biography securely provides his dates, age, family, Council of Nicaea attendance, or a blow against Arius. Archaeology illuminates Myra and the later church at Demre without proving every episode or identifying bones. The earliest surviving complete Life is ninth-century hagiography. Its dowry gifts, rescues, justice scenes, sailors, children, and generosity shaped devotion across Christian cultures. In 1087 sailors removed remains attributed to Nicholas from Myra to Norman Bari, where political, ecclesiastical, and economic interests helped expand his cult; reception is not scientific authentication or national ownership. Dutch Sinterklaas customs and modern American Santa developed through later migration, literature, images, and commerce. Nicholas should inspire accountable generosity, not secret surveillance, coerced marriage, poverty shame, frightening children, moral ranking, magical promises, or consumerism. Give with consent, protect recipients' agency, and tell children truth in age-appropriate ways.",
+  "life": {
+    "sections": [
+      {"heading": "A bishop behind limited evidence", "body": "Nicholas belongs to Myra's early Christian memory, but exact dates, Nicaea attendance, and the Arius assault are not secure. Nicholas of Sion traditions also entered later accounts.", "sourceIds": ["nicholas-english", "nicholas-demre-archaeology"]},
+      {"heading": "Stories of gifts and justice", "body": "Michael's medieval Life gives dowry, rescue, sailor, and justice stories. They document hagiographic ideals, not eyewitness biography, and charity today requires consent, safety, and recipient agency.", "sourceIds": ["nicholas-michael-life", "nicholas-english"]},
+      {"heading": "Myra, Demre, and Bari", "body": "Archaeology documents a layered cult site at Demre. The 1087 Bari removal and cult grew within Norman politics and economy; neither architecture nor reception proves the identity of remains or grants ownership.", "sourceIds": ["nicholas-demre-archaeology", "nicholas-hayes", "nicholas-bari"]},
+      {"heading": "From Saint Nicholas customs to Santa", "body": "European customs, migration, American literature, illustration, and commerce reshaped the gift giver. This layered history cannot justify manipulating children or equating generosity with consumption.", "sourceIds": ["nicholas-santa-history", "nicholas-calendar", "nicholas-girm-color"]}
+    ],
+    "gospelTheme": "Generosity protects dignity and justice when gifts serve persons rather than control them.",
+    "struggle": "Beloved legends can become false biography, relic rivalry, coercive charity, child surveillance, or consumer pressure.",
+    "response": "Label evidence honestly, give accountably, preserve recipients' choices, protect children, and resist turning holiness into ownership or consumption."
+  },
+  "virtues": [
+    {"name": "Discreet generosity", "evidence": "The dowry story made anonymous giving central to Nicholas's reception, though its medieval social assumptions require critique.", "imitation": "Give through a trusted channel that protects privacy while preserving consent, accountability, and the recipient's choices.", "sourceIds": ["nicholas-michael-life"]},
+    {"name": "Protective justice", "evidence": "Hagiographic rescue stories repeatedly present Nicholas intervening for people threatened by abuse of power.", "imitation": "Support a verified child-safeguarding, legal-aid, or poverty-relief service without demanding gratitude or disclosure.", "sourceIds": ["nicholas-michael-life", "nicholas-english"]}
+  ],
+  "practice": {"spiritual": "Pray for the wisdom to give in ways that preserve another person's freedom and dignity.", "action": "Make one accountable gift chosen from a recipient-led request, without attaching publicity, pressure, or moral judgment."},
+  "reflectionQuestions": ["Does my giving increase another person's agency or my control?", "Can I enjoy Saint Nicholas customs while telling history honestly and resisting consumer pressure?"],
+  "scripture": {"reference": "Matthew 6:3–4", "connection": "Giving without self-display resonates with Nicholas's later anonymous-gift tradition, while accountable safeguards protect the recipient."},
+  "prayer": "God of generous justice, through Saint Nicholas teach us to protect people without controlling them and to give without shame or display. Free us from fabricated history, relic rivalry, child manipulation, and consumerism. Keep every child safe, honor every recipient's agency, and make our gifts truthful, accountable, and joyful. Amen."
+}
