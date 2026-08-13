@@ -13,9 +13,9 @@
 
 | ID | Tier | Author/institution | Title | Publisher | URL | Accessed | Reuse basis |
 |---|---:|---|---|---|---|---|---|
-| doctor-letter | 1 | Pope Benedict XVI | Apostolic Letter proclaiming Hildegard of Bingen a Doctor of the Church | The Holy See | https://www.vatican.va/content/benedict-xvi/en/apost_letters/documents/hf_ben-xvi_apl_20121007_ildegarda-bingen.html | 2026-08-10 | Authoritative chronology, theology, works, and Doctor title; original synthesis |
-| audience-one | 1 | Pope Benedict XVI | General Audience: Saint Hildegard of Bingen | The Holy See | https://www.vatican.va/content/benedict-xvi/en/audiences/2010/documents/hf_ben-xvi_aud_20100901.html | 2026-08-10 | Official biographical and foundation cross-check; original synthesis |
-| doctor-homily | 1 | Pope Benedict XVI | Proclamation of Saint Hildegard as Doctor of the Church | The Holy See | https://www.vatican.va/content/benedict-xvi/en/homilies/2012/documents/hf_ben-xvi_hom_20121007_apertura-sinodo.html | 2026-08-10 | Official confirmation of title and evangelizing significance; original synthesis |
+| doctor-letter | 1 | Pope Benedict XVI | Apostolic Letter proclaiming Hildegard of Bingen a Doctor of the Church | The Holy See | https://www.vatican.va/content/benedict-xvi/en/apost_letters/documents/hf_ben-xvi_apl_20121007_ildegarda-bingen.html | 2026-08-10 | Official comprehensive source for life, writings, theology, reform, and title; original synthesis |
+| audience-one | 1 | Pope Benedict XVI | General Audience: Saint Hildegard of Bingen | The Holy See | https://www.vatican.va/content/benedict-xvi/en/audiences/2010/documents/hf_ben-xvi_aud_20100901.html | 2026-08-10 | Official biographical catechesis used for early life and leadership; original prose |
+| doctor-homily | 1 | Pope Benedict XVI | Proclamation of Saint Hildegard as Doctor of the Church | The Holy See | https://www.vatican.va/content/benedict-xvi/en/homilies/2012/documents/hf_ben-xvi_hom_20121007_apertura-sinodo.html | 2026-08-10 | Official liturgical confirmation and pastoral interpretation; original synthesis |
 
 ## Claim ledger
 

@@ -785,6 +785,50 @@ void main() {
     },
   );
 
+  testWidgets(
+    'Batch 14 real assets render both Marian profiles as observances',
+    (tester) async {
+      for (final id in const [
+        'immaculate_heart_of_mary',
+        'mary_mother_of_the_church',
+      ]) {
+        final profile = await tester.runAsync(
+          () => SaintProfileService.instance.findById(id),
+        );
+
+        expect(profile, isNotNull, reason: id);
+        expect(profile!.kind, SaintProfileKind.observance, reason: id);
+        expect(profile.lifeSpan, isEmpty, reason: id);
+        expect(profile.lifeLength, isEmpty, reason: id);
+        expect(profile.vocation, isEmpty, reason: id);
+        expect(profile.places, isEmpty, reason: id);
+
+        await tester.pumpWidget(
+          _host(SaintLifeGuideView(profile: profile, onShowSources: () {})),
+        );
+
+        for (final heading in const [
+          'Why this observance matters today',
+          'What the Church celebrates',
+          'The Gospel at the heart of this observance',
+          'Dispositions to cultivate',
+        ]) {
+          expect(find.text(heading), findsWidgets, reason: id);
+        }
+        for (final personHeading in const [
+          'Lived',
+          'Length',
+          'Their life and journey',
+          'The Gospel visible in their life',
+          'Their response',
+          'Seen in their life',
+        ]) {
+          expect(find.text(personHeading), findsNothing, reason: id);
+        }
+      }
+    },
+  );
+
   testWidgets('group profiles retain person-centered guide copy', (
     tester,
   ) async {

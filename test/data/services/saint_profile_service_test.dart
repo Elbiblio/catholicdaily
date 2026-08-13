@@ -337,6 +337,25 @@ void main() {
     }
   });
 
+  test('preserves reviewed Batch 14 observance identities', () async {
+    const expected = <String, (String?, String)>{
+      'immaculate_heart_of_mary': (null, 'observance'),
+      'mary_mother_of_the_church': (null, 'observance'),
+    };
+
+    for (final entry in expected.entries) {
+      final profile = await SaintProfileService.instance.findById(entry.key);
+
+      expect(profile, isNotNull, reason: entry.key);
+      expect(profile!.wikidataId, entry.value.$1, reason: entry.key);
+      expect(profile.kind.name, entry.value.$2, reason: entry.key);
+      expect(profile.lifeSpan, isEmpty, reason: entry.key);
+      expect(profile.lifeLength, isEmpty, reason: entry.key);
+      expect(profile.vocation, isEmpty, reason: entry.key);
+      expect(profile.places, isEmpty, reason: entry.key);
+    }
+  });
+
   test('preserves reviewed Batch 3 publication precision', () async {
     final frances = await SaintProfileService.instance.findById(
       'frances_of_rome',
@@ -679,6 +698,22 @@ void main() {
     }
 
     expect(failures, isEmpty);
+  });
+
+  test('Batch 14 one-minute summaries contain 100 to 150 words', () async {
+    for (final id in const [
+      'immaculate_heart_of_mary',
+      'mary_mother_of_the_church',
+    ]) {
+      final profile = await SaintProfileService.instance.findById(id);
+      final words = profile!.guide!.oneMinuteSummary
+          .trim()
+          .split(RegExp(r'\s+'))
+          .where((word) => word.isNotEmpty)
+          .length;
+
+      expect(words, inInclusiveRange(100, 150), reason: '$id: $words words');
+    }
   });
 
   test('preserves reviewed Batch 7 calendar ranks and colors', () async {
@@ -1308,6 +1343,34 @@ void main() {
     expect(holyFamily.color, LiturgicalColor.white);
   });
 
+  test('preserves reviewed Batch 14 calendar ranks and colors', () async {
+    final cases = [
+      (
+        DateTime(2026, 5, 25),
+        'mary_mother_of_the_church',
+        CelebrationRank.obligatoryMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 6, 13),
+        'immaculate_heart_of_mary',
+        CelebrationRank.obligatoryMemorial,
+        LiturgicalColor.white,
+      ),
+    ];
+
+    for (final entry in cases) {
+      final celebrations = await SaintCalendarService.instance
+          .getSaintCelebrationsForDate(date: entry.$1);
+      final matching = celebrations
+          .where((candidate) => candidate.id == entry.$2)
+          .toList();
+      expect(matching, hasLength(1), reason: entry.$2);
+      expect(matching.single.rank, entry.$3, reason: entry.$2);
+      expect(matching.single.color, entry.$4, reason: entry.$2);
+    }
+  });
+
   test(
     'resolves a notification title to a stable curated profile id',
     () async {
@@ -1447,6 +1510,36 @@ void main() {
       ),
       isEmpty,
     );
+  });
+
+  test('Batch 14 completion publishes all 158 profiles without fallback', () async {
+    final profiles = await SaintProfileService.instance.loadProfiles();
+
+    expect(profiles, hasLength(158));
+    expect(
+      profiles.where((profile) => profile.schemaVersion != 2),
+      isEmpty,
+    );
+    expect(profiles.where((profile) => !profile.isPublished), isEmpty);
+    expect(
+      profiles.where(
+        (profile) =>
+            profile.briefBio.contains('fuller curated biography has not yet'),
+      ),
+      isEmpty,
+    );
+    for (final profile in profiles) {
+      final words = profile.guide!.oneMinuteSummary
+          .trim()
+          .split(RegExp(r'\s+'))
+          .where((word) => word.isNotEmpty)
+          .length;
+      expect(
+        words,
+        inInclusiveRange(100, 150),
+        reason: '${profile.id} has a $words-word one-minute summary',
+      );
+    }
   });
 
   test(

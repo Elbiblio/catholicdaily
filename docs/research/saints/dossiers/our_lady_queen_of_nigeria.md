@@ -13,9 +13,9 @@
 
 | ID | Tier | Author/institution | Title | Publisher | URL | Accessed | Reuse basis |
 |---|---:|---|---|---|---|---|---|
-| umuahia-homily | 1 | Father Francis Onwunali | Reflection for the Solemnity of Our Lady Queen and Patroness of Nigeria | Catholic Diocese of Umuahia | https://www.umuahiadiocese.org/fullhomilies?sn=60 | 2026-08-10 | Official diocesan date, dedication, and pastoral context; original synthesis |
-| kaigama-address | 1 | Archbishop Ignatius Kaigama | National Marian Celebration and Rededication of Nigeria to the Immaculate Heart of Mary | Archbishop Ignatius Kaigama | https://ignatiuskaigama.com/national-marian-celebration-rededication-nigeria-immaculate-heart-mary/ | 2026-08-10 | Nigerian episcopal interpretation and social application; original synthesis |
-| warri-reflection | 1 | Father Jude Igho | Mary Queen and Patroness of Nigeria | Catholic Diocese of Warri | https://warridiocese.org/mary-queen-and-patroness-of-nigeria/ | 2026-08-10 | Independent diocesan title, patronage, and date cross-check; original synthesis |
+| umuahia-homily | 1 | Father Francis Onwunali | Reflection for the Solemnity of Our Lady Queen and Patroness of Nigeria | Catholic Diocese of Umuahia | https://www.umuahiadiocese.org/fullhomilies?sn=60 | 2026-08-10 | Official diocesan source for the 1960 dedication, date, rank, and justice-peace themes; original synthesis |
+| kaigama-address | 1 | Archbishop Ignatius Kaigama | National Marian Celebration and Rededication of Nigeria to the Immaculate Heart of Mary | Archbishop Ignatius Kaigama | https://ignatiuskaigama.com/national-marian-celebration-rededication-nigeria-immaculate-heart-mary/ | 2026-08-10 | Nigerian episcopal address used for the title's national pastoral meaning and Marian virtues; original prose |
+| warri-reflection | 1 | Father Jude Igho | Mary Queen and Patroness of Nigeria | Catholic Diocese of Warri | https://warridiocese.org/mary-queen-and-patroness-of-nigeria/ | 2026-08-10 | Official diocesan cross-check for title and October 1 observance; original synthesis |
 
 ## Claim ledger
 

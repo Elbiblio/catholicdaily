@@ -13,9 +13,9 @@
 
 | ID | Tier | Author/institution | Title | Publisher | URL | Accessed | Reuse basis |
 |---|---:|---|---|---|---|---|---|
-| holy-see-biography | 1 | Office for the Liturgical Celebrations of the Supreme Pontiff | Josephine Bakhita (1869-1947) | The Holy See | https://www.vatican.va/news_services/liturgy/documents/ns_lit_doc_20001001_giuseppina-bakhita_en.html | 2026-08-10 | Facts and chronology checked; no source prose copied |
-| canonization-homily | 1 | Pope John Paul II | Canonization homily of 1 October 2000 | The Holy See | https://www.vatican.va/content/john-paul-ii/en/homilies/2000/documents/hf_jp-ii_hom_20001001_canonization.html | 2026-08-10 | Official ecclesial interpretation checked; original synthesis |
-| spe-salvi | 1 | Pope Benedict XVI | Spe salvi | The Holy See | https://www.vatican.va/content/benedict-xvi/en/encyclicals/documents/hf_ben-xvi_enc_20071130_spe-salvi.html | 2026-08-10 | Theological control for hope and freedom; original synthesis |
+| holy-see-biography | 1 | Office for the Liturgical Celebrations of the Supreme Pontiff | Josephine Bakhita (1869-1947) | The Holy See | https://www.vatican.va/news_services/liturgy/documents/ns_lit_doc_20001001_giuseppina-bakhita_en.html | 2026-08-10 | Facts checked against an official canonization biography; all app prose is original |
+| canonization-homily | 1 | Pope John Paul II | Canonization of Augustine Zhao Rong and companions, Josephine Bakhita, and others | The Holy See | https://www.vatican.va/content/john-paul-ii/en/homilies/2000/documents/hf_jp-ii_hom_20001001_canonization.html | 2026-08-10 | Official canonization interpretation used for factual and theological verification |
+| spe-salvi | 1 | Pope Benedict XVI | Spe salvi | The Holy See | https://www.vatican.va/content/benedict-xvi/en/encyclicals/documents/hf_ben-xvi_enc_20071130_spe-salvi.html | 2026-08-10 | Official theological source for Bakhita as a witness of hope; all app prose is original |
 
 ## Claim ledger
 

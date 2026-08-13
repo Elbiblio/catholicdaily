@@ -13,9 +13,9 @@
 
 | ID | Tier | Author/institution | Title | Publisher | URL | Accessed | Reuse basis |
 |---|---:|---|---|---|---|---|---|
-| canonization-homily | 1 | Pope John Paul II | Canonization of Maximilian Mary Kolbe | The Holy See | https://www.vatican.va/content/john-paul-ii/it/homilies/1982/documents/hf_jp-ii_hom_19821010_canonizzazione-kolbe.html | 2026-08-10 | Official interpretation of martyrdom of charity; original synthesis |
-| kolbe-center-biography | 2 | National Shrine of St. Maximilian Kolbe | Biography of Saint Maximilian Kolbe | Marytown | https://saintmaximiliankolbe.com/biography/ | 2026-08-10 | Franciscan shrine chronology and ministry history; original synthesis |
-| franciscan-media | 2 | Franciscan Media | Saint Maximilian Mary Kolbe | Franciscan Media | https://www.franciscanmedia.org/saint-of-the-day/saint-maximilian-mary-kolbe/ | 2026-08-10 | Independent Franciscan date and vocation cross-check; original synthesis |
+| canonization-homily | 1 | Pope John Paul II | Canonization of Maximilian Mary Kolbe | The Holy See | https://www.vatican.va/content/john-paul-ii/it/homilies/1982/documents/hf_jp-ii_hom_19821010_canonizzazione-kolbe.html | 2026-08-10 | Official canonization interpretation of his death as martyrdom of charity; original synthesis |
+| kolbe-center-biography | 2 | National Shrine of St. Maximilian Kolbe | Biography of Saint Maximilian Kolbe | Marytown | https://saintmaximiliankolbe.com/biography/ | 2026-08-10 | Franciscan shrine biography used for chronology and ministries; original app prose |
+| franciscan-media | 2 | Franciscan Media | Saint Maximilian Mary Kolbe | Franciscan Media | https://www.franciscanmedia.org/saint-of-the-day/saint-maximilian-mary-kolbe/ | 2026-08-10 | Franciscan secondary source for feast and biographical cross-check; original prose |
 
 ## Claim ledger
 

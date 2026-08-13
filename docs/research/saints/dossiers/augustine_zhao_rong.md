@@ -13,9 +13,9 @@
 
 | ID | Tier | Author/institution | Title | Publisher | URL | Accessed | Reuse basis |
 |---|---:|---|---|---|---|---|---|
-| official-biography | 1 | Office for the Liturgical Celebrations of the Supreme Pontiff | Augustine Zhao Rong and 119 Companions, Martyrs in China | The Holy See | https://www.vatican.va/news_services/liturgy/saints/ns_lit_doc_20001001_zhao-rong-compagni_en.html | 2026-08-10 | Official group composition, chronology, and biographies; original synthesis |
-| canonization-homily | 1 | Pope John Paul II | Canonization of Augustine Zhao Rong and companions | The Holy See | https://www.vatican.va/content/john-paul-ii/en/homilies/2000/documents/hf_jp-ii_hom_20001001_canonization.html | 2026-08-10 | Official ecclesial interpretation of martyrdom; original synthesis |
-| roman-calendar | 2 | United States Conference of Catholic Bishops | General Roman Calendar: July | USCCB | https://www.usccb.org/prayer-worship/liturgical-year/saints | 2026-08-10 | English liturgical title and July 9 cross-check; original synthesis |
+| official-biography | 1 | Office for the Liturgical Celebrations of the Supreme Pontiff | Augustine Zhao Rong and 119 Companions, Martyrs in China | The Holy See | https://www.vatican.va/news_services/liturgy/saints/ns_lit_doc_20001001_zhao-rong-compagni_en.html | 2026-08-10 | Official group biography used for identity, chronology, and composition; original app prose |
+| canonization-homily | 1 | Pope John Paul II | Canonization of Augustine Zhao Rong and companions | The Holy See | https://www.vatican.va/content/john-paul-ii/en/homilies/2000/documents/hf_jp-ii_hom_20001001_canonization.html | 2026-08-10 | Official ecclesial interpretation of the martyrs' witness; original synthesis |
+| roman-calendar | 2 | United States Conference of Catholic Bishops | General Roman Calendar: July | USCCB | https://www.usccb.org/prayer-worship/liturgical-year/saints | 2026-08-10 | Episcopal calendar source for the July 9 optional memorial; original prose |
 
 ## Claim ledger
 

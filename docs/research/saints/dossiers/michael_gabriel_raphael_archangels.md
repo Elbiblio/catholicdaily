@@ -13,9 +13,9 @@
 
 | ID | Tier | Author/institution | Title | Publisher | URL | Accessed | Reuse basis |
 |---|---:|---|---|---|---|---|---|
-| catechism-angels | 1 | Catholic Church | Catechism of the Catholic Church: Heaven and Earth | The Holy See | https://www.vatican.va/content/catechism/en/part_one/section_two/chapter_one/article_1/paragraph_5_heaven_and_earth.html | 2026-08-10 | Authoritative doctrine on angels and Christ-centered service; original synthesis |
-| popular-piety-directory | 1 | Congregation for Divine Worship and the Discipline of the Sacraments | Directory on Popular Piety and the Liturgy | The Holy See | https://press.vatican.va/roman_curia/congregations/ccdds/documents/rc_con_ccdds_doc_20020513_vers-direttorio_en.html | 2026-08-10 | Authoritative feast and devotional boundaries; original synthesis |
-| archangels-address | 1 | Pope Benedict XVI | Greeting on the Feast of the Holy Archangels | The Holy See | https://www.vatican.va/content/benedict-xvi/en/speeches/2008/september/documents/hf_ben-xvi_spe_20080929_saluto-castel-gandolfo.html | 2026-08-10 | Official interpretation of the three biblical missions; original synthesis |
+| catechism-angels | 1 | Catholic Church | Catechism of the Catholic Church: Heaven and Earth | The Holy See | https://www.vatican.va/content/catechism/en/part_one/section_two/chapter_one/article_1/paragraph_5_heaven_and_earth.html | 2026-08-10 | Official doctrinal source on angels as creatures, servants, and messengers centered on Christ; original synthesis |
+| popular-piety-directory | 1 | Congregation for Divine Worship and the Discipline of the Sacraments | Directory on Popular Piety and the Liturgy | The Holy See | https://press.vatican.va/roman_curia/congregations/ccdds/documents/rc_con_ccdds_doc_20020513_vers-direttorio_en.html | 2026-08-10 | Official guidance for the September 29 feast and sound angel devotion; original prose |
+| archangels-address | 1 | Pope Benedict XVI | Greeting on the Feast of the Holy Archangels | The Holy See | https://www.vatican.va/content/benedict-xvi/en/speeches/2008/september/documents/hf_ben-xvi_spe_20080929_saluto-castel-gandolfo.html | 2026-08-10 | Official pastoral source on their biblical missions and service; original synthesis |
 
 ## Claim ledger
 

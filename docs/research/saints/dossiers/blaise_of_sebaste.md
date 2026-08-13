@@ -13,7 +13,7 @@
 
 | ID | Tier | Author/institution | Title | Publisher | URL | Accessed | Reuse basis |
 |---|---:|---|---|---|---|---|---|
-| usccb-memorial | 1 | United States Conference of Catholic Bishops | Optional Memorial of Saint Blaise, Bishop and Martyr | United States Conference of Catholic Bishops | https://bible.usccb.org/bible/readings/0203-memorial-blase.cfm | 2026-08-10 | Official identity, date, and suggested readings checked; no liturgical text copied |
+| usccb-memorial | 1 | United States Conference of Catholic Bishops | Optional Memorial of Saint Blaise, Bishop and Martyr | United States Conference of Catholic Bishops | https://bible.usccb.org/bible/readings/0203-memorial-blase.cfm | 2026-08-10 | Official liturgical identity, date, and suggested readings checked; no liturgical text copied |
 | new-advent-blaise | 2 | Johann Peter Kirsch | St. Blaise | The Catholic Encyclopedia, transcribed by New Advent | https://www.newadvent.org/cathen/02592a.htm | 2026-08-10 | Historical control for the limited early evidence and later legendary Acts; original synthesis |
 | archny-blessing | 3 | Archdiocese of New York | Blessing of Throats on St. Blaise Day | Archdiocese of New York | https://www.archny.org/posts/blessing-of-throats-on-st-blaise-day | 2026-08-10 | Official diocesan pastoral summary of the legend and present blessing tradition; blessing formula not reproduced |
 

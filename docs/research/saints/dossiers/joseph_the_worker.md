@@ -13,9 +13,9 @@
 
 | ID | Tier | Author/institution | Title | Publisher | URL | Accessed | Reuse basis |
 |---|---:|---|---|---|---|---|---|
-| redemptoris-custos | 1 | Pope John Paul II | Redemptoris Custos | The Holy See | https://www.vatican.va/content/john-paul-ii/en/apost_exhortations/documents/hf_jp-ii_exh_15081989_redemptoris-custos.html | 2026-08-10 | Authoritative Gospel identity and theology of Joseph's work; original synthesis |
-| work-vocation-homily | 1 | Pope Francis | Work is the vocation of man | The Holy See | https://www.vatican.va/content/francesco/en/cotidie/2020/documents/papa-francesco-cotidie_20200501_illavoro-primavocazione-delluomo.html | 2026-08-10 | Official May 1 teaching on dignity, pay, and rest; original synthesis |
-| audience-2013 | 1 | Pope Francis | General Audience of 1 May 2013 | The Holy See | https://www.vatican.va/content/francesco/en/audiences/2013/documents/papa-francesco_20130501_udienza-generale.html | 2026-08-10 | Official pastoral teaching on Joseph, work, and exploitation; original synthesis |
+| redemptoris-custos | 1 | Pope John Paul II | Redemptoris Custos | The Holy See | https://www.vatican.va/content/john-paul-ii/en/apost_exhortations/documents/hf_jp-ii_exh_15081989_redemptoris-custos.html | 2026-08-10 | Official synthesis of Gospel testimony about Joseph and work; original app prose |
+| work-vocation-homily | 1 | Pope Francis | Work is the vocation of man | The Holy See | https://www.vatican.va/content/francesco/en/cotidie/2020/documents/papa-francesco-cotidie_20200501_illavoro-primavocazione-delluomo.html | 2026-08-10 | Official reflection on work, dignity, fair pay, and rest; original synthesis |
+| audience-2013 | 1 | Pope Francis | General Audience of 1 May 2013 | The Holy See | https://www.vatican.va/content/francesco/en/audiences/2013/documents/papa-francesco_20130501_udienza-generale.html | 2026-08-10 | Official pastoral application of Joseph's work; all prose is original |
 
 ## Claim ledger
 

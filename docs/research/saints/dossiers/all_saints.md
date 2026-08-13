@@ -13,9 +13,9 @@
 
 | ID | Tier | Author/institution | Title | Publisher | URL | Accessed | Reuse basis |
 |---|---:|---|---|---|---|---|---|
-| all-saints-homily-2006 | 1 | Pope Benedict XVI | Solemnity of All Saints | The Holy See | https://www.vatican.va/content/benedict-xvi/en/homilies/2006/documents/hf_ben-xvi_hom_20061101_all-saints.html | 2026-08-10 | Official interpretation of the unnamed multitude, Beatitudes, and communion; original synthesis |
-| all-saints-homily-2015 | 1 | Pope Francis | Holy Mass on the Solemnity of All Saints | The Holy See | https://www.vatican.va/content/francesco/en/homilies/2015/documents/papa-francesco_20151101_omelia-ognissanti.html | 2026-08-10 | Official Beatitudes and discipleship cross-check; original synthesis |
-| all-saints-angelus-2010 | 1 | Pope Benedict XVI | Angelus on the Solemnity of All Saints | The Holy See | https://www.vatican.va/content/benedict-xvi/en/angelus/2010/documents/hf_ben-xvi_ang_20101101_all-saints.html | 2026-08-10 | Official baptismal holiness and Christian destiny context; original synthesis |
+| all-saints-homily-2006 | 1 | Pope Benedict XVI | Solemnity of All Saints | The Holy See | https://www.vatican.va/content/benedict-xvi/en/homilies/2006/documents/hf_ben-xvi_hom_20061101_all-saints.html | 2026-08-10 | Official liturgical interpretation of the unnamed multitude, Beatitudes, and imitation; original synthesis |
+| all-saints-homily-2015 | 1 | Pope Francis | Holy Mass on the Solemnity of All Saints | The Holy See | https://www.vatican.va/content/francesco/en/homilies/2015/documents/papa-francesco_20151101_omelia-ognissanti.html | 2026-08-10 | Official pastoral reading of the Beatitudes as a path to holiness; original prose |
+| all-saints-angelus-2010 | 1 | Pope Benedict XVI | Angelus on the Solemnity of All Saints | The Holy See | https://www.vatican.va/content/benedict-xvi/en/angelus/2010/documents/hf_ben-xvi_ang_20101101_all-saints.html | 2026-08-10 | Official source for holiness as goal and baptismal gift; original synthesis |
 
 ## Claim ledger
 

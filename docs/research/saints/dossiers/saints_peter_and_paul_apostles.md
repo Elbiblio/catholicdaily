@@ -13,9 +13,9 @@
 
 | ID | Tier | Author/institution | Title | Publisher | URL | Accessed | Reuse basis |
 |---|---:|---|---|---|---|---|---|
-| homily-2020 | 1 | Pope Francis | Solemnity of Saints Peter and Paul | The Holy See | https://www.vatican.va/content/francesco/en/homilies/2020/documents/papa-francesco_20200629_omelia-pallio.html | 2026-08-10 | Official interpretation of prayer, unity, and mission; original synthesis |
-| homily-2005 | 1 | Pope Benedict XVI | Solemnity of Saints Peter and Paul | The Holy See | https://www.vatican.va/content/benedict-xvi/en/homilies/2005/documents/hf_ben-xvi_hom_20050629_sts-peter-paul.html | 2026-08-10 | Official teaching on apostolicity and Roman witness; original synthesis |
-| homily-1999 | 1 | Pope John Paul II | Solemnity of Saints Peter and Paul | The Holy See | https://www.vatican.va/content/john-paul-ii/en/homilies/1999/documents/hf_jp-ii_hom_29061999.html | 2026-08-10 | Official feast, confession, and mission context; original synthesis |
+| homily-2020 | 1 | Pope Francis | Solemnity of Saints Peter and Paul | The Holy See | https://www.vatican.va/content/francesco/en/homilies/2020/documents/papa-francesco_20200629_omelia-pallio.html | 2026-08-10 | Official interpretation of unity and prophecy; original app prose |
+| homily-2005 | 1 | Pope Benedict XVI | Solemnity of Saints Peter and Paul | The Holy See | https://www.vatican.va/content/benedict-xvi/en/homilies/2005/documents/hf_ben-xvi_hom_20050629_sts-peter-paul.html | 2026-08-10 | Official source for apostolicity, catholicity, Rome, and common witness; original synthesis |
+| homily-1999 | 1 | Pope John Paul II | Solemnity of Saints Peter and Paul | The Holy See | https://www.vatican.va/content/john-paul-ii/en/homilies/1999/documents/hf_jp-ii_hom_29061999.html | 2026-08-10 | Official source for Peter's confession, Paul's mission, and shared Roman feast; original synthesis |
 
 ## Claim ledger
 

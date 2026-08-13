@@ -13,9 +13,9 @@
 
 | ID | Tier | Author/institution | Title | Publisher | URL | Accessed | Reuse basis |
 |---|---:|---|---|---|---|---|---|
-| solemnity-homily-2007 | 1 | Pope Benedict XVI | Solemnity of Mary, Mother of God and 40th World Day of Peace | The Holy See | https://www.vatican.va/content/benedict-xvi/en/homilies/2007/documents/hf_ben-xvi_hom_20070101_world-day-peace.html | 2026-08-10 | Official Christological and liturgical interpretation; original synthesis |
-| catechism-mary-prayer | 1 | Catholic Church | Catechism of the Catholic Church: The Prayer of the Virgin Mary | The Holy See | https://www.vatican.va/content/catechism/en/part_four/section_one/chapter_two/article_2.html | 2026-08-10 | Authoritative doctrine on Mary's prayer and discipleship; original synthesis |
-| solemnity-homily-1999 | 1 | Pope John Paul II | Solemnity of Mary, Mother of God | The Holy See | https://www.vatican.va/content/john-paul-ii/en/homilies/1999/documents/hf_jp-ii_hom_01011999.html | 2026-08-10 | Official January 1 and Luke 2 context; original synthesis |
+| solemnity-homily-2007 | 1 | Pope Benedict XVI | Solemnity of Mary, Mother of God and 40th World Day of Peace | The Holy See | https://www.vatican.va/content/benedict-xvi/en/homilies/2007/documents/hf_ben-xvi_hom_20070101_world-day-peace.html | 2026-08-10 | Official liturgical and Christological interpretation; app prose is original |
+| catechism-mary-prayer | 1 | Catholic Church | Catechism of the Catholic Church: The Prayer of the Virgin Mary | The Holy See | https://www.vatican.va/content/catechism/en/part_four/section_one/chapter_two/article_2.html | 2026-08-10 | Official doctrinal source for Mary's faith and prayer; original synthesis |
+| solemnity-homily-1999 | 1 | Pope John Paul II | Solemnity of Mary, Mother of God | The Holy See | https://www.vatican.va/content/john-paul-ii/en/homilies/1999/documents/hf_jp-ii_hom_01011999.html | 2026-08-10 | Official source for the January 1 celebration and Luke 2 theme; original synthesis |
 
 ## Claim ledger
 

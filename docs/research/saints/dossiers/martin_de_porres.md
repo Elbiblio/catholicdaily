@@ -13,9 +13,9 @@
 
 | ID | Tier | Author/institution | Title | Publisher | URL | Accessed | Reuse basis |
 |---|---:|---|---|---|---|---|---|
-| canonization-homily | 1 | Pope John XXIII | Canonization of Blessed Martin de Porres | The Holy See | https://www.vatican.va/content/john-xxiii/es/homilies/1962/documents/hf_j-xxiii_hom_19620506_martino-porres.html | 2026-08-10 | Official interpretation checked; original prose |
-| dominican-biography | 1 | Dominican Friars, Province of St. Joseph | St. Martin de Porres | Dominican Friars | https://dominicanfriars.org/st-martin-de-porres-2/ | 2026-08-10 | Order biography used for vocation, prayer, healing, and dates; original prose |
-| latin-american-encyclopedia | 2 | Noble David Cook | Porres, Martín de (1579-1639) | Encyclopedia of Latin American History and Culture | https://www.encyclopedia.com/humanities/encyclopedias-almanacs-transcripts-and-maps/porres-martin-de-1579-1639 | 2026-08-10 | Historical facts and colonial context only |
+| canonization-homily | 1 | Pope John XXIII | Canonization of Blessed Martin de Porres | The Holy See | https://www.vatican.va/content/john-xxiii/es/homilies/1962/documents/hf_j-xxiii_hom_19620506_martino-porres.html | 2026-08-10 | Official canonization record used for ecclesial interpretation; original app prose |
+| dominican-biography | 1 | Dominican Friars, Province of St. Joseph | St. Martin de Porres | Dominican Friars | https://dominicanfriars.org/st-martin-de-porres-2/ | 2026-08-10 | Official religious-order biography used for chronology and vocation; original app prose |
+| latin-american-encyclopedia | 2 | Noble David Cook | Porres, Martín de (1579-1639) | Encyclopedia of Latin American History and Culture | https://www.encyclopedia.com/humanities/encyclopedias-almanacs-transcripts-and-maps/porres-martin-de-1579-1639 | 2026-08-10 | Historical control for colonial context, dates, and profession; facts only |
 
 ## Claim ledger
 

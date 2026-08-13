@@ -13,9 +13,9 @@
 
 | ID | Tier | Author/institution | Title | Publisher | URL | Accessed | Reuse basis |
 |---|---:|---|---|---|---|---|---|
-| holy-see-biography | 1 | Office for the Liturgical Celebrations of the Supreme Pontiff | Mother Teresa of Calcutta (1910-1997) | The Holy See | https://www.vatican.va/news_services/liturgy/saints/ns_lit_doc_20031019_madre-teresa_en.html | 2026-08-10 | Official chronology, foundation history, and spiritual context; original synthesis |
+| holy-see-biography | 1 | Office for the Liturgical Celebrations of the Supreme Pontiff | Mother Teresa of Calcutta (1910-1997) | The Holy See | https://www.vatican.va/news_services/liturgy/saints/ns_lit_doc_20031019_madre-teresa_en.html | 2026-08-10 | Official biography used for chronology, vocation, works, and spiritual darkness; original prose |
 | canonization-homily | 1 | Pope Francis | Canonization of Blessed Mother Teresa of Calcutta | The Holy See | https://www.vatican.va/content/francesco/en/homilies/2016/documents/papa-francesco_20160904_omelia-canonizzazione-madre-teresa.html | 2026-08-10 | Official ecclesial interpretation of mercy and service; original synthesis |
-| mc-biography | 1 | Missionaries of Charity | Mother Teresa | Missionaries of Charity | https://missionariesofcharity.org/about-us/mother-teresa/ | 2026-08-10 | Primary institutional charism and biography cross-check; original synthesis |
+| mc-biography | 1 | Missionaries of Charity | Mother Teresa | Missionaries of Charity | https://missionariesofcharity.org/about-us/mother-teresa/ | 2026-08-10 | Founding community source used to cross-check charism and chronology; app prose is original |
 
 ## Claim ledger
 
