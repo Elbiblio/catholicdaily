@@ -261,6 +261,44 @@ void main() {
     }
   });
 
+  test('preserves reviewed Batch 12 identities and profile kinds', () async {
+    const expected = <String, (String?, String)>{
+      'albert_the_great': ('Q60059', 'individual'),
+      'gertrude_the_great': ('Q61934', 'individual'),
+      'margaret_of_scotland': ('Q230507', 'individual'),
+      'dedication_of_basilicas_of_peter_and_paul': ('Q5249824', 'observance'),
+      'presentation_of_blessed_virgin_mary': ('Q1124234', 'observance'),
+      'clement_i_pope': ('Q42887', 'individual'),
+      'columban_of_luxeuil': ('Q319653', 'individual'),
+      'catherine_of_alexandria': ('Q179718', 'individual'),
+      'andrew_apostle': ('Q43399', 'individual'),
+      'john_damascene': ('Q51884', 'individual'),
+      'nicholas_of_myra': ('Q44269', 'individual'),
+      'the_immaculate_conception_of_the_blessed_virgin_mary': (
+        'Q3538509',
+        'observance',
+      ),
+    };
+
+    for (final entry in expected.entries) {
+      final profile = await SaintProfileService.instance.findById(entry.key);
+
+      expect(profile, isNotNull, reason: entry.key);
+      expect(profile!.wikidataId, entry.value.$1, reason: entry.key);
+      expect(profile.kind.name, entry.value.$2, reason: entry.key);
+    }
+
+    for (final id in const [
+      'dedication_of_basilicas_of_peter_and_paul',
+      'presentation_of_blessed_virgin_mary',
+      'the_immaculate_conception_of_the_blessed_virgin_mary',
+    ]) {
+      final profile = await SaintProfileService.instance.findById(id);
+      expect(profile!.lifeSpan, isEmpty, reason: id);
+      expect(profile.lifeLength, isEmpty, reason: id);
+    }
+  });
+
   test('preserves reviewed Batch 3 publication precision', () async {
     final frances = await SaintProfileService.instance.findById(
       'frances_of_rome',
@@ -527,6 +565,38 @@ void main() {
     final failures = <String>[];
 
     for (final id in batch11Ids) {
+      final profile = await SaintProfileService.instance.findById(id);
+      final summary = profile!.guide!.oneMinuteSummary.trim();
+      final wordCount = summary
+          .split(RegExp(r'\s+'))
+          .where((word) => word.isNotEmpty)
+          .length;
+      if (wordCount < 100 || wordCount > 150) {
+        failures.add('$id: $wordCount words');
+      }
+    }
+
+    expect(failures, isEmpty);
+  });
+
+  test('Batch 12 one-minute summaries contain 100 to 150 words', () async {
+    const batch12Ids = [
+      'albert_the_great',
+      'gertrude_the_great',
+      'margaret_of_scotland',
+      'dedication_of_basilicas_of_peter_and_paul',
+      'presentation_of_blessed_virgin_mary',
+      'clement_i_pope',
+      'columban_of_luxeuil',
+      'catherine_of_alexandria',
+      'andrew_apostle',
+      'john_damascene',
+      'nicholas_of_myra',
+      'the_immaculate_conception_of_the_blessed_virgin_mary',
+    ];
+    final failures = <String>[];
+
+    for (final id in batch12Ids) {
       final profile = await SaintProfileService.instance.findById(id);
       final summary = profile!.guide!.oneMinuteSummary.trim();
       final wordCount = summary
@@ -989,6 +1059,94 @@ void main() {
     expect(aparecida.title, 'Our Lady of Aparecida');
     expect(aparecida.rank, 'Solemnity');
     expect(aparecida.color, LiturgicalColor.white);
+  });
+
+  test('preserves reviewed Batch 12 calendar ranks and colors', () async {
+    final cases = [
+      (
+        DateTime(2026, 11, 15),
+        'albert_the_great',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 11, 16),
+        'gertrude_the_great',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 11, 16),
+        'margaret_of_scotland',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 11, 18),
+        'dedication_of_basilicas_of_peter_and_paul',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 11, 21),
+        'presentation_of_blessed_virgin_mary',
+        CelebrationRank.obligatoryMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 11, 23),
+        'clement_i_pope',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.red,
+      ),
+      (
+        DateTime(2026, 11, 23),
+        'columban_of_luxeuil',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 11, 25),
+        'catherine_of_alexandria',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.red,
+      ),
+      (
+        DateTime(2026, 11, 30),
+        'andrew_apostle',
+        CelebrationRank.feast,
+        LiturgicalColor.red,
+      ),
+      (
+        DateTime(2026, 12, 4),
+        'john_damascene',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 12, 6),
+        'nicholas_of_myra',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+    ];
+
+    for (final entry in cases) {
+      final celebrations = await SaintCalendarService.instance
+          .getSaintCelebrationsForDate(date: entry.$1);
+      final matching = celebrations
+          .where((candidate) => candidate.id == entry.$2)
+          .toList();
+      expect(matching, hasLength(1), reason: entry.$2);
+      expect(matching.single.rank, entry.$3, reason: entry.$2);
+      expect(matching.single.color, entry.$4, reason: entry.$2);
+    }
+
+    final immaculate = ImprovedLiturgicalCalendarService.instance
+        .getLiturgicalDay(DateTime(2026, 12, 8));
+    expect(immaculate.title, 'The Immaculate Conception');
+    expect(immaculate.rank, 'Solemnity');
+    expect(immaculate.color, LiturgicalColor.white);
   });
 
   test(
