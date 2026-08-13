@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 2,
+  "id": "presentation_of_blessed_virgin_mary",
+  "profileKind": "observance",
+  "celebrationIds": ["presentation_of_blessed_virgin_mary", "the_presentation_of_the_blessed_virgin_mary"],
+  "name": "The Presentation of the Blessed Virgin Mary",
+  "alternateNames": ["The Presentation of the Virgin Mary", "The Entry of the Theotokos into the Temple"],
+  "ecclesialTitle": "Memorial of the Blessed Virgin Mary",
+  "places": ["Jerusalem"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "This November 21 memorial receives an ancient Christian story about Mary's childhood dedication to God. The New Testament does not narrate her presentation or residence in the Jerusalem Temple. Those scenes appear in the second-century Protoevangelium of James, an influential apocryphal work rather than apostolic eyewitness testimony or Scripture. Its narrative draws on biblical motifs and ancient ideas about women connected with Temple practice, while also advancing its own theology of Mary's purity. Eastern liturgical reception preceded the feast's later adoption in the Latin West. Catholic worship celebrates Mary's grace-filled self-offering and her place in Christ's mystery without requiring a literal childhood chronology. The observance must not impose virginity, purity tests, separation from parents, gendered obedience, or religious vocation on children. Marian devotion cannot replace consent, safeguarding, education, family care, or the unique saving work of Christ.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Presentation_of_Mary",
+  "wikidataId": "Q1124234",
+  "feastDates": ["November 21"],
+  "historicalCertainty": "traditional",
+  "sources": [
+    {
+      "id": "presentation-protoevangelium",
+      "title": "Protoevangelium of James",
+      "authorOrInstitution": "Anonymous early Christian author; traditional attribution to James",
+      "publisher": "New Advent, Fathers of the Church collection",
+      "url": "https://www.newadvent.org/fathers/0847.htm",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Readable full English translation of the apocryphal primary narrative used for the vow, three-year-old Mary, Temple steps, priestly reception, childhood residence, angelic food, curtain weaving, and guardianship scenes; these are treated as second-century literary tradition, not New Testament or eyewitness biography",
+      "supports": ["tradition.source", "tradition.vow", "tradition.age_three", "tradition.temple", "tradition.angelic_food", "tradition.weaving", "tradition.guardianship", "sourceLimits"]
+    },
+    {
+      "id": "presentation-nutzman",
+      "title": "Mary in the Protevangelium of James: A Jewish Woman in the Temple?",
+      "authorOrInstitution": "Megan Nutzman",
+      "publisher": "Greek, Roman, and Byzantine Studies 53 (2013), pp. 551–578, CC BY",
+      "url": "https://grbs.library.duke.edu/index.php/grbs/article/view/14673",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Open peer-reviewed full article used for the Protoevangelium's uncertain authorship, date, and provenance, its apologetic aims, and its literary use of Jewish traditions concerning accused women, Temple-curtain weavers, and female Nazirites; it prevents both naive literalism and caricature of Jewish practice",
+      "supports": ["tradition.date", "tradition.genre", "tradition.apologetic", "history.jewish_context", "history.women_temple", "safeguard.no_antisemitism", "historicalCertainty", "sourceLimits"]
+    },
+    {
+      "id": "presentation-kishpaugh-review",
+      "title": "The Feast of the Presentation of the Virgin Mary in the Temple: An Historical and Literary Study — review",
+      "authorOrInstitution": "Sévérien Salaville, reviewing Marie-Jérôme Kishpaugh",
+      "publisher": "Échos d'Orient 39, nos. 199–200 (1941), pp. 526–529, Persée",
+      "url": "https://www.persee.fr/doc/rebyz_1146-9447_1941_num_39_199_2977_t1_0526_0000_1",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Readable scholarly review used narrowly for the feast's obscure Eastern origins, apocryphal foundations, early Eastern reception, first Latin celebration at Avignon in 1372, and later Western development; it is evidence about liturgical history, not Mary's childhood",
+      "supports": ["history.eastern_feast", "history.latin_1372", "history.western_development", "sourceLimits"]
+    },
+    {
+      "id": "presentation-lumen-gentium",
+      "title": "Lumen Gentium, Chapter VIII, nos. 52–69",
+      "authorOrInstitution": "Second Vatican Council",
+      "publisher": "The Holy See, 21 November 1964",
+      "url": "https://www.vatican.va/archive/hist_councils/ii_vatican_council/documents/vat-ii_const_19641121_lumen-gentium_en.html",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal doctrinal control used for Mary's consent in faith, her role entirely dependent on Christ the one Mediator, and Marian devotion ordered to immediate union with Christ; it distinguishes Catholic doctrine from apocryphal childhood narration",
+      "supports": ["theology.mary_consent", "theology.christ_mediator", "theology.marian_devotion", "safeguard.no_marian_replacement"]
+    },
+    {
+      "id": "presentation-marial-cultus",
+      "title": "Marialis Cultus, no. 8 (AAS 66 (1974), p. 130)",
+      "authorOrInstitution": "Pope Paul VI",
+      "publisher": "Acta Apostolicae Sedis 66 (1974), The Holy See",
+      "url": "https://www.vatican.va/archive/aas/documents/AAS-66-1974-ocr.pdf",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal Latin liturgical teaching at AAS 66 (1974), p. 130, no. 8, used for the Church's continued celebration of the Presentation because of its venerable traditions and exemplary values despite its apocryphal content; this explicitly controls reception versus historical authentication",
+      "supports": ["reception.catholic", "theology.self_offering", "tradition.apocryphal_control", "sourceLimits"]
+    },
+    {
+      "id": "presentation-francis",
+      "title": "General Audience, 21 November 2018",
+      "authorOrInstitution": "Pope Francis",
+      "publisher": "Holy See Press Office",
+      "url": "https://press.vatican.va/content/salastampa/en/bollettino/pubblico/2018/11/21/181121a.html",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal contemporary reception used for the Church's celebration of the memorial and its spiritual interpretation of Mary presented to God; it does not authenticate the apocryphal childhood scene as documentary history",
+      "supports": ["identity", "reception.catholic", "theology.self_offering", "sourceLimits"]
+    },
+    {
+      "id": "presentation-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — November",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/NovUC.shtml",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the exact November 21 title and memorial rank; it does not establish the childhood narrative or liturgical color",
+      "supports": ["identity", "celebrationIds", "ecclesialTitle", "feastDates", "calendar.rank"]
+    },
+    {
+      "id": "presentation-girm-color",
+      "title": "General Instruction of the Roman Missal, nos. 345–346",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "USCCB, Chapter VI: The Requisites for the Celebration of Mass",
+      "url": "https://www.usccb.org/prayer-and-worship/the-mass/general-instruction-of-the-roman-missal/girm-chapter-6",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal liturgical norm used only for white at celebrations of the Blessed Virgin Mary; title, date, and memorial rank come from the calendar source",
+      "supports": ["calendar.color"]
+    }
+  ],
+  "editorial": {"state": "published", "researcher": "Catholic Daily editorial research", "reviewer": "Catholic Daily factual and theological review", "reviewedAt": "2026-08-13", "revision": 1, "warnings": []},
+  "whyItMatters": "The memorial shows how liturgy can receive an influential noncanonical story as spiritual tradition without converting it into Scripture or documentary childhood biography. It calls believers to free, grace-filled self-offering with consent and safeguarding.",
+  "oneMinuteSummary": "The November 21 memorial of Mary's Presentation receives a story first preserved in the second-century Protoevangelium of James. That apocryphal work describes Joachim and Anna fulfilling a vow by bringing three-year-old Mary to the Jerusalem Temple, where she is received, nurtured, and later entrusted to Joseph. The New Testament does not narrate these events, and the text is neither apostolic eyewitness testimony nor Scripture. Scholars read its Temple scenes as literary theology shaped by biblical motifs, apologetic concerns, and ancient Jewish traditions about women's participation. Eastern Christians developed a feast that later entered the Latin calendar. Catholic reception celebrates Mary's grace and dedication to God, not a compulsory childhood timetable. The memorial never justifies purity tests, antisemitism, separating children from safe families, coerced virginity or vocation, gender hierarchy, or denial of education and care. Christ remains the source of salvation; Marian devotion leads to faithful freedom and service.",
+  "life": {
+    "sections": [
+      {"heading": "An apocryphal childhood story", "body": "The Protoevangelium supplies the vow, age, Temple, food, weaving, and guardianship scenes absent from the New Testament. Its early date and influence matter, but influence is not eyewitness verification or canonicity.", "sourceIds": ["presentation-protoevangelium", "presentation-nutzman"]},
+      {"heading": "Women and the Temple", "body": "The narrative uses ancient traditions about women in Temple settings, including curtain weavers and Nazirites. Critical context can correct caricature without proving that Mary literally lived there as narrated.", "sourceIds": ["presentation-nutzman"]},
+      {"heading": "From story to memorial", "body": "Eastern Christians received the scene before its first Latin celebration at Avignon in 1372 and later Western development. Formal teaching retains its venerable observance while naming its apocryphal content; the Roman calendar observes November 21 as a memorial in white.", "sourceIds": ["presentation-kishpaugh-review", "presentation-marial-cultus", "presentation-francis", "presentation-calendar", "presentation-girm-color"]},
+      {"heading": "Dedication with freedom", "body": "Catholic doctrine centers Mary's consent and Christ the one Mediator. Her fiat provides no warrant for adults to impose vows, purity roles, separation, or religious identity on a child; Christian offering requires grace and freedom.", "sourceIds": ["presentation-lumen-gentium", "presentation-francis", "presentation-nutzman"]}
+    ],
+    "gospelTheme": "God's grace calls people into free and faithful service centered on Christ.",
+    "struggle": "Sacred childhood stories can be literalized to control children, shame bodies, erase Jewish contexts, or pressure women into prescribed roles.",
+    "response": "Receive the feast as liturgical theology, distinguish source genres, protect children and conscience, and let devotion bear fruit in freely chosen service."
+  },
+  "virtues": [
+    {"name": "Discernment", "evidence": "The Church celebrates the memorial while the childhood details remain sourced to an influential apocryphal narrative rather than the New Testament.", "imitation": "Before repeating a devotional scene as history, identify its earliest source, genre, and level of authority.", "sourceIds": ["presentation-protoevangelium", "presentation-nutzman", "presentation-calendar"]},
+    {"name": "Free self-offering", "evidence": "Formal doctrine and reception interpret Mary's life through consent to God in Christ rather than a rule imposed on every child or woman.", "imitation": "Support one person's freely discerned vocation without pressure, shame, or withdrawal of care.", "sourceIds": ["presentation-lumen-gentium", "presentation-francis"]}
+  ],
+  "practice": {"spiritual": "Pray Mary's fiat from Luke 1 slowly, asking for freedom to serve without fear or compulsion.", "action": "Strengthen one safeguarding, education, or consent practice for children and vulnerable people in your community."},
+  "reflectionQuestions": ["Can I value a sacred tradition without pretending its source is Scripture or eyewitness history?", "Does my devotion protect the freedom, safety, and full humanity of children and women?"],
+  "scripture": {"reference": "Luke 1:38", "connection": "Mary's Gospel response is a free answer to God's grace; it centers the memorial on faithful consent rather than invented compulsion."},
+  "prayer": "God of freedom and grace, as the Church remembers Mary's dedication, teach us to distinguish Scripture, tradition, and history with honesty. Protect every child and vulnerable person from coercion, shame, and unsafe authority. Free our devotion from antisemitism and gender control, and lead us through Mary to Christ in consent, learning, service, and love. Amen."
+}

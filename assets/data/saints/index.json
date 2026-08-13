@@ -136,6 +136,10 @@
     "assets/data/saints/profiles/albert_the_great.json",
     "assets/data/saints/profiles/gertrude_the_great.json",
     "assets/data/saints/profiles/margaret_of_scotland.json",
-    "assets/data/saints/profiles/dedication_of_basilicas_of_peter_and_paul.json"
+    "assets/data/saints/profiles/dedication_of_basilicas_of_peter_and_paul.json",
+    "assets/data/saints/profiles/presentation_of_blessed_virgin_mary.json",
+    "assets/data/saints/profiles/clement_i_pope.json",
+    "assets/data/saints/profiles/columban_of_luxeuil.json",
+    "assets/data/saints/profiles/catherine_of_alexandria.json"
   ]
 }

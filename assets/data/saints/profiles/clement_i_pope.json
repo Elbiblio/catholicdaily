@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 2,
+  "id": "clement_i_pope",
+  "profileKind": "individual",
+  "celebrationIds": ["clement_i_pope", "saint_clement_i_pope_and_martyr"],
+  "name": "Saint Clement I, Pope and Martyr",
+  "alternateNames": ["Clement of Rome", "Clement Romanus"],
+  "ecclesialTitle": "Pope and Martyr",
+  "lifeSpan": "late first century",
+  "vocation": "Bishop of Rome and early Christian leader",
+  "places": ["Rome", "Corinth"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Clement led the Roman church near the end of the first century and was remembered early in the succession of its bishops. The writing called 1 Clement is formally a letter from God's church at Rome to God's church at Corinth. It addresses conflict after presbyters were removed, urging repentance, humility, order, and restored communion through extensive scriptural reasoning. The letter itself does not name Clement, although second-century reception associates it with him; its communal voice must not be flattened into a modern papal decree. Later sources give Clement the title martyr, while the detailed story of exile in Crimea and death at sea with an anchor appears centuries later and is not secure biography. His exact birth, death year, and manner of death remain uncertain. Appeals to order or obedience can never conceal abuse, retaliate against reporting, silence conscience, or override justice and safeguarding.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Clement_of_Rome",
+  "wikidataId": "Q42887",
+  "feastDates": ["November 23"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "clement-first-letter",
+      "title": "The First Epistle of Clement to the Corinthians",
+      "authorOrInstitution": "Church of Rome; traditionally associated with Clement of Rome",
+      "publisher": "J. B. Lightfoot translation, Christian Classics Ethereal Library",
+      "url": "https://www.ccel.org/ccel/l/lightfoot/fathers/cache/fathers.pdf",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Readable full primary text used for the Roman-to-Corinthian address, deposed presbyters, scriptural argument, repentance, humility, order, peace, communal discernment, and closing prayer; the letter's anonymous communal voice is preserved rather than recast as a modern papal decree",
+      "supports": ["works.first_clement", "works.communal_voice", "history.corinth_conflict", "theology.scripture", "theology.repentance", "theology.order", "theology.peace", "sourceLimits"]
+    },
+    {
+      "id": "clement-oxford",
+      "title": "First Clement",
+      "authorOrInstitution": "Harry Maier",
+      "publisher": "Oxford Bibliographies in Biblical Studies, 2016",
+      "url": "https://academic.oup.com/reference/62341/reference-article-abstract/554114381",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Independent scholarly overview used for the letter's Roman and Corinthian setting, early date, anonymous text, second-century attribution to Clement, evidence and limits around authorship, displaced leaders, and importance for emergent Christianity",
+      "supports": ["identity", "lifeSpan", "works.date", "works.authorship", "history.rome", "history.corinth", "historicalCertainty", "sourceLimits"]
+    },
+    {
+      "id": "clement-benedict",
+      "title": "General Audience: Saint Clement, Bishop of Rome",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "The Holy See, 7 March 2007",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/audiences/2007/documents/hf_ben-xvi_aud_20070307.html",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal ecclesial reception used for Clement's leadership at Rome late in the first century, early succession memory, 1 Clement's communal authorship and purpose, and the fact that the martyr title and detailed traditions are later testimonies",
+      "supports": ["identity", "vocation", "places", "history.roman_leadership", "reception.succession", "works.first_clement", "tradition.martyr", "sourceLimits"]
+    },
+    {
+      "id": "clement-irenaeus",
+      "title": "Against Heresies, Book III, chapter 3, section 3",
+      "authorOrInstitution": "Irenaeus of Lyons",
+      "publisher": "New Advent, Fathers of the Church collection",
+      "url": "https://www.newadvent.org/fathers/0103303.htm",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Readable early reception witness used for Clement's place in a Roman episcopal succession and the remembered letter from Rome to Corinth; it establishes second-century reception, not sole authorship of every line or a complete modern papal biography",
+      "supports": ["identity", "reception.succession", "works.early_attribution", "sourceLimits"]
+    },
+    {
+      "id": "clement-martyrdom-study",
+      "title": "Death of Saint Clement: New Evidence concerning Tradition of the Saint's Martyrdom",
+      "authorOrInstitution": "Radosław Andrzej Gawroński and Radosław Karasiewicz-Szczypiorski",
+      "publisher": "Saeculum Christianum 27(1) (2020), pp. 5–16, University of Warsaw repository",
+      "url": "https://bibliotekanauki.pl/articles/1195770.pdf",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Readable scholarly article used for the Crimea quarry, anchor, and drowning tradition and its mixing with local quarry memory; its historical reconstruction does not turn the later tradition into a secure death account",
+      "supports": ["tradition.exile", "tradition.crimea", "tradition.anchor", "tradition.martyrdom", "historicalCertainty", "sourceLimits"]
+    },
+    {
+      "id": "clement-slavorum-apostoli",
+      "title": "Slavorum Apostoli, no. 5",
+      "authorOrInstitution": "Pope John Paul II",
+      "publisher": "The Holy See, 2 June 1985",
+      "url": "https://www.vatican.va/content/john-paul-ii/en/encyclicals/documents/hf_jp-ii_enc_19850602_slavorum-apostoli.html",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal reception used narrowly for the tradition that Cyril and Methodius identified what they believed was Clement's church and tomb in Crimea and later brought the associated relics to Rome; its careful belief-language is preserved and no relic authentication is claimed",
+      "supports": ["tradition.relics", "reception.cyril_methodius", "reception.rome", "sourceLimits"]
+    },
+    {
+      "id": "clement-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — November",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/NovUC.shtml",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the exact Saint Clement I, Pope, Martyr title, November 23 date, and optional-memorial rank; no printed rank means optional memorial",
+      "supports": ["identity", "celebrationIds", "ecclesialTitle", "feastDates", "calendar.rank"]
+    },
+    {
+      "id": "clement-girm-color",
+      "title": "General Instruction of the Roman Missal, nos. 345–346",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "USCCB, Chapter VI: The Requisites for the Celebration of Mass",
+      "url": "https://www.usccb.org/prayer-and-worship/the-mass/general-instruction-of-the-roman-missal/girm-chapter-6",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal liturgical norm used only for red at celebrations of martyrs; title, date, and rank come from the calendar source, while historical certainty about Clement's death remains separately qualified",
+      "supports": ["calendar.color"]
+    }
+  ],
+  "editorial": {"state": "published", "researcher": "Catholic Daily editorial research", "reviewer": "Catholic Daily factual and theological review", "reviewedAt": "2026-08-13", "revision": 1, "warnings": []},
+  "whyItMatters": "Clement's reception preserves an exceptionally early Christian appeal for repentance and peace. Reading its communal authorship and later legends honestly prevents church order from becoming a weapon against conscience, truth, or safeguarding.",
+  "oneMinuteSummary": "Clement led Rome's church near the end of the first century. First Clement is an early letter from the Roman community to Corinth after presbyters were removed. Through Scripture, prayer, and exhortation, it calls the divided community toward repentance, humility, order, peace, and restored communion. The letter does not name Clement; second-century witnesses connect it with him, so both its communal voice and early attribution matter. Reception remembers Clement in Rome's episcopal succession. His martyr title belongs to Church tradition, but stories of Crimea, quarries, an anchor, drowning, and relic transfer are not secure biography or scientific identification. His exact birth and death year should not be invented. Clement's concern for order never excuses authoritarian control: leaders remain accountable, abuse reporting must be protected, conscience cannot be crushed, and reconciliation requires truth, justice, safety, and repair.",
+  "life": {
+    "sections": [
+      {"heading": "A Roman leader", "body": "Early reception places Clement among Rome's late-first-century bishops. Evidence supports leadership and succession memory, not a detailed modern-style papal biography or exact lifespan.", "sourceIds": ["clement-oxford", "clement-irenaeus", "clement-benedict"]},
+      {"heading": "A letter from church to church", "body": "First Clement addresses Corinth in the Roman community's name. The traditional association with Clement is early, but the text's corporate voice prevents treating every sentence as a solitary ruler's decree.", "sourceIds": ["clement-first-letter", "clement-oxford", "clement-benedict"]},
+      {"heading": "Conflict, order, and peace", "body": "The letter challenges the removal of presbyters and urges repentance and concord through Scripture. Its order language belongs with humility and communal peace, never secrecy, retaliation, or immunity for leaders.", "sourceIds": ["clement-first-letter", "clement-oxford"]},
+      {"heading": "Martyr memory, relics, and later legend", "body": "The Church venerates Clement as martyr, hence red vestments. Crimea, quarry, anchor, drowning, and relics associated with Cyril and Methodius are received traditions rather than verified death reportage or scientific identification.", "sourceIds": ["clement-benedict", "clement-martyrdom-study", "clement-slavorum-apostoli", "clement-calendar", "clement-girm-color"]}
+    ],
+    "gospelTheme": "Christ calls divided communities to repentance, truth, humble leadership, and peace.",
+    "struggle": "Religious order can be distorted into leader immunity, coerced silence, superficial reconciliation, or certainty about later legends.",
+    "response": "Read authority within communal accountability, protect conscience and reporting, distinguish reception from biography, and seek peace through truth and repair."
+  },
+  "virtues": [
+    {"name": "Peacemaking", "evidence": "First Clement repeatedly calls a divided church from jealousy and faction toward repentance, concord, and prayer.", "imitation": "In one conflict, name the harm truthfully and support a safe process of repair rather than demanding quick silence.", "sourceIds": ["clement-first-letter"]},
+    {"name": "Accountable leadership", "evidence": "The letter debates the removal and appointment of leaders within a community rather than presenting office as private possession.", "imitation": "Strengthen one transparent policy for selection, review, complaint, or removal of leaders.", "sourceIds": ["clement-first-letter", "clement-oxford"]}
+  ],
+  "practice": {"spiritual": "Pray for a divided Christian community, asking first for truth, protection, repentance, and justice, then for durable peace.", "action": "Learn the safe reporting and accountability route in one institution you belong to and help make it accessible."},
+  "reflectionQuestions": ["Do I confuse unity with silence or obedience with immunity from review?", "Can I honor martyr tradition without presenting later narrative details as certain history?"],
+  "scripture": {"reference": "Philippians 2:3–4", "connection": "The apostolic call to humility and concern for others illuminates Clement's appeal for a community healed from rivalry."},
+  "prayer": "God of truth and peace, through Saint Clement's intercession, heal division without hiding harm. Give leaders humility, communities courage, survivors safety, and all of us freedom from retaliation and false obedience. Teach us to read tradition honestly, repent concretely, protect conscience, and build communion through justice and love. Amen."
+}

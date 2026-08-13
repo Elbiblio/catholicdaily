@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 2,
+  "id": "catherine_of_alexandria",
+  "profileKind": "individual",
+  "celebrationIds": ["catherine_of_alexandria", "saint_catherine_of_alexandria_virgin_and_martyr"],
+  "name": "Saint Catherine of Alexandria, Virgin and Martyr",
+  "alternateNames": ["Katherine of Alexandria", "Catherine of Alexandria"],
+  "ecclesialTitle": "Virgin and Martyr",
+  "lifeSpan": "traditionally early fourth century",
+  "vocation": "Legendary learned Christian woman and martyr",
+  "places": ["Alexandria", "Sinai"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Catherine of Alexandria is one of medieval Christianity's most influential virgin-martyr figures, but no contemporary evidence securely identifies her. Her developed Passion appears many centuries after the early-fourth-century setting it claims. The story presents a young, elite, learned Christian woman confronting an emperor, defeating philosophers in debate, enduring threatened marriage and torture, and dying as a martyr. Medieval texts, art, Sinai pilgrimage, vernacular literature, universities, and women's devotion expanded her reception. These traditions preserve real questions about conscience, learning, speech, gender, and power, but they are not transparent biography: exact dates, royal ancestry, age eighteen, mass conversions, the breaking wheel, miraculous transport, and relic identification cannot be published as secure facts. Catherine must never authorize anti-pagan triumphalism, forced debate, crusade ideology, graphic fascination with torture, coerced virginity, self-harm, refusal of escape or care, or demands that victims prove faith by accepting violence.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Catherine_of_Alexandria",
+  "wikidataId": "Q179718",
+  "feastDates": ["November 25"],
+  "historicalCertainty": "legendary",
+  "sources": [
+    {
+      "id": "catherine-passio",
+      "title": "Passio sanctae Katharinae Alexandriensis",
+      "authorOrInstitution": "Anonymous medieval hagiographer; edition and source unspecified by host",
+      "publisher": "Latin Wikisource transcription of an eleventh-century Passion, dated 1033–1048",
+      "url": "https://la.wikisource.org/wiki/Passio_S._Katharinae",
+      "accessedDate": "2026-08-13",
+      "tier": 3,
+      "reuseBasis": "Readable Latin transcription used only to illustrate a developed later Passion's learned virgin, imperial confrontation, debate, prison, conversion, torture, death, and exhortatory purpose; the host supplies no critical edition or manuscript source, so it is neither an authenticated earliest text nor contemporary biography",
+      "supports": ["tradition.learned_virgin", "tradition.emperor", "tradition.debate", "tradition.prison", "tradition.conversions", "tradition.torture", "tradition.death", "tradition.genre", "sourceLimits"]
+    },
+    {
+      "id": "catherine-mets",
+      "title": "Introduction to Katherine of Alexandria",
+      "authorOrInstitution": "Sherry L. Reames, editor; assisted by Martha G. Blalock and Wendy R. Larson",
+      "publisher": "Middle English Legends of Women Saints, Middle English Texts Series, Medieval Institute Publications, 2003",
+      "url": "https://metseditions.org/read/2ppMPBmyH2wxguvqRKIaKgeHZ6EbpMjb1",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Readable scholarly introduction used for the absence of documents before the ninth or tenth century, early-fourth-century legendary setting, Sinai cult, relic claims, medieval manuscripts, women's reception, speaking against power, and narrative promises; prevents secure lifespan and relic claims",
+      "supports": ["identity", "lifeSpan", "history.evidence_gap", "history.early_accounts", "reception.sinai", "tradition.relics", "reception.medieval", "reception.women", "historicalCertainty", "sourceLimits"]
+    },
+    {
+      "id": "catherine-schill",
+      "title": "Ikonographie und Kult der hl. Katharina von Alexandrien im Mittelalter: Studien zu den szenischen Darstellungen aus der Katharinenlegende",
+      "authorOrInstitution": "Peter Schill",
+      "publisher": "Ludwig-Maximilians-Universität München doctoral dissertation, 2002",
+      "url": "https://edoc.ub.uni-muenchen.de/4091/",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Open full interdisciplinary study used for the earliest known images, medieval development of Catherine's iconography and cult, approximately 750 textual and liturgical witnesses, dedications, relic reception, and the wheel's growth as an attribute; reception evidence is not converted into proof of biography",
+      "supports": ["reception.images", "reception.cult", "reception.texts", "reception.dedications", "tradition.relics", "tradition.wheel", "sourceLimits"]
+    },
+    {
+      "id": "catherine-crusader-states",
+      "title": "The Saints of the Crusader States: Legends of the Eastern Mediterranean in Anglo-French Vernacular Culture, 1135–1220",
+      "authorOrInstitution": "Cristina Politano",
+      "publisher": "University of California, Los Angeles doctoral dissertation, 2018",
+      "url": "https://escholarship.org/uc/item/8cf8g10n",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Open full independent study used for Catherine's place in Anglo-French hagiography, Eastern Mediterranean and crusader-era reception, gendered sanctity, interreligious difference, and ideological tensions; prevents using the legend for crusade nostalgia or anti-pagan and anti-Muslim triumphalism",
+      "supports": ["reception.vernacular", "reception.crusader_context", "reception.gender", "history.mediterranean", "safeguard.no_crusade", "safeguard.no_religious_triumphalism", "sourceLimits"]
+    },
+    {
+      "id": "catherine-alexandria-context",
+      "title": "Urban Violence in Alexandria in Antiquity: A Historical Distortion?",
+      "authorOrInstitution": "Sylvain Destephen",
+      "publisher": "Classica et Christiana 16/2 (2021), pp. 475–493; DOI 10.47743/CetC-2021-16.2.475",
+      "url": "https://history.uaic.ro/wp-content/uploads/2021/10/Classica-et-Christiana-16.2.pdf",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Open peer-reviewed contextual study used for Alexandria as a large, diverse late Roman metropolis and for critical debate over recurring urban and religious violence across a long chronology; this city context neither proves Catherine existed nor maps a late legend onto one documented conflict",
+      "supports": ["places", "history.alexandria_context", "history.religious_diversity", "history.violence_context", "safeguard.no_city_stereotype", "sourceLimits"]
+    },
+    {
+      "id": "catherine-byzantine-reception",
+      "title": "Byzantine Liturgy and Iconography",
+      "authorOrInstitution": "Maria Donadeo",
+      "publisher": "The Holy See, Jubilee 2000 Magazine, 1997",
+      "url": "https://www.vatican.va/jubilee_2000/magazine/documents/ju_mag_01031997_p-74_en.html",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal ecclesial reception used narrowly for Catherine's November 25 place in Byzantine martyr commemoration and the general liturgical framing of martyr witness; it supplies no precise biography",
+      "supports": ["identity", "feastDates", "reception.eastern", "tradition.martyr", "sourceLimits"]
+    },
+    {
+      "id": "catherine-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — November",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/NovUC.shtml",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for Saint Catherine of Alexandria, November 25, and optional-memorial rank; no printed rank means optional memorial, while the fuller virgin-and-martyr title is preserved from the exact legacy alias and broader reception",
+      "supports": ["identity", "celebrationIds", "ecclesialTitle", "feastDates", "calendar.rank"]
+    },
+    {
+      "id": "catherine-girm-color",
+      "title": "General Instruction of the Roman Missal, nos. 345–346",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "USCCB, Chapter VI: The Requisites for the Celebration of Mass",
+      "url": "https://www.usccb.org/prayer-and-worship/the-mass/general-instruction-of-the-roman-missal/girm-chapter-6",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal liturgical norm used only for red at celebrations of martyrs; it does not make Catherine's detailed Passion historically certain",
+      "supports": ["calendar.color"]
+    }
+  ],
+  "editorial": {"state": "published", "researcher": "Catholic Daily editorial research", "reviewer": "Catholic Daily factual and theological review", "reviewedAt": "2026-08-13", "revision": 1, "warnings": []},
+  "whyItMatters": "Catherine's vast reception shows how a legend can give women intellectual and moral authority while also carrying violent, gendered, and triumphalist scripts. Honest devotion keeps courageous conscience and rejects fabricated certainty and harm.",
+  "oneMinuteSummary": "Catherine of Alexandria is a celebrated virgin-martyr of Christian tradition whose secure historical biography is unknown. Her legend places an elite, learned young Christian in early-fourth-century Alexandria, where she confronts an emperor, defeats philosophers in debate, resists marriage, converts witnesses, survives torture, and is killed. Yet no contemporary document names her; developed accounts appear only centuries later. Medieval writers, artists, Sinai communities, pilgrims, universities, and women readers made Catherine a major figure of learning, eloquence, chastity, and resistance to power. That reception is historically real even when the narrated life is legendary. Exact dates, age eighteen, royal ancestry, mass conversions, the wheel's destruction, miraculous bodily transport, and relic identity are not secure facts. Her feast cannot promote anti-pagan debate fantasies, crusade or national ownership, coerced virginity, graphic torture, self-harm, or pressure to remain in danger. Courageous witness includes seeking safety, protecting conscience, learning humbly, and opposing abuse without dehumanizing others.",
+  "life": {
+    "sections": [
+      {"heading": "A late and influential Passion", "body": "The developed narrative comes centuries after its alleged setting. It portrays a learned virgin confronting imperial power, but its rhetoric and exhortatory aim mark it as medieval hagiography rather than contemporary evidence.", "sourceIds": ["catherine-passio", "catherine-mets"]},
+      {"heading": "Alexandria, learning, debate, and gender", "body": "Late Roman Alexandria was a large and religiously diverse city whose conflicts require careful chronology. Catherine's eloquence gave later women intellectual authority, but the debate scene cannot prove a specific event or justify humiliating other religions.", "sourceIds": ["catherine-passio", "catherine-mets", "catherine-crusader-states", "catherine-alexandria-context"]},
+      {"heading": "Cult, images, Sinai, and relics", "body": "Texts, art, churches, pilgrimage, Sinai memory, and the wheel document a far-reaching medieval cult. They establish reception, not scientific identity of relics or historical proof of each episode.", "sourceIds": ["catherine-mets", "catherine-schill", "catherine-byzantine-reception"]},
+      {"heading": "Martyr witness without violent imitation", "body": "The Church remembers Catherine as a martyr and uses red. No one must accept torture, reject rescue or healthcare, or remain with an abuser to prove faith; responsibility belongs to perpetrators and protecting communities.", "sourceIds": ["catherine-passio", "catherine-byzantine-reception", "catherine-calendar", "catherine-girm-color"]}
+    ],
+    "gospelTheme": "Christ sustains truth and conscience before coercive power without commanding contempt, domination, or preventable harm.",
+    "struggle": "Legend can be mistaken for biography and used to glorify torture, control women's bodies, stage religious enemies, or sanctify crusade and intellectual pride.",
+    "response": "Label evidence honestly, honor women's learning, protect people from violence, welcome escape and care, and pursue truth without humiliating another person."
+  },
+  "virtues": [
+    {"name": "Courageous conscience", "evidence": "Across Catherine's reception, a young woman refuses imperial control and speaks from conviction despite gendered power.", "imitation": "Support someone setting a safe boundary or reporting coercion, without demanding public exposure or danger.", "sourceIds": ["catherine-passio", "catherine-mets", "catherine-crusader-states"]},
+    {"name": "Love of learning", "evidence": "Medieval communities repeatedly received Catherine as learned and eloquent, especially in educational and women's contexts.", "imitation": "Study an opposing view from its strongest responsible source and discuss it without ridicule.", "sourceIds": ["catherine-mets", "catherine-schill"]}
+  ],
+  "practice": {"spiritual": "Pray for people threatened because of conscience, including those whose safest faithful choice is escape or silence.", "action": "Support a survivor-centered service, legal-aid resource, or education program that protects speech without forcing disclosure."},
+  "reflectionQuestions": ["Do I need a legend to be literal before I can learn from its reception?", "Does my idea of courage protect vulnerable people, or does it demand that they endure preventable harm?"],
+  "scripture": {"reference": "1 Peter 3:15–16", "connection": "The call to give an account with gentleness and reverence corrects coercive debate and joins conviction to respect."},
+  "prayer": "God of wisdom and courage, through Saint Catherine's intercession, strengthen every conscience under threat. Free us from fabricated certainty, religious contempt, crusade fantasy, gender control, and fascination with violence. Protect those who seek escape, justice, education, and care. Teach us to speak truth gently, learn humbly, and resist abuse without hatred. Amen."
+}

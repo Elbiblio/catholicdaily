@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 2,
+  "id": "columban_of_luxeuil",
+  "profileKind": "individual",
+  "celebrationIds": ["columban_of_luxeuil", "saint_columban_abbot"],
+  "name": "Saint Columban, Abbot",
+  "alternateNames": ["Columbanus", "Columban of Luxeuil"],
+  "ecclesialTitle": "Abbot and missionary",
+  "lifeSpan": "c. 543–615",
+  "vocation": "Irish monk, missionary, writer, and monastic founder",
+  "places": ["Ireland", "Luxeuil", "Bregenz", "Bobbio"],
+  "patronage": [],
+  "symbols": [],
+  "briefBio": "Columban was an Irish monk who undertook religious exile on the Continent, founded communities including Luxeuil, crossed regions shaped by Frankish and Lombard power, and died at Bobbio in 615. His surviving letters reveal a forceful writer disputing the Easter calculation, appealing to popes, defending his community, and urging ecclesial unity while speaking with the assumptions and polemics of his age. Jonas of Bobbio wrote his influential Life a generation later; it preserves important memory but arranges miracles and political conflicts as hagiography. Modern scholarship shows Columbanian monasteries embedded in royal, episcopal, aristocratic, economic, and family networks. His rules and penitential discipline include severe fasting and corporal punishment that must not be revived. Mission never licenses cultural domination; obedience never permits violence, isolation, medical neglect, or suppression of conscience. Columban's mobility can inspire hospitable encounter only when migrants and local communities retain agency.",
+  "wikipediaUrl": "https://en.wikipedia.org/wiki/Columbanus",
+  "wikidataId": "Q319653",
+  "feastDates": ["November 23"],
+  "historicalCertainty": "mixed",
+  "sources": [
+    {
+      "id": "columban-letters",
+      "title": "Letters of Columbanus",
+      "authorOrInstitution": "Columbanus Hibernus; edited by G. S. M. Walker",
+      "publisher": "CELT: Corpus of Electronic Texts, University College Cork",
+      "url": "https://celt.ucc.ie/document/T201054/",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Readable full English primary corpus used for Columban's self-presentation as an Irish exile, Easter controversy, appeals to Rome, criticism of bishops and rulers, ecclesial unity, and Letter I.7's nonspecific bodily weakness; anti-Jewish rhetoric in Letter I.3–4 is located and rejected, and disputed Letter VI is not used",
+      "supports": ["identity", "works.letters", "life.exile", "history.easter_controversy", "history.rome", "history.bishops", "theology.unity", "tradition.bodily_weakness", "safeguard.no_antisemitism", "sourceLimits"]
+    },
+    {
+      "id": "columban-letters-header",
+      "title": "TEI Header for Letters of Columbanus",
+      "authorOrInstitution": "CELT Project, University College Cork",
+      "publisher": "CELT electronic edition L201054, revised 2008",
+      "url": "https://celt.ucc.ie/published/L201054/header.html",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Institutional textual-control record used for edition provenance, manuscript and print bases, corpus extent, and the modern authorship doubt concerning Letter VI; prevents treating every traditionally collected text as authentic",
+      "supports": ["works.edition", "works.manuscripts", "works.authorship_control", "sourceLimits"]
+    },
+    {
+      "id": "columban-rules",
+      "title": "Monks' Rules",
+      "authorOrInstitution": "Columbanus Hibernus; edited by G. S. M. Walker",
+      "publisher": "CELT: Corpus of Electronic Texts, University College Cork",
+      "url": "https://celt.ucc.ie/document/T201052/",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Readable full English primary collection of the Monks' Rule, Communal Rule, and Penitential used for love of God and neighbor, obedience, food, fasting, silence, confession, imprisonment, expulsion, and corporal penalties; it is historical monastic legislation, not safe universal discipline",
+      "supports": ["works.rules", "works.penitential", "discipline.obedience", "discipline.fasting", "discipline.silence", "discipline.corporal_penalties", "discipline.imprisonment", "discipline.expulsion", "safeguard.no_harm", "sourceLimits"]
+    },
+    {
+      "id": "columban-rules-header",
+      "title": "TEI Header for Monks' Rules",
+      "authorOrInstitution": "CELT Project, University College Cork",
+      "publisher": "CELT electronic edition L201052, revised 2008",
+      "url": "https://celt.ucc.ie/published/L201052/header.html",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Institutional textual-control record used for edition provenance, separate manuscript families, fragments, and scribal transmission from about 800 to 1400; it prevents treating the collected rules as an autograph or textually simple corpus",
+      "supports": ["works.rules_edition", "works.rules_manuscripts", "works.rules_transmission", "sourceLimits"]
+    },
+    {
+      "id": "columban-meens",
+      "title": "The Practice and Literature of Penance",
+      "authorOrInstitution": "Rob Meens",
+      "publisher": "Great Christian Jurists and Legal Collections in the First Millennium, Cambridge University Press, 2019, pp. 198–213",
+      "url": "https://research-portal.uu.nl/files/70919874/practice_and_literature_of_penance.pdf",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Open peer-reviewed chapter used for independent control of Columban's rules within early medieval monastic penance, the centrality of confession, their usual physical punishments, later textual circulation, and the difference between historical practice and safe contemporary care",
+      "supports": ["works.rules", "works.penitential", "discipline.confession", "discipline.corporal_penalties", "history.transmission", "sourceLimits"]
+    },
+    {
+      "id": "columban-sermons",
+      "title": "Sermons of Columbanus",
+      "authorOrInstitution": "Unknown; traditionally attributed to Columbanus; edited by G. S. M. Walker",
+      "publisher": "CELT: Corpus of Electronic Texts, University College Cork",
+      "url": "https://research.ucc.ie/celt/document/T201053/index.html",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Readable full English sermon collection used for faith, Christ, prayer, mercy, watchfulness, monastic formation, and bodily illness as spiritual metaphor; the traditional attribution is qualified by the separate manuscript and authorship-control record",
+      "supports": ["works.sermons", "theology.christ", "theology.prayer", "theology.mercy", "discipline.watchfulness", "tradition.illness_metaphor", "sourceLimits"]
+    },
+    {
+      "id": "columban-sermons-header",
+      "title": "TEI Header for Sermons of Columbanus",
+      "authorOrInstitution": "CELT Project, University College Cork",
+      "publisher": "CELT electronic edition L201053",
+      "url": "https://celt.ucc.ie/published/L201053/header.html",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Institutional textual-control record used for the thirteen-sermon manuscript witnesses, dubious additional material, edition provenance, and documented scholarly dispute over authorship; no sermon is treated as an autograph or transparent biographical record",
+      "supports": ["works.sermons_edition", "works.sermons_manuscripts", "works.sermons_authorship", "sourceLimits"]
+    },
+    {
+      "id": "columban-jonas",
+      "title": "The Life of St. Columban, by the Monk Jonas",
+      "authorOrInstitution": "Jonas of Bobbio; translated by Dana Carleton Munro",
+      "publisher": "Internet Medieval Sourcebook, Fordham University",
+      "url": "https://sourcebooks.web.fordham.edu/basis/columban.asp",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Readable full early hagiographic source used for Irish formation, continental travel, foundations, conflicts, exile, Bregenz, Bobbio, death, miracles, and community memory; Jonas wrote after Columban's death and his narrative is not treated as neutral political reportage",
+      "supports": ["life.ireland", "life.migration", "life.foundations", "history.royal_conflict", "life.bregenz", "life.bobbio", "life.death", "tradition.miracles", "sourceLimits"]
+    },
+    {
+      "id": "columban-ohara",
+      "title": "Jonas of Bobbio and the Vita Columbani: Sanctity and Community in the Seventh Century",
+      "authorOrInstitution": "Alexander O'Hara",
+      "publisher": "University of St Andrews doctoral thesis, 2009",
+      "url": "https://research-repository.st-andrews.ac.uk/bitstream/handle/10023/899/Alexander-O%27Hara-PhD-thesis.pdf?sequence=3",
+      "accessedDate": "2026-08-13",
+      "tier": 2,
+      "reuseBasis": "Readable full independent study used for Jonas's hagiographic aims, Columban's chronology, Easter conflict, episcopal and royal politics, banishment, community formation, and omissions that prevent a simple hero-versus-queen narrative",
+      "supports": ["lifeSpan", "history.easter_controversy", "history.episcopal_politics", "history.royal_politics", "history.banishment", "works.jonas_genre", "historicalCertainty", "sourceLimits"]
+    },
+    {
+      "id": "columban-benedict",
+      "title": "General Audience: Saint Columban",
+      "authorOrInstitution": "Pope Benedict XVI",
+      "publisher": "The Holy See, 11 June 2008",
+      "url": "https://www.vatican.va/content/benedict-xvi/en/audiences/2008/documents/hf_ben-xvi_aud_20080611.html",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal ecclesial reception used for the approximate 543 birth tradition, Irish formation, Luxeuil, conflict and expulsion, Alpine travel, Bobbio foundation, 615 death, writings, and modern interpretation of his European legacy; praise is reception, not a warrant for coercive discipline or continental ownership",
+      "supports": ["identity", "lifeSpan", "vocation", "places", "life.ireland", "life.luxeuil", "history.exile", "life.bobbio", "life.death", "works.reception", "reception.europe"]
+    },
+    {
+      "id": "columban-luxeuil-archive",
+      "title": "History of the Abbey",
+      "authorOrInstitution": "Abbaye de Luxeuil",
+      "publisher": "Luxeuil Abbey heritage project",
+      "url": "https://abbayedeluxeuil.com/history/",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Promotional institutional site used narrowly for received foundation memory and the distinction between the lost early monastery and present later buildings; its superlatives and European-founder framing are not adopted as independent history",
+      "supports": ["life.luxeuil", "history.institutional_memory", "history.building_limits", "sourceLimits"]
+    },
+    {
+      "id": "columban-calendar",
+      "title": "Liturgical Calendar: Universal Calendar — November",
+      "authorOrInstitution": "Liturgy Office, Catholic Bishops' Conference of England and Wales",
+      "publisher": "Catholic Bishops' Conference of England and Wales",
+      "url": "https://www.liturgyoffice.org.uk/Calendar/Universal/NovUC.shtml",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal calendar used for the Saint Columban, abbot, missionary title, November 23 date, and optional-memorial rank; no printed rank means optional memorial",
+      "supports": ["identity", "celebrationIds", "ecclesialTitle", "feastDates", "calendar.rank"]
+    },
+    {
+      "id": "columban-girm-color",
+      "title": "General Instruction of the Roman Missal, nos. 345–346",
+      "authorOrInstitution": "United States Conference of Catholic Bishops",
+      "publisher": "USCCB, Chapter VI: The Requisites for the Celebration of Mass",
+      "url": "https://www.usccb.org/prayer-and-worship/the-mass/general-instruction-of-the-roman-missal/girm-chapter-6",
+      "accessedDate": "2026-08-13",
+      "tier": 1,
+      "reuseBasis": "Formal liturgical norm used only for white at celebrations of non-martyr saints; title, date, and optional rank come from the calendar source",
+      "supports": ["calendar.color"]
+    }
+  ],
+  "editorial": {"state": "published", "researcher": "Catholic Daily editorial research", "reviewer": "Catholic Daily factual and theological review", "reviewedAt": "2026-08-13", "revision": 1, "warnings": []},
+  "whyItMatters": "Columban's letters preserve an unusually direct early Irish voice moving through many peoples and power systems. His legacy invites courageous dialogue and hospitality while requiring resistance to coercive discipline, nationalism, and missionary domination.",
+  "oneMinuteSummary": "Columban, born around 543, trained as an Irish monk and undertook religious exile with companions on the Continent. He founded communities including Luxeuil, encountered Frankish rulers and bishops, was expelled from Burgundy, crossed the Alpine region, and founded Bobbio before dying in 615. His letters preserve his sharp voice in disputes over Easter, unity, and authority; textual controls warn that every attributed work is not equally secure. Jonas of Bobbio's later Life supplies a hagiographic narrative of travel, conflict, miracles, and sanctity, while modern study exposes political choices and omissions. Columbanian houses depended on rulers, patrons, migrants, monks, workers, and local peoples. Neither mission nor sainthood validates cultural conquest. Harsh fasting, corporal penalties, and obedience rules are historical evidence, not safe practices. Christian discipline must protect bodily integrity, conscience, healthcare, rest, consent, and freedom from abuse.",
+  "life": {
+    "sections": [
+      {"heading": "Irish exile and continental encounter", "body": "Columban left Ireland with companions and moved among many peoples and kingdoms. Religious exile was chosen within his monastic worldview, but modern imitation must not romanticize displacement or erase migrants' and hosts' agency.", "sourceIds": ["columban-letters", "columban-jonas", "columban-benedict"]},
+      {"heading": "Luxeuil, rulers, and bishops", "body": "His foundations grew within elite patronage and conflict. Easter disputes, royal politics, and episcopal interests all shaped his expulsion; Jonas's dramatic confrontation narrative requires critical control.", "sourceIds": ["columban-jonas", "columban-ohara", "columban-benedict"]},
+      {"heading": "Letters, sermons, and contested authority", "body": "Columban's letters address powerful leaders with urgency, while rules and traditionally attributed sermons shaped monastic formation. CELT's manuscript controls show that collected corpora and attributions are not textually simple.", "sourceIds": ["columban-letters", "columban-letters-header", "columban-rules", "columban-rules-header", "columban-sermons", "columban-sermons-header", "columban-ohara"]},
+      {"heading": "Discipline and illness without harm", "body": "The rules prescribe severe fasting, blows, imprisonment, and expulsion; a letter mentions bodily weakness without diagnosis, and sermons use sickness metaphorically. No retrospective diagnosis or discipline can override safety, consent, rest, nutrition, healthcare, or freedom from abuse.", "sourceIds": ["columban-letters", "columban-rules", "columban-rules-header", "columban-meens", "columban-sermons", "columban-sermons-header"]},
+      {"heading": "Calendar reception", "body": "The Roman calendar keeps Saint Columban on November 23 as an optional memorial. White follows the separate liturgical norm for non-martyr saints and does not establish biography.", "sourceIds": ["columban-calendar", "columban-girm-color"]}
+    ],
+    "gospelTheme": "Following Christ across boundaries calls for conversion, hospitable encounter, truthful speech, and unity without domination.",
+    "struggle": "Mission, monastic authority, Scriptural polemic, or European identity can become cultural conquest, anti-Jewish supersession, coercive discipline, political myth, or contempt for bodies and conscience.",
+    "response": "Listen across cultures, test hagiography and attribution, protect vulnerable people, and build communities whose discipline serves freedom and love."
+  },
+  "virtues": [
+    {"name": "Courageous dialogue", "evidence": "Columban's letters addressed disputed questions directly to powerful ecclesial leaders while continuing to seek church unity.", "imitation": "Raise one difficult concern through a safe, documented channel without contempt or surrender of conscience.", "sourceIds": ["columban-letters", "columban-benedict"]},
+    {"name": "Persevering service", "evidence": "After expulsion and travel, Columban and companions established a new community at Bobbio, while Luxeuil's later history records an enduring network rather than one solitary founder.", "imitation": "Help a displaced person or newcomer access one concrete resource while following their choices and expertise.", "sourceIds": ["columban-jonas", "columban-ohara", "columban-benedict", "columban-luxeuil-archive"]}
+  ],
+  "practice": {"spiritual": "Pray for migrants, hosts, and communities negotiating difference, asking for humility rather than ownership.", "action": "Support a migrant-led service or language-access effort, letting affected people define what help is useful."},
+  "reflectionQuestions": ["Do I call something mission when I am really demanding cultural control?", "Can I learn from disciplined commitment while rejecting practices that harm bodies or silence conscience?"],
+  "scripture": {"reference": "Ephesians 4:1–3", "connection": "The call to humility, patience, and unity tests every forceful appeal to church order or missionary purpose."},
+  "prayer": "God of every people, through Saint Columban's intercession, make us courageous without contempt and disciplined without harm. Protect migrants, local communities, monks, workers, the sick, and all under authority. Free mission from conquest, Scripture from anti-Jewish misuse, Europe from religious ownership, and obedience from coercion. Lead us in truth, hospitality, conscience, safe care, and peace. Amen."
+}
