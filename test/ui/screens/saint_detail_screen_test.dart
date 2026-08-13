@@ -708,6 +708,83 @@ void main() {
     },
   );
 
+  testWidgets(
+    'Batch 13 real assets preserve observance and person-centered guide copy',
+    (tester) async {
+      for (final id in const ['our_lady_of_loreto', 'our_lady_of_guadalupe']) {
+        final profile = await tester.runAsync(
+          () => SaintProfileService.instance.findById(id),
+        );
+
+        expect(profile, isNotNull, reason: id);
+        expect(profile!.kind, SaintProfileKind.observance, reason: id);
+        expect(profile.lifeSpan, isEmpty, reason: id);
+        expect(profile.lifeLength, isEmpty, reason: id);
+
+        await tester.pumpWidget(
+          _host(SaintLifeGuideView(profile: profile, onShowSources: () {})),
+        );
+
+        for (final heading in const [
+          'Why this observance matters today',
+          'What the Church celebrates',
+          'The Gospel at the heart of this observance',
+          'Dispositions to cultivate',
+        ]) {
+          expect(find.text(heading), findsWidgets, reason: id);
+        }
+        for (final personHeading in const [
+          'Lived',
+          'Length',
+          'Their life and journey',
+          'The Gospel visible in their life',
+          'Their response',
+          'Seen in their life',
+        ]) {
+          expect(find.text(personHeading), findsNothing, reason: id);
+        }
+      }
+
+      for (final id in const [
+        'stephen_first_martyr',
+        'john_apostle',
+        'holy_innocents',
+        'holy_family',
+        'juan_diego',
+        'thomas_becket',
+      ]) {
+        final profile = await tester.runAsync(
+          () => SaintProfileService.instance.findById(id),
+        );
+
+        expect(profile, isNotNull, reason: id);
+        expect(profile!.kind, isNot(SaintProfileKind.observance), reason: id);
+        if (profile.kind != SaintProfileKind.individual) {
+          expect(profile.lifeSpan, isEmpty, reason: id);
+          expect(profile.lifeLength, isEmpty, reason: id);
+        }
+
+        await tester.pumpWidget(
+          _host(SaintLifeGuideView(profile: profile, onShowSources: () {})),
+        );
+
+        expect(find.text('Their life and journey'), findsOneWidget, reason: id);
+        expect(
+          find.text('The Gospel visible in their life'),
+          findsOneWidget,
+          reason: id,
+        );
+        expect(find.text('Their response'), findsOneWidget, reason: id);
+        expect(find.text('Seen in their life'), findsWidgets, reason: id);
+        expect(
+          find.text('What the Church celebrates'),
+          findsNothing,
+          reason: id,
+        );
+      }
+    },
+  );
+
   testWidgets('group profiles retain person-centered guide copy', (
     tester,
   ) async {

@@ -299,6 +299,44 @@ void main() {
     }
   });
 
+  test('preserves reviewed Batch 13 identities and profile kinds', () async {
+    const expected = <String, (String?, String)>{
+      'juan_diego': ('Q335539', 'individual'),
+      'our_lady_of_loreto': (null, 'observance'),
+      'damasus_i_pope': ('Q130997', 'individual'),
+      'our_lady_of_guadalupe': ('Q5815789', 'observance'),
+      'peter_canisius': ('Q44624', 'individual'),
+      'john_of_kanty': ('Q275624', 'individual'),
+      'stephen_first_martyr': ('Q161775', 'biblical'),
+      'john_apostle': ('Q44015', 'biblical'),
+      'holy_innocents': (null, 'group'),
+      'thomas_becket': ('Q192236', 'individual'),
+      'sylvester_i_pope': ('Q47149', 'individual'),
+      'holy_family': ('Q618057', 'group'),
+    };
+
+    for (final entry in expected.entries) {
+      final profile = await SaintProfileService.instance.findById(entry.key);
+
+      expect(profile, isNotNull, reason: entry.key);
+      expect(profile!.wikidataId, entry.value.$1, reason: entry.key);
+      expect(profile.kind.name, entry.value.$2, reason: entry.key);
+    }
+
+    for (final id in const [
+      'our_lady_of_loreto',
+      'our_lady_of_guadalupe',
+      'stephen_first_martyr',
+      'john_apostle',
+      'holy_innocents',
+      'holy_family',
+    ]) {
+      final profile = await SaintProfileService.instance.findById(id);
+      expect(profile!.lifeSpan, isEmpty, reason: id);
+      expect(profile.lifeLength, isEmpty, reason: id);
+    }
+  });
+
   test('preserves reviewed Batch 3 publication precision', () async {
     final frances = await SaintProfileService.instance.findById(
       'frances_of_rome',
@@ -597,6 +635,38 @@ void main() {
     final failures = <String>[];
 
     for (final id in batch12Ids) {
+      final profile = await SaintProfileService.instance.findById(id);
+      final summary = profile!.guide!.oneMinuteSummary.trim();
+      final wordCount = summary
+          .split(RegExp(r'\s+'))
+          .where((word) => word.isNotEmpty)
+          .length;
+      if (wordCount < 100 || wordCount > 150) {
+        failures.add('$id: $wordCount words');
+      }
+    }
+
+    expect(failures, isEmpty);
+  });
+
+  test('Batch 13 one-minute summaries contain 100 to 150 words', () async {
+    const batch13Ids = [
+      'juan_diego',
+      'our_lady_of_loreto',
+      'damasus_i_pope',
+      'our_lady_of_guadalupe',
+      'peter_canisius',
+      'john_of_kanty',
+      'stephen_first_martyr',
+      'john_apostle',
+      'holy_innocents',
+      'thomas_becket',
+      'sylvester_i_pope',
+      'holy_family',
+    ];
+    final failures = <String>[];
+
+    for (final id in batch13Ids) {
       final profile = await SaintProfileService.instance.findById(id);
       final summary = profile!.guide!.oneMinuteSummary.trim();
       final wordCount = summary
@@ -1147,6 +1217,95 @@ void main() {
     expect(immaculate.title, 'The Immaculate Conception');
     expect(immaculate.rank, 'Solemnity');
     expect(immaculate.color, LiturgicalColor.white);
+  });
+
+  test('preserves reviewed Batch 13 calendar ranks and colors', () async {
+    final cases = [
+      (
+        DateTime(2026, 12, 9),
+        'juan_diego',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 12, 10),
+        'our_lady_of_loreto',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 12, 11),
+        'damasus_i_pope',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 12, 12),
+        'our_lady_of_guadalupe',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 12, 21),
+        'peter_canisius',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 12, 23),
+        'john_of_kanty',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 12, 26),
+        'stephen_first_martyr',
+        CelebrationRank.feast,
+        LiturgicalColor.red,
+      ),
+      (
+        DateTime(2026, 12, 27),
+        'john_apostle',
+        CelebrationRank.feast,
+        LiturgicalColor.white,
+      ),
+      (
+        DateTime(2026, 12, 28),
+        'holy_innocents',
+        CelebrationRank.feast,
+        LiturgicalColor.red,
+      ),
+      (
+        DateTime(2026, 12, 29),
+        'thomas_becket',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.red,
+      ),
+      (
+        DateTime(2026, 12, 31),
+        'sylvester_i_pope',
+        CelebrationRank.optionalMemorial,
+        LiturgicalColor.white,
+      ),
+    ];
+
+    for (final entry in cases) {
+      final celebrations = await SaintCalendarService.instance
+          .getSaintCelebrationsForDate(date: entry.$1);
+      final matching = celebrations
+          .where((candidate) => candidate.id == entry.$2)
+          .toList();
+      expect(matching, hasLength(1), reason: entry.$2);
+      expect(matching.single.rank, entry.$3, reason: entry.$2);
+      expect(matching.single.color, entry.$4, reason: entry.$2);
+    }
+
+    final holyFamily = OfflineOrdoLookupService.instance.resolve(
+      DateTime(2022, 12, 30),
+    );
+    expect(holyFamily.title, 'The Holy Family of Jesus, Mary, and Joseph');
+    expect(holyFamily.rank, 'Feast');
+    expect(holyFamily.color, LiturgicalColor.white);
   });
 
   test(
