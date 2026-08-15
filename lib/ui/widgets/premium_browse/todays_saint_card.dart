@@ -137,14 +137,6 @@ class TodaysSaintCard extends StatelessWidget {
               Row(
                 children: [
                   _buildRankBadge(theme, celebration.rank, accentColor, isDark),
-                  if (celebration.hasProperReadings) ...[
-                    const SizedBox(width: 6),
-                    Icon(
-                      Icons.menu_book_rounded,
-                      size: 12,
-                      color: accentColor.withValues(alpha: 0.7),
-                    ),
-                  ],
                 ],
               ),
             ],

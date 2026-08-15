@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import '../models/daily_reading.dart';
+import 'csv_readings_resolver_service.dart';
 import 'optional_memorial_service.dart';
+import 'ordo_resolver_service.dart';
 import 'readings_backend_io.dart';
 
 /// Represents a set of readings for a particular celebration option on a given day.
@@ -39,54 +41,129 @@ class AlternateReadingsService {
   static final AlternateReadingsService instance = AlternateReadingsService._();
   AlternateReadingsService._();
 
-  final OptionalMemorialService _memorialService = OptionalMemorialService.instance;
+  final OptionalMemorialService _memorialService =
+      OptionalMemorialService.instance;
   final ReadingsBackendIo _readingsBackend = ReadingsBackendIo();
+  final CsvReadingsResolverService _csvResolver =
+      CsvReadingsResolverService.instance;
+  final OrdoResolverService _ordoResolver = OrdoResolverService.instance;
 
   /// Get all available reading sets for a given date.
-  /// Returns at least one set (the ferial/weekday readings).
-  /// May return additional sets for optional memorials with proper readings.
-  Future<List<CelebrationReadingSet>> getAvailableReadingSets(DateTime date) async {
+  /// Returns at least one set. The resolved celebration is always first;
+  /// additional legitimate Vigil, weekday, memorial, and common choices follow.
+  Future<List<CelebrationReadingSet>> getAvailableReadingSets(
+    DateTime date,
+  ) async {
     final sets = <CelebrationReadingSet>[];
+    final resolvedDay = await _ordoResolver.resolveDay(date);
 
-    // 1. Always include the ferial (weekday) readings
+    // 1. The calendar-resolved celebration is always the primary set.
     try {
-      final ferialReadings = await _readingsBackend.getReadingsForDate(date);
-      sets.add(CelebrationReadingSet(
-        readings: ferialReadings,
-        label: _buildFerialLabel(date),
-        isFerial: true,
-      ));
+      final primaryReadings = await _readingsBackend.getReadingsForDate(date);
+      sets.add(
+        CelebrationReadingSet(
+          readings: primaryReadings,
+          label: resolvedDay.title.trim().isEmpty
+              ? _buildFerialLabel(date)
+              : resolvedDay.title.trim(),
+          isFerial: resolvedDay.title.trim().isEmpty,
+        ),
+      );
     } catch (e) {
-      debugPrint('Error loading ferial readings: $e');
+      debugPrint('Error loading primary readings: $e');
     }
 
-    // 2. Check for celebrations on this date. We include commemorated days too,
-    // so the UI can still offer an alternate set where local practice allows it.
-    final optionalCelebrations = _memorialService.getAllCelebrationsForDate(date);
+    // 2. Add an explicitly labelled Vigil where the canonical catalog has one.
+    if (resolvedDay.title.trim().isNotEmpty) {
+      final vigilReadings = await _csvResolver.resolveVigilChoice(
+        date: date,
+        celebrationTitle: resolvedDay.title,
+      );
+      if (vigilReadings.isNotEmpty) {
+        sets.add(
+          CelebrationReadingSet(
+            readings: vigilReadings,
+            label: '${resolvedDay.title} — Vigil Mass',
+          ),
+        );
+      }
+
+      final otherMassChoices = await _csvResolver.resolveOtherMassChoices(
+        date: date,
+        celebrationTitle: resolvedDay.title,
+      );
+      for (final choice in otherMassChoices) {
+        sets.add(
+          CelebrationReadingSet(readings: choice.readings, label: choice.label),
+        );
+      }
+    }
+
+    // 3. Keep the underlying weekday/temporal set available after the primary
+    // celebration. Never mislabel the primary celebration itself as ferial.
+    final weekdayReadings = await _csvResolver.resolveWeekday(date);
+    final primaryUsesWeekday =
+        sets.isNotEmpty &&
+        weekdayReadings.isNotEmpty &&
+        _sameReadings(sets.first.readings, weekdayReadings);
+    final resolvedRank = (resolvedDay.rank ?? '').toLowerCase();
+    if (primaryUsesWeekday &&
+        (resolvedDay.title.trim().isEmpty ||
+            resolvedRank.contains('memorial'))) {
+      sets[0] = CelebrationReadingSet(
+        readings: sets.first.readings,
+        label: resolvedDay.title.trim().isEmpty
+            ? _buildFerialLabel(date)
+            : '${resolvedDay.title.trim()} — Weekday readings',
+        isFerial: true,
+      );
+    }
+    if (weekdayReadings.isNotEmpty && (sets.isEmpty || !primaryUsesWeekday)) {
+      sets.add(
+        CelebrationReadingSet(
+          readings: weekdayReadings,
+          label: _buildFerialLabel(date),
+          isFerial: true,
+        ),
+      );
+    }
+
+    // 4. Include every fixed memorial/feast choice for easy access, while
+    // obtaining scripture references from the canonical resolver.
+    final optionalCelebrations = _memorialService.getAllCelebrationsForDate(
+      date,
+    );
 
     for (final celebration in optionalCelebrations) {
-      final properReadings = _memorialService.getProperReadings(celebration.id);
+      if (_normalizeTitle(celebration.title) ==
+              _normalizeTitle(resolvedDay.title) &&
+          !primaryUsesWeekday) {
+        continue;
+      }
 
-      if (properReadings != null) {
-        // This celebration has proper readings — create a distinct reading set
-        final readings = _buildReadingsFromProperSet(
-          date: date,
-          readingSet: properReadings,
-          celebration: celebration,
+      final readings = await _csvResolver.resolveCelebrationChoice(
+        date: date,
+        celebrationId: celebration.id,
+        celebrationTitle: celebration.title,
+      );
+      if (readings.isNotEmpty) {
+        sets.add(
+          CelebrationReadingSet(
+            celebration: celebration,
+            readings: readings,
+            label: celebration.title,
+          ),
         );
-        sets.add(CelebrationReadingSet(
-          celebration: celebration,
-          readings: readings,
-          label: celebration.title,
-        ));
       } else {
-        // No proper readings — uses weekday readings with different collect
-        // Still list the celebration as an option for display purposes
-        sets.add(CelebrationReadingSet(
-          celebration: celebration,
-          readings: sets.isNotEmpty ? sets.first.readings : [],
-          label: '${celebration.title} (weekday readings)',
-        ));
+        // No verified proper readings: the memorial legitimately retains the
+        // weekday references, with its choice clearly labelled.
+        sets.add(
+          CelebrationReadingSet(
+            celebration: celebration,
+            readings: weekdayReadings,
+            label: '${celebration.title} (weekday readings)',
+          ),
+        );
       }
     }
 
@@ -95,7 +172,7 @@ class AlternateReadingsService {
 
   /// Check if a date has alternate reading options
   Future<bool> hasAlternateReadings(DateTime date) async {
-    return _memorialService.getAllCelebrationsForDate(date).isNotEmpty;
+    return (await getAvailableReadingSets(date)).length > 1;
   }
 
   /// Get just the list of optional celebrations for display (no reading fetching)
@@ -103,80 +180,24 @@ class AlternateReadingsService {
     return _memorialService.getAllCelebrationsForDate(date);
   }
 
-  List<DailyReading> _buildReadingsFromProperSet({
-    required DateTime date,
-    required ProperReadingSet readingSet,
-    required OptionalCelebration celebration,
-  }) {
-    final readings = <DailyReading>[];
-
-    // First Reading
-    readings.add(DailyReading(
-      reading: readingSet.firstReading,
-      position: 'First Reading',
-      date: date,
-      feast: celebration.title,
-    ));
-
-    // Alternative First Reading (if available)
-    if (readingSet.alternativeFirstReading != null) {
-      readings.add(DailyReading(
-        reading: readingSet.alternativeFirstReading!,
-        position: 'First Reading (alternative)',
-        date: date,
-        feast: celebration.title,
-      ));
-    }
-
-    // Responsorial Psalm
-    // Set the hardcoded response for feast days (they're not in lectionary catalog)
-    // PsalmResolverService will check reading.feast and skip catalog enrichment
-    readings.add(DailyReading(
-      reading: readingSet.psalm,
-      position: 'Responsorial Psalm',
-      date: date,
-      feast: celebration.title,
-      psalmResponse: readingSet.psalmResponse,
-    ));
-
-    // Second Reading (only for Solemnities/Feasts)
-    if (readingSet.secondReading != null) {
-      readings.add(DailyReading(
-        reading: readingSet.secondReading!,
-        position: 'Second Reading',
-        date: date,
-        feast: celebration.title,
-      ));
-    }
-
-    // Gospel
-    readings.add(DailyReading(
-      reading: readingSet.gospel,
-      position: 'Gospel',
-      date: date,
-      feast: celebration.title,
-      gospelAcclamation: readingSet.gospelAcclamation,
-    ));
-
-    // Alternative Gospel (if available)
-    if (readingSet.alternativeGospel != null) {
-      readings.add(DailyReading(
-        reading: readingSet.alternativeGospel!,
-        position: 'Gospel (alternative)',
-        date: date,
-        feast: celebration.title,
-        gospelAcclamation: readingSet.gospelAcclamation,
-      ));
-    }
-
-    debugPrint('_buildReadingsFromProperSet: feast=${celebration.title}, psalmResponse=${readingSet.psalmResponse}');
-    return readings;
-  }
-
   String _buildFerialLabel(DateTime date) {
     final weekday = _weekdayName(date.weekday);
     return '$weekday — Weekday';
   }
+
+  bool _sameReadings(List<DailyReading> left, List<DailyReading> right) {
+    if (left.length != right.length) return false;
+    for (var i = 0; i < left.length; i++) {
+      if (left[i].reading.trim() != right[i].reading.trim() ||
+          (left[i].position ?? '').trim() != (right[i].position ?? '').trim()) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  String _normalizeTitle(String value) =>
+      value.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]+'), ' ').trim();
 
   String _weekdayName(int weekday) {
     switch (weekday) {

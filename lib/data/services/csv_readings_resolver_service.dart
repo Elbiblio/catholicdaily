@@ -62,12 +62,15 @@ class CsvReadingsResolverService
       return nigeriaObservedOverride;
     }
 
+    final resolvedRank = (resolvedDay.rank ?? '').toLowerCase();
     final memorialEntries = await _catalog.loadMemorialEntries();
-    final celebrationEntry = _findCelebrationEntry(
-      memorialEntries: memorialEntries,
-      date: normalizedDate,
-      celebrationTitle: resolvedDay.title,
-    );
+    final celebrationEntry = resolvedRank.contains('memorial')
+        ? null
+        : _findCelebrationEntry(
+            memorialEntries: memorialEntries,
+            date: normalizedDate,
+            celebrationTitle: resolvedDay.title,
+          );
     debugPrint(
       'CSV Resolver: celebrationEntry=${celebrationEntry?.title ?? "null"}',
     );
@@ -111,6 +114,199 @@ class CsvReadingsResolverService
     }
 
     return standardReadings;
+  }
+
+  /// Resolves the underlying temporal/weekday readings without allowing a
+  /// fixed or movable celebration to replace them.
+  ///
+  /// This is used only as an explicitly labelled secondary choice. The
+  /// normal [resolve] method remains the authority for the primary readings
+  /// of the resolved liturgical day.
+  Future<List<DailyReading>> resolveWeekday(DateTime date) async {
+    final normalizedDate = _normalizeDate(date);
+    final liturgicalDay = _calendar.getLiturgicalDay(normalizedDate);
+    final yearVariables = await _ordoResolver.resolveYearVariables(
+      normalizedDate,
+    );
+    final standardEntries = await _catalog.loadStandardEntries();
+    final matches = standardEntries.where((entry) {
+      return _matchesStandardEntry(
+        entry: entry,
+        date: normalizedDate,
+        liturgicalDay: liturgicalDay,
+        sundayCycle: yearVariables.sundayCycle,
+        weekdayCycle: yearVariables.weekdayCycle,
+      );
+    }).toList();
+
+    final standardReadings = _buildStandardReadings(normalizedDate, matches);
+    if (_shouldPreferLegacyFallback(standardReadings)) {
+      final legacyFallback = await _resolveLegacyFallback(normalizedDate);
+      if (legacyFallback.isNotEmpty) {
+        return legacyFallback;
+      }
+    }
+
+    return standardReadings;
+  }
+
+  /// Resolves a named celebration choice through the same authoritative
+  /// override/catalog path used by [resolve]. This prevents the UI from
+  /// maintaining a second hand-written scripture-reference catalog.
+  Future<List<DailyReading>> resolveCelebrationChoice({
+    required DateTime date,
+    required String celebrationId,
+    required String celebrationTitle,
+  }) async {
+    final normalizedDate = _normalizeDate(date);
+    final yearVariables = await _ordoResolver.resolveYearVariables(
+      normalizedDate,
+    );
+    final override = _buildAuthoritativeCelebrationOverride(
+      date: normalizedDate,
+      celebrationTitle: celebrationTitle,
+      sundayCycle: yearVariables.sundayCycle,
+    );
+    if (override != null) return override;
+
+    final entries = await _catalog.loadMemorialEntries();
+    MemorialFeastEntry? match;
+    for (final entry in entries) {
+      if (entry.id == celebrationId) {
+        match = entry;
+        break;
+      }
+    }
+    if (match == null || !_isMemorialEntryWellFormed(match)) {
+      return const [];
+    }
+    if (match.firstReading.isEmpty && match.gospel.isEmpty) {
+      return const [];
+    }
+    return _buildCelebrationReadings(normalizedDate, match);
+  }
+
+  /// Returns a separately labelled Vigil set when the resolved celebration
+  /// has one represented in the reviewed canonical catalog.
+  Future<List<DailyReading>> resolveVigilChoice({
+    required DateTime date,
+    required String celebrationTitle,
+  }) async {
+    final normalizedTitle = _normalizeTitle(celebrationTitle);
+    if (normalizedTitle ==
+            _normalizeTitle('The Assumption of the Blessed Virgin Mary') ||
+        normalizedTitle == _normalizeTitle('The Assumption')) {
+      return _buildOverrideReadings(
+        date: _normalizeDate(date),
+        firstReading: '1 Chr 15:3-4, 15-16; 16:1-2',
+        psalm: 'Ps 132:6-7, 9-10, 13-14',
+        psalmResponse:
+            'Lord, go up to the place of your rest, you and the ark of your holiness.',
+        secondReading: '1 Cor 15:54b-57',
+        gospel: 'Luke 11:27-28',
+        gospelAcclamation:
+            'Blessed are they who hear the word of God and observe it.',
+        feastTitle: '$celebrationTitle — Vigil Mass',
+      );
+    }
+    if (normalizedTitle == _normalizeTitle('Pentecost Sunday')) {
+      return _buildOverrideReadings(
+        date: _normalizeDate(date),
+        firstReading: 'Gen 11:1-9',
+        firstReadingAlternates: const <String>[
+          'Exod 19:3-8a, 16-20b',
+          'Ezek 37:1-14',
+          'Joel 3:1-5',
+        ],
+        psalm: 'Ps 104:1-2a, 24, 35c, 27-28, 29bc-30',
+        psalmResponse:
+            'Lord, send out your Spirit, and renew the face of the earth.',
+        secondReading: 'Rom 8:22-27',
+        gospel: 'John 7:37-39',
+        gospelAcclamation:
+            'Come, Holy Spirit, fill the hearts of the faithful and kindle in them the fire of your love.',
+        feastTitle: '$celebrationTitle — Vigil Mass',
+      );
+    }
+    if (normalizedTitle == _normalizeTitle('The Nativity of the Lord') ||
+        normalizedTitle == _normalizeTitle('Christmas')) {
+      return _buildOverrideReadings(
+        date: _normalizeDate(date),
+        firstReading: 'Isa 62:1-5',
+        psalm: 'Ps 89:4-5, 16-17, 27, 29',
+        psalmResponse: 'For ever I will sing the goodness of the Lord.',
+        secondReading: 'Acts 13:16-17, 22-25',
+        gospel: 'Matt 1:1-25',
+        gospelAlternates: const <String>['Matt 1:18-25'],
+        feastTitle: '$celebrationTitle — Vigil Mass',
+      );
+    }
+    if (normalizedTitle ==
+        _normalizeTitle('The Nativity of Saint John the Baptist')) {
+      return _buildOverrideReadings(
+        date: _normalizeDate(date),
+        firstReading: 'Jer 1:4-10',
+        psalm: 'Ps 71:1-2, 3-4a, 5-6ab, 15ab, 17',
+        psalmResponse: 'Since my mother\'s womb, you have been my strength.',
+        secondReading: '1 Pet 1:8-12',
+        gospel: 'Luke 1:5-17',
+        feastTitle: '$celebrationTitle — Vigil Mass',
+      );
+    }
+    if (normalizedTitle == _normalizeTitle('Saints Peter and Paul, Apostles')) {
+      return _buildOverrideReadings(
+        date: _normalizeDate(date),
+        firstReading: 'Acts 3:1-10',
+        psalm: 'Ps 19:2-3, 4-5',
+        psalmResponse: 'Their message goes out through all the earth.',
+        secondReading: 'Gal 1:11-20',
+        gospel: 'John 21:15-19',
+        feastTitle: '$celebrationTitle — Vigil Mass',
+      );
+    }
+    return const [];
+  }
+
+  /// Additional complete Mass formularies for a resolved celebration.
+  /// These remain separate reading sets so users can select them explicitly.
+  Future<List<NamedReadingChoice>> resolveOtherMassChoices({
+    required DateTime date,
+    required String celebrationTitle,
+  }) async {
+    final normalizedTitle = _normalizeTitle(celebrationTitle);
+    if (normalizedTitle != _normalizeTitle('The Nativity of the Lord') &&
+        normalizedTitle != _normalizeTitle('Christmas')) {
+      return const <NamedReadingChoice>[];
+    }
+
+    final normalizedDate = _normalizeDate(date);
+    return <NamedReadingChoice>[
+      NamedReadingChoice(
+        label: '$celebrationTitle — Mass during the Night',
+        readings: _buildOverrideReadings(
+          date: normalizedDate,
+          firstReading: 'Isa 9:1-6',
+          psalm: 'Ps 96:1-2, 2-3, 11-12, 13',
+          psalmResponse: 'Today is born our Savior, Christ the Lord.',
+          secondReading: 'Titus 2:11-14',
+          gospel: 'Luke 2:1-14',
+          feastTitle: '$celebrationTitle — Mass during the Night',
+        ),
+      ),
+      NamedReadingChoice(
+        label: '$celebrationTitle — Mass at Dawn',
+        readings: _buildOverrideReadings(
+          date: normalizedDate,
+          firstReading: 'Isa 62:11-12',
+          psalm: 'Ps 97:1, 6, 11-12',
+          psalmResponse:
+              'A light will shine on us this day: the Lord is born for us.',
+          secondReading: 'Titus 3:4-7',
+          gospel: 'Luke 2:15-20',
+          feastTitle: '$celebrationTitle — Mass at Dawn',
+        ),
+      ),
+    ];
   }
 
   Future<List<DailyReading>> _resolveLegacyFallback(DateTime date) async {
@@ -371,6 +567,10 @@ class CsvReadingsResolverService
 
     for (final entry in memorialEntries) {
       if (entry.month.isEmpty || entry.day.isEmpty) {
+        continue;
+      }
+      final rank = entry.rank.toLowerCase();
+      if (!rank.contains('feast') && !rank.contains('solemnity')) {
         continue;
       }
       if (int.tryParse(entry.month) == date.month &&
@@ -995,15 +1195,16 @@ class CsvReadingsResolverService
         _ => 'Matt 21:1-11',
       };
       final gospelAlt = switch (cycle) {
-        'A' => 'Matt 26:14-27:66',
-        'B' => 'Mark 14:1-15:47',
-        'C' => 'Luke 22:14-23:56',
-        _ => 'Matt 26:14-27:66',
+        'A' => ('Matt 26:14-27:66', 'Matt 27:11-54'),
+        'B' => ('Mark 14:1-15:47', 'Mark 15:1-39'),
+        'C' => ('Luke 22:14-23:56', 'Luke 23:1-49'),
+        _ => ('Matt 26:14-27:66', 'Matt 27:11-54'),
       };
       return _buildPalmSundayOverrideReadings(
         date: date,
         gospelAtProcession: gospel,
-        passionGospel: gospelAlt,
+        passionGospel: gospelAlt.$1,
+        passionGospelShorter: gospelAlt.$2,
         firstReading: 'Isa 50:4-7',
         psalm: 'Ps 22:8-9, 17-18, 19-20, 23-24',
         psalmResponse: 'My God, my God, why have you abandoned me?',
@@ -1014,18 +1215,27 @@ class CsvReadingsResolverService
     }
 
     if (normalizedTitle == _normalizeTitle('Pentecost Sunday')) {
-      final secondReading = switch (cycle) {
-        'C' => 'Rom 8:8-17',
-        _ => '1 Cor 12:3b-7, 12-13',
+      final secondReadings = switch (cycle) {
+        'B' => <String>['Gal 5:16-25', '1 Cor 12:3b-7, 12-13', 'Rom 8:8-17'],
+        'C' => <String>['Rom 8:8-17', '1 Cor 12:3b-7, 12-13', 'Gal 5:16-25'],
+        _ => <String>['1 Cor 12:3b-7, 12-13', 'Gal 5:16-25', 'Rom 8:8-17'],
       };
-      final gospel = switch (cycle) {
-        'C' => 'John 14:15-16, 23b-26',
-        _ => 'John 20:19-23',
-      };
-      final gospelAlt = switch (cycle) {
-        'A' => 'John 15:26-27; 16:12-15',
-        'B' => 'John 15:26-27; 16:12-15',
-        _ => null,
+      final gospels = switch (cycle) {
+        'B' => <String>[
+          'John 15:26-27; 16:12-15',
+          'John 20:19-23',
+          'John 14:15-16, 23b-26',
+        ],
+        'C' => <String>[
+          'John 14:15-16, 23b-26',
+          'John 20:19-23',
+          'John 15:26-27; 16:12-15',
+        ],
+        _ => <String>[
+          'John 20:19-23',
+          'John 15:26-27; 16:12-15',
+          'John 14:15-16, 23b-26',
+        ],
       };
       return _buildPentecostOverrideReadings(
         date: date,
@@ -1033,10 +1243,11 @@ class CsvReadingsResolverService
         psalm: 'Ps 104:1, 24, 29-30, 31, 34',
         psalmResponse:
             'Lord, send out your Spirit, and renew the face of the earth.',
-        secondReading: secondReading,
+        secondReading: secondReadings.first,
+        secondReadingAlternates: secondReadings.skip(1).toList(),
         sequence: 'Veni Sancte Spiritus (Sequence)',
-        gospel: gospel,
-        gospelAlternate: gospelAlt,
+        gospel: gospels.first,
+        gospelAlternates: gospels.skip(1).toList(),
         gospelAcclamation:
             'Come, Holy Spirit, fill the hearts of your faithful and kindle in them the fire of your love.',
         feastTitle: celebrationTitle,
@@ -1046,10 +1257,10 @@ class CsvReadingsResolverService
     if (normalizedTitle == _normalizeTitle('The Ascension of the Lord') ||
         normalizedTitle == _normalizeTitle('Ascension of the Lord') ||
         normalizedTitle == _normalizeTitle('Ascension Thursday')) {
-      final secondReading = switch (cycle) {
+      final secondReadingAlternate = switch (cycle) {
         'B' => 'Eph 4:1-13',
         'C' => 'Heb 9:24-28; 10:19-23',
-        _ => 'Eph 1:17-23',
+        _ => null,
       };
       final gospel = switch (cycle) {
         'B' => 'Mark 16:15-20',
@@ -1062,7 +1273,9 @@ class CsvReadingsResolverService
         psalm: 'Ps 47:2-3, 6-7, 8-9',
         psalmResponse:
             'God mounts his throne to shouts of joy: a blare of trumpets for the Lord.',
-        secondReading: secondReading,
+        secondReading: 'Eph 1:17-23',
+        secondReadingAlternate: secondReadingAlternate,
+        secondReadingAlternateShorter: cycle == 'B' ? 'Eph 4:1-7, 11-13' : null,
         gospel: gospel,
         gospelAcclamation:
             'Go and teach all nations, says the Lord; I am with you always, until the end of the world.',
@@ -1107,7 +1320,9 @@ class CsvReadingsResolverService
         psalm: psalm,
         psalmResponse: psalmResponse,
         secondReading: secondReading,
+        secondReadingAlternate: cycle == 'A' ? 'Col 3:12-17' : null,
         gospel: gospel,
+        gospelAlternate: cycle == 'B' ? 'Luke 2:22, 39-40' : null,
         gospelAcclamation:
             'Glory to the Father, the Son, and the Holy Spirit; to God who is, who was, and who is to come.',
         feastTitle: celebrationTitle,
@@ -1275,9 +1490,9 @@ class CsvReadingsResolverService
         psalmResponse:
             'All the ends of the earth have seen the salvation of our God.',
         secondReading: 'Heb 1:1-6',
-        secondReadingIncipit:
-            'God has spoken to us by a Son.',
+        secondReadingIncipit: 'God has spoken to us by a Son.',
         gospel: 'John 1:1-18',
+        gospelAlternates: const <String>['John 1:1-5, 9-14'],
         gospelIncipit: 'The Word became flesh and dwelt among us.',
         gospelAcclamation:
             'A hallowed day has shone upon us: come, O nations, and adore the Lord; for today a great light has come down to earth.',
@@ -1389,6 +1604,7 @@ class CsvReadingsResolverService
         psalmResponse: 'Who is this king of glory? It is the Lord!',
         secondReading: 'Heb 2:14-18',
         gospel: 'Luke 2:22-40',
+        gospelAlternates: const <String>['Luke 2:22-32'],
         gospelAcclamation:
             'A light of revelation to the Gentiles, and the glory of your people Israel.',
         feastTitle: celebrationTitle,
@@ -1588,7 +1804,9 @@ class CsvReadingsResolverService
         psalmResponse:
             'This is the day the Lord has made; let us rejoice and be glad.',
         secondReading: 'Col 3:1-4',
+        secondReadingAlternate: '1 Cor 5:6b-8',
         gospel: 'John 20:1-9',
+        gospelAlternates: const <String>['Luke 24:13-35'],
         gospelAcclamation:
             'Christ, our paschal lamb, has been sacrificed; let us then feast with joy in the Lord.',
         feastTitle: celebrationTitle,
@@ -1674,9 +1892,11 @@ class CsvReadingsResolverService
       ),
       _normalizeTitle('The Nativity of the Blessed Virgin Mary'): _ApostleFeast(
         firstReading: 'Mic 5:1-4a',
+        firstReadingAlternates: const <String>['Rom 8:28-30'],
         psalm: 'Ps 13:6ab, 6c',
         psalmResponse: 'With delight I rejoice in the Lord.',
         gospel: 'Matt 1:1-16, 18-23',
+        gospelAlternates: const <String>['Matt 1:18-23'],
         gospelAcclamation:
             'Blessed are you, holy Virgin Mary, and most worthy of all praise; for from you arose the sun of justice, Christ our God.',
       ),
@@ -1756,10 +1976,12 @@ class CsvReadingsResolverService
       return _buildOverrideReadings(
         date: date,
         firstReading: feast.firstReading,
+        firstReadingAlternates: feast.firstReadingAlternates,
         psalm: feast.psalm,
         psalmResponse: feast.psalmResponse,
         secondReading: null,
         gospel: feast.gospel,
+        gospelAlternates: feast.gospelAlternates,
         gospelAcclamation: feast.gospelAcclamation,
         feastTitle: celebrationTitle,
       );
@@ -1774,9 +1996,10 @@ class CsvReadingsResolverService
     required String psalm,
     required String psalmResponse,
     String? secondReading,
+    List<String> secondReadingAlternates = const <String>[],
     required String sequence,
     required String gospel,
-    String? gospelAlternate,
+    List<String> gospelAlternates = const <String>[],
     String? gospelAcclamation,
     String? feastTitle,
   }) {
@@ -1807,6 +2030,19 @@ class CsvReadingsResolverService
       );
     }
 
+    for (var i = 0; i < secondReadingAlternates.length; i++) {
+      readings.add(
+        DailyReading(
+          reading: _normalizeReferenceStyle(secondReadingAlternates[i]),
+          position: i == 0
+              ? 'Second Reading (alternative)'
+              : 'Second Reading (alternative ${i + 1})',
+          date: date,
+          feast: feastTitle,
+        ),
+      );
+    }
+
     // Add the Sequence for Pentecost
     readings.add(
       DailyReading(
@@ -1827,11 +2063,13 @@ class CsvReadingsResolverService
       ),
     );
 
-    if (gospelAlternate != null && gospelAlternate.isNotEmpty) {
+    for (var i = 0; i < gospelAlternates.length; i++) {
       readings.add(
         DailyReading(
-          reading: _normalizeReferenceStyle(gospelAlternate),
-          position: 'Gospel (alternative)',
+          reading: _normalizeReferenceStyle(gospelAlternates[i]),
+          position: i == 0
+              ? 'Gospel (alternative)'
+              : 'Gospel (alternative ${i + 1})',
           date: date,
           feast: feastTitle,
           gospelAcclamation: gospelAcclamation,
@@ -1846,6 +2084,7 @@ class CsvReadingsResolverService
     required DateTime date,
     required String gospelAtProcession,
     required String passionGospel,
+    String? passionGospelShorter,
     required String firstReading,
     required String psalm,
     required String psalmResponse,
@@ -1853,7 +2092,7 @@ class CsvReadingsResolverService
     String? gospelAcclamation,
     String? feastTitle,
   }) {
-    return <DailyReading>[
+    final readings = <DailyReading>[
       DailyReading(
         reading: _normalizeReferenceStyle(gospelAtProcession),
         position: 'Gospel at Procession',
@@ -1887,19 +2126,35 @@ class CsvReadingsResolverService
         gospelAcclamation: gospelAcclamation,
       ),
     ];
+    if (passionGospelShorter != null && passionGospelShorter.isNotEmpty) {
+      readings.add(
+        DailyReading(
+          reading: _normalizeReferenceStyle(passionGospelShorter),
+          position: 'Gospel (shorter form)',
+          date: date,
+          feast: feastTitle,
+          gospelAcclamation: gospelAcclamation,
+        ),
+      );
+    }
+    return readings;
   }
 
   List<DailyReading> _buildOverrideReadings({
     required DateTime date,
     required String firstReading,
     String? firstReadingIncipit,
+    List<String> firstReadingAlternates = const <String>[],
     required String psalm,
     required String psalmResponse,
     String? secondReading,
     String? secondReadingIncipit,
+    String? secondReadingAlternate,
+    String? secondReadingAlternateShorter,
     required String gospel,
     String? gospelIncipit,
     String? gospelAlternate,
+    List<String> gospelAlternates = const <String>[],
     String? gospelAcclamation,
     String? feastTitle,
   }) {
@@ -1911,6 +2166,22 @@ class CsvReadingsResolverService
         feast: feastTitle,
         incipit: firstReadingIncipit,
       ),
+    ];
+
+    for (var i = 0; i < firstReadingAlternates.length; i++) {
+      readings.add(
+        DailyReading(
+          reading: _normalizeReferenceStyle(firstReadingAlternates[i]),
+          position: i == 0
+              ? 'First Reading (alternative)'
+              : 'First Reading (alternative ${i + 1})',
+          date: date,
+          feast: feastTitle,
+        ),
+      );
+    }
+
+    readings.add(
       DailyReading(
         reading: _normalizeReferenceStyle(psalm),
         position: 'Responsorial Psalm',
@@ -1918,7 +2189,7 @@ class CsvReadingsResolverService
         feast: feastTitle,
         psalmResponse: psalmResponse,
       ),
-    ];
+    );
 
     if (secondReading != null && secondReading.isNotEmpty) {
       readings.add(
@@ -1928,6 +2199,29 @@ class CsvReadingsResolverService
           date: date,
           feast: feastTitle,
           incipit: secondReadingIncipit,
+        ),
+      );
+    }
+
+    if (secondReadingAlternate != null && secondReadingAlternate.isNotEmpty) {
+      readings.add(
+        DailyReading(
+          reading: _normalizeReferenceStyle(secondReadingAlternate),
+          position: 'Second Reading (alternative)',
+          date: date,
+          feast: feastTitle,
+        ),
+      );
+    }
+
+    if (secondReadingAlternateShorter != null &&
+        secondReadingAlternateShorter.isNotEmpty) {
+      readings.add(
+        DailyReading(
+          reading: _normalizeReferenceStyle(secondReadingAlternateShorter),
+          position: 'Second Reading (alternative shorter form)',
+          date: date,
+          feast: feastTitle,
         ),
       );
     }
@@ -1948,6 +2242,21 @@ class CsvReadingsResolverService
         DailyReading(
           reading: _normalizeReferenceStyle(gospelAlternate),
           position: 'Gospel (alternative)',
+          date: date,
+          feast: feastTitle,
+          gospelAcclamation: gospelAcclamation,
+        ),
+      );
+    }
+
+    for (var i = 0; i < gospelAlternates.length; i++) {
+      final alternativeNumber = gospelAlternate == null ? i + 1 : i + 2;
+      readings.add(
+        DailyReading(
+          reading: _normalizeReferenceStyle(gospelAlternates[i]),
+          position: alternativeNumber == 1
+              ? 'Gospel (alternative)'
+              : 'Gospel (alternative $alternativeNumber)',
           date: date,
           feast: feastTitle,
           gospelAcclamation: gospelAcclamation,
@@ -2447,6 +2756,21 @@ class CsvReadingsResolverService
       RegExp(r'^([A-Za-z0-9 ]+\s\d+)\.\s*(\d)'),
       (match) => '${match.group(1)}:${match.group(2)}',
     );
+    // Normalize extracted cross-chapter forms such as
+    // "Acts 7.51 - 8.1a" and "Matt 18.21-35 - 19.1". In the latter,
+    // the intermediate verse is the final verse of the first chapter; the
+    // canonical compact reference is "Matt 18:21-19:1".
+    result = result.replaceFirstMapped(
+      RegExp(
+        r'^(.+?\s\d+:\d+[a-z]?)(?:-\d+[a-z]?)?\s*[-\u2013\u2014]\s*(\d+)\.(\d+[a-z]?)',
+        caseSensitive: false,
+      ),
+      (match) => '${match.group(1)}-${match.group(2)}:${match.group(3)}',
+    );
+    result = result
+        .replaceAll('\u2013', '-')
+        .replaceAll('\u2014', '-')
+        .replaceAll(RegExp(r'\s*-\s*'), '-');
     result = result.replaceFirst(
       RegExp(r'\s+or\s+.+$', caseSensitive: false),
       '',
@@ -2619,18 +2943,29 @@ class CsvReadingsResolverService
 
 class _ApostleFeast {
   final String firstReading;
+  final List<String> firstReadingAlternates;
   final String psalm;
   final String psalmResponse;
   final String gospel;
+  final List<String> gospelAlternates;
   final String gospelAcclamation;
 
   const _ApostleFeast({
     required this.firstReading,
+    this.firstReadingAlternates = const <String>[],
     required this.psalm,
     required this.psalmResponse,
     required this.gospel,
+    this.gospelAlternates = const <String>[],
     required this.gospelAcclamation,
   });
+}
+
+class NamedReadingChoice {
+  final String label;
+  final List<DailyReading> readings;
+
+  const NamedReadingChoice({required this.label, required this.readings});
 }
 
 class _LegacyReadingRow {

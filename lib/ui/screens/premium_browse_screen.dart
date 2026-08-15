@@ -4,10 +4,6 @@ import 'package:intl/intl.dart';
 import '../../core/latest_request_guard.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
 import '../../data/services/ordo_resolver_service.dart';
-import '../../data/services/readings_backend.dart';
-import '../../data/services/readings_backend_io.dart'
-    if (dart.library.html) 'readings_backend_web.dart'
-    as backend_factory;
 import '../../data/models/daily_reading.dart';
 import '../../data/services/optional_memorial_service.dart';
 import '../../data/services/alternate_readings_service.dart';
@@ -36,8 +32,13 @@ class PremiumBrowseScreen extends StatefulWidget {
     int? selectedIndex,
   ])
   onReadingSelected;
+  final DateTime? initialDate;
 
-  const PremiumBrowseScreen({super.key, required this.onReadingSelected});
+  const PremiumBrowseScreen({
+    super.key,
+    required this.onReadingSelected,
+    this.initialDate,
+  });
 
   @override
   State<PremiumBrowseScreen> createState() => _PremiumBrowseScreenState();
@@ -45,16 +46,16 @@ class PremiumBrowseScreen extends StatefulWidget {
 
 class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
     with TickerProviderStateMixin {
-  DateTime _selectedDate = DateTime.now();
+  late DateTime _selectedDate;
   List<DailyReading> _readings = [];
   Map<String, String> _readingTexts = {};
   Map<String, String> _readingPreviews = {};
   bool _isLoading = true;
   LiturgicalDay? _liturgicalDay;
   OrdoYearVariables? _ordoYearVariables;
-  List<OptionalCelebration> _optionalCelebrations = [];
   List<OptionalCelebration> _saintCelebrations = [];
-  int _selectedCelebrationIndex = -1; // -1 = ferial/default
+  List<CelebrationReadingSet> _availableReadingSets = [];
+  int _selectedReadingSetIndex = 0;
   bool _celebrationsSuppressed = false;
 
   late AnimationController _fadeController;
@@ -63,8 +64,6 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
   late Animation<Offset> _slideAnimation;
 
   final OrdoResolverService _ordoResolver = OrdoResolverService.instance;
-  final ReadingsBackend _readingsBackend = backend_factory
-      .createReadingsBackend();
   final ReadingFlowService _readingFlow = ReadingFlowService.instance;
   final SaintCalendarService _saintCalendar = SaintCalendarService.instance;
   final LatestRequestGuard _loadGuard = LatestRequestGuard();
@@ -72,6 +71,12 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
   @override
   void initState() {
     super.initState();
+    final initialDate = widget.initialDate ?? DateTime.now();
+    _selectedDate = DateTime(
+      initialDate.year,
+      initialDate.month,
+      initialDate.day,
+    );
     _initializeAnimations();
     _loadReadings();
   }
@@ -120,11 +125,11 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
       final results = await Future.wait([
         _ordoResolver.resolveDay(date),
         _ordoResolver.resolveYearVariables(date),
-        _readingsBackend.getReadingsForDate(date),
+        AlternateReadingsService.instance.getAvailableReadingSets(date),
       ]);
       final liturgicalDay = results[0] as LiturgicalDay;
       final ordoYearVariables = results[1] as OrdoYearVariables;
-      final rawReadings = results[2] as List<DailyReading>;
+      final readingSets = results[2] as List<CelebrationReadingSet>;
 
       final optionalMemorialService = OptionalMemorialService.instance;
 
@@ -149,50 +154,9 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
       );
       debugPrint('Celebrations suppressed: $celebrationsSuppressed');
 
-      // Auto-select feast or solemnity with proper readings over ferial
-      // This ensures feast days like St. Mark show their proper readings
-      List<DailyReading> readingsToLoad = rawReadings;
-      var selectedCelebrationIndex = -1;
-
-      final primaryIsSolemnity = liturgicalDay.rank == 'Solemnity';
-      if (!celebrationsSuppressed && !primaryIsSolemnity) {
-        // Find feasts or solemnities with proper readings
-        final feastWithReadings = optionalCelebrations.indexWhere(
-          (c) =>
-              (c.rank == CelebrationRank.feast ||
-                  c.rank == CelebrationRank.solemnity) &&
-              c.hasProperReadings,
-        );
-
-        debugPrint('Feast with proper readings index: $feastWithReadings');
-
-        if (feastWithReadings >= 0) {
-          // Load the feast readings instead of ferial
-          final celebration = optionalCelebrations[feastWithReadings];
-          debugPrint('Loading feast readings for: ${celebration.title}');
-          final readingSet = optionalMemorialService.getProperReadings(
-            celebration.id,
-          );
-          if (readingSet != null) {
-            final alternateService = AlternateReadingsService.instance;
-            final sets = await alternateService.getAvailableReadingSets(date);
-            debugPrint(
-              'Available reading sets: ${sets.map((s) => '${s.label} (isFerial: ${s.isFerial})').join(', ')}',
-            );
-            final matching = sets.where(
-              (s) => s.celebration?.id == celebration.id,
-            );
-            final matchingSet = matching.isEmpty ? null : matching.first;
-            if (matchingSet != null && matchingSet.readings.isNotEmpty) {
-              readingsToLoad = matchingSet.readings;
-              selectedCelebrationIndex = feastWithReadings;
-              debugPrint(
-                'Using feast readings, feast field on first reading: ${readingsToLoad[0].feast}',
-              );
-            }
-          }
-        }
-      }
+      final readingsToLoad = readingSets.isEmpty
+          ? <DailyReading>[]
+          : readingSets.first.readings;
 
       debugPrint(
         'Readings to load count: ${readingsToLoad.length}, feast field on psalm: ${readingsToLoad.where((r) => r.position?.toLowerCase().contains('psalm') ?? false).map((r) => r.feast).join(', ')}',
@@ -207,10 +171,10 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
       setState(() {
         _liturgicalDay = liturgicalDay;
         _ordoYearVariables = ordoYearVariables;
-        _optionalCelebrations = optionalCelebrations;
         _celebrationsSuppressed = celebrationsSuppressed;
         _saintCelebrations = saintCelebrations;
-        _selectedCelebrationIndex = selectedCelebrationIndex;
+        _availableReadingSets = readingSets;
+        _selectedReadingSetIndex = 0;
         _applyHydratedReadings(hydrated);
         _isLoading = false;
       });
@@ -225,9 +189,9 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
         _readings = [];
         _liturgicalDay = null;
         _ordoYearVariables = null;
-        _optionalCelebrations = [];
         _saintCelebrations = [];
-        _selectedCelebrationIndex = -1;
+        _availableReadingSets = [];
+        _selectedReadingSetIndex = 0;
         _celebrationsSuppressed = false;
         _readingTexts = {};
         _readingPreviews = {};
@@ -699,8 +663,8 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                 onCelebrationTap: _openSaintProfile,
               ),
 
-            // Optional celebrations selector
-            if (_optionalCelebrations.isNotEmpty)
+            // Ordered reading choices: the resolved celebration is always first.
+            if (_availableReadingSets.length > 1)
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
@@ -1319,13 +1283,10 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
   }
 
   Widget _buildOptionalCelebrationSelector(ThemeData theme) {
-    final isDark = theme.brightness == Brightness.dark;
-    final baseBorderColor = _celebrationsSuppressed
-        ? (isDark ? const Color(0xFFE7C27A) : const Color(0xFFD9A441))
-        : theme.colorScheme.tertiary;
-    final baseBackgroundColor = _celebrationsSuppressed
-        ? (isDark ? const Color(0xFF2B2117) : const Color(0xFF3A2B1A))
-        : theme.colorScheme.tertiaryContainer.withValues(alpha: 0.3);
+    final baseBorderColor = theme.colorScheme.tertiary;
+    final baseBackgroundColor = theme.colorScheme.tertiaryContainer.withValues(
+      alpha: 0.3,
+    );
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -1343,9 +1304,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
               Icon(Icons.auto_awesome, size: 16, color: baseBorderColor),
               const SizedBox(width: 6),
               Text(
-                _celebrationsSuppressed
-                    ? 'Commemorated Feast / Memorial'
-                    : 'Optional Celebrations',
+                'Reading Choices',
                 style: theme.textTheme.labelMedium?.copyWith(
                   color: baseBorderColor,
                   fontWeight: FontWeight.w700,
@@ -1355,111 +1314,57 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
             ],
           ),
           const SizedBox(height: 8),
-          if (_celebrationsSuppressed)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: Text(
-                'These commemorations may still be chosen locally. Tap a feast to view its readings.',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-              ),
+          Text(
+            'The celebration appointed for this day is shown first. Vigil, weekday, and memorial choices remain available here.',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
             ),
+          ),
+          const SizedBox(height: 8),
           Wrap(
             spacing: 6,
             runSpacing: 6,
-            children: [
-              // Ferial/weekday chip (always first)
-              ChoiceChip(
-                label: Text('Weekday', style: TextStyle(fontSize: 12)),
-                selected: _selectedCelebrationIndex == -1,
+            children: _availableReadingSets.asMap().entries.map((entry) {
+              final index = entry.key;
+              final readingSet = entry.value;
+              final selected = _selectedReadingSetIndex == index;
+              return ChoiceChip(
+                key: ValueKey('reading-choice-$index'),
+                label: Text(
+                  index == 0
+                      ? '${_shortenTitle(readingSet.label)} · Primary'
+                      : _shortenTitle(readingSet.label),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: selected
+                        ? theme.colorScheme.onPrimary
+                        : theme.colorScheme.onSurfaceVariant,
+                    fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                  ),
+                ),
+                selected: selected,
+                selectedColor: theme.colorScheme.primary,
+                backgroundColor: theme.colorScheme.surface,
+                side: BorderSide(
+                  color: selected
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.outlineVariant,
+                ),
                 onSelected: (_) {
-                  if (_selectedCelebrationIndex != -1) {
-                    setState(() => _selectedCelebrationIndex = -1);
-                    _loadReadings();
-                  }
+                  if (!selected) _loadReadingSet(index);
                 },
+                avatar: readingSet.isFerial
+                    ? const Icon(Icons.calendar_view_day, size: 14)
+                    : index == 0
+                    ? const Icon(Icons.star, size: 14)
+                    : null,
                 visualDensity: VisualDensity.compact,
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-              // Optional celebration chips
-              ..._optionalCelebrations.asMap().entries.map((entry) {
-                final idx = entry.key;
-                final celebration = entry.value;
-                final hasProper = celebration.hasProperReadings;
-                final selected = _selectedCelebrationIndex == idx;
-                final isDark = theme.brightness == Brightness.dark;
-                final chipForeground = _celebrationsSuppressed
-                    ? (isDark
-                          ? const Color(0xFFE7C27A)
-                          : const Color(0xFFD9A441))
-                    : (hasProper
-                          ? theme.colorScheme.tertiary
-                          : theme.colorScheme.onSurfaceVariant);
-                return ChoiceChip(
-                  label: Text(
-                    _shortenTitle(celebration.title),
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: selected
-                          ? theme.colorScheme.onPrimary
-                          : chipForeground,
-                      fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                    ),
-                  ),
-                  selected: selected,
-                  selectedColor: _celebrationsSuppressed
-                      ? (isDark
-                            ? const Color(0xFF8B5E1A)
-                            : const Color(0xFFD9A441))
-                      : theme.colorScheme.primary,
-                  backgroundColor: _celebrationsSuppressed
-                      ? (isDark
-                            ? const Color(0xFF2B2117)
-                            : const Color(0xFF3A2B1A))
-                      : theme.colorScheme.surface,
-                  side: BorderSide(
-                    color: selected
-                        ? (_celebrationsSuppressed
-                              ? const Color(0xFFE7C27A)
-                              : theme.colorScheme.primary)
-                        : chipForeground.withValues(alpha: 0.35),
-                  ),
-                  onSelected: (_) {
-                    if (_selectedCelebrationIndex != idx) {
-                      setState(() => _selectedCelebrationIndex = idx);
-                      _loadCelebrationReadings(celebration);
-                    }
-                  },
-                  avatar: hasProper
-                      ? (_celebrationsSuppressed
-                            ? Icon(
-                                Icons.info_outline,
-                                size: 14,
-                                color: selected
-                                    ? theme.colorScheme.onPrimary
-                                    : const Color(0xFFE7C27A),
-                              )
-                            : null)
-                      : Icon(
-                          Icons.link,
-                          size: 14,
-                          color: selected
-                              ? theme.colorScheme.onPrimary
-                              : theme.colorScheme.onSurfaceVariant,
-                        ),
-                  visualDensity: VisualDensity.compact,
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  tooltip: _celebrationsSuppressed
-                      ? (hasProper
-                            ? 'Tap to view commemorated feast readings'
-                            : 'Uses weekday readings unless local usage provides otherwise')
-                      : hasProper
-                      ? 'Tap to view proper readings'
-                      : 'Uses weekday readings',
-                );
-              }),
-            ],
+                tooltip: index == 0
+                    ? 'Primary readings for the resolved liturgical celebration'
+                    : 'Open ${readingSet.label}',
+              );
+            }).toList(),
           ),
         ],
       ),
@@ -1486,7 +1391,8 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
         .replaceFirst(RegExp(r', Pope$'), '');
   }
 
-  Future<void> _loadCelebrationReadings(OptionalCelebration celebration) async {
+  Future<void> _loadReadingSet(int index) async {
+    if (index < 0 || index >= _availableReadingSets.length) return;
     final date = DateTime(
       _selectedDate.year,
       _selectedDate.month,
@@ -1495,31 +1401,21 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
     final request = _loadGuard.begin();
     setState(() => _isLoading = true);
     try {
-      final readingSet = OptionalMemorialService.instance.getProperReadings(
-        celebration.id,
+      final selectedSet = _availableReadingSets[index];
+      final hydrated = await _readingFlow.hydrateReadingSet(
+        date: date,
+        readings: selectedSet.readings,
       );
-      if (readingSet != null) {
-        final alternateService = AlternateReadingsService.instance;
-        final sets = await alternateService.getAvailableReadingSets(date);
-        // Find the matching set
-        final matching = sets.where((s) => s.celebration?.id == celebration.id);
-        final matchingSet = matching.isEmpty ? null : matching.first;
-        if (matchingSet != null && matchingSet.readings.isNotEmpty) {
-          final hydrated = await _readingFlow.hydrateReadingSet(
-            date: date,
-            readings: matchingSet.readings,
-          );
-          if (!mounted || !_loadGuard.isCurrent(request)) return;
-          setState(() {
-            _applyHydratedReadings(hydrated);
-            _isLoading = false;
-          });
-          _restartAnimations();
-          return;
-        }
-      }
+      if (!mounted || !_loadGuard.isCurrent(request)) return;
+      setState(() {
+        _selectedReadingSetIndex = index;
+        _applyHydratedReadings(hydrated);
+        _isLoading = false;
+      });
+      _restartAnimations();
+      return;
     } catch (e) {
-      debugPrint('Error loading celebration readings: $e');
+      debugPrint('Error loading reading choice: $e');
     }
     if (!mounted || !_loadGuard.isCurrent(request)) return;
     setState(() => _isLoading = false);
