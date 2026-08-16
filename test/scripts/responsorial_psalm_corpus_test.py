@@ -14,6 +14,10 @@ sys.path.insert(0, str(ROOT))
 
 from scripts.psalm_sources.models import PsalmEditionText, ReuseStatus, SourceRecord
 from scripts.psalm_sources.bible_databases import extract_bible_selection
+from scripts.psalm_sources.edition_corpus import (
+    build_wide_comparison,
+    write_csv_rows,
+)
 from scripts.psalm_sources.normalize import (
     normalize_reference,
     parse_responsorial_section,
@@ -28,7 +32,7 @@ from scripts.psalm_sources.local_catalogs import (
 )
 from scripts.psalm_sources.modern_psalter import parse_liturgy_page
 from scripts.psalm_sources.compare import classify_difference, redact_for_commit
-from scripts.psalm_sources.models import PsalmSourceRow
+from scripts.psalm_sources.models import PsalmSourceRow, PsalmUsage
 
 
 class PsalmSourceRegistryTest(unittest.TestCase):
@@ -225,6 +229,91 @@ class BibleDatabaseExtractionTest(unittest.TestCase):
             selections[0].normalized_sha256,
             selections[2].normalized_sha256,
         )
+        self.assertIn("queen in gold", selections[0].stanzas[0])
+        self.assertIn("princess arrayed", selections[2].stanzas[0])
+
+
+class PsalmEditionCorpusTest(unittest.TestCase):
+    def _usage(self):
+        return PsalmUsage(
+            usage_id="assumption_day",
+            selection_id="ps45_10_11_12_16",
+            territory="WORLD",
+            date_rule="08-15",
+            celebration_id="assumption",
+            celebration_title="Assumption of the Blessed Virgin Mary",
+            reading_set_kind="proper",
+            reading_set_priority=1,
+        )
+
+    def _edition(self, edition_id, stanzas):
+        return PsalmEditionText(
+            selection_id="ps45_10_11_12_16",
+            edition_id=edition_id,
+            reference_normalized="ps45:10,11,12,16",
+            response_text="The queen stands at your right hand, arrayed in gold.",
+            stanzas=stanzas,
+            source_url=f"repo://{edition_id}",
+        )
+
+    def test_wide_comparison_contains_full_text_from_two_editions(self):
+        comparison = build_wide_comparison(
+            usages=[self._usage()],
+            edition_rows=[
+                self._edition("local_rsvce", ("RSVCE stanza one.", "Stanza two.")),
+                self._edition("local_nabre", ("NABRE stanza one.", "Stanza two.")),
+            ],
+            baseline_edition="local_rsvce",
+        )
+        row = comparison[0]
+        self.assertEqual(row["selection_id"], "ps45_10_11_12_16")
+        self.assertTrue(row["local_rsvce_stanzas_text"])
+        self.assertTrue(row["local_nabre_stanzas_text"])
+        self.assertEqual(row["complete_edition_count"], 2)
+        self.assertEqual(row["comparison_status"], "comparison_ready")
+        self.assertIn(
+            row["local_nabre_difference_class"],
+            {"exact", "punctuation_only", "translation_variant"},
+        )
+
+    def test_csv_round_trip_preserves_multiline_full_text(self):
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        path = Path(directory.name) / "comparison.csv"
+        expected = "First full stanza.\n\nSecond full stanza."
+        write_csv_rows(
+            path,
+            [{"selection_id": "ps45", "local_rsvce_stanzas_text": expected}],
+            fieldnames=("selection_id", "local_rsvce_stanzas_text"),
+        )
+        with path.open(encoding="utf-8", newline="") as handle:
+            actual = next(csv.DictReader(handle))
+        self.assertEqual(actual["local_rsvce_stanzas_text"], expected)
+
+    def test_generated_comparison_has_two_complete_editions_everywhere(self):
+        path = ROOT / "verification/psalm_sources/psalm_text_comparison.csv"
+        with path.open(encoding="utf-8", newline="") as handle:
+            rows = list(csv.DictReader(handle))
+        self.assertGreater(len(rows), 500)
+        self.assertTrue(
+            all(int(row["complete_edition_count"]) >= 2 for row in rows)
+        )
+        self.assertTrue(
+            all(row["comparison_status"] == "comparison_ready" for row in rows)
+        )
+        self.assertTrue(all(row["local_rsvce_stanzas_text"] for row in rows))
+        self.assertTrue(all(row["local_nabre_stanzas_text"] for row in rows))
+
+    def test_known_legacy_reference_corruptions_are_repaired(self):
+        expected = {
+            "Ps 23: 13a, 3b4, 5, 6": "ps23:1-3a,3b-4,5,6",
+            "Ps 114:1-2, 3-4, 5-6, 8-9": "ps116:1-2,3-4,5-6,8-9",
+            "Psalm 27.1, 2, 3, 13-15": "ps27:1,2,3,13-14",
+        }
+        from scripts.psalm_sources.bible_databases import parse_selection
+
+        for raw, normalized in expected.items():
+            self.assertEqual(parse_selection(raw).normalized, normalized)
 
     def test_parser_extracts_response_and_stanzas(self):
         section = """Psalm 45:10.11.12.16 (R.10b)

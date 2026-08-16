@@ -96,6 +96,7 @@ class PsalmUsage:
     sunday_cycle: str = ""
     weekday_cycle: str = ""
     lectionary_number: str = ""
+    response_text: str = ""
 
 
 @dataclass(frozen=True)

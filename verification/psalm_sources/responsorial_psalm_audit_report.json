@@ -1,30 +1,12 @@
 {
-  "conflict_count": 122,
-  "difference_classes": [
-    "exact",
-    "missing_text",
-    "punctuation_only",
-    "response_only",
-    "selection_mismatch",
-    "translation_variant"
-  ],
-  "display_eligible_count": 0,
-  "malformed_row_count": 682,
-  "modern_psalter_fixture": {
-    "lectionary_number": "118",
-    "license_notice": "ICEL Lectionary response and Gospel verse copyright notice",
-    "reuse_status": "comparison_only",
-    "source_id": "modern_psalter_us",
-    "source_url": "https://www.modernpsalter.com/Lectionary.aspx?n=118",
-    "territory": "US,PH",
-    "title": "20th Sunday in Ordinary Time (Year A) Psalms for 20th Sunday in Ordinary Time (Year A) World |"
+  "comparison_ready_count": 549,
+  "complete_selection_count_by_edition": {
+    "local_nabre": 549,
+    "local_rsvce": 549,
+    "nigeria_365_firestore": 2
   },
-  "nigeria_normalized_unique_count": 345,
-  "nigeria_raw_unique_count": 362,
-  "nigeria_selection_unique_count": 328,
-  "nigeria_usage_count": 372,
+  "insufficient_edition_count": 0,
   "retrieved_at": "2026-08-16",
-  "row_count": 2318,
-  "source_count": 11,
-  "unmatched_count": 1861
+  "selection_count": 549,
+  "usage_count": 1948
 }

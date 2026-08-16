@@ -11,8 +11,27 @@ import tempfile
 from typing import Iterable
 
 from psalm_sources.compare import compare_rows, redact_for_commit
+from psalm_sources.bible_databases import (
+    extract_bible_selections,
+    parse_selection,
+    selection_id_for,
+)
+from psalm_sources.edition_corpus import (
+    EDITION_TEXT_FIELDS,
+    USAGE_FIELDS,
+    build_wide_comparison,
+    edition_text_rows,
+    usage_rows,
+    wide_fieldnames,
+    write_csv_rows,
+)
 from psalm_sources.local_catalogs import load_local_psalm_rows
-from psalm_sources.models import PsalmSourceRow, SourceRecord
+from psalm_sources.models import (
+    PsalmEditionText,
+    PsalmSourceRow,
+    PsalmUsage,
+    SourceRecord,
+)
 from psalm_sources.modern_psalter import parse_liturgy_page
 from psalm_sources.nigeria_365 import extract_rows, fetch_live_rows
 
@@ -263,11 +282,156 @@ def _write_report(
     )
 
 
+def _full_text_corpus(
+    rows: list[PsalmSourceRow],
+    *,
+    douay_db: Path | None = None,
+) -> tuple[list[PsalmUsage], list[PsalmEditionText]]:
+    usages: list[PsalmUsage] = []
+    reference_by_selection: dict[str, tuple[str, str]] = {}
+    seen_usages: set[tuple[str, str, str]] = set()
+
+    for row in rows:
+        parsed = parse_selection(row.reference_raw)
+        selection_id = selection_id_for(parsed.normalized)
+        usage_key = (row.usage_id, selection_id, row.source_id)
+        if usage_key not in seen_usages:
+            usages.append(
+                PsalmUsage(
+                    usage_id=row.usage_id,
+                    selection_id=selection_id,
+                    territory=row.territory or "WORLD",
+                    date_rule=row.date_rule,
+                    celebration_id=row.celebration_id,
+                    celebration_title=row.celebration_title,
+                    reading_set_kind=row.reading_set_kind,
+                    reading_set_priority=row.reading_set_priority,
+                    sunday_cycle=row.sunday_cycle,
+                    weekday_cycle=row.weekday_cycle,
+                    lectionary_number=row.lectionary_number,
+                    response_text=row.response_raw,
+                )
+            )
+            seen_usages.add(usage_key)
+        reference_by_selection.setdefault(
+            selection_id,
+            (row.reference_raw, row.response_raw),
+        )
+
+    selections = [
+        reference_by_selection[selection_id]
+        for selection_id in sorted(reference_by_selection)
+    ]
+    edition_rows = extract_bible_selections(
+        ROOT / "assets/rsvce.db",
+        edition_id="local_rsvce",
+        selections=selections,
+        source_url="repo://assets/rsvce.db",
+    )
+    edition_rows.extend(
+        extract_bible_selections(
+            ROOT / "assets/nabre.db",
+            edition_id="local_nabre",
+            selections=selections,
+            source_url="repo://assets/nabre.db",
+        )
+    )
+    if douay_db is not None:
+        edition_rows.extend(
+            extract_bible_selections(
+                douay_db,
+                edition_id="douay_rheims",
+                selections=selections,
+                source_url=str(douay_db),
+            )
+        )
+
+    for row in rows:
+        if row.source_id != "nigeria_365_firestore" or not row.stanzas_raw.strip():
+            continue
+        parsed = parse_selection(row.reference_raw)
+        edition_rows.append(
+            PsalmEditionText(
+                selection_id=selection_id_for(parsed.normalized),
+                edition_id="nigeria_365_firestore",
+                reference_normalized=parsed.normalized,
+                response_text=row.response_raw,
+                stanzas=tuple(
+                    value.strip()
+                    for value in re.split(r"\n\s*\n", row.stanzas_raw)
+                    if value.strip()
+                ),
+                source_url=row.source_url,
+                source_edition=row.source_edition,
+                territory=row.territory or "NG",
+                coverage_status="partial",
+            )
+        )
+    return usages, edition_rows
+
+
+def _write_full_text_outputs(
+    output_dir: Path,
+    *,
+    rows: list[PsalmSourceRow],
+    douay_db: Path | None,
+    retrieved_at: str,
+) -> None:
+    usages, editions = _full_text_corpus(rows, douay_db=douay_db)
+    comparison = build_wide_comparison(
+        usages,
+        editions,
+        baseline_edition="local_rsvce",
+    )
+    write_csv_rows(
+        output_dir / "psalm_text_editions.csv",
+        edition_text_rows(editions),
+        fieldnames=EDITION_TEXT_FIELDS,
+    )
+    write_csv_rows(
+        output_dir / "psalm_text_comparison.csv",
+        comparison,
+        fieldnames=wide_fieldnames(),
+    )
+    write_csv_rows(
+        output_dir / "psalm_usage_map.csv",
+        usage_rows(usages),
+        fieldnames=USAGE_FIELDS,
+    )
+    counts = {
+        edition_id: sum(
+            1
+            for row in editions
+            if row.edition_id == edition_id and row.stanzas_text.strip()
+        )
+        for edition_id in sorted({row.edition_id for row in editions})
+    }
+    report = {
+        "retrieved_at": retrieved_at,
+        "selection_count": len(comparison),
+        "usage_count": len(usages),
+        "comparison_ready_count": sum(
+            row["comparison_status"] == "comparison_ready" for row in comparison
+        ),
+        "insufficient_edition_count": sum(
+            row["comparison_status"] == "insufficient_editions"
+            for row in comparison
+        ),
+        "complete_selection_count_by_edition": counts,
+    }
+    _atomic_text(
+        output_dir / "responsorial_psalm_audit_report.json",
+        json.dumps(report, indent=2, sort_keys=True) + "\n",
+    )
+
+
 def build(
     *,
     output_dir: Path,
     refresh_live: bool,
     retrieved_at: str,
+    full_text_output: Path | None = None,
+    douay_db: Path | None = None,
 ) -> None:
     records = _registry()
     rows = load_local_psalm_rows(ROOT, retrieved_at=retrieved_at)
@@ -302,20 +466,36 @@ def build(
         modern_metadata=modern_metadata,
         retrieved_at=retrieved_at,
     )
+    if full_text_output is not None:
+        _write_full_text_outputs(
+            full_text_output,
+            rows=rows,
+            douay_db=douay_db,
+            retrieved_at=retrieved_at,
+        )
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--fixtures-only", action="store_true")
+    mode.add_argument("--fixture-mode", action="store_true")
     mode.add_argument("--refresh-live", action="store_true")
-    parser.add_argument("--output-dir", required=True, type=Path)
-    parser.add_argument("--retrieved-at", required=True)
+    parser.add_argument("--output-dir", type=Path)
+    parser.add_argument("--full-text-output", type=Path)
+    parser.add_argument("--douay-db", type=Path)
+    parser.add_argument("--external-pack-dir", type=Path)
+    parser.add_argument("--retrieved-at", default="2026-08-16")
     args = parser.parse_args()
+    output_dir = args.output_dir or args.full_text_output
+    if output_dir is None:
+        parser.error("one of --output-dir or --full-text-output is required")
     build(
-        output_dir=args.output_dir,
+        output_dir=output_dir,
         refresh_live=args.refresh_live,
         retrieved_at=args.retrieved_at,
+        full_text_output=args.full_text_output,
+        douay_db=args.douay_db,
     )
 
 
