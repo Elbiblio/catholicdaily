@@ -16,6 +16,11 @@ from scripts.psalm_sources.nigeria_365 import (
     extract_rows,
     iter_firestore_documents,
 )
+from scripts.psalm_sources.local_catalogs import (
+    load_local_psalm_rows,
+    validate_local_row,
+)
+from scripts.psalm_sources.modern_psalter import parse_liturgy_page
 
 
 class PsalmSourceRegistryTest(unittest.TestCase):
@@ -126,6 +131,42 @@ class Nigeria365ExtractorTest(unittest.TestCase):
         )
         self.assertEqual(calls, [None, "next"])
         self.assertEqual([doc["name"] for doc in docs], ["one", "two"])
+
+
+class LocalPsalmCatalogTest(unittest.TestCase):
+    def test_acclamation_in_response_column_is_rejected(self):
+        errors = validate_local_row(
+            {
+                "Full Reference": "Ps 122:1-2, 3-4",
+                "Refrain Text RSVCE": "Come, Wisdom of our God Most High",
+                "Acclamation Ref": "Luke 3:4, 6",
+            }
+        )
+        self.assertIn("response_contains_acclamation", errors)
+
+    def test_all_three_local_catalogs_are_inventoried(self):
+        rows = load_local_psalm_rows(ROOT)
+        self.assertTrue(
+            {
+                "local_standard_lectionary",
+                "local_sunday_psalms",
+                "local_weekday_psalms",
+            }.issubset({row.source_id for row in rows})
+        )
+
+
+class ModernPsalterTest(unittest.TestCase):
+    def test_fixture_is_scoped_to_us_philippines(self):
+        html = (
+            ROOT / "test/fixtures/psalm_sources/modern_psalter_118.html"
+        ).read_text(encoding="utf-8")
+        row = parse_liturgy_page(
+            html,
+            "https://www.modernpsalter.com/Lectionary.aspx?n=118",
+        )
+        self.assertEqual(row["territory"], "US,PH")
+        self.assertEqual(row["lectionary_number"], "118")
+        self.assertEqual(row["reuse_status"], "comparison_only")
 
 
 if __name__ == "__main__":
