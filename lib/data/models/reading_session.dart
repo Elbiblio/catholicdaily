@@ -1,10 +1,12 @@
 import 'daily_reading.dart';
 import 'navigable_item.dart';
 import '../services/improved_liturgical_calendar_service.dart';
+import 'resolved_responsorial_psalm.dart';
 
 class ReadingSession {
   final List<DailyReading> readings;
   final Map<String, String> readingTexts;
+  final Map<String, ResolvedResponsorialPsalm> psalmSources;
   final int currentIndex;
   final List<NavigableItem> navigableItems;
   final int navigableIndex;
@@ -13,6 +15,7 @@ class ReadingSession {
   const ReadingSession({
     required this.readings,
     required this.readingTexts,
+    this.psalmSources = const <String, ResolvedResponsorialPsalm>{},
     required this.currentIndex,
     this.navigableItems = const [],
     this.navigableIndex = 0,
@@ -98,6 +101,7 @@ class ReadingSession {
   ReadingSession copyWith({
     List<DailyReading>? readings,
     Map<String, String>? readingTexts,
+    Map<String, ResolvedResponsorialPsalm>? psalmSources,
     int? currentIndex,
     List<NavigableItem>? navigableItems,
     int? navigableIndex,
@@ -106,6 +110,7 @@ class ReadingSession {
     return ReadingSession(
       readings: readings ?? this.readings,
       readingTexts: readingTexts ?? this.readingTexts,
+      psalmSources: psalmSources ?? this.psalmSources,
       currentIndex: currentIndex ?? this.currentIndex,
       navigableItems: navigableItems ?? this.navigableItems,
       navigableIndex: navigableIndex ?? this.navigableIndex,

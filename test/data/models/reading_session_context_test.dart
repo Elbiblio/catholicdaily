@@ -1,6 +1,7 @@
 import 'package:catholic_daily/data/models/daily_reading.dart';
 import 'package:catholic_daily/data/models/navigable_item.dart';
 import 'package:catholic_daily/data/models/reading_session.dart';
+import 'package:catholic_daily/data/models/resolved_responsorial_psalm.dart';
 import 'package:catholic_daily/data/services/improved_liturgical_calendar_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -77,5 +78,40 @@ void main() {
     expect(selected.currentIndex, 2);
     expect(selected.navigableIndex, 2);
     expect(selected.currentReading?.reading, 'Gospel');
+  });
+
+  test('copyWith and selection retain responsorial psalm provenance', () {
+    const source = ResolvedResponsorialPsalm(
+      text: 'Psalm text',
+      responseText: 'Response',
+      requestedEditionId: 'local_nabre',
+      actualEditionId: 'local_nabre',
+      actualEditionName: 'NABRE',
+      referenceNormalized: 'ps45:10,11,12,16',
+      fallbackReason: PsalmFallbackReason.none,
+      sourceUrl: 'repo://assets/nabre.db',
+    );
+    final reading = DailyReading(
+      reading: 'Ps 45:10, 11, 12, 16',
+      position: 'Responsorial Psalm',
+      date: DateTime(2026, 8, 15),
+    );
+    final session = ReadingSession(
+      readings: <DailyReading>[reading],
+      readingTexts: const <String, String>{},
+      psalmSources: const <String, ResolvedResponsorialPsalm>{
+        'Ps 45:10, 11, 12, 16': source,
+      },
+      currentIndex: 0,
+    );
+
+    expect(
+      session.selectReading(0).psalmSources[reading.reading]?.actualEditionId,
+      'local_nabre',
+    );
+    expect(
+      session.copyWith(currentIndex: 0).psalmSources,
+      same(session.psalmSources),
+    );
   });
 }

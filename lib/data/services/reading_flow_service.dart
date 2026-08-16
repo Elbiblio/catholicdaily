@@ -1,6 +1,7 @@
 import '../models/daily_reading.dart';
 import '../models/reading_session.dart';
 import '../models/navigable_item.dart';
+import '../models/resolved_responsorial_psalm.dart';
 import '../../ui/utils/reading_title_formatter.dart';
 import 'bible_version_preference.dart';
 import 'liturgical_region_preference_service.dart';
@@ -15,12 +16,14 @@ class HydratedReadingSet {
   final Map<String, String> readingTitles;
   final Map<String, String> readingPreviews;
   final Map<String, String> readingTexts;
+  final Map<String, ResolvedResponsorialPsalm> psalmSources;
 
   const HydratedReadingSet({
     required this.readings,
     required this.readingTitles,
     required this.readingPreviews,
     required this.readingTexts,
+    this.psalmSources = const <String, ResolvedResponsorialPsalm>{},
   });
 }
 
@@ -47,6 +50,7 @@ class ReadingFlowService extends BaseService<ReadingFlowService> {
     final titles = <String, String>{};
     final previews = <String, String>{};
     final texts = <String, String>{};
+    final psalmSources = <String, ResolvedResponsorialPsalm>{};
     final regionPrefs = await LiturgicalRegionPreferenceService.getInstance();
     final versionPrefs = await BibleVersionPreference.getInstance();
 
@@ -57,16 +61,16 @@ class ReadingFlowService extends BaseService<ReadingFlowService> {
         );
         String? rawText;
         if (isResponsorial) {
-          rawText = await _readingsService.getReadingText(
+          final resolved = await _readingsService.resolveResponsorialPsalm(
             reading.reading,
             psalmResponse: reading.psalmResponse,
-            incipit: reading.incipit,
-            readingType: reading.position,
             date: date,
             territory: regionPrefs.currentRegion.code,
             celebrationId: _celebrationId(reading),
             readingSetKind: _readingSetKind(reading),
           );
+          rawText = resolved.text;
+          psalmSources[reading.reading] = resolved;
         } else {
           rawText = await _localExtractText.lookup(
             date: date,
@@ -109,6 +113,7 @@ class ReadingFlowService extends BaseService<ReadingFlowService> {
       readingTitles: titles,
       readingPreviews: previews,
       readingTexts: texts,
+      psalmSources: psalmSources,
     );
   }
 
@@ -148,6 +153,8 @@ class ReadingFlowService extends BaseService<ReadingFlowService> {
     required List<DailyReading> readings,
     required Map<String, String> readingTexts,
     required int selectedIndex,
+    Map<String, ResolvedResponsorialPsalm> psalmSources =
+        const <String, ResolvedResponsorialPsalm>{},
     List<NavigableItem>? navigableItems,
     int? navigableIndex,
     LiturgicalDay? liturgicalDay,
@@ -155,6 +162,7 @@ class ReadingFlowService extends BaseService<ReadingFlowService> {
     return ReadingSession(
       readings: List<DailyReading>.from(readings),
       readingTexts: Map<String, String>.from(readingTexts),
+      psalmSources: Map<String, ResolvedResponsorialPsalm>.from(psalmSources),
       currentIndex: selectedIndex,
       navigableItems:
           navigableItems ??

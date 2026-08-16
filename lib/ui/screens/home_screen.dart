@@ -140,6 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _readingSession = _readingFlow.buildSession(
         readings: hydrated.readings,
         readingTexts: hydrated.readingTexts,
+        psalmSources: hydrated.psalmSources,
         selectedIndex: 0,
         navigableItems: navigableItems,
         navigableIndex: 0,
