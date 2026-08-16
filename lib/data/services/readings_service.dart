@@ -6,6 +6,7 @@ import 'readings_backend.dart';
 import 'readings_backend_io.dart'
     if (dart.library.html) 'readings_backend_web.dart'
     as backend_factory;
+import 'responsorial_psalm_text_catalog_service.dart';
 
 /// Canonical service for readings + Bible text across all supported platforms.
 class ReadingsService extends BaseService<ReadingsService> {
@@ -18,6 +19,8 @@ class ReadingsService extends BaseService<ReadingsService> {
   ReadingsService._();
 
   final ReadingsBackend _backend = backend_factory.createReadingsBackend();
+  final ResponsorialPsalmTextCatalogService _psalmTexts =
+      ResponsorialPsalmTextCatalogService.instance;
 
   Future<List<DailyReading>> getReadingsForDate(DateTime date) async {
     try {
@@ -33,8 +36,28 @@ class ReadingsService extends BaseService<ReadingsService> {
     String? psalmResponse,
     String? incipit,
     String? readingType,
+    DateTime? date,
+    String? territory,
+    String celebrationId = '',
+    String readingSetKind = '',
+    String lectionaryNumber = '',
   }) async {
     try {
+      final isResponsorial = (readingType ?? '').toLowerCase().contains(
+        'responsorial psalm',
+      );
+      if (isResponsorial && date != null && territory != null) {
+        final entry = await _psalmTexts.lookup(
+          date: date,
+          territory: territory,
+          reference: reference,
+          response: psalmResponse ?? '',
+          celebrationId: celebrationId,
+          readingSetKind: readingSetKind,
+          lectionaryNumber: lectionaryNumber,
+        );
+        if (entry != null) return entry.formattedText;
+      }
       return await _backend.getReadingText(
         reference,
         psalmResponse: psalmResponse,

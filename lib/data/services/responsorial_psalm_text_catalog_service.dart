@@ -13,6 +13,10 @@ class ResponsorialPsalmTextCatalogService
 
   List<ResponsorialPsalmTextEntry>? _entries;
 
+  void setEntriesForTesting(List<ResponsorialPsalmTextEntry>? entries) {
+    _entries = entries == null ? null : List.unmodifiable(entries);
+  }
+
   Future<ResponsorialPsalmTextEntry?> lookup({
     required DateTime date,
     required String territory,

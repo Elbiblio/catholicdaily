@@ -6,6 +6,7 @@ import '../../data/models/daily_reading.dart';
 import '../../data/models/navigable_item.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
 import '../../data/services/readings_service.dart';
+import '../../data/services/liturgical_region_preference_service.dart';
 import '../../data/services/bible_version_preference.dart';
 import '../../data/services/incipit_preference_service.dart';
 import '../../data/services/scroll_position_service.dart';
@@ -1428,11 +1429,15 @@ class _ReadingScreenState extends State<ReadingScreen> {
           chapter: chapter,
         );
       } else {
+        final regionPrefs =
+            await LiturgicalRegionPreferenceService.getInstance();
         newContent = await readingsService.getReadingText(
           widget.reference,
           psalmResponse: widget.readingData?.psalmResponse,
           incipit: widget.readingData?.incipit,
           readingType: widget.readingData?.position,
+          date: widget.readingData?.date,
+          territory: regionPrefs.currentRegion.code,
         );
       }
 

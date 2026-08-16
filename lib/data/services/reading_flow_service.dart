@@ -52,19 +52,36 @@ class ReadingFlowService extends BaseService<ReadingFlowService> {
 
     await Future.wait(
       enrichedReadings.map((reading) async {
-        var rawText = await _localExtractText.lookup(
-          date: date,
-          regionCode: regionPrefs.currentRegion.code,
-          bibleVersionId: versionPrefs.currentDbName,
-          reference: reading.reading,
-          position: reading.position,
+        final isResponsorial = (reading.position ?? '').toLowerCase().contains(
+          'responsorial psalm',
         );
-        rawText ??= await _readingsService.getReadingText(
-          reading.reading,
-          psalmResponse: reading.psalmResponse,
-          incipit: reading.incipit,
-          readingType: reading.position,
-        );
+        String? rawText;
+        if (isResponsorial) {
+          rawText = await _readingsService.getReadingText(
+            reading.reading,
+            psalmResponse: reading.psalmResponse,
+            incipit: reading.incipit,
+            readingType: reading.position,
+            date: date,
+            territory: regionPrefs.currentRegion.code,
+            celebrationId: _celebrationId(reading),
+            readingSetKind: _readingSetKind(reading),
+          );
+        } else {
+          rawText = await _localExtractText.lookup(
+            date: date,
+            regionCode: regionPrefs.currentRegion.code,
+            bibleVersionId: versionPrefs.currentDbName,
+            reference: reading.reading,
+            position: reading.position,
+          );
+          rawText ??= await _readingsService.getReadingText(
+            reading.reading,
+            psalmResponse: reading.psalmResponse,
+            incipit: reading.incipit,
+            readingType: reading.position,
+          );
+        }
         final openingAdaptation = await _localExtractText.adaptOpening(
           date: date,
           regionCode: regionPrefs.currentRegion.code,
@@ -95,13 +112,36 @@ class ReadingFlowService extends BaseService<ReadingFlowService> {
     );
   }
 
-  Future<String> getReadingText(DailyReading reading) {
+  Future<String> getReadingText(DailyReading reading) async {
+    final regionPrefs = await LiturgicalRegionPreferenceService.getInstance();
     return _readingsService.getReadingText(
       reading.reading,
       psalmResponse: reading.psalmResponse,
       incipit: reading.incipit,
       readingType: reading.position,
+      date: reading.date,
+      territory: regionPrefs.currentRegion.code,
+      celebrationId: _celebrationId(reading),
+      readingSetKind: _readingSetKind(reading),
     );
+  }
+
+  String _celebrationId(DailyReading reading) {
+    final source = reading.source ?? '';
+    final match = RegExp(r'(?:celebration|proper):([^|;]+)').firstMatch(source);
+    final explicit = match?.group(1)?.trim();
+    if (explicit != null && explicit.isNotEmpty) return explicit;
+    return (reading.feast ?? '')
+        .toLowerCase()
+        .replaceAll(RegExp(r'[^a-z0-9]+'), '_')
+        .replaceAll(RegExp(r'^_+|_+$'), '');
+  }
+
+  String _readingSetKind(DailyReading reading) {
+    final position = (reading.position ?? '').toLowerCase();
+    if (position.contains('vigil')) return 'vigil';
+    if ((reading.source ?? '').contains('weekday')) return 'weekday';
+    return 'celebration';
   }
 
   ReadingSession buildSession({
