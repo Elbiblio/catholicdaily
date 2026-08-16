@@ -95,17 +95,9 @@ class LectionaryPsalmCatalogService
     );
     if (match == null) return null;
 
-    // Try version-specific response first
-    String? response;
-    if (bibleVersion == 'rsvce' && match.refrainTextRsvce.isNotEmpty) {
-      response = match.refrainTextRsvce.trim();
-    } else if (bibleVersion == 'nabre' && match.refrainTextNabre.isNotEmpty) {
-      response = match.refrainTextNabre.trim();
-    } else {
-      // Fallback to generic response
-      response = match.refrainText.trim();
-    }
-
+    // The response belongs to the lectionary selection, not the user's Bible
+    // preference. [bibleVersion] remains temporarily for API compatibility.
+    final response = match.refrainText.trim();
     if (response.isEmpty) {
       return null;
     }

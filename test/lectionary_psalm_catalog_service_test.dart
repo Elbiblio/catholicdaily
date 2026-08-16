@@ -64,37 +64,42 @@ void main() {
   });
 
   group('LectionaryPsalmCatalogService - Response Resolution', () {
-    test(
-      'resolvePsalmResponseFromEntries uses bible version parameter',
-      () async {
-        final date = DateTime(2024, 12, 1);
-        final entries = await service.getEntriesForDate(date);
+    test('liturgical response is independent of Bible version', () async {
+      final psalmRef = 'Psalm 122:1-2.3-4.5-6.7-8.9 (R. cf. 1)';
+      const entries = <LectionaryPsalmCatalogEntry>[
+        LectionaryPsalmCatalogEntry(
+          season: 'Advent',
+          week: '1',
+          day: 'Sunday',
+          weekdayCycle: 'I/II',
+          sundayCycle: 'A',
+          fullReference: 'Psalm 122:1-2.3-4.5-6.7-8.9 (R. cf. 1)',
+          refrainText: 'Generic liturgical response.',
+          refrainTextRsvce: 'RSVCE-labelled response.',
+          refrainTextNabre: 'NABRE-labelled response.',
+          acclamationRef: '',
+          acclamationText: '',
+          lectionaryNumber: '1',
+        ),
+      ];
 
-        if (entries.isEmpty) {
-          return; // Skip if no entries
-        }
+      // Test with RSVCE
+      final rsvceResponse = service.resolvePsalmResponseFromEntries(
+        entries: entries,
+        psalmReference: psalmRef,
+        bibleVersion: 'rsvce',
+      );
 
-        final psalmRef = 'Psalm 122:1-2.3-4.5-6.7-8.9 (R. cf. 1)';
+      // Test with NABRE
+      final nabreResponse = service.resolvePsalmResponseFromEntries(
+        entries: entries,
+        psalmReference: psalmRef,
+        bibleVersion: 'nabre',
+      );
 
-        // Test with RSVCE
-        final rsvceResponse = service.resolvePsalmResponseFromEntries(
-          entries: entries,
-          psalmReference: psalmRef,
-          bibleVersion: 'rsvce',
-        );
-
-        // Test with NABRE
-        final nabreResponse = service.resolvePsalmResponseFromEntries(
-          entries: entries,
-          psalmReference: psalmRef,
-          bibleVersion: 'nabre',
-        );
-
-        // Both should return something (fallback to generic if version-specific not available)
-        expect(rsvceResponse, isNotNull);
-        expect(nabreResponse, isNotNull);
-      },
-    );
+      expect(rsvceResponse, isNotEmpty);
+      expect(nabreResponse, rsvceResponse);
+    });
 
     test(
       'resolvePsalmResponseFromEntries falls back to generic when version-specific empty',

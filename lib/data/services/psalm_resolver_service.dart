@@ -1,45 +1,39 @@
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 import '../models/daily_reading.dart';
 import 'lectionary_psalm_catalog_service.dart';
 import 'readings_service.dart';
 import 'gospel_acclamation_service.dart';
 import 'ultimate_gospel_acclamation_mapper.dart';
 import 'responsorial_psalm_mapper.dart';
-import 'bible_version_preference.dart';
 import 'base_service.dart';
 
-/// On-demand psalm response resolver that fetches from USCCB when missing
+/// Deterministic offline resolver for liturgical psalm responses.
 class PsalmResolverService extends BaseService<PsalmResolverService> {
-  static PsalmResolverService get instance => BaseService.init(() => PsalmResolverService._());
-  
+  static PsalmResolverService get instance =>
+      BaseService.init(() => PsalmResolverService._());
+
   PsalmResolverService._();
 
   final Map<String, String> _cache = {};
-  final Set<String> _pendingFetches = {};
   final ReadingsService _readingsService = ReadingsService.instance;
   final GospelAcclamationService _gospelAcclamationService =
       GospelAcclamationService();
-  final UltimateGospelAcclamationMapper _mapper = UltimateGospelAcclamationMapper.instance;
+  final UltimateGospelAcclamationMapper _mapper =
+      UltimateGospelAcclamationMapper.instance;
   final ResponsorialPsalmMapper _psalmMapper = ResponsorialPsalmMapper.instance;
   final LectionaryPsalmCatalogService _catalogService =
       LectionaryPsalmCatalogService.instance;
-  BibleVersionPreference? _bibleVersionPreference;
 
   /// Resolve psalm response for a given date and psalm reference
-  /// Returns cached value if available, otherwise fetches from USCCB
+  /// Returns a catalog or offline-mapped value without network mutation.
   Future<String?> resolvePsalmResponse({
     required DateTime date,
     required String psalmReference,
     String? positionLabel,
     int? psalmSequence,
   }) async {
-    // Get bible version preference first (needed for cache key)
-    _bibleVersionPreference ??= await BibleVersionPreference.getInstance();
-    final bibleVersion = _bibleVersionPreference!.currentDbName;
-
-    // Include Bible version in cache key so different versions have separate caches
-    final cacheKey = '${date.toIso8601String().split('T')[0]}|psalm|$psalmReference|$bibleVersion';
+    final cacheKey =
+        '${date.toIso8601String().split('T')[0]}|psalm|$psalmReference';
 
     // Check memory cache first
     if (_cache.containsKey(cacheKey)) {
@@ -52,7 +46,6 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
       psalmReference: psalmReference,
       positionLabel: positionLabel,
       psalmSequence: psalmSequence,
-      bibleVersion: bibleVersion,
     );
     if (catalogResponse != null && catalogResponse.trim().isNotEmpty) {
       _cache[cacheKey] = catalogResponse;
@@ -69,12 +62,6 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
       return offlineFallback;
     }
 
-    // Fetch from USCCB if not in database and not already pending
-    if (!_pendingFetches.contains(cacheKey)) {
-      _pendingFetches.add(cacheKey);
-      _fetchAndUpdatePsalmResponse(date, psalmReference, cacheKey);
-    }
-
     return null;
   }
 
@@ -85,10 +72,6 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
     final enriched = <DailyReading>[];
     final catalogEntries = await _catalogService.getEntriesForDate(date);
     var psalmOrdinal = 0;
-
-    // Get bible version preference
-    _bibleVersionPreference ??= await BibleVersionPreference.getInstance();
-    final bibleVersion = _bibleVersionPreference!.currentDbName;
 
     for (final reading in readings) {
       final position = (reading.position ?? '').toLowerCase();
@@ -101,8 +84,10 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
 
       if (position.contains('psalm')) {
         psalmOrdinal += 1;
-        debugPrint('Psalm processing: ref=${reading.reading}, feast=${reading.feast}, hasExplicit=$hasExplicitPsalmResponse, initialResponse=$psalmResponse');
-        
+        debugPrint(
+          'Psalm processing: ref=${reading.reading}, feast=${reading.feast}, hasExplicit=$hasExplicitPsalmResponse, initialResponse=$psalmResponse',
+        );
+
         // For feast days (reading.feast is set), use the hardcoded response
         // Feast days have proper readings with their own psalm responses
         // Do NOT enrich from catalog - feast day responses are authoritative
@@ -112,21 +97,20 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
         } else {
           // Ferial day: try catalog enrichment to get R notation
           debugPrint('FERIAL DAY - trying catalog enrichment');
-          final catalogResponse = _catalogService.resolvePsalmResponseFromEntries(
-            entries: catalogEntries,
-            psalmReference: reading.reading,
-            positionLabel: reading.position,
-            psalmSequence: psalmOrdinal,
-            bibleVersion: bibleVersion,
-          );
+          final catalogResponse = _catalogService
+              .resolvePsalmResponseFromEntries(
+                entries: catalogEntries,
+                psalmReference: reading.reading,
+                positionLabel: reading.position,
+                psalmSequence: psalmOrdinal,
+              );
 
           if (catalogResponse != null && catalogResponse.trim().isNotEmpty) {
             // Use catalog response (has R notation) instead of hardcoded response
             debugPrint('Catalog response found: $catalogResponse');
             psalmResponse = catalogResponse.trim();
           } else if (!hasExplicitPsalmResponse) {
-            // Fallback to USCCB if no catalog response and no hardcoded response
-            debugPrint('No catalog response, falling back to USCCB');
+            debugPrint('No catalog response, using deterministic offline map');
             psalmResponse = await resolvePsalmResponse(
               date: date,
               psalmReference: reading.reading,
@@ -140,22 +124,27 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
 
       if (position.contains('gospel')) {
         if (!hasExplicitGospelAcclamation) {
-          final catalogAcclamation = _catalogService.resolveGospelAcclamationFromEntries(
-            entries: catalogEntries,
-            gospelReference: reading.reading,
-            positionLabel: reading.position,
-          );
+          final catalogAcclamation = _catalogService
+              .resolveGospelAcclamationFromEntries(
+                entries: catalogEntries,
+                gospelReference: reading.reading,
+                positionLabel: reading.position,
+              );
 
-          if (catalogAcclamation != null && catalogAcclamation.trim().isNotEmpty) {
+          if (catalogAcclamation != null &&
+              catalogAcclamation.trim().isNotEmpty) {
             gospelAcclamation = catalogAcclamation.trim();
-          } else if (gospelAcclamation == null || gospelAcclamation.trim().isEmpty) {
+          } else if (gospelAcclamation == null ||
+              gospelAcclamation.trim().isEmpty) {
             gospelAcclamation = await resolveGospelAcclamation(
               date: date,
               gospelReference: reading.reading,
               positionLabel: reading.position,
             );
           }
-        } else if (gospelAcclamation.trim().startsWith('Reading text unavailable')) {
+        } else if (gospelAcclamation.trim().startsWith(
+          'Reading text unavailable',
+        )) {
           gospelAcclamation = await resolveGospelAcclamation(
             date: date,
             gospelReference: reading.reading,
@@ -165,10 +154,11 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
         final trimmedAcclamation = gospelAcclamation?.trim();
         if (trimmedAcclamation != null &&
             !trimmedAcclamation.startsWith('Reading text unavailable') &&
-            _gospelAcclamationService.shouldResolveReference(trimmedAcclamation)) {
-          gospelAcclamation = await _gospelAcclamationService.getAcclamationText(
-            trimmedAcclamation,
-          );
+            _gospelAcclamationService.shouldResolveReference(
+              trimmedAcclamation,
+            )) {
+          gospelAcclamation = await _gospelAcclamationService
+              .getAcclamationText(trimmedAcclamation);
         }
       }
 
@@ -195,108 +185,6 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
     );
   }
 
-  /// Background fetch from USCCB and cache in memory only
-  Future<void> _fetchAndUpdatePsalmResponse(
-    DateTime date,
-    String psalmReference,
-    String cacheKey,
-  ) async {
-    try {
-      final response = await _fetchFromUSCCB(date);
-      if (response != null && response.isNotEmpty) {
-        // Update cache only (not database)
-        _cache[cacheKey] = response;
-        
-        debugPrint('✓ Fetched psalm response for $date: ${response.substring(0, response.length > 50 ? 50 : response.length)}...');
-      }
-    } catch (e) {
-      debugPrint('Error fetching psalm response for $date: $e');
-    } finally {
-      _pendingFetches.remove(cacheKey);
-    }
-  }
-
-  /// Fetch psalm response from USCCB daily readings page
-  Future<String?> _fetchFromUSCCB(DateTime date) async {
-    try {
-      final url = 'https://bible.usccb.org/bible/readings/${_formatDate(date)}.cfm';
-      final response = await http.get(
-        Uri.parse(url),
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (compatible; CatholicDailyApp/1.0)',
-        },
-      ).timeout(const Duration(seconds: 15));
-
-      if (response.statusCode != 200) {
-        return null;
-      }
-
-      return _extractPsalmResponse(response.body);
-    } catch (e) {
-      debugPrint('USCCB fetch error: $e');
-      return null;
-    }
-  }
-
-  /// Extract psalm response from USCCB HTML
-  String? _extractPsalmResponse(String html) {
-    // Look for "Responsorial Psalm" section
-    final psalmMatch = RegExp(
-      r'Responsorial Psalm.*?(?=Reading II|Gospel|Alleluia|Verse before the Gospel|$)',
-      caseSensitive: false,
-      dotAll: true,
-    ).firstMatch(html);
-
-    if (psalmMatch == null) return null;
-
-    final psalmSection = psalmMatch.group(0) ?? '';
-
-    // Extract response patterns: R. (...) text or R. text
-    final patterns = [
-      RegExp(r'R\.\s*\([^)]*\)\s*(.+?)(?=<|R\.|$)', caseSensitive: false),
-      RegExp(r'R\.\s*(.+?)(?=<|R\.|$)', caseSensitive: false),
-      RegExp(r'Resp?\.\s*(.+?)(?=<|$)', caseSensitive: false),
-    ];
-
-    for (final pattern in patterns) {
-      final match = pattern.firstMatch(psalmSection);
-      if (match != null) {
-        final response = _cleanHtml(match.group(1) ?? '');
-        if (response.isNotEmpty && response.length > 5) {
-          return response;
-        }
-      }
-    }
-
-    return null;
-  }
-
-  /// Clean HTML tags and entities from text
-  String _cleanHtml(String html) {
-    var text = html
-        .replaceAll(RegExp(r'<[^>]+>'), ' ')
-        .replaceAll('&nbsp;', ' ')
-        .replaceAll('&amp;', '&')
-        .replaceAll('&lt;', '<')
-        .replaceAll('&gt;', '>')
-        .replaceAll('&quot;', '"')
-        .replaceAll(RegExp(r'\s+'), ' ')
-        .trim();
-    
-    // Remove trailing punctuation
-    text = text.replaceAll(RegExp(r'[;:,]+$'), '');
-    
-    return text;
-  }
-
-  /// Format date for USCCB URL (MMDDYY)
-  String _formatDate(DateTime date) {
-    final month = date.month.toString().padLeft(2, '0');
-    final day = date.day.toString().padLeft(2, '0');
-    final year = date.year.toString().substring(2);
-    return '$month$day$year';
-  }
-
   /// Resolve gospel acclamation for a given date
   /// Uses mapping algorithm for 100% offline coverage
   Future<String?> resolveGospelAcclamation({
@@ -304,19 +192,21 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
     required String gospelReference,
     String? positionLabel,
   }) async {
-    final cacheKey = '${date.toIso8601String().split('T')[0]}|acclamation|$gospelReference';
-    
+    final cacheKey =
+        '${date.toIso8601String().split('T')[0]}|acclamation|$gospelReference';
+
     // Check memory cache first
     if (_cache.containsKey(cacheKey)) {
       return _cache[cacheKey];
     }
 
     final catalogEntries = await _catalogService.getEntriesForDate(date);
-    final catalogAcclamation = _catalogService.resolveGospelAcclamationFromEntries(
-      entries: catalogEntries,
-      gospelReference: gospelReference,
-      positionLabel: positionLabel,
-    );
+    final catalogAcclamation = _catalogService
+        .resolveGospelAcclamationFromEntries(
+          entries: catalogEntries,
+          gospelReference: gospelReference,
+          positionLabel: positionLabel,
+        );
     if (catalogAcclamation != null && catalogAcclamation.trim().isNotEmpty) {
       _cache[cacheKey] = catalogAcclamation;
       return catalogAcclamation;
@@ -329,16 +219,26 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
     );
 
     // Extract the text from UltimateAcclamationResult
-    final completeAcclamation = await _decodeIfVerseReference(mappedAcclamation.text, date);
-    
+    final completeAcclamation = await _decodeIfVerseReference(
+      mappedAcclamation.text,
+      date,
+    );
+
     _cache[cacheKey] = completeAcclamation;
     return completeAcclamation;
   }
 
   /// Decode verse reference if needed, otherwise return as-is
-  Future<String> _decodeIfVerseReference(String acclamation, DateTime date) async {
+  Future<String> _decodeIfVerseReference(
+    String acclamation,
+    DateTime date,
+  ) async {
     // Check if this is just a verse reference (short length, contains book:verse pattern)
-    if (acclamation.length < 50 && RegExp(r'^[A-Za-z]+\s+\d+:\d+', caseSensitive: false).hasMatch(acclamation)) {
+    if (acclamation.length < 50 &&
+        RegExp(
+          r'^[A-Za-z]+\s+\d+:\d+',
+          caseSensitive: false,
+        ).hasMatch(acclamation)) {
       try {
         // Try to decode the verse reference
         final verseText = await _decodeAcclamationVerse(acclamation);
@@ -350,9 +250,11 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
         debugPrint('Error decoding verse reference $acclamation: $e');
       }
     }
-    
+
     // Check if it has "See" or "Cf." prefix
-    if (acclamation.startsWith('See ') || acclamation.startsWith('Cf.') || acclamation.startsWith('cf.')) {
+    if (acclamation.startsWith('See ') ||
+        acclamation.startsWith('Cf.') ||
+        acclamation.startsWith('cf.')) {
       try {
         final cleanReference = _cleanVerseReference(acclamation);
         final verseText = await _decodeAcclamationVerse(cleanReference);
@@ -363,7 +265,7 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
         debugPrint('Error decoding prefixed reference $acclamation: $e');
       }
     }
-    
+
     // Return as-is if it's full text or decoding failed
     return acclamation;
   }
@@ -375,13 +277,19 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
       final cleanReference = _cleanVerseReference(verseReference);
 
       // Handle discrete verse lists like 'Ps 43:2+6' or 'Ps 43:2,6'
-      final m = RegExp(r'^\s*([A-Za-z ]+\d+)\s*:(.+)\s*$').firstMatch(cleanReference);
+      final m = RegExp(
+        r'^\s*([A-Za-z ]+\d+)\s*:(.+)\s*$',
+      ).firstMatch(cleanReference);
       if (m != null) {
         final base = m.group(1)!; // e.g., 'Ps 43'
         final versesPart = m.group(2)!; // e.g., '2,6'
         // If it is a list of discrete verses (no ranges), split and fetch each
         if (versesPart.contains(',')) {
-          final parts = versesPart.split(',').map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
+          final parts = versesPart
+              .split(',')
+              .map((s) => s.trim())
+              .where((s) => s.isNotEmpty)
+              .toList();
           final texts = <String>[];
           for (final v in parts) {
             // If any token still contains a dash (range), pass through directly once
@@ -403,14 +311,14 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
           verseText.startsWith('Reading text unavailable')) {
         return null;
       }
-      
+
       // Extract just the verse text (remove verse numbers)
       final cleaned = _stripVerseNumbers(verseText);
       if (cleaned.isNotEmpty &&
           !cleaned.startsWith('Reading text unavailable')) {
         return cleaned;
       }
-      
+
       return null;
     } catch (e) {
       debugPrint('Error decoding verse reference $verseReference: $e');
@@ -448,7 +356,7 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
     if (_isDuringLent(date) && !_isSunday(date)) {
       return 'Glory and praise to you, Lord Jesus Christ.';
     }
-    
+
     // Outside Lent, use Alleluia
     return 'Alleluia.';
   }
@@ -456,19 +364,20 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
   /// Check if date is during Lent (Ash Wednesday to Holy Saturday)
   bool _isDuringLent(DateTime date) {
     final year = date.year;
-    
+
     // Calculate Easter Sunday for the given year
     final easter = _calculateEaster(year);
-    
+
     // Ash Wednesday is 46 days before Easter Sunday
     final ashWednesday = easter.subtract(const Duration(days: 46));
-    
+
     // Holy Saturday is the day before Easter Sunday
     final holySaturday = easter.subtract(const Duration(days: 1));
-    
+
     // Check if date is within Lent period
-    return (date.isAtSameMomentAs(ashWednesday) || date.isAfter(ashWednesday)) &&
-           (date.isAtSameMomentAs(holySaturday) || date.isBefore(holySaturday));
+    return (date.isAtSameMomentAs(ashWednesday) ||
+            date.isAfter(ashWednesday)) &&
+        (date.isAtSameMomentAs(holySaturday) || date.isBefore(holySaturday));
   }
 
   /// Check if date is a Sunday
@@ -493,7 +402,7 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
     final m = (a + 11 * h + 22 * l) ~/ 451;
     final month = (h + l - 7 * m + 114) ~/ 31;
     final day = ((h + l - 7 * m + 114) % 31) + 1;
-    
+
     return DateTime(year, month, day);
   }
 
@@ -512,7 +421,8 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
       for (final reading in readings) {
         final position = (reading.position ?? '').toLowerCase();
         if (position.contains('psalm') &&
-            (reading.psalmResponse == null || reading.psalmResponse!.trim().isEmpty)) {
+            (reading.psalmResponse == null ||
+                reading.psalmResponse!.trim().isEmpty)) {
           resolvePsalmResponse(
             date: date,
             psalmReference: reading.reading,
@@ -520,7 +430,8 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
           );
         }
         if (position.contains('gospel') &&
-            (reading.gospelAcclamation == null || reading.gospelAcclamation!.trim().isEmpty)) {
+            (reading.gospelAcclamation == null ||
+                reading.gospelAcclamation!.trim().isEmpty)) {
           resolveGospelAcclamation(
             date: date,
             gospelReference: reading.reading,
@@ -533,6 +444,5 @@ class PsalmResolverService extends BaseService<PsalmResolverService> {
 
   Future<void> close() async {
     _cache.clear();
-    _pendingFetches.clear();
   }
 }
