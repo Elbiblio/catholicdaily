@@ -120,6 +120,7 @@ flutter:
     - assets/data/prayer_of_faithful_mapped.csv
     - assets/data/cpl_prayer_faithful_spanish.csv
     - assets/data/responsorial_psalm_texts.csv
+    - assets/data/psalm_editions/
     - assets/incipit_rules.csv
     - assets/incipit_evidence.csv
     - assets/prayers/
