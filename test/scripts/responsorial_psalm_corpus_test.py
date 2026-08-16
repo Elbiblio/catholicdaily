@@ -21,6 +21,8 @@ from scripts.psalm_sources.local_catalogs import (
     validate_local_row,
 )
 from scripts.psalm_sources.modern_psalter import parse_liturgy_page
+from scripts.psalm_sources.compare import classify_difference, redact_for_commit
+from scripts.psalm_sources.models import PsalmSourceRow
 
 
 class PsalmSourceRegistryTest(unittest.TestCase):
@@ -167,6 +169,80 @@ class ModernPsalterTest(unittest.TestCase):
         self.assertEqual(row["territory"], "US,PH")
         self.assertEqual(row["lectionary_number"], "118")
         self.assertEqual(row["reuse_status"], "comparison_only")
+
+
+class PsalmComparisonTest(unittest.TestCase):
+    def _sample_row(
+        self,
+        *,
+        reuse_status: str,
+        stanzas_raw: str,
+    ) -> PsalmSourceRow:
+        return PsalmSourceRow(
+            usage_id="fixture:ps45",
+            celebration_id="the_assumption_of_the_blessed_virgin_mary",
+            celebration_title="The Assumption of the Blessed Virgin Mary",
+            date_rule="08-15",
+            season="",
+            week="",
+            weekday="",
+            sunday_cycle="A/B/C",
+            weekday_cycle="I/II",
+            lectionary_number="",
+            territory="NG",
+            reading_set_kind="celebration",
+            reading_set_priority=1,
+            biblical_book="Ps",
+            psalm_number_hebrew="45",
+            psalm_number_vulgate="44",
+            reference_raw="Ps 45:10, 11, 12, 16",
+            reference_normalized="ps45:10,11,12,16",
+            stanza_selection_normalized="10,11,12,16",
+            response_verse_normalized="10b",
+            source_id="fixture_source",
+            source_name="Fixture Source",
+            source_edition="Fixture Edition",
+            source_territory="NG",
+            source_url="https://www.modernpsalter.com/Lectionary.aspx?n=622",
+            retrieved_at="2026-08-16",
+            source_license="fixture",
+            reuse_status=reuse_status,
+            response_raw="On your right stands the queen in gold of Ophir.",
+            response_normalized=(
+                "on your right stands the queen in gold of ophir"
+            ),
+            stanzas_raw=stanzas_raw,
+            stanzas_normalized="full stanza text",
+            raw_sha256="a" * 64,
+            normalized_sha256="b" * 64,
+            token_count=3,
+        )
+
+    def test_punctuation_only_is_not_translation_variant(self):
+        self.assertEqual(
+            classify_difference("Lord, hear us.", "Lord hear us"),
+            "punctuation_only",
+        )
+
+    def test_comparison_only_text_is_redacted(self):
+        row = self._sample_row(
+            reuse_status="comparison_only",
+            stanzas_raw="full stanza text",
+        )
+        redacted = redact_for_commit(row)
+        self.assertEqual(redacted.stanzas_raw, "")
+        self.assertNotEqual(redacted.normalized_sha256, "")
+        self.assertLessEqual(len(redacted.notes), 240)
+
+    def test_open_text_is_retained(self):
+        row = self._sample_row(
+            reuse_status="open",
+            stanzas_raw="full stanza text",
+        )
+        self.assertEqual(
+            redact_for_commit(row).stanzas_raw,
+            "full stanza text",
+        )
 
 
 if __name__ == "__main__":
