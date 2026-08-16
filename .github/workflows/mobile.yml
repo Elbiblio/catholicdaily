@@ -583,7 +583,10 @@ jobs:
 
   windows:
     name: Windows Release Build
-    runs-on: windows-latest
+    # Flutter 3.35 recognizes the Visual Studio 2022 CMake generator. The
+    # windows-latest image now carries Visual Studio 2026, which this pinned
+    # Flutter toolchain misidentifies and then requests unavailable VS 2019.
+    runs-on: windows-2022
     needs:
       - verify
       - version_info
