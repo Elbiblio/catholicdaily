@@ -52,6 +52,7 @@ void main() {
         await tester.pump(const Duration(milliseconds: 100));
       }
       expect(primaryReference, findsWidgets);
+      expect(find.text('Ps 45:10, 11, 12, 16'), findsWidgets);
 
       final vigilChoice = find.byKey(const ValueKey('reading-choice-1'));
       expect(vigilChoice, findsOneWidget);
@@ -78,6 +79,7 @@ void main() {
         await tester.pump(const Duration(milliseconds: 100));
       }
       expect(vigilReference, findsWidgets);
+      expect(find.text('Ps 132:6-7, 9-10, 13-14'), findsWidgets);
     },
   );
 }
