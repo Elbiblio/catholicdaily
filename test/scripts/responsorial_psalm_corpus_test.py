@@ -1,5 +1,8 @@
+import csv
 import json
+import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -100,6 +103,43 @@ forget your own people and your father's house. R/.
                 "ALLELUIA John 14:6 I am the way and the truth"
             )
 
+    def test_parser_accepts_lectionary_canticles_and_noisy_prefixes(self):
+        canticle = parse_responsorial_section(
+            """Isaiah 12:2-3.4bcde.5-6 (R. see 3)
+R/. You will draw water joyfully from the springs of salvation.
+
+God indeed is my saviour;
+I am confident and unafraid. R/.
+"""
+        )
+        noisy_psalm = parse_responsorial_section(
+            """(Psalm 72:1-2.7-8.12-13.17 (R. 7)
+R/. In his days shall justice flourish and great peace for ever.
+
+O God, give your judgement to the king,
+to a king's son your justice. R/.
+"""
+        )
+        self.assertEqual(canticle.reference_normalized, "isaiah12:2-3,4bcde,5-6(r.3)")
+        self.assertEqual(noisy_psalm.reference_normalized, "ps72:1-2,7-8,12-13,17(r.7)")
+
+    def test_response_line_can_share_a_block_with_the_first_stanza(self):
+        parsed = parse_responsorial_section(
+            """Psalm 16:1-2a.4.5 and 8.11 (R. 1)
+R/. Preserve me, O God, for in you I take refuge.
+Preserve me, O God, for in you I take refuge.
+I say to the Lord, 'You are my Lord.' R/.
+
+O Lord, it is you who are my portion and cup;
+you yourself who secure my lot. R/.
+"""
+        )
+        self.assertEqual(
+            parsed.response,
+            "Preserve me, O God, for in you I take refuge.",
+        )
+        self.assertEqual(len(parsed.stanzas), 2)
+
 
 class Nigeria365ExtractorTest(unittest.TestCase):
     def test_fixture_extracts_january_and_assumption(self):
@@ -133,6 +173,44 @@ class Nigeria365ExtractorTest(unittest.TestCase):
         )
         self.assertEqual(calls, [None, "next"])
         self.assertEqual([doc["name"] for doc in docs], ["one", "two"])
+
+    def test_embedded_alternative_psalms_are_extracted_as_choices(self):
+        page = {
+            "documents": [
+                {
+                    "fields": {
+                        "mandroiddates": {"stringValue": "04-04-2026"},
+                        "title": {"stringValue": "Saturday\nEaster Vigil"},
+                        "body": {
+                            "stringValue": """RESPONSORIAL PSALM
+Psalm 104:1-2a.5-6 (R. cf. 30)
+R/. Lord, send forth your Spirit.
+
+Bless the Lord, O my soul! R/.
+
+OR THE FOLLOWING:
+
+RESPONSORIAL PSALM Ps 33:4-5.6-7 (R. 5b)
+R/. His merciful love fills the earth.
+
+The word of the Lord is faithful. R/.
+
+SECOND READING Genesis 22:1-18
+fixture omitted"""
+                        },
+                    }
+                }
+            ]
+        }
+        rows = extract_rows(page)
+        self.assertEqual(len(rows), 2)
+        self.assertEqual(
+            [row.usage_id for row in rows],
+            [
+                "ng:2026-04-04:responsorial-psalm:1",
+                "ng:2026-04-04:responsorial-psalm:2",
+            ],
+        )
 
 
 class LocalPsalmCatalogTest(unittest.TestCase):
@@ -243,6 +321,57 @@ class PsalmComparisonTest(unittest.TestCase):
             redact_for_commit(row).stanzas_raw,
             "full stanza text",
         )
+
+
+class PsalmCorpusBuildTest(unittest.TestCase):
+    def test_fixture_build_is_deterministic_and_safe(self):
+        with tempfile.TemporaryDirectory() as first, tempfile.TemporaryDirectory() as second:
+            command = [
+                sys.executable,
+                "scripts/build_responsorial_psalm_corpus.py",
+                "--fixtures-only",
+                "--retrieved-at",
+                "2026-08-16",
+                "--output-dir",
+            ]
+            subprocess.run(command + [first], cwd=ROOT, check=True)
+            subprocess.run(command + [second], cwd=ROOT, check=True)
+            for name in (
+                "psalm_source_inventory.csv",
+                "psalm_source_comparison.csv",
+                "responsorial_psalm_audit_report.json",
+                "responsorial_psalm_texts.csv",
+            ):
+                self.assertEqual(
+                    (Path(first) / name).read_bytes(),
+                    (Path(second) / name).read_bytes(),
+                )
+
+    def test_comparison_only_rows_have_no_committed_full_text(self):
+        with tempfile.TemporaryDirectory() as output:
+            subprocess.run(
+                [
+                    sys.executable,
+                    "scripts/build_responsorial_psalm_corpus.py",
+                    "--fixtures-only",
+                    "--retrieved-at",
+                    "2026-08-16",
+                    "--output-dir",
+                    output,
+                ],
+                cwd=ROOT,
+                check=True,
+            )
+            path = Path(output) / "psalm_source_comparison.csv"
+            with path.open(encoding="utf-8-sig", newline="") as handle:
+                rows = list(csv.DictReader(handle))
+            restricted = [
+                row
+                for row in rows
+                if row["reuse_status"] in {"comparison_only", "unknown"}
+            ]
+            self.assertTrue(restricted)
+            self.assertTrue(all(not row["stanzas_raw"] for row in restricted))
 
 
 if __name__ == "__main__":

@@ -36,15 +36,22 @@ def normalize_words(value: str) -> str:
 
 def normalize_reference(value: str) -> str:
     value = _clean_unicode(value).lower().strip()
-    response_match = re.search(r"\(\s*r\.\s*([^)]+)\)", value)
+    value = value.replace("�", "-")
+    value = re.sub(r"^[\s(\-]+", "", value)
+    value = re.sub(r"^psalms?\s*,?\s*", "ps", value)
+    value = re.sub(r"^ps\s*", "ps", value)
+    value = re.sub(r"^psl(?=\s*:)", "ps1", value)
+    value = re.sub(r"^dt\s*", "deuteronomy", value)
+    if re.match(r"^\d+\s*:", value):
+        value = "ps" + value
+    response_match = re.search(r"\(\s*r\s*/?\.\s*([^)]+)\)", value)
     response = ""
     if response_match:
         response = response_match.group(1)
         value = value[: response_match.start()] + value[response_match.end() :]
-    value = re.sub(r"^(?:psalm|ps)\s*", "ps", value)
     value = re.sub(r"\b(?:cf\.?|see)\s*", "", value)
     value = value.replace(" and ", ",")
-    value = re.sub(r"(?<=\d)[.;](?=\d)", ",", value)
+    value = re.sub(r"(?<=[0-9a-z])[.;](?=\d)", ",", value)
     value = re.sub(r"\s+", "", value)
     value = re.sub(r",+", ",", value).rstrip(",")
     if response:
@@ -83,7 +90,13 @@ def parse_responsorial_section(section: str) -> ParsedPsalm:
 
     header_lines = blocks[0].splitlines()
     reference_raw = header_lines[0].strip()
-    if not re.match(r"^(?:psalm|ps)\s*\d", reference_raw, re.IGNORECASE):
+    reference_normalized = normalize_reference(reference_raw)
+    if not re.match(
+        r"^(?:ps|isaiah|jeremiah|daniel|deuteronomy|"
+        r"1samuel|1chronicles|exodus|luke)\d",
+        reference_normalized,
+        re.IGNORECASE,
+    ):
         raise ValueError("responsorial psalm has an invalid reference")
 
     response = ""
@@ -91,17 +104,28 @@ def parse_responsorial_section(section: str) -> ParsedPsalm:
     remainder = "\n".join(header_lines[1:]).strip()
     if remainder:
         if _starts_with_response_marker(remainder):
-            response = _strip_response_marker(remainder)
+            response_lines = remainder.splitlines()
+            response = _strip_response_marker(response_lines[0])
+            if len(response_lines) > 1:
+                body_blocks.append(
+                    _strip_response_marker("\n".join(response_lines[1:]))
+                )
         else:
             body_blocks.append(_strip_response_marker(remainder))
 
     for block in blocks[1:]:
         cleaned = _strip_response_marker(block)
         if _starts_with_response_marker(block):
+            response_lines = block.splitlines()
+            candidate = _strip_response_marker(response_lines[0])
             if not response:
-                response = cleaned
-            elif normalize_words(cleaned) != normalize_words(response):
+                response = candidate
+            elif normalize_words(candidate) != normalize_words(response):
                 raise ValueError("responsorial psalm contains conflicting responses")
+            if len(response_lines) > 1:
+                body_blocks.append(
+                    _strip_response_marker("\n".join(response_lines[1:]))
+                )
             continue
         if response and normalize_words(cleaned) == normalize_words(response):
             continue
@@ -122,7 +146,7 @@ def parse_responsorial_section(section: str) -> ParsedPsalm:
     normalized_whole = normalize_words(response) + "\n\n" + stanzas_normalized
     return ParsedPsalm(
         reference_raw=reference_raw,
-        reference_normalized=normalize_reference(reference_raw),
+        reference_normalized=reference_normalized,
         response=response,
         response_normalized=normalize_words(response),
         stanzas=stanzas,

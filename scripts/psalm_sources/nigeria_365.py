@@ -44,14 +44,22 @@ def _field(document: dict, name: str) -> str:
     )
 
 
-def _psalm_section(body: str) -> str | None:
-    match = re.search(
-        r"RESPONSORIAL\s+PSALM\s*:?[ \t]*(.*?)"
-        r"(?=\n\s*(?:SECOND\s+READING|ALLELUIA|GOSPEL\s+ACCLAMATION|GOSPEL)\b)",
+def _psalm_sections(body: str) -> list[str]:
+    matches = re.finditer(
+        r"^\s*RESPONSORIAL\s+PSALM\s*:?[ \t]*(.*?)"
+        r"(?=\n\s*(?:(?:OR\s+THE\s+FOLLOWING)\s*:\s*)?"
+        r"(?:RESPONSORIAL\s+PSALM|SECOND\s+READING|ALLELUIA|"
+        r"GOSPEL\s+ACCLAMATION|VERSE\s+BEFORE\s+THE\s+GOSPEL|GOSPEL|PRIEST:)"
+        r"(?=\s|$)|\Z)",
         body,
-        flags=re.IGNORECASE | re.DOTALL,
+        flags=re.IGNORECASE | re.DOTALL | re.MULTILINE,
     )
-    return match.group(1).strip() if match else None
+    return [match.group(1).strip() for match in matches if match.group(1).strip()]
+
+
+def _psalm_section(body: str) -> str | None:
+    sections = _psalm_sections(body)
+    return sections[0] if sections else None
 
 
 def _default_source() -> SourceRecord:
@@ -83,11 +91,10 @@ def extract_rows(
     source = source or _default_source()
     rows: list[PsalmSourceRow] = []
     for document in page.get("documents", []):
-        section = _psalm_section(_field(document, "body"))
+        sections = _psalm_sections(_field(document, "body"))
         raw_date = _field(document, "mandroiddates")
-        if not section or not raw_date:
+        if not sections or not raw_date:
             continue
-        parsed = parse_responsorial_section(section)
         iso_date = _iso_date(raw_date)
         title_lines = [
             line.strip()
@@ -95,9 +102,15 @@ def extract_rows(
             if line.strip()
         ]
         celebration_title = title_lines[1] if len(title_lines) > 1 else ""
-        rows.append(
-            PsalmSourceRow(
-                usage_id=f"ng:{iso_date}:responsorial-psalm:1",
+        for choice_index, section in enumerate(sections, start=1):
+            parsed = parse_responsorial_section(section)
+            book_match = re.match(r"^([^\d]+)", parsed.reference_normalized)
+            biblical_book = book_match.group(1) if book_match else ""
+            rows.append(
+                PsalmSourceRow(
+                usage_id=(
+                    f"ng:{iso_date}:responsorial-psalm:{choice_index}"
+                ),
                 celebration_id="",
                 celebration_title=celebration_title,
                 date_rule=iso_date,
@@ -110,7 +123,7 @@ def extract_rows(
                 territory="NG",
                 reading_set_kind="resolved-day",
                 reading_set_priority=1,
-                biblical_book="Ps",
+                biblical_book=biblical_book,
                 psalm_number_hebrew="",
                 psalm_number_vulgate="",
                 reference_raw=parsed.reference_raw,
@@ -139,8 +152,8 @@ def extract_rows(
                     ).split()
                 ),
                 comparison_target="nigeria_365_firestore",
+                )
             )
-        )
     return rows
 
 
