@@ -16,6 +16,7 @@ import 'dart:io' show Platform;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
+import '../widgets/responsorial_psalm_edition_selector.dart';
 
 class SettingsScreen extends StatefulWidget {
   final List<BibleVersion> versions;
@@ -473,6 +474,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           const SizedBox(height: 24),
           _SectionHeader(title: 'Readings'),
+          const Card(child: ResponsorialPsalmEditionSelector()),
+          const SizedBox(height: 8),
           Card(
             child: SwitchListTile(
               secondary: Icon(

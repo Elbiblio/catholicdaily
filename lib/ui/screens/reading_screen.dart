@@ -4,6 +4,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/models/daily_reading.dart';
 import '../../data/models/navigable_item.dart';
+import '../../data/models/resolved_responsorial_psalm.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
 import '../../data/services/readings_service.dart';
 import '../../data/services/liturgical_region_preference_service.dart';
@@ -14,6 +15,8 @@ import '../widgets/parchment_background.dart';
 import '../widgets/psalm_response_widget.dart';
 import '../widgets/gospel_acclamation_widget.dart';
 import '../widgets/bible_version_switcher.dart';
+import '../widgets/responsorial_psalm_edition_selector.dart';
+import '../widgets/responsorial_psalm_source_label.dart';
 import '../widgets/ai_insights_sheet.dart';
 import '../utils/reading_title_formatter.dart';
 import '../utils/bible_reference_helper.dart';
@@ -37,6 +40,7 @@ class ReadingScreen extends StatefulWidget {
   final List<NavigableItem> navigableItems;
   final int currentNavigableIndex;
   final VoidCallback? onRouteDisposed;
+  final ResolvedResponsorialPsalm? psalmSource;
 
   const ReadingScreen({
     super.key,
@@ -55,6 +59,7 @@ class ReadingScreen extends StatefulWidget {
     this.navigableItems = const [],
     this.currentNavigableIndex = 0,
     this.onRouteDisposed,
+    this.psalmSource,
   });
 
   @override
@@ -99,6 +104,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
   bool _isFullScreen = false;
   bool _showVerseNumbers = true;
   bool _showIncipit = true;
+  ResolvedResponsorialPsalm? _currentPsalmSource;
 
   final ScrollPositionService _scrollPositionService = ScrollPositionService();
   Timer? _scrollDebounceTimer;
@@ -166,6 +172,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
   void initState() {
     super.initState();
     _currentContent = widget.content;
+    _currentPsalmSource = widget.psalmSource;
     _loadBookmarkStatus();
     _loadVerseNumberPref();
     _loadIncipitPref();
@@ -259,6 +266,9 @@ class _ReadingScreenState extends State<ReadingScreen> {
       setState(() {
         _currentContent = widget.content;
       });
+    }
+    if (oldWidget.psalmSource != widget.psalmSource) {
+      _currentPsalmSource = widget.psalmSource;
     }
   }
 
@@ -1376,6 +1386,24 @@ class _ReadingScreenState extends State<ReadingScreen> {
   }
 
   Widget _buildVersionFooter(ThemeData theme) {
+    if (_isResponsorialPsalm) {
+      return Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            ResponsorialPsalmEditionSelector(
+              compact: true,
+              onEditionChanged: _reloadPsalmForNewEdition,
+            ),
+            if (_currentPsalmSource != null) ...<Widget>[
+              const SizedBox(height: 8),
+              ResponsorialPsalmSourceLabel(resolution: _currentPsalmSource!),
+            ],
+          ],
+        ),
+      );
+    }
     return Padding(
       padding: const EdgeInsets.all(16),
       child: BibleVersionSwitcher(
@@ -1384,6 +1412,57 @@ class _ReadingScreenState extends State<ReadingScreen> {
         },
       ),
     );
+  }
+
+  bool get _isResponsorialPsalm =>
+      (widget.readingData?.position ?? '').toLowerCase().contains(
+        'responsorial psalm',
+      ) ||
+      widget.reference.toLowerCase().startsWith('ps ');
+
+  Future<void> _reloadPsalmForNewEdition() async {
+    if (!mounted || !_isResponsorialPsalm) return;
+    setState(() => _isReloading = true);
+    try {
+      final region = await LiturgicalRegionPreferenceService.getInstance();
+      final resolved = await ReadingsService.instance.resolveResponsorialPsalm(
+        widget.reference,
+        psalmResponse: widget.readingData?.psalmResponse ?? '',
+        date:
+            widget.readingData?.date ??
+            widget.liturgicalDay?.date ??
+            DateTime.now(),
+        territory: region.currentRegion.code,
+        celebrationId: _celebrationId(widget.readingData),
+        readingSetKind: _readingSetKind(widget.readingData),
+      );
+      if (!mounted) return;
+      setState(() {
+        _currentContent = resolved.text;
+        _currentPsalmSource = resolved;
+        _isReloading = false;
+      });
+    } catch (_) {
+      if (mounted) setState(() => _isReloading = false);
+    }
+  }
+
+  static String _celebrationId(DailyReading? reading) {
+    final source = reading?.source ?? '';
+    final match = RegExp(r'(?:celebration|proper):([^|;]+)').firstMatch(source);
+    final explicit = match?.group(1)?.trim();
+    if (explicit != null && explicit.isNotEmpty) return explicit;
+    return (reading?.feast ?? '')
+        .toLowerCase()
+        .replaceAll(RegExp(r'[^a-z0-9]+'), '_')
+        .replaceAll(RegExp(r'^_+|_+$'), '');
+  }
+
+  static String _readingSetKind(DailyReading? reading) {
+    final position = (reading?.position ?? '').toLowerCase();
+    if (position.contains('vigil')) return 'vigil';
+    if ((reading?.source ?? '').contains('weekday')) return 'weekday';
+    return 'celebration';
   }
 
   Future<void> _reloadContentForNewVersion() async {

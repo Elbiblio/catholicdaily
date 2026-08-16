@@ -298,6 +298,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onRouteDisposed: _invalidateReadingNavigation,
         navigableItems: _readingSession.navigableItems,
         currentNavigableIndex: _readingSession.navigableIndex,
+        psalmSource: _readingSession.psalmSources[reference],
       ),
     );
     if (replaceCurrentRoute) {
