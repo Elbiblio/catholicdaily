@@ -34,6 +34,7 @@ from psalm_sources.models import (
 )
 from psalm_sources.modern_psalter import parse_liturgy_page
 from psalm_sources.nigeria_365 import extract_rows, fetch_live_rows
+from psalm_sources.source_packs import write_runtime_packs
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -376,7 +377,7 @@ def _write_full_text_outputs(
     rows: list[PsalmSourceRow],
     douay_db: Path | None,
     retrieved_at: str,
-) -> None:
+) -> tuple[list[PsalmUsage], list[PsalmEditionText]]:
     usages, editions = _full_text_corpus(rows, douay_db=douay_db)
     comparison = build_wide_comparison(
         usages,
@@ -423,15 +424,17 @@ def _write_full_text_outputs(
         output_dir / "responsorial_psalm_audit_report.json",
         json.dumps(report, indent=2, sort_keys=True) + "\n",
     )
+    return usages, editions
 
 
 def build(
     *,
-    output_dir: Path,
+    output_dir: Path | None,
     refresh_live: bool,
     retrieved_at: str,
     full_text_output: Path | None = None,
     douay_db: Path | None = None,
+    runtime_output: Path | None = None,
 ) -> None:
     records = _registry()
     rows = load_local_psalm_rows(ROOT, retrieved_at=retrieved_at)
@@ -454,24 +457,34 @@ def build(
         "https://www.modernpsalter.com/Lectionary.aspx?n=118",
     )
     compared = _compare_to_nigeria(rows)
-    output_dir.mkdir(parents=True, exist_ok=True)
-    _write_inventory(output_dir, records)
-    _write_comparison(output_dir, compared)
-    runtime_count = _write_runtime(output_dir, compared)
-    _write_report(
-        output_dir,
-        records=records,
-        rows=compared,
-        runtime_count=runtime_count,
-        modern_metadata=modern_metadata,
-        retrieved_at=retrieved_at,
-    )
+    if output_dir is not None:
+        output_dir.mkdir(parents=True, exist_ok=True)
+        _write_inventory(output_dir, records)
+        _write_comparison(output_dir, compared)
+        runtime_count = _write_runtime(output_dir, compared)
+        _write_report(
+            output_dir,
+            records=records,
+            rows=compared,
+            runtime_count=runtime_count,
+            modern_metadata=modern_metadata,
+            retrieved_at=retrieved_at,
+        )
+    edition_rows: list[PsalmEditionText] | None = None
     if full_text_output is not None:
-        _write_full_text_outputs(
+        _, edition_rows = _write_full_text_outputs(
             full_text_output,
             rows=rows,
             douay_db=douay_db,
             retrieved_at=retrieved_at,
+        )
+    if runtime_output is not None:
+        if edition_rows is None:
+            _, edition_rows = _full_text_corpus(rows, douay_db=douay_db)
+        write_runtime_packs(
+            runtime_output,
+            registry=records,
+            edition_rows=edition_rows,
         )
 
 
@@ -485,17 +498,20 @@ def main() -> None:
     parser.add_argument("--full-text-output", type=Path)
     parser.add_argument("--douay-db", type=Path)
     parser.add_argument("--external-pack-dir", type=Path)
+    parser.add_argument("--runtime-output", type=Path)
     parser.add_argument("--retrieved-at", default="2026-08-16")
     args = parser.parse_args()
-    output_dir = args.output_dir or args.full_text_output
-    if output_dir is None:
-        parser.error("one of --output-dir or --full-text-output is required")
+    if args.output_dir is None and args.full_text_output is None and args.runtime_output is None:
+        parser.error(
+            "one of --output-dir, --full-text-output, or --runtime-output is required"
+        )
     build(
-        output_dir=output_dir,
+        output_dir=args.output_dir,
         refresh_live=args.refresh_live,
         retrieved_at=args.retrieved_at,
         full_text_output=args.full_text_output,
         douay_db=args.douay_db,
+        runtime_output=args.runtime_output,
     )
 
 

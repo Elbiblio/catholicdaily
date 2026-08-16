@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "editions": [
+    {
+      "id": "nigeria_365_firestore",
+      "displayName": "Catholic Missal for Nigeria / 365 Readings",
+      "abbreviation": "Nigeria Lectionary",
+      "sourceKind": "lectionary",
+      "territories": [
+        "NG"
+      ],
+      "coverageStatus": "partial",
+      "packAsset": "assets/data/psalm_editions/nigeria_365.csv",
+      "installed": true,
+      "downloadable": false,
+      "sourceUrl": "https://firestore.googleapis.com/v1/projects/catholic-missal/databases/(default)/documents/NigeriaReading",
+      "fallbackRole": "territory_lectionary",
+      "selectionCount": 2
+    },
+    {
+      "id": "modern_psalter_us",
+      "displayName": "Modern Psalter Lectionary Index",
+      "abbreviation": "US Lectionary",
+      "sourceKind": "lectionary",
+      "territories": [
+        "US",
+        "PH"
+      ],
+      "coverageStatus": "unavailable",
+      "packAsset": "",
+      "installed": false,
+      "downloadable": false,
+      "sourceUrl": "https://www.modernpsalter.com/Lectionary.aspx?n=118",
+      "fallbackRole": "territory_lectionary",
+      "selectionCount": 0
+    },
+    {
+      "id": "local_rsvce",
+      "displayName": "Catholic Daily RSVCE database",
+      "abbreviation": "RSVCE",
+      "sourceKind": "bible",
+      "territories": [
+        "WORLD"
+      ],
+      "coverageStatus": "complete",
+      "packAsset": "assets/data/psalm_editions/rsvce.csv",
+      "installed": true,
+      "downloadable": false,
+      "sourceUrl": "repo://assets/rsvce.db",
+      "fallbackRole": "default",
+      "selectionCount": 549
+    },
+    {
+      "id": "local_nabre",
+      "displayName": "Catholic Daily NABRE database",
+      "abbreviation": "NABRE",
+      "sourceKind": "bible",
+      "territories": [
+        "US"
+      ],
+      "coverageStatus": "complete",
+      "packAsset": "assets/data/psalm_editions/nabre.csv",
+      "installed": true,
+      "downloadable": false,
+      "sourceUrl": "repo://assets/nabre.db",
+      "fallbackRole": "selected_bible",
+      "selectionCount": 549
+    },
+    {
+      "id": "douay_rheims",
+      "displayName": "Douay-Rheims Bible database",
+      "abbreviation": "Douay-Rheims",
+      "sourceKind": "bible",
+      "territories": [
+        "WORLD"
+      ],
+      "coverageStatus": "unavailable",
+      "packAsset": "",
+      "installed": false,
+      "downloadable": true,
+      "sourceUrl": "https://api.elbiblio.com/dbs/engdra.db",
+      "fallbackRole": "selected_bible",
+      "selectionCount": 0
+    },
+    {
+      "id": "jerusalem_bible",
+      "displayName": "Jerusalem Bible lectionary text",
+      "abbreviation": "Jerusalem Bible",
+      "sourceKind": "lectionary",
+      "territories": [
+        "GB",
+        "IE",
+        "NG"
+      ],
+      "coverageStatus": "unavailable",
+      "packAsset": "",
+      "installed": false,
+      "downloadable": false,
+      "sourceUrl": "https://newman.nd.edu/liturgy-planning/sunday-liturgies/",
+      "fallbackRole": "territory_lectionary",
+      "selectionCount": 0
+    },
+    {
+      "id": "esvce",
+      "displayName": "English Standard Version Catholic Edition",
+      "abbreviation": "ESV-CE",
+      "sourceKind": "bible",
+      "territories": [
+        "GB",
+        "IE"
+      ],
+      "coverageStatus": "unavailable",
+      "packAsset": "",
+      "installed": false,
+      "downloadable": false,
+      "sourceUrl": "https://www.catholicbible.org/",
+      "fallbackRole": "none",
+      "selectionCount": 0
+    }
+  ]
+}

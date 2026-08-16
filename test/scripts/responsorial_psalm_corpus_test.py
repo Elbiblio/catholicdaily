@@ -18,6 +18,11 @@ from scripts.psalm_sources.edition_corpus import (
     build_wide_comparison,
     write_csv_rows,
 )
+from scripts.psalm_sources.source_packs import (
+    RuntimePsalmPackRow,
+    build_manifest,
+    validate_source_pack,
+)
 from scripts.psalm_sources.normalize import (
     normalize_reference,
     parse_responsorial_section,
@@ -314,6 +319,62 @@ class PsalmEditionCorpusTest(unittest.TestCase):
 
         for raw, normalized in expected.items():
             self.assertEqual(parse_selection(raw).normalized, normalized)
+
+
+class PsalmSourcePackTest(unittest.TestCase):
+    def _pack_row(self, text="Complete stanza text."):
+        return RuntimePsalmPackRow(
+            edition_id="local_rsvce",
+            selection_id="ps45_10_11_12_16",
+            territory="WORLD",
+            celebration_id="",
+            date_rule="",
+            reading_set_kind="generic",
+            sunday_cycle="",
+            weekday_cycle="",
+            lectionary_number="",
+            reference_normalized="ps45:10,11,12,16",
+            response_text="The queen stands at your right hand.",
+            stanzas_text=text,
+            source_url="repo://assets/rsvce.db",
+            source_edition="RSVCE",
+            display_priority=100,
+        )
+
+    def test_runtime_pack_rejects_conflicting_duplicate_selection(self):
+        rows = [self._pack_row(text="First"), self._pack_row(text="Different")]
+        with self.assertRaisesRegex(ValueError, "conflicting duplicate"):
+            validate_source_pack(rows)
+
+    def test_manifest_only_marks_nonempty_validated_packs_installed(self):
+        raw = json.loads(
+            (ROOT / "scripts/psalm_sources/source_registry.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        registry = [SourceRecord.from_dict(item) for item in raw]
+        manifest = build_manifest(
+            registry=registry,
+            packs={"local_rsvce": [self._pack_row()]},
+        )
+        self.assertTrue(manifest["local_rsvce"]["installed"])
+        self.assertFalse(manifest["jerusalem_bible"]["installed"])
+
+    def test_generated_manifest_only_installs_nonempty_validated_packs(self):
+        root = ROOT / "assets/data/psalm_editions"
+        manifest = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
+        editions = {row["id"]: row for row in manifest["editions"]}
+        self.assertEqual(editions["local_rsvce"]["selectionCount"], 549)
+        self.assertEqual(editions["local_nabre"]["selectionCount"], 549)
+        self.assertTrue(editions["nigeria_365_firestore"]["installed"])
+        self.assertFalse(editions["modern_psalter_us"]["installed"])
+        self.assertFalse(editions["jerusalem_bible"]["installed"])
+        for filename in ("rsvce.csv", "nabre.csv", "nigeria_365.csv"):
+            with (root / filename).open(encoding="utf-8", newline="") as handle:
+                rows = list(csv.DictReader(handle))
+            self.assertTrue(rows)
+            self.assertTrue(all(row["stanzas_text"].strip() for row in rows))
+            self.assertTrue(all(len(row["raw_sha256"]) == 64 for row in rows))
 
     def test_parser_extracts_response_and_stanzas(self):
         section = """Psalm 45:10.11.12.16 (R.10b)

@@ -1,0 +1,25 @@
+edition_id,selection_id,territory,celebration_id,date_rule,reading_set_kind,sunday_cycle,weekday_cycle,lectionary_number,reference_normalized,response_text,stanzas_text,source_url,source_edition,raw_sha256,normalized_sha256,display_priority
+nigeria_365_firestore,ps45_10_11_12_16,NG,,,generic,,,,"ps45:10,11,12,16",On your right stands the queen in gold of Ophir.,"The daughters of kings are those whom you favour.
+On your right stands the queen in gold of Ophir.
+
+Listen, O daughter; pay heed and give ear;
+forget your own people and your father's house.
+
+So will the king desire your beauty.
+He is your lord, pay homage to him.
+
+They are escorted amid gladness and joy;
+they pass within the palace of the king.",https://firestore.googleapis.com/v1/projects/catholic-missal/databases/(default)/documents/NigeriaReading,live Nigerian daily corpus,6e6db005f5d828f2c7ebd8b7c1dd9924034fd4e39e9c029f1b9bd6b15f74b77c,611d269af69d37b05fe619a321e9852aa564f24272e01679d09960e65cf94091,100
+nigeria_365_firestore,ps67_2_3_5_6and8,NG,,,generic,,,,"ps67:2-3,5-6and8","O God, be gracious and bless us.","O God, be gracious and bless us
+and let your face shed its light upon us.
+So will your ways be known upon earth and
+all nations learn your salvation.
+
+Let the nations be glad and shout for joy,
+with uprightness you rule the peoples;
+you guide the nations on earth.
+
+Let the peoples praise you, O God;
+let all the peoples praise you.
+May God still give us his blessing
+that all the ends of the earth may revere him.",https://firestore.googleapis.com/v1/projects/catholic-missal/databases/(default)/documents/NigeriaReading,live Nigerian daily corpus,3d9cdd3d8c308654351cd7d8c0266a378f855e83427f351ceea6fa1dbb4c36ff,64368c53fc585ec59be3e499a362118794e26abbe2f8ce8922c39c401475806d,100

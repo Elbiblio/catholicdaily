@@ -81,7 +81,7 @@
     "access_method": "SQLite",
     "notes": "Bible fallback, not exact lectionary stanza authority",
     "source_kind": "bible",
-    "pack_id": "local_rsvce",
+    "pack_id": "rsvce",
     "renderability": "bundled",
     "fallback_role": "default",
     "coverage_status": "complete"
@@ -98,7 +98,7 @@
     "access_method": "SQLite",
     "notes": "Bible fallback, not Nigerian lectionary authority",
     "source_kind": "bible",
-    "pack_id": "local_nabre",
+    "pack_id": "nabre",
     "renderability": "bundled",
     "fallback_role": "selected_bible",
     "coverage_status": "complete"
