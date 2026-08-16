@@ -63,7 +63,7 @@ class ReadingFlowService extends BaseService<ReadingFlowService> {
         if (isResponsorial) {
           final resolved = await _readingsService.resolveResponsorialPsalm(
             reading.reading,
-            psalmResponse: reading.psalmResponse,
+            psalmResponse: reading.psalmResponse ?? '',
             date: date,
             territory: regionPrefs.currentRegion.code,
             celebrationId: _celebrationId(reading),

@@ -190,6 +190,19 @@ local_nabre,ps104_1_2a_27_28_29bc_30,WORLD,,,generic,,,,"ps104:1-2a,27-28,29bc-3
 All of these look to you to give them food in due time. When you give it to them, they gather; when you open your hand, they are well filled.
 
 Take away their breath, they perish and return to the dust. Send forth your spirit, they are created and you renew the face of the earth.",repo://assets/nabre.db,,a37e000347d4770d74068ceda7b7076189218de87b0d8f6933e4b205cd7d3f98,48cca7b8fa9dab9fc0d356f0b0efefc10f5d158a9a1531f06f92550c6a0772ab,100
+local_nabre,ps104_1_2a_5_6_10_12_13_14_24_35c,WORLD,,,generic,,,,"ps104:1-2a,5-6,10,12,13-14,24,35c","Lord, send forth your Spirit, and renew the face of the earth.","Psalm 104 Praise of God the Creator I - Bless the LORD, my soul! LORD, my God, you are great indeed! You are clothed with majesty and splendor, robed in light as with a cloak. You spread out the heavens like a tent;
+
+You fixed the earth on its foundation, so it can never be shaken. The deeps covered it like a garment; above the mountains stood the waters.
+
+You made springs flow in wadies that wind among the mountains.
+
+Beside them the birds of heaven nest; among the branches they sing.
+
+You water the mountains from your chambers; from the fruit of your labor the earth abounds. You make the grass grow for the cattle and plants for people’s work to bring forth food from the earth,
+
+V - How varied are your works, LORD! In wisdom you have made them all; the earth is full of your creatures.
+
+Bless the LORD, my soul! Hallelujah!",repo://assets/nabre.db,,f6f362f937159001d1d4d4110ac915dacf4de66ccaefe95d526679321215c58c,70a8a5f539e17d3e8803a564748f0fe374b03e37110204eca98bbf1e72ff7371,100
 local_nabre,ps104_1_2a_5_6_10_12_24_35c,WORLD,,,generic,,,,"ps104:1-2a,5-6,10+12,24+35c",May the Lord be glad in his works.,"Psalm 104 Praise of God the Creator I - Bless the LORD, my soul! LORD, my God, you are great indeed! You are clothed with majesty and splendor, robed in light as with a cloak. You spread out the heavens like a tent;
 
 You fixed the earth on its foundation, so it can never be shaken. The deeps covered it like a garment; above the mountains stood the waters.
@@ -197,15 +210,6 @@ You fixed the earth on its foundation, so it can never be shaken. The deeps cove
 You made springs flow in wadies that wind among the mountains. Beside them the birds of heaven nest; among the branches they sing.
 
 V - How varied are your works, LORD! In wisdom you have made them all; the earth is full of your creatures. Bless the LORD, my soul! Hallelujah!",repo://assets/nabre.db,,6af27cfd40f64c97923c9da9cd54320f0ecc06a236665d955ac4084811320ce8,42d8a8e6eb956ef39205744c9669da9d19499bc8cce89d338d43d9b433869146,100
-local_nabre,ps104_1_2a_5_6_10and12_13_14_24and35c,WORLD,,,generic,,,,"ps104:1-2a,5-6,10and12,13-14,24and35c","Lord, send forth your Spirit, and renew the face of the earth.","Psalm 104 Praise of God the Creator I - Bless the LORD, my soul! LORD, my God, you are great indeed! You are clothed with majesty and splendor, robed in light as with a cloak. You spread out the heavens like a tent;
-
-You fixed the earth on its foundation, so it can never be shaken. The deeps covered it like a garment; above the mountains stood the waters.
-
-You made springs flow in wadies that wind among the mountains.
-
-You water the mountains from your chambers; from the fruit of your labor the earth abounds. You make the grass grow for the cattle and plants for people’s work to bring forth food from the earth,
-
-V - How varied are your works, LORD! In wisdom you have made them all; the earth is full of your creatures.",repo://assets/nabre.db,,df73a12607735bd9730c3414a30c111f46f0aadf75371825f70e80279d7f904a,a5ad6e1b5c52baa21a243bf41de39382cb506d881a8c960610985a97cffa3a05,100
 local_nabre,ps104_1b_2_3_4_24_25_27_28_29_30,WORLD,,,generic,,,,"ps104:1b-2,3-4,24-25,27-28,29-30","(1) O bless the Lord, my soul.","Psalm 104 Praise of God the Creator I - Bless the LORD, my soul! LORD, my God, you are great indeed! You are clothed with majesty and splendor, robed in light as with a cloak. You spread out the heavens like a tent;
 
 setting the beams of your chambers upon the waters. You make the clouds your chariot; traveling on the wings of the wind. You make the winds your messengers; flaming fire, your ministers.
@@ -1185,11 +1189,6 @@ I keep the LORD always before me; with him at my right hand, I shall never be sh
 Therefore my heart is glad, my soul rejoices; my body also dwells secure, For you will not abandon my soul to Sheol, nor let your devout one see the pit.
 
 You will show me the path to life, abounding joy in your presence, the delights at your right hand forever.",repo://assets/nabre.db,,3109c8af1a2e539a2a361fc16387a0abd8e6e46f77d536fc3ae34bf6748540ca,98191877c715b7e91eeb66e62a3cd78a6e8cc230cc0078226c1ffb1516ee510b,100
-local_nabre,ps16_5and8_9_10_11,WORLD,,,generic,,,,"ps16:5and8,9-10,11","Preserve me, O God, for in you I take refuge.","LORD, my allotted portion and my cup, you have made my destiny secure.
-
-Therefore my heart is glad, my soul rejoices; my body also dwells secure, For you will not abandon my soul to Sheol, nor let your devout one see the pit.
-
-You will show me the path to life, abounding joy in your presence, the delights at your right hand forever.",repo://assets/nabre.db,,155ba02564519601f8468749e1828ebd97d42136b03ef8ebb76181b33cd37a0d,d037906ce8c6581edfc0de84898a8029f9200bd091f1b3ba54f4a3ca9604c4cd,100
 local_nabre,ps17_1_2_3_6_7,WORLD,,,generic,,,,"ps17:1,2-3,6-7","Lord, bend your ear and hear my prayer.","Psalm 17 Prayer for Rescue from Persecutors - A prayer of David. I - Hear, LORD, my plea for justice; pay heed to my cry; Listen to my prayer from lips without guile.
 
 From you let my vindication come; your eyes see what is right. My mouth has not transgressed
@@ -1287,16 +1286,13 @@ The command of the LORD is clear, enlightening the eye.
 The statutes of the LORD are true, all of them just;
 
 Let the words of my mouth be acceptable, the thoughts of my heart before you, LORD, my rock and my redeemer.",repo://assets/nabre.db,,e800a0fe6ea0820d37aac08f310766637249bf8bec0c751655c5a6d96b8006a4,a62bdee32a8d383f0e0c32d410088e28bb36bb03a6fe6217bd28056cc1c16779,100
-local_nabre,ps1_1_2_3_4_6,WORLD,,,generic,,,,"ps1:1-2,3,4+6","Those who follow you, Lord,","First Book—Psalms 1–41 Psalm 1 True Happiness in God’s Law I - Blessed is the man who does not walk in the counsel of the wicked, Nor stand in the way of sinners, nor sit in company with scoffers. Rather, the law of the LORD is his joy; and on his law he meditates day and night.
+local_nabre,ps1_1_2_3_4_6,WORLD,,,generic,,,,"ps1:1-2,3,4,6",(40:5a) Blessed are they who hope in the Lord.,"First Book—Psalms 1–41 Psalm 1 True Happiness in God’s Law I - Blessed is the man who does not walk in the counsel of the wicked, Nor stand in the way of sinners, nor sit in company with scoffers. Rather, the law of the LORD is his joy; and on his law he meditates day and night.
 
 He is like a tree planted near streams of water, that yields its fruit in season; Its leaves never wither; whatever he does prospers.
 
-But not so are the wicked, not so! They are like chaff driven by the wind. Because the LORD knows the way of the just, but the way of the wicked leads to ruin.",repo://assets/nabre.db,,8aad8c1988f0758bb1f150adae0e4d08e766cb819dd4214e875fc2e6c698298d,a300879e0fd2132193b03543ddb8f63a87bed6062494f59aee9bb299ab59eb24,100
-local_nabre,ps1_1_2_3_4and6,WORLD,,,generic,,,,"ps1:1-2,3,4and6",(40:5a) Blessed are they who hope in the Lord.,"First Book—Psalms 1–41 Psalm 1 True Happiness in God’s Law I - Blessed is the man who does not walk in the counsel of the wicked, Nor stand in the way of sinners, nor sit in company with scoffers. Rather, the law of the LORD is his joy; and on his law he meditates day and night.
+But not so are the wicked, not so! They are like chaff driven by the wind.
 
-He is like a tree planted near streams of water, that yields its fruit in season; Its leaves never wither; whatever he does prospers.
-
-But not so are the wicked, not so! They are like chaff driven by the wind.",repo://assets/nabre.db,,86d0486cb7bd43a0dbabc08fb4531dfcce1580f002887e979a98336986dd117e,95cf367c4b243dacd36044a4393467b4fb9d70a9d8abdfd456d51f62b63e019c,100
+Because the LORD knows the way of the just, but the way of the wicked leads to ruin.",repo://assets/nabre.db,,0bba57c10d90c8cb34c8bf32c988ce784d384e83e0e1cc985c38718b4dc7e03a,805ce55be520b8f54c1cf00e85e53c3f520f8dbdbfff9a4fdd0af269817ab5bc,100
 local_nabre,ps21_1_2_3_4_5_6,WORLD,,,generic,,,,"ps21:1-2,3-4,5-6","Lord, your strength gives joy to the king.","Psalm 21 Thanksgiving and Assurances for the King - For the leader. A psalm of David. I - LORD, the king finds joy in your power; in your victory how greatly he rejoices!
 
 You have granted him his heart’s desire; you did not refuse the request of his lips. Selah For you welcomed him with goodly blessings; you placed on his head a crown of pure gold.
@@ -1500,11 +1496,15 @@ Sing praise to the LORD, you faithful; give thanks to his holy memory. At dusk w
 Hear, O LORD, have mercy on me; LORD, be my helper.” You changed my mourning into dancing; you took off my sackcloth and clothed me with gladness.
 
 O LORD, my God, forever will I give you thanks.",repo://assets/nabre.db,,25f33c6732361fdf19843f155baf85698ef8bde22a8be159811cdb981720940f,e6344b7d2950d5a50caf17c9befb4fbf6405274bfbfb140d5f015e310a0e4a10,100
-local_nabre,ps30_2and4_5_6_11_12aand13b,WORLD,,,generic,,,,"ps30:2and4,5-6,11-12aand13b","I will extol you, O Lord, for you have raised me up.","I - I praise you, LORD, for you raised me up and did not let my enemies rejoice over me.
+local_nabre,ps30_2_4_5_6_11_12a_13b,WORLD,,,generic,,,,"ps30:2,4,5-6,11-12a,13b","I will extol you, O Lord, for you have raised me up.","I - I praise you, LORD, for you raised me up and did not let my enemies rejoice over me.
+
+LORD, you brought my soul up from Sheol; you let me live, from going down to the pit.
 
 Sing praise to the LORD, you faithful; give thanks to his holy memory. At dusk weeping comes for the night; but at dawn there is rejoicing.
 
-Hear, O LORD, have mercy on me; LORD, be my helper.” You changed my mourning into dancing; you took off my sackcloth and clothed me with gladness.",repo://assets/nabre.db,,556ae49d7da5eb77ba6f8e6245b26205bcbed87524dc5bd1b5bdd888a64f8693,c3a6e825a894d29e60b28a0d05eb1f2b2f93b8dc18ea8bed67228d2a1350e3d2,100
+Hear, O LORD, have mercy on me; LORD, be my helper.” You changed my mourning into dancing; you took off my sackcloth and clothed me with gladness.
+
+O LORD, my God, forever will I give you thanks.",repo://assets/nabre.db,,8f16bbb75e33f44dd692ca076dcffd8c86141ec0d9b043f498596b6ad825c28f,1dd6eea54657ba0fe4ed44b48423ce3c46408c39d58d767ff2d291d33e011e05,100
 local_nabre,ps31_19_20_21_22_23,WORLD,,,generic,,,,"ps31:19,20,21,22,23","Let your hearts take comfort,","Strike dumb their lying lips, which speak arrogantly against the righteous in contempt and scorn.
 
 You display it for those who trust you, in the sight of the children of Adam.
@@ -1652,13 +1652,15 @@ Behold, the eye of the LORD is upon those who fear him, upon those who count on 
 Our soul waits for the LORD, he is our help and shield.
 
 May your mercy, LORD, be upon us; as we put our hope in you.",repo://assets/nabre.db,,b85d5d9f4931921418ec8d9a0ea59412b2cff5b61b1dcfed0bfeb19c9f5f7648,03c5604c59695562bf2d2b31ea896f2011c81ebb99f321afa702e1ba11a73ff5,100
-local_nabre,ps33_4_5_6_7_12_13_20and22,WORLD,,,generic,,,,"ps33:4-5,6-7,12-13,20and22",His merciful love fills the earth.,"For the LORD’s word is upright; all his works are trustworthy. The earth is full of the mercy of the LORD.
+local_nabre,ps33_4_5_6_7_12_13_20_22,WORLD,,,generic,,,,"ps33:4-5,6-7,12-13,20,22",His merciful love fills the earth.,"For the LORD’s word is upright; all his works are trustworthy. The earth is full of the mercy of the LORD.
 
 By the LORD’s word the heavens were made; by the breath of his mouth all their host. He gathered the waters of the sea as a mound; he sets the deep into storage vaults.
 
 Blessed is the nation whose God is the LORD, the people chosen as his inheritance. From heaven the LORD looks down and observes the children of Adam,
 
-Our soul waits for the LORD, he is our help and shield.",repo://assets/nabre.db,,225b9d69e3907c1eb243f258136d9285773db3180dc7de41b3a86098c4720473,822c98033b8d719731112ed5d73a8fe712db53c11570a76a5a0ee5dfd9205adf,100
+Our soul waits for the LORD, he is our help and shield.
+
+May your mercy, LORD, be upon us; as we put our hope in you.",repo://assets/nabre.db,,38300810ceda83f6a42db95367860beaeeea2d651344d8e6cd21e515c72394b6,f3b3d029a0332af41322408e53df8158a365b3d083f521b2abba07dc43484386,100
 local_nabre,ps33_4_5_6_9_18_19_20_22,WORLD,,,generic,,,,"ps33:4-5,6,9,18-19,20,22",(12b) Blessed the people the Lord has chosen to be his own.,"For the LORD’s word is upright; all his works are trustworthy. The earth is full of the mercy of the LORD.
 
 By the LORD’s word the heavens were made; by the breath of his mouth all their host.
@@ -2163,13 +2165,15 @@ For I know my transgressions; my sin is always before me. Against you, you alone
 A clean heart create for me, God; renew within me a steadfast spirit. Do not drive me from before your face, nor take from me your holy spirit.
 
 Lord, you will open my lips; and my mouth will proclaim your praise.",repo://assets/nabre.db,,d39c72e55338733915c543ce7b27e55ec0f9a04bf05c6604f3a5e551375fcda6,57131679bedaac7dceffacc40dc612ddeffe3e66bd6e86929d123f942b017e42,100
-local_nabre,ps51_3_4_5_6ab_12_13_14and17,WORLD,,,generic,,,,"ps51:3-4,5-6ab,12-13,14and17","(see 3a) Be merciful, O Lord, for we have sinned.","I - Have mercy on me, God, in accord with your merciful love; in your abundant compassion blot out my transgressions. Thoroughly wash away my guilt; and from my sin cleanse me.
+local_nabre,ps51_3_4_5_6ab_12_13_14_17,WORLD,,,generic,,,,"ps51:3-4,5-6ab,12-13,14,17","(see 3a) Be merciful, O Lord, for we have sinned.","I - Have mercy on me, God, in accord with your merciful love; in your abundant compassion blot out my transgressions. Thoroughly wash away my guilt; and from my sin cleanse me.
 
 For I know my transgressions; my sin is always before me. Against you, you alone have I sinned; I have done what is evil in your eyes So that you are just in your word, and without reproach in your judgment.
 
 A clean heart create for me, God; renew within me a steadfast spirit. Do not drive me from before your face, nor take from me your holy spirit.
 
-Restore to me the gladness of your salvation; uphold me with a willing spirit.",repo://assets/nabre.db,,3f3a2a392865276bdf827860eaa309f998170df6321450440f37c466ec3dd9f2,223a85ed943fe9063b36a6836f42894da3f24fdc0f87d45f723b5228f58d0111,100
+Restore to me the gladness of your salvation; uphold me with a willing spirit.
+
+Lord, you will open my lips; and my mouth will proclaim your praise.",repo://assets/nabre.db,,8ba9d19a7dfb470fb966383d98f5083b188315265f62122f95d54d64b88ead03,f76adadc1f3b86f62ff10fa4099da00d1772f13d0b55f236903561184c3bdeee,100
 local_nabre,ps52_8_9,WORLD,,,generic,,,,"ps52:8,9",I trust in the kindness of God for ever.,"The righteous will see and they will fear; but they will laugh at him:
 
 “Behold the man! He did not take God as his refuge, but he trusted in the abundance of his wealth, and grew powerful through his wickedness.”",repo://assets/nabre.db,,76328dd138932f2f60d8342b96578929fea6925033d45aeadbc9e5ad774fc59d,1a4cc8794598eb493ea6b6f7661e83b87cf9480b72a6d5c23431e9faaba00c4a,100
@@ -2331,9 +2335,6 @@ Selah
 May the peoples praise you, God; may all the peoples praise you!
 
 May God bless us still; that the ends of the earth may revere him.",repo://assets/nabre.db,,d770107cb7de3d1259cfac1ad7c8b8d56bd82ee7c8f84cd4672d59e1950819cb,d43e53ffcc73eb306785875d5a0da59df37ea218f5503d12ad31eec1a91ded2c,100
-local_nabre,ps67_2_3_5_6and8,WORLD,,,generic,,,,"ps67:2-3,5-6and8","O God, be gracious and bless us.","Selah So shall your way be known upon the earth, your victory among all the nations.
-
-Selah May the peoples praise you, God; may all the peoples praise you!",repo://assets/nabre.db,,069176afd34bfbf821eee63b925859966d800b6257038866b3e8e4ebd419f27b,a6fec639d67abe4f18eaea3d8af46a3d4c7e078ce2241b3d9384b57b1aca9fac,100
 local_nabre,ps68_1_2_3_4ac_5_6ab,WORLD,,,generic,,,,"ps68:1-2,3,4ac,5-6ab","Sing to God, O kingdoms of the earth.","Psalm 68 The Exodus and Conquest, Pledge of Future Help - For the leader. A psalm of David; a song. I - May God arise; may his enemies be scattered; may those who hate him flee before him.
 
 As the smoke is dispersed, disperse them; as wax is melted by fire, so may the wicked perish before God.
@@ -2425,20 +2426,15 @@ Be my rock of refuge, my stronghold to give me safety; for you are my rock and f
 You are my hope, Lord; my trust, GOD, from my youth. On you I have depended since birth; from my mother’s womb you are my strength; my hope in you never wavers.
 
 My mouth shall proclaim your just deeds, day after day your acts of deliverance, though I cannot number them all. God, you have taught me from my youth; to this day I proclaim your wondrous deeds.",repo://assets/nabre.db,,f655e8995e72e37163133b14f7fd82364ac19a902152f6c7cbff2a3497a8dbae,bc444538e73248602974a09cd2508a845ce8e13a8681956da4c2511b0d096452,100
-local_nabre,ps71_1_2_3_4a_5_6ab_15ab_17,WORLD,,,generic,,,,"ps71:1-2,3-4a,5-6ab,15ab+17",I will sing of your salvation.,"Psalm 71 Prayer in Time of Old Age I - In you, LORD, I take refuge; let me never be put to shame. In your justice rescue and deliver me; listen to me and save me!
+local_nabre,ps71_1_2_3_4a_5_6ab_15ab_17,WORLD,,,generic,,,,"ps71:1-2,3-4a,5-6ab,15ab,17","(6) Since my mother's womb, you have been my strength.","Psalm 71 Prayer in Time of Old Age I - In you, LORD, I take refuge; let me never be put to shame. In your justice rescue and deliver me; listen to me and save me!
 
 Be my rock of refuge, my stronghold to give me safety; for you are my rock and fortress. My God, rescue me from the hand of the wicked, from the clutches of the evil and violent.
 
 You are my hope, Lord; my trust, GOD, from my youth. On you I have depended since birth; from my mother’s womb you are my strength; my hope in you never wavers.
 
-My mouth shall proclaim your just deeds, day after day your acts of deliverance, though I cannot number them all. God, you have taught me from my youth; to this day I proclaim your wondrous deeds.",repo://assets/nabre.db,,c4a51ae60c35635e888b59f3efa0b5ba8e1519c95dd1aace2dcb4869c407cc8c,62e8532e928550c5ba15d7200464dd3b791fa5e698470027fa02af9a7fb785ad,100
-local_nabre,ps71_1_2_3_4a_5_6ab_15aband17,WORLD,,,generic,,,,"ps71:1-2,3-4a,5-6ab,15aband17","(6) Since my mother's womb, you have been my strength.","Psalm 71 Prayer in Time of Old Age I - In you, LORD, I take refuge; let me never be put to shame. In your justice rescue and deliver me; listen to me and save me!
+My mouth shall proclaim your just deeds, day after day your acts of deliverance, though I cannot number them all.
 
-Be my rock of refuge, my stronghold to give me safety; for you are my rock and fortress. My God, rescue me from the hand of the wicked, from the clutches of the evil and violent.
-
-You are my hope, Lord; my trust, GOD, from my youth. On you I have depended since birth; from my mother’s womb you are my strength; my hope in you never wavers.
-
-My mouth shall proclaim your just deeds, day after day your acts of deliverance, though I cannot number them all.",repo://assets/nabre.db,,7c6fd0ce336124e16a9fb22a3306f426bffb0bb11fcc7d89b58b1056c1c8ab1b,461ab765341124f435670f9268217253552d052c881c86c8a8035ab83f3d0696,100
+God, you have taught me from my youth; to this day I proclaim your wondrous deeds.",repo://assets/nabre.db,,a52dee320d8e87b7ba518cabe2b8e441e12d3ebdb5d4d6705c8b1c1a2fc4e51f,c5e5a0db0d4ccace1184cfd20a96ebde21071a94c8526e91bb3776b41c4cb155,100
 local_nabre,ps71_1_2_3_5_6_15_17,WORLD,,,generic,,,,"ps71:1-2,3,5-6,15+17",I will sing of your salvation.,"Psalm 71 Prayer in Time of Old Age I - In you, LORD, I take refuge; let me never be put to shame. In your justice rescue and deliver me; listen to me and save me!
 
 Be my rock of refuge, my stronghold to give me safety; for you are my rock and fortress.

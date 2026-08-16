@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../data/models/responsorial_psalm_edition.dart';
 import '../../data/services/responsorial_psalm_edition_registry.dart';
 import '../../data/services/responsorial_psalm_preference.dart';
 

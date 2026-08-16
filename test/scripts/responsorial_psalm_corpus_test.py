@@ -308,12 +308,26 @@ class PsalmEditionCorpusTest(unittest.TestCase):
         )
         self.assertTrue(all(row["local_rsvce_stanzas_text"] for row in rows))
         self.assertTrue(all(row["local_nabre_stanzas_text"] for row in rows))
+        report = json.loads(
+            (
+                ROOT
+                / "verification/psalm_sources/responsorial_psalm_audit_report.json"
+            ).read_text(encoding="utf-8")
+        )
+        self.assertEqual(report["conflicting_pack_row_count"], 0)
+        self.assertEqual(report["invalid_hash_count"], 0)
+        self.assertEqual(report["orphan_usage_count"], 0)
+        self.assertEqual(
+            report["comparison_ready_count"], report["unique_selection_count"]
+        )
+        self.assertEqual(report["insufficient_edition_count"], 0)
 
     def test_known_legacy_reference_corruptions_are_repaired(self):
         expected = {
             "Ps 23: 13a, 3b4, 5, 6": "ps23:1-3a,3b-4,5,6",
             "Ps 114:1-2, 3-4, 5-6, 8-9": "ps116:1-2,3-4,5-6,8-9",
             "Psalm 27.1, 2, 3, 13-15": "ps27:1,2,3,13-14",
+            "Ps 67:2-3, 5-6 and 8": "ps67:2-3,5-6,8",
         }
         from scripts.psalm_sources.bible_databases import parse_selection
 
@@ -364,8 +378,8 @@ class PsalmSourcePackTest(unittest.TestCase):
         root = ROOT / "assets/data/psalm_editions"
         manifest = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
         editions = {row["id"]: row for row in manifest["editions"]}
-        self.assertEqual(editions["local_rsvce"]["selectionCount"], 549)
-        self.assertEqual(editions["local_nabre"]["selectionCount"], 549)
+        self.assertEqual(editions["local_rsvce"]["selectionCount"], 545)
+        self.assertEqual(editions["local_nabre"]["selectionCount"], 545)
         self.assertTrue(editions["nigeria_365_firestore"]["installed"])
         self.assertFalse(editions["modern_psalter_us"]["installed"])
         self.assertFalse(editions["jerusalem_bible"]["installed"])

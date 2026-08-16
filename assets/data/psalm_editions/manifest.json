@@ -48,7 +48,7 @@
       "downloadable": false,
       "sourceUrl": "repo://assets/rsvce.db",
       "fallbackRole": "default",
-      "selectionCount": 549
+      "selectionCount": 545
     },
     {
       "id": "local_nabre",
@@ -64,7 +64,7 @@
       "downloadable": false,
       "sourceUrl": "repo://assets/nabre.db",
       "fallbackRole": "selected_bible",
-      "selectionCount": 549
+      "selectionCount": 545
     },
     {
       "id": "douay_rheims",

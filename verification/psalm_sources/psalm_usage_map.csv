@@ -113,10 +113,10 @@ local_standard_lectionary:row:71,ps104_1_24_29_30_31_34,WORLD,Sunday,,SEVENTH SU
 local_standard_lectionary:row:661,ps104_1_2a_27_28_29bc_30,WORLD,Wednesday,,Ordinary Time 5 Wednesday,catalog,1,,I,331,"O bless the Lord, my soul!"
 local_sunday_psalms:row:119,ps104_1_2a_27_28_29bc_30,WORLD,Wednesday,,,catalog,1,,I,,"O bless the Lord, my soul!"
 local_weekday_psalms:row:197,ps104_1_2a_27_28_29bc_30,WORLD,Wednesday,,,catalog,1,,I,,"O bless the Lord, my soul!"
+local_sunday_psalms:row:599,ps104_1_2a_5_6_10_12_13_14_24_35c,WORLD,Easter Vigil - Psalm 1,,,catalog,1,A/B/C,,,"Lord, send forth your Spirit, and renew the face of the earth."
 local_standard_lectionary:row:653,ps104_1_2a_5_6_10_12_24_35c,WORLD,Monday,,Ordinary Time 5 Monday,catalog,1,,I,329,May the Lord be glad in his works.
 local_sunday_psalms:row:115,ps104_1_2a_5_6_10_12_24_35c,WORLD,Monday,,,catalog,1,,I,,May the Lord be glad in his works.
 local_weekday_psalms:row:189,ps104_1_2a_5_6_10_12_24_35c,WORLD,Monday,,,catalog,1,,I,,May the Lord be glad in his works.
-local_sunday_psalms:row:599,ps104_1_2a_5_6_10and12_13_14_24and35c,WORLD,Easter Vigil - Psalm 1,,,catalog,1,A/B/C,,,"Lord, send forth your Spirit, and renew the face of the earth."
 local_standard_lectionary:row:31,ps104_1b_2_3_4_24_25_27_28_29_30,WORLD,Sunday,,THE BAPTISM OF THE LORD (First Sunday in Ordinary Time),catalog,1,ABC,,,"(1) O bless the Lord, my soul."
 local_standard_lectionary:row:275,ps105_16_17_18_19_20_21,WORLD,Friday,,Lent 2 Friday,catalog,1,,I/II,234,Remember the marvels the Lord has done.
 local_standard_lectionary:row:357,ps105_16_17_18_19_20_21,WORLD,Thursday,,Ordinary Time 14 Thursday,catalog,1,,I,386,Remember the marvels the Lord has done.
@@ -799,7 +799,7 @@ local_sunday_psalms:row:327,ps16_1_2a_5_7_8_9a_11,WORLD,Saturday,,,catalog,1,,I,
 local_weekday_psalms:row:460,ps16_1_2a_5_7_8_9a_11,WORLD,Saturday,,,catalog,1,,II,,"You are my inheritance, O Lord."
 local_standard_lectionary:row:167,ps16_5_8_9_10_11,WORLD,Sunday,,THIRTY-THIRD SUNDAY IN ORDINARY TIME-B,catalog,1,B,,,"(1) You are my inheritance, O Lord!"
 local_sunday_psalms:row:516,ps16_5_8_9_10_11,WORLD,Sunday,,,catalog,1,B,,,"Preserve me, God, I take refuge in you."
-local_sunday_psalms:row:601,ps16_5and8_9_10_11,WORLD,Easter Vigil - Psalm 2,,,catalog,1,A/B/C,,,"Preserve me, O God, for in you I take refuge."
+local_sunday_psalms:row:601,ps16_5_8_9_10_11,WORLD,Easter Vigil - Psalm 2,,,catalog,1,A/B/C,,,"Preserve me, O God, for in you I take refuge."
 local_standard_lectionary:row:500,ps17_1_2_3_6_7,WORLD,Monday,,Ordinary Time 25 Monday,catalog,1,,II,455,"Lord, bend your ear and hear my prayer."
 local_sunday_psalms:row:407,ps17_1_2_3_6_7,WORLD,Monday,,,catalog,1,,II,,"Lord, bend your ear and hear my prayer."
 local_weekday_psalms:row:192,ps17_1_2_3_6_7,WORLD,Monday,,,catalog,1,,II,,"Lord, bend your ear and hear my prayer."
@@ -881,6 +881,7 @@ local_standard_lectionary:row:571,ps1_1_2_3_4_6,WORLD,Monday,,Ordinary Time 30 M
 local_standard_lectionary:row:596,ps1_1_2_3_4_6,WORLD,Monday,,Ordinary Time 32 Monday,catalog,1,,II,497,Those who are victorious
 local_standard_lectionary:row:699,ps1_1_2_3_4_6,WORLD,Thursday,,Ordinary Time 7 Thursday,catalog,1,,I,344,Happy are they who hope in the Lord.
 local_standard_lectionary:row:700,ps1_1_2_3_4_6,WORLD,Thursday,,Ordinary Time 7 Thursday,catalog,1,,I,344,Happy are they who hope in the Lord.
+local_standard_lectionary:row:86,ps1_1_2_3_4_6,WORLD,Sunday,,SIXTH SUNDAY IN ORDINARY TIME-C,catalog,1,C,,,(40:5a) Blessed are they who hope in the Lord.
 local_sunday_psalms:row:129,ps1_1_2_3_4_6,WORLD,Sunday,,,catalog,1,C,,,Happy the man who has placed his trust in the Lord.
 local_sunday_psalms:row:152,ps1_1_2_3_4_6,WORLD,Thursday,,,catalog,1,,I,,Happy are they who hope in the Lord.
 local_sunday_psalms:row:25,ps1_1_2_3_4_6,WORLD,Friday,,,catalog,1,,I/II,,"Those who follow you, Lord, will have the light of life."
@@ -900,7 +901,6 @@ local_weekday_psalms:row:297,ps1_1_2_3_4_6,WORLD,Wednesday,,,catalog,1,,II,,"Tho
 local_weekday_psalms:row:340,ps1_1_2_3_4_6,WORLD,Monday,,,catalog,1,,II,,Behave like God as beloved children.
 local_weekday_psalms:row:409,ps1_1_2_3_4_6,WORLD,Thursday,,,catalog,1,,II,,Happy are they who hope in the Lord.
 local_weekday_psalms:row:487,ps1_1_2_3_4_6,WORLD,Thursday,,,catalog,1,,I/II,,Happy are they who hope in the Lord.
-local_standard_lectionary:row:86,ps1_1_2_3_4and6,WORLD,Sunday,,SIXTH SUNDAY IN ORDINARY TIME-C,catalog,1,C,,,(40:5a) Blessed are they who hope in the Lord.
 local_standard_lectionary:row:428,ps21_1_2_3_4_5_6,WORLD,Saturday,,Ordinary Time 1 Saturday,catalog,1,,II,310,"Lord, your strength gives joy to the king."
 local_standard_lectionary:row:446,ps21_1_2_3_4_5_6,WORLD,Wednesday,,Ordinary Time 20 Wednesday,catalog,1,,I,421,"Lord, your strength gives joy to the king."
 local_sunday_psalms:row:334,ps21_1_2_3_4_5_6,WORLD,Wednesday,,,catalog,1,,I,,"Lord, your strength gives joy to the king."
@@ -1066,7 +1066,7 @@ local_standard_lectionary:row:98,ps30_2_4_5_6_11_12_13,WORLD,Sunday,,TENTH SUNDA
 local_sunday_psalms:row:191,ps30_2_4_5_6_11_12_13,WORLD,Sunday,,,catalog,1,C,,,"I will praise you, Lord, you have rescued me."
 local_sunday_psalms:row:235,ps30_2_4_5_6_11_12_13,WORLD,Sunday,,,catalog,1,B,,,"I will praise you, Lord, you have rescued me."
 local_sunday_psalms:row:620,ps30_2_4_5_6_11_12_13,WORLD,Sunday,,,catalog,1,C,,,"I will praise you, Lord, you have rescued me."
-local_sunday_psalms:row:603,ps30_2and4_5_6_11_12aand13b,WORLD,Easter Vigil - Psalm 4,,,catalog,1,A/B/C,,,"I will extol you, O Lord, for you have raised me up."
+local_sunday_psalms:row:603,ps30_2_4_5_6_11_12a_13b,WORLD,Easter Vigil - Psalm 4,,,catalog,1,A/B/C,,,"I will extol you, O Lord, for you have raised me up."
 local_standard_lectionary:row:641,ps31_19_20_21_22_23,WORLD,Monday,,Ordinary Time 4 Monday,catalog,1,,I,323,"Let your hearts take comfort,"
 local_sunday_psalms:row:101,ps31_19_20_21_22_23,WORLD,Monday,,,catalog,1,,I,,"Let your hearts take comfort, all who hope in the Lord."
 local_weekday_psalms:row:130,ps31_19_20_21_22_23,WORLD,Monday,,,catalog,1,,I,,"Let your hearts take comfort, all who hope in the Lord."
@@ -1152,7 +1152,7 @@ local_standard_lectionary:row:760,ps33_4_5_18_19_20_22,WORLD,Tuesday,,Easter Oct
 local_sunday_psalms:row:459,ps33_4_5_18_19_20_22,WORLD,Sunday,,,catalog,1,B,,,"May your love be upon us, O Lord, as we place all our hope in you."
 local_sunday_psalms:row:550,ps33_4_5_18_19_20_22,WORLD,Sunday,,,catalog,1,A,,,"May your love be upon us, O Lord, as we place all our hope in you."
 local_sunday_psalms:row:594,ps33_4_5_18_19_20_22,WORLD,Wednesday,,,catalog,1,,I/II,,The earth is full of the goodness of the Lord.
-local_sunday_psalms:row:600,ps33_4_5_6_7_12_13_20and22,WORLD,Easter Vigil - Psalm 1 (Alt),,,catalog,1,A/B/C,,,His merciful love fills the earth.
+local_sunday_psalms:row:600,ps33_4_5_6_7_12_13_20_22,WORLD,Easter Vigil - Psalm 1 (Alt),,,catalog,1,A/B/C,,,His merciful love fills the earth.
 local_standard_lectionary:row:175,ps33_4_5_6_9_18_19_20_22,WORLD,Sunday,,HOLY TRINITY-B (Sunday after Pentecost),catalog,1,B,,,(12b) Blessed the people the Lord has chosen to be his own.
 local_standard_lectionary:row:287,ps34_16_17_18_19_20_22,WORLD,Friday,,Lent 4 Friday,catalog,1,,I/II,248,The Lord is near to broken hearts.
 local_sunday_psalms:row:576,ps34_16_17_18_19_20_22,WORLD,Friday,,,catalog,1,,I/II,,The Lord is near to broken hearts.
@@ -1402,7 +1402,7 @@ local_standard_lectionary:row:141,ps51_3_4_12_13_17_19,WORLD,Sunday,,TWENTY-FOUR
 local_sunday_psalms:row:389,ps51_3_4_12_13_17_19,WORLD,Sunday,,,catalog,1,C,,,I will leave this place and go to my father.
 local_sunday_psalms:row:540,ps51_3_4_5_6_12_13_14_17,WORLD,Sunday,,,catalog,1,A,,,"Have mercy on us, O Lord, for we have sinned."
 local_standard_lectionary:row:33,ps51_3_4_5_6_12_13_17,WORLD,Sunday,,FIRST SUNDAY OF LENT-A,catalog,1,A,,,"Be merciful, O Lord, for we have sinned."
-local_standard_lectionary:row:32,ps51_3_4_5_6ab_12_13_14and17,WORLD,Ash Wednesday,,ASH WEDNESDAY-ABC,catalog,1,ABC,,,"(see 3a) Be merciful, O Lord, for we have sinned."
+local_standard_lectionary:row:32,ps51_3_4_5_6ab_12_13_14_17,WORLD,Ash Wednesday,,ASH WEDNESDAY-ABC,catalog,1,ABC,,,"(see 3a) Be merciful, O Lord, for we have sinned."
 local_standard_lectionary:row:471,ps52_8_9,WORLD,Wednesday,,Ordinary Time 22 Wednesday,catalog,1,,I,433,I trust in the kindness of God for ever.
 local_sunday_psalms:row:364,ps52_8_9,WORLD,Wednesday,,,catalog,1,,I,,I trust in the kindness of God for ever.
 local_weekday_psalms:row:74,ps52_8_9,WORLD,Wednesday,,,catalog,1,,II,,I trust in the kindness of God for ever.
@@ -1489,11 +1489,11 @@ local_weekday_psalms:row:458,ps67_1_2_3a_4_6_7,WORLD,Saturday,,,catalog,1,,II,,"
 local_standard_lectionary:row:213,ps67_1_2_4_6_7,WORLD,Friday,,Advent 3 Friday,catalog,1,,I/II,191,"O God, let the nations praise you!"
 local_sunday_psalms:row:34,ps67_1_2_4_6_7,WORLD,Friday,,,catalog,1,,I/II,,"O God, let the nations praise you!"
 local_weekday_psalms:row:18,ps67_1_2_4_6_7,WORLD,Friday,,,catalog,1,,I/II,,"O God, let the nations praise you!"
+ng:2026-01-01:responsorial-psalm:1,ps67_2_3_5_6_8,NG,2026-01-01,,"SOLEMNITY OF MARY, MOTHER OF GOD",resolved-day,1,,,,"O God, be gracious and bless us."
 local_standard_lectionary:row:126,ps67_2_3_5_6_8,WORLD,Sunday,,TWENTIETH SUNDAY IN ORDINARY TIME-A,catalog,1,A,,,"(4) O God, let all the nations praise you!"
 local_standard_lectionary:row:172,ps67_2_3_5_6_8,WORLD,Sunday,,"MARY, MOTHER OF GOD-ABC (January 1)",catalog,1,ABC,,,(2a) May God bless us in his mercy.
 local_sunday_psalms:row:329,ps67_2_3_5_6_8,WORLD,Sunday,,,catalog,1,A,,,"Let the peoples praise you, O God; let all the peoples praise you."
 local_sunday_psalms:row:647,ps67_2_3_5_6_8,WORLD,Sunday,,,catalog,1,C,,,"Let the peoples praise you, O God; let all the peoples praise you."
-ng:2026-01-01:responsorial-psalm:1,ps67_2_3_5_6and8,NG,2026-01-01,,"SOLEMNITY OF MARY, MOTHER OF GOD",resolved-day,1,,,,"O God, be gracious and bless us."
 local_standard_lectionary:row:261,ps68_1_2_3_4ac_5_6ab,WORLD,Monday,,Easter 7 Monday,catalog,1,,I/II,297,"Sing to God, O kingdoms of the earth."
 local_sunday_psalms:row:657,ps68_1_2_3_4ac_5_6ab,WORLD,Monday,,,catalog,1,,I/II,,"Sing to God, O kingdoms of the earth."
 local_weekday_psalms:row:540,ps68_1_2_3_4ac_5_6ab,WORLD,Monday,,,catalog,1,,I/II,,"Sing to God, O kingdoms of the earth."
@@ -1532,10 +1532,10 @@ local_sunday_psalms:row:219,ps69_8_10_14_17_33_35,WORLD,Sunday,,,catalog,1,A,,,"
 local_standard_lectionary:row:80,ps71_1_2_3_4_5_6_15_17,WORLD,Sunday,,FOURTH SUNDAY IN ORDINARY TIME-C,catalog,1,C,,,I will sing of your salvation.
 local_sunday_psalms:row:100,ps71_1_2_3_4_5_6_15_17,WORLD,Sunday,,,catalog,1,C,,,My lips will tell of your help.
 local_weekday_psalms:row:174,ps71_1_2_3_4a_5_6_15ab_17,WORLD,Saturday,,,catalog,1,,II,,I will sing your salvation.
+local_standard_lectionary:row:183,ps71_1_2_3_4a_5_6ab_15ab_17,WORLD,Sunday,,NATIVITY OF JOHN THE BAPTIST (VIGIL)-ABC (June 24),catalog,1,ABC,,,"(6) Since my mother's womb, you have been my strength."
 local_standard_lectionary:row:386,ps71_1_2_3_4a_5_6ab_15ab_17,WORLD,Wednesday,,Ordinary Time 16 Wednesday,catalog,1,,II,397,I will sing of your salvation.
 local_sunday_psalms:row:284,ps71_1_2_3_4a_5_6ab_15ab_17,WORLD,Wednesday,,,catalog,1,,II,,I will sing of your salvation.
 local_weekday_psalms:row:391,ps71_1_2_3_4a_5_6ab_15ab_17,WORLD,Wednesday,,,catalog,1,,II,,I will sing of your salvation.
-local_standard_lectionary:row:183,ps71_1_2_3_4a_5_6ab_15aband17,WORLD,Sunday,,NATIVITY OF JOHN THE BAPTIST (VIGIL)-ABC (June 24),catalog,1,ABC,,,"(6) Since my mother's womb, you have been my strength."
 local_standard_lectionary:row:267,ps71_1_2_3_5_6_15_17,WORLD,Tuesday,,Holy Week  Tuesday,catalog,1,,I/II,258,I will sing of your salvation.
 local_sunday_psalms:row:588,ps71_1_2_3_5_6_15_17,WORLD,Tuesday,,,catalog,1,,I/II,,I will sing of your salvation.
 local_weekday_psalms:row:162,ps71_1_2_3_5_6_15_17,WORLD,Saturday,,,catalog,1,,II,,"Since my mother’s womb, you have been my strength."

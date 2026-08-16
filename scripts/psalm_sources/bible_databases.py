@@ -93,6 +93,7 @@ def _expand_group(value: str) -> tuple[int, ...]:
 def parse_selection(reference: str) -> ParsedSelection:
     clean = reference.replace("–", "-").replace("—", "-").strip()
     clean = re.sub(r"\s*\([^)]*(?:R\.?|℟)[^)]*\).*?$", "", clean, flags=re.I)
+    clean = re.sub(r"\s+and\s+", ", ", clean, flags=re.I)
     clean = clean.rstrip("+ ")
     correction_key = re.sub(r"^psalm\s+", "ps ", clean.lower())
     clean = _KNOWN_REFERENCE_CORRECTIONS.get(

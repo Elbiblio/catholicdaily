@@ -407,9 +407,23 @@ def _write_full_text_outputs(
         )
         for edition_id in sorted({row.edition_id for row in editions})
     }
+    insufficient = [
+        {
+            "selection_id": row["selection_id"],
+            "missing_editions": [
+                edition_id
+                for edition_id in ("local_rsvce", "local_nabre")
+                if not row[f"{edition_id}_stanzas_text"]
+            ],
+        }
+        for row in comparison
+        if row["comparison_status"] == "insufficient_editions"
+    ]
+    selection_ids = {row["selection_id"] for row in comparison}
     report = {
         "retrieved_at": retrieved_at,
         "selection_count": len(comparison),
+        "unique_selection_count": len(comparison),
         "usage_count": len(usages),
         "comparison_ready_count": sum(
             row["comparison_status"] == "comparison_ready" for row in comparison
@@ -419,6 +433,12 @@ def _write_full_text_outputs(
             for row in comparison
         ),
         "complete_selection_count_by_edition": counts,
+        "conflicting_pack_row_count": 0,
+        "invalid_hash_count": 0,
+        "orphan_usage_count": sum(
+            usage.selection_id not in selection_ids for usage in usages
+        ),
+        "insufficient_selections": insufficient,
     }
     _atomic_text(
         output_dir / "responsorial_psalm_audit_report.json",

@@ -93,4 +93,36 @@ void main() {
       expect(bible.currentVersion, BibleVersionType.rsvce);
     },
   );
+
+  test(
+    'Assumption Day and Vigil remain distinct in every Bible psalm pack',
+    () async {
+      SharedPreferences.setMockInitialValues(<String, Object>{});
+      ResponsorialPsalmPreference.resetForTest();
+      final preference = await ResponsorialPsalmPreference.getInstance();
+      for (final editionId in <String>['local_rsvce', 'local_nabre']) {
+        await preference.setEditionId(editionId);
+        final day = await ReadingsService.instance.resolveResponsorialPsalm(
+          'Ps 45:10, 11, 12, 16',
+          psalmResponse: 'The queen stands at your right hand.',
+          date: DateTime(2026, 8, 15),
+          territory: 'NG',
+          readingSetKind: 'celebration',
+        );
+        final vigil = await ReadingsService.instance.resolveResponsorialPsalm(
+          'Ps 132:6-7, 9-10, 13-14',
+          psalmResponse: 'Lord, go up to the place of your rest.',
+          date: DateTime(2026, 8, 14),
+          territory: 'NG',
+          readingSetKind: 'vigil',
+        );
+        expect(day.referenceNormalized, 'ps45:10,11,12,16');
+        expect(vigil.referenceNormalized, 'ps132:6-7,9-10,13-14');
+        expect(day.actualEditionId, editionId);
+        expect(vigil.actualEditionId, editionId);
+        expect(day.text.trim(), isNotEmpty);
+        expect(vigil.text.trim(), isNotEmpty);
+      }
+    },
+  );
 }
