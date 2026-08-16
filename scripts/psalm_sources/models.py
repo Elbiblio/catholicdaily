@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import hashlib
 from dataclasses import asdict, dataclass
 from enum import Enum
 from typing import Any
+
+from .normalize import normalize_words
 
 
 class ReuseStatus(str, Enum):
@@ -25,6 +28,11 @@ class SourceRecord:
     coverage: str
     access_method: str
     notes: str
+    source_kind: str = "catalog"
+    pack_id: str = ""
+    renderability: str = "external"
+    fallback_role: str = "none"
+    coverage_status: str = "unavailable"
 
     @classmethod
     def from_dict(cls, raw: dict[str, Any]) -> "SourceRecord":
@@ -39,7 +47,55 @@ class SourceRecord:
             coverage=str(raw.get("coverage", "")),
             access_method=str(raw.get("access_method", "")),
             notes=str(raw.get("notes", "")),
+            source_kind=str(raw.get("source_kind", "catalog")),
+            pack_id=str(raw.get("pack_id", "")),
+            renderability=str(raw.get("renderability", "external")),
+            fallback_role=str(raw.get("fallback_role", "none")),
+            coverage_status=str(raw.get("coverage_status", "unavailable")),
         )
+
+
+@dataclass(frozen=True)
+class PsalmEditionText:
+    selection_id: str
+    edition_id: str
+    reference_normalized: str
+    response_text: str
+    stanzas: tuple[str, ...]
+    source_url: str
+    source_edition: str = ""
+    territory: str = "WORLD"
+    coverage_status: str = "complete"
+    missing_reason: str = ""
+
+    @property
+    def stanzas_text(self) -> str:
+        return "\n\n".join(value.strip() for value in self.stanzas if value.strip())
+
+    @property
+    def raw_sha256(self) -> str:
+        value = f"{self.response_text.strip()}\n\n{self.stanzas_text}"
+        return hashlib.sha256(value.encode("utf-8")).hexdigest()
+
+    @property
+    def normalized_sha256(self) -> str:
+        value = normalize_words(f"{self.response_text} {self.stanzas_text}")
+        return hashlib.sha256(value.encode("utf-8")).hexdigest()
+
+
+@dataclass(frozen=True)
+class PsalmUsage:
+    usage_id: str
+    selection_id: str
+    territory: str
+    date_rule: str
+    celebration_id: str
+    celebration_title: str
+    reading_set_kind: str
+    reading_set_priority: int
+    sunday_cycle: str = ""
+    weekday_cycle: str = ""
+    lectionary_number: str = ""
 
 
 @dataclass(frozen=True)

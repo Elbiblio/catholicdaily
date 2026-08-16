@@ -10,7 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
-from scripts.psalm_sources.models import ReuseStatus, SourceRecord
+from scripts.psalm_sources.models import PsalmEditionText, ReuseStatus, SourceRecord
 from scripts.psalm_sources.normalize import (
     normalize_reference,
     parse_responsorial_section,
@@ -64,6 +64,48 @@ class PsalmSourceRegistryTest(unittest.TestCase):
                 "unknown",
             },
         )
+
+    def test_registry_describes_runtime_psalm_editions(self):
+        registry = json.loads(
+            (ROOT / "scripts/psalm_sources/source_registry.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        by_id = {row["source_id"]: row for row in registry}
+        for source_id in {
+            "nigeria_365_firestore",
+            "modern_psalter_us",
+            "local_rsvce",
+            "local_nabre",
+            "douay_rheims",
+            "jerusalem_bible",
+            "esvce",
+        }:
+            row = by_id[source_id]
+            self.assertIn(row["source_kind"], {"lectionary", "bible", "psalter"})
+            self.assertTrue(row["pack_id"])
+            self.assertIn(
+                row["renderability"], {"bundled", "downloaded", "external"}
+            )
+            self.assertIn(
+                row["coverage_status"], {"complete", "partial", "unavailable"}
+            )
+
+    def test_edition_text_row_preserves_complete_text_and_hashes(self):
+        row = PsalmEditionText(
+            selection_id="ps45_10_11_12_16",
+            edition_id="local_rsvce",
+            reference_normalized="ps45:10,11,12,16",
+            response_text="The queen stands at your right hand, arrayed in gold.",
+            stanzas=("A first complete stanza.", "A second complete stanza."),
+            source_url="repo://assets/rsvce.db",
+        )
+        self.assertEqual(
+            row.stanzas_text,
+            "A first complete stanza.\n\nA second complete stanza.",
+        )
+        self.assertEqual(len(row.raw_sha256), 64)
+        self.assertEqual(len(row.normalized_sha256), 64)
 
 
 class PsalmNormalizationTest(unittest.TestCase):

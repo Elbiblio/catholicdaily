@@ -9,7 +9,12 @@
     "reuse_status": "comparison_only",
     "coverage": "2025-2026 daily records at audit time",
     "access_method": "public Firestore REST",
-    "notes": "Comparator for Nigerian Ordo assignments and displayed wording"
+    "notes": "Comparator for Nigerian Ordo assignments and displayed wording",
+    "source_kind": "lectionary",
+    "pack_id": "nigeria_365",
+    "renderability": "external",
+    "fallback_role": "territory_lectionary",
+    "coverage_status": "partial"
   },
   {
     "source_id": "modern_psalter_us",
@@ -21,7 +26,12 @@
     "reuse_status": "comparison_only",
     "coverage": "Sundays, principal feasts, and ritual selections",
     "access_method": "public HTML",
-    "notes": "Territory-specific comparator, not a Nigerian authority"
+    "notes": "Territory-specific comparator, not a Nigerian authority",
+    "source_kind": "lectionary",
+    "pack_id": "modern_psalter_us",
+    "renderability": "external",
+    "fallback_role": "territory_lectionary",
+    "coverage_status": "partial"
   },
   {
     "source_id": "local_standard_lectionary",
@@ -69,7 +79,12 @@
     "reuse_status": "comparison_only",
     "coverage": "complete Bible psalm verses",
     "access_method": "SQLite",
-    "notes": "Bible fallback, not exact lectionary stanza authority"
+    "notes": "Bible fallback, not exact lectionary stanza authority",
+    "source_kind": "bible",
+    "pack_id": "local_rsvce",
+    "renderability": "bundled",
+    "fallback_role": "default",
+    "coverage_status": "complete"
   },
   {
     "source_id": "local_nabre",
@@ -81,7 +96,12 @@
     "reuse_status": "comparison_only",
     "coverage": "complete Bible psalm verses",
     "access_method": "SQLite",
-    "notes": "Bible fallback, not Nigerian lectionary authority"
+    "notes": "Bible fallback, not Nigerian lectionary authority",
+    "source_kind": "bible",
+    "pack_id": "local_nabre",
+    "renderability": "bundled",
+    "fallback_role": "selected_bible",
+    "coverage_status": "complete"
   },
   {
     "source_id": "revised_grail_evidence",
@@ -130,5 +150,56 @@
     "coverage": "current regional Mass readings",
     "access_method": "public HTML",
     "notes": "Regional assignment comparator; wording is not assumed to be the Nigerian print lectionary"
+  },
+  {
+    "source_id": "douay_rheims",
+    "source_name": "Douay-Rheims Bible database",
+    "source_edition": "Douay-Rheims 1899 American Edition",
+    "source_territory": "WORLD",
+    "source_url": "https://api.elbiblio.com/dbs/engdra.db",
+    "source_license": "public domain",
+    "reuse_status": "public_domain",
+    "coverage": "complete Bible psalm and canticle verses",
+    "access_method": "downloadable SQLite",
+    "notes": "Optional Bible-derived psalm pack; not exact modern lectionary wording",
+    "source_kind": "bible",
+    "pack_id": "douay_rheims",
+    "renderability": "downloaded",
+    "fallback_role": "selected_bible",
+    "coverage_status": "complete"
+  },
+  {
+    "source_id": "jerusalem_bible",
+    "source_name": "Jerusalem Bible lectionary text",
+    "source_edition": "Jerusalem Bible",
+    "source_territory": "GB,IE,NG",
+    "source_url": "https://newman.nd.edu/liturgy-planning/sunday-liturgies/",
+    "source_license": "copyright; no reusable complete pack bundled",
+    "reuse_status": "comparison_only",
+    "coverage": "external comparison evidence",
+    "access_method": "public HTML",
+    "notes": "Visible as unavailable until a licensed complete pack is supplied",
+    "source_kind": "lectionary",
+    "pack_id": "jerusalem_bible",
+    "renderability": "external",
+    "fallback_role": "territory_lectionary",
+    "coverage_status": "unavailable"
+  },
+  {
+    "source_id": "esvce",
+    "source_name": "English Standard Version Catholic Edition",
+    "source_edition": "ESV-CE",
+    "source_territory": "GB,IE",
+    "source_url": "https://www.catholicbible.org/",
+    "source_license": "copyright; no reusable complete pack bundled",
+    "reuse_status": "unknown",
+    "coverage": "edition metadata only",
+    "access_method": "external",
+    "notes": "Not selectable until an authorized complete local pack is available",
+    "source_kind": "bible",
+    "pack_id": "esvce",
+    "renderability": "external",
+    "fallback_role": "none",
+    "coverage_status": "unavailable"
   }
 ]
