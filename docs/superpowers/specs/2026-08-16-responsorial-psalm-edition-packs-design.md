@@ -109,7 +109,7 @@ This wide review file contains one row per unique normalized selection. It inclu
 
 For each edition, the row also contains response text, stanza text, raw hash, normalized hash, coverage status, and source identifier. Comparison columns record exact equality, normalized similarity, response similarity, stanza similarity, selection mismatch, punctuation-only differences, translation differences, and missing-text reasons relative to the app-rendered baseline.
 
-A row is `comparison_ready` only when at least two editions contain complete stanza text. Missing text is represented explicitly rather than silently substituted in the audit file.
+A row is `comparison_ready` only when at least two editions contain complete stanza text. Every valid normalized selection in the supported lectionary corpus must reach this state through the RSVCE and NABRE baselines even when other editions have partial coverage. Missing optional-edition text is represented explicitly rather than silently substituted in the audit file.
 
 ### `psalm_usage_map.csv`
 
@@ -224,6 +224,6 @@ The feature is complete when:
 1. The app has a separate responsorial psalm edition selector.
 2. Every installed edition can be rendered independently.
 3. Fallback follows the approved order and is labeled accurately.
-4. The comparison CSV contains complete available text from at least two editions for every comparison-ready selection and includes the exact app-rendered baseline.
+4. The comparison CSV contains complete text from at least two editions for every valid normalized selection and includes the exact app-rendered baseline.
 5. The generator reports remaining coverage gaps explicitly.
 6. Focused, exhaustive, analysis, and full-suite gates pass.
