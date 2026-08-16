@@ -8,6 +8,10 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
 from scripts.psalm_sources.models import ReuseStatus, SourceRecord
+from scripts.psalm_sources.normalize import (
+    normalize_reference,
+    parse_responsorial_section,
+)
 
 
 class PsalmSourceRegistryTest(unittest.TestCase):
@@ -46,6 +50,44 @@ class PsalmSourceRegistryTest(unittest.TestCase):
                 "unknown",
             },
         )
+
+
+class PsalmNormalizationTest(unittest.TestCase):
+    def test_reference_normalization_preserves_verse_parts(self):
+        left = normalize_reference("Psalm 45:10.11.12.16 (R.10b)")
+        right = normalize_reference("Ps 45:10, 11, 12, 16 (R. 10b)")
+        self.assertEqual(left, right)
+        self.assertNotEqual(
+            left,
+            normalize_reference("Ps 45:10, 11, 12, 16 (R. 10)"),
+        )
+
+    def test_parser_extracts_response_and_stanzas(self):
+        section = """Psalm 45:10.11.12.16 (R.10b)
+R/. On your right stands the queen in gold of Ophir.
+
+The daughters of kings are those whom you favour.
+On your right stands the queen in gold of Ophir. R/.
+
+Listen, O daughter; pay heed and give ear;
+forget your own people and your father's house. R/.
+"""
+        parsed = parse_responsorial_section(section)
+        self.assertEqual(
+            parsed.response,
+            "On your right stands the queen in gold of Ophir.",
+        )
+        self.assertEqual(len(parsed.stanzas), 2)
+        self.assertEqual(
+            parsed.reference_normalized,
+            "ps45:10,11,12,16(r.10b)",
+        )
+
+    def test_parser_rejects_non_psalm_field_pollution(self):
+        with self.assertRaises(ValueError):
+            parse_responsorial_section(
+                "ALLELUIA John 14:6 I am the way and the truth"
+            )
 
 
 if __name__ == "__main__":
