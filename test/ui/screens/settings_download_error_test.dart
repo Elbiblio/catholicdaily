@@ -46,11 +46,11 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    await tester.drag(
-      find.byType(ListView),
-      const Offset(0, -2200),
+    await tester.scrollUntilVisible(
+      find.text('Data & Downloads'),
+      500,
+      scrollable: find.byType(Scrollable),
     );
-    await tester.pumpAndSettle();
     await tester.tap(find.text('Data & Downloads'));
     await tester.pumpAndSettle();
     await tester.tap(find.byTooltip('Download'));

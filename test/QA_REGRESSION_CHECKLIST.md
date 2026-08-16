@@ -22,6 +22,13 @@
 - Run `flutter test test/language_switcher_test.dart test/bible_cache_service_test.dart`.
 - Run full test suite and record unrelated pre-existing failures before release decisions.
 
+## Responsorial Psalm Editions
+- On 15 August, confirm the Assumption Day set appears first with Psalm 45:10, 11, 12, 16 and the Vigil choice remains available with Psalm 132:6-7, 9-10, 13-14.
+- Change only the Responsorial Psalm text setting between RSVCE and NABRE; confirm the selected Bible edition and all non-psalm readings remain unchanged.
+- Confirm the psalm footer labels the edition that actually supplied the stanza text, including a visible fallback indication when the selected edition is unavailable.
+- With Nigeria selected as the territory, confirm Automatic prefers the installed Nigeria lectionary text when that exact selection exists and otherwise follows the documented fallback order.
+- Confirm a missing, corrupt, or incomplete pack row never substitutes text from another psalm selection; it must fall through to the next compatible edition for the same normalized selection.
+
 ## Comprehensive Readings Emulator Matrix
 - Run on Android emulator `emulator-5554` after comprehensive resolver audit passes.
 - For each row: set liturgical region, set Bible version where selectable, navigate to date in Browse/Mass readings, verify celebration title/references/psalm/acclamation/text, capture XML and screenshot to `verification/comprehensive-readings-audit/`.
