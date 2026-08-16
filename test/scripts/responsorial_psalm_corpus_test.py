@@ -12,6 +12,10 @@ from scripts.psalm_sources.normalize import (
     normalize_reference,
     parse_responsorial_section,
 )
+from scripts.psalm_sources.nigeria_365 import (
+    extract_rows,
+    iter_firestore_documents,
+)
 
 
 class PsalmSourceRegistryTest(unittest.TestCase):
@@ -88,6 +92,40 @@ forget your own people and your father's house. R/.
             parse_responsorial_section(
                 "ALLELUIA John 14:6 I am the way and the truth"
             )
+
+
+class Nigeria365ExtractorTest(unittest.TestCase):
+    def test_fixture_extracts_january_and_assumption(self):
+        fixture = ROOT / "test/fixtures/psalm_sources/nigeria_365_page.json"
+        rows = extract_rows(json.loads(fixture.read_text(encoding="utf-8")))
+        self.assertEqual(
+            [row.date_rule for row in rows],
+            ["2026-01-01", "2026-08-15"],
+        )
+        self.assertEqual(
+            rows[1].reference_normalized,
+            "ps45:10,11,12,16(r.10b)",
+        )
+        self.assertIn(
+            "queen in gold of ophir",
+            rows[1].response_normalized,
+        )
+
+    def test_pagination_uses_next_page_token(self):
+        pages = iter(
+            [
+                {"documents": [{"name": "one"}], "nextPageToken": "next"},
+                {"documents": [{"name": "two"}]},
+            ]
+        )
+        calls = []
+        docs = list(
+            iter_firestore_documents(
+                lambda token: calls.append(token) or next(pages)
+            )
+        )
+        self.assertEqual(calls, [None, "next"])
+        self.assertEqual([doc["name"] for doc in docs], ["one", "two"])
 
 
 if __name__ == "__main__":

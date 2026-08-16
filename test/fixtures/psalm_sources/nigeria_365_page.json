@@ -1,0 +1,24 @@
+{
+  "documents": [
+    {
+      "name": "projects/catholic-missal/databases/(default)/documents/NigeriaReading/01-01-2026",
+      "fields": {
+        "mandroiddates": {"stringValue": "01-01-2026"},
+        "title": {"stringValue": "Thursday January 1, 2026\nSOLEMNITY OF MARY, MOTHER OF GOD"},
+        "body": {
+          "stringValue": "fixture omitted\n\nRESPONSORIAL PSALM: Psalm 67:2-3, 5-6 and 8\nR/. O God, be gracious and bless us.\n\nO God, be gracious and bless us\nand let your face shed its light upon us.\nSo will your ways be known upon earth and\nall nations learn your salvation. R/.\n\nLet the nations be glad and shout for joy,\nwith uprightness you rule the peoples;\nyou guide the nations on earth. R/.\n\nR/. O God, be gracious and bless us.\n\nLet the peoples praise you, O God;\nlet all the peoples praise you.\nMay God still give us his blessing\nthat all the ends of the earth may revere him. R/.\n\nSECOND READING\nfixture omitted"
+        }
+      }
+    },
+    {
+      "name": "projects/catholic-missal/databases/(default)/documents/NigeriaReading/15-08-2026",
+      "fields": {
+        "mandroiddates": {"stringValue": "15-08-2026"},
+        "title": {"stringValue": "Saturday August 15, 2026\nTHE ASSUMPTION OF THE BLESSED VIRGIN MARY"},
+        "body": {
+          "stringValue": "fixture omitted\n\nRESPONSORIAL PSALM: Psalm 45:10.11.12.16 (R.10b)\nR/. On your right stands the queen in gold of Ophir.\n\nThe daughters of kings are those whom you favour.\nOn your right stands the queen in gold of Ophir. R/.\n\nListen, O daughter; pay heed and give ear;\nforget your own people and your father's house. R/.\n\nR/. On your right stands the queen in gold of Ophir.\n\nSo will the king desire your beauty.\nHe is your lord, pay homage to him. R/.\n\nThey are escorted amid gladness and joy;\nthey pass within the palace of the king. R/.\n\nSECOND READING\nfixture omitted"
+        }
+      }
+    }
+  ]
+}
