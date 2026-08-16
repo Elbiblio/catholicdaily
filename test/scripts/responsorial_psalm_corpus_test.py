@@ -1,5 +1,7 @@
 import csv
+from contextlib import closing
 import json
+import sqlite3
 import subprocess
 import sys
 import tempfile
@@ -11,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
 from scripts.psalm_sources.models import PsalmEditionText, ReuseStatus, SourceRecord
+from scripts.psalm_sources.bible_databases import extract_bible_selection
 from scripts.psalm_sources.normalize import (
     normalize_reference,
     parse_responsorial_section,
@@ -116,6 +119,111 @@ class PsalmNormalizationTest(unittest.TestCase):
         self.assertNotEqual(
             left,
             normalize_reference("Ps 45:10, 11, 12, 16 (R. 10)"),
+        )
+
+
+class BibleDatabaseExtractionTest(unittest.TestCase):
+    def _build_bible_fixture(self, *, books, verses):
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        path = Path(directory.name) / "bible.db"
+        with closing(sqlite3.connect(path)) as connection:
+            connection.executescript(
+                """
+                CREATE TABLE books (_id INTEGER PRIMARY KEY, text TEXT, shortname TEXT);
+                CREATE TABLE chapters (_id INTEGER, book_id INTEGER);
+                CREATE TABLE verses (
+                  _id INTEGER PRIMARY KEY,
+                  book_id INTEGER,
+                  chapter_id INTEGER,
+                  verse_id INTEGER,
+                  text TEXT
+                );
+                """
+            )
+            connection.executemany(
+                "INSERT INTO books (_id, text, shortname) VALUES (?, ?, ?)", books
+            )
+            connection.executemany(
+                """INSERT INTO verses
+                   (book_id, chapter_id, verse_id, text) VALUES (?, ?, ?, ?)""",
+                verses,
+            )
+            connection.commit()
+        return path
+
+    def test_extracts_requested_verses_in_selection_order(self):
+        path = self._build_bible_fixture(
+            books=[(1, "Psalms", "Ps")],
+            verses=[
+                (1, 45, 10, "Daughters of kings are among your ladies of honor."),
+                (1, 45, 11, "Hear, O daughter, and consider."),
+                (1, 45, 12, "The king will desire your beauty."),
+                (1, 45, 16, "With joy and gladness they are led along."),
+            ],
+        )
+        result = extract_bible_selection(
+            path,
+            edition_id="fixture",
+            reference="Ps 45:10, 11, 12, 16",
+        )
+        self.assertEqual(result.reference_normalized, "ps45:10,11,12,16")
+        self.assertEqual(len(result.stanzas), 4)
+        self.assertIn("Hear, O daughter", result.stanzas_text)
+
+    def test_extracts_canticle_ranges_and_preserves_stanza_groups(self):
+        path = self._build_bible_fixture(
+            books=[(1, "Isaiah", "Isa")],
+            verses=[
+                (1, 12, verse, f"Isaiah twelve verse {verse}.")
+                for verse in range(2, 7)
+            ],
+        )
+        result = extract_bible_selection(
+            path,
+            edition_id="fixture",
+            reference="Isa 12:2-3, 4, 5-6",
+        )
+        self.assertEqual(result.reference_normalized, "isa12:2-3,4,5-6")
+        self.assertEqual(len(result.stanzas), 3)
+        self.assertEqual(
+            result.stanzas[0], "Isaiah twelve verse 2. Isaiah twelve verse 3."
+        )
+
+    def test_verse_letters_select_the_complete_numbered_verse(self):
+        path = self._build_bible_fixture(
+            books=[(1, "Psalms", "Ps")],
+            verses=[
+                (1, 34, verse, f"Complete psalm verse {verse}.")
+                for verse in range(2, 10)
+            ],
+        )
+        result = extract_bible_selection(
+            path,
+            edition_id="fixture",
+            reference="Ps 34:2-3a, 4-5, 6-7, 8-9",
+        )
+        self.assertIn("Complete psalm verse 3.", result.stanzas[0])
+        self.assertNotIn("3a", result.stanzas_text)
+
+    def test_bundled_editions_return_complete_distinct_text(self):
+        selections = []
+        for edition_id, database in (
+            ("local_rsvce", ROOT / "assets/rsvce.db"),
+            ("local_nabre", ROOT / "assets/nabre.db"),
+        ):
+            for reference in ("Ps 45:10, 11, 12, 16", "Isa 12:2-3, 4, 5-6"):
+                row = extract_bible_selection(
+                    database,
+                    edition_id=edition_id,
+                    reference=reference,
+                )
+                self.assertTrue(row.stanzas_text)
+                self.assertEqual(len(row.raw_sha256), 64)
+                selections.append(row)
+        self.assertNotEqual(
+            selections[0].normalized_sha256,
+            selections[2].normalized_sha256,
         )
 
     def test_parser_extracts_response_and_stanzas(self):
