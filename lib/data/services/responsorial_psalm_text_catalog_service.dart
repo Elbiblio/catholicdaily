@@ -152,6 +152,7 @@ class ResponsorialPsalmTextCatalogService
   static String normalizeReference(String value) => value
       .toLowerCase()
       .replaceFirst(RegExp(r'^(?:psalm|ps)\s*'), 'ps')
+      .replaceFirst(RegExp(r'^(?:deuteronomy|dt)\s*'), 'deut')
       .replaceAll(' and ', ',')
       .replaceAll(RegExp(r'\(r\.[^)]*\)', caseSensitive: false), '')
       .replaceAllMapped(RegExp(r'(?<=[0-9a-z])[.;](?=\d)'), (_) => ',')

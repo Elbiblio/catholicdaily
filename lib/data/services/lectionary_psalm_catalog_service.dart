@@ -235,16 +235,8 @@ class LectionaryPsalmCatalogService
     final matches = await getEntriesForDate(date);
     if (matches.isEmpty) return null;
 
-    // Prefer matches whose fullReference carries "(R. Xx)" notation.
-    final rBearing = matches
-        .where(
-          (e) =>
-              RegExp(r'\(R\.', caseSensitive: false).hasMatch(e.fullReference),
-        )
-        .toList();
-    final pool = rBearing.isNotEmpty ? rBearing : matches;
     return _resolvePsalmEntry(
-      entries: pool,
+      entries: matches,
       psalmReference: psalmReference,
       positionLabel: positionLabel,
       psalmSequence: psalmSequence,
@@ -463,14 +455,10 @@ class LectionaryPsalmCatalogService
       }
     }
 
-    if (psalmSequence != null) {
-      final index = psalmSequence - 1;
-      if (index >= 0 && index < entries.length) {
-        return entries[index];
-      }
-    }
-
-    return entries.first;
+    // A date match alone is not enough to identify a responsorial psalm.
+    // Returning an arbitrary same-day entry here can attach an unrelated
+    // refrain when a canticle is absent from a supplementary catalog.
+    return null;
   }
 
   /// Extracts the (R. ...) notation from a normalized reference
@@ -487,6 +475,7 @@ class LectionaryPsalmCatalogService
     var normalized = value
         .toLowerCase()
         .replaceAll('psalm', 'ps')
+        .replaceFirst(RegExp(r'^(?:deuteronomy|dt)\s*'), 'deut')
         .replaceAll('see ', '')
         .replaceAll('cf. ', '')
         .replaceAll('cf ', '');
@@ -496,6 +485,23 @@ class LectionaryPsalmCatalogService
     // Only remove spaces, but keep commas, colons, semicolons, hyphens, and periods
     // These are needed to distinguish verse ranges (e.g., 2-3, 6-7 vs 2-3, 16-17)
     normalized = normalized.replaceAll(RegExp(r'\s+'), '');
+    normalized = normalized.replaceFirstMapped(
+      RegExp(r'^([1-3]?[a-z]+)(\d+)[.:]'),
+      (match) => '${match.group(1)}${match.group(2)}:',
+    );
+    final responseIndex = normalized.indexOf('(r.');
+    final selection = responseIndex == -1
+        ? normalized
+        : normalized.substring(0, responseIndex);
+    final response = responseIndex == -1
+        ? ''
+        : normalized.substring(responseIndex);
+    normalized =
+        selection.replaceAllMapped(
+          RegExp(r'(?<=[0-9a-z])[.;](?=\d)'),
+          (_) => ',',
+        ) +
+        response;
 
     return normalized;
   }

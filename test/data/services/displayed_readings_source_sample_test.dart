@@ -1,7 +1,6 @@
 import 'package:catholic_daily/data/models/daily_reading.dart';
 import 'package:catholic_daily/data/models/liturgical_region.dart';
 import 'package:catholic_daily/data/services/bible_version_preference.dart';
-import 'package:catholic_daily/data/services/csv_readings_resolver_service.dart';
 import 'package:catholic_daily/data/services/liturgical_region_preference_service.dart';
 import 'package:catholic_daily/data/services/reading_flow_service.dart';
 import 'package:catholic_daily/data/services/readings_service.dart';
@@ -32,7 +31,7 @@ void main() {
             await versionPrefs.setVersion(sample.version);
             await ReadingsService.instance.reloadForVersionChange();
 
-            final readings = await CsvReadingsResolverService.instance.resolve(
+            final readings = await ReadingsService.instance.getReadingsForDate(
               sample.date,
             );
             final hydrated = await ReadingFlowService.instance
@@ -46,6 +45,13 @@ void main() {
                   '${sample.source}\nExpected ${sample.expectedReferences}\n'
                   'Displayed $displayedReferences',
             );
+            if (sample.expectedPsalmResponse != null) {
+              final psalm = hydrated.readings.singleWhere(
+                (reading) => reading.position == 'Responsorial Psalm',
+              );
+              expect(psalm.reading, sample.expectedPsalmReference);
+              expect(psalm.psalmResponse, sample.expectedPsalmResponse);
+            }
 
             for (final reading in hydrated.readings) {
               if (reading.position == 'Sequence') continue;
@@ -71,6 +77,19 @@ Set<String> _referenceSet(List<DailyReading> readings) =>
     readings.map((reading) => reading.reading).toSet();
 
 final _sourceBackedSamples = <_DisplayedReadingSample>[
+  _DisplayedReadingSample(
+    date: DateTime(2026, 8, 17),
+    region: LiturgicalRegion.nigeria,
+    version: BibleVersionType.rsvce,
+    source: 'Nigeria weekday lectionary, Monday of Ordinary Time 20 Year II',
+    expectedReferences: const {
+      'Ezek 24:15-24',
+      'Dt 32:18-19, 20, 21',
+      'Matt 19:16-22',
+    },
+    expectedPsalmReference: 'Dt 32:18-19, 20, 21',
+    expectedPsalmResponse: 'You forgot God who gave you birth.',
+  ),
   _DisplayedReadingSample(
     date: DateTime(2026, 8, 16),
     region: LiturgicalRegion.unitedStates,
@@ -126,6 +145,8 @@ class _DisplayedReadingSample {
   final BibleVersionType version;
   final String source;
   final Set<String> expectedReferences;
+  final String? expectedPsalmReference;
+  final String? expectedPsalmResponse;
 
   const _DisplayedReadingSample({
     required this.date,
@@ -133,6 +154,8 @@ class _DisplayedReadingSample {
     required this.version,
     required this.source,
     required this.expectedReferences,
+    this.expectedPsalmReference,
+    this.expectedPsalmResponse,
   });
 
   String get isoDate =>

@@ -378,8 +378,8 @@ class PsalmSourcePackTest(unittest.TestCase):
         root = ROOT / "assets/data/psalm_editions"
         manifest = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
         editions = {row["id"]: row for row in manifest["editions"]}
-        self.assertEqual(editions["local_rsvce"]["selectionCount"], 545)
-        self.assertEqual(editions["local_nabre"]["selectionCount"], 545)
+        self.assertEqual(editions["local_rsvce"]["selectionCount"], 546)
+        self.assertEqual(editions["local_nabre"]["selectionCount"], 546)
         self.assertTrue(editions["nigeria_365_firestore"]["installed"])
         self.assertFalse(editions["modern_psalter_us"]["installed"])
         self.assertFalse(editions["jerusalem_bible"]["installed"])
@@ -389,6 +389,11 @@ class PsalmSourcePackTest(unittest.TestCase):
             self.assertTrue(rows)
             self.assertTrue(all(row["stanzas_text"].strip() for row in rows))
             self.assertTrue(all(len(row["raw_sha256"]) == 64 for row in rows))
+            if filename != "nigeria_365.csv":
+                self.assertIn(
+                    "deut32:18-19,20,21",
+                    {row["reference_normalized"] for row in rows},
+                )
 
     def test_parser_extracts_response_and_stanzas(self):
         section = """Psalm 45:10.11.12.16 (R.10b)
@@ -547,6 +552,61 @@ class LocalPsalmCatalogTest(unittest.TestCase):
                 "local_weekday_psalms",
             }.issubset({row.source_id for row in rows})
         )
+
+    def test_year_two_week_twenty_monday_uses_deuteronomy_canticle(self):
+        with (ROOT / "standard_lectionary_complete.csv").open(
+            encoding="utf-8-sig", newline=""
+        ) as handle:
+            rows = list(csv.DictReader(handle))
+        matches = [
+            row
+            for row in rows
+            if row["season"] == "Ordinary Time"
+            and row["week"] == "20"
+            and row["day"] == "Monday"
+            and row["weekday_cycle"] == "II"
+        ]
+        self.assertEqual(len(matches), 1)
+        self.assertEqual(matches[0]["first_reading"], "Ezek 24.15-24")
+        self.assertEqual(
+            matches[0]["psalm_reference"],
+            "Dt 32.18-19, 20, 21",
+        )
+        self.assertEqual(
+            matches[0]["psalm_response"],
+            "You forgot God who gave you birth.",
+        )
+        self.assertEqual(matches[0]["gospel"], "Matt 19.16-22")
+
+    def test_ordinary_time_week_metadata_matches_lectionary_number(self):
+        day_offsets = {
+            "Monday": 299,
+            "Tuesday": 300,
+            "Wednesday": 301,
+            "Thursday": 302,
+            "Friday": 303,
+            "Saturday": 304,
+        }
+        with (ROOT / "standard_lectionary_complete.csv").open(
+            encoding="utf-8-sig", newline=""
+        ) as handle:
+            rows = list(csv.DictReader(handle))
+        mismatches = []
+        for line_number, row in enumerate(rows, start=2):
+            if row["season"] != "Ordinary Time" or row["day"] not in day_offsets:
+                continue
+            if not row["lectionary_number"].isdigit():
+                continue
+            lectionary_number = int(row["lectionary_number"])
+            delta = lectionary_number - day_offsets[row["day"]]
+            if delta < 6 or delta > 204 or delta % 6:
+                continue
+            expected_week = str(delta // 6)
+            if row["week"] != expected_week:
+                mismatches.append(
+                    (line_number, row["week"], expected_week, lectionary_number)
+                )
+        self.assertEqual(mismatches, [])
 
 
 class ModernPsalterTest(unittest.TestCase):

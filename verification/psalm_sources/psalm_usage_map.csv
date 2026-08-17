@@ -1,5 +1,6 @@
 usage_id,selection_id,territory,date_rule,celebration_id,celebration_title,reading_set_kind,reading_set_priority,sunday_cycle,weekday_cycle,lectionary_number,response_text
 local_standard_lectionary:row:174,dan3_52_53_54_55_56,WORLD,Sunday,,HOLY TRINITY-A (Sunday after Pentecost),catalog,1,A,,,(52b) Glory and praise for ever!
+local_standard_lectionary:row:438,deut32_18_19_20_21,WORLD,Monday,,Ordinary Time 20 Monday,catalog,1,,II,419,You forgot God who gave you birth.
 local_sunday_psalms:row:602,ex15_1b_2_3_4_5_6_17_18,WORLD,Easter Vigil - Psalm 3,,,catalog,1,A/B/C,,,"I will sing to the Lord, for he has triumphed gloriously."
 local_sunday_psalms:row:281,ex15_7ab_8_9_10_12_17,WORLD,Tuesday,,,catalog,1,,I,,Let us sing to the Lord; he has covered himself in glory.
 local_standard_lectionary:row:383,exod15_7ab_8_9_10_12_17,WORLD,Tuesday,,Ordinary Time 16 Tuesday,catalog,1,,I,396,Let us sing to the Lord;
@@ -15,7 +16,7 @@ local_standard_lectionary:row:222,ps100_1_2_3_4_5,WORLD,January 5,,Christmas Oct
 local_standard_lectionary:row:461,ps100_1_2_3_4_5,WORLD,Friday,,Ordinary Time 22 Friday,catalog,1,,I,435,Come with joy into the presence of the Lord.
 local_standard_lectionary:row:489,ps100_1_2_3_4_5,WORLD,Saturday,,Ordinary Time 24 Saturday,catalog,1,,I,448,Come with joy into the presence of the Lord.
 local_standard_lectionary:row:494,ps100_1_2_3_4_5,WORLD,Tuesday,,Ordinary Time 24 Tuesday,catalog,1,,II,444,We are his people: the sheep of his flock.
-local_standard_lectionary:row:536,ps100_1_2_3_4_5,WORLD,Monday,,Ordinary Time 28 Monday,catalog,1,,II,473,"The Lord made us, we belong to him."
+local_standard_lectionary:row:536,ps100_1_2_3_4_5,WORLD,Monday,,Ordinary Time 29 Monday,catalog,1,,II,473,"The Lord made us, we belong to him."
 local_standard_lectionary:row:623,ps100_1_2_3_4_5,WORLD,Thursday,,Ordinary Time 34 Thursday,catalog,1,,II,506,Blessed are they who are called to
 local_standard_lectionary:row:725,ps100_1_2_3_4_5,WORLD,Thursday,,Ordinary Time 8 Thursday,catalog,1,,II,350,Come with joy into the presence of the Lord.
 local_standard_lectionary:row:726,ps100_1_2_3_4_5,WORLD,Thursday,,Ordinary Time 8 Thursday,catalog,1,,II,350,Come with joy into the presence of the Lord.
@@ -47,7 +48,7 @@ local_standard_lectionary:row:370,ps102_12_14_15_17_18_20,WORLD,Thursday,,Ordina
 local_sunday_psalms:row:273,ps102_12_14_15_17_18_20,WORLD,Thursday,,,catalog,1,,II,,From heaven the Lord looks down on the earth.
 local_weekday_psalms:row:417,ps102_12_14_15_17_18_20,WORLD,Thursday,,,catalog,1,,II,,From heaven the Lord looks down on the earth.
 local_standard_lectionary:row:408,ps102_15_17_18_20_28_21_22,WORLD,Tuesday,,Ordinary Time 18 Tuesday,catalog,1,,II,408,"The Lord will build up Zion again,"
-local_standard_lectionary:row:499,ps102_15_17_18_20_28_21_22,WORLD,Monday,,Ordinary Time 25 Monday,catalog,1,,I,455,"The Lord will build up Zion again,"
+local_standard_lectionary:row:499,ps102_15_17_18_20_28_21_22,WORLD,Monday,,Ordinary Time 26 Monday,catalog,1,,I,455,"The Lord will build up Zion again,"
 local_standard_lectionary:row:675,ps102_15_17_18_20_28_21_22,WORLD,Thursday,,Ordinary Time 6 Thursday,catalog,1,,I,338,From heaven the Lord looks down on the earth.
 local_standard_lectionary:row:676,ps102_15_17_18_20_28_21_22,WORLD,Thursday,,Ordinary Time 6 Thursday,catalog,1,,I,338,From heaven the Lord looks down on the earth.
 local_sunday_psalms:row:136,ps102_15_17_18_20_28_21_22,WORLD,Thursday,,,catalog,1,,I,,From heaven the Lord looks down on the earth.
@@ -89,7 +90,7 @@ local_standard_lectionary:row:91,ps103_1_2_3_4_8_10_12_13,WORLD,Sunday,,EIGHTH S
 local_sunday_psalms:row:143,ps103_1_2_3_4_8_10_12_13,WORLD,Sunday,,,catalog,1,A,,,The Lord is compassion and love.
 local_sunday_psalms:row:145,ps103_1_2_3_4_8_10_12_13,WORLD,Sunday,,,catalog,1,C,,,The Lord is compassion and love.
 local_sunday_psalms:row:159,ps103_1_2_3_4_8_10_12_13,WORLD,Sunday,,,catalog,1,B,,,The Lord is compassion and love.
-local_standard_lectionary:row:330,ps103_1_2_3_4_8_9_10_11,WORLD,Monday,,Ordinary Time 12 Monday,catalog,1,,I,377,The Lord is kind and merciful.
+local_standard_lectionary:row:330,ps103_1_2_3_4_8_9_10_11,WORLD,Monday,,Ordinary Time 13 Monday,catalog,1,,I,377,The Lord is kind and merciful.
 local_sunday_psalms:row:237,ps103_1_2_3_4_8_9_10_11,WORLD,Monday,,,catalog,1,,I,,The Lord is kind and merciful.
 local_weekday_psalms:row:322,ps103_1_2_3_4_8_9_10_11,WORLD,Monday,,,catalog,1,,II,,The Lord is kind and merciful.
 local_standard_lectionary:row:307,ps103_1_2_3_4_8_9_11_12,WORLD,Saturday,,Ordinary Time 10 Saturday,catalog,1,,I,364,The Lord is kind and merciful.
@@ -174,7 +175,6 @@ local_standard_lectionary:row:658,ps106_3_4_6_7_35_36_37_40,WORLD,Thursday,,Ordi
 local_sunday_psalms:row:122,ps106_3_4_6_7_35_36_37_40,WORLD,Thursday,,,catalog,1,,II,,"Lord, remember us, for the love you bear your people."
 local_weekday_psalms:row:201,ps106_3_4_6_7_35_36_37_40,WORLD,Thursday,,,catalog,1,,I,,"Lord, remember us, for the love you bear your people."
 local_standard_lectionary:row:437,ps106_4_5b_6_35_36_37_39_40_43_44,WORLD,Monday,,Ordinary Time 20 Monday,catalog,1,,I,419,"In your love, remember us, Lord.++"
-local_standard_lectionary:row:438,ps106_4_5b_6_35_36_37_39_40_43_44,WORLD,Monday,,Ordinary Time 20 Monday,catalog,1,,II,419,"In your love, remember us, Lord.++"
 local_sunday_psalms:row:332,ps106_4_5b_6_35_36_37_39_40_43_44,WORLD,Monday,,,catalog,1,,I,,"In your love, remember us, Lord."
 local_weekday_psalms:row:328,ps106_4_5b_6_35_36_37_39_40_43_44,WORLD,Monday,,,catalog,1,,II,,"In your love, remember us, Lord.++"
 local_standard_lectionary:row:409,ps106_6_7_13_14_21_22_23,WORLD,Wednesday,,Ordinary Time 18 Wednesday,catalog,1,,I,409,"In your love, remember us, Lord.++"
@@ -225,7 +225,7 @@ local_standard_lectionary:row:718,ps111_1_2_5_6_9_10c,WORLD,Monday,,Ordinary Tim
 local_sunday_psalms:row:162,ps111_1_2_5_6_9_10c,WORLD,Monday,,,catalog,1,,II,,The Lord will remember his covenant for ever.
 local_weekday_psalms:row:280,ps111_1_2_5_6_9_10c,WORLD,Monday,,,catalog,1,,I,,The Lord will remember his covenant for ever.
 local_weekday_psalms:row:283,ps111_1_2_5_6_9_10c,WORLD,Monday,,,catalog,1,,II,,The Lord will remember his covenant for ever.
-local_standard_lectionary:row:512,ps111_1_2_7_8_9_10c,WORLD,Monday,,Ordinary Time 26 Monday,catalog,1,,II,461,The Lord will remember his covenant for ever.
+local_standard_lectionary:row:512,ps111_1_2_7_8_9_10c,WORLD,Monday,,Ordinary Time 27 Monday,catalog,1,,II,461,The Lord will remember his covenant for ever.
 local_sunday_psalms:row:432,ps111_1_2_7_8_9_10c,WORLD,Monday,,,catalog,1,,II,,The Lord will remember his covenant for ever.
 local_weekday_psalms:row:249,ps111_1_2_7_8_9_10c,WORLD,Monday,,,catalog,1,,II,,The Lord will remember his covenant for ever.
 local_standard_lectionary:row:491,ps111_7_8_9_10,WORLD,Thursday,,Ordinary Time 24 Thursday,catalog,1,,I,446,How great are the works of the Lord!
@@ -267,7 +267,7 @@ local_sunday_psalms:row:323,ps113_1_2_3_4_5_6,WORLD,Wednesday,,,catalog,1,,II,,T
 local_weekday_psalms:row:393,ps113_1_2_3_4_5_6,WORLD,Wednesday,,,catalog,1,,II,,The glory of the Lord is higher than the skies.
 local_weekday_psalms:row:159,ps113_1_2_3_4_5_6_7_8,WORLD,Saturday,,,catalog,1,,II,,The Lord will count him among his people.++
 local_standard_lectionary:row:477,ps113_1_2_3_4_5a_6_7,WORLD,Saturday,,Ordinary Time 23 Saturday,catalog,1,,I,442,Blessed be the name of the Lord for ever.
-local_standard_lectionary:row:524,ps113_1_2_3_4_5a_6_7,WORLD,Monday,,Ordinary Time 27 Monday,catalog,1,,II,467,Blessed be the name of the Lord for ever.
+local_standard_lectionary:row:524,ps113_1_2_3_4_5a_6_7,WORLD,Monday,,Ordinary Time 28 Monday,catalog,1,,II,467,Blessed be the name of the Lord for ever.
 local_sunday_psalms:row:385,ps113_1_2_3_4_5a_6_7,WORLD,Saturday,,,catalog,1,,I,,Blessed be the name of the Lord for ever.
 local_sunday_psalms:row:446,ps113_1_2_3_4_5a_6_7,WORLD,Monday,,,catalog,1,,II,,Blessed be the name of the Lord for ever.
 local_weekday_psalms:row:126,ps113_1_2_3_4_5a_6_7,WORLD,Saturday,,,catalog,1,,II,,Blessed be the name of the Lord for ever.
@@ -399,7 +399,7 @@ local_weekday_psalms:row:387,ps119_33_34_35_36_37_40,WORLD,Wednesday,,,catalog,1
 local_standard_lectionary:row:542,ps119_41_43_44_45_47_48,WORLD,Tuesday,,Ordinary Time 28 Tuesday,catalog,1,,II,468,"Let your loving kindness come to me, O Lord."
 local_sunday_psalms:row:449,ps119_41_43_44_45_47_48,WORLD,Tuesday,,,catalog,1,,II,,"Let your loving kindness come to me, O Lord."
 local_weekday_psalms:row:291,ps119_41_43_44_45_47_48,WORLD,Tuesday,,,catalog,1,,II,,"Let your loving kindness come to me, O Lord."
-local_standard_lectionary:row:595,ps119_53_61_134_150_155_158,WORLD,Monday,,Ordinary Time 32 Monday,catalog,1,,I,497,"Give me life, O Lord, and I will do your commands"
+local_standard_lectionary:row:595,ps119_53_61_134_150_155_158,WORLD,Monday,,Ordinary Time 33 Monday,catalog,1,,I,497,"Give me life, O Lord, and I will do your commands"
 local_sunday_psalms:row:504,ps119_53_61_134_150_155_158,WORLD,Monday,,,catalog,1,,I,,"Give me life, O Lord, and I will do your commands"
 local_weekday_psalms:row:64,ps119_53_61_134_150_155_158,WORLD,Monday,,,catalog,1,,II,,"Give me life, O Lord, and I will do your commands"
 local_standard_lectionary:row:117,ps119_57_72_76_77_127_128_129_130,WORLD,Sunday,,SEVENTEENTH SUNDAY IN ORDINARY TIME-A,catalog,1,A,,,"Lord, I love your commands."
@@ -418,7 +418,7 @@ local_weekday_psalms:row:214,ps119_67_68_71_72_75_76,WORLD,Monday,,,catalog,1,,I
 local_standard_lectionary:row:599,ps119_89_90_91_130_135_175,WORLD,Thursday,,Ordinary Time 32 Thursday,catalog,1,,I,494,"Your word is for ever, O Lord."
 local_sunday_psalms:row:509,ps119_89_90_91_130_135_175,WORLD,Thursday,,,catalog,1,,I,,"Your word is for ever, O Lord."
 local_weekday_psalms:row:81,ps119_89_90_91_130_135_175,WORLD,Thursday,,,catalog,1,,II,,"Your word is for ever, O Lord."
-local_standard_lectionary:row:452,ps119_97_98_99_100_101_102,WORLD,Monday,,Ordinary Time 21 Monday,catalog,1,,II,431,"Lord, I love your commands."
+local_standard_lectionary:row:452,ps119_97_98_99_100_101_102,WORLD,Monday,,Ordinary Time 22 Monday,catalog,1,,II,431,"Lord, I love your commands."
 local_sunday_psalms:row:347,ps119_97_98_99_100_101_102,WORLD,Monday,,,catalog,1,,II,,"Lord, I love your commands."
 local_weekday_psalms:row:29,ps119_97_98_99_100_101_102,WORLD,Monday,,,catalog,1,,II,,"Lord, I love your commands."
 local_standard_lectionary:row:644,ps119_9_10_11_12_13_14,WORLD,Saturday,,Ordinary Time 4 Saturday,catalog,1,,II,328,"Lord, teach me your decrees."
@@ -474,7 +474,7 @@ local_sunday_psalms:row:471,ps126_1_2_2_3_4_5_6,WORLD,Sunday,,,catalog,1,B,,,Wha
 local_sunday_psalms:row:581,ps126_1_2_2_3_4_5_6,WORLD,Sunday,,,catalog,1,C,,,What marvels the Lord worked for us! Indeed we were glad.
 local_weekday_psalms:row:167,ps126_1_2ab_2bc_3_4_5_6,WORLD,Saturday,,,catalog,1,,II,,"Those who sow in tears, shall reap with shouts of joy."
 local_weekday_psalms:row:188,ps126_1_2ab_2bc_3_4_5_6,WORLD,Saturday,,,catalog,1,,II,,Those who sow in tears shall reap with shouts of joy.
-local_standard_lectionary:row:487,ps126_1_2ab_2cd_3_4_5_6,WORLD,Monday,,Ordinary Time 24 Monday,catalog,1,,I,449,The Lord has done great things for us.
+local_standard_lectionary:row:487,ps126_1_2ab_2cd_3_4_5_6,WORLD,Monday,,Ordinary Time 25 Monday,catalog,1,,I,449,The Lord has done great things for us.
 local_standard_lectionary:row:576,ps126_1_2ab_2cd_3_4_5_6,WORLD,Tuesday,,Ordinary Time 30 Tuesday,catalog,1,,I,480,The Lord has done great things for us.
 local_sunday_psalms:row:390,ps126_1_2ab_2cd_3_4_5_6,WORLD,Monday,,,catalog,1,,I,,The Lord has done great things for us.
 local_sunday_psalms:row:475,ps126_1_2ab_2cd_3_4_5_6,WORLD,Tuesday,,,catalog,1,,I,,The Lord has done great things for us.
@@ -527,7 +527,7 @@ local_standard_lectionary:row:529,ps130_1_2_3_4ab_7_8,WORLD,Tuesday,,Ordinary Ti
 local_sunday_psalms:row:433,ps130_1_2_3_4ab_7_8,WORLD,Tuesday,,,catalog,1,,I,,"If you, O Lord, laid bare our guilt, who could endure it?"
 local_weekday_psalms:row:253,ps130_1_2_3_4ab_7_8,WORLD,Tuesday,,,catalog,1,,II,,"If you, O Lord, laid bare our guilt, who could endure it?"
 local_standard_lectionary:row:160,ps131_1_2_3,WORLD,Sunday,,THIRTY-FIRST SUNDAY IN ORDINARY TIME-A,catalog,1,A,,,"In you, Lord, I have found my peace."
-local_standard_lectionary:row:577,ps131_1_2_3,WORLD,Tuesday,,Ordinary Time 30 Tuesday,catalog,1,,I,486,"In you, Lord, I have found my peace."
+local_standard_lectionary:row:577,ps131_1_2_3,WORLD,Tuesday,,Ordinary Time 31 Tuesday,catalog,1,,I,486,"In you, Lord, I have found my peace."
 local_standard_lectionary:row:584,ps131_1_2_3,WORLD,Monday,,Ordinary Time 31 Monday,catalog,1,,II,485,"In you, Lord, I have found my peace."
 local_sunday_psalms:row:485,ps131_1_2_3,WORLD,Sunday,,,catalog,1,A,,,"Keep my soul in peace before you, O Lord."
 local_sunday_psalms:row:488,ps131_1_2_3,WORLD,Monday,,,catalog,1,,II,,"In you, Lord, I have found my peace."
@@ -587,7 +587,7 @@ local_weekday_psalms:row:163,ps139_1_3_13_14a_14b_15,WORLD,Saturday,,,catalog,1,
 local_standard_lectionary:row:480,ps139_1_3_13_14ab_23_24,WORLD,Thursday,,Ordinary Time 23 Thursday,catalog,1,,II,440,"Guide me, Lord, along the everlasting way."
 local_sunday_psalms:row:382,ps139_1_3_13_14ab_23_24,WORLD,Thursday,,,catalog,1,,II,,"Guide me, Lord, along the everlasting way."
 local_weekday_psalms:row:118,ps139_1_3_13_14ab_23_24,WORLD,Thursday,,,catalog,1,,II,,"Guide me, Lord, along the everlasting way."
-local_standard_lectionary:row:583,ps139_1_3_4_6_7_8_9_10,WORLD,Monday,,Ordinary Time 31 Monday,catalog,1,,I,491,"Guide me, Lord, along the everlasting way."
+local_standard_lectionary:row:583,ps139_1_3_4_6_7_8_9_10,WORLD,Monday,,Ordinary Time 32 Monday,catalog,1,,I,491,"Guide me, Lord, along the everlasting way."
 local_sunday_psalms:row:503,ps139_1_3_4_6_7_8_9_10,WORLD,Monday,,,catalog,1,,I,,"Guide me, Lord, along the everlasting way."
 local_weekday_psalms:row:63,ps139_1_3_4_6_7_8_9_10,WORLD,Monday,,,catalog,1,,II,,"Guide me, Lord, along the everlasting way."
 local_standard_lectionary:row:510,ps139_1_3_7_8_9_10_13_14ab,WORLD,Friday,,Ordinary Time 26 Friday,catalog,1,,II,459,"Guide me, Lord, along the everlasting way."
@@ -654,7 +654,7 @@ local_weekday_psalms:row:58,ps145_2_3_4_5_10_11,WORLD,Saturday,,,catalog,1,,II,,
 local_standard_lectionary:row:456,ps145_2_3_4_5_6_7,WORLD,Thursday,,Ordinary Time 21 Thursday,catalog,1,,II,428,"I will praise your name for ever, Lord."
 local_sunday_psalms:row:353,ps145_2_3_4_5_6_7,WORLD,Thursday,,,catalog,1,,II,,"I will praise your name for ever, Lord."
 local_weekday_psalms:row:47,ps145_2_3_4_5_6_7,WORLD,Thursday,,,catalog,1,,II,,"I will praise your name for ever, Lord."
-local_standard_lectionary:row:344,ps145_2_3_4_5_6_7_8_9,WORLD,Monday,,Ordinary Time 13 Monday,catalog,1,,II,383,The Lord is kind and merciful.
+local_standard_lectionary:row:344,ps145_2_3_4_5_6_7_8_9,WORLD,Monday,,Ordinary Time 14 Monday,catalog,1,,II,383,The Lord is kind and merciful.
 local_sunday_psalms:row:239,ps145_2_3_4_5_6_7_8_9,WORLD,Monday,,,catalog,1,,II,,The Lord is kind and merciful.
 local_weekday_psalms:row:335,ps145_2_3_4_5_6_7_8_9,WORLD,Monday,,,catalog,1,,II,,The Lord is kind and merciful.
 local_standard_lectionary:row:142,ps145_2_3_8_9_17_18,WORLD,Sunday,,TWENTY-FIFTH SUNDAY IN ORDINARY TIME-A,catalog,1,A,,,(18a) The Lord is near to all who call upon him.
@@ -760,7 +760,7 @@ local_weekday_psalms:row:116,ps150_1_2_3_4_5_6,WORLD,Thursday,,,catalog,1,,II,,L
 local_standard_lectionary:row:614,ps15_1_3a_3bc_4a_4b_5,WORLD,Tuesday,,Ordinary Time 33 Tuesday,catalog,1,,II,498,Those who are victorious
 local_sunday_psalms:row:521,ps15_1_3a_3bc_4a_4b_5,WORLD,Tuesday,,,catalog,1,,II,,Those who are victorious I will place on my throne.
 local_weekday_psalms:row:107,ps15_1_3a_3bc_4a_4b_5,WORLD,Tuesday,,,catalog,1,,II,,Those who are victorious
-local_standard_lectionary:row:488,ps15_1b_3a_3b_4a_4b_5,WORLD,Monday,,Ordinary Time 24 Monday,catalog,1,,II,449,"The just shall live on your holy mountain, O Lord."
+local_standard_lectionary:row:488,ps15_1b_3a_3b_4a_4b_5,WORLD,Monday,,Ordinary Time 25 Monday,catalog,1,,II,449,"The just shall live on your holy mountain, O Lord."
 local_sunday_psalms:row:392,ps15_1b_3a_3b_4a_4b_5,WORLD,Monday,,,catalog,1,,II,,"The just shall live on your holy mountain, O Lord."
 local_weekday_psalms:row:134,ps15_1b_3a_3b_4a_4b_5,WORLD,Monday,,,catalog,1,,II,,"The just shall live on your holy mountain, O Lord."
 local_standard_lectionary:row:133,ps15_2_3_3_4_4_5,WORLD,Sunday,,TWENTY-SECOND SUNDAY IN ORDINARY TIME-B,catalog,1,B,,,(1a) One who does justice will live in the presence of the Lord.
@@ -800,7 +800,7 @@ local_weekday_psalms:row:460,ps16_1_2a_5_7_8_9a_11,WORLD,Saturday,,,catalog,1,,I
 local_standard_lectionary:row:167,ps16_5_8_9_10_11,WORLD,Sunday,,THIRTY-THIRD SUNDAY IN ORDINARY TIME-B,catalog,1,B,,,"(1) You are my inheritance, O Lord!"
 local_sunday_psalms:row:516,ps16_5_8_9_10_11,WORLD,Sunday,,,catalog,1,B,,,"Preserve me, God, I take refuge in you."
 local_sunday_psalms:row:601,ps16_5_8_9_10_11,WORLD,Easter Vigil - Psalm 2,,,catalog,1,A/B/C,,,"Preserve me, O God, for in you I take refuge."
-local_standard_lectionary:row:500,ps17_1_2_3_6_7,WORLD,Monday,,Ordinary Time 25 Monday,catalog,1,,II,455,"Lord, bend your ear and hear my prayer."
+local_standard_lectionary:row:500,ps17_1_2_3_6_7,WORLD,Monday,,Ordinary Time 26 Monday,catalog,1,,II,455,"Lord, bend your ear and hear my prayer."
 local_sunday_psalms:row:407,ps17_1_2_3_6_7,WORLD,Monday,,,catalog,1,,II,,"Lord, bend your ear and hear my prayer."
 local_weekday_psalms:row:192,ps17_1_2_3_6_7,WORLD,Monday,,,catalog,1,,II,,"Lord, bend your ear and hear my prayer."
 local_standard_lectionary:row:359,ps17_1_2_3_6_7_8_15,WORLD,Tuesday,,Ordinary Time 14 Tuesday,catalog,1,,I,384,"In my justice, I shall see your face, O Lord."
@@ -878,7 +878,7 @@ local_standard_lectionary:row:528,ps1_1_2_3_4_6,WORLD,Thursday,,Ordinary Time 27
 local_standard_lectionary:row:544,ps1_1_2_3_4_6,WORLD,Wednesday,,Ordinary Time 28 Wednesday,catalog,1,,II,469,"Those who follow you, Lord,"
 local_standard_lectionary:row:549,ps1_1_2_3_4_6,WORLD,Thursday,,Ordinary Time 29 Thursday,catalog,1,,I,476,Happy are they who hope in the Lord.
 local_standard_lectionary:row:571,ps1_1_2_3_4_6,WORLD,Monday,,Ordinary Time 30 Monday,catalog,1,,II,479,Behave like God as beloved children.
-local_standard_lectionary:row:596,ps1_1_2_3_4_6,WORLD,Monday,,Ordinary Time 32 Monday,catalog,1,,II,497,Those who are victorious
+local_standard_lectionary:row:596,ps1_1_2_3_4_6,WORLD,Monday,,Ordinary Time 33 Monday,catalog,1,,II,497,Those who are victorious
 local_standard_lectionary:row:699,ps1_1_2_3_4_6,WORLD,Thursday,,Ordinary Time 7 Thursday,catalog,1,,I,344,Happy are they who hope in the Lord.
 local_standard_lectionary:row:700,ps1_1_2_3_4_6,WORLD,Thursday,,Ordinary Time 7 Thursday,catalog,1,,I,344,Happy are they who hope in the Lord.
 local_standard_lectionary:row:86,ps1_1_2_3_4_6,WORLD,Sunday,,SIXTH SUNDAY IN ORDINARY TIME-C,catalog,1,C,,,(40:5a) Blessed are they who hope in the Lord.
@@ -949,8 +949,8 @@ local_standard_lectionary:row:208,ps24_1_2_3_4ab_5_6,WORLD,December 20,,Advent 3
 local_standard_lectionary:row:468,ps24_1_2_3_4ab_5_6,WORLD,Thursday,,Ordinary Time 22 Thursday,catalog,1,,II,434,To the Lord belongs the earth and all that fills it.
 local_standard_lectionary:row:546,ps24_1_2_3_4ab_5_6,WORLD,Friday,,Ordinary Time 29 Friday,catalog,1,,II,477,"Lord, this is the people that longs to see your face."
 local_standard_lectionary:row:547,ps24_1_2_3_4ab_5_6,WORLD,Saturday,,Ordinary Time 29 Saturday,catalog,1,,I,478,"Lord, this is the people that longs to see your face."
-local_standard_lectionary:row:585,ps24_1_2_3_4ab_5_6,WORLD,Monday,,Ordinary Time 31 Monday,catalog,1,,II,491,"Lord, this is the people that longs to see your face."
-local_standard_lectionary:row:608,ps24_1_2_3_4ab_5_6,WORLD,Monday,,Ordinary Time 33 Monday,catalog,1,,II,503,"Lord, this is the people that longs to see your face."
+local_standard_lectionary:row:585,ps24_1_2_3_4ab_5_6,WORLD,Monday,,Ordinary Time 32 Monday,catalog,1,,II,491,"Lord, this is the people that longs to see your face."
+local_standard_lectionary:row:608,ps24_1_2_3_4ab_5_6,WORLD,Monday,,Ordinary Time 34 Monday,catalog,1,,II,503,"Lord, this is the people that longs to see your face."
 local_standard_lectionary:row:633,ps24_1_2_3_4ab_5_6,WORLD,Thursday,,Ordinary Time 3 Thursday,catalog,1,,I,320,"Lord, this is the people that longs to see your face."
 local_sunday_psalms:row:367,ps24_1_2_3_4ab_5_6,WORLD,Thursday,,,catalog,1,,II,,To the Lord belongs the earth and all that fills it.
 local_sunday_psalms:row:467,ps24_1_2_3_4ab_5_6,WORLD,Friday,,,catalog,1,,II,,"Lord, this is the people that longs to see your face."
@@ -1034,7 +1034,7 @@ local_sunday_psalms:row:201,ps27_7_8a_8b_9abc_13_14,WORLD,Friday,,,catalog,1,,II
 local_sunday_psalms:row:424,ps27_7_8a_8b_9abc_13_14,WORLD,Thursday,,,catalog,1,,II,,I believe that I shall see the good things of the Lord in the land of the living.
 local_weekday_psalms:row:232,ps27_7_8a_8b_9abc_13_14,WORLD,Thursday,,,catalog,1,,II,,I believe that I shall see the good things of the Lord in the land of the living.
 local_weekday_psalms:row:442,ps27_7_8a_8b_9abc_13_14,WORLD,Friday,,,catalog,1,,II,,"I long to see your face, O Lord."
-local_standard_lectionary:row:475,ps28_2_7_8_9,WORLD,Monday,,Ordinary Time 23 Monday,catalog,1,,I,443,Blest be the Lord for he has heard my prayer.
+local_standard_lectionary:row:475,ps28_2_7_8_9,WORLD,Monday,,Ordinary Time 24 Monday,catalog,1,,I,443,Blest be the Lord for he has heard my prayer.
 local_sunday_psalms:row:376,ps28_2_7_8_9,WORLD,Monday,,,catalog,1,,I,,Blest be the Lord for he has heard my prayer.
 local_weekday_psalms:row:99,ps28_2_7_8_9,WORLD,Monday,,,catalog,1,,II,,Blest be the Lord for he has heard my prayer.
 local_standard_lectionary:row:27,ps29_1_2_3_4_3_9_10,WORLD,Sunday,,THE BAPTISM OF THE LORD-ABC,catalog,1,A,,,(11b) The Lord will bless his people with peace.
@@ -1249,7 +1249,7 @@ local_weekday_psalms:row:408,ps40_4_6_7a_7b_8_9,WORLD,Thursday,,,catalog,1,,II,,
 local_standard_lectionary:row:551,ps40_6_7a_7b_8_9_10ab_16_17c,WORLD,Tuesday,,Ordinary Time 29 Tuesday,catalog,1,,I,474,"Here am I, Lord; I come to do your will."
 local_sunday_psalms:row:461,ps40_6_7a_7b_8_9_10ab_16_17c,WORLD,Tuesday,,,catalog,1,,I,,"Here am I, Lord; I come to do your will."
 local_weekday_psalms:row:353,ps40_6_7a_7b_8_9_10ab_16_17c,WORLD,Tuesday,,,catalog,1,,II,,"Here am I, Lord; I come to do your will."
-local_standard_lectionary:row:476,ps40_6_7a_7b_8_9_16,WORLD,Monday,,Ordinary Time 23 Monday,catalog,1,,II,443,Proclaim the death of the Lord until he comes again.
+local_standard_lectionary:row:476,ps40_6_7a_7b_8_9_16,WORLD,Monday,,Ordinary Time 24 Monday,catalog,1,,II,443,Proclaim the death of the Lord until he comes again.
 local_standard_lectionary:row:561,ps40_6_7a_7b_8_9_16,WORLD,Thursday,,Ordinary Time 2 Thursday,catalog,1,,I,314,"Here am I, Lord;"
 local_sunday_psalms:row:391,ps40_6_7a_7b_8_9_16,WORLD,Monday,,,catalog,1,,II,,Proclaim the death of the Lord until he comes again.
 local_sunday_psalms:row:78,ps40_6_7a_7b_8_9_16,WORLD,Thursday,,,catalog,1,,I,,"Here am I, Lord; I come to do your will."
@@ -1325,7 +1325,7 @@ local_sunday_psalms:row:195,ps4_1_2_3_4_6_7,WORLD,Tuesday,,,catalog,1,,II,,"Lord
 local_weekday_psalms:row:356,ps4_1_2_3_4_6_7,WORLD,Tuesday,,,catalog,1,,II,,"Lord, let your face shine on us."
 local_standard_lectionary:row:58,ps4_2_4_7_8_9,WORLD,Sunday,,THIRD SUNDAY OF EASTER-B,catalog,1,B,,,"(7a) Lord, let your face shine on us."
 local_sunday_psalms:row:619,ps4_2_4_7_9,WORLD,Sunday,,,catalog,1,B,,,"Lift up the light of your face on us, O Lord."
-local_standard_lectionary:row:332,ps50_16bc_17_18_19_20_21_22_23,WORLD,Monday,,Ordinary Time 12 Monday,catalog,1,,II,377,"Remember this, you who never think of God."
+local_standard_lectionary:row:332,ps50_16bc_17_18_19_20_21_22_23,WORLD,Monday,,Ordinary Time 13 Monday,catalog,1,,II,377,"Remember this, you who never think of God."
 local_sunday_psalms:row:224,ps50_16bc_17_18_19_20_21_22_23,WORLD,Monday,,,catalog,1,,II,,"Remember this, you who never think of God. To the wicked God says:"
 local_weekday_psalms:row:334,ps50_16bc_17_18_19_20_21_22_23,WORLD,Monday,,,catalog,1,,II,,"Remember this, you who never think of God. To the wicked God says:"
 local_standard_lectionary:row:379,ps50_1_2_5_6_14_15,WORLD,Saturday,,Ordinary Time 16 Saturday,catalog,1,,I,400,Offer to God a sacrifice of praise.
@@ -1434,7 +1434,7 @@ local_weekday_psalms:row:392,ps59_1_2_3_4a_9_10_16_17,WORLD,Wednesday,,,catalog,
 local_standard_lectionary:row:318,ps5_1_2_4_5_6_12,WORLD,Monday,,Ordinary Time 11 Monday,catalog,1,,II,365,"Lord, listen to my groaning."
 local_sunday_psalms:row:208,ps5_1_2_4_5_6_12,WORLD,Monday,,,catalog,1,,II,,"Lord, listen to my groaning."
 local_weekday_psalms:row:332,ps5_1_2_4_5_6_12,WORLD,Monday,,,catalog,1,,II,,"Lord, listen to my groaning."
-local_standard_lectionary:row:464,ps5_1_4_5_6_11,WORLD,Monday,,Ordinary Time 22 Monday,catalog,1,,II,437,"Lead me in your justice, Lord."
+local_standard_lectionary:row:464,ps5_1_4_5_6_11,WORLD,Monday,,Ordinary Time 23 Monday,catalog,1,,II,437,"Lead me in your justice, Lord."
 local_sunday_psalms:row:361,ps5_1_4_5_6_11,WORLD,Monday,,,catalog,1,,II,,"Lead me in your justice, Lord."
 local_weekday_psalms:row:65,ps5_1_4_5_6_11,WORLD,Monday,,,catalog,1,,II,,"Lead me in your justice, Lord."
 local_standard_lectionary:row:350,ps5_4_5a_5b_6_7,WORLD,Tuesday,,Ordinary Time 13 Tuesday,catalog,1,,II,378,"Lead me in your justice, Lord."
@@ -1448,7 +1448,7 @@ local_sunday_psalms:row:450,ps62_1_2_5_7_8,WORLD,Wednesday,,,catalog,1,,I,,"Lord
 local_weekday_psalms:row:295,ps62_1_2_5_7_8,WORLD,Wednesday,,,catalog,1,,II,,"Lord, you give back to all according to their works."
 local_standard_lectionary:row:90,ps62_2_3_6_7_8_9,WORLD,Sunday,,EIGHTH SUNDAY IN ORDINARY TIME-A,catalog,1,A,,,"(6a) Rest in God alone, my soul."
 local_sunday_psalms:row:158,ps62_2_3_6_7_8_9,WORLD,Sunday,,,catalog,1,A,,,In God alone is my soul at rest.
-local_standard_lectionary:row:463,ps62_5_6_7b_8,WORLD,Monday,,Ordinary Time 22 Monday,catalog,1,,I,437,In God is my safety and my glory.
+local_standard_lectionary:row:463,ps62_5_6_7b_8,WORLD,Monday,,Ordinary Time 23 Monday,catalog,1,,I,437,In God is my safety and my glory.
 local_sunday_psalms:row:375,ps62_5_6_7b_8,WORLD,Monday,,,catalog,1,,I,,In God is my safety and my glory.
 local_weekday_psalms:row:98,ps62_5_6_7b_8,WORLD,Monday,,,catalog,1,,II,,In God is my safety and my glory.
 local_standard_lectionary:row:721,ps63_1_2_3_4_5,WORLD,Saturday,,Ordinary Time 8 Saturday,catalog,1,,II,352,"My soul is thirsting for you, O Lord my God."
@@ -1515,7 +1515,7 @@ local_sunday_psalms:row:265,ps69_14_17_30_31_33_34_36_37,WORLD,Sunday,,,catalog,
 local_standard_lectionary:row:388,ps69_1_4ab_4cd_7_8_9_13,WORLD,Friday,,Ordinary Time 17 Friday,catalog,1,,II,405,"Lord, in your great love, answer me."
 local_sunday_psalms:row:300,ps69_1_4ab_4cd_7_8_9_13,WORLD,Friday,,,catalog,1,,II,,"Lord, in your great love, answer me."
 local_weekday_psalms:row:447,ps69_1_4ab_4cd_7_8_9_13,WORLD,Friday,,,catalog,1,,II,,"Lord, in your great love, answer me."
-local_standard_lectionary:row:570,ps69_29_30_32_33_35_36,WORLD,Monday,,Ordinary Time 30 Monday,catalog,1,,I,485,"Lord, in your great love, answer me."
+local_standard_lectionary:row:570,ps69_29_30_32_33_35_36,WORLD,Monday,,Ordinary Time 31 Monday,catalog,1,,I,485,"Lord, in your great love, answer me."
 local_sunday_psalms:row:57,ps69_29_30_32_33_35_36,WORLD,Monday,,,catalog,1,,I,,"Lord, in your great love, answer me."
 local_weekday_psalms:row:27,ps69_29_30_32_33_35_36,WORLD,Monday,,,catalog,1,,II,,"Lord, in your great love, answer me."
 local_standard_lectionary:row:513,ps69_29_32_33_34_35_36,WORLD,Saturday,,Ordinary Time 26 Saturday,catalog,1,,I,460,The Lord listens to the poor.
@@ -1778,7 +1778,7 @@ local_standard_lectionary:row:742,ps91_1_2_14_15ab_15c_16,WORLD,Monday,,killed h
 local_sunday_psalms:row:177,ps91_1_2_14_15ab_15c_16,WORLD,Monday,,,catalog,1,,II,,"In you, my God, I place my trust."
 local_weekday_psalms:row:317,ps91_1_2_14_15ab_15c_16,WORLD,Monday,,,catalog,1,,I,,"In you, my God, I place my trust."
 local_weekday_psalms:row:330,ps91_1_2_14_15ab_15c_16,WORLD,Monday,,,catalog,1,,II,,"In you, my God, I place my trust."
-local_standard_lectionary:row:343,ps91_1_2_3_4_14_15ab,WORLD,Monday,,Ordinary Time 13 Monday,catalog,1,,I,383,"In you, my God, I place my trust."
+local_standard_lectionary:row:343,ps91_1_2_3_4_14_15ab,WORLD,Monday,,Ordinary Time 14 Monday,catalog,1,,I,383,"In you, my God, I place my trust."
 local_sunday_psalms:row:238,ps91_1_2_3_4_14_15ab,WORLD,Monday,,,catalog,1,,I,,"In you, my God, I place my trust."
 local_weekday_psalms:row:323,ps91_1_2_3_4_14_15ab,WORLD,Monday,,,catalog,1,,II,,"In you, my God, I place my trust."
 local_standard_lectionary:row:100,ps92_2_3_13_14_15_16,WORLD,Sunday,,ELEVENTH SUNDAY IN ORDINARY TIME-B,catalog,1,B,,,"Lord, it is good to give thanks to you."
@@ -1832,7 +1832,7 @@ local_weekday_psalms:row:495,ps95_1_2_6_7ab_7c_9,WORLD,Saturday,,,catalog,1,,I/I
 local_standard_lectionary:row:429,ps95_6_7_8_9_10_11,WORLD,Thursday,,Ordinary Time 1 Thursday,catalog,1,,I,308,"If today you hear God's voice,"
 local_sunday_psalms:row:63,ps95_6_7_8_9_10_11,WORLD,Thursday,,,catalog,1,,I,,"If today you hear God’s voice, harden not your hearts."
 local_weekday_psalms:row:43,ps95_6_7_8_9_10_11,WORLD,Thursday,,,catalog,1,,I,,"If today you hear God’s voice, harden not your hearts."
-local_standard_lectionary:row:615,ps96_10_11_12_13,WORLD,Tuesday,,Ordinary Time 33 Tuesday,catalog,1,,II,504,The Lord comes to judge the earth.
+local_standard_lectionary:row:615,ps96_10_11_12_13,WORLD,Tuesday,,Ordinary Time 34 Tuesday,catalog,1,,II,504,The Lord comes to judge the earth.
 local_standard_lectionary:row:713,ps96_10_11_12_13,WORLD,Friday,,Ordinary Time 8 Friday,catalog,1,,II,351,The Lord comes to judge the earth.
 local_standard_lectionary:row:714,ps96_10_11_12_13,WORLD,Friday,,Ordinary Time 8 Friday,catalog,1,,II,351,The Lord comes to judge the earth.
 local_sunday_psalms:row:170,ps96_10_11_12_13,WORLD,Friday,,,catalog,1,,II,,The Lord comes to judge the earth.
@@ -1855,10 +1855,10 @@ local_sunday_psalms:row:41,ps96_1_2_3_4_5_6,WORLD,December 29,,,catalog,1,,I/II,
 local_standard_lectionary:row:251,ps96_1_2a_2b_3_10,WORLD,Thursday,,Easter 5 Thursday,catalog,1,,I/II,288,Proclaim God's marvellous deeds to all the nations.
 local_sunday_psalms:row:642,ps96_1_2a_2b_3_10,WORLD,Thursday,,,catalog,1,,I/II,,Proclaim God’s marvellous deeds to all the nations.
 local_weekday_psalms:row:531,ps96_1_2a_2b_3_10,WORLD,Thursday,,,catalog,1,,I/II,,Proclaim God’s marvellous deeds to all the nations.
-local_standard_lectionary:row:439,ps96_1_2a_2b_3_4_5,WORLD,Monday,,Ordinary Time 20 Monday,catalog,1,,II,425,Proclaim God's marvellous deeds to all the nations.
+local_standard_lectionary:row:439,ps96_1_2a_2b_3_4_5,WORLD,Monday,,Ordinary Time 21 Monday,catalog,1,,II,425,Proclaim God's marvellous deeds to all the nations.
 local_sunday_psalms:row:59,ps96_1_2a_2b_3_4_5,WORLD,Monday,,,catalog,1,,II,,Proclaim God’s marvellous deeds to all the nations.
 local_weekday_psalms:row:28,ps96_1_2a_2b_3_4_5,WORLD,Monday,,,catalog,1,,II,,Proclaim God’s marvellous deeds to all the nations.
-local_standard_lectionary:row:451,ps96_1_3_4_5_11_12_13,WORLD,Monday,,Ordinary Time 21 Monday,catalog,1,,I,431,The Lord comes to judge the earth.
+local_standard_lectionary:row:451,ps96_1_3_4_5_11_12_13,WORLD,Monday,,Ordinary Time 22 Monday,catalog,1,,I,431,The Lord comes to judge the earth.
 local_sunday_psalms:row:346,ps96_1_3_4_5_11_12_13,WORLD,Monday,,,catalog,1,,I,,The Lord comes to judge the earth.
 local_weekday_psalms:row:26,ps96_1_3_4_5_11_12_13,WORLD,Monday,,,catalog,1,,II,,The Lord comes to judge the earth.
 local_standard_lectionary:row:154,ps96_1_3_4_5_7_8_9_10,WORLD,Sunday,,TWENTY-NINTH SUNDAY IN ORDINARY TIME-A,catalog,1,A,,,(7b) Give the Lord glory and honor.
@@ -1901,7 +1901,7 @@ local_standard_lectionary:row:219,ps98_1_2_3ab_3cd_4,WORLD,January 2,,Christmas 
 local_standard_lectionary:row:244,ps98_1_2_3ab_3cd_4,WORLD,Saturday,,Easter 4 Saturday,catalog,1,,I/II,284,All the ends of the earth have seen
 local_standard_lectionary:row:257,ps98_1_2_3ab_3cd_4,WORLD,Thursday,,Easter 6 Thursday,catalog,1,,I/II,294,The Lord has revealed to the nations his saving power.
 local_standard_lectionary:row:317,ps98_1_2_3ab_3cd_4,WORLD,Monday,,Ordinary Time 11 Monday,catalog,1,,I,365,The Lord has made known his salvation.
-local_standard_lectionary:row:523,ps98_1_2_3ab_3cd_4,WORLD,Monday,,Ordinary Time 27 Monday,catalog,1,,I,467,The Lord has made known his salvation.
+local_standard_lectionary:row:523,ps98_1_2_3ab_3cd_4,WORLD,Monday,,Ordinary Time 28 Monday,catalog,1,,I,467,The Lord has made known his salvation.
 local_standard_lectionary:row:581,ps98_1_2_3ab_3cd_4,WORLD,Friday,,Ordinary Time 31 Friday,catalog,1,,I,489,The Lord has revealed to the nations his saving power.
 local_sunday_psalms:row:207,ps98_1_2_3ab_3cd_4,WORLD,Monday,,,catalog,1,,I,,The Lord has made known his salvation.
 local_sunday_psalms:row:44,ps98_1_2_3ab_3cd_4,WORLD,January 2,,,catalog,1,,I/II,,All the ends of the earth have seen the saving power of our God.

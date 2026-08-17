@@ -103,24 +103,29 @@ void main() {
 
     test(
       'resolvePsalmResponseFromEntries falls back to generic when version-specific empty',
-      () async {
-        final date = DateTime(2024, 12, 1);
-        final entries = await service.getEntriesForDate(date);
+      () {
+        const psalmRef = 'Psalm 122:1-2.3-4.5-6.7-8.9 (R. cf. 1)';
+        const entries = <LectionaryPsalmCatalogEntry>[
+          LectionaryPsalmCatalogEntry(
+            season: 'Advent',
+            week: '1',
+            day: 'Sunday',
+            weekdayCycle: '',
+            sundayCycle: 'A',
+            fullReference: psalmRef,
+            refrainText: 'Let us go rejoicing to the house of the Lord.',
+            acclamationRef: '',
+            acclamationText: '',
+            lectionaryNumber: '1',
+          ),
+        ];
 
-        if (entries.isEmpty) {
-          return; // Skip if no entries
-        }
-
-        final psalmRef = 'Psalm 122:1-2.3-4.5-6.7-8.9 (R. cf. 1)';
-
-        // Test with unknown version - should fall back to generic
         final response = service.resolvePsalmResponseFromEntries(
           entries: entries,
           psalmReference: psalmRef,
           bibleVersion: 'unknown',
         );
-
-        expect(response, isNotNull);
+        expect(response, 'Let us go rejoicing to the house of the Lord.');
       },
     );
 
@@ -151,6 +156,32 @@ void main() {
         );
       },
     );
+
+    test('never uses ordinal fallback for an unrelated biblical selection', () {
+      const entries = <LectionaryPsalmCatalogEntry>[
+        LectionaryPsalmCatalogEntry(
+          season: 'Ordinary Time',
+          week: '20',
+          day: 'Monday',
+          weekdayCycle: 'II',
+          sundayCycle: '',
+          fullReference: 'Ps 119.97-98, 99-100, 101-102 (R. 97a)',
+          refrainText: 'Lord, I love your commands.',
+          acclamationRef: '',
+          acclamationText: '',
+          lectionaryNumber: '431',
+        ),
+      ];
+
+      final response = service.resolvePsalmResponseFromEntries(
+        entries: entries,
+        psalmReference: 'Dt 32:18-19, 20, 21',
+        positionLabel: 'Responsorial Psalm',
+        psalmSequence: 1,
+      );
+
+      expect(response, isNull);
+    });
   });
 
   group('LectionaryPsalmCatalogService - Best Entry Selection', () {
@@ -168,5 +199,21 @@ void main() {
       // The best entry should have R notation
       expect(bestEntry.fullReference, contains('(R.'));
     });
+
+    test(
+      'Deuteronomy canticle never inherits an unrelated psalm refrain',
+      () async {
+        final bestEntry = await service.getBestPsalmEntryForDate(
+          date: DateTime(2026, 8, 17),
+          psalmReference: 'Dt 32:18-19, 20, 21',
+          positionLabel: 'Responsorial Psalm',
+          psalmSequence: 1,
+        );
+
+        expect(bestEntry, isNotNull);
+        expect(bestEntry!.fullReference, 'Dt 32.18-19, 20, 21');
+        expect(bestEntry.refrainText, 'You forgot God who gave you birth.');
+      },
+    );
   });
 }

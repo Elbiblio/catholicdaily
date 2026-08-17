@@ -125,4 +125,26 @@ void main() {
       }
     },
   );
+
+  test('Deuteronomy 32 canticle renders in every Bible psalm pack', () async {
+    SharedPreferences.setMockInitialValues(<String, Object>{});
+    ResponsorialPsalmPreference.resetForTest();
+    final preference = await ResponsorialPsalmPreference.getInstance();
+
+    for (final editionId in <String>['local_rsvce', 'local_nabre']) {
+      await preference.setEditionId(editionId);
+      final canticle = await ReadingsService.instance.resolveResponsorialPsalm(
+        'Dt 32:18-19, 20, 21',
+        psalmResponse: 'You forgot God who gave you birth.',
+        date: DateTime(2026, 8, 17),
+        territory: 'NG',
+        weekdayCycle: 'II',
+      );
+
+      expect(canticle.referenceNormalized, 'deut32:18-19,20,21');
+      expect(canticle.actualEditionId, editionId);
+      expect(canticle.responseText, 'You forgot God who gave you birth.');
+      expect(canticle.text, contains('R/. You forgot God who gave you birth.'));
+    }
+  });
 }

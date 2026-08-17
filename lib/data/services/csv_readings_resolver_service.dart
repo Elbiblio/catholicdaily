@@ -502,6 +502,8 @@ class CsvReadingsResolverService
     final lower = reference.trim().toLowerCase();
     return lower.startsWith('ps ') ||
         lower.startsWith('psalm ') ||
+        lower.startsWith('deut 32:') ||
+        lower.startsWith('dt 32:') ||
         lower.startsWith('isa 12:') ||
         lower.startsWith('exod 15:') ||
         lower.startsWith('1 sam 2:') ||
