@@ -30,6 +30,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   if (!window.Create(L"Catholic Daily Missal", origin, size)) {
     return EXIT_FAILURE;
   }
+  ::ShowWindow(window.GetHandle(), show_command);
   window.SetQuitOnClose(true);
 
   ::MSG msg;

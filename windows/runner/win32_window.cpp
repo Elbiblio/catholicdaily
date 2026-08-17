@@ -161,8 +161,15 @@ bool Win32Window::Create(const std::wstring& title,
   const wchar_t* window_class =
       WindowClassRegistrar::GetInstance()->GetWindowClass();
 
-  int saved_x, saved_y, saved_w, saved_h;
+  int saved_x = 0, saved_y = 0, saved_w = 0, saved_h = 0;
   bool has_saved = LoadWindowBounds(saved_x, saved_y, saved_w, saved_h);
+  RECT saved_bounds = {saved_x, saved_y, saved_x + saved_w,
+                       saved_y + saved_h};
+  if (has_saved &&
+      (saved_w < 320 || saved_h < 240 ||
+       MonitorFromRect(&saved_bounds, MONITOR_DEFAULTTONULL) == nullptr)) {
+    has_saved = false;
+  }
 
   int start_x = has_saved ? saved_x : static_cast<int>(origin.x);
   int start_y = has_saved ? saved_y : static_cast<int>(origin.y);
@@ -250,7 +257,7 @@ Win32Window::MessageHandler(HWND hwnd,
         MoveWindow(child_content_, rect.left, rect.top, rect.right - rect.left,
                    rect.bottom - rect.top, TRUE);
       }
-      if (wparam == SIZE_RESTORED || wparam == SIZE_MAXIMIZED) {
+      if (wparam == SIZE_RESTORED) {
         RECT win_rect;
         if (GetWindowRect(hwnd, &win_rect)) {
           SaveWindowBounds(win_rect.left, win_rect.top,
@@ -262,11 +269,13 @@ Win32Window::MessageHandler(HWND hwnd,
     }
 
     case WM_MOVE: {
-      RECT win_rect;
-      if (GetWindowRect(hwnd, &win_rect)) {
-        SaveWindowBounds(win_rect.left, win_rect.top,
-                         win_rect.right - win_rect.left,
-                         win_rect.bottom - win_rect.top);
+      if (!IsIconic(hwnd) && !IsZoomed(hwnd)) {
+        RECT win_rect;
+        if (GetWindowRect(hwnd, &win_rect)) {
+          SaveWindowBounds(win_rect.left, win_rect.top,
+                           win_rect.right - win_rect.left,
+                           win_rect.bottom - win_rect.top);
+        }
       }
       return 0;
     }
