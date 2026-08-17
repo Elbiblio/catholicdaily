@@ -404,28 +404,46 @@ class LectionaryPsalmCatalogService
     }
 
     final normalizedReference = _normalizeReference(psalmReference);
-
-    // First try exact match on normalized references (preserves R. notation)
-    final exactMatches = entries
-        .where(
-          (entry) =>
-              _normalizeReference(entry.fullReference) == normalizedReference,
-        )
-        .toList();
-    if (exactMatches.isNotEmpty) {
-      return exactMatches.first;
-    }
-
-    // Extract R. notation from both query and entries for precise matching
     final queryRNotation = _extractRNotation(normalizedReference);
+    final normalizedSelection = _stripRNotation(normalizedReference);
+
+    // Match the biblical selection first, then prefer the richer
+    // supplementary row that carries the lectionary's (R. ...) notation.
+    // This keeps exact canticles such as Deut 32 on their primary row while
+    // preserving refrains for psalms represented in both catalogs.
+    final exactSelectionMatches = entries.where((entry) {
+      final candidate = _normalizeReference(entry.fullReference);
+      return _stripRNotation(candidate) == normalizedSelection;
+    }).toList();
+    if (exactSelectionMatches.isNotEmpty) {
+      if (queryRNotation != null) {
+        final exactResponseMatches = exactSelectionMatches.where((entry) {
+          return _extractRNotation(_normalizeReference(entry.fullReference)) ==
+              queryRNotation;
+        }).toList();
+        if (exactResponseMatches.isNotEmpty) {
+          return exactResponseMatches.first;
+        }
+      } else {
+        final richerMatches = exactSelectionMatches.where((entry) {
+          return _extractRNotation(_normalizeReference(entry.fullReference)) !=
+              null;
+        }).toList();
+        if (richerMatches.isNotEmpty) {
+          return richerMatches.first;
+        }
+      }
+      return exactSelectionMatches.first;
+    }
 
     // Try to match entries with the same R. notation
     if (queryRNotation != null) {
       final rNotationMatches = entries.where((entry) {
-        final entryRNotation = _extractRNotation(
-          _normalizeReference(entry.fullReference),
-        );
-        return entryRNotation == queryRNotation;
+        final candidate = _normalizeReference(entry.fullReference);
+        final entryRNotation = _extractRNotation(candidate);
+        return entryRNotation == queryRNotation &&
+            (_stripRNotation(candidate).contains(normalizedSelection) ||
+                normalizedSelection.contains(_stripRNotation(candidate)));
       }).toList();
       if (rNotationMatches.isNotEmpty) {
         return rNotationMatches.first;
@@ -437,11 +455,17 @@ class LectionaryPsalmCatalogService
     if (queryRNotation == null) {
       final looseMatches = entries.where((entry) {
         final candidate = _normalizeReference(entry.fullReference);
-        return candidate.contains(normalizedReference) ||
-            normalizedReference.contains(candidate);
+        final candidateSelection = _stripRNotation(candidate);
+        return candidateSelection.contains(normalizedSelection) ||
+            normalizedSelection.contains(candidateSelection);
       }).toList();
       if (looseMatches.isNotEmpty) {
-        return looseMatches.first;
+        return looseMatches.firstWhere(
+          (entry) =>
+              _extractRNotation(_normalizeReference(entry.fullReference)) !=
+              null,
+          orElse: () => looseMatches.first,
+        );
       }
     }
 
@@ -470,6 +494,9 @@ class LectionaryPsalmCatalogService
     ).firstMatch(normalizedReference);
     return match?.group(0);
   }
+
+  String _stripRNotation(String normalizedReference) => normalizedReference
+      .replaceAll(RegExp(r'\(r\.[^)]*\)', caseSensitive: false), '');
 
   String _normalizeReference(String value) {
     var normalized = value

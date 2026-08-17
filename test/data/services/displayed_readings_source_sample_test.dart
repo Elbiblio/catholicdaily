@@ -74,7 +74,16 @@ void main() {
 }
 
 Set<String> _referenceSet(List<DailyReading> readings) =>
-    readings.map((reading) => reading.reading).toSet();
+    readings
+        .map(
+          (reading) => reading.reading
+              .replaceFirst(
+                RegExp(r'\s*\(R\.[^)]*\)\s*$', caseSensitive: false),
+                '',
+              )
+              .trim(),
+        )
+        .toSet();
 
 final _sourceBackedSamples = <_DisplayedReadingSample>[
   _DisplayedReadingSample(
