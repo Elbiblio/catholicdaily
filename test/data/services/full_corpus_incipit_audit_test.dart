@@ -90,6 +90,39 @@ void main() {
       );
     },
   );
+
+  test(
+    'Every standard-lectionary Gospel Acclamation reference resolves',
+    timeout: const Timeout(Duration(minutes: 5)),
+    () async {
+      final rows = await _readCsv('standard_lectionary_complete.csv');
+      final references = <String>{
+        for (final row in rows)
+          if ((row['acclamation_ref'] ?? '').trim().isNotEmpty)
+            _normalizeReference(row['acclamation_ref']!),
+      };
+      final service = ReadingsService.instance;
+      final unavailable = <String>[];
+
+      for (final reference in references) {
+        final text = await service.getReadingText(
+          reference,
+          readingType: 'Gospel Acclamation',
+        );
+        if (text.trim().isEmpty ||
+            text.startsWith('Reading text unavailable')) {
+          unavailable.add('$reference → $text');
+        }
+      }
+
+      expect(references.length, greaterThan(100));
+      expect(
+        unavailable,
+        isEmpty,
+        reason: 'Every acclamation card reference must open scripture text.',
+      );
+    },
+  );
 }
 
 List<String> _auditRenderedCase(_ReadingCase c, String text) {

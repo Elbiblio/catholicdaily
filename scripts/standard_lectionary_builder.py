@@ -133,6 +133,12 @@ def clean_reference(value: str) -> str:
     text = text.replace('Luke Lk ', 'Luke ')
     text = text.replace('John Jn ', 'John ')
     text = re.sub(r'\b2\s+Corinthians\s+8\.93\b', '2 Corinthians 8:9', text)
+    text = re.sub(r'^Corinthians\s+8[.:]9\b', '2 Corinthians 8:9', text)
+    text = re.sub(r'\b([12])\s+Thes\b', r'\1 Thess', text)
+    text = re.sub(r'\b([12])\s+Tm\b', r'\1 Tim', text)
+    text = re.sub(r'\bJas\b', 'James', text)
+    text = re.sub(r'^([A-Za-z0-9. ]+\s\d+)\s*[,;]\s*(\d)', r'\1:\2', text)
+    text = re.sub(r'^John\s+63b,\s*68b$', 'John 6:63b, 68b', text)
     text = re.sub(r'\bJohn\s+21\.173\b', 'John 21:17-18', text)
     return text.strip(' ,;')
 

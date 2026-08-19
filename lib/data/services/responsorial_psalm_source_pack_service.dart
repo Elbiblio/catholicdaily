@@ -58,9 +58,16 @@ class ResponsorialPsalmSourcePackService {
     final candidates = entries.where((entry) {
       if (entry.referenceNormalized != normalizedReference) return false;
       final territory = request.territory.toUpperCase();
-      return entry.territory.isEmpty ||
+      final territoryMatches =
+          entry.territory.isEmpty ||
           entry.territory == 'WORLD' ||
           entry.territory == territory;
+      final sourceDateIsOnlyProvenance =
+          entry.readingSetKind == 'resolved-day' ||
+          entry.sourceId == 'nigeria_365_firestore';
+      return territoryMatches &&
+          (sourceDateIsOnlyProvenance ||
+              _matchesDateRule(entry.dateRule, request.date));
     }).toList();
     if (candidates.isEmpty) return null;
 
@@ -83,11 +90,30 @@ class ResponsorialPsalmSourcePackService {
           entry.weekdayCycle == request.weekdayCycle) {
         value += 200;
       }
+      if (request.responseText.isNotEmpty &&
+          ResponsorialPsalmTextCatalogService.normalizeWords(
+                entry.responseText,
+              ) ==
+              ResponsorialPsalmTextCatalogService.normalizeWords(
+                request.responseText,
+              )) {
+        value += 100;
+      }
       return value - entry.displayPriority;
     }
 
     candidates.sort((left, right) => score(right).compareTo(score(left)));
     return candidates.first;
+  }
+
+  static bool _matchesDateRule(String rule, DateTime date) {
+    if (rule.isEmpty || rule == '*') return true;
+    final month = date.month.toString().padLeft(2, '0');
+    final day = date.day.toString().padLeft(2, '0');
+    if (RegExp(r'^\d{2}-\d{2}$').hasMatch(rule)) {
+      return rule == '$month-$day';
+    }
+    return rule == '${date.year}-$month-$day';
   }
 
   Future<List<ResponsorialPsalmTextEntry>> _loadEdition(
@@ -147,6 +173,7 @@ class ResponsorialPsalmSourcePackService {
       lectionaryNumber: columns[8],
       readingSetKind: columns[5],
       referenceNormalized: normalizePackReference(columns[9]),
+      referenceDisplay: columns[9],
       responseText: columns[10],
       stanzas: columns[11]
           .split(RegExp(r'\r?\n\r?\n'))

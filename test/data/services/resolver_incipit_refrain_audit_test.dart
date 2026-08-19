@@ -1,10 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/foundation.dart';
 import 'package:catholic_daily/data/models/daily_reading.dart';
 import 'package:catholic_daily/data/services/reading_flow_service.dart';
 import 'package:catholic_daily/data/services/readings_service.dart';
 import '../../helpers/test_helpers.dart';
 
-/// Walks every day from Jan 1 2026 through Dec 31 2027 and asserts the
+/// Walks every day from Jan 1 2025 through Dec 31 2027 and asserts the
 /// backend output (the path the UI actually renders) is free of the
 /// issues the user flagged: trailing page-number noise, "-R." rubric
 /// residue, and un-decoded "(R. Xx)" psalm-response references.
@@ -16,40 +17,57 @@ void main() {
   tearDownAll(() => cleanup());
 
   test(
-    'Two-year audit: no trailing PDF noise anywhere',
+    'Three-year audit: no trailing PDF noise anywhere',
     timeout: const Timeout(Duration(minutes: 15)),
     () async {
       final service = ReadingsService.instance;
-      final start = DateTime(2026, 1, 1);
+      final start = DateTime(2025, 1, 1);
       final end = DateTime(2027, 12, 31);
 
-      final noisePattern = RegExp(r'\s\d{2,4}\s+[A-Z][A-Z \-]{2,}$');
+      final noisePattern = RegExp(
+        r'(?:\s\d{2,4}\s+[A-Z][A-Z \-]{2,}|\s(?:MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY|JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER)\s+\d{2,4}\b)',
+      );
       final trailingRRubric = RegExp(r'[-–—]\s*R\.?\s*$');
       final spacedHeader = RegExp(r'\bG\s+O\s+S\s+P\s+E\s+L\b');
+      final omittedRubric = RegExp(
+        r'^If (?:the )?(?:Alleluia|acclamation) is not sung, it is omitted\.',
+        caseSensitive: false,
+      );
 
       final offenders = <String>[];
 
-      for (var d = start; !d.isAfter(end); d = d.add(const Duration(days: 1))) {
-        final readings = await service.getReadingsForDate(d);
-        for (final r in readings) {
-          final iso =
-              '${d.year}-${d.month.toString().padLeft(2, '0')}'
-              '-${d.day.toString().padLeft(2, '0')}';
-          void checkField(String label, String? value) {
-            if (value == null) return;
-            final trimmed = value.trim();
-            if (trimmed.isEmpty) return;
-            if (noisePattern.hasMatch(trimmed) ||
-                trailingRRubric.hasMatch(trimmed) ||
-                spacedHeader.hasMatch(trimmed)) {
-              offenders.add('$iso [${r.position}] $label → "$trimmed"');
+      final previousDebugPrint = debugPrint;
+      debugPrint = (String? message, {int? wrapWidth}) {};
+      try {
+        for (
+          var d = start;
+          !d.isAfter(end);
+          d = d.add(const Duration(days: 1))
+        ) {
+          final readings = await service.getReadingsForDate(d);
+          for (final r in readings) {
+            final iso =
+                '${d.year}-${d.month.toString().padLeft(2, '0')}'
+                '-${d.day.toString().padLeft(2, '0')}';
+            void checkField(String label, String? value) {
+              if (value == null) return;
+              final trimmed = value.trim();
+              if (trimmed.isEmpty) return;
+              if (noisePattern.hasMatch(trimmed) ||
+                  trailingRRubric.hasMatch(trimmed) ||
+                  spacedHeader.hasMatch(trimmed) ||
+                  omittedRubric.hasMatch(trimmed)) {
+                offenders.add('$iso [${r.position}] $label → "$trimmed"');
+              }
             }
-          }
 
-          checkField('psalmResponse', r.psalmResponse);
-          checkField('gospelAcclamation', r.gospelAcclamation);
-          checkField('incipit', r.incipit);
+            checkField('psalmResponse', r.psalmResponse);
+            checkField('gospelAcclamation', r.gospelAcclamation);
+            checkField('incipit', r.incipit);
+          }
         }
+      } finally {
+        debugPrint = previousDebugPrint;
       }
 
       if (offenders.isNotEmpty) {
@@ -240,6 +258,19 @@ void main() {
       readings = await byPosition(DateTime(2026, 7, 22));
       expect(readings['First Reading']!.reading, '2 Cor 5:14-17');
       expect(readings['Gospel']!.reading, 'John 20:1-2, 11-18');
+
+      readings = await byPosition(DateTime(2026, 8, 18));
+      final acclamation = readings['Gospel Acclamation']!;
+      expect(acclamation.reading, '2 Cor 8:9');
+      expect(
+        acclamation.gospelAcclamation,
+        'Jesus Christ was rich but he became poor, to make you rich out of his poverty.',
+      );
+      final acclamationText = await service.getReadingText(
+        acclamation.reading,
+        readingType: acclamation.position,
+      );
+      expect(acclamationText, isNot(startsWith('Reading text unavailable')));
 
       readings = await byPosition(DateTime(2026, 5, 30));
       expect(readings['First Reading']!.reading, 'Jude 1:17, 20b-25');

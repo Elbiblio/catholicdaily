@@ -1,0 +1,49 @@
+{
+  "range": {
+    "start": "2024-01-01",
+    "end": "2025-11-30",
+    "dates": 700
+  },
+  "primary_recovered_dates": 0,
+  "catholic_leaf_recovered_dates": 632,
+  "catholic_gallery_recovered_dates": 700,
+  "nigeria_calendar_dates": 731,
+  "comparison_rows_with_two_full_texts": 700,
+  "reference_conflicts": 44,
+  "reference_notation_variants": 128,
+  "unresolved_assignments": [],
+  "unique_base_compositions": 133,
+  "unique_references": 455,
+  "unique_reference_response_pairs": 587,
+  "unique_full_text_forms": 633,
+  "leaf_parse_failures": 45,
+  "gallery_failures": 0,
+  "gallery_failure_dates": {},
+  "historical_unique_stable_keys": 676,
+  "new_usage_candidate_keys": 0,
+  "corroborated_runtime_keys": 636,
+  "conflict_review_dates": 44,
+  "conflict_review_keys": 43,
+  "reference_counts": {
+    "current_runtime_2025_2026": {
+      "unique_base_compositions": 137,
+      "unique_exact_references": 921,
+      "unique_numbered_verse_selections": 650
+    },
+    "catholic_leaf_2024_2025": {
+      "unique_base_compositions": 122,
+      "unique_exact_references": 419,
+      "unique_numbered_verse_selections": 382
+    },
+    "catholic_gallery_2024_2025": {
+      "unique_base_compositions": 132,
+      "unique_exact_references": 456,
+      "unique_numbered_verse_selections": 408
+    },
+    "combined_runtime_and_gallery": {
+      "unique_base_compositions": 137,
+      "unique_exact_references": 940,
+      "unique_numbered_verse_selections": 660
+    }
+  }
+}

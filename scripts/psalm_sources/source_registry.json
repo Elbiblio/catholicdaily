@@ -1,7 +1,7 @@
 [
   {
     "source_id": "nigeria_365_firestore",
-    "source_name": "Catholic Missal for Nigeria / 365 Readings",
+    "source_name": "Catholic Missal for Nigeria",
     "source_edition": "live Nigerian daily corpus",
     "source_territory": "NG",
     "source_url": "https://firestore.googleapis.com/v1/projects/catholic-missal/databases/(default)/documents/NigeriaReading",

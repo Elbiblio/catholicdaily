@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "stable_usages": 1052,
+  "ordered_choices": 2536,
+  "distinct_references": 929,
+  "distinct_responses": 902,
+  "status_counts": {
+    "exact_nigeria": 498,
+    "fallback": 1806,
+    "reconstructed_nigeria": 232
+  }
+}

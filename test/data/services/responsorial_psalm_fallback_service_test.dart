@@ -55,7 +55,74 @@ ResponsorialPsalmEditionRegistry registry() =>
     });
 
 void main() {
-  test('fallback order is selected, territory, Bible, RSVCE', () async {
+  test(
+    'territory selection identifies a non-territory edition as fallback',
+    () async {
+      final resolver = ResponsorialPsalmFallbackService(
+        registry: registry(),
+        packs: ResponsorialPsalmSourcePackService.fromEntries(
+          <String, List<ResponsorialPsalmTextEntry>>{
+            'local_rsvce': <ResponsorialPsalmTextEntry>[
+              entry('local_rsvce', 'RSVCE stanza.'),
+            ],
+          },
+        ),
+      );
+
+      final result = await resolver.resolve(
+        request: ResponsorialPsalmRequest(
+          selectedEditionId: 'territory_lectionary',
+          reference: 'Ps 45:10, 11, 12, 16',
+          responseText: 'Reviewed response.',
+          date: DateTime(2026, 8, 15),
+          territory: 'NG',
+        ),
+        territoryEditionId: 'nigeria_365_firestore',
+        bibleEditionId: 'local_rsvce',
+      );
+
+      expect(result.actualEditionId, 'local_rsvce');
+      expect(result.actualEditionName, 'local_rsvce');
+      expect(result.didFallback, isTrue);
+      expect(
+        result.fallbackReason,
+        PsalmFallbackReason.territoryEditionMissing,
+      );
+    },
+  );
+
+  test(
+    'territory selection is not a fallback when Nigeria text exists',
+    () async {
+      final resolver = ResponsorialPsalmFallbackService(
+        registry: registry(),
+        packs: ResponsorialPsalmSourcePackService.fromEntries(
+          <String, List<ResponsorialPsalmTextEntry>>{
+            'nigeria_365_firestore': <ResponsorialPsalmTextEntry>[
+              entry('nigeria_365_firestore', 'Nigerian stanza.'),
+            ],
+          },
+        ),
+      );
+
+      final result = await resolver.resolve(
+        request: ResponsorialPsalmRequest(
+          selectedEditionId: 'territory_lectionary',
+          reference: 'Ps 45:10, 11, 12, 16',
+          responseText: 'Reviewed response.',
+          date: DateTime(2026, 8, 15),
+          territory: 'NG',
+        ),
+        territoryEditionId: 'nigeria_365_firestore',
+        bibleEditionId: 'local_rsvce',
+      );
+
+      expect(result.actualEditionId, 'nigeria_365_firestore');
+      expect(result.didFallback, isFalse);
+    },
+  );
+
+  test('fallback order preserves the stable liturgical response', () async {
     final packs = ResponsorialPsalmSourcePackService.fromEntries(
       <String, List<ResponsorialPsalmTextEntry>>{
         'nigeria_365_firestore': <ResponsorialPsalmTextEntry>[
@@ -87,7 +154,7 @@ void main() {
     expect(result.actualEditionId, 'nigeria_365_firestore');
     expect(result.didFallback, isTrue);
     expect(result.fallbackReason, PsalmFallbackReason.selectedEditionMissing);
-    expect(result.responseText, 'Nigerian response.');
+    expect(result.responseText, 'Reviewed response.');
   });
 
   test('fallback never changes the authoritative selection', () async {

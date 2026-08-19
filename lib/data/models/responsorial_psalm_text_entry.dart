@@ -8,6 +8,7 @@ class ResponsorialPsalmTextEntry {
   final String lectionaryNumber;
   final String readingSetKind;
   final String referenceNormalized;
+  final String referenceDisplay;
   final String responseText;
   final List<String> stanzas;
   final String sourceId;
@@ -25,6 +26,7 @@ class ResponsorialPsalmTextEntry {
     required this.lectionaryNumber,
     required this.readingSetKind,
     required this.referenceNormalized,
+    this.referenceDisplay = '',
     required this.responseText,
     required this.stanzas,
     required this.sourceId,

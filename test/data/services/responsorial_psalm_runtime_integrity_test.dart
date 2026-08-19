@@ -1,8 +1,12 @@
 import 'package:catholic_daily/data/models/responsorial_psalm_text_entry.dart';
 import 'package:catholic_daily/data/services/bible_version_preference.dart';
 import 'package:catholic_daily/data/services/readings_service.dart';
+import 'package:catholic_daily/data/services/nigeria_psalm_usage_service.dart';
+import 'package:catholic_daily/data/services/responsorial_psalm_edition_registry.dart';
+import 'package:catholic_daily/data/services/responsorial_psalm_source_pack_service.dart';
 import 'package:catholic_daily/data/services/responsorial_psalm_text_catalog_service.dart';
 import 'package:catholic_daily/data/services/responsorial_psalm_preference.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -147,4 +151,138 @@ void main() {
       expect(canticle.text, contains('R/. You forgot God who gave you birth.'));
     }
   });
+
+  test(
+    'August 18 canticle renders in every installed Nigeria option',
+    () async {
+      SharedPreferences.setMockInitialValues(<String, Object>{});
+      ResponsorialPsalmPreference.resetForTest();
+      final preference = await ResponsorialPsalmPreference.getInstance();
+
+      for (final editionId in <String>[
+        'territory_lectionary',
+        'nigeria_365_firestore',
+        'local_rsvce',
+        'local_nabre',
+      ]) {
+        await preference.setEditionId(editionId);
+        final canticle = await ReadingsService.instance
+            .resolveResponsorialPsalm(
+              'Dt 32:26-27ab, 27cd-28, 30, 35cd-36ab',
+              psalmResponse: 'I kill and I make alive.',
+              date: DateTime(2026, 8, 18),
+              territory: 'NG',
+              weekdayCycle: 'II',
+            );
+
+        expect(canticle.text, contains('R/. I kill and I make alive.'));
+        expect(canticle.text.trim(), isNotEmpty);
+        if (editionId == 'territory_lectionary') {
+          expect(canticle.actualEditionId, 'nigeria_365_firestore');
+        }
+      }
+    },
+  );
+
+  test(
+    'every official Nigeria choice renders in every installed option',
+    () async {
+      SharedPreferences.setMockInitialValues(<String, Object>{});
+      ResponsorialPsalmPreference.resetForTest();
+      final preference = await ResponsorialPsalmPreference.getInstance();
+      final registry = await ResponsorialPsalmEditionRegistry.load();
+      final raw = await rootBundle.loadString(
+        'assets/data/psalm_editions/nigeria_365.csv',
+      );
+      final official = ResponsorialPsalmSourcePackService.parsePackCsv(raw);
+
+      for (final edition in registry.selectable) {
+        await preference.setEditionId(edition.id);
+        for (final entry in official) {
+          final resolved = await ReadingsService.instance
+              .resolveResponsorialPsalm(
+                entry.referenceDisplay,
+                psalmResponse: entry.responseText,
+                date: entry.dateRule.isEmpty
+                    ? DateTime(2026, 1, 1)
+                    : DateTime.parse(entry.dateRule),
+                territory: 'NG',
+                celebrationId: entry.celebrationId,
+                sundayCycle: entry.sundayCycle,
+                weekdayCycle: entry.weekdayCycle,
+                readingSetKind: entry.readingSetKind,
+              );
+
+          expect(
+            resolved.referenceNormalized,
+            entry.referenceNormalized,
+            reason: '${edition.id} ${entry.usageId}',
+          );
+          expect(
+            resolved.responseText,
+            entry.responseText,
+            reason: '${edition.id} ${entry.usageId}',
+          );
+          expect(
+            resolved.text.trim(),
+            isNotEmpty,
+            reason: '${edition.id} ${entry.usageId}',
+          );
+        }
+      }
+    },
+    timeout: const Timeout(Duration(minutes: 5)),
+  );
+
+  test(
+    'every reconciled Nigeria usage renders in every installed option',
+    () async {
+      SharedPreferences.setMockInitialValues(<String, Object>{});
+      ResponsorialPsalmPreference.resetForTest();
+      final preference = await ResponsorialPsalmPreference.getInstance();
+      final registry = await ResponsorialPsalmEditionRegistry.load();
+      final raw = await rootBundle.loadString(
+        'assets/data/nigeria_psalm_usages.csv',
+      );
+      final usages = NigeriaPsalmUsageService.parseCsv(raw);
+
+      expect(usages, hasLength(2536));
+      for (final edition in registry.selectable) {
+        await preference.setEditionId(edition.id);
+        for (final usage in usages) {
+          final resolved = await ReadingsService.instance
+              .resolveResponsorialPsalm(
+                usage.referenceDisplay,
+                psalmResponse: usage.responseText,
+                date: usage.sourceDate.isEmpty
+                    ? DateTime(2026, 1, 1)
+                    : DateTime.parse(usage.sourceDate),
+                territory: usage.territory,
+                celebrationId: usage.celebrationId,
+                sundayCycle: usage.sundayCycle,
+                weekdayCycle: usage.weekdayCycle,
+              );
+
+          expect(
+            resolved.referenceNormalized,
+            ResponsorialPsalmSourcePackService.normalizePackReference(
+              usage.referenceDisplay,
+            ),
+            reason: '${edition.id} ${usage.usageId}',
+          );
+          expect(
+            resolved.responseText,
+            usage.responseText,
+            reason: '${edition.id} ${usage.usageId}',
+          );
+          expect(
+            resolved.text.trim(),
+            isNotEmpty,
+            reason: '${edition.id} ${usage.usageId}',
+          );
+        }
+      }
+    },
+    timeout: const Timeout(Duration(minutes: 5)),
+  );
 }

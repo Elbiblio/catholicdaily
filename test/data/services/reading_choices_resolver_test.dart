@@ -22,6 +22,16 @@ void main() {
       expect(sets, hasLength(greaterThanOrEqualTo(3)));
       expect(sets.first.label, 'The Assumption of the Blessed Virgin Mary');
       expect(sets.first.isFerial, isFalse);
+      expect(regionPrefs.currentRegion, LiturgicalRegion.nigeria);
+      expect(
+        sets.first.readings
+            .firstWhere(
+              (reading) =>
+                  (reading.position ?? '').startsWith('Responsorial Psalm'),
+            )
+            .source,
+        startsWith('nigeria_usage:'),
+      );
       expect(
         sets.first.readings.map((reading) => reading.reading),
         orderedEquals(<String>[
@@ -159,7 +169,7 @@ void main() {
   );
 
   test(
-    'weekday and every same-date optional memorial remain available',
+    'Nigeria feast stays first while weekday and same-date memorials remain available',
     () async {
       final regionPrefs = await LiturgicalRegionPreferenceService.getInstance();
       await regionPrefs.setRegion(LiturgicalRegion.nigeria);
@@ -167,8 +177,9 @@ void main() {
       final sets = await AlternateReadingsService.instance
           .getAvailableReadingSets(DateTime(2026, 1, 20));
 
-      expect(sets.first.isFerial, isTrue);
-      expect(sets.first.label, 'Tuesday — Weekday');
+      expect(sets.first.label, 'Blessed Cyprian Michael Iwene Tansi, Priest');
+      expect(sets.first.isFerial, isFalse);
+      expect(sets.map((set) => set.label), contains('Tuesday — Weekday'));
       expect(
         sets.map((set) => set.label),
         contains('Saint Fabian, Pope and Martyr (weekday readings)'),
@@ -193,8 +204,26 @@ void main() {
     expect(sets[1].readings.first.reading, 'Isa 62:1-5');
     expect(sets[2].label, contains('Mass during the Night'));
     expect(sets[2].readings.first.reading, 'Isa 9:1-6');
+    expect(
+      sets[2].readings
+          .firstWhere(
+            (reading) =>
+                (reading.position ?? '').startsWith('Responsorial Psalm'),
+          )
+          .source,
+      startsWith('nigeria_usage:'),
+    );
     expect(sets[3].label, contains('Mass at Dawn'));
     expect(sets[3].readings.first.reading, 'Isa 62:11-12');
+    expect(
+      sets[3].readings
+          .firstWhere(
+            (reading) =>
+                (reading.position ?? '').startsWith('Responsorial Psalm'),
+          )
+          .source,
+      startsWith('nigeria_usage:'),
+    );
   });
 
   test('proper vigils remain available after their feast-day set', () async {

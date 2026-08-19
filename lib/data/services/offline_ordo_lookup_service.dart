@@ -159,13 +159,18 @@ class OfflineOrdoLookupService {
     final ferial = _ferialDay(day, seasonData);
     if (candidate == null) return ferial;
 
-    // Sundays of Advent/Lent/Easter outrank most fixed celebrations except solemnities.
-    if (day.weekday == DateTime.sunday &&
-        (seasonData.season == LiturgicalSeason.advent ||
-            seasonData.season == LiturgicalSeason.lent ||
-            seasonData.season == LiturgicalSeason.easter) &&
-        candidate.rank != 'Solemnity') {
-      return ferial;
+    if (day.weekday == DateTime.sunday && candidate.rank != 'Solemnity') {
+      final privilegedSunday =
+          seasonData.season == LiturgicalSeason.advent ||
+          seasonData.season == LiturgicalSeason.lent ||
+          seasonData.season == LiturgicalSeason.easter;
+      final ordinaryOrChristmasSunday =
+          seasonData.season == LiturgicalSeason.ordinaryTime ||
+          seasonData.season == LiturgicalSeason.christmas;
+      if (privilegedSunday ||
+          (ordinaryOrChristmasSunday && !_isFeastOfTheLord(candidate.title))) {
+        return ferial;
+      }
     }
 
     return LiturgicalDay(
@@ -198,6 +203,14 @@ class OfflineOrdoLookupService {
         );
         break;
       case LiturgicalRegion.nigeria:
+        celebrations[DateTime(year, 1, 20)] = _feast(
+          'Blessed Cyprian Michael Iwene Tansi, Priest',
+          LiturgicalColor.white,
+        );
+        celebrations[DateTime(year, 3, 17)] = _feast(
+          'Saint Patrick, Bishop',
+          LiturgicalColor.white,
+        );
         celebrations[DateTime(year, 4, 30)] = _feast(
           'Our Lady Mother of Africa',
           LiturgicalColor.white,
@@ -384,7 +397,7 @@ class OfflineOrdoLookupService {
       final weekStart = day.subtract(Duration(days: daysToSubtract));
       final weeksBack = christTheKing.difference(weekStart).inDays ~/ 7;
       final week = 34 - weeksBack;
-      return _SeasonData(LiturgicalSeason.ordinaryTime, week.clamp(10, 34));
+      return _SeasonData(LiturgicalSeason.ordinaryTime, week.clamp(1, 34));
     }
 
     if (!day.isBefore(previousAdventStart) &&
@@ -611,6 +624,15 @@ class OfflineOrdoLookupService {
 
   _Celebration _day(String title, LiturgicalColor color, String rank) =>
       _Celebration(title: title, rank: rank, color: color);
+
+  bool _isFeastOfTheLord(String title) {
+    final normalized = title.toLowerCase();
+    return normalized.contains('presentation of the lord') ||
+        normalized.contains('baptism of the lord') ||
+        normalized.contains('holy family') ||
+        normalized.contains('transfiguration of the lord') ||
+        normalized.contains('exaltation of the holy cross');
+  }
 }
 
 class _Celebration {

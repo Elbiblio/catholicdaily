@@ -1,9 +1,8 @@
 {
-  "comparison_ready_count": 546,
+  "comparison_ready_count": 874,
   "complete_selection_count_by_edition": {
-    "local_nabre": 546,
-    "local_rsvce": 546,
-    "nigeria_365_firestore": 2
+    "local_nabre": 874,
+    "local_rsvce": 874
   },
   "conflicting_pack_row_count": 0,
   "insufficient_edition_count": 0,
@@ -11,7 +10,7 @@
   "invalid_hash_count": 0,
   "orphan_usage_count": 0,
   "retrieved_at": "2026-08-16",
-  "selection_count": 546,
-  "unique_selection_count": 546,
-  "usage_count": 1948
+  "selection_count": 874,
+  "unique_selection_count": 874,
+  "usage_count": 4504
 }

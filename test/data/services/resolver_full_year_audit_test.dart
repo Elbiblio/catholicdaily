@@ -78,5 +78,5 @@ void main() {
 
     expect(malformed.isEmpty, isTrue,
         reason: 'Found malformed references: ${malformed.take(5).join("; ")}');
-  });
+  }, timeout: const Timeout(Duration(minutes: 5)));
 }

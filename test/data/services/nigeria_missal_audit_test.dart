@@ -2,12 +2,18 @@ import 'dart:math';
 
 import 'package:catholic_daily/data/models/daily_reading.dart';
 import 'package:catholic_daily/data/models/liturgical_region.dart';
+import 'package:catholic_daily/data/models/responsorial_psalm_text_entry.dart';
 import 'package:catholic_daily/data/services/csv_readings_resolver_service.dart';
+import 'package:catholic_daily/data/services/alternate_readings_service.dart';
 import 'package:catholic_daily/data/services/feast_reminder_preferences.dart';
 import 'package:catholic_daily/data/services/feast_reminder_service.dart';
+import 'package:catholic_daily/data/services/improved_liturgical_calendar_service.dart';
 import 'package:catholic_daily/data/services/liturgical_region_preference_service.dart';
 import 'package:catholic_daily/data/services/offline_ordo_lookup_service.dart';
 import 'package:catholic_daily/data/services/saint_profile_service.dart';
+import 'package:catholic_daily/data/services/responsorial_psalm_source_pack_service.dart';
+import 'package:catholic_daily/data/services/responsorial_psalm_text_catalog_service.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../helpers/test_helpers.dart';
@@ -64,6 +70,24 @@ void main() {
 
     test('Ordinary Time Sunday titles stay aligned after Easter', () {
       expect(
+        ImprovedLiturgicalCalendarService.instance
+            .getLiturgicalDay(DateTime(2026, 1, 18))
+            .weekNumber,
+        2,
+      );
+      expect(
+        lookup
+            .resolve(DateTime(2026, 1, 25), region: LiturgicalRegion.nigeria)
+            .title,
+        '3rd Sunday in Ordinary Time',
+      );
+      expect(
+        lookup
+            .resolve(DateTime(2026, 10, 18), region: LiturgicalRegion.nigeria)
+            .title,
+        '29th Sunday in Ordinary Time',
+      );
+      expect(
         lookup
             .resolve(DateTime(2026, 1, 18), region: LiturgicalRegion.nigeria)
             .title,
@@ -80,6 +104,12 @@ void main() {
             .resolve(DateTime(2026, 11, 8), region: LiturgicalRegion.nigeria)
             .title,
         '32nd Sunday in Ordinary Time',
+      );
+      expect(
+        lookup
+            .resolve(DateTime(2026, 5, 26), region: LiturgicalRegion.nigeria)
+            .weekNumber,
+        8,
       );
     });
 
@@ -262,7 +292,262 @@ void main() {
   });
 
   group('Nigeria readings audit', () {
+    test(
+      'official Nigeria psalm pack covers and matches the full liturgical year',
+      () async {
+        final raw = await rootBundle.loadString(
+          'assets/data/psalm_editions/nigeria_365.csv',
+        );
+        final official = ResponsorialPsalmSourcePackService.parsePackCsv(raw);
+        final start = DateTime(2025, 12, 1);
+        final expectedDates = <String>{
+          for (var offset = 0; offset < 365; offset++)
+            _isoDay(start.add(Duration(days: offset))),
+        };
+        final byDate = <String, List<ResponsorialPsalmTextEntry>>{};
+        for (final entry in official) {
+          if (entry.dateRule.isEmpty) continue;
+          byDate
+              .putIfAbsent(entry.dateRule, () => <ResponsorialPsalmTextEntry>[])
+              .add(entry);
+        }
+
+        expect(byDate.keys.toSet(), expectedDates);
+
+        final mismatches = <String>[];
+        for (final dateRule in expectedDates) {
+          final date = DateTime.parse(dateRule);
+          final readingSets =
+              (await AlternateReadingsService.instance.getAvailableReadingSets(
+                date,
+              )).map((choice) => choice.readings).toList();
+          if (dateRule == '2026-04-02') {
+            readingSets.addAll(
+              (await CsvReadingsResolverService.instance
+                      .resolveOtherMassChoices(
+                        date: date,
+                        celebrationTitle:
+                            "Holy Thursday - Evening Mass of the Lord's Supper",
+                      ))
+                  .map((choice) => choice.readings),
+            );
+          }
+          final vigilTitle = switch (dateRule) {
+            '2025-12-24' => 'The Nativity of the Lord',
+            '2026-05-23' => 'Pentecost Sunday',
+            '2026-06-28' => 'Saints Peter and Paul, Apostles',
+            '2026-08-14' => 'The Assumption of the Blessed Virgin Mary',
+            _ => '',
+          };
+          if (vigilTitle.isNotEmpty) {
+            readingSets.add(
+              await CsvReadingsResolverService.instance.resolveVigilChoice(
+                date: date,
+                celebrationTitle: vigilTitle,
+              ),
+            );
+          }
+          final psalms = readingSets
+              .expand((set) => set)
+              .where(
+                (reading) =>
+                    (reading.position ?? '').startsWith('Responsorial Psalm'),
+              );
+          final expected = byDate[dateRule]!;
+          final actualPairs = psalms.map((psalm) {
+            final normalizedReference =
+                ResponsorialPsalmSourcePackService.normalizePackReference(
+                  psalm.reading,
+                );
+            return (
+              normalizedReference,
+              ResponsorialPsalmTextCatalogService.normalizeWords(
+                psalm.psalmResponse ?? '',
+              ),
+            );
+          }).toList();
+          final missing = expected.where(
+            (entry) => !actualPairs.contains((
+              entry.referenceNormalized,
+              ResponsorialPsalmTextCatalogService.normalizeWords(
+                entry.responseText,
+              ),
+            )),
+          );
+          if (missing.isNotEmpty) {
+            mismatches.add(
+              '$dateRule actual=${psalms.map((p) => '${p.reading} | ${p.psalmResponse}').join(' || ')} '
+              'official=${expected.map((e) => '${e.referenceDisplay} | ${e.responseText}').join(' || ')}',
+            );
+          }
+        }
+
+        expect(mismatches, isEmpty, reason: mismatches.take(40).join('\n'));
+      },
+      timeout: const Timeout(Duration(minutes: 5)),
+    );
+
+    test(
+      'Week 20 Year II preserves the Nigerian canticles and responses',
+      () async {
+        final expectations = <DateTime, (String, String)>{
+          DateTime(2026, 8, 17): (
+            'Dt 32:18-19, 20, 21',
+            'You forgot God who gave you birth.',
+          ),
+          DateTime(2026, 8, 18): (
+            'Dt 32:26-27ab, 27cd-28, 30, 35cd-36ab',
+            'I kill and I make alive.',
+          ),
+          DateTime(2026, 8, 19): (
+            'Ps 23:1-3a, 3b-4, 5, 6',
+            'The Lord is my shepherd; there is nothing I shall want.',
+          ),
+          DateTime(2026, 8, 20): (
+            'Ps 51:12-13, 14-15, 18-19',
+            'I will sprinkle clean water on you, and you shall be clean from all your uncleannesses.',
+          ),
+          DateTime(2026, 8, 21): (
+            'Ps 107:2-3, 4-5, 6-7, 8-9',
+            'O give thanks to the Lord for he is good; for his mercy endures forever!',
+          ),
+        };
+
+        for (final entry in expectations.entries) {
+          final readings = await CsvReadingsResolverService.instance.resolve(
+            entry.key,
+          );
+          final psalm = readings.singleWhere(
+            (reading) => reading.position == 'Responsorial Psalm',
+          );
+          expect(
+            psalm.reading,
+            entry.value.$1,
+            reason: entry.key.toIso8601String(),
+          );
+          expect(
+            psalm.psalmResponse,
+            entry.value.$2,
+            reason: entry.key.toIso8601String(),
+          );
+        }
+      },
+    );
+
+    test('proper and memorial psalm overlays preserve precedence', () async {
+      final expectations = <DateTime, (String, String)>{
+        DateTime(2025, 12, 28): (
+          'Ps 128:1-2, 3, 4-5',
+          'Blessed are all who fear the Lord, and walk in his ways.',
+        ),
+        DateTime(2026, 1, 11): (
+          'Ps 29:1a, 2, 3ac-4, 3b, 9c-10',
+          'The Lord will bless his people with peace.',
+        ),
+        DateTime(2026, 6, 13): (
+          'Ps 16:1-2a, 5, 7-8, 9-10',
+          'It is you, O Lord, who are my portion.',
+        ),
+        DateTime(2026, 8, 29): (
+          'Ps 71:1-6, 15, 17',
+          "Since my mother's womb, you have been my strength.",
+        ),
+        DateTime(2026, 11, 2): (
+          'Ps 23:1-3, 4, 5, 6',
+          'The Lord is my shepherd, there is nothing I shall want.',
+        ),
+      };
+      for (final entry in expectations.entries) {
+        final psalm = (await CsvReadingsResolverService.instance.resolve(
+          entry.key,
+        )).singleWhere((reading) => reading.position == 'Responsorial Psalm');
+        expect(psalm.reading, entry.value.$1);
+        expect(psalm.psalmResponse, entry.value.$2);
+      }
+    });
+
+    test('different Mass forms remain separate and proper-first', () async {
+      final holyThursday = await CsvReadingsResolverService.instance.resolve(
+        DateTime(2026, 4, 2),
+      );
+      final holyThursdayPsalms = holyThursday
+          .where(
+            (reading) =>
+                (reading.position ?? '').startsWith('Responsorial Psalm'),
+          )
+          .toList();
+      expect(holyThursdayPsalms, hasLength(1));
+      expect(holyThursdayPsalms.first.reading, 'Ps 116:12-13, 15, 16bc, 17-18');
+      expect(
+        holyThursdayPsalms.first.psalmResponse,
+        'The cup of blessing is a participation in the blood of Christ.',
+      );
+      final holyThursdayAlternates = await CsvReadingsResolverService.instance
+          .resolveOtherMassChoices(
+            date: DateTime(2026, 4, 2),
+            celebrationTitle:
+                "Holy Thursday - Evening Mass of the Lord's Supper",
+          );
+      expect(holyThursdayAlternates, hasLength(1));
+      final chrismPsalm = holyThursdayAlternates.single.readings.singleWhere(
+        (reading) => reading.position == 'Responsorial Psalm',
+      );
+      expect(chrismPsalm.reading, 'Ps 89:21-22, 25, 27');
+      expect(
+        chrismPsalm.psalmResponse,
+        'I will sing forever of your mercies, O Lord.',
+      );
+
+      final assumptionEve = await CsvReadingsResolverService.instance.resolve(
+        DateTime(2026, 8, 14),
+      );
+      final assumptionEvePsalms = assumptionEve
+          .where(
+            (reading) =>
+                (reading.position ?? '').startsWith('Responsorial Psalm'),
+          )
+          .toList();
+      expect(assumptionEvePsalms.length, greaterThanOrEqualTo(1));
+      expect(assumptionEvePsalms.first.reading, 'Ps 116:10-19');
+      final assumptionVigil = await CsvReadingsResolverService.instance
+          .resolveVigilChoice(
+            date: DateTime(2026, 8, 14),
+            celebrationTitle: 'The Assumption of the Blessed Virgin Mary',
+          );
+      final vigilPsalm = assumptionVigil.singleWhere(
+        (reading) => reading.position == 'Responsorial Psalm',
+      );
+      expect(vigilPsalm.reading, 'Ps 132:6-7, 9-10, 13-14');
+
+      final displayedChoices = await AlternateReadingsService.instance
+          .getAvailableReadingSets(DateTime(2026, 8, 14));
+      final displayedPsalms = displayedChoices
+          .map(
+            (set) => set.readings.where(
+              (reading) => reading.position == 'Responsorial Psalm',
+            ),
+          )
+          .where((psalms) => psalms.isNotEmpty)
+          .map((psalms) => psalms.first.reading)
+          .toList();
+      expect(displayedPsalms.first, 'Ps 116:10-19');
+      expect(displayedPsalms, contains('Isa 12:2-3, 4bcde, 5-6'));
+      expect(displayedPsalms, contains('Ps 132:6-7, 9-10, 13-14'));
+    });
+
     test('contentious Nigeria days resolve proper readings', () async {
+      await _expectReadingRefs(DateTime(2026, 1, 20), {
+        'First Reading': 'Phil 2:1-11',
+        'Responsorial Psalm': 'Isa 12:2-3, 4bcde, 5-6',
+        'Gospel': 'Matt 13:44-46',
+      }, feast: 'Blessed Cyprian Michael Iwene Tansi, Priest');
+
+      await _expectReadingRefs(DateTime(2026, 3, 17), {
+        'First Reading': '1 Pet 4:7b-11',
+        'Responsorial Psalm': 'Ps 96:1-2a, 2b-3, 7-8a, 9-10ac',
+        'Gospel': 'Luke 5:1-11',
+      }, feast: 'Saint Patrick, Bishop');
+
       await _expectReadingRefs(DateTime(2026, 4, 30), {
         'First Reading': 'Acts 1:12-14',
         'Responsorial Psalm': 'Luke 1:46-47, 48-49, 50-51, 52-53, 54-55',
@@ -292,7 +577,7 @@ void main() {
 
       await _expectReadingRefs(DateTime(2026, 11, 22), {
         'First Reading': 'Ezek 34:11-12, 15-17',
-        'Responsorial Psalm': 'Ps 23:1-2, 2-3, 5-6',
+        'Responsorial Psalm': 'Ps 23:1, 2a, 2b, 3, 5, 6',
         'Second Reading': '1 Cor 15:20-26, 28',
         'Gospel': 'Matt 25:31-46',
       }, feast: 'Our Lord Jesus Christ, King of the Universe');
@@ -350,6 +635,11 @@ void main() {
     );
   });
 }
+
+String _isoDay(DateTime date) =>
+    '${date.year.toString().padLeft(4, '0')}-'
+    '${date.month.toString().padLeft(2, '0')}-'
+    '${date.day.toString().padLeft(2, '0')}';
 
 Future<void> _expectReadingRefs(
   DateTime date,

@@ -4,10 +4,12 @@ from dataclasses import dataclass
 import hashlib
 import json
 from pathlib import Path
+import re
 from typing import Iterable, Mapping, Sequence
 
 from .edition_corpus import write_csv_rows
-from .models import PsalmEditionText, SourceRecord
+from .models import PsalmEditionText, PsalmSourceRow, SourceRecord
+from .nigeria_365 import canonicalize_nigeria_reference
 from .normalize import normalize_words
 
 
@@ -94,29 +96,82 @@ def validate_source_pack(
 
 def pack_rows_from_editions(
     rows: Iterable[PsalmEditionText],
+    *,
+    reference_aliases: Mapping[str, Iterable[str]] = {},
 ) -> dict[str, list[RuntimePsalmPackRow]]:
     packs: dict[str, list[RuntimePsalmPackRow]] = {}
     for row in rows:
-        packs.setdefault(row.edition_id, []).append(
+        references = {row.reference_normalized}
+        references.update(
+            value.strip()
+            for value in reference_aliases.get(row.selection_id, ())
+            if value.strip()
+        )
+        for reference in sorted(references):
+            selection_id = row.selection_id
+            if reference != row.reference_normalized:
+                digest = hashlib.sha1(reference.encode("utf-8")).hexdigest()[:12]
+                selection_id = f"{row.selection_id}__alias_{digest}"
+            packs.setdefault(row.edition_id, []).append(
+                RuntimePsalmPackRow(
+                    edition_id=row.edition_id,
+                    selection_id=selection_id,
+                    territory=row.territory,
+                    celebration_id="",
+                    date_rule="",
+                    reading_set_kind="generic",
+                    sunday_cycle="",
+                    weekday_cycle="",
+                    lectionary_number="",
+                    reference_normalized=reference,
+                    response_text=row.response_text,
+                    stanzas_text=row.stanzas_text,
+                    source_url=row.source_url,
+                    source_edition=row.source_edition,
+                    display_priority=100,
+                )
+            )
+    return packs
+
+
+def pack_rows_from_source_rows(
+    rows: Iterable[PsalmSourceRow],
+) -> list[RuntimePsalmPackRow]:
+    packed: list[RuntimePsalmPackRow] = []
+    for row in rows:
+        reference = (
+            canonicalize_nigeria_reference(
+                row.date_rule,
+                row.reference_normalized,
+            )
+            if row.source_id == "nigeria_365_firestore"
+            else re.sub(
+                r"\(r\.[^)]*\)",
+                "",
+                row.reference_normalized,
+                flags=re.IGNORECASE,
+            ).rstrip(",")
+        )
+        packed.append(
             RuntimePsalmPackRow(
-                edition_id=row.edition_id,
-                selection_id=row.selection_id,
+                edition_id=row.source_id,
+                selection_id=row.usage_id,
                 territory=row.territory,
-                celebration_id="",
-                date_rule="",
-                reading_set_kind="generic",
-                sunday_cycle="",
-                weekday_cycle="",
-                lectionary_number="",
-                reference_normalized=row.reference_normalized,
-                response_text=row.response_text,
-                stanzas_text=row.stanzas_text,
+                celebration_id=row.celebration_id,
+                date_rule=row.date_rule,
+                reading_set_kind=row.reading_set_kind,
+                sunday_cycle=row.sunday_cycle,
+                weekday_cycle=row.weekday_cycle,
+                lectionary_number=row.lectionary_number,
+                reference_normalized=reference,
+                response_text=row.response_raw,
+                stanzas_text=row.stanzas_raw,
                 source_url=row.source_url,
                 source_edition=row.source_edition,
-                display_priority=100,
+                display_priority=row.reading_set_priority,
+                )
             )
-        )
-    return packs
+    return packed
 
 
 def _abbreviation(record: SourceRecord) -> str:
@@ -175,8 +230,25 @@ def write_runtime_packs(
     *,
     registry: Sequence[SourceRecord],
     edition_rows: Sequence[PsalmEditionText],
+    source_rows: Sequence[PsalmSourceRow] = (),
+    reference_aliases: Mapping[str, Iterable[str]] = {},
 ) -> dict[str, dict[str, object]]:
-    raw_packs = pack_rows_from_editions(edition_rows)
+    raw_packs = pack_rows_from_editions(
+        edition_rows,
+        reference_aliases=reference_aliases,
+    )
+    resolved_packs: dict[str, list[RuntimePsalmPackRow]] = {}
+    runtime_source_ids = {
+        record.source_id for record in registry if record.pack_id
+    }
+    eligible_source_rows = [
+        row
+        for row in source_rows
+        if row.source_id in runtime_source_ids and row.stanzas_raw.strip()
+    ]
+    for row in pack_rows_from_source_rows(eligible_source_rows):
+        resolved_packs.setdefault(row.edition_id, []).append(row)
+    raw_packs.update(resolved_packs)
     packs: dict[str, tuple[RuntimePsalmPackRow, ...]] = {}
     for edition_id, rows in raw_packs.items():
         packs[edition_id] = validate_source_pack(rows)

@@ -4,10 +4,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 import '../models/daily_reading.dart';
+import '../models/liturgical_psalm_usage_context.dart';
 import 'base_service.dart';
 import 'improved_liturgical_calendar_service.dart';
+import 'liturgical_region_preference_service.dart';
+import 'nigeria_psalm_usage_service.dart';
 import 'ordo_resolver_service.dart';
 import 'reading_catalog_service.dart';
+import 'responsorial_psalm_source_pack_service.dart';
 
 class CsvReadingsResolverService
     extends BaseService<CsvReadingsResolverService> {
@@ -21,6 +25,7 @@ class CsvReadingsResolverService
       ImprovedLiturgicalCalendarService.instance;
   final OrdoResolverService _ordoResolver = OrdoResolverService.instance;
   Map<int, List<_LegacyReadingRow>>? _legacyRowsByDate;
+  Future<NigeriaPsalmUsageService>? _nigeriaPsalmUsages;
 
   Future<List<DailyReading>> resolve(DateTime date) async {
     final normalizedDate = _normalizeDate(date);
@@ -41,13 +46,30 @@ class CsvReadingsResolverService
     );
     if (authoritativeOverride != null) {
       debugPrint('CSV Resolver: Using authoritative override');
-      return authoritativeOverride;
+      return _applyNigeriaPsalmChoices(
+        date: normalizedDate,
+        readings: authoritativeOverride,
+        context: _authoritativePsalmContext(
+          date: normalizedDate,
+          liturgicalDay: liturgicalDay,
+          resolvedTitle: resolvedDay.title,
+          yearVariables: yearVariables,
+        ),
+      );
     }
 
     if (_isEasterVigil(normalizedDate)) {
-      return _buildAuthoritativeEasterVigilReadings(
-        normalizedDate,
-        yearVariables.sundayCycle,
+      return _applyNigeriaPsalmChoices(
+        date: normalizedDate,
+        readings: _buildAuthoritativeEasterVigilReadings(
+          normalizedDate,
+          yearVariables.sundayCycle,
+        ),
+        context: LiturgicalPsalmUsageContext.specialPeriod(
+          territory: 'NG',
+          specialDay: 'easter-vigil',
+          sundayCycle: yearVariables.sundayCycle,
+        ),
       );
     }
 
@@ -59,18 +81,33 @@ class CsvReadingsResolverService
     );
     if (nigeriaObservedOverride != null) {
       debugPrint('CSV Resolver: Using Nigeria observed override');
-      return nigeriaObservedOverride;
+      final celebrationId = _celebrationPsalmId(
+        nigeriaObservedOverride.first.feast ?? resolvedDay.title,
+      );
+      final context = _isImmaculateHeartAfterSacredHeart(normalizedDate)
+          ? _temporalPsalmContext(
+              date: normalizedDate,
+              liturgicalDay: liturgicalDay,
+              yearVariables: yearVariables,
+            )
+          : _celebrationPsalmContext(
+              celebrationId: celebrationId,
+              yearVariables: yearVariables,
+              cycleSpecific: _isCycleSpecificCelebration(celebrationId),
+            );
+      return _applyNigeriaPsalmChoices(
+        date: normalizedDate,
+        readings: nigeriaObservedOverride,
+        context: context,
+      );
     }
 
-    final resolvedRank = (resolvedDay.rank ?? '').toLowerCase();
     final memorialEntries = await _catalog.loadMemorialEntries();
-    final celebrationEntry = resolvedRank.contains('memorial')
-        ? null
-        : _findCelebrationEntry(
-            memorialEntries: memorialEntries,
-            date: normalizedDate,
-            celebrationTitle: resolvedDay.title,
-          );
+    final celebrationEntry = _findCelebrationEntry(
+      memorialEntries: memorialEntries,
+      date: normalizedDate,
+      celebrationTitle: resolvedDay.title,
+    );
     debugPrint(
       'CSV Resolver: celebrationEntry=${celebrationEntry?.title ?? "null"}',
     );
@@ -80,7 +117,17 @@ class CsvReadingsResolverService
       debugPrint(
         'CSV Resolver: Using celebration readings for ${celebrationEntry.title}',
       );
-      return _buildCelebrationReadings(normalizedDate, celebrationEntry);
+      return _applyNigeriaPsalmChoices(
+        date: normalizedDate,
+        readings: _buildCelebrationReadings(normalizedDate, celebrationEntry),
+        context: _primaryPsalmContext(
+          date: normalizedDate,
+          liturgicalDay: liturgicalDay,
+          resolvedTitle: celebrationEntry.title,
+          resolvedRank: celebrationEntry.rank,
+          yearVariables: yearVariables,
+        ),
+      );
     }
 
     debugPrint(
@@ -100,7 +147,17 @@ class CsvReadingsResolverService
     if (matches.isEmpty) {
       final legacyFallback = await _resolveLegacyFallback(normalizedDate);
       if (legacyFallback.isNotEmpty) {
-        return legacyFallback;
+        return _applyNigeriaPsalmChoices(
+          date: normalizedDate,
+          readings: legacyFallback,
+          context: _primaryPsalmContext(
+            date: normalizedDate,
+            liturgicalDay: liturgicalDay,
+            resolvedTitle: resolvedDay.title,
+            resolvedRank: resolvedDay.rank ?? '',
+            yearVariables: yearVariables,
+          ),
+        );
       }
       return const [];
     }
@@ -109,11 +166,32 @@ class CsvReadingsResolverService
     if (_shouldPreferLegacyFallback(standardReadings)) {
       final legacyFallback = await _resolveLegacyFallback(normalizedDate);
       if (legacyFallback.isNotEmpty) {
-        return legacyFallback;
+        return _applyNigeriaPsalmChoices(
+          date: normalizedDate,
+          readings: legacyFallback,
+          context: _primaryPsalmContext(
+            date: normalizedDate,
+            liturgicalDay: liturgicalDay,
+            resolvedTitle: resolvedDay.title,
+            resolvedRank: resolvedDay.rank ?? '',
+            yearVariables: yearVariables,
+          ),
+        );
       }
     }
 
-    return standardReadings;
+    final primaryContext = _primaryPsalmContext(
+      date: normalizedDate,
+      liturgicalDay: liturgicalDay,
+      resolvedTitle: resolvedDay.title,
+      resolvedRank: resolvedDay.rank ?? '',
+      yearVariables: yearVariables,
+    );
+    return _applyNigeriaPsalmChoices(
+      date: normalizedDate,
+      readings: standardReadings,
+      context: primaryContext,
+    );
   }
 
   /// Resolves the underlying temporal/weekday readings without allowing a
@@ -143,11 +221,483 @@ class CsvReadingsResolverService
     if (_shouldPreferLegacyFallback(standardReadings)) {
       final legacyFallback = await _resolveLegacyFallback(normalizedDate);
       if (legacyFallback.isNotEmpty) {
-        return legacyFallback;
+        return _applyNigeriaPsalmChoices(
+          date: normalizedDate,
+          readings: legacyFallback,
+          context: _temporalPsalmContext(
+            date: normalizedDate,
+            liturgicalDay: liturgicalDay,
+            yearVariables: yearVariables,
+          ),
+        );
       }
     }
 
-    return standardReadings;
+    return _applyNigeriaPsalmChoices(
+      date: normalizedDate,
+      readings: standardReadings,
+      context: _temporalPsalmContext(
+        date: normalizedDate,
+        liturgicalDay: liturgicalDay,
+        yearVariables: yearVariables,
+      ),
+    );
+  }
+
+  LiturgicalPsalmUsageContext _temporalPsalmContext({
+    required DateTime date,
+    required LiturgicalDay liturgicalDay,
+    required OrdoYearVariables yearVariables,
+  }) {
+    final specialDay = _specialPsalmDay(date);
+    if (specialDay.isNotEmpty) {
+      return LiturgicalPsalmUsageContext.specialPeriod(
+        territory: 'NG',
+        specialDay: specialDay,
+        sundayCycle: date.weekday == DateTime.sunday
+            ? yearVariables.sundayCycle
+            : '',
+        weekdayCycle: date.weekday == DateTime.sunday
+            ? ''
+            : yearVariables.weekdayCycle,
+      );
+    }
+    return LiturgicalPsalmUsageContext.temporal(
+      territory: 'NG',
+      season: liturgicalDay.seasonName.toLowerCase().replaceAll(' ', '-'),
+      week: liturgicalDay.weekNumber,
+      weekday: date.weekday,
+      sundayCycle: date.weekday == DateTime.sunday
+          ? yearVariables.sundayCycle
+          : '',
+      weekdayCycle: date.weekday == DateTime.sunday
+          ? ''
+          : yearVariables.weekdayCycle,
+    );
+  }
+
+  LiturgicalPsalmUsageContext _primaryPsalmContext({
+    required DateTime date,
+    required LiturgicalDay liturgicalDay,
+    required String resolvedTitle,
+    required String resolvedRank,
+    required OrdoYearVariables yearVariables,
+  }) {
+    if (_isHolyThursday(date)) {
+      return _celebrationPsalmContext(
+        celebrationId: 'holy_thursday',
+        massForm: 'evening',
+        yearVariables: yearVariables,
+      );
+    }
+    if (_isPalmSunday(date) || _isGoodFriday(date)) {
+      return _temporalPsalmContext(
+        date: date,
+        liturgicalDay: liturgicalDay,
+        yearVariables: yearVariables,
+      );
+    }
+    final normalizedRank = resolvedRank.toLowerCase();
+    if (resolvedTitle.trim().isNotEmpty &&
+        (normalizedRank.contains('feast') ||
+            normalizedRank.contains('solemnity') ||
+            normalizedRank.contains('obligatory memorial'))) {
+      final celebrationId = _celebrationPsalmId(resolvedTitle);
+      return _celebrationPsalmContext(
+        celebrationId: celebrationId,
+        yearVariables: yearVariables,
+        cycleSpecific: _isCycleSpecificCelebration(celebrationId),
+      );
+    }
+    final specialDay = _specialPsalmDay(date);
+    if (specialDay.isNotEmpty) {
+      return _temporalPsalmContext(
+        date: date,
+        liturgicalDay: liturgicalDay,
+        yearVariables: yearVariables,
+      );
+    }
+    return _temporalPsalmContext(
+      date: date,
+      liturgicalDay: liturgicalDay,
+      yearVariables: yearVariables,
+    );
+  }
+
+  LiturgicalPsalmUsageContext _authoritativePsalmContext({
+    required DateTime date,
+    required LiturgicalDay liturgicalDay,
+    required String resolvedTitle,
+    required OrdoYearVariables yearVariables,
+  }) {
+    if (_isPalmSunday(date) || _isGoodFriday(date)) {
+      return _temporalPsalmContext(
+        date: date,
+        liturgicalDay: liturgicalDay,
+        yearVariables: yearVariables,
+      );
+    }
+    if (_isHolyThursday(date)) {
+      return _celebrationPsalmContext(
+        celebrationId: 'holy_thursday',
+        massForm: 'evening',
+        yearVariables: yearVariables,
+      );
+    }
+    final celebrationId = _celebrationPsalmId(resolvedTitle);
+    return _celebrationPsalmContext(
+      celebrationId: celebrationId,
+      yearVariables: yearVariables,
+      cycleSpecific: _isCycleSpecificCelebration(celebrationId),
+    );
+  }
+
+  LiturgicalPsalmUsageContext _celebrationPsalmContext({
+    required String celebrationId,
+    required OrdoYearVariables yearVariables,
+    String massForm = 'day',
+    bool cycleSpecific = false,
+  }) {
+    return LiturgicalPsalmUsageContext.celebration(
+      territory: 'NG',
+      celebrationId: celebrationId,
+      massForm: massForm,
+      sundayCycle: cycleSpecific ? yearVariables.sundayCycle : '',
+    );
+  }
+
+  String _specialPsalmDay(DateTime date) {
+    if (_isAshWednesday(date)) return 'ash-wednesday';
+    if (_isPalmSunday(date)) return 'palm-sunday';
+    if (_isGoodFriday(date)) return 'good-friday';
+    if (_isEasterVigil(date)) return 'easter-vigil';
+    final holyWeekDay = _holyWeekSpecialDay(date);
+    if (holyWeekDay.isNotEmpty) return holyWeekDay;
+    if (_isAfterAshWednesdayToSaturday(date)) {
+      return 'after-ash-wednesday-${_weekdayKey(date.weekday)}';
+    }
+    if (_isEasterOctave(date)) {
+      return 'easter-octave-${_weekdayKey(date.weekday)}';
+    }
+    if (date.month == 12 && date.day >= 17 && date.day <= 24) {
+      return 'advent-december-${date.day}';
+    }
+    if (date.month == 12 && date.day >= 26 && date.day <= 31) {
+      return 'christmas-december-${date.day}';
+    }
+    if (date.month == 1 && date.day >= 2 && date.day <= 7) {
+      return 'christmas-january-${date.day}';
+    }
+    final epiphany = _nigeriaEpiphany(date.year);
+    final baptism = epiphany.day == 7 || epiphany.day == 8
+        ? epiphany.add(const Duration(days: 1))
+        : epiphany.add(const Duration(days: 7));
+    if (date.isAfter(epiphany) && date.isBefore(baptism)) {
+      return 'after-epiphany-${_weekdayKey(date.weekday)}';
+    }
+    return '';
+  }
+
+  DateTime _nigeriaEpiphany(int year) {
+    for (var day = 2; day <= 8; day++) {
+      final date = DateTime(year, 1, day);
+      if (date.weekday == DateTime.sunday) return date;
+    }
+    return DateTime(year, 1, 6);
+  }
+
+  String _weekdayKey(int weekday) => switch (weekday) {
+    DateTime.monday => 'monday',
+    DateTime.tuesday => 'tuesday',
+    DateTime.wednesday => 'wednesday',
+    DateTime.thursday => 'thursday',
+    DateTime.friday => 'friday',
+    DateTime.saturday => 'saturday',
+    _ => 'sunday',
+  };
+
+  String _celebrationPsalmId(String title) {
+    final normalized = _normalizeTitle(title);
+    const ids = <String, String>{
+      'the assumption of the virgin mary':
+          'the_assumption_of_the_blessed_virgin_mary',
+      'the assumption': 'the_assumption_of_the_blessed_virgin_mary',
+      'the nativity of the lord': 'nativity_of_the_lord',
+      'christmas': 'nativity_of_the_lord',
+      'pentecost sunday': 'pentecost_sunday',
+      'the ascension of the lord': 'ascension_of_the_lord',
+      'the most holy trinity': 'most_holy_trinity',
+      'the most holy body and blood of christ': 'body_and_blood_of_christ',
+      'the most sacred heart of jesus': 'most_sacred_heart_of_jesus',
+      'mary mother of the church': 'mary_mother_of_the_church',
+      'the immaculate heart of the virgin mary': 'immaculate_heart_of_mary',
+      'saints peter and paul apostles': 'saints_peter_and_paul_apostles',
+      'the nativity of saint john the baptist':
+          'nativity_of_saint_john_the_baptist',
+      'our lord jesus christ king of the universe': 'christ_the_king',
+      'all saints': 'all_saints',
+      'the epiphany of the lord': 'epiphany_of_the_lord',
+      'the baptism of the lord': 'baptism_of_the_lord',
+      'mary the holy mother of god': 'mary_mother_of_god',
+      'the immaculate conception of the virgin mary':
+          'immaculate_conception_of_blessed_virgin_mary',
+      'saint stephen the first martyr': 'stephen_first_martyr',
+      'saint john apostle and evangelist': 'john_apostle',
+      'saint john apostle': 'john_apostle',
+      'the holy family of jesus mary and joseph': 'holy_family',
+      'holy family': 'holy_family',
+      'saint cyprian michael iwene tansi': 'cyprian_michael_iwene_tansi',
+      'blessed cyprian michael iwene tansi priest':
+          'cyprian_michael_iwene_tansi',
+      'the presentation of the lord': 'presentation_of_the_lord',
+      'saint patrick bishop': 'patrick_of_ireland',
+      'saint joseph husband of mary':
+          'saint_joseph_spouse_of_blessed_virgin_mary',
+      'the annunciation of the lord': 'annunciation_of_the_lord',
+      'easter sunday of the resurrection of the lord': 'easter_sunday',
+      'saint mark evangelist': 'mark_evangelist',
+      'our lady mother of africa': 'our_lady_mother_of_africa',
+      'saint barnabas apostle': 'saint_barnabas_apostle',
+      'saint thomas apostle': 'thomas_apostle',
+      'saint mary magdalene': 'mary_magdalene',
+      'saint james apostle': 'james_apostle',
+      'the transfiguration of the lord': 'transfiguration_of_the_lord',
+      'saint lawrence deacon and martyr': 'lawrence_of_rome_deacon',
+      'saint bartholomew apostle': 'bartholomew_apostle',
+      'the passion of saint john the baptist': 'passion_of_john_the_baptist',
+      'the nativity of the virgin mary': 'nativity_of_blessed_virgin_mary',
+      'the exaltation of the holy cross': 'exaltation_of_holy_cross',
+      'saint matthew apostle and evangelist': 'matthew_apostle',
+      'saints michael gabriel and raphael archangels':
+          'michael_gabriel_raphael_archangels',
+      'our lady queen of nigeria': 'our_lady_queen_of_nigeria',
+      'the holy guardian angels': 'guardian_angels',
+      'the commemoration of all the faithful departed': 'all_souls',
+      'all souls': 'all_souls',
+      'the dedication of the lateran basilica':
+          'dedication_of_lateran_basilica',
+      'saint andrew apostle': 'andrew_apostle',
+      'saints simon and jude apostles': 'simon_and_jude_apostles',
+    };
+    final mapped = ids[normalized];
+    if (mapped != null) return mapped;
+    return normalized.replaceAll(RegExp(r'[^a-z0-9]+'), '_');
+  }
+
+  bool _isCycleSpecificCelebration(String celebrationId) => const <String>{
+    'epiphany_of_the_lord',
+    'baptism_of_the_lord',
+    'ascension_of_the_lord',
+    'pentecost_sunday',
+    'most_holy_trinity',
+    'body_and_blood_of_christ',
+    'most_sacred_heart_of_jesus',
+    'christ_the_king',
+    'easter_sunday',
+  }.contains(celebrationId);
+
+  Future<List<DailyReading>> _applyNigeriaPsalmChoices({
+    required DateTime date,
+    required List<DailyReading> readings,
+    required LiturgicalPsalmUsageContext context,
+  }) async {
+    if (readings.isEmpty) return readings;
+    if (!await _usesNigeriaLectionary()) {
+      return readings;
+    }
+    final catalog = await (_nigeriaPsalmUsages ??=
+        NigeriaPsalmUsageService.load());
+    final choices = catalog.resolve(context);
+    if (choices.isEmpty) return readings;
+    if (context.kind == LiturgicalPsalmUsageKind.specialPeriod &&
+        context.specialDay == 'easter-vigil') {
+      return _applyNigeriaEasterVigilUsages(date, readings, choices);
+    }
+
+    final psalmIndexes = <int>[
+      for (var index = 0; index < readings.length; index++)
+        if (_isOrdinaryResponsorialPosition(readings[index].position)) index,
+    ];
+    if (psalmIndexes.isEmpty) return readings;
+
+    final base = readings[psalmIndexes.first];
+    // The stable usage catalog is already ordered with the proper/current
+    // Nigerian choice first. A generic base-calendar match must never move an
+    // alternative ahead of that reviewed priority.
+    final orderedChoices = choices;
+
+    final output = List<DailyReading>.from(readings);
+    for (final index in psalmIndexes.reversed) {
+      output.removeAt(index);
+    }
+    output.insertAll(psalmIndexes.first, <DailyReading>[
+      for (var index = 0; index < orderedChoices.length; index++)
+        _usagePsalmReading(
+          date: date,
+          base: base,
+          entry: orderedChoices[index],
+          position: index == 0
+              ? 'Responsorial Psalm'
+              : index == 1
+              ? 'Responsorial Psalm (alternative)'
+              : 'Responsorial Psalm (alternative $index)',
+        ),
+    ]);
+    return output;
+  }
+
+  Future<bool> _usesNigeriaLectionary() async {
+    try {
+      final region = await LiturgicalRegionPreferenceService.getInstance();
+      return region.currentRegion.code.toUpperCase().startsWith('NG');
+    } catch (_) {
+      // Resolver-only tests and very early startup paths may not have the
+      // SharedPreferences platform channel available. Retry on the next
+      // resolution because platform preferences can become available later.
+      return false;
+    }
+  }
+
+  List<DailyReading> _applyNigeriaEasterVigilUsages(
+    DateTime date,
+    List<DailyReading> readings,
+    List<NigeriaPsalmUsageEntry> choices,
+  ) {
+    final unused = List<NigeriaPsalmUsageEntry>.from(choices);
+    final output = <DailyReading>[];
+    for (final reading in readings) {
+      final position = (reading.position ?? '').toLowerCase();
+      if (!position.contains('responsorial psalm')) {
+        output.add(reading);
+        continue;
+      }
+      final normalized =
+          ResponsorialPsalmSourcePackService.normalizePackReference(
+            reading.reading,
+          );
+      var matchIndex = unused.indexWhere(
+        (entry) => entry.referenceNormalized == normalized,
+      );
+      if (matchIndex < 0) {
+        final stem = _referenceStem(normalized);
+        matchIndex = unused.indexWhere(
+          (entry) => _referenceStem(entry.referenceNormalized) == stem,
+        );
+      }
+      if (matchIndex < 0) {
+        output.add(reading);
+        continue;
+      }
+      final match = unused.removeAt(matchIndex);
+      output.add(
+        _usagePsalmReading(
+          date: date,
+          base: reading,
+          entry: match,
+          position: reading.position ?? 'Responsorial Psalm',
+        ),
+      );
+      final normalizedMatch = match.referenceNormalized;
+      if (_referenceStem(normalizedMatch) == 'ps104') {
+        final alternativeIndex = unused.indexWhere(
+          (entry) => _referenceStem(entry.referenceNormalized) == 'ps33',
+        );
+        if (alternativeIndex >= 0) {
+          output.add(
+            _usagePsalmReading(
+              date: date,
+              base: reading,
+              entry: unused.removeAt(alternativeIndex),
+              position: 'Responsorial Psalm after First Reading (alternative)',
+            ),
+          );
+        }
+      }
+      if (position.contains('after seventh reading')) {
+        final alternativeIndex = unused.indexWhere(
+          (entry) => _referenceStem(entry.referenceNormalized) == 'ps51',
+        );
+        if (alternativeIndex >= 0) {
+          output.add(
+            _usagePsalmReading(
+              date: date,
+              base: reading,
+              entry: unused.removeAt(alternativeIndex),
+              position:
+                  'Responsorial Psalm after Seventh Reading (alternative)',
+            ),
+          );
+        }
+      }
+    }
+    for (final entry in unused) {
+      output.add(
+        _usagePsalmReading(
+          date: date,
+          base: readings.first,
+          entry: entry,
+          position: 'Responsorial Psalm (alternative)',
+        ),
+      );
+    }
+    return output;
+  }
+
+  DailyReading _usagePsalmReading({
+    required DateTime date,
+    required DailyReading base,
+    required NigeriaPsalmUsageEntry entry,
+    required String position,
+  }) {
+    return DailyReading(
+      reading: entry.referenceDisplay.isEmpty
+          ? _displayNormalizedReference(entry.referenceNormalized)
+          : entry.referenceDisplay,
+      position: position,
+      date: date,
+      feast: base.feast,
+      psalmResponse: entry.responseText,
+      source: 'nigeria_usage:${entry.usageId}',
+    );
+  }
+
+  bool _isOrdinaryResponsorialPosition(String? position) {
+    final value = (position ?? '').toLowerCase();
+    return value == 'responsorial psalm' ||
+        value.startsWith('responsorial psalm (alternative');
+  }
+
+  String _referenceStem(String normalized) {
+    final separator = normalized.indexOf(':');
+    return separator < 0 ? normalized : normalized.substring(0, separator);
+  }
+
+  String _displayNormalizedReference(String normalized) {
+    final match = RegExp(
+      r'^([a-z]+|1[a-z]+)(\d+):(.*)$',
+    ).firstMatch(normalized);
+    if (match == null) return normalized;
+    const books = <String, String>{
+      'ps': 'Ps',
+      'deut': 'Dt',
+      'deuteronomy': 'Dt',
+      'isa': 'Isa',
+      'isaiah': 'Isa',
+      'exod': 'Exod',
+      'exodus': 'Exod',
+      'dan': 'Dan',
+      'daniel': 'Dan',
+      'jer': 'Jer',
+      'jeremiah': 'Jer',
+      '1sam': '1 Sam',
+      '1samuel': '1 Sam',
+      '1chr': '1 Chr',
+      '1chronicles': '1 Chr',
+      'luke': 'Luke',
+    };
+    final book = books[match.group(1)] ?? match.group(1)!;
+    final verses = match.group(3)!.replaceAll(',', ', ');
+    return '$book ${match.group(2)}:$verses';
   }
 
   /// Resolves a named celebration choice through the same authoritative
@@ -167,7 +717,17 @@ class CsvReadingsResolverService
       celebrationTitle: celebrationTitle,
       sundayCycle: yearVariables.sundayCycle,
     );
-    if (override != null) return override;
+    if (override != null) {
+      return _applyNigeriaPsalmChoices(
+        date: normalizedDate,
+        readings: override,
+        context: _celebrationPsalmContext(
+          celebrationId: celebrationId,
+          yearVariables: yearVariables,
+          cycleSpecific: _isCycleSpecificCelebration(celebrationId),
+        ),
+      );
+    }
 
     final entries = await _catalog.loadMemorialEntries();
     MemorialFeastEntry? match;
@@ -183,7 +743,15 @@ class CsvReadingsResolverService
     if (match.firstReading.isEmpty && match.gospel.isEmpty) {
       return const [];
     }
-    return _buildCelebrationReadings(normalizedDate, match);
+    return _applyNigeriaPsalmChoices(
+      date: normalizedDate,
+      readings: _buildCelebrationReadings(normalizedDate, match),
+      context: _celebrationPsalmContext(
+        celebrationId: celebrationId,
+        yearVariables: yearVariables,
+        cycleSpecific: _isCycleSpecificCelebration(celebrationId),
+      ),
+    );
   }
 
   /// Returns a separately labelled Vigil set when the resolved celebration
@@ -192,76 +760,120 @@ class CsvReadingsResolverService
     required DateTime date,
     required String celebrationTitle,
   }) async {
+    final normalizedDate = _normalizeDate(date);
+    final yearVariables = await _ordoResolver.resolveYearVariables(
+      normalizedDate,
+    );
     final normalizedTitle = _normalizeTitle(celebrationTitle);
     if (normalizedTitle ==
             _normalizeTitle('The Assumption of the Blessed Virgin Mary') ||
         normalizedTitle == _normalizeTitle('The Assumption')) {
-      return _buildOverrideReadings(
-        date: _normalizeDate(date),
-        firstReading: '1 Chr 15:3-4, 15-16; 16:1-2',
-        psalm: 'Ps 132:6-7, 9-10, 13-14',
-        psalmResponse:
-            'Lord, go up to the place of your rest, you and the ark of your holiness.',
-        secondReading: '1 Cor 15:54b-57',
-        gospel: 'Luke 11:27-28',
-        gospelAcclamation:
-            'Blessed are they who hear the word of God and observe it.',
-        feastTitle: '$celebrationTitle — Vigil Mass',
+      return _applyNigeriaPsalmChoices(
+        date: normalizedDate,
+        readings: _buildOverrideReadings(
+          date: normalizedDate,
+          firstReading: '1 Chr 15:3-4, 15-16; 16:1-2',
+          psalm: 'Ps 132:6-7, 9-10, 13-14',
+          psalmResponse:
+              'Lord, go up to the place of your rest, you and the ark of your holiness.',
+          secondReading: '1 Cor 15:54b-57',
+          gospel: 'Luke 11:27-28',
+          gospelAcclamation:
+              'Blessed are they who hear the word of God and observe it.',
+          feastTitle: '$celebrationTitle — Vigil Mass',
+        ),
+        context: _celebrationPsalmContext(
+          celebrationId: 'the_assumption_of_the_blessed_virgin_mary',
+          massForm: 'vigil',
+          yearVariables: yearVariables,
+        ),
       );
     }
     if (normalizedTitle == _normalizeTitle('Pentecost Sunday')) {
-      return _buildOverrideReadings(
-        date: _normalizeDate(date),
-        firstReading: 'Gen 11:1-9',
-        firstReadingAlternates: const <String>[
-          'Exod 19:3-8a, 16-20b',
-          'Ezek 37:1-14',
-          'Joel 3:1-5',
-        ],
-        psalm: 'Ps 104:1-2a, 24, 35c, 27-28, 29bc-30',
-        psalmResponse:
-            'Lord, send out your Spirit, and renew the face of the earth.',
-        secondReading: 'Rom 8:22-27',
-        gospel: 'John 7:37-39',
-        gospelAcclamation:
-            'Come, Holy Spirit, fill the hearts of the faithful and kindle in them the fire of your love.',
-        feastTitle: '$celebrationTitle — Vigil Mass',
+      return _applyNigeriaPsalmChoices(
+        date: normalizedDate,
+        readings: _buildOverrideReadings(
+          date: normalizedDate,
+          firstReading: 'Gen 11:1-9',
+          firstReadingAlternates: const <String>[
+            'Exod 19:3-8a, 16-20b',
+            'Ezek 37:1-14',
+            'Joel 3:1-5',
+          ],
+          psalm: 'Ps 104:1-2a, 24, 35c, 27-28, 29bc-30',
+          psalmResponse:
+              'Lord, send out your Spirit, and renew the face of the earth.',
+          secondReading: 'Rom 8:22-27',
+          gospel: 'John 7:37-39',
+          gospelAcclamation:
+              'Come, Holy Spirit, fill the hearts of the faithful and kindle in them the fire of your love.',
+          feastTitle: '$celebrationTitle — Vigil Mass',
+        ),
+        context: _celebrationPsalmContext(
+          celebrationId: 'pentecost_sunday',
+          massForm: 'vigil',
+          yearVariables: yearVariables,
+        ),
       );
     }
     if (normalizedTitle == _normalizeTitle('The Nativity of the Lord') ||
         normalizedTitle == _normalizeTitle('Christmas')) {
-      return _buildOverrideReadings(
-        date: _normalizeDate(date),
-        firstReading: 'Isa 62:1-5',
-        psalm: 'Ps 89:4-5, 16-17, 27, 29',
-        psalmResponse: 'For ever I will sing the goodness of the Lord.',
-        secondReading: 'Acts 13:16-17, 22-25',
-        gospel: 'Matt 1:1-25',
-        gospelAlternates: const <String>['Matt 1:18-25'],
-        feastTitle: '$celebrationTitle — Vigil Mass',
+      return _applyNigeriaPsalmChoices(
+        date: normalizedDate,
+        readings: _buildOverrideReadings(
+          date: normalizedDate,
+          firstReading: 'Isa 62:1-5',
+          psalm: 'Ps 89:4-5, 16-17, 27, 29',
+          psalmResponse: 'For ever I will sing the goodness of the Lord.',
+          secondReading: 'Acts 13:16-17, 22-25',
+          gospel: 'Matt 1:1-25',
+          gospelAlternates: const <String>['Matt 1:18-25'],
+          feastTitle: '$celebrationTitle — Vigil Mass',
+        ),
+        context: _celebrationPsalmContext(
+          celebrationId: 'nativity_of_the_lord',
+          massForm: 'vigil',
+          yearVariables: yearVariables,
+        ),
       );
     }
     if (normalizedTitle ==
         _normalizeTitle('The Nativity of Saint John the Baptist')) {
-      return _buildOverrideReadings(
-        date: _normalizeDate(date),
-        firstReading: 'Jer 1:4-10',
-        psalm: 'Ps 71:1-2, 3-4a, 5-6ab, 15ab, 17',
-        psalmResponse: 'Since my mother\'s womb, you have been my strength.',
-        secondReading: '1 Pet 1:8-12',
-        gospel: 'Luke 1:5-17',
-        feastTitle: '$celebrationTitle — Vigil Mass',
+      return _applyNigeriaPsalmChoices(
+        date: normalizedDate,
+        readings: _buildOverrideReadings(
+          date: normalizedDate,
+          firstReading: 'Jer 1:4-10',
+          psalm: 'Ps 71:1-2, 3-4a, 5-6ab, 15ab, 17',
+          psalmResponse: 'Since my mother\'s womb, you have been my strength.',
+          secondReading: '1 Pet 1:8-12',
+          gospel: 'Luke 1:5-17',
+          feastTitle: '$celebrationTitle — Vigil Mass',
+        ),
+        context: _celebrationPsalmContext(
+          celebrationId: 'nativity_of_saint_john_the_baptist',
+          massForm: 'vigil',
+          yearVariables: yearVariables,
+        ),
       );
     }
     if (normalizedTitle == _normalizeTitle('Saints Peter and Paul, Apostles')) {
-      return _buildOverrideReadings(
-        date: _normalizeDate(date),
-        firstReading: 'Acts 3:1-10',
-        psalm: 'Ps 19:2-3, 4-5',
-        psalmResponse: 'Their message goes out through all the earth.',
-        secondReading: 'Gal 1:11-20',
-        gospel: 'John 21:15-19',
-        feastTitle: '$celebrationTitle — Vigil Mass',
+      return _applyNigeriaPsalmChoices(
+        date: normalizedDate,
+        readings: _buildOverrideReadings(
+          date: normalizedDate,
+          firstReading: 'Acts 3:1-10',
+          psalm: 'Ps 19:2-3, 4-5',
+          psalmResponse: 'Their message goes out through all the earth.',
+          secondReading: 'Gal 1:11-20',
+          gospel: 'John 21:15-19',
+          feastTitle: '$celebrationTitle — Vigil Mass',
+        ),
+        context: _celebrationPsalmContext(
+          celebrationId: 'saints_peter_and_paul_apostles',
+          massForm: 'vigil',
+          yearVariables: yearVariables,
+        ),
       );
     }
     return const [];
@@ -274,36 +886,82 @@ class CsvReadingsResolverService
     required String celebrationTitle,
   }) async {
     final normalizedTitle = _normalizeTitle(celebrationTitle);
+    final normalizedDate = _normalizeDate(date);
+    final yearVariables = await _ordoResolver.resolveYearVariables(
+      normalizedDate,
+    );
+    if (_isHolyThursday(normalizedDate)) {
+      final readings = _buildOverrideReadings(
+        date: normalizedDate,
+        firstReading: 'Isa 61:1-3a, 6a, 8b-9',
+        psalm: 'Ps 89:21-22, 25, 27',
+        psalmResponse: 'For ever I will sing the goodness of the Lord.',
+        secondReading: 'Rev 1:5-8',
+        gospel: 'Luke 4:16-21',
+        feastTitle: 'Holy Thursday — Chrism Mass',
+      );
+      return <NamedReadingChoice>[
+        NamedReadingChoice(
+          label: 'Holy Thursday — Chrism Mass',
+          readings: await _applyNigeriaPsalmChoices(
+            date: normalizedDate,
+            readings: readings,
+            context: _celebrationPsalmContext(
+              celebrationId: 'holy_thursday',
+              massForm: 'chrism',
+              yearVariables: yearVariables,
+            ),
+          ),
+        ),
+      ];
+    }
     if (normalizedTitle != _normalizeTitle('The Nativity of the Lord') &&
         normalizedTitle != _normalizeTitle('Christmas')) {
       return const <NamedReadingChoice>[];
     }
 
-    final normalizedDate = _normalizeDate(date);
+    final nightReadings = _buildOverrideReadings(
+      date: normalizedDate,
+      firstReading: 'Isa 9:1-6',
+      psalm: 'Ps 96:1-2, 2-3, 11-12, 13',
+      psalmResponse: 'Today is born our Savior, Christ the Lord.',
+      secondReading: 'Titus 2:11-14',
+      gospel: 'Luke 2:1-14',
+      feastTitle: '$celebrationTitle — Mass during the Night',
+    );
+    final dawnReadings = _buildOverrideReadings(
+      date: normalizedDate,
+      firstReading: 'Isa 62:11-12',
+      psalm: 'Ps 97:1, 6, 11-12',
+      psalmResponse:
+          'A light will shine on us this day: the Lord is born for us.',
+      secondReading: 'Titus 3:4-7',
+      gospel: 'Luke 2:15-20',
+      feastTitle: '$celebrationTitle — Mass at Dawn',
+    );
     return <NamedReadingChoice>[
       NamedReadingChoice(
         label: '$celebrationTitle — Mass during the Night',
-        readings: _buildOverrideReadings(
+        readings: await _applyNigeriaPsalmChoices(
           date: normalizedDate,
-          firstReading: 'Isa 9:1-6',
-          psalm: 'Ps 96:1-2, 2-3, 11-12, 13',
-          psalmResponse: 'Today is born our Savior, Christ the Lord.',
-          secondReading: 'Titus 2:11-14',
-          gospel: 'Luke 2:1-14',
-          feastTitle: '$celebrationTitle — Mass during the Night',
+          readings: nightReadings,
+          context: _celebrationPsalmContext(
+            celebrationId: 'nativity_of_the_lord',
+            massForm: 'midnight',
+            yearVariables: yearVariables,
+          ),
         ),
       ),
       NamedReadingChoice(
         label: '$celebrationTitle — Mass at Dawn',
-        readings: _buildOverrideReadings(
+        readings: await _applyNigeriaPsalmChoices(
           date: normalizedDate,
-          firstReading: 'Isa 62:11-12',
-          psalm: 'Ps 97:1, 6, 11-12',
-          psalmResponse:
-              'A light will shine on us this day: the Lord is born for us.',
-          secondReading: 'Titus 3:4-7',
-          gospel: 'Luke 2:15-20',
-          feastTitle: '$celebrationTitle — Mass at Dawn',
+          readings: dawnReadings,
+          context: _celebrationPsalmContext(
+            celebrationId: 'nativity_of_the_lord',
+            massForm: 'dawn',
+            yearVariables: yearVariables,
+          ),
         ),
       ),
     ];
@@ -572,7 +1230,9 @@ class CsvReadingsResolverService
         continue;
       }
       final rank = entry.rank.toLowerCase();
-      if (!rank.contains('feast') && !rank.contains('solemnity')) {
+      if (!rank.contains('feast') &&
+          !rank.contains('solemnity') &&
+          !rank.contains('obligatory memorial')) {
         continue;
       }
       if (int.tryParse(entry.month) == date.month &&
@@ -612,6 +1272,28 @@ class CsvReadingsResolverService
     required String sundayCycle,
     required String weekdayCycle,
   }) async {
+    if (date.month == 1 && date.day == 20) {
+      return _buildOverrideReadings(
+        date: date,
+        firstReading: 'Phil 2:1-11',
+        psalm: 'Isa 12:2-3, 4bcde, 5-6',
+        psalmResponse: 'Your anger turned away and you comforted me.',
+        gospel: 'Matt 13:44-46',
+        feastTitle: 'Blessed Cyprian Michael Iwene Tansi, Priest',
+      );
+    }
+
+    if (date.month == 3 && date.day == 17) {
+      return _buildOverrideReadings(
+        date: date,
+        firstReading: '1 Pet 4:7b-11',
+        psalm: 'Ps 96:1-2a, 2b-3, 7-8a, 9-10ac',
+        psalmResponse: 'Tell among all the peoples the wonders of the Lord!',
+        gospel: 'Luke 5:1-11',
+        feastTitle: 'Saint Patrick, Bishop',
+      );
+    }
+
     if (_isMondayAfterPentecost(date)) {
       return _buildOverrideReadings(
         date: date,
@@ -2611,6 +3293,17 @@ class CsvReadingsResolverService
     var cleaned = value.trim();
     if (cleaned.isEmpty) return cleaned;
 
+    // Rubrics from the source missal extraction are instructions, not part of
+    // the verse before the Gospel. They are sometimes glued to the beginning
+    // of the acclamation text.
+    cleaned = cleaned.replaceFirst(
+      RegExp(
+        r'^(?:(?:If (?:the )?(?:Alleluia|acclamation) is not sung, it is omitted|If the acclamation is omitted|acclamation is omitted|mation is omitted)\.?\s*)+',
+        caseSensitive: false,
+      ),
+      '',
+    );
+
     // Normalize spaced-out section markers e.g. "GO S P E L" → "GOSPEL".
     cleaned = cleaned.replaceAllMapped(
       RegExp(r'\b([A-Z])(\s[A-Z]){3,}\b'),
@@ -2620,6 +3313,15 @@ class CsvReadingsResolverService
     // Trailing " 1234 SECTION HEADER" (page number + ALL-CAPS heading).
     cleaned = cleaned.replaceFirst(
       RegExp(r'\s+\d{2,4}\s+[A-Z][A-Z \-–]{2,}.*$'),
+      '',
+    );
+
+    // The same page marker also occurs in reverse order, for example
+    // "... poverty. TUESDAY 1563" and "... life. FRIDAY 537".
+    cleaned = cleaned.replaceFirst(
+      RegExp(
+        r'\s+(?:MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY|JANUARY|FEBRUARY|MARCH|APRIL|MAY|JUNE|JULY|AUGUST|SEPTEMBER|OCTOBER|NOVEMBER|DECEMBER)\s+\d{2,4}\b.*$',
+      ),
       '',
     );
 
@@ -2751,6 +3453,25 @@ class CsvReadingsResolverService
         .replaceAll('Baruch', 'Bar')
         .replaceAll('Psalms', 'Ps')
         .replaceAll('Psalm', 'Ps');
+    // Normalize source abbreviations that do not match the bundled Bible's
+    // canonical book keys. This is especially important for standalone
+    // Gospel Acclamation cards, whose reference is opened as scripture text.
+    result = result
+        .replaceAllMapped(
+          RegExp(r'\b([12])\s+Thes\b'),
+          (match) => '${match.group(1)} Thess',
+        )
+        .replaceAllMapped(
+          RegExp(r'\b([12])\s+Tm\b'),
+          (match) => '${match.group(1)} Tim',
+        )
+        .replaceAll(RegExp(r'\bJas\b'), 'James');
+    // A small number of source rows use European punctuation between chapter
+    // and verse ("Luke 21,28" / "Joel 2; 12-13").
+    result = result.replaceFirstMapped(
+      RegExp(r'^([A-Za-z0-9. ]+\s\d+)\s*[,;]\s*(\d)'),
+      (match) => '${match.group(1)}:${match.group(2)}',
+    );
     // Convert period notation to colon for the chapter.verse separator only.
     // Anchored to the start so mid-string periods like "and 12.13" are not touched.
     // Handles both "Psalm 72.1-2" and "Psalm 1. 1-2" (space after period).
@@ -2897,6 +3618,17 @@ class CsvReadingsResolverService
     return _isSameDate(date, easter.subtract(const Duration(days: 3)));
   }
 
+  String _holyWeekSpecialDay(DateTime date) {
+    final easter = _calculateEasterSunday(date.year);
+    final daysBeforeEaster = easter.difference(_normalizeDate(date)).inDays;
+    return switch (daysBeforeEaster) {
+      6 => 'holy-week-monday',
+      5 => 'holy-week-tuesday',
+      4 => 'holy-week-wednesday',
+      _ => '',
+    };
+  }
+
   bool _isGoodFriday(DateTime date) {
     final easter = _calculateEasterSunday(date.year);
     return _isSameDate(date, easter.subtract(const Duration(days: 2)));
@@ -2921,7 +3653,7 @@ class CsvReadingsResolverService
     return !date.isBefore(
           DateTime(easter.year, easter.month, easter.day + 1),
         ) &&
-        !date.isAfter(octaveEnd);
+        date.isBefore(octaveEnd);
   }
 
   bool _isAshWednesday(DateTime date) {

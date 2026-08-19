@@ -44,6 +44,11 @@ def normalize_reference(value: str) -> str:
     value = re.sub(r"^dt\s*", "deuteronomy", value)
     if re.match(r"^\d+\s*:", value):
         value = "ps" + value
+    value = re.sub(
+        r"^([1-3]?[a-z]+)\s*(\d+)\s*[.:]\s*",
+        r"\1\2:",
+        value,
+    )
     response_match = re.search(r"\(\s*r\s*/?\.\s*([^)]+)\)", value)
     response = ""
     if response_match:
@@ -51,7 +56,7 @@ def normalize_reference(value: str) -> str:
         value = value[: response_match.start()] + value[response_match.end() :]
     value = re.sub(r"\b(?:cf\.?|see)\s*", "", value)
     value = value.replace(" and ", ",")
-    value = re.sub(r"(?<=[0-9a-z])[.;](?=\d)", ",", value)
+    value = re.sub(r"(?<=[0-9a-z])[.;]\s*(?=\d)", ",", value)
     value = re.sub(r"\s+", "", value)
     value = re.sub(r",+", ",", value).rstrip(",")
     if response:

@@ -33,7 +33,12 @@ from psalm_sources.models import (
     SourceRecord,
 )
 from psalm_sources.modern_psalter import parse_liturgy_page
-from psalm_sources.nigeria_365 import extract_rows, fetch_live_rows
+from psalm_sources.nigeria_365 import (
+    canonicalize_nigeria_reference,
+    extract_rows,
+    fetch_live_rows,
+)
+from psalm_sources.normalize import normalize_words
 from psalm_sources.source_packs import write_runtime_packs
 
 
@@ -70,8 +75,80 @@ def _registry() -> list[SourceRecord]:
     return records
 
 
+def _nigeria_usage_source_rows(*, retrieved_at: str) -> list[PsalmSourceRow]:
+    path = ROOT / "assets/data/nigeria_psalm_usages.csv"
+    with path.open(encoding="utf-8-sig", newline="") as handle:
+        values = list(csv.DictReader(handle))
+    rows: list[PsalmSourceRow] = []
+    for item in values:
+        response = item["response_text"]
+        reference = item["reference_normalized"]
+        rows.append(
+            PsalmSourceRow(
+                usage_id=f"usage-corpus:{item['usage_id']}",
+                celebration_id=item["celebration_id"],
+                celebration_title="",
+                date_rule=item["source_date"],
+                season=item["season"],
+                week=item["week"],
+                weekday=item["weekday"],
+                sunday_cycle=item["sunday_cycle"],
+                weekday_cycle=item["weekday_cycle"],
+                lectionary_number="",
+                territory=item["territory"],
+                reading_set_kind=item["kind"],
+                reading_set_priority=int(item["choice_priority"]),
+                biblical_book="",
+                psalm_number_hebrew="",
+                psalm_number_vulgate="",
+                reference_raw=reference,
+                reference_normalized=reference,
+                stanza_selection_normalized=reference,
+                response_verse_normalized="",
+                source_id="nigeria_reconciled_usage_catalog",
+                source_name="Nigeria reconciled psalm usage catalog",
+                source_edition=item["source_edition"],
+                source_territory="NG",
+                source_url="repo://assets/data/nigeria_psalm_usages.csv",
+                retrieved_at=retrieved_at,
+                source_license="comparison-derived reference inventory",
+                reuse_status="comparison_only",
+                response_raw=response,
+                response_normalized=normalize_words(response),
+                stanzas_raw="",
+                stanzas_normalized="",
+                raw_sha256="",
+                normalized_sha256="",
+                token_count=0,
+            )
+        )
+    return rows
+
+
 def _selection_key(reference: str) -> str:
     return re.sub(r"\(r\.[^)]*\)", "", reference, flags=re.IGNORECASE)
+
+
+def _corpus_reference(row: PsalmSourceRow) -> str:
+    if row.source_id == "nigeria_365_firestore":
+        return canonicalize_nigeria_reference(
+            row.date_rule,
+            row.reference_normalized,
+        )
+    return row.reference_raw
+
+
+def _runtime_reference_aliases(
+    rows: Iterable[PsalmSourceRow],
+) -> dict[str, set[str]]:
+    aliases: dict[str, set[str]] = {}
+    for row in rows:
+        if row.source_id != "nigeria_reconciled_usage_catalog":
+            continue
+        reference = row.reference_normalized.strip()
+        parsed = parse_selection(reference)
+        aliases.setdefault(selection_id_for(parsed.normalized), set()).add(reference)
+    return aliases
 
 
 def _compare_to_nigeria(rows: list[PsalmSourceRow]) -> list[PsalmSourceRow]:
@@ -293,7 +370,8 @@ def _full_text_corpus(
     seen_usages: set[tuple[str, str, str]] = set()
 
     for row in rows:
-        parsed = parse_selection(row.reference_raw)
+        reference = _corpus_reference(row)
+        parsed = parse_selection(reference)
         selection_id = selection_id_for(parsed.normalized)
         usage_key = (row.usage_id, selection_id, row.source_id)
         if usage_key not in seen_usages:
@@ -316,7 +394,7 @@ def _full_text_corpus(
             seen_usages.add(usage_key)
         reference_by_selection.setdefault(
             selection_id,
-            (row.reference_raw, row.response_raw),
+            (reference, row.response_raw),
         )
 
     selections = [
@@ -347,27 +425,6 @@ def _full_text_corpus(
             )
         )
 
-    for row in rows:
-        if row.source_id != "nigeria_365_firestore" or not row.stanzas_raw.strip():
-            continue
-        parsed = parse_selection(row.reference_raw)
-        edition_rows.append(
-            PsalmEditionText(
-                selection_id=selection_id_for(parsed.normalized),
-                edition_id="nigeria_365_firestore",
-                reference_normalized=parsed.normalized,
-                response_text=row.response_raw,
-                stanzas=tuple(
-                    value.strip()
-                    for value in re.split(r"\n\s*\n", row.stanzas_raw)
-                    if value.strip()
-                ),
-                source_url=row.source_url,
-                source_edition=row.source_edition,
-                territory=row.territory or "NG",
-                coverage_status="partial",
-            )
-        )
     return usages, edition_rows
 
 
@@ -458,6 +515,7 @@ def build(
 ) -> None:
     records = _registry()
     rows = load_local_psalm_rows(ROOT, retrieved_at=retrieved_at)
+    rows.extend(_nigeria_usage_source_rows(retrieved_at=retrieved_at))
     if refresh_live:
         rows.extend(fetch_live_rows(retrieved_at=retrieved_at))
     else:
@@ -500,11 +558,21 @@ def build(
         )
     if runtime_output is not None:
         if edition_rows is None:
-            _, edition_rows = _full_text_corpus(rows, douay_db=douay_db)
+            bible_rows = [
+                row
+                for row in rows
+                if row.source_id != "nigeria_365_firestore"
+            ]
+            _, edition_rows = _full_text_corpus(
+                bible_rows,
+                douay_db=douay_db,
+            )
         write_runtime_packs(
             runtime_output,
             registry=records,
             edition_rows=edition_rows,
+            source_rows=rows,
+            reference_aliases=_runtime_reference_aliases(rows),
         )
 
 

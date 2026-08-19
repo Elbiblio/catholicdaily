@@ -52,7 +52,7 @@ void main() {
     await tester.tap(tile);
     await tester.pumpAndSettle();
 
-    final nigeria = find.text('Catholic Missal for Nigeria / 365 Readings');
+    final nigeria = find.text('Catholic Missal for Nigeria');
     await tester.ensureVisible(nigeria);
     await tester.tap(nigeria);
     await tester.pumpAndSettle();

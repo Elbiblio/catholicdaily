@@ -149,17 +149,30 @@ class ResponsorialPsalmTextCatalogService
     return candidates.isEmpty ? null : candidates.first;
   }
 
-  static String normalizeReference(String value) => value
-      .toLowerCase()
-      .replaceFirst(RegExp(r'^(?:psalm|ps)\s*'), 'ps')
-      .replaceFirst(RegExp(r'^(?:deuteronomy|dt)\s*'), 'deut')
-      .replaceAll(' and ', ',')
-      .replaceAll(RegExp(r'\(r\.[^)]*\)', caseSensitive: false), '')
-      .replaceAllMapped(RegExp(r'(?<=[0-9a-z])[.;](?=\d)'), (_) => ',')
-      .replaceAll(RegExp(r'\s+'), '')
-      .replaceAll(RegExp(r',+'), ',')
-      .replaceAll(RegExp(r',$'), '')
-      .trim();
+  static String normalizeReference(String value) {
+    var normalized = value
+        .toLowerCase()
+        .replaceFirst(RegExp(r'^(?:psalm|ps)\s*'), 'ps')
+        .replaceFirst(RegExp(r'^(?:deuteronomy|dt)\s*'), 'deut')
+        .replaceFirst(RegExp(r'^(?:isaiah|isa)\s*'), 'isa')
+        .replaceFirst(RegExp(r'^(?:jeremiah|jer)\s*'), 'jer')
+        .replaceFirst(RegExp(r'^(?:daniel|dan)\s*'), 'dan')
+        .replaceFirst(RegExp(r'^(?:exodus|exod|ex)\s*'), 'ex')
+        .replaceFirst(RegExp(r'^(?:1\s*samuel|1\s*sam)\s*'), '1sam')
+        .replaceFirst(RegExp(r'^(?:1\s*chronicles|1\s*chr)\s*'), '1chr')
+        .replaceAll(' and ', ',')
+        .replaceAll(RegExp(r'\(r\.[^)]*\)', caseSensitive: false), '');
+    normalized = normalized.replaceFirstMapped(
+      RegExp(r'^([1-3]?[a-z]+)\s*(\d+)\s*[.:]\s*'),
+      (match) => '${match.group(1)}${match.group(2)}:',
+    );
+    return normalized
+        .replaceAllMapped(RegExp(r'(?<=[0-9a-z])[.;]\s*(?=\d)'), (_) => ',')
+        .replaceAll(RegExp(r'\s+'), '')
+        .replaceAll(RegExp(r',+'), ',')
+        .replaceAll(RegExp(r',$'), '')
+        .trim();
+  }
 
   static String normalizeWords(String value) => value
       .toLowerCase()

@@ -21,7 +21,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # To skip a platform build, add exactly one of these as its own line above the version:
 #   # CI_SKIP_ANDROID
 #   # CI_SKIP_IOS
-version: 1.6.9+34
+version: 1.6.10+35
 
 environment:
   sdk: ^3.9.0
@@ -120,6 +120,7 @@ flutter:
     - assets/data/prayer_of_faithful_mapped.csv
     - assets/data/cpl_prayer_faithful_spanish.csv
     - assets/data/responsorial_psalm_texts.csv
+    - assets/data/nigeria_psalm_usages.csv
     - assets/data/psalm_editions/
     - assets/incipit_rules.csv
     - assets/incipit_evidence.csv

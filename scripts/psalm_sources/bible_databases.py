@@ -26,9 +26,19 @@ _BOOK_ALIASES = {
     "deuteronomy": "deut",
     "1 sam": "1sam",
     "1 samuel": "1sam",
+    "first samuel": "1sam",
+    "firstsamuel": "1sam",
     "1 chronicles": "1chr",
     "1 chr": "1chr",
+    "first chronicles": "1chr",
+    "firstchronicles": "1chr",
+    "tob": "tob",
+    "tobit": "tob",
+    "jdt": "judith",
+    "jud": "judith",
+    "judith": "judith",
     "ex": "ex",
+    "exod": "ex",
     "exodus": "ex",
     "luke": "luke",
     "lk": "luke",
@@ -92,7 +102,8 @@ def _expand_group(value: str) -> tuple[int, ...]:
 
 def parse_selection(reference: str) -> ParsedSelection:
     clean = reference.replace("–", "-").replace("—", "-").strip()
-    clean = re.sub(r"\s*\([^)]*(?:R\.?|℟)[^)]*\).*?$", "", clean, flags=re.I)
+    clean = re.sub(r"\s*\((?:R\.?|℟)[^)]*\).*?$", "", clean, flags=re.I)
+    clean = clean.lstrip(" (")
     clean = re.sub(r"\s+and\s+", ", ", clean, flags=re.I)
     clean = clean.rstrip("+ ")
     correction_key = re.sub(r"^psalm\s+", "ps ", clean.lower())
@@ -102,26 +113,45 @@ def parse_selection(reference: str) -> ParsedSelection:
     )
     if re.match(r"^\d+\s*[:.]", clean):
         clean = f"Ps {clean}"
-    match = re.match(r"^(.+?)\s+(\d+)\s*[:.]\s*(.+)$", clean)
+    match = re.match(r"^(.+?)\s*(\d+)\s*[:.]\s*(.+)$", clean)
     if not match:
         raise ValueError(f"Unsupported psalm or canticle reference: {reference!r}")
 
     book = _canonical_book(match.group(1))
     chapter = int(match.group(2))
+    raw_selection = re.sub(
+        r";\s*(\d+)\s*\.\s*(?=\d)",
+        r";\1:",
+        match.group(3),
+    )
     raw_groups = [
         group.strip()
-        for group in re.split(r"\s*(?:,|\.(?=\s*\d))\s*", match.group(3))
+        for group in re.split(r"\s*(?:,|;|\.(?=\s*\d))\s*", raw_selection)
         if group.strip()
     ]
-    groups = tuple(
-        SelectionGroup(
-            chapter=chapter,
-            verses=_expand_group(group),
-            normalized=re.sub(r"\s+", "", group.lower()),
+    groups_list: list[SelectionGroup] = []
+    current_chapter = chapter
+    for group in raw_groups:
+        chapter_marker = re.match(r"^(\d+)\s*[:.]\s*(.+)$", group)
+        selector = group
+        if chapter_marker:
+            current_chapter = int(chapter_marker.group(1))
+            selector = chapter_marker.group(2)
+        groups_list.append(
+            SelectionGroup(
+                chapter=current_chapter,
+                verses=_expand_group(selector),
+                normalized=re.sub(r"\s+", "", selector.lower()),
+            )
         )
-        for group in raw_groups
-    )
-    normalized = f"{book}{chapter}:{','.join(group.normalized for group in groups)}"
+    groups = tuple(groups_list)
+    normalized_groups: list[str] = []
+    prior_chapter = chapter
+    for group in groups:
+        prefix = f"{group.chapter}:" if group.chapter != prior_chapter else ""
+        normalized_groups.append(prefix + group.normalized)
+        prior_chapter = group.chapter
+    normalized = f"{book}{chapter}:{','.join(normalized_groups)}"
     return ParsedSelection(
         book=book,
         chapter=chapter,
@@ -161,6 +191,37 @@ def lookup_verse(
     return " ".join(values)
 
 
+def _edition_verse_numbers(
+    *,
+    edition_id: str,
+    book: str,
+    chapter: int,
+    verses: tuple[int, ...],
+    psalm_offset: int = 0,
+) -> tuple[int, ...]:
+    """Map lectionary numbering to the bundled edition's verse keys."""
+
+    mapped: list[int] = []
+    for verse in verses:
+        value = verse + psalm_offset
+        if edition_id == "local_rsvce" and book == "dan" and chapter == 3:
+            # The RSVCE database keys the Greek canticle at 3:35-68, while the
+            # lectionary cites the continuous Daniel numbering 3:57-90.
+            if verse >= 57:
+                value = verse - 22
+        elif edition_id == "local_rsvce" and book == "tob" and chapter == 13:
+            # The imported RSVCE row for Tobit 13:3 also contains verse 4.
+            if verse == 4:
+                value = 3
+        elif edition_id == "local_nabre" and book == "ps" and chapter == 2:
+            # The bundled NABRE row 2:11 contains its final beatitude and has
+            # no separately keyed 2:12 row.
+            if verse == 12:
+                value = 11
+        mapped.append(value)
+    return tuple(dict.fromkeys(mapped))
+
+
 def extract_bible_selections(
     database: Path,
     *,
@@ -177,18 +238,6 @@ def extract_bible_selections(
             if parsed.book not in book_ids:
                 book_ids[parsed.book] = resolve_book_id(connection, parsed.book)
             book_id = book_ids[parsed.book]
-            verse_offset = 0
-            if edition_id == "local_rsvce" and parsed.book == "ps":
-                if parsed.chapter not in offsets:
-                    offsets[parsed.chapter] = _rsvce_psalm_offset(
-                        database,
-                        connection,
-                        book_id,
-                        parsed.chapter,
-                    )
-                verse_offset = offsets[parsed.chapter]
-                if any(verse == 1 for group in parsed.groups for verse in group.verses):
-                    verse_offset = 0
             try:
                 stanzas = tuple(
                     " ".join(
@@ -196,9 +245,23 @@ def extract_bible_selections(
                             connection,
                             book_id,
                             group.chapter,
-                            verse + verse_offset,
+                            verse,
                         )
-                        for verse in group.verses
+                        for verse in _edition_verse_numbers(
+                            edition_id=edition_id,
+                            book=parsed.book,
+                            chapter=group.chapter,
+                            verses=group.verses,
+                            psalm_offset=_psalm_group_offset(
+                                database=database,
+                                connection=connection,
+                                book_id=book_id,
+                                edition_id=edition_id,
+                                book=parsed.book,
+                                group=group,
+                                offsets=offsets,
+                            ),
+                        )
                     )
                     for group in parsed.groups
                 )
@@ -270,23 +333,30 @@ def extract_bible_selection(
     parsed = parse_selection(reference)
     with closing(sqlite3.connect(database)) as connection:
         book_id = resolve_book_id(connection, parsed.book)
-        verse_offset = 0
-        if edition_id == "local_rsvce" and parsed.book == "ps":
-            verse_offset = _rsvce_psalm_offset(
-                database,
-                connection,
-                book_id,
-                parsed.chapter,
-            )
+        offsets: dict[int, int] = {}
         stanzas = tuple(
             " ".join(
                 lookup_verse(
                     connection,
                     book_id,
                     group.chapter,
-                    verse + verse_offset,
+                    verse,
                 )
-                for verse in group.verses
+                for verse in _edition_verse_numbers(
+                    edition_id=edition_id,
+                    book=parsed.book,
+                    chapter=group.chapter,
+                    verses=group.verses,
+                    psalm_offset=_psalm_group_offset(
+                        database=database,
+                        connection=connection,
+                        book_id=book_id,
+                        edition_id=edition_id,
+                        book=parsed.book,
+                        group=group,
+                        offsets=offsets,
+                    ),
+                )
             )
             for group in parsed.groups
         )
@@ -298,3 +368,25 @@ def extract_bible_selection(
         stanzas=stanzas,
         source_url=source_url or f"repo://{database.as_posix()}",
     )
+
+
+def _psalm_group_offset(
+    *,
+    database: Path,
+    connection: sqlite3.Connection,
+    book_id: int,
+    edition_id: str,
+    book: str,
+    group: SelectionGroup,
+    offsets: dict[int, int],
+) -> int:
+    if edition_id != "local_rsvce" or book != "ps" or 1 in group.verses:
+        return 0
+    if group.chapter not in offsets:
+        offsets[group.chapter] = _rsvce_psalm_offset(
+            database,
+            connection,
+            book_id,
+            group.chapter,
+        )
+    return offsets[group.chapter]

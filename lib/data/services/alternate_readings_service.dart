@@ -99,6 +99,28 @@ class AlternateReadingsService {
       }
     }
 
+    // Vigils belong to the evening before a solemnity. The civil-date page
+    // therefore needs to look ahead instead of depending on today's title.
+    final tomorrow = date.add(const Duration(days: 1));
+    final tomorrowDay = await _ordoResolver.resolveDay(tomorrow);
+    if (tomorrowDay.title.trim().isNotEmpty) {
+      final eveReadings = await _csvResolver.resolveVigilChoice(
+        date: date,
+        celebrationTitle: tomorrowDay.title,
+      );
+      final alreadyIncluded = sets.any(
+        (set) => _sameReadings(set.readings, eveReadings),
+      );
+      if (eveReadings.isNotEmpty && !alreadyIncluded) {
+        sets.add(
+          CelebrationReadingSet(
+            readings: eveReadings,
+            label: '${tomorrowDay.title} — Vigil Mass',
+          ),
+        );
+      }
+    }
+
     // 3. Keep the underlying weekday/temporal set available after the primary
     // celebration. Never mislabel the primary celebration itself as ferial.
     final weekdayReadings = await _csvResolver.resolveWeekday(date);
