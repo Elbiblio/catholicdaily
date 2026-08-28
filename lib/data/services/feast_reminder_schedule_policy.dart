@@ -1,5 +1,46 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import 'feast_reminder_notification_contract.dart';
+import 'feast_reminder_payload.dart';
+
+/// Separates the intended server delivery time from the local OS safety net.
+class FeastReminderSafetySchedule {
+  const FeastReminderSafetySchedule._({
+    required this.scheduledFor,
+    required this.remoteExpiresAt,
+    required this.localSafetyAt,
+  });
+
+  factory FeastReminderSafetySchedule.fromIntendedTime(DateTime scheduledFor) {
+    return FeastReminderSafetySchedule._(
+      scheduledFor: scheduledFor,
+      remoteExpiresAt: FeastReminderNotificationContract.remoteExpiresAt(
+        scheduledFor,
+      ),
+      localSafetyAt: FeastReminderNotificationContract.localSafetyAt(
+        scheduledFor,
+      ),
+    );
+  }
+
+  final DateTime scheduledFor;
+  final DateTime remoteExpiresAt;
+  final DateTime localSafetyAt;
+
+  /// Returns the trigger persisted in the payload, never the intended time.
+  static DateTime localTriggerFor(FeastReminderPayload payload) {
+    final localSafetyAt = payload.localSafetyAt;
+    if (localSafetyAt == null) {
+      throw ArgumentError.value(
+        payload,
+        'payload',
+        'must include a local safety trigger',
+      );
+    }
+    return localSafetyAt;
+  }
+}
+
 class FeastReminderSchedulePolicy {
   static const replenishmentLeadTime = Duration(days: 30);
 

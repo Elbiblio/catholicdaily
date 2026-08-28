@@ -115,7 +115,7 @@ class FeastReminderService {
   static const _channelName = 'Feast & Solemnity Reminders';
   static const _channelDesc =
       'Daily reminders for Catholic feasts and solemnities';
-  static const scheduleSchemaVersion = 6;
+  static const scheduleSchemaVersion = 7;
   static const _schedulePolicy = FeastReminderSchedulePolicy();
   static const _majorFeastTitleTokens = <String>[
     'lord',
@@ -288,6 +288,77 @@ class FeastReminderService {
       await _cancelScheduledFeastReminders(prefs);
       await prefs.invalidateSchedule();
     });
+  }
+
+  /// Cancels one scheduled occurrence using its stable ID and Android tag.
+  Future<void> cancelOccurrence(String occurrenceKey) async {
+    final key = occurrenceKey.trim();
+    if (key.isEmpty) {
+      throw ArgumentError.value(
+        occurrenceKey,
+        'occurrenceKey',
+        'must not be empty',
+      );
+    }
+    await initialize();
+    await _plugin.cancel(
+      FeastReminderNotificationContract.stableNotificationId(key),
+      tag: key,
+    );
+  }
+
+  /// Returns `null` when the platform cannot safely report pending alarms.
+  Future<bool?> isOccurrencePending(String occurrenceKey) async {
+    final key = occurrenceKey.trim();
+    if (key.isEmpty) {
+      throw ArgumentError.value(
+        occurrenceKey,
+        'occurrenceKey',
+        'must not be empty',
+      );
+    }
+    await initialize();
+    try {
+      final pending = await _plugin.pendingNotificationRequests();
+      return pendingOccurrenceStatusForTesting(pending, key);
+    } catch (e) {
+      debugPrint('[FeastReminder] Pending occurrence query failed: $e');
+      return null;
+    }
+  }
+
+  @visibleForTesting
+  static bool pendingRequestMatchesOccurrenceForTesting(
+    PendingNotificationRequest request,
+    String occurrenceKey,
+  ) {
+    final key = occurrenceKey.trim();
+    if (key.isEmpty ||
+        request.id !=
+            FeastReminderNotificationContract.stableNotificationId(key)) {
+      return false;
+    }
+    return FeastReminderPayload.tryParse(request.payload)?.occurrenceKey == key;
+  }
+
+  @visibleForTesting
+  static bool? pendingOccurrenceStatusForTesting(
+    List<PendingNotificationRequest> pending,
+    String occurrenceKey,
+  ) {
+    final key = occurrenceKey.trim();
+    if (key.isEmpty) return false;
+    final id = FeastReminderNotificationContract.stableNotificationId(key);
+    var unresolvedMatchingId = false;
+    for (final request in pending) {
+      if (request.id != id) continue;
+      if (pendingRequestMatchesOccurrenceForTesting(request, key)) return true;
+      if (request.payload == null ||
+          FeastReminderPayload.tryParse(request.payload) == null) {
+        unresolvedMatchingId = true;
+      }
+    }
+    return unresolvedMatchingId ? null : false;
   }
 
   Future<void> _cancelScheduledFeastReminders(
@@ -863,6 +934,9 @@ class FeastReminderService {
         occurrence.scheduledTime,
         tz.local,
       );
+      final safetySchedule = FeastReminderSafetySchedule.fromIntendedTime(
+        tzScheduled,
+      );
       final identity = FeastReminderNotificationContract.identity(
         region: region.name,
         celebrationDate: event.date,
@@ -895,11 +969,30 @@ class FeastReminderService {
               .map((item) => '${item.id}|${item.tag}')
               .toList(growable: false),
         );
+        final payload = FeastReminderPayload(
+          celebrationDate: event.date,
+          scheduledFor: safetySchedule.scheduledFor,
+          remoteExpiresAt: safetySchedule.remoteExpiresAt,
+          localSafetyAt: safetySchedule.localSafetyAt,
+          occurrenceKey: identity.occurrenceKey,
+          timeZone: tz.local.name,
+          liturgicalRegion: region.name,
+          scheduleGeneration:
+              FeastReminderNotificationContract.scheduleGeneration,
+          title: event.title,
+          rank: event.rank,
+          saintProfileId: event.saintProfileId,
+          dayBefore: occurrence.dayBefore,
+        );
+        final localSafetyTrigger = tz.TZDateTime.from(
+          FeastReminderSafetySchedule.localTriggerFor(payload),
+          tz.local,
+        );
         await _plugin.zonedSchedule(
           identity.notificationId,
           content.title,
           content.body,
-          tzScheduled,
+          localSafetyTrigger,
           _buildNotificationDetails(
             event,
             content: content,
@@ -908,19 +1001,7 @@ class FeastReminderService {
           androidScheduleMode: androidScheduleMode,
           uiLocalNotificationDateInterpretation:
               UILocalNotificationDateInterpretation.absoluteTime,
-          payload: FeastReminderPayload(
-            celebrationDate: event.date,
-            scheduledFor: tzScheduled,
-            occurrenceKey: identity.occurrenceKey,
-            timeZone: tz.local.name,
-            liturgicalRegion: region.name,
-            scheduleGeneration:
-                FeastReminderNotificationContract.scheduleGeneration,
-            title: event.title,
-            rank: event.rank,
-            saintProfileId: event.saintProfileId,
-            dayBefore: occurrence.dayBefore,
-          ).encode(),
+          payload: payload.encode(),
         );
       } catch (e) {
         failures++;
