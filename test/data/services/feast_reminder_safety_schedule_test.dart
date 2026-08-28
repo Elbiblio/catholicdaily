@@ -103,5 +103,37 @@ void main() {
         isNull,
       );
     });
+
+    test('does not claim an occurrence is absent for a legacy payload', () {
+      final request = PendingNotificationRequest(
+        FeastReminderNotificationContract.stableNotificationId(occurrenceKey),
+        'Test celebration',
+        'Test body',
+        'feast:2026-08-29T00:00:00.000:day',
+      );
+
+      expect(
+        FeastReminderService.pendingOccurrenceStatusForTesting([
+          request,
+        ], occurrenceKey),
+        isNull,
+      );
+    });
+
+    test('does not claim an occurrence is absent for a malformed payload', () {
+      final request = PendingNotificationRequest(
+        FeastReminderNotificationContract.stableNotificationId(occurrenceKey),
+        'Test celebration',
+        'Test body',
+        '{not JSON',
+      );
+
+      expect(
+        FeastReminderService.pendingOccurrenceStatusForTesting([
+          request,
+        ], occurrenceKey),
+        isNull,
+      );
+    });
   });
 }

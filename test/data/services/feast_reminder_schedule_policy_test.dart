@@ -1,5 +1,6 @@
 import 'package:catholic_daily/data/services/feast_reminder_schedule_policy.dart';
 import 'package:catholic_daily/data/services/feast_reminder_preferences.dart';
+import 'package:catholic_daily/data/services/feast_reminder_payload.dart';
 import 'package:catholic_daily/data/services/feast_reminder_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -128,6 +129,12 @@ void main() {
       'feast_reminder_schedule_journal_references': <String>[
         '456|feast:general-roman:2027-06-05:on_day:pending',
       ],
+      'feast_reminder_scheduled_notification_payloads': <String>[
+        'old-scheduled-payload',
+      ],
+      'feast_reminder_schedule_journal_payloads': <String>[
+        'old-journal-payload',
+      ],
       'feast_reminder_scheduled_configuration':
           'v1|generalRoman|feasts|9|0|false',
     });
@@ -143,11 +150,20 @@ void main() {
     expect(preferences.scheduleTimezone, isNull);
     expect(preferences.lastAuditAt, isNull);
     expect(preferences.scheduledNotificationReferences, isEmpty);
+    expect(preferences.scheduledNotificationPayloads, isEmpty);
     expect(preferences.scheduledConfigurationFingerprint, isNull);
     final raw = await SharedPreferences.getInstance();
     expect(raw.containsKey('feast_reminder_schedule_in_progress'), isFalse);
     expect(
       raw.containsKey('feast_reminder_schedule_journal_references'),
+      isFalse,
+    );
+    expect(
+      raw.containsKey('feast_reminder_scheduled_notification_payloads'),
+      isFalse,
+    );
+    expect(
+      raw.containsKey('feast_reminder_schedule_journal_payloads'),
       isFalse,
     );
   });
@@ -158,6 +174,9 @@ void main() {
       SharedPreferences.setMockInitialValues({
         'feast_reminder_scheduled_notification_references': <String>[
           '123|feast:general-roman:2027-06-04:on_day:old',
+        ],
+        'feast_reminder_scheduled_notification_payloads': <String>[
+          _v3Payload(DateTime.parse('2027-06-04T09:00:00+01:00')),
         ],
       });
       FeastReminderPreferences.resetInstanceForTesting();
@@ -170,11 +189,22 @@ void main() {
         preferences.cancellationNotificationReferences,
         contains('123|feast:general-roman:2027-06-04:on_day:old'),
       );
+      expect(
+        preferences.scheduleJournalPayloads
+            .map(FeastReminderPayload.tryParse)
+            .single
+            ?.scheduledFor,
+        DateTime.parse('2027-06-04T09:00:00+01:00'),
+      );
 
       final replacement = <String>[
         '456|feast:general-roman:2027-06-05:on_day:new',
       ];
+      final replacementPayloads = <String>[
+        _v3Payload(DateTime.parse('2027-06-05T09:00:00+01:00')),
+      ];
       await preferences.setScheduleJournalReferences(replacement);
+      await preferences.setScheduleJournalPayloads(replacementPayloads);
       await preferences.completeScheduleUpdate(
         lastScheduledYear: 2027,
         scheduledThrough: DateTime(2027, 6, 5),
@@ -184,11 +214,28 @@ void main() {
         auditedAt: DateTime(2026, 8, 28),
         configurationFingerprint: 'v1|nigeria|feasts|9|0|false',
         references: replacement,
+        payloads: replacementPayloads,
       );
 
       expect(preferences.scheduleInProgress, isFalse);
       expect(preferences.scheduleJournalReferences, isEmpty);
+      expect(preferences.scheduleJournalPayloads, isEmpty);
       expect(preferences.scheduledNotificationReferences, replacement);
+      final persistedPayload = FeastReminderPayload.tryParse(
+        preferences.scheduledNotificationPayloads.single,
+      );
+      expect(
+        persistedPayload?.scheduledFor,
+        DateTime.parse('2027-06-05T09:00:00+01:00'),
+      );
+      expect(
+        persistedPayload?.remoteExpiresAt,
+        DateTime.parse('2027-06-05T09:02:00+01:00'),
+      );
+      expect(
+        persistedPayload?.localSafetyAt,
+        DateTime.parse('2027-06-05T09:03:00+01:00'),
+      );
       expect(preferences.scheduleSchemaVersion, 6);
       expect(
         preferences.scheduledConfigurationFingerprint,
@@ -216,3 +263,18 @@ void main() {
     },
   );
 }
+
+String _v3Payload(DateTime scheduledFor) => FeastReminderPayload(
+  celebrationDate: DateTime(
+    scheduledFor.year,
+    scheduledFor.month,
+    scheduledFor.day,
+  ),
+  scheduledFor: scheduledFor,
+  occurrenceKey:
+      'feast:nigeria:${scheduledFor.year.toString().padLeft(4, '0')}-${scheduledFor.month.toString().padLeft(2, '0')}-${scheduledFor.day.toString().padLeft(2, '0')}:on_day:test',
+  title: 'Test celebration',
+  rank: 'Feast',
+  saintProfileId: 'test',
+  dayBefore: false,
+).encode();

@@ -353,8 +353,10 @@ class FeastReminderService {
     for (final request in pending) {
       if (request.id != id) continue;
       if (pendingRequestMatchesOccurrenceForTesting(request, key)) return true;
-      if (request.payload == null ||
-          FeastReminderPayload.tryParse(request.payload) == null) {
+      final pendingOccurrenceKey = FeastReminderPayload.tryParse(
+        request.payload,
+      )?.occurrenceKey;
+      if (pendingOccurrenceKey == null || pendingOccurrenceKey.isEmpty) {
         unresolvedMatchingId = true;
       }
     }
@@ -867,6 +869,7 @@ class FeastReminderService {
     await _cancelScheduledFeastReminders(prefs);
     await prefs.clearScheduleFreshnessForUpdate();
     await prefs.setScheduleJournalReferences(const []);
+    await prefs.setScheduleJournalPayloads(const []);
 
     if (!prefs.isEnabled) {
       await prefs.invalidateSchedule();
@@ -910,7 +913,7 @@ class FeastReminderService {
 
     int failures = 0;
     final scheduledReferences =
-        <({int id, String tag, DateTime celebrationDate})>[];
+        <({int id, String tag, DateTime celebrationDate, String payload})>[];
     var exactAllowed = false;
     if (Platform.isAndroid) {
       final androidPlugin = _plugin
@@ -950,6 +953,22 @@ class FeastReminderService {
         dayBefore: occurrence.dayBefore,
         locale: 'en',
       );
+      final payload = FeastReminderPayload(
+        celebrationDate: event.date,
+        scheduledFor: safetySchedule.scheduledFor,
+        remoteExpiresAt: safetySchedule.remoteExpiresAt,
+        localSafetyAt: safetySchedule.localSafetyAt,
+        occurrenceKey: identity.occurrenceKey,
+        timeZone: tz.local.name,
+        liturgicalRegion: region.name,
+        scheduleGeneration:
+            FeastReminderNotificationContract.scheduleGeneration,
+        title: event.title,
+        rank: event.rank,
+        saintProfileId: event.saintProfileId,
+        dayBefore: occurrence.dayBefore,
+      );
+      final encodedPayload = payload.encode();
       final reference = (
         id: identity.notificationId,
         tag: identity.occurrenceKey,
@@ -958,6 +977,7 @@ class FeastReminderService {
           event.date.month,
           event.date.day,
         ),
+        payload: encodedPayload,
       );
 
       try {
@@ -969,20 +989,10 @@ class FeastReminderService {
               .map((item) => '${item.id}|${item.tag}')
               .toList(growable: false),
         );
-        final payload = FeastReminderPayload(
-          celebrationDate: event.date,
-          scheduledFor: safetySchedule.scheduledFor,
-          remoteExpiresAt: safetySchedule.remoteExpiresAt,
-          localSafetyAt: safetySchedule.localSafetyAt,
-          occurrenceKey: identity.occurrenceKey,
-          timeZone: tz.local.name,
-          liturgicalRegion: region.name,
-          scheduleGeneration:
-              FeastReminderNotificationContract.scheduleGeneration,
-          title: event.title,
-          rank: event.rank,
-          saintProfileId: event.saintProfileId,
-          dayBefore: occurrence.dayBefore,
+        await prefs.setScheduleJournalPayloads(
+          scheduledReferences
+              .map((item) => item.payload)
+              .toList(growable: false),
         );
         final localSafetyTrigger = tz.TZDateTime.from(
           FeastReminderSafetySchedule.localTriggerFor(payload),
@@ -1001,7 +1011,7 @@ class FeastReminderService {
           androidScheduleMode: androidScheduleMode,
           uiLocalNotificationDateInterpretation:
               UILocalNotificationDateInterpretation.absoluteTime,
-          payload: payload.encode(),
+          payload: encodedPayload,
         );
       } catch (e) {
         failures++;
@@ -1023,6 +1033,11 @@ class FeastReminderService {
         await prefs.setScheduleJournalReferences(
           scheduledReferences
               .map((item) => '${item.id}|${item.tag}')
+              .toList(growable: false),
+        );
+        await prefs.setScheduleJournalPayloads(
+          scheduledReferences
+              .map((item) => item.payload)
               .toList(growable: false),
         );
         break;
@@ -1063,6 +1078,9 @@ class FeastReminderService {
         ),
         references: scheduledReferences
             .map((item) => '${item.id}|${item.tag}')
+            .toList(growable: false),
+        payloads: scheduledReferences
+            .map((item) => item.payload)
             .toList(growable: false),
       );
     }

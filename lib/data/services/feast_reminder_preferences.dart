@@ -32,10 +32,14 @@ class FeastReminderPreferences {
   static const String _lastAuditAtKey = 'feast_reminder_last_audit_at';
   static const String _scheduledNotificationReferencesKey =
       'feast_reminder_scheduled_notification_references';
+  static const String _scheduledNotificationPayloadsKey =
+      'feast_reminder_scheduled_notification_payloads';
   static const String _scheduleInProgressKey =
       'feast_reminder_schedule_in_progress';
   static const String _scheduleJournalReferencesKey =
       'feast_reminder_schedule_journal_references';
+  static const String _scheduleJournalPayloadsKey =
+      'feast_reminder_schedule_journal_payloads';
   static const String _scheduledConfigurationKey =
       'feast_reminder_scheduled_configuration';
   static const String _autoSetupCompletedKey = 'feast_reminder_auto_setup_done';
@@ -87,10 +91,16 @@ class FeastReminderPreferences {
   List<String> get scheduledNotificationReferences => List<String>.unmodifiable(
     _prefs.getStringList(_scheduledNotificationReferencesKey) ?? const [],
   );
+  List<String> get scheduledNotificationPayloads => List<String>.unmodifiable(
+    _prefs.getStringList(_scheduledNotificationPayloadsKey) ?? const [],
+  );
   bool get scheduleInProgress =>
       _prefs.getBool(_scheduleInProgressKey) ?? false;
   List<String> get scheduleJournalReferences => List<String>.unmodifiable(
     _prefs.getStringList(_scheduleJournalReferencesKey) ?? const [],
+  );
+  List<String> get scheduleJournalPayloads => List<String>.unmodifiable(
+    _prefs.getStringList(_scheduleJournalPayloadsKey) ?? const [],
   );
   List<String> get cancellationNotificationReferences =>
       List<String>.unmodifiable({
@@ -158,11 +168,18 @@ class FeastReminderPreferences {
       _scheduleJournalReferencesKey,
       scheduledNotificationReferences,
     );
+    await _prefs.setStringList(
+      _scheduleJournalPayloadsKey,
+      scheduledNotificationPayloads,
+    );
     await _prefs.setBool(_scheduleInProgressKey, true);
   }
 
   Future<void> setScheduleJournalReferences(List<String> values) =>
       _prefs.setStringList(_scheduleJournalReferencesKey, values);
+
+  Future<void> setScheduleJournalPayloads(List<String> values) =>
+      _prefs.setStringList(_scheduleJournalPayloadsKey, values);
 
   Future<void> clearScheduleFreshnessForUpdate() async {
     await _prefs.setInt(_lastScheduledYearKey, 0);
@@ -172,6 +189,7 @@ class FeastReminderPreferences {
     await _prefs.remove(_scheduleTimezoneKey);
     await _prefs.remove(_lastAuditAtKey);
     await _prefs.remove(_scheduledNotificationReferencesKey);
+    await _prefs.remove(_scheduledNotificationPayloadsKey);
     await _prefs.remove(_scheduledConfigurationKey);
   }
 
@@ -184,11 +202,14 @@ class FeastReminderPreferences {
     required DateTime auditedAt,
     required String configurationFingerprint,
     required List<String> references,
+    required List<String> payloads,
   }) async {
     // Keep the in-progress marker and journal intact until every freshness
     // field and cancellation reference has been durably written.
     await _prefs.setStringList(_scheduleJournalReferencesKey, references);
+    await _prefs.setStringList(_scheduleJournalPayloadsKey, payloads);
     await _prefs.setStringList(_scheduledNotificationReferencesKey, references);
+    await _prefs.setStringList(_scheduledNotificationPayloadsKey, payloads);
     await _prefs.setInt(_lastScheduledYearKey, lastScheduledYear);
     await _prefs.setInt(
       _scheduledThroughKey,
@@ -203,6 +224,7 @@ class FeastReminderPreferences {
     );
     await _prefs.setInt(_lastAuditAtKey, auditedAt.millisecondsSinceEpoch);
     await _prefs.remove(_scheduleJournalReferencesKey);
+    await _prefs.remove(_scheduleJournalPayloadsKey);
     await _prefs.setBool(_scheduleInProgressKey, false);
   }
 
@@ -214,9 +236,11 @@ class FeastReminderPreferences {
     await _prefs.remove(_scheduleTimezoneKey);
     await _prefs.remove(_lastAuditAtKey);
     await _prefs.remove(_scheduledNotificationReferencesKey);
+    await _prefs.remove(_scheduledNotificationPayloadsKey);
     await _prefs.remove(_scheduledConfigurationKey);
     await _prefs.remove(_scheduleInProgressKey);
     await _prefs.remove(_scheduleJournalReferencesKey);
+    await _prefs.remove(_scheduleJournalPayloadsKey);
   }
 
   String get timeLabel {
