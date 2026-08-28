@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../data/models/liturgical_region.dart';
 import '../../data/services/feast_reminder_preferences.dart';
 import '../../data/services/feast_reminder_service.dart';
+import '../../data/services/feast_reminder_background_service.dart';
 import '../../data/services/liturgical_region_preference_service.dart';
 import '../../data/services/offline_ordo_lookup_service.dart';
 
@@ -122,6 +123,7 @@ class _FeastReminderSettingsSheetState
         await service.cancelAll();
         await prefs.invalidateSchedule();
       }
+      await FeastReminderBackgroundService.instance.enqueueRepair();
     } catch (e) {
       debugPrint('[FeastReminder] _save error: $e');
       if (mounted) {

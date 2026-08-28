@@ -4,13 +4,13 @@ import 'package:flutter/material.dart' show Color;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest_all.dart' as tzdata;
 import '../models/liturgical_region.dart';
 import 'feast_reminder_preferences.dart';
 import 'feast_reminder_notification_contract.dart';
 import 'feast_reminder_payload.dart';
 import 'feast_reminder_schedule_capacity.dart';
 import 'feast_reminder_schedule_policy.dart';
+import 'feast_reminder_timezone.dart';
 import 'improved_liturgical_calendar_service.dart';
 import 'liturgical_region_preference_service.dart';
 import 'offline_ordo_lookup_service.dart';
@@ -113,7 +113,7 @@ class FeastReminderService {
   static const _channelName = 'Feast & Solemnity Reminders';
   static const _channelDesc =
       'Daily reminders for Catholic feasts and solemnities';
-  static const _scheduleSchemaVersion = 5;
+  static const scheduleSchemaVersion = 5;
   static const _schedulePolicy = FeastReminderSchedulePolicy();
   static const _majorFeastTitleTokens = <String>[
     'lord',
@@ -127,7 +127,7 @@ class FeastReminderService {
   Future<void> initialize() async {
     if (_initialized) return;
 
-    tzdata.initializeTimeZones();
+    await FeastReminderTimezone.configure();
 
     const androidSettings = AndroidInitializationSettings(
       '@mipmap/ic_launcher',
@@ -249,7 +249,7 @@ class FeastReminderService {
     final references = prefs.scheduledNotificationReferences;
     if (references.isEmpty &&
         prefs.scheduleSchemaVersion > 0 &&
-        prefs.scheduleSchemaVersion < _scheduleSchemaVersion) {
+        prefs.scheduleSchemaVersion < scheduleSchemaVersion) {
       // Versions 1-4 used the reserved 1000-1063 range without tags.
       for (var id = 1000; id < 1064; id++) {
         await _plugin.cancel(id);
@@ -655,7 +655,7 @@ class FeastReminderService {
     if (_schedulePolicy.needsReschedule(
       now: now,
       scheduledThrough: prefs.scheduledThrough,
-      schemaMatches: prefs.scheduleSchemaVersion == _scheduleSchemaVersion,
+      schemaMatches: prefs.scheduleSchemaVersion == scheduleSchemaVersion,
     )) {
       await scheduleAheadMonths(15, prefs);
     }
@@ -883,7 +883,7 @@ class FeastReminderService {
         result.scheduledThrough?.year ?? endDate.year,
       );
       await prefs.setScheduledThrough(result.scheduledThrough!);
-      await prefs.setScheduleSchemaVersion(_scheduleSchemaVersion);
+      await prefs.setScheduleSchemaVersion(scheduleSchemaVersion);
       await prefs.setScheduleGeneration(
         FeastReminderNotificationContract.scheduleGeneration,
       );

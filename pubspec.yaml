@@ -57,6 +57,16 @@ dependencies:
   flutter_local_notifications: ^18.0.1
   timezone: ^0.9.4
   crypto: ^3.0.7
+  workmanager: 0.9.0+3
+  flutter_timezone: 5.1.0
+
+# Workmanager 0.9.0+3 is the newest release compatible with this project's
+# Flutter 3.35 toolchain. Keep its federated packages on the matching API set;
+# newer 0.9.x implementations require Flutter 3.38 and changed the interface.
+dependency_overrides:
+  workmanager_android: 0.9.0+2
+  workmanager_apple: 0.9.1+2
+  workmanager_platform_interface: 0.9.1+1
 
 dev_dependencies:
   flutter_test:

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'data/services/theme_preferences.dart';
 import 'data/services/app_navigation_service.dart';
 import 'data/services/feast_reminder_service.dart';
+import 'data/services/feast_reminder_background_service.dart';
 import 'data/services/feast_reminder_preferences.dart';
 import 'data/services/feast_reminder_payload.dart';
 import 'data/services/feast_reminder_destination_resolver.dart';
@@ -18,6 +19,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  try {
+    await FeastReminderBackgroundService.instance.initialize();
+  } catch (e, st) {
+    debugPrint('[FeastReminder] Background worker init failed: $e\n$st');
+  }
 
   // Set preferred orientations
   SystemChrome.setPreferredOrientations([
@@ -68,6 +75,8 @@ void main() async {
     // no-op. Reschedule covers year-rollover refresh on every launch.
     await FeastReminderService.instance.autoSetupOnFirstRun(reminderPrefs);
     await FeastReminderService.instance.rescheduleIfNeeded(reminderPrefs);
+    await FeastReminderBackgroundService.instance.auditAndRepair();
+    await FeastReminderBackgroundService.instance.enqueueRepair();
   } catch (e, st) {
     debugPrint('[FeastReminder] Startup init failed: $e\n$st');
   }
