@@ -39,6 +39,12 @@ class EnsureIosPushProfileTest(unittest.TestCase):
             },
         )
 
+    def test_capability_relationship_uses_only_supported_parameters(self):
+        self.assertEqual(
+            MODULE.bundle_capabilities_path("bundle-resource-id"),
+            "/bundleIds/bundle-resource-id/bundleIdCapabilities",
+        )
+
     def test_builds_app_store_profile_for_exact_certificate(self):
         payload = MODULE.profile_payload(
             name="Catholic Daily Push 42",

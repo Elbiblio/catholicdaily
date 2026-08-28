@@ -68,6 +68,11 @@ def profile_payload(*, name: str, bundle_id: str, certificate_id: str) -> dict:
     }
 
 
+def bundle_capabilities_path(bundle_id: str) -> str:
+    # Apple's relationship endpoint rejects the otherwise common `limit` query.
+    return f"/bundleIds/{bundle_id}/bundleIdCapabilities"
+
+
 def select_distribution_certificate(certificates: list[dict], serial: str) -> dict:
     expected = normalize_serial(serial)
     for certificate in certificates:
@@ -156,7 +161,7 @@ def find_bundle_id(token: str, identifier: str) -> dict:
 
 
 def ensure_push_capability(token: str, bundle_id: str) -> None:
-    path = f"/bundleIds/{bundle_id}/bundleIdCapabilities?limit=200"
+    path = bundle_capabilities_path(bundle_id)
     capabilities = list_all(token, path)
     if any(
         capability.get("attributes", {}).get("capabilityType") == "PUSH_NOTIFICATIONS"
