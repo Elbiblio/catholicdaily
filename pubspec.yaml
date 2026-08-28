@@ -56,6 +56,7 @@ dependencies:
   audioplayers: ^6.1.0
   flutter_local_notifications: ^18.0.1
   timezone: ^0.9.4
+  crypto: ^3.0.7
 
 dev_dependencies:
   flutter_test:
@@ -115,6 +116,7 @@ flutter:
     - assets/data/lectionary_text_overrides.json
     - assets/data/local_lectionary_extract_text_sources.json
     - assets/data/saints_profiles.json
+    - assets/data/feast_notification_catalog.json
     - assets/data/saints/
     - assets/data/saints/profiles/
     - assets/data/prayer_of_faithful_mapped.csv

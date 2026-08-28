@@ -63,7 +63,6 @@ class _ReminderOccurrence {
   });
 }
 
-@visibleForTesting
 class FeastReminderPreviewEvent {
   final DateTime date;
   final String title;
@@ -471,6 +470,13 @@ class FeastReminderService {
 
   @visibleForTesting
   Future<List<FeastReminderPreviewEvent>> buildPreviewEventsForTesting(
+    int year,
+    FeastReminderRank rank, {
+    LiturgicalRegion? region,
+  }) => buildCatalogEventsForYear(year, rank, region: region);
+
+  /// Resolves the same celebration set used by local scheduling for export.
+  Future<List<FeastReminderPreviewEvent>> buildCatalogEventsForYear(
     int year,
     FeastReminderRank rank, {
     LiturgicalRegion? region,
