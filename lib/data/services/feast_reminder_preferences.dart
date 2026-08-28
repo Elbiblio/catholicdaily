@@ -313,18 +313,51 @@ class FeastReminderPreferences {
   }
 
   Future<void> invalidateSchedule() async {
-    await _prefs.setInt(_lastScheduledYearKey, 0);
-    await _prefs.setInt(_scheduleSchemaVersionKey, 0);
-    await _prefs.remove(_scheduledThroughKey);
-    await _prefs.remove(_scheduleGenerationKey);
-    await _prefs.remove(_scheduleTimezoneKey);
-    await _prefs.remove(_lastAuditAtKey);
-    await _prefs.remove(_scheduledNotificationReferencesKey);
-    await _prefs.remove(_scheduledNotificationPayloadsKey);
-    await _prefs.remove(_scheduledConfigurationKey);
-    await _prefs.remove(_scheduleInProgressKey);
-    await _prefs.remove(_scheduleJournalReferencesKey);
-    await _prefs.remove(_scheduleJournalPayloadsKey);
+    await _write(
+      _lastScheduledYearKey,
+      () => _prefs.setInt(_lastScheduledYearKey, 0),
+    );
+    await _write(
+      _scheduleSchemaVersionKey,
+      () => _prefs.setInt(_scheduleSchemaVersionKey, 0),
+    );
+    await _write(
+      _scheduledThroughKey,
+      () => _prefs.remove(_scheduledThroughKey),
+    );
+    await _write(
+      _scheduleGenerationKey,
+      () => _prefs.remove(_scheduleGenerationKey),
+    );
+    await _write(
+      _scheduleTimezoneKey,
+      () => _prefs.remove(_scheduleTimezoneKey),
+    );
+    await _write(_lastAuditAtKey, () => _prefs.remove(_lastAuditAtKey));
+    await _write(
+      _scheduledNotificationReferencesKey,
+      () => _prefs.remove(_scheduledNotificationReferencesKey),
+    );
+    await _write(
+      _scheduledNotificationPayloadsKey,
+      () => _prefs.remove(_scheduledNotificationPayloadsKey),
+    );
+    await _write(
+      _scheduledConfigurationKey,
+      () => _prefs.remove(_scheduledConfigurationKey),
+    );
+    await _write(
+      _scheduleJournalReferencesKey,
+      () => _prefs.remove(_scheduleJournalReferencesKey),
+    );
+    await _write(
+      _scheduleJournalPayloadsKey,
+      () => _prefs.remove(_scheduleJournalPayloadsKey),
+    );
+    await _write(
+      _scheduleInProgressKey,
+      () => _prefs.remove(_scheduleInProgressKey),
+    );
   }
 
   String get timeLabel {

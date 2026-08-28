@@ -280,6 +280,25 @@ void main() {
     expect(preferences.scheduleJournalPayloads, contains(journalPayload));
   });
 
+  test('a failed invalidation clear retains recovery state', () async {
+    SharedPreferences.setMockInitialValues({
+      'feast_reminder_schedule_in_progress': true,
+      'feast_reminder_schedule_schema_version': 7,
+      'feast_reminder_schedule_journal_references': <String>['1|tag'],
+    });
+    FeastReminderPreferences.resetInstanceForTesting();
+    final preferences = await FeastReminderPreferences.getInstance();
+    FeastReminderPreferences.setWriteInterceptorForTesting((key, write) async {
+      if (key == 'feast_reminder_schedule_schema_version') return false;
+      return write();
+    });
+    addTearDown(FeastReminderPreferences.resetWriteInterceptorForTesting);
+
+    expect(preferences.invalidateSchedule, throwsStateError);
+    expect(preferences.scheduleInProgress, isTrue);
+    expect(preferences.scheduleJournalReferences, isNotEmpty);
+  });
+
   test('a failed completion write retains the in-progress journal', () async {
     final reference = '456|feast:general-roman:2027-06-05:on_day:new';
     final payload = _v3Payload(DateTime.parse('2027-06-05T09:00:00+01:00'));

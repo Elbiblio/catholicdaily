@@ -936,7 +936,14 @@ class FeastReminderService {
       exactAllowed: exactAllowed,
     );
 
-    for (final occurrence in selection.selected) {
+    final selectedOccurrences = List<_ReminderOccurrence>.of(selection.selected)
+      ..sort((a, b) {
+        final byDate = a.event.date.compareTo(b.event.date);
+        if (byDate != 0) return byDate;
+        return a.scheduledTime.compareTo(b.scheduledTime);
+      });
+
+    for (final occurrence in selectedOccurrences) {
       final event = occurrence.event;
       final tzScheduled = tz.TZDateTime.from(
         occurrence.scheduledTime,
