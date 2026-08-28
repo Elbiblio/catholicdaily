@@ -6,7 +6,9 @@ import 'package:flutter/foundation.dart';
 
 import '../../firebase_options.dart';
 import 'feast_reminder_payload.dart';
+import 'feast_reminder_background_service.dart';
 import 'feast_reminder_service.dart';
+import 'notification_installation_sync_service.dart';
 
 class RemoteFeastMessage {
   const RemoteFeastMessage({required this.payload, required this.expiresAt});
@@ -68,11 +70,26 @@ class FeastReminderMessagingService {
     _subscriptions.add(
       FirebaseMessaging.onMessageOpenedApp.listen(_handleOpenedMessage),
     );
+    _subscriptions.add(
+      FirebaseMessaging.instance.onTokenRefresh.listen(_syncToken),
+    );
     final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
       _handleOpenedMessage(initialMessage);
     }
+    final token = await FirebaseMessaging.instance.getToken();
+    if (token != null && token.isNotEmpty) {
+      await _syncToken(token);
+    }
     _initialized = true;
+  }
+
+  Future<void> _syncToken(String token) async {
+    final synchronized = await NotificationInstallationSyncService.instance
+        .syncToken(token);
+    if (!synchronized) {
+      await FeastReminderBackgroundService.instance.enqueueRepair();
+    }
   }
 
   Future<void> _handleForegroundMessage(RemoteMessage message) async {

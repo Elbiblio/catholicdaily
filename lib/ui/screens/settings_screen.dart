@@ -8,6 +8,8 @@ import '../../data/services/feast_reminder_preferences.dart';
 import '../../data/services/feast_reminder_service.dart';
 import '../../data/services/incipit_preference_service.dart';
 import '../../data/services/liturgical_region_preference_service.dart';
+import '../../data/services/notification_installation_sync_service.dart';
+import '../../data/services/feast_reminder_background_service.dart';
 import '../../data/services/order_of_mass_preference_service.dart';
 import 'feast_reminder_settings_sheet.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -146,6 +148,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
         15,
         reminderPrefs,
       );
+    }
+    final synchronized = await NotificationInstallationSyncService.instance
+        .syncCurrentToken();
+    if (!synchronized) {
+      await FeastReminderBackgroundService.instance.enqueueRepair();
     }
   }
 

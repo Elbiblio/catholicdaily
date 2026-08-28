@@ -8,6 +8,7 @@ import 'feast_reminder_notification_contract.dart';
 import 'feast_reminder_preferences.dart';
 import 'feast_reminder_service.dart';
 import 'feast_reminder_timezone.dart';
+import 'notification_installation_sync_service.dart';
 
 enum FeastReminderAuditDecision { skip, current, repair }
 
@@ -143,7 +144,7 @@ class FeastReminderBackgroundService {
       final prefs = await FeastReminderPreferences.getInstance();
       if (!prefs.isEnabled) {
         await prefs.setLastAuditAt(DateTime.now());
-        return true;
+        return NotificationInstallationSyncService.instance.syncCurrentToken();
       }
 
       final timezone = await FeastReminderTimezone.configure();
@@ -169,11 +170,12 @@ class FeastReminderBackgroundService {
           _scheduleMonths,
           prefs,
         );
-        return result.shouldPersistHorizon;
+        if (!result.shouldPersistHorizon) return false;
+      } else {
+        await prefs.setLastAuditAt(now);
       }
 
-      await prefs.setLastAuditAt(now);
-      return true;
+      return NotificationInstallationSyncService.instance.syncCurrentToken();
     } catch (error, stackTrace) {
       debugPrint(
         '[FeastReminder] Background coverage audit failed: '
