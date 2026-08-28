@@ -35,6 +35,12 @@ class FeastReminderNotificationContract {
 
   const FeastReminderNotificationContract._();
 
+  static DateTime remoteExpiresAt(DateTime scheduledFor) =>
+      scheduledFor.add(const Duration(minutes: 2));
+
+  static DateTime localSafetyAt(DateTime scheduledFor) =>
+      scheduledFor.add(const Duration(minutes: 3));
+
   static FeastReminderNotificationContent content({
     required DateTime celebrationDate,
     required String title,

@@ -1,4 +1,5 @@
 import 'package:catholic_daily/data/services/feast_reminder_payload.dart';
+import 'package:catholic_daily/data/services/feast_reminder_notification_contract.dart';
 import 'package:catholic_daily/data/services/feast_reminder_destination_resolver.dart';
 import 'package:catholic_daily/data/services/feast_reminder_service.dart';
 import 'package:catholic_daily/data/models/liturgical_region.dart';
@@ -32,6 +33,20 @@ void main() {
       expect(decoded.dayBefore, isTrue);
       expect(decoded.scheduledFor, isNotNull);
       expect(
+        decoded.remoteExpiresAt,
+        DateTime.parse('2026-10-31T20:02:00+01:00'),
+      );
+      expect(
+        decoded.localSafetyAt,
+        DateTime.parse('2026-10-31T20:03:00+01:00'),
+      );
+      expect(
+        decoded.localNotificationId,
+        FeastReminderNotificationContract.stableNotificationId(
+          decoded.occurrenceKey!,
+        ),
+      );
+      expect(
         decoded.occurrenceKey,
         'feast:generalRoman:2026-11-01:eve:all_saints',
       );
@@ -58,6 +73,87 @@ void main() {
       expect(decoded.occurrenceKey, isNull);
       expect(decoded.scheduledFor, isNull);
       expect(decoded.dayBefore, isFalse);
+    });
+
+    test('accepts schema-v2 JSON with string version fields', () {
+      final decoded = FeastReminderPayload.tryParse(
+        '{"type":"feast_reminder","schema":"2","v":"2",'
+        '"occurrence_key":"feast:nigeria:2026-08-15:on_day:assumption",'
+        '"celebration_date":"2026-08-15",'
+        '"scheduled_for":"2026-08-15T06:30:00+01:00",'
+        '"expires_at":"2026-08-15T12:30:00+01:00",'
+        '"title":"The Assumption", "rank":"Solemnity",'
+        '"timing":"on_day"}',
+      );
+
+      expect(decoded, isNotNull);
+      expect(decoded!.celebrationDate, DateTime(2026, 8, 15));
+      expect(decoded.occurrenceKey, contains('2026-08-15'));
+      expect(decoded.remoteExpiresAt, isNull);
+      expect(decoded.localSafetyAt, isNull);
+      expect(decoded.localNotificationId, isNull);
+    });
+
+    test('rejects v3 payloads with unsafe timing relationships', () {
+      final base = <String, dynamic>{
+        'type': 'feast_reminder',
+        'schema': 3,
+        'v': 3,
+        'occurrence_key': 'feast:nigeria:2026-08-15:on_day:assumption',
+        'local_notification_id':
+            FeastReminderNotificationContract.stableNotificationId(
+              'feast:nigeria:2026-08-15:on_day:assumption',
+            ),
+        'celebration_date': '2026-08-15',
+        'scheduled_for': '2026-08-15T06:30:00+01:00',
+        'remote_expires_at': '2026-08-15T06:32:00+01:00',
+        'local_safety_at': '2026-08-15T06:31:00+01:00',
+        'title': 'The Assumption',
+        'rank': 'Solemnity',
+        'timing': 'on_day',
+      };
+
+      expect(FeastReminderPayload.fromMap(base), isNull);
+
+      final safetyBeforeScheduled = Map<String, dynamic>.from(base)
+        ..['remote_expires_at'] = '2026-08-15T06:32:00+01:00'
+        ..['local_safety_at'] = '2026-08-15T06:29:00+01:00';
+      expect(FeastReminderPayload.fromMap(safetyBeforeScheduled), isNull);
+    });
+
+    test('rejects v3 payloads with mismatched identity or date', () {
+      final key = 'feast:nigeria:2026-08-15:on_day:assumption';
+      final validId = FeastReminderNotificationContract.stableNotificationId(
+        key,
+      );
+      final base = <String, dynamic>{
+        'type': 'feast_reminder',
+        'schema': 3,
+        'occurrence_key': key,
+        'local_notification_id': validId,
+        'celebration_date': '2026-08-15',
+        'scheduled_for': '2026-08-15T06:30:00+01:00',
+        'remote_expires_at': '2026-08-15T06:32:00+01:00',
+        'local_safety_at': '2026-08-15T06:33:00+01:00',
+        'title': 'The Assumption',
+        'rank': 'Solemnity',
+        'timing': 'on_day',
+      };
+
+      expect(FeastReminderPayload.fromMap(base), isNotNull);
+      expect(
+        FeastReminderPayload.fromMap(
+          Map<String, dynamic>.from(base)
+            ..['local_notification_id'] = validId + 1,
+        ),
+        isNull,
+      );
+      expect(
+        FeastReminderPayload.fromMap(
+          Map<String, dynamic>.from(base)..['celebration_date'] = '2026-08-16',
+        ),
+        isNull,
+      );
     });
 
     test('accepts legacy feast payloads without inventing a saint id', () {

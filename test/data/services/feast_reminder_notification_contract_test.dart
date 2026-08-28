@@ -1,4 +1,5 @@
 import 'package:catholic_daily/data/services/feast_reminder_notification_contract.dart';
+import 'package:catholic_daily/data/services/feast_reminder_payload.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -74,6 +75,59 @@ void main() {
       );
 
       expect(value.occurrenceKey, 'feast:ng:2026-11-01:eve:all-saints');
+    });
+
+    test('derives the remote expiry exactly two minutes after scheduling', () {
+      final scheduled = DateTime.parse('2026-08-29T07:00:00+01:00');
+
+      expect(
+        FeastReminderNotificationContract.remoteExpiresAt(scheduled),
+        DateTime.parse('2026-08-29T07:02:00+01:00'),
+      );
+    });
+
+    test('derives local safety exactly three minutes after scheduling', () {
+      final scheduled = DateTime.parse('2026-08-29T07:00:00+01:00');
+
+      expect(
+        FeastReminderNotificationContract.localSafetyAt(scheduled),
+        DateTime.parse('2026-08-29T07:03:00+01:00'),
+      );
+    });
+
+    test('v3 payload serializes the stable local notification ID', () {
+      final identity = FeastReminderNotificationContract.identity(
+        region: 'nigeria',
+        celebrationDate: DateTime(2026, 8, 29),
+        dayBefore: false,
+        celebrationId: 'passion-john-baptist',
+      );
+      final payload = FeastReminderPayload(
+        celebrationDate: DateTime(2026, 8, 29),
+        scheduledFor: DateTime.parse('2026-08-29T07:00:00+01:00'),
+        occurrenceKey: identity.occurrenceKey,
+        title: 'The Passion of Saint John the Baptist',
+        rank: 'Memorial',
+        saintProfileId: 'passion-john-baptist',
+        dayBefore: false,
+      );
+
+      final map = payload.toMap();
+      expect(map['schema'], 3);
+      expect(
+        map['local_notification_id'],
+        FeastReminderNotificationContract.stableNotificationId(
+          identity.occurrenceKey,
+        ),
+      );
+      expect(
+        DateTime.parse(map['remote_expires_at'] as String),
+        DateTime.parse('2026-08-29T07:02:00+01:00'),
+      );
+      expect(
+        DateTime.parse(map['local_safety_at'] as String),
+        DateTime.parse('2026-08-29T07:03:00+01:00'),
+      );
     });
   });
 }
