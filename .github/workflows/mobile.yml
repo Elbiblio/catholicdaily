@@ -477,7 +477,7 @@ jobs:
         shell: bash
         run: |
           echo "PROVISIONING_PROFILE_SPECIFIER=${IOS_PROFILE_UUID}" >> ios/Flutter/Release.xcconfig
-          echo "IPHONEOS_DEPLOYMENT_TARGET = 13.0" >> ios/Flutter/Release.xcconfig
+          echo "IPHONEOS_DEPLOYMENT_TARGET = 15.0" >> ios/Flutter/Release.xcconfig
 
       - name: Build signed iOS IPA
         if: env.HAS_IOS_SIGNING == 'true'
