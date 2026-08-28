@@ -26,6 +26,12 @@ class FeastReminderPreferences {
   static const String _scheduleSchemaVersionKey =
       'feast_reminder_schedule_schema_version';
   static const String _scheduledThroughKey = 'feast_reminder_scheduled_through';
+  static const String _scheduleGenerationKey =
+      'feast_reminder_schedule_generation';
+  static const String _scheduleTimezoneKey = 'feast_reminder_schedule_timezone';
+  static const String _lastAuditAtKey = 'feast_reminder_last_audit_at';
+  static const String _scheduledNotificationReferencesKey =
+      'feast_reminder_scheduled_notification_references';
   static const String _autoSetupCompletedKey = 'feast_reminder_auto_setup_done';
   static const String _dayBeforeKey = 'feast_reminder_day_before';
 
@@ -56,6 +62,19 @@ class FeastReminderPreferences {
         ? null
         : DateTime.fromMillisecondsSinceEpoch(timestamp);
   }
+
+  String? get scheduleGeneration => _prefs.getString(_scheduleGenerationKey);
+  String? get scheduleTimezone => _prefs.getString(_scheduleTimezoneKey);
+  DateTime? get lastAuditAt {
+    final timestamp = _prefs.getInt(_lastAuditAtKey);
+    return timestamp == null
+        ? null
+        : DateTime.fromMillisecondsSinceEpoch(timestamp);
+  }
+
+  List<String> get scheduledNotificationReferences => List<String>.unmodifiable(
+    _prefs.getStringList(_scheduledNotificationReferencesKey) ?? const [],
+  );
 
   /// When true, the notification fires the EVENING BEFORE the feast at
   /// [hour]:[minute] (e.g. 8pm/9pm/10pm/11pm). When false, fires on the
@@ -93,10 +112,26 @@ class FeastReminderPreferences {
   Future<void> setScheduledThrough(DateTime value) =>
       _prefs.setInt(_scheduledThroughKey, value.millisecondsSinceEpoch);
 
+  Future<void> setScheduleGeneration(String value) =>
+      _prefs.setString(_scheduleGenerationKey, value);
+
+  Future<void> setScheduleTimezone(String value) =>
+      _prefs.setString(_scheduleTimezoneKey, value);
+
+  Future<void> setLastAuditAt(DateTime value) =>
+      _prefs.setInt(_lastAuditAtKey, value.millisecondsSinceEpoch);
+
+  Future<void> setScheduledNotificationReferences(List<String> values) =>
+      _prefs.setStringList(_scheduledNotificationReferencesKey, values);
+
   Future<void> invalidateSchedule() async {
     await _prefs.setInt(_lastScheduledYearKey, 0);
     await _prefs.setInt(_scheduleSchemaVersionKey, 0);
     await _prefs.remove(_scheduledThroughKey);
+    await _prefs.remove(_scheduleGenerationKey);
+    await _prefs.remove(_scheduleTimezoneKey);
+    await _prefs.remove(_lastAuditAtKey);
+    await _prefs.remove(_scheduledNotificationReferencesKey);
   }
 
   String get timeLabel {

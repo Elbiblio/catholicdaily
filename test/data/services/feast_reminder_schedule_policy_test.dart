@@ -109,6 +109,16 @@ void main() {
         6,
         4,
       ).millisecondsSinceEpoch,
+      'feast_reminder_schedule_generation': 'feast-reminders-v4',
+      'feast_reminder_schedule_timezone': 'Africa/Lagos',
+      'feast_reminder_last_audit_at': DateTime(
+        2026,
+        8,
+        28,
+      ).millisecondsSinceEpoch,
+      'feast_reminder_scheduled_notification_references': <String>[
+        '123|feast:general-roman:2027-06-04:on_day:test',
+      ],
     });
     final preferences = await FeastReminderPreferences.getInstance();
 
@@ -117,5 +127,9 @@ void main() {
     expect(preferences.lastScheduledYear, 0);
     expect(preferences.scheduleSchemaVersion, 0);
     expect(preferences.scheduledThrough, isNull);
+    expect(preferences.scheduleGeneration, isNull);
+    expect(preferences.scheduleTimezone, isNull);
+    expect(preferences.lastAuditAt, isNull);
+    expect(preferences.scheduledNotificationReferences, isEmpty);
   });
 }

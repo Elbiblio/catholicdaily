@@ -7,7 +7,9 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tzdata;
 import '../models/liturgical_region.dart';
 import 'feast_reminder_preferences.dart';
+import 'feast_reminder_notification_contract.dart';
 import 'feast_reminder_payload.dart';
+import 'feast_reminder_schedule_capacity.dart';
 import 'feast_reminder_schedule_policy.dart';
 import 'improved_liturgical_calendar_service.dart';
 import 'liturgical_region_preference_service.dart';
@@ -112,7 +114,7 @@ class FeastReminderService {
   static const _channelName = 'Feast & Solemnity Reminders';
   static const _channelDesc =
       'Daily reminders for Catholic feasts and solemnities';
-  static const _scheduleSchemaVersion = 4;
+  static const _scheduleSchemaVersion = 5;
   static const _schedulePolicy = FeastReminderSchedulePolicy();
   static const _majorFeastTitleTokens = <String>[
     'lord',
@@ -238,7 +240,40 @@ class FeastReminderService {
   /// Cancel all scheduled feast reminders.
   Future<void> cancelAll() async {
     await initialize();
-    await _plugin.cancelAll();
+    final prefs = await FeastReminderPreferences.getInstance();
+    await _cancelScheduledFeastReminders(prefs);
+  }
+
+  Future<void> _cancelScheduledFeastReminders(
+    FeastReminderPreferences prefs,
+  ) async {
+    final references = prefs.scheduledNotificationReferences;
+    if (references.isEmpty &&
+        prefs.scheduleSchemaVersion > 0 &&
+        prefs.scheduleSchemaVersion < _scheduleSchemaVersion) {
+      // Versions 1-4 used the reserved 1000-1063 range without tags.
+      for (var id = 1000; id < 1064; id++) {
+        await _plugin.cancel(id);
+      }
+      return;
+    }
+
+    for (final reference in references) {
+      final separator = reference.indexOf('|');
+      if (separator <= 0 || separator == reference.length - 1) continue;
+      final id = int.tryParse(reference.substring(0, separator));
+      if (id == null) continue;
+      await _plugin.cancel(id, tag: reference.substring(separator + 1));
+    }
+  }
+
+  Future<LiturgicalRegion> _currentRegion() async {
+    try {
+      final regionPrefs = await LiturgicalRegionPreferenceService.getInstance();
+      return regionPrefs.currentRegion;
+    } catch (_) {
+      return LiturgicalRegion.generalRoman;
+    }
   }
 
   /// DEPRECATED: kept as a thin wrapper around [scheduleAheadMonths] for
@@ -249,54 +284,10 @@ class FeastReminderService {
     FeastReminderPreferences prefs,
   ) => scheduleAheadMonths(15, prefs);
 
-  // ── Notification copywriting ───────────────────────────────────────────
-  // Wording is intentionally restrained — short, dignified, contemplative.
-  // The intent is to feel like a quiet reminder from a faithful companion,
-  // not a marketing nudge.
-
-  String _notificationTitle(_FeastEvent event, {required bool dayBefore}) {
-    final rank = event.rank;
-    if (dayBefore) {
-      if (rank == 'Solemnity') return 'Tomorrow — A Solemnity';
-      if (rank == 'Feast') return 'Tomorrow — A Feast';
-      if (rank.toLowerCase().contains('memorial')) {
-        return 'Tomorrow — A Memorial';
-      }
-      return 'Tomorrow\'s Celebration';
-    }
-    if (rank == 'Solemnity') return 'Today — A Solemnity';
-    if (rank == 'Feast') return 'Today — A Feast';
-    if (rank.toLowerCase().contains('memorial')) {
-      return 'Today — A Memorial';
-    }
-    return 'Today\'s Celebration';
-  }
-
-  String _notificationBody(_FeastEvent event, {required bool dayBefore}) {
-    return event.title;
-  }
-
-  /// Long-form body shown on Android's expanded notification and used as the
-  /// iOS body when subtitle is the title. Adds a brief, reverent reflection
-  /// keyed to the rank — never embellishing the saint's identity itself.
-  String _expandedBody(_FeastEvent event, {required bool dayBefore}) {
-    final rank = event.rank;
-    final lead = dayBefore ? 'Tomorrow' : 'Today';
-    if (rank == 'Solemnity') {
-      return '$lead the Church celebrates a Solemnity:\n${event.title}.';
-    }
-    if (rank == 'Feast') {
-      return '$lead the Church keeps a Feast:\n${event.title}.';
-    }
-    if (rank.toLowerCase().contains('memorial')) {
-      return '$lead the Church remembers:\n${event.title}.';
-    }
-    return '${event.title}\n$lead in the Sacred Liturgy.';
-  }
-
   NotificationDetails _buildNotificationDetails(
     _FeastEvent event, {
-    required bool dayBefore,
+    required FeastReminderNotificationContent content,
+    required FeastReminderNotificationIdentity identity,
   }) {
     final isSolemnity = event.rank == 'Solemnity';
     final isFeast = event.rank == 'Feast';
@@ -326,15 +317,13 @@ class FeastReminderService {
         // Expandable rich text — shows the full reflection when the user
         // pulls down the notification or sees it in the shade.
         styleInformation: BigTextStyleInformation(
-          _expandedBody(event, dayBefore: dayBefore),
-          contentTitle: _notificationTitle(event, dayBefore: dayBefore),
-          summaryText: 'Catholic Daily',
+          content.expandedBody,
+          contentTitle: content.title,
+          summaryText: content.dateLabel,
         ),
-        // Group all feast notifications under a single bundle on Android.
-        groupKey: 'feast_reminders_group',
-        subText: dayBefore
-            ? 'Eve of the celebration'
-            : 'On the day of the celebration',
+        tag: identity.occurrenceKey,
+        groupKey: identity.groupKey,
+        subText: content.subtitle,
         ticker: event.title,
       ),
       iOS: DarwinNotificationDetails(
@@ -342,14 +331,12 @@ class FeastReminderService {
         presentBadge: false,
         presentSound: isMajor,
         // The subtitle line — Apple's mid-tier hierarchy slot.
-        subtitle: dayBefore
-            ? 'Tomorrow in the Sacred Liturgy'
-            : 'Today in the Sacred Liturgy',
+        subtitle: content.subtitle,
         // iOS allows interruption-level customization for Focus modes.
         interruptionLevel: isSolemnity
             ? InterruptionLevel.timeSensitive
             : InterruptionLevel.active,
-        threadIdentifier: 'feast_reminders',
+        threadIdentifier: identity.groupKey,
         categoryIdentifier: 'feast_reminder',
       ),
     );
@@ -726,8 +713,8 @@ class FeastReminderService {
     FeastReminderPreferences prefs,
   ) async {
     await initialize();
+    await _cancelScheduledFeastReminders(prefs);
     await prefs.invalidateSchedule();
-    await _plugin.cancelAll();
 
     if (!prefs.isEnabled) {
       return const FeastReminderScheduleResult(
@@ -741,11 +728,14 @@ class FeastReminderService {
 
     final now = DateTime.now();
     final endDate = DateTime(now.year, now.month + monthsAhead, now.day);
+    final region = await _currentRegion();
 
     // Walk every year touched by the window and pull qualifying events.
     final allEvents = <_FeastEvent>[];
     for (var y = now.year; y <= endDate.year; y++) {
-      allEvents.addAll(await _buildFeastEvents(y, prefs.rank));
+      allEvents.addAll(
+        await _buildFeastEvents(y, prefs.rank, regionOverride: region),
+      );
     }
     allEvents.sort((a, b) => a.date.compareTo(b.date));
 
@@ -757,12 +747,17 @@ class FeastReminderService {
       minute: prefs.minute,
       notifyDayBefore: prefs.notifyDayBefore,
     );
+    final capacity = Platform.isIOS
+        ? FeastReminderScheduleCapacity.forIos()
+        : FeastReminderScheduleCapacity.forAndroid();
+    final selection = capacity.select(
+      occurrences,
+      celebrationDate: (occurrence) => occurrence.event.date,
+    );
 
-    int notifId = 1000;
-    int scheduled = 0;
     int failures = 0;
-    DateTime? scheduledThrough;
-    const maxNotifications = 64;
+    final scheduledReferences =
+        <({int id, String tag, DateTime celebrationDate})>[];
     var exactAllowed = false;
     if (Platform.isAndroid) {
       final androidPlugin = _plugin
@@ -780,59 +775,122 @@ class FeastReminderService {
       exactAllowed: exactAllowed,
     );
 
-    for (final occurrence in occurrences) {
-      if (scheduled >= maxNotifications) break;
-
+    for (final occurrence in selection.selected) {
       final event = occurrence.event;
       final tzScheduled = tz.TZDateTime.from(
         occurrence.scheduledTime,
         tz.local,
       );
+      final identity = FeastReminderNotificationContract.identity(
+        region: region.name,
+        celebrationDate: event.date,
+        dayBefore: occurrence.dayBefore,
+        celebrationId: event.saintProfileId ?? event.title,
+      );
+      final content = FeastReminderNotificationContract.content(
+        celebrationDate: event.date,
+        title: event.title,
+        rank: event.rank,
+        dayBefore: occurrence.dayBefore,
+        locale: 'en',
+      );
 
       try {
         await _plugin.zonedSchedule(
-          notifId++,
-          _notificationTitle(event, dayBefore: occurrence.dayBefore),
-          _notificationBody(event, dayBefore: occurrence.dayBefore),
+          identity.notificationId,
+          content.title,
+          content.body,
           tzScheduled,
-          _buildNotificationDetails(event, dayBefore: occurrence.dayBefore),
+          _buildNotificationDetails(
+            event,
+            content: content,
+            identity: identity,
+          ),
           androidScheduleMode: androidScheduleMode,
           uiLocalNotificationDateInterpretation:
               UILocalNotificationDateInterpretation.absoluteTime,
           payload: FeastReminderPayload(
             celebrationDate: event.date,
+            scheduledFor: tzScheduled,
+            occurrenceKey: identity.occurrenceKey,
+            timeZone: tz.local.name,
+            liturgicalRegion: region.name,
+            scheduleGeneration:
+                FeastReminderNotificationContract.scheduleGeneration,
             title: event.title,
             rank: event.rank,
             saintProfileId: event.saintProfileId,
             dayBefore: occurrence.dayBefore,
           ).encode(),
         );
-        scheduled++;
-        scheduledThrough = occurrence.scheduledTime;
+        scheduledReferences.add((
+          id: identity.notificationId,
+          tag: identity.occurrenceKey,
+          celebrationDate: DateTime(
+            event.date.year,
+            event.date.month,
+            event.date.day,
+          ),
+        ));
       } catch (e) {
         failures++;
         debugPrint('[FeastReminder] Failed to schedule ${event.title}: $e');
+        final failedDate = DateTime(
+          event.date.year,
+          event.date.month,
+          event.date.day,
+        );
+        final partialDateReferences = scheduledReferences
+            .where((reference) => reference.celebrationDate == failedDate)
+            .toList(growable: false);
+        for (final reference in partialDateReferences) {
+          await _plugin.cancel(reference.id, tag: reference.tag);
+        }
+        scheduledReferences.removeWhere(
+          (reference) => reference.celebrationDate == failedDate,
+        );
+        break;
       }
     }
 
+    final scheduledThrough = occurrences.isEmpty
+        ? endDate
+        : (failures == 0
+              ? selection.coverageThrough
+              : (scheduledReferences.isEmpty
+                    ? null
+                    : scheduledReferences.last.celebrationDate));
+
     final result = FeastReminderScheduleResult(
       eligibleCount: occurrences.length,
-      scheduledCount: scheduled,
+      scheduledCount: scheduledReferences.length,
       failureCount: failures,
       scheduledThrough: occurrences.isEmpty ? endDate : scheduledThrough,
       usedExactDelivery: exactAllowed,
     );
     if (!result.shouldPersistHorizon) {
-      await _plugin.cancelAll();
+      for (final reference in scheduledReferences) {
+        await _plugin.cancel(reference.id, tag: reference.tag);
+      }
     } else {
       await prefs.setLastScheduledYear(
         result.scheduledThrough?.year ?? endDate.year,
       );
       await prefs.setScheduledThrough(result.scheduledThrough!);
       await prefs.setScheduleSchemaVersion(_scheduleSchemaVersion);
+      await prefs.setScheduleGeneration(
+        FeastReminderNotificationContract.scheduleGeneration,
+      );
+      await prefs.setScheduleTimezone(tz.local.name);
+      await prefs.setLastAuditAt(now);
+      await prefs.setScheduledNotificationReferences(
+        scheduledReferences
+            .map((reference) => '${reference.id}|${reference.tag}')
+            .toList(growable: false),
+      );
     }
     debugPrint(
-      '[FeastReminder] Scheduled $scheduled reminders across '
+      '[FeastReminder] Scheduled ${scheduledReferences.length} reminders across '
       '${now.year}-${endDate.year} '
       '(${occurrences.length} occurrences, ${allEvents.length} candidates, '
       '${exactAllowed ? 'exact' : 'inexact'}, $failures failures)',
