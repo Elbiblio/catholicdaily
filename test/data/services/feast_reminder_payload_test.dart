@@ -151,6 +151,33 @@ void main() {
       },
     );
 
+    test('canonicalizes the v3 occurrence identity during serialization', () {
+      final payload = FeastReminderPayload(
+        celebrationDate: DateTime(2026, 8, 15),
+        scheduledFor: DateTime.parse('2026-08-15T06:30:00+01:00'),
+        occurrenceKey: 'feast:WRONG:2026-08-16:eve:Wrong ID',
+        liturgicalRegion: 'Nigeria-East',
+        title: 'The Assumption',
+        rank: 'Solemnity',
+        saintProfileId: 'Saint ID',
+        dayBefore: false,
+      );
+
+      final encoded = payload.toMap();
+
+      expect(
+        encoded['occurrence_key'],
+        'feast:nigeria-east:2026-08-15:on_day:saint-id',
+      );
+      expect(
+        encoded['local_notification_id'],
+        FeastReminderNotificationContract.stableNotificationId(
+          'feast:nigeria-east:2026-08-15:on_day:saint-id',
+        ),
+      );
+      expect(FeastReminderPayload.fromMap(encoded), isNotNull);
+    });
+
     test('rejects v3 payloads with unsafe timing relationships', () {
       final base = <String, dynamic>{
         'type': 'feast_reminder',

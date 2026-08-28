@@ -101,18 +101,18 @@ class FeastReminderPayload {
     final localSafety = FeastReminderNotificationContract.localSafetyAt(
       scheduled,
     );
+    final identity = _canonicalIdentity(key);
 
     return {
       'type': 'feast_reminder',
       'schema': schemaVersion,
       'v': schemaVersion,
-      'occurrence_key': key,
+      'occurrence_key': identity.occurrenceKey,
       'celebration_date': _dateOnly(celebrationDate),
       'scheduled_for': scheduled.toIso8601String(),
       'remote_expires_at': remoteExpiry.toIso8601String(),
       'local_safety_at': localSafety.toIso8601String(),
-      'local_notification_id':
-          FeastReminderNotificationContract.stableNotificationId(key),
+      'local_notification_id': identity.notificationId,
       if (timeZone != null) 'timezone': timeZone,
       if (liturgicalRegion != null) 'liturgical_region': liturgicalRegion,
       if (scheduleGeneration != null) 'schedule_generation': scheduleGeneration,
@@ -313,6 +313,27 @@ class FeastReminderPayload {
       return false;
     }
     return true;
+  }
+
+  FeastReminderNotificationIdentity _canonicalIdentity(String key) {
+    final parts = key.split(':');
+    if (parts.length != 5 ||
+        parts.any((part) => part.trim().isEmpty) ||
+        parts[0] != 'feast') {
+      throw StateError(
+        'A scheduled feast reminder requires a valid occurrence key',
+      );
+    }
+    final region = liturgicalRegion;
+    final celebrationId = saintProfileId;
+    return FeastReminderNotificationContract.identity(
+      region: region == null || region.trim().isEmpty ? parts[1] : region,
+      celebrationDate: celebrationDate,
+      dayBefore: dayBefore,
+      celebrationId: celebrationId == null || celebrationId.trim().isEmpty
+          ? parts[4]
+          : celebrationId,
+    );
   }
 
   static int? _parseVersion(dynamic value) {
