@@ -60,7 +60,7 @@ void main() {
       'local_safety_at': '2026-08-15T06:03:00+01:00',
       'scheduled_for': '2026-08-15T06:00:00+01:00',
       'occurrence_key': key,
-      'expires_at': '2026-08-15T06:02:00+01:00',
+      'expires_at': '2026-08-15T08:00:00+01:00',
     };
 
     final message = RemoteFeastMessage.tryParse(v3Data);
@@ -70,6 +70,7 @@ void main() {
       message!.payload.localNotificationId,
       FeastReminderNotificationContract.stableNotificationId(key),
     );
+    expect(message.expiresAt, DateTime.parse('2026-08-15T06:02:00+01:00'));
   });
 
   test('ignores unrelated and malformed messages', () {

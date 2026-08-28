@@ -37,9 +37,10 @@ class RemoteFeastMessage {
       normalized['local_notification_id'] = localNotificationId;
     }
 
-    final expiresAt = DateTime.tryParse(
-      '${normalized['expires_at'] ?? normalized['remote_expires_at'] ?? ''}',
-    );
+    final expiryField = schema == FeastReminderPayload.schemaVersion
+        ? normalized['remote_expires_at']
+        : normalized['expires_at'];
+    final expiresAt = DateTime.tryParse('$expiryField');
     if (expiresAt == null) return null;
     final payload = FeastReminderPayload.fromMap(normalized);
     if (payload == null) return null;
