@@ -168,6 +168,15 @@ class FeastReminderService {
 
   void clearNotificationTapHandler() => _tapHandler = null;
 
+  void receiveRemoteTap(FeastReminderPayload payload) {
+    final handler = _tapHandler;
+    if (handler == null) {
+      _pendingTap = payload;
+    } else {
+      handler(payload);
+    }
+  }
+
   void _receiveTap(String? rawPayload) {
     final payload = FeastReminderPayload.tryParse(rawPayload);
     if (payload == null) return;
@@ -234,6 +243,37 @@ class FeastReminderService {
       return settings?.isEnabled ?? false;
     }
     return true;
+  }
+
+  Future<void> showRemoteReminder(FeastReminderPayload payload) async {
+    final occurrenceKey = payload.occurrenceKey;
+    if (occurrenceKey == null || occurrenceKey.trim().isEmpty) return;
+    await initialize();
+
+    final event = _FeastEvent(
+      date: payload.celebrationDate,
+      title: payload.title,
+      rank: payload.rank,
+      saintProfileId: payload.saintProfileId,
+    );
+    final content = FeastReminderNotificationContract.content(
+      celebrationDate: payload.celebrationDate,
+      title: payload.title,
+      rank: payload.rank,
+      dayBefore: payload.dayBefore,
+    );
+    final identity = FeastReminderNotificationContract.identityForOccurrenceKey(
+      occurrenceKey: occurrenceKey,
+      celebrationDate: payload.celebrationDate,
+    );
+
+    await _plugin.show(
+      identity.notificationId,
+      content.title,
+      content.body,
+      _buildNotificationDetails(event, content: content, identity: identity),
+      payload: payload.encode(),
+    );
   }
 
   /// Cancel all scheduled feast reminders.

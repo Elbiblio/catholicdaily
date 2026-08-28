@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "421197495610",
+    "project_id": "elbiblio-fae32",
+    "storage_bucket": "elbiblio-fae32.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:421197495610:android:2101f65de59868afc12403",
+        "android_client_info": {
+          "package_name": "com.elbiblio.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIqSZ6Z24Job2fqE1xs238cCuHJia1lXM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:421197495610:android:ebf40b27f118a360c12403",
+        "android_client_info": {
+          "package_name": "com.elbiblio.catholicdaily"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIqSZ6Z24Job2fqE1xs238cCuHJia1lXM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

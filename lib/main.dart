@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'data/services/theme_preferences.dart';
 import 'data/services/app_navigation_service.dart';
 import 'data/services/feast_reminder_service.dart';
 import 'data/services/feast_reminder_background_service.dart';
+import 'data/services/feast_reminder_messaging_service.dart';
 import 'data/services/feast_reminder_preferences.dart';
 import 'data/services/feast_reminder_payload.dart';
 import 'data/services/feast_reminder_destination_resolver.dart';
@@ -16,9 +19,23 @@ import 'ui/screens/mass_flow_screen.dart';
 import 'ui/screens/onboarding_screen.dart';
 import 'ui/screens/saint_detail_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  var firebaseMessagingAvailable = false;
+  if (DefaultFirebaseOptions.isSupported) {
+    try {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+      FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+      firebaseMessagingAvailable = true;
+    } catch (e, st) {
+      debugPrint('[FeastReminder] Firebase init failed: $e\n$st');
+    }
+  }
 
   try {
     await FeastReminderBackgroundService.instance.initialize();
@@ -77,6 +94,9 @@ void main() async {
     await FeastReminderService.instance.rescheduleIfNeeded(reminderPrefs);
     await FeastReminderBackgroundService.instance.auditAndRepair();
     await FeastReminderBackgroundService.instance.enqueueRepair();
+    if (firebaseMessagingAvailable) {
+      await FeastReminderMessagingService.instance.initialize();
+    }
   } catch (e, st) {
     debugPrint('[FeastReminder] Startup init failed: $e\n$st');
   }

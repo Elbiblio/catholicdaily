@@ -56,9 +56,9 @@ android/*.keystore
 android/app/*.jks
 android/app/*.keystore
 
-# Google Services
-google-services.json
-GoogleService-Info.plist
+# Firebase platform configuration contains public app identifiers and is
+# committed so CI/release builds always target the registered Catholic Daily
+# Android and iOS apps. Service-account and signing credentials remain ignored.
 
 # Backup files
 *.backup

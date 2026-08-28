@@ -97,6 +97,27 @@ class FeastReminderNotificationContract {
     return positive == 0 ? 1 : positive;
   }
 
+  static FeastReminderNotificationIdentity identityForOccurrenceKey({
+    required String occurrenceKey,
+    required DateTime celebrationDate,
+  }) {
+    final key = occurrenceKey.trim();
+    if (key.isEmpty) {
+      throw ArgumentError.value(
+        occurrenceKey,
+        'occurrenceKey',
+        'must not be empty',
+      );
+    }
+    final date = _dateOnly(celebrationDate);
+    return FeastReminderNotificationIdentity(
+      occurrenceKey: key,
+      notificationId: stableNotificationId(key),
+      groupKey: 'feast_reminders:$date',
+      sortKey: '$date:${key.split(':').skip(3).join(':')}',
+    );
+  }
+
   static String _dateOnly(DateTime value) =>
       '${value.year.toString().padLeft(4, '0')}-'
       '${value.month.toString().padLeft(2, '0')}-'
