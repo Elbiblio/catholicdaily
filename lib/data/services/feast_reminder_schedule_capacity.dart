@@ -31,25 +31,38 @@ class FeastReminderScheduleCapacity {
     }
 
     final limit = maximumPending;
-    var selected = limit == null || items.length <= limit
-        ? List<T>.of(items)
-        : List<T>.of(items.take(limit));
-
-    if (limit != null && items.length > limit && selected.isNotEmpty) {
-      final boundaryDate = _dateOnly(celebrationDate(selected.last));
-      final nextDate = _dateOnly(celebrationDate(items[limit]));
-      if (boundaryDate == nextDate) {
-        selected = selected
-            .where((item) => _dateOnly(celebrationDate(item)) != boundaryDate)
-            .toList(growable: false);
-      }
+    if (limit == null) {
+      return FeastReminderCapacitySelection<T>(
+        selected: List<T>.of(items),
+        coverageThrough: _dateOnly(celebrationDate(items.last)),
+      );
     }
+
+    final buckets = <DateTime, List<T>>{};
+    for (final item in items) {
+      final date = _dateOnly(celebrationDate(item));
+      (buckets[date] ??= <T>[]).add(item);
+    }
+    final dates = buckets.keys.toList()..sort();
+    final selectedDates = <DateTime>{};
+    var selectedCount = 0;
+    for (final date in dates) {
+      final bucket = buckets[date]!;
+      if (selectedCount + bucket.length > limit) break;
+      selectedDates.add(date);
+      selectedCount += bucket.length;
+    }
+    final selected = items
+        .where(
+          (item) => selectedDates.contains(_dateOnly(celebrationDate(item))),
+        )
+        .toList(growable: false);
 
     return FeastReminderCapacitySelection<T>(
       selected: selected,
-      coverageThrough: selected.isEmpty
+      coverageThrough: selectedDates.isEmpty
           ? null
-          : _dateOnly(celebrationDate(selected.last)),
+          : dates[selectedDates.length - 1],
     );
   }
 

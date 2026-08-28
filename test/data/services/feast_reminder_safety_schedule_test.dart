@@ -50,6 +50,25 @@ void main() {
         throwsArgumentError,
       );
     });
+
+    test('retains a safety copy during its three-minute grace window', () {
+      final intended = DateTime.parse('2026-08-29T07:00:00+01:00');
+
+      expect(
+        FeastReminderSafetySchedule.isLocallySchedulable(
+          scheduledFor: intended,
+          now: intended.add(const Duration(minutes: 1)),
+        ),
+        isTrue,
+      );
+      expect(
+        FeastReminderSafetySchedule.isLocallySchedulable(
+          scheduledFor: intended,
+          now: intended.add(const Duration(minutes: 3)),
+        ),
+        isFalse,
+      );
+    });
   });
 
   group('FeastReminderService pending occurrence matching', () {

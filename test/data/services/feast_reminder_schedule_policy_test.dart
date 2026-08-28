@@ -106,6 +106,23 @@ void main() {
     });
   });
 
+  test('failure reconciliation retains only complete dates before failure', () {
+    final items = <({DateTime date, String id})>[
+      (date: DateTime(2026, 9, 1), id: 'a-1'),
+      (date: DateTime(2026, 9, 2), id: 'b-1'),
+      (date: DateTime(2026, 9, 1), id: 'a-2'),
+    ];
+
+    final result = FeastReminderScheduleReconciliation.retainBeforeFailure(
+      items,
+      failedDate: DateTime(2026, 9, 2),
+      celebrationDate: (item) => item.date,
+    );
+
+    expect(result, hasLength(2));
+    expect(result.map((item) => item.id), ['a-1', 'a-2']);
+  });
+
   test('invalidating a schedule clears every freshness marker', () async {
     SharedPreferences.setMockInitialValues({
       'feast_reminder_last_year': 2027,
@@ -243,6 +260,61 @@ void main() {
       );
     },
   );
+
+  test('an interrupted restart preserves its live schedule journal', () async {
+    final journalReference = '456|feast:general-roman:2027-06-05:on_day:new';
+    final journalPayload = _v3Payload(
+      DateTime.parse('2027-06-05T09:00:00+01:00'),
+    );
+    SharedPreferences.setMockInitialValues({
+      'feast_reminder_schedule_in_progress': true,
+      'feast_reminder_schedule_journal_references': <String>[journalReference],
+      'feast_reminder_schedule_journal_payloads': <String>[journalPayload],
+    });
+    FeastReminderPreferences.resetInstanceForTesting();
+    final preferences = await FeastReminderPreferences.getInstance();
+
+    await preferences.beginScheduleUpdate();
+
+    expect(preferences.scheduleJournalReferences, contains(journalReference));
+    expect(preferences.scheduleJournalPayloads, contains(journalPayload));
+  });
+
+  test('a failed completion write retains the in-progress journal', () async {
+    final reference = '456|feast:general-roman:2027-06-05:on_day:new';
+    final payload = _v3Payload(DateTime.parse('2027-06-05T09:00:00+01:00'));
+    SharedPreferences.setMockInitialValues({
+      'feast_reminder_schedule_in_progress': true,
+      'feast_reminder_schedule_journal_references': <String>[reference],
+      'feast_reminder_schedule_journal_payloads': <String>[payload],
+    });
+    FeastReminderPreferences.resetInstanceForTesting();
+    final preferences = await FeastReminderPreferences.getInstance();
+    FeastReminderPreferences.setWriteInterceptorForTesting((key, write) async {
+      if (key == 'feast_reminder_scheduled_notification_references')
+        return false;
+      return write();
+    });
+    addTearDown(FeastReminderPreferences.resetWriteInterceptorForTesting);
+
+    expect(
+      () => preferences.completeScheduleUpdate(
+        lastScheduledYear: 2027,
+        scheduledThrough: DateTime(2027, 6, 5),
+        schemaVersion: 7,
+        scheduleGeneration: 'feast-reminders-v5',
+        scheduleTimezone: 'Africa/Lagos',
+        auditedAt: DateTime(2026, 8, 28),
+        configurationFingerprint: 'v1|nigeria|feasts|9|0|false',
+        references: [reference],
+        payloads: [payload],
+      ),
+      throwsStateError,
+    );
+    expect(preferences.scheduleInProgress, isTrue);
+    expect(preferences.scheduleJournalReferences, contains(reference));
+    expect(preferences.scheduleJournalPayloads, contains(payload));
+  });
 
   test(
     'configuration fingerprint includes every scheduling preference',

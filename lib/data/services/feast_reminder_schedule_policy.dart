@@ -39,6 +39,14 @@ class FeastReminderSafetySchedule {
     }
     return localSafetyAt;
   }
+
+  static bool isLocallySchedulable({
+    required DateTime scheduledFor,
+    required DateTime now,
+  }) => localSafetyAtFor(scheduledFor).isAfter(now);
+
+  static DateTime localSafetyAtFor(DateTime scheduledFor) =>
+      FeastReminderNotificationContract.localSafetyAt(scheduledFor);
 }
 
 class FeastReminderSchedulePolicy {
@@ -60,6 +68,24 @@ class FeastReminderSchedulePolicy {
         ? AndroidScheduleMode.exactAllowWhileIdle
         : AndroidScheduleMode.inexactAllowWhileIdle;
   }
+}
+
+class FeastReminderScheduleReconciliation {
+  const FeastReminderScheduleReconciliation._();
+
+  static List<T> retainBeforeFailure<T>(
+    Iterable<T> items, {
+    required DateTime failedDate,
+    required DateTime Function(T item) celebrationDate,
+  }) {
+    final boundary = _dateOnly(failedDate);
+    return items
+        .where((item) => _dateOnly(celebrationDate(item)).isBefore(boundary))
+        .toList(growable: false);
+  }
+
+  static DateTime _dateOnly(DateTime value) =>
+      DateTime(value.year, value.month, value.day);
 }
 
 class FeastReminderScheduleResult {

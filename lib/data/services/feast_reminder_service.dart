@@ -754,7 +754,12 @@ class FeastReminderService {
           slot.hour,
           slot.minute,
         );
-        if (scheduledTime.isBefore(now)) continue;
+        if (!FeastReminderSafetySchedule.isLocallySchedulable(
+          scheduledFor: scheduledTime,
+          now: now,
+        )) {
+          continue;
+        }
 
         occurrences.add(
           _ReminderOccurrence(
@@ -1021,15 +1026,21 @@ class FeastReminderService {
           event.date.month,
           event.date.day,
         );
-        final partialDateReferences = scheduledReferences
-            .where((reference) => reference.celebrationDate == failedDate)
+        final completedReferences =
+            FeastReminderScheduleReconciliation.retainBeforeFailure(
+              scheduledReferences,
+              failedDate: failedDate,
+              celebrationDate: (reference) => reference.celebrationDate,
+            );
+        final referencesToCancel = scheduledReferences
+            .where((reference) => !completedReferences.contains(reference))
             .toList(growable: false);
-        for (final reference in partialDateReferences) {
+        for (final reference in referencesToCancel) {
           await _plugin.cancel(reference.id, tag: reference.tag);
         }
-        scheduledReferences.removeWhere(
-          (reference) => reference.celebrationDate == failedDate,
-        );
+        scheduledReferences
+          ..clear()
+          ..addAll(completedReferences);
         await prefs.setScheduleJournalReferences(
           scheduledReferences
               .map((item) => '${item.id}|${item.tag}')

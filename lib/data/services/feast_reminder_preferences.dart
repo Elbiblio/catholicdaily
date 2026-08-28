@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum FeastReminderRank {
@@ -46,6 +47,8 @@ class FeastReminderPreferences {
   static const String _dayBeforeKey = 'feast_reminder_day_before';
 
   static FeastReminderPreferences? _instance;
+  static Future<bool> Function(String key, Future<bool> Function() write)?
+  _writeInterceptor;
   final SharedPreferences _prefs;
 
   FeastReminderPreferences._(this._prefs);
@@ -59,6 +62,20 @@ class FeastReminderPreferences {
   }
 
   static void resetInstanceForTesting() => _instance = null;
+
+  @visibleForTesting
+  static void setWriteInterceptorForTesting(
+    Future<bool> Function(String key, Future<bool> Function() write) value,
+  ) => _writeInterceptor = value;
+
+  @visibleForTesting
+  static void resetWriteInterceptorForTesting() => _writeInterceptor = null;
+
+  Future<void> _write(String key, Future<bool> Function() operation) async {
+    final succeeded =
+        await (_writeInterceptor?.call(key, operation) ?? operation());
+    if (!succeeded) throw StateError('Unable to persist $key');
+  }
 
   Future<void> reload() => _prefs.reload();
 
@@ -164,22 +181,46 @@ class FeastReminderPreferences {
       _prefs.setStringList(_scheduledNotificationReferencesKey, values);
 
   Future<void> beginScheduleUpdate() async {
-    await _prefs.setStringList(
+    final recovering = scheduleInProgress;
+    await _write(
       _scheduleJournalReferencesKey,
-      scheduledNotificationReferences,
+      () => _prefs.setStringList(
+        _scheduleJournalReferencesKey,
+        recovering
+            ? <String>{
+                ...scheduleJournalReferences,
+                ...scheduledNotificationReferences,
+              }.toList(growable: false)
+            : scheduledNotificationReferences,
+      ),
     );
-    await _prefs.setStringList(
+    await _write(
       _scheduleJournalPayloadsKey,
-      scheduledNotificationPayloads,
+      () => _prefs.setStringList(
+        _scheduleJournalPayloadsKey,
+        recovering
+            ? <String>{
+                ...scheduleJournalPayloads,
+                ...scheduledNotificationPayloads,
+              }.toList(growable: false)
+            : scheduledNotificationPayloads,
+      ),
     );
-    await _prefs.setBool(_scheduleInProgressKey, true);
+    await _write(
+      _scheduleInProgressKey,
+      () => _prefs.setBool(_scheduleInProgressKey, true),
+    );
   }
 
-  Future<void> setScheduleJournalReferences(List<String> values) =>
-      _prefs.setStringList(_scheduleJournalReferencesKey, values);
+  Future<void> setScheduleJournalReferences(List<String> values) => _write(
+    _scheduleJournalReferencesKey,
+    () => _prefs.setStringList(_scheduleJournalReferencesKey, values),
+  );
 
-  Future<void> setScheduleJournalPayloads(List<String> values) =>
-      _prefs.setStringList(_scheduleJournalPayloadsKey, values);
+  Future<void> setScheduleJournalPayloads(List<String> values) => _write(
+    _scheduleJournalPayloadsKey,
+    () => _prefs.setStringList(_scheduleJournalPayloadsKey, values),
+  );
 
   Future<void> clearScheduleFreshnessForUpdate() async {
     await _prefs.setInt(_lastScheduledYearKey, 0);
@@ -206,26 +247,69 @@ class FeastReminderPreferences {
   }) async {
     // Keep the in-progress marker and journal intact until every freshness
     // field and cancellation reference has been durably written.
-    await _prefs.setStringList(_scheduleJournalReferencesKey, references);
-    await _prefs.setStringList(_scheduleJournalPayloadsKey, payloads);
-    await _prefs.setStringList(_scheduledNotificationReferencesKey, references);
-    await _prefs.setStringList(_scheduledNotificationPayloadsKey, payloads);
-    await _prefs.setInt(_lastScheduledYearKey, lastScheduledYear);
-    await _prefs.setInt(
+    await _write(
+      _scheduleJournalReferencesKey,
+      () => _prefs.setStringList(_scheduleJournalReferencesKey, references),
+    );
+    await _write(
+      _scheduleJournalPayloadsKey,
+      () => _prefs.setStringList(_scheduleJournalPayloadsKey, payloads),
+    );
+    await _write(
+      _scheduledNotificationReferencesKey,
+      () =>
+          _prefs.setStringList(_scheduledNotificationReferencesKey, references),
+    );
+    await _write(
+      _scheduledNotificationPayloadsKey,
+      () => _prefs.setStringList(_scheduledNotificationPayloadsKey, payloads),
+    );
+    await _write(
+      _lastScheduledYearKey,
+      () => _prefs.setInt(_lastScheduledYearKey, lastScheduledYear),
+    );
+    await _write(
       _scheduledThroughKey,
-      scheduledThrough.millisecondsSinceEpoch,
+      () => _prefs.setInt(
+        _scheduledThroughKey,
+        scheduledThrough.millisecondsSinceEpoch,
+      ),
     );
-    await _prefs.setInt(_scheduleSchemaVersionKey, schemaVersion);
-    await _prefs.setString(_scheduleGenerationKey, scheduleGeneration);
-    await _prefs.setString(_scheduleTimezoneKey, scheduleTimezone);
-    await _prefs.setString(
+    await _write(
+      _scheduleSchemaVersionKey,
+      () => _prefs.setInt(_scheduleSchemaVersionKey, schemaVersion),
+    );
+    await _write(
+      _scheduleGenerationKey,
+      () => _prefs.setString(_scheduleGenerationKey, scheduleGeneration),
+    );
+    await _write(
+      _scheduleTimezoneKey,
+      () => _prefs.setString(_scheduleTimezoneKey, scheduleTimezone),
+    );
+    await _write(
       _scheduledConfigurationKey,
-      configurationFingerprint,
+      () => _prefs.setString(
+        _scheduledConfigurationKey,
+        configurationFingerprint,
+      ),
     );
-    await _prefs.setInt(_lastAuditAtKey, auditedAt.millisecondsSinceEpoch);
-    await _prefs.remove(_scheduleJournalReferencesKey);
-    await _prefs.remove(_scheduleJournalPayloadsKey);
-    await _prefs.setBool(_scheduleInProgressKey, false);
+    await _write(
+      _lastAuditAtKey,
+      () => _prefs.setInt(_lastAuditAtKey, auditedAt.millisecondsSinceEpoch),
+    );
+    await _write(
+      _scheduleJournalReferencesKey,
+      () => _prefs.remove(_scheduleJournalReferencesKey),
+    );
+    await _write(
+      _scheduleJournalPayloadsKey,
+      () => _prefs.remove(_scheduleJournalPayloadsKey),
+    );
+    await _write(
+      _scheduleInProgressKey,
+      () => _prefs.setBool(_scheduleInProgressKey, false),
+    );
   }
 
   Future<void> invalidateSchedule() async {

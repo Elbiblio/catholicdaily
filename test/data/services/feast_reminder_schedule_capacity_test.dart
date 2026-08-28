@@ -41,6 +41,24 @@ void main() {
       expect(result.selected, isNot(contains(DateTime(2026, 11, 1))));
     });
 
+    test('never splits an interleaved celebration date at the iOS boundary', () {
+      final dates = <DateTime>[
+        ...List.generate(59, (index) => DateTime(2026, 9, 1 + index)),
+        DateTime(2026, 11, 1),
+        DateTime(2026, 11, 2),
+        DateTime(2026, 11, 1),
+      ];
+
+      final result = FeastReminderScheduleCapacity.forIos().select(
+        dates,
+        celebrationDate: (date) => date,
+      );
+
+      expect(result.selected, hasLength(59));
+      expect(result.selected, isNot(contains(DateTime(2026, 11, 1))));
+      expect(result.coverageThrough, dates[58]);
+    });
+
     test('unbounded selection includes the complete horizon', () {
       final dates = <DateTime>[DateTime(2026, 8, 15), DateTime(2027, 1, 1)];
 
