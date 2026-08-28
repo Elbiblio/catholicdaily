@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:catholic_daily/data/services/feast_reminder_messaging_service.dart';
+import 'package:catholic_daily/data/services/feast_reminder_notification_contract.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -45,6 +46,30 @@ void main() {
     expect(message!.payload.celebrationDate, DateTime(2026, 8, 15));
     expect(message.payload.saintProfileId, 'assumption');
     expect(message.payload.liturgicalRegion, 'nigeria');
+  });
+
+  test('accepts schema-v3 FCM data with a string local notification ID', () {
+    final key = 'feast:nigeria:2026-08-15:on_day:assumption';
+    final v3Data = <String, String>{
+      ...validData,
+      'schema': '3',
+      'v': '3',
+      'local_notification_id':
+          '${FeastReminderNotificationContract.stableNotificationId(key)}',
+      'remote_expires_at': '2026-08-15T06:02:00+01:00',
+      'local_safety_at': '2026-08-15T06:03:00+01:00',
+      'scheduled_for': '2026-08-15T06:00:00+01:00',
+      'occurrence_key': key,
+      'expires_at': '2026-08-15T06:02:00+01:00',
+    };
+
+    final message = RemoteFeastMessage.tryParse(v3Data);
+
+    expect(message, isNotNull);
+    expect(
+      message!.payload.localNotificationId,
+      FeastReminderNotificationContract.stableNotificationId(key),
+    );
   });
 
   test('ignores unrelated and malformed messages', () {

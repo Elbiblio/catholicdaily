@@ -22,11 +22,24 @@ class RemoteFeastMessage {
     if (data['type'] != 'feast_reminder') return null;
     final normalized = Map<String, dynamic>.of(data);
     final schema = int.tryParse('${normalized['schema'] ?? normalized['v']}');
-    if (schema != FeastReminderPayload.schemaVersion) return null;
+    if (schema != 2 && schema != FeastReminderPayload.schemaVersion) {
+      return null;
+    }
     normalized['schema'] = schema;
     normalized['v'] = schema;
 
-    final expiresAt = DateTime.tryParse('${normalized['expires_at'] ?? ''}');
+    if (schema == FeastReminderPayload.schemaVersion &&
+        normalized['local_notification_id'] is String) {
+      final localNotificationId = int.tryParse(
+        normalized['local_notification_id'] as String,
+      );
+      if (localNotificationId == null) return null;
+      normalized['local_notification_id'] = localNotificationId;
+    }
+
+    final expiresAt = DateTime.tryParse(
+      '${normalized['expires_at'] ?? normalized['remote_expires_at'] ?? ''}',
+    );
     if (expiresAt == null) return null;
     final payload = FeastReminderPayload.fromMap(normalized);
     if (payload == null) return null;

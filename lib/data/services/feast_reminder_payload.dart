@@ -42,13 +42,14 @@ class FeastReminderPayload {
     if (profileId == null || profileId.isEmpty || title.trim().isEmpty) {
       return null;
     }
+    final normalizedRank = rank.trim().toLowerCase();
     return OptionalCelebration(
       id: profileId,
       title: title,
-      rank: switch (rank) {
-        'Solemnity' => CelebrationRank.solemnity,
-        'Feast' => CelebrationRank.feast,
-        'Memorial' => CelebrationRank.obligatoryMemorial,
+      rank: switch (normalizedRank) {
+        'solemnity' => CelebrationRank.solemnity,
+        'feast' => CelebrationRank.feast,
+        'memorial' => CelebrationRank.obligatoryMemorial,
         _ => CelebrationRank.optionalMemorial,
       },
       color: _colorFromTitle(title),
@@ -272,22 +273,20 @@ class FeastReminderPayload {
     if (keyParts[3] != timing) return false;
 
     final region = decoded['liturgical_region'] as String?;
-    if (region != null &&
-        region.trim().isNotEmpty &&
-        _identityToken(region) != _identityToken(keyParts[1])) {
-      return false;
-    }
     final saintId = decoded['saint_id'] as String?;
-    if (saintId != null &&
-        saintId.trim().isNotEmpty &&
-        _identityToken(saintId) != _identityToken(keyParts.last)) {
+    final expectedIdentity = FeastReminderNotificationContract.identity(
+      region: region == null || region.trim().isEmpty ? keyParts[1] : region,
+      celebrationDate: celebrationDate,
+      dayBefore: timing == 'eve',
+      celebrationId: saintId == null || saintId.trim().isEmpty
+          ? keyParts.last
+          : saintId,
+    );
+    if (expectedIdentity.occurrenceKey != occurrenceKey) {
       return false;
     }
     return true;
   }
-
-  static String _identityToken(String value) =>
-      value.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]'), '');
 
   static String _dateOnly(DateTime value) =>
       '${value.year.toString().padLeft(4, '0')}-'

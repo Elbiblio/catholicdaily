@@ -3,6 +3,7 @@ import 'package:catholic_daily/data/services/feast_reminder_notification_contrac
 import 'package:catholic_daily/data/services/feast_reminder_destination_resolver.dart';
 import 'package:catholic_daily/data/services/feast_reminder_service.dart';
 import 'package:catholic_daily/data/models/liturgical_region.dart';
+import 'package:catholic_daily/data/services/optional_memorial_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -13,7 +14,7 @@ void main() {
       final payload = FeastReminderPayload(
         celebrationDate: DateTime(2026, 11, 1),
         scheduledFor: DateTime.parse('2026-10-31T20:00:00+01:00'),
-        occurrenceKey: 'feast:generalRoman:2026-11-01:eve:all_saints',
+        occurrenceKey: 'feast:generalroman:2026-11-01:eve:all-saints',
         timeZone: 'Africa/Lagos',
         liturgicalRegion: 'generalRoman',
         scheduleGeneration: 'feast-reminders-v5',
@@ -48,7 +49,7 @@ void main() {
       );
       expect(
         decoded.occurrenceKey,
-        'feast:generalRoman:2026-11-01:eve:all_saints',
+        'feast:generalroman:2026-11-01:eve:all-saints',
       );
       expect(decoded.timeZone, 'Africa/Lagos');
       expect(decoded.liturgicalRegion, 'generalRoman');
@@ -154,6 +155,47 @@ void main() {
         ),
         isNull,
       );
+      const punctuatedKey = 'feast:nigeria-east:2026-08-15:on_day:saint-id';
+      final punctuatedBase = Map<String, dynamic>.from(base)
+        ..['occurrence_key'] = punctuatedKey
+        ..['local_notification_id'] =
+            FeastReminderNotificationContract.stableNotificationId(
+              punctuatedKey,
+            )
+        ..['liturgical_region'] = 'nigeria-east'
+        ..['saint_id'] = 'saint-id';
+      expect(FeastReminderPayload.fromMap(punctuatedBase), isNotNull);
+      expect(
+        FeastReminderPayload.fromMap(
+          Map<String, dynamic>.from(punctuatedBase)
+            ..['liturgical_region'] = 'nigeriaeast',
+        ),
+        isNull,
+      );
+      expect(
+        FeastReminderPayload.fromMap(
+          Map<String, dynamic>.from(punctuatedBase)..['saint_id'] = 'saintid',
+        ),
+        isNull,
+      );
+    });
+
+    test('maps lowercase ranks to their celebration rank', () {
+      for (final value in [
+        ('solemnity', CelebrationRank.solemnity),
+        ('feast', CelebrationRank.feast),
+        ('memorial', CelebrationRank.obligatoryMemorial),
+      ]) {
+        final payload = FeastReminderPayload(
+          celebrationDate: DateTime(2026, 8, 15),
+          title: 'The Assumption',
+          rank: value.$1,
+          saintProfileId: 'assumption',
+          dayBefore: false,
+        );
+
+        expect(payload.toSaintCelebration()!.rank, value.$2);
+      }
     });
 
     test('accepts legacy feast payloads without inventing a saint id', () {
@@ -196,7 +238,7 @@ void main() {
       final payload = FeastReminderPayload(
         celebrationDate: DateTime(2026, 11, 1),
         scheduledFor: DateTime(2026, 11, 1),
-        occurrenceKey: 'feast:generalRoman:2026-11-01:on_day:all_saints',
+        occurrenceKey: 'feast:generalroman:2026-11-01:on_day:all-saints',
         timeZone: 'UTC',
         liturgicalRegion: 'generalRoman',
         scheduleGeneration: 'feast-reminders-v5',
