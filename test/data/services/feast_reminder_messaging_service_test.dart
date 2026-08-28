@@ -83,6 +83,7 @@ void main() {
       RemoteFeastMessage.tryParse({...validData}..remove('expires_at')),
       isNull,
     );
+    expect(RemoteFeastMessage.tryParse({...validData, 'v': '3'}), isNull);
   });
 
   test('rejects an expired foreground delivery', () {

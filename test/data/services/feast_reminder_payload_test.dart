@@ -93,7 +93,63 @@ void main() {
       expect(decoded.remoteExpiresAt, isNull);
       expect(decoded.localSafetyAt, isNull);
       expect(decoded.localNotificationId, isNull);
+
+      final reencoded = decoded.toMap();
+      expect(reencoded['schema'], 2);
+      expect(reencoded['v'], 2);
+      expect(FeastReminderPayload.fromMap(reencoded), isNotNull);
     });
+
+    test('serializes a keyed payload without a schedule as valid v2', () {
+      final payload = FeastReminderPayload(
+        celebrationDate: DateTime(2026, 8, 15),
+        occurrenceKey: 'feast:nigeria:2026-08-15:on_day:assumption',
+        title: 'The Assumption',
+        rank: 'Solemnity',
+        saintProfileId: 'assumption',
+        dayBefore: false,
+      );
+
+      final encoded = payload.toMap();
+
+      expect(encoded['schema'], 2);
+      expect(FeastReminderPayload.fromMap(encoded), isNotNull);
+    });
+
+    test(
+      'normalizes conflicting v3 constructor fields during serialization',
+      () {
+        final key = 'feast:nigeria:2026-08-15:on_day:assumption';
+        final payload = FeastReminderPayload(
+          celebrationDate: DateTime(2026, 8, 15),
+          scheduledFor: DateTime.parse('2026-08-15T06:30:00+01:00'),
+          occurrenceKey: key,
+          remoteExpiresAt: DateTime.parse('2026-08-15T08:00:00+01:00'),
+          localSafetyAt: DateTime.parse('2026-08-15T08:01:00+01:00'),
+          localNotificationId: 42,
+          title: 'The Assumption',
+          rank: 'Solemnity',
+          saintProfileId: 'assumption',
+          dayBefore: false,
+        );
+
+        final decoded = FeastReminderPayload.tryParse(payload.encode());
+
+        expect(decoded, isNotNull);
+        expect(
+          decoded!.remoteExpiresAt,
+          DateTime.parse('2026-08-15T06:32:00+01:00'),
+        );
+        expect(
+          decoded.localSafetyAt,
+          DateTime.parse('2026-08-15T06:33:00+01:00'),
+        );
+        expect(
+          decoded.localNotificationId,
+          FeastReminderNotificationContract.stableNotificationId(key),
+        );
+      },
+    );
 
     test('rejects v3 payloads with unsafe timing relationships', () {
       final base = <String, dynamic>{
@@ -175,6 +231,39 @@ void main() {
       expect(
         FeastReminderPayload.fromMap(
           Map<String, dynamic>.from(punctuatedBase)..['saint_id'] = 'saintid',
+        ),
+        isNull,
+      );
+    });
+
+    test('rejects v3 alias types and contradictory version fields', () {
+      final base = <String, dynamic>{
+        'type': 'feast_reminder',
+        'schema': 3,
+        'v': 3,
+        'occurrence_key': 'feast:nigeria:2026-08-15:on_day:assumption',
+        'local_notification_id':
+            FeastReminderNotificationContract.stableNotificationId(
+              'feast:nigeria:2026-08-15:on_day:assumption',
+            ),
+        'celebration_date': '2026-08-15',
+        'scheduled_for': '2026-08-15T06:30:00+01:00',
+        'remote_expires_at': '2026-08-15T06:32:00+01:00',
+        'local_safety_at': '2026-08-15T06:33:00+01:00',
+        'title': 'The Assumption',
+        'rank': 'Solemnity',
+        'timing': 'on_day',
+      };
+
+      expect(
+        FeastReminderPayload.fromMap(
+          Map<String, dynamic>.from(base)..['type'] = 'feast',
+        ),
+        isNull,
+      );
+      expect(
+        FeastReminderPayload.fromMap(
+          Map<String, dynamic>.from(base)..['v'] = 2,
         ),
         isNull,
       );

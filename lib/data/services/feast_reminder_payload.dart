@@ -15,6 +15,7 @@ class FeastReminderPayload {
     this.remoteExpiresAt,
     this.localSafetyAt,
     this.localNotificationId,
+    this.sourceSchemaVersion,
     required this.title,
     required this.rank,
     required this.saintProfileId,
@@ -32,6 +33,7 @@ class FeastReminderPayload {
   final DateTime? remoteExpiresAt;
   final DateTime? localSafetyAt;
   final int? localNotificationId;
+  final int? sourceSchemaVersion;
   final String title;
   final String rank;
   final String? saintProfileId;
@@ -74,16 +76,31 @@ class FeastReminderPayload {
     }
 
     final scheduled = scheduledFor;
-    final remoteExpiry =
-        remoteExpiresAt ??
-        (scheduled == null
-            ? null
-            : FeastReminderNotificationContract.remoteExpiresAt(scheduled));
-    final localSafety =
-        localSafetyAt ??
-        (scheduled == null
-            ? null
-            : FeastReminderNotificationContract.localSafetyAt(scheduled));
+    if (sourceSchemaVersion == 2 || scheduled == null) {
+      return {
+        'type': 'feast_reminder',
+        'schema': 2,
+        'v': 2,
+        'occurrence_key': key,
+        'celebration_date': _dateOnly(celebrationDate),
+        if (scheduled != null) 'scheduled_for': scheduled.toIso8601String(),
+        if (timeZone != null) 'timezone': timeZone,
+        if (liturgicalRegion != null) 'liturgical_region': liturgicalRegion,
+        if (scheduleGeneration != null)
+          'schedule_generation': scheduleGeneration,
+        'title': title,
+        'rank': rank,
+        if (saintProfileId != null) 'saint_id': saintProfileId,
+        'timing': dayBefore ? 'eve' : 'on_day',
+      };
+    }
+
+    final remoteExpiry = FeastReminderNotificationContract.remoteExpiresAt(
+      scheduled,
+    );
+    final localSafety = FeastReminderNotificationContract.localSafetyAt(
+      scheduled,
+    );
 
     return {
       'type': 'feast_reminder',
@@ -91,12 +108,10 @@ class FeastReminderPayload {
       'v': schemaVersion,
       'occurrence_key': key,
       'celebration_date': _dateOnly(celebrationDate),
-      if (scheduled != null) 'scheduled_for': scheduled.toIso8601String(),
-      if (remoteExpiry != null)
-        'remote_expires_at': remoteExpiry.toIso8601String(),
-      if (localSafety != null) 'local_safety_at': localSafety.toIso8601String(),
+      'scheduled_for': scheduled.toIso8601String(),
+      'remote_expires_at': remoteExpiry.toIso8601String(),
+      'local_safety_at': localSafety.toIso8601String(),
       'local_notification_id':
-          localNotificationId ??
           FeastReminderNotificationContract.stableNotificationId(key),
       if (timeZone != null) 'timezone': timeZone,
       if (liturgicalRegion != null) 'liturgical_region': liturgicalRegion,
@@ -148,10 +163,18 @@ class FeastReminderPayload {
   static FeastReminderPayload? fromMap(Map<String, dynamic> decoded) {
     try {
       final type = decoded['type'] as String?;
-      final rawVersion = decoded['schema'] ?? decoded['v'];
-      final version = rawVersion is int
-          ? rawVersion
-          : int.tryParse(rawVersion?.toString() ?? '');
+      final hasSchema = decoded.containsKey('schema');
+      final hasV = decoded.containsKey('v');
+      final parsedSchema = _parseVersion(decoded['schema']);
+      final parsedV = _parseVersion(decoded['v']);
+      if ((hasSchema && parsedSchema == null) ||
+          (hasV && parsedV == null) ||
+          (parsedSchema != null &&
+              parsedV != null &&
+              parsedSchema != parsedV)) {
+        return null;
+      }
+      final version = parsedSchema ?? parsedV;
       if (version == 1 && type == 'feast') {
         final date = DateTime.tryParse(decoded['date'] as String? ?? '');
         final title = decoded['title'] as String? ?? '';
@@ -166,11 +189,15 @@ class FeastReminderPayload {
               ? null
               : rawSaintId,
           dayBefore: decoded['timing'] == 'eve',
+          sourceSchemaVersion: 1,
         );
       }
 
-      if ((version != 2 && version != schemaVersion) ||
-          (type != 'feast_reminder' && type != 'feast')) {
+      final isV3 = version == schemaVersion;
+      if ((version != 2 && !isV3) ||
+          (isV3
+              ? type != 'feast_reminder'
+              : (type != 'feast_reminder' && type != 'feast'))) {
         return null;
       }
       final date = DateTime.tryParse(
@@ -185,7 +212,6 @@ class FeastReminderPayload {
       final scheduledFor = DateTime.tryParse(
         decoded['scheduled_for'] as String? ?? '',
       );
-      final isV3 = version == schemaVersion;
       final remoteExpiresAt = DateTime.tryParse(
         decoded['remote_expires_at'] as String? ?? '',
       );
@@ -223,6 +249,7 @@ class FeastReminderPayload {
             ? null
             : rawSaintId,
         dayBefore: decoded['timing'] == 'eve',
+        sourceSchemaVersion: version,
       );
     } on FormatException {
       return null;
@@ -286,6 +313,12 @@ class FeastReminderPayload {
       return false;
     }
     return true;
+  }
+
+  static int? _parseVersion(dynamic value) {
+    if (value == null) return null;
+    if (value is int) return value;
+    return int.tryParse(value.toString());
   }
 
   static String _dateOnly(DateTime value) =>

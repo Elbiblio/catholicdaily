@@ -21,14 +21,21 @@ class RemoteFeastMessage {
   static RemoteFeastMessage? tryParse(Map<String, dynamic> data) {
     if (data['type'] != 'feast_reminder') return null;
     final normalized = Map<String, dynamic>.of(data);
-    final schema = int.tryParse('${normalized['schema'] ?? normalized['v']}');
-    if (schema != 2 && schema != FeastReminderPayload.schemaVersion) {
+    final schema = int.tryParse('${normalized['schema']}');
+    final versionAlias = int.tryParse('${normalized['v']}');
+    if (normalized.containsKey('schema') &&
+        normalized.containsKey('v') &&
+        schema != versionAlias) {
       return null;
     }
-    normalized['schema'] = schema;
-    normalized['v'] = schema;
+    final version = schema ?? versionAlias;
+    if (version != 2 && version != FeastReminderPayload.schemaVersion) {
+      return null;
+    }
+    normalized['schema'] = version;
+    normalized['v'] = version;
 
-    if (schema == FeastReminderPayload.schemaVersion &&
+    if (version == FeastReminderPayload.schemaVersion &&
         normalized['local_notification_id'] is String) {
       final localNotificationId = int.tryParse(
         normalized['local_notification_id'] as String,
@@ -37,7 +44,7 @@ class RemoteFeastMessage {
       normalized['local_notification_id'] = localNotificationId;
     }
 
-    final expiryField = schema == FeastReminderPayload.schemaVersion
+    final expiryField = version == FeastReminderPayload.schemaVersion
         ? normalized['remote_expires_at']
         : normalized['expires_at'];
     final expiresAt = DateTime.tryParse('$expiryField');
