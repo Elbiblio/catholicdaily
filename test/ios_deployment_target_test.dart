@@ -24,6 +24,8 @@ void main() {
     );
     expect(workflow, contains('IPHONEOS_DEPLOYMENT_TARGET = 15.0'));
     expect(workflow, isNot(contains('IPHONEOS_DEPLOYMENT_TARGET = 13.0')));
+    expect(workflow, contains('ensure_ios_push_profile.py'));
+    expect(workflow, contains('test_ensure_ios_push_profile.py'));
     expect(podfile, contains("platform :ios, '15.0'"));
     expect(podfile, contains('use_modular_headers!'));
     expect(

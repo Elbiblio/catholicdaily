@@ -94,6 +94,9 @@ jobs:
       - name: Analyze
         run: flutter analyze lib
 
+      - name: Test iOS provisioning automation
+        run: python3 -m unittest discover -s scripts/tests -p 'test_ensure_ios_push_profile.py'
+
       - name: Run tests
         shell: bash
         run: |
@@ -404,17 +407,63 @@ jobs:
             echo "::error::Unable to decode iOS .p12 – none of the candidate passwords worked (tried standard and legacy formats)." >&2
             exit 1
           fi
+          CERT_SERIAL=$(openssl x509 -in "$LEGACY_PEM" -noout -serial | cut -d= -f2)
+          test -n "$CERT_SERIAL"
           openssl pkcs12 -export -in "$LEGACY_PEM" -out "$MODERN_P12" -passout pass:"$P12_PASSWORD" >/dev/null
           rm -f "$LEGACY_PEM"
           CERT_PATH="$MODERN_P12"
 
-          if ! aws s3 ls "s3://${{ env.R2_BUCKET_NAME }}/${{ env.IOS_PROVISION_PROFILE_OBJECT_KEY }}" \
-            --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com" >/dev/null 2>&1; then
-            echo "::error::iOS provisioning profile not found in R2 at bucket=${{ env.R2_BUCKET_NAME }} key=${{ env.IOS_PROVISION_PROFILE_OBJECT_KEY }}" >&2
-            exit 1
+          if [ -n "${{ secrets.IOS_PROVISION_PROFILE_BASE64 }}" ]; then
+            echo "${{ secrets.IOS_PROVISION_PROFILE_BASE64 }}" | base64 --decode > "$PROFILE_PATH"
+          else
+            if ! aws s3 ls "s3://${{ env.R2_BUCKET_NAME }}/${{ env.IOS_PROVISION_PROFILE_OBJECT_KEY }}" \
+              --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com" >/dev/null 2>&1; then
+              echo "::error::iOS provisioning profile not found in R2 at bucket=${{ env.R2_BUCKET_NAME }} key=${{ env.IOS_PROVISION_PROFILE_OBJECT_KEY }}" >&2
+              exit 1
+            fi
+            aws s3 cp "s3://${{ env.R2_BUCKET_NAME }}/${{ env.IOS_PROVISION_PROFILE_OBJECT_KEY }}" "$PROFILE_PATH" \
+              --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com"
           fi
-          aws s3 cp "s3://${{ env.R2_BUCKET_NAME }}/${{ env.IOS_PROVISION_PROFILE_OBJECT_KEY }}" "$PROFILE_PATH" \
-            --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com"
+
+          profile_has_push() {
+            security cms -D -i "$PROFILE_PATH" 2>/dev/null | \
+              plutil -extract Entitlements.aps-environment raw - >/dev/null 2>&1
+          }
+
+          if ! profile_has_push; then
+            echo "Stored provisioning profile lacks APNs; creating a push-enabled replacement."
+            KEY_ID="${{ secrets.APPSTORE_KEY_ID }}"
+            if [ -z "$KEY_ID" ]; then
+              KEY_ID="${{ env.APPSTORE_KEY_ID }}"
+            fi
+            KEY_PATH="$RUNNER_TEMP/AuthKey_${KEY_ID}.p8"
+            if [ -n "${{ secrets.APPSTORE_PRIVATE_KEY }}" ]; then
+              printf '%s\n' "${{ secrets.APPSTORE_PRIVATE_KEY }}" > "$KEY_PATH"
+            else
+              aws s3 cp "s3://${{ env.R2_BUCKET_NAME }}/${{ env.APPSTORE_API_KEY_OBJECT_KEY }}" "$KEY_PATH" \
+                --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com"
+            fi
+            python3 -m pip install --user --quiet --disable-pip-version-check pyjwt cryptography
+            python3 scripts/ensure_ios_push_profile.py \
+              --issuer-id "${{ env.APPSTORE_ISSUER_ID }}" \
+              --key-id "$KEY_ID" \
+              --key-path "$KEY_PATH" \
+              --bundle-identifier "${{ env.PLAY_PACKAGE_NAME }}" \
+              --certificate-serial "$CERT_SERIAL" \
+              --profile-name "Catholic Daily Push ${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" \
+              --output "$PROFILE_PATH"
+            rm -f "$KEY_PATH"
+
+            if ! profile_has_push; then
+              echo "::error::Apple created a provisioning profile without the APNs entitlement." >&2
+              exit 1
+            fi
+            if [ "${{ env.HAS_R2_ACCESS }}" = "true" ]; then
+              aws s3 cp "$PROFILE_PATH" "s3://${{ env.R2_BUCKET_NAME }}/${{ env.IOS_PROVISION_PROFILE_OBJECT_KEY }}" \
+                --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com"
+              echo "Stored the push-enabled provisioning profile for subsequent releases."
+            fi
+          fi
 
           security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
           security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
