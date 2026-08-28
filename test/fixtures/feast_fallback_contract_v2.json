@@ -1,0 +1,16 @@
+{
+  "type": "feast_reminder",
+  "schema": "2",
+  "v": "2",
+  "occurrence_key": "feast:nigeria:2026-08-15:on_day:the-assumption-of-the-blessed-virgin-mary",
+  "celebration_date": "2026-08-15",
+  "scheduled_for": "2026-08-15T06:30:00+01:00",
+  "expires_at": "2026-08-15T12:30:00+01:00",
+  "timezone": "Africa/Lagos",
+  "liturgical_region": "nigeria",
+  "schedule_generation": "feast-reminders-v5",
+  "title": "The Assumption of the Blessed Virgin Mary",
+  "rank": "Solemnity",
+  "saint_id": "the-assumption-of-the-blessed-virgin-mary",
+  "timing": "on_day"
+}

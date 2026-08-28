@@ -9,6 +9,7 @@ import 'feast_reminder_preferences.dart';
 import 'feast_reminder_notification_contract.dart';
 import 'feast_reminder_payload.dart';
 import 'feast_reminder_schedule_capacity.dart';
+import 'feast_reminder_schedule_lock.dart';
 import 'feast_reminder_schedule_policy.dart';
 import 'feast_reminder_timezone.dart';
 import 'improved_liturgical_calendar_service.dart';
@@ -105,6 +106,7 @@ class FeastReminderService {
 
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
+  final FeastReminderScheduleLock _scheduleLock = FeastReminderScheduleLock();
   bool _initialized = false;
   void Function(FeastReminderPayload payload)? _tapHandler;
   FeastReminderPayload? _pendingTap;
@@ -113,7 +115,7 @@ class FeastReminderService {
   static const _channelName = 'Feast & Solemnity Reminders';
   static const _channelDesc =
       'Daily reminders for Catholic feasts and solemnities';
-  static const scheduleSchemaVersion = 5;
+  static const scheduleSchemaVersion = 6;
   static const _schedulePolicy = FeastReminderSchedulePolicy();
   static const _majorFeastTitleTokens = <String>[
     'lord',
@@ -280,16 +282,33 @@ class FeastReminderService {
   Future<void> cancelAll() async {
     await initialize();
     final prefs = await FeastReminderPreferences.getInstance();
-    await _cancelScheduledFeastReminders(prefs);
+    await _scheduleLock.synchronized(() async {
+      await prefs.reload();
+      await prefs.beginScheduleUpdate();
+      await _cancelScheduledFeastReminders(prefs);
+      await prefs.invalidateSchedule();
+    });
   }
 
   Future<void> _cancelScheduledFeastReminders(
     FeastReminderPreferences prefs,
   ) async {
-    final references = prefs.scheduledNotificationReferences;
+    final references = <String>{...prefs.cancellationNotificationReferences};
+    try {
+      final pending = await _plugin.pendingNotificationRequests();
+      for (final request in pending) {
+        final payload = FeastReminderPayload.tryParse(request.payload);
+        final occurrenceKey = payload?.occurrenceKey;
+        if (occurrenceKey != null && occurrenceKey.isNotEmpty) {
+          references.add('${request.id}|$occurrenceKey');
+        }
+      }
+    } catch (e) {
+      debugPrint('[FeastReminder] Pending alarm recovery failed: $e');
+    }
     if (references.isEmpty &&
         prefs.scheduleSchemaVersion > 0 &&
-        prefs.scheduleSchemaVersion < scheduleSchemaVersion) {
+        prefs.scheduleSchemaVersion < 5) {
       // Versions 1-4 used the reserved 1000-1063 range without tags.
       for (var id = 1000; id < 1064; id++) {
         await _plugin.cancel(id);
@@ -690,12 +709,18 @@ class FeastReminderService {
 
   /// Call on app start to reschedule if needed (new year or prefs changed).
   Future<void> rescheduleIfNeeded(FeastReminderPreferences prefs) async {
+    await prefs.reload();
     if (!prefs.isEnabled) return;
     final now = DateTime.now();
+    final region = await _currentRegion();
     if (_schedulePolicy.needsReschedule(
       now: now,
       scheduledThrough: prefs.scheduledThrough,
-      schemaMatches: prefs.scheduleSchemaVersion == scheduleSchemaVersion,
+      schemaMatches:
+          prefs.scheduleSchemaVersion == scheduleSchemaVersion &&
+          !prefs.scheduleInProgress &&
+          prefs.scheduledConfigurationFingerprint ==
+              prefs.configurationFingerprint(region: region.name),
     )) {
       await scheduleAheadMonths(15, prefs);
     }
@@ -757,12 +782,23 @@ class FeastReminderService {
   Future<FeastReminderScheduleResult> scheduleAheadMonths(
     int monthsAhead,
     FeastReminderPreferences prefs,
+  ) => _scheduleLock.synchronized(
+    () async => _scheduleAheadMonthsLocked(monthsAhead, prefs),
+  );
+
+  Future<FeastReminderScheduleResult> _scheduleAheadMonthsLocked(
+    int monthsAhead,
+    FeastReminderPreferences prefs,
   ) async {
     await initialize();
+    await prefs.reload();
+    await prefs.beginScheduleUpdate();
     await _cancelScheduledFeastReminders(prefs);
-    await prefs.invalidateSchedule();
+    await prefs.clearScheduleFreshnessForUpdate();
+    await prefs.setScheduleJournalReferences(const []);
 
     if (!prefs.isEnabled) {
+      await prefs.invalidateSchedule();
       return const FeastReminderScheduleResult(
         eligibleCount: 0,
         scheduledCount: 0,
@@ -840,8 +876,25 @@ class FeastReminderService {
         dayBefore: occurrence.dayBefore,
         locale: 'en',
       );
+      final reference = (
+        id: identity.notificationId,
+        tag: identity.occurrenceKey,
+        celebrationDate: DateTime(
+          event.date.year,
+          event.date.month,
+          event.date.day,
+        ),
+      );
 
       try {
+        // Journal before touching the OS. If the process dies after this
+        // write, the next audit can safely cancel the possibly-created alarm.
+        scheduledReferences.add(reference);
+        await prefs.setScheduleJournalReferences(
+          scheduledReferences
+              .map((item) => '${item.id}|${item.tag}')
+              .toList(growable: false),
+        );
         await _plugin.zonedSchedule(
           identity.notificationId,
           content.title,
@@ -869,15 +922,6 @@ class FeastReminderService {
             dayBefore: occurrence.dayBefore,
           ).encode(),
         );
-        scheduledReferences.add((
-          id: identity.notificationId,
-          tag: identity.occurrenceKey,
-          celebrationDate: DateTime(
-            event.date.year,
-            event.date.month,
-            event.date.day,
-          ),
-        ));
       } catch (e) {
         failures++;
         debugPrint('[FeastReminder] Failed to schedule ${event.title}: $e');
@@ -894,6 +938,11 @@ class FeastReminderService {
         }
         scheduledReferences.removeWhere(
           (reference) => reference.celebrationDate == failedDate,
+        );
+        await prefs.setScheduleJournalReferences(
+          scheduledReferences
+              .map((item) => '${item.id}|${item.tag}')
+              .toList(growable: false),
         );
         break;
       }
@@ -918,20 +967,21 @@ class FeastReminderService {
       for (final reference in scheduledReferences) {
         await _plugin.cancel(reference.id, tag: reference.tag);
       }
+      await prefs.invalidateSchedule();
     } else {
-      await prefs.setLastScheduledYear(
-        result.scheduledThrough?.year ?? endDate.year,
-      );
-      await prefs.setScheduledThrough(result.scheduledThrough!);
-      await prefs.setScheduleSchemaVersion(scheduleSchemaVersion);
-      await prefs.setScheduleGeneration(
-        FeastReminderNotificationContract.scheduleGeneration,
-      );
-      await prefs.setScheduleTimezone(tz.local.name);
-      await prefs.setLastAuditAt(now);
-      await prefs.setScheduledNotificationReferences(
-        scheduledReferences
-            .map((reference) => '${reference.id}|${reference.tag}')
+      await prefs.completeScheduleUpdate(
+        lastScheduledYear: result.scheduledThrough?.year ?? endDate.year,
+        scheduledThrough: result.scheduledThrough!,
+        schemaVersion: scheduleSchemaVersion,
+        scheduleGeneration:
+            FeastReminderNotificationContract.scheduleGeneration,
+        scheduleTimezone: tz.local.name,
+        auditedAt: now,
+        configurationFingerprint: prefs.configurationFingerprint(
+          region: region.name,
+        ),
+        references: scheduledReferences
+            .map((item) => '${item.id}|${item.tag}')
             .toList(growable: false),
       );
     }

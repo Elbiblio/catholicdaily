@@ -1,10 +1,15 @@
 import 'package:catholic_daily/data/services/feast_reminder_schedule_policy.dart';
 import 'package:catholic_daily/data/services/feast_reminder_preferences.dart';
+import 'package:catholic_daily/data/services/feast_reminder_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  test('journaled scheduler uses schema version 6', () {
+    expect(FeastReminderService.scheduleSchemaVersion, 6);
+  });
+
   group('FeastReminderSchedulePolicy', () {
     final policy = FeastReminderSchedulePolicy();
     final now = DateTime(2026, 8, 10, 12);
@@ -119,7 +124,14 @@ void main() {
       'feast_reminder_scheduled_notification_references': <String>[
         '123|feast:general-roman:2027-06-04:on_day:test',
       ],
+      'feast_reminder_schedule_in_progress': true,
+      'feast_reminder_schedule_journal_references': <String>[
+        '456|feast:general-roman:2027-06-05:on_day:pending',
+      ],
+      'feast_reminder_scheduled_configuration':
+          'v1|generalRoman|feasts|9|0|false',
     });
+    FeastReminderPreferences.resetInstanceForTesting();
     final preferences = await FeastReminderPreferences.getInstance();
 
     await preferences.invalidateSchedule();
@@ -131,5 +143,76 @@ void main() {
     expect(preferences.scheduleTimezone, isNull);
     expect(preferences.lastAuditAt, isNull);
     expect(preferences.scheduledNotificationReferences, isEmpty);
+    expect(preferences.scheduledConfigurationFingerprint, isNull);
+    final raw = await SharedPreferences.getInstance();
+    expect(raw.containsKey('feast_reminder_schedule_in_progress'), isFalse);
+    expect(
+      raw.containsKey('feast_reminder_schedule_journal_references'),
+      isFalse,
+    );
   });
+
+  test(
+    'schedule journal stays recoverable until completion marker is written',
+    () async {
+      SharedPreferences.setMockInitialValues({
+        'feast_reminder_scheduled_notification_references': <String>[
+          '123|feast:general-roman:2027-06-04:on_day:old',
+        ],
+      });
+      FeastReminderPreferences.resetInstanceForTesting();
+      final preferences = await FeastReminderPreferences.getInstance();
+
+      await preferences.beginScheduleUpdate();
+
+      expect(preferences.scheduleInProgress, isTrue);
+      expect(
+        preferences.cancellationNotificationReferences,
+        contains('123|feast:general-roman:2027-06-04:on_day:old'),
+      );
+
+      final replacement = <String>[
+        '456|feast:general-roman:2027-06-05:on_day:new',
+      ];
+      await preferences.setScheduleJournalReferences(replacement);
+      await preferences.completeScheduleUpdate(
+        lastScheduledYear: 2027,
+        scheduledThrough: DateTime(2027, 6, 5),
+        schemaVersion: 6,
+        scheduleGeneration: 'feast-reminders-v5',
+        scheduleTimezone: 'Africa/Lagos',
+        auditedAt: DateTime(2026, 8, 28),
+        configurationFingerprint: 'v1|nigeria|feasts|9|0|false',
+        references: replacement,
+      );
+
+      expect(preferences.scheduleInProgress, isFalse);
+      expect(preferences.scheduleJournalReferences, isEmpty);
+      expect(preferences.scheduledNotificationReferences, replacement);
+      expect(preferences.scheduleSchemaVersion, 6);
+      expect(
+        preferences.scheduledConfigurationFingerprint,
+        'v1|nigeria|feasts|9|0|false',
+      );
+    },
+  );
+
+  test(
+    'configuration fingerprint includes every scheduling preference',
+    () async {
+      SharedPreferences.setMockInitialValues({
+        'feast_reminder_hour': 21,
+        'feast_reminder_minute': 15,
+        'feast_reminder_rank': 'all',
+        'feast_reminder_day_before': true,
+      });
+      FeastReminderPreferences.resetInstanceForTesting();
+      final preferences = await FeastReminderPreferences.getInstance();
+
+      expect(
+        preferences.configurationFingerprint(region: 'nigeria'),
+        'v1|nigeria|all|21|15|true',
+      );
+    },
+  );
 }

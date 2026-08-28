@@ -1,7 +1,27 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:catholic_daily/data/services/feast_reminder_messaging_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test('parses the server-owned fallback contract fixture', () {
+    final fixture =
+        jsonDecode(
+              File(
+                'test/fixtures/feast_fallback_contract_v2.json',
+              ).readAsStringSync(),
+            )
+            as Map<String, dynamic>;
+
+    final message = RemoteFeastMessage.tryParse(fixture);
+
+    expect(message, isNotNull);
+    expect(message!.payload.celebrationDate, DateTime(2026, 8, 15));
+    expect(message.expiresAt, DateTime.parse('2026-08-15T12:30:00+01:00'));
+    expect(message.payload.occurrenceKey, fixture['occurrence_key']);
+  });
+
   final validData = <String, String>{
     'type': 'feast_reminder',
     'schema': '2',

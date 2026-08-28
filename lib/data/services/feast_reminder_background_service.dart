@@ -8,9 +8,10 @@ import 'feast_reminder_notification_contract.dart';
 import 'feast_reminder_preferences.dart';
 import 'feast_reminder_service.dart';
 import 'feast_reminder_timezone.dart';
+import 'liturgical_region_preference_service.dart';
 import 'notification_installation_sync_service.dart';
 
-enum FeastReminderAuditDecision { skip, current, repair }
+enum FeastReminderAuditDecision { skip, cleanup, current, repair }
 
 class FeastReminderAuditSnapshot {
   const FeastReminderAuditSnapshot({
@@ -21,6 +22,10 @@ class FeastReminderAuditSnapshot {
     required this.scheduledTimezone,
     required this.currentTimezone,
     required this.scheduledThrough,
+    required this.scheduleInProgress,
+    required this.hasCancellationState,
+    required this.scheduledConfigurationFingerprint,
+    required this.currentConfigurationFingerprint,
   });
 
   final bool enabled;
@@ -30,6 +35,10 @@ class FeastReminderAuditSnapshot {
   final String? scheduledTimezone;
   final String currentTimezone;
   final DateTime? scheduledThrough;
+  final bool scheduleInProgress;
+  final bool hasCancellationState;
+  final String? scheduledConfigurationFingerprint;
+  final String currentConfigurationFingerprint;
 
   FeastReminderAuditSnapshot copyWith({
     bool? enabled,
@@ -39,6 +48,10 @@ class FeastReminderAuditSnapshot {
     String? scheduledTimezone,
     String? currentTimezone,
     DateTime? scheduledThrough,
+    bool? scheduleInProgress,
+    bool? hasCancellationState,
+    String? scheduledConfigurationFingerprint,
+    String? currentConfigurationFingerprint,
   }) => FeastReminderAuditSnapshot(
     enabled: enabled ?? this.enabled,
     permissionGranted: permissionGranted ?? this.permissionGranted,
@@ -47,6 +60,13 @@ class FeastReminderAuditSnapshot {
     scheduledTimezone: scheduledTimezone ?? this.scheduledTimezone,
     currentTimezone: currentTimezone ?? this.currentTimezone,
     scheduledThrough: scheduledThrough ?? this.scheduledThrough,
+    scheduleInProgress: scheduleInProgress ?? this.scheduleInProgress,
+    hasCancellationState: hasCancellationState ?? this.hasCancellationState,
+    scheduledConfigurationFingerprint:
+        scheduledConfigurationFingerprint ??
+        this.scheduledConfigurationFingerprint,
+    currentConfigurationFingerprint:
+        currentConfigurationFingerprint ?? this.currentConfigurationFingerprint,
   );
 }
 
@@ -66,16 +86,21 @@ class FeastReminderAuditPolicy {
     required DateTime now,
   }) {
     if (!snapshot.enabled || !snapshot.permissionGranted) {
-      return FeastReminderAuditDecision.skip;
+      return snapshot.scheduleInProgress || snapshot.hasCancellationState
+          ? FeastReminderAuditDecision.cleanup
+          : FeastReminderAuditDecision.skip;
     }
     final coverageThreshold = DateTime(
       now.year,
       now.month,
       now.day,
     ).add(minimumCoverage);
-    if (snapshot.schemaVersion != expectedSchemaVersion ||
+    if (snapshot.scheduleInProgress ||
+        snapshot.schemaVersion != expectedSchemaVersion ||
         snapshot.scheduleGeneration != expectedScheduleGeneration ||
         snapshot.scheduledTimezone != snapshot.currentTimezone ||
+        snapshot.scheduledConfigurationFingerprint !=
+            snapshot.currentConfigurationFingerprint ||
         snapshot.scheduledThrough == null ||
         snapshot.scheduledThrough!.isBefore(coverageThreshold)) {
       return FeastReminderAuditDecision.repair;
@@ -142,16 +167,25 @@ class FeastReminderBackgroundService {
   Future<bool> auditAndRepair() async {
     try {
       final prefs = await FeastReminderPreferences.getInstance();
+      await prefs.reload();
+      final now = DateTime.now();
+      final reminders = FeastReminderService.instance;
       if (!prefs.isEnabled) {
-        await prefs.setLastAuditAt(DateTime.now());
+        if (prefs.hasCancellationState) {
+          await reminders.cancelAll();
+        }
+        await prefs.setLastAuditAt(now);
         return NotificationInstallationSyncService.instance.syncCurrentToken();
       }
 
       final timezone = await FeastReminderTimezone.configure();
-      final reminders = FeastReminderService.instance;
       await reminders.initialize();
       final permissionGranted = await reminders.hasPermission();
-      final now = DateTime.now();
+      final regionPreferences =
+          await LiturgicalRegionPreferenceService.getInstance();
+      final currentConfiguration = prefs.configurationFingerprint(
+        region: regionPreferences.currentRegion.name,
+      );
       final decision = _policy.decide(
         FeastReminderAuditSnapshot(
           enabled: prefs.isEnabled,
@@ -161,11 +195,19 @@ class FeastReminderBackgroundService {
           scheduledTimezone: prefs.scheduleTimezone,
           currentTimezone: timezone,
           scheduledThrough: prefs.scheduledThrough,
+          scheduleInProgress: prefs.scheduleInProgress,
+          hasCancellationState: prefs.hasCancellationState,
+          scheduledConfigurationFingerprint:
+              prefs.scheduledConfigurationFingerprint,
+          currentConfigurationFingerprint: currentConfiguration,
         ),
         now: now,
       );
 
-      if (decision == FeastReminderAuditDecision.repair) {
+      if (decision == FeastReminderAuditDecision.cleanup) {
+        await reminders.cancelAll();
+        await prefs.setLastAuditAt(now);
+      } else if (decision == FeastReminderAuditDecision.repair) {
         final result = await reminders.scheduleAheadMonths(
           _scheduleMonths,
           prefs,

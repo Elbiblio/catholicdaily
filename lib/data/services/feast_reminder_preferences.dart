@@ -32,6 +32,12 @@ class FeastReminderPreferences {
   static const String _lastAuditAtKey = 'feast_reminder_last_audit_at';
   static const String _scheduledNotificationReferencesKey =
       'feast_reminder_scheduled_notification_references';
+  static const String _scheduleInProgressKey =
+      'feast_reminder_schedule_in_progress';
+  static const String _scheduleJournalReferencesKey =
+      'feast_reminder_schedule_journal_references';
+  static const String _scheduledConfigurationKey =
+      'feast_reminder_scheduled_configuration';
   static const String _autoSetupCompletedKey = 'feast_reminder_auto_setup_done';
   static const String _dayBeforeKey = 'feast_reminder_day_before';
 
@@ -47,6 +53,10 @@ class FeastReminderPreferences {
     }
     return _instance!;
   }
+
+  static void resetInstanceForTesting() => _instance = null;
+
+  Future<void> reload() => _prefs.reload();
 
   bool get isEnabled => _prefs.getBool(_enabledKey) ?? false;
   int get hour => _prefs.getInt(_hourKey) ?? 0;
@@ -65,6 +75,8 @@ class FeastReminderPreferences {
 
   String? get scheduleGeneration => _prefs.getString(_scheduleGenerationKey);
   String? get scheduleTimezone => _prefs.getString(_scheduleTimezoneKey);
+  String? get scheduledConfigurationFingerprint =>
+      _prefs.getString(_scheduledConfigurationKey);
   DateTime? get lastAuditAt {
     final timestamp = _prefs.getInt(_lastAuditAtKey);
     return timestamp == null
@@ -75,6 +87,23 @@ class FeastReminderPreferences {
   List<String> get scheduledNotificationReferences => List<String>.unmodifiable(
     _prefs.getStringList(_scheduledNotificationReferencesKey) ?? const [],
   );
+  bool get scheduleInProgress =>
+      _prefs.getBool(_scheduleInProgressKey) ?? false;
+  List<String> get scheduleJournalReferences => List<String>.unmodifiable(
+    _prefs.getStringList(_scheduleJournalReferencesKey) ?? const [],
+  );
+  List<String> get cancellationNotificationReferences =>
+      List<String>.unmodifiable({
+        ...scheduledNotificationReferences,
+        ...scheduleJournalReferences,
+      });
+  bool get hasCancellationState =>
+      scheduleInProgress ||
+      scheduleSchemaVersion > 0 ||
+      cancellationNotificationReferences.isNotEmpty;
+
+  String configurationFingerprint({required String region}) =>
+      'v1|$region|${rank.key}|$hour|$minute|$notifyDayBefore';
 
   /// When true, the notification fires the EVENING BEFORE the feast at
   /// [hour]:[minute] (e.g. 8pm/9pm/10pm/11pm). When false, fires on the
@@ -124,6 +153,59 @@ class FeastReminderPreferences {
   Future<void> setScheduledNotificationReferences(List<String> values) =>
       _prefs.setStringList(_scheduledNotificationReferencesKey, values);
 
+  Future<void> beginScheduleUpdate() async {
+    await _prefs.setStringList(
+      _scheduleJournalReferencesKey,
+      scheduledNotificationReferences,
+    );
+    await _prefs.setBool(_scheduleInProgressKey, true);
+  }
+
+  Future<void> setScheduleJournalReferences(List<String> values) =>
+      _prefs.setStringList(_scheduleJournalReferencesKey, values);
+
+  Future<void> clearScheduleFreshnessForUpdate() async {
+    await _prefs.setInt(_lastScheduledYearKey, 0);
+    await _prefs.setInt(_scheduleSchemaVersionKey, 0);
+    await _prefs.remove(_scheduledThroughKey);
+    await _prefs.remove(_scheduleGenerationKey);
+    await _prefs.remove(_scheduleTimezoneKey);
+    await _prefs.remove(_lastAuditAtKey);
+    await _prefs.remove(_scheduledNotificationReferencesKey);
+    await _prefs.remove(_scheduledConfigurationKey);
+  }
+
+  Future<void> completeScheduleUpdate({
+    required int lastScheduledYear,
+    required DateTime scheduledThrough,
+    required int schemaVersion,
+    required String scheduleGeneration,
+    required String scheduleTimezone,
+    required DateTime auditedAt,
+    required String configurationFingerprint,
+    required List<String> references,
+  }) async {
+    // Keep the in-progress marker and journal intact until every freshness
+    // field and cancellation reference has been durably written.
+    await _prefs.setStringList(_scheduleJournalReferencesKey, references);
+    await _prefs.setStringList(_scheduledNotificationReferencesKey, references);
+    await _prefs.setInt(_lastScheduledYearKey, lastScheduledYear);
+    await _prefs.setInt(
+      _scheduledThroughKey,
+      scheduledThrough.millisecondsSinceEpoch,
+    );
+    await _prefs.setInt(_scheduleSchemaVersionKey, schemaVersion);
+    await _prefs.setString(_scheduleGenerationKey, scheduleGeneration);
+    await _prefs.setString(_scheduleTimezoneKey, scheduleTimezone);
+    await _prefs.setString(
+      _scheduledConfigurationKey,
+      configurationFingerprint,
+    );
+    await _prefs.setInt(_lastAuditAtKey, auditedAt.millisecondsSinceEpoch);
+    await _prefs.remove(_scheduleJournalReferencesKey);
+    await _prefs.setBool(_scheduleInProgressKey, false);
+  }
+
   Future<void> invalidateSchedule() async {
     await _prefs.setInt(_lastScheduledYearKey, 0);
     await _prefs.setInt(_scheduleSchemaVersionKey, 0);
@@ -132,6 +214,9 @@ class FeastReminderPreferences {
     await _prefs.remove(_scheduleTimezoneKey);
     await _prefs.remove(_lastAuditAtKey);
     await _prefs.remove(_scheduledNotificationReferencesKey);
+    await _prefs.remove(_scheduledConfigurationKey);
+    await _prefs.remove(_scheduleInProgressKey);
+    await _prefs.remove(_scheduleJournalReferencesKey);
   }
 
   String get timeLabel {

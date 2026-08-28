@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   const policy = FeastReminderAuditPolicy(
-    expectedSchemaVersion: 5,
+    expectedSchemaVersion: 6,
     expectedScheduleGeneration: 'feast-reminders-v5',
     minimumCoverage: Duration(days: 30),
   );
@@ -12,11 +12,15 @@ void main() {
   FeastReminderAuditSnapshot healthy() => FeastReminderAuditSnapshot(
     enabled: true,
     permissionGranted: true,
-    schemaVersion: 5,
+    schemaVersion: 6,
     scheduleGeneration: 'feast-reminders-v5',
     scheduledTimezone: 'Africa/Lagos',
     currentTimezone: 'Africa/Lagos',
     scheduledThrough: DateTime(2026, 10, 1),
+    scheduleInProgress: false,
+    hasCancellationState: false,
+    scheduledConfigurationFingerprint: 'v1|nigeria|feasts|9|0|false',
+    currentConfigurationFingerprint: 'v1|nigeria|feasts|9|0|false',
   );
 
   test('skips disabled and permission-denied installations successfully', () {
@@ -27,6 +31,26 @@ void main() {
     expect(
       policy.decide(healthy().copyWith(permissionGranted: false), now: now),
       FeastReminderAuditDecision.skip,
+    );
+  });
+
+  test('cleans interrupted or cancellable schedules before disabled skip', () {
+    expect(
+      policy.decide(
+        healthy().copyWith(enabled: false, scheduleInProgress: true),
+        now: now,
+      ),
+      FeastReminderAuditDecision.cleanup,
+    );
+    expect(
+      policy.decide(
+        healthy().copyWith(
+          permissionGranted: false,
+          hasCancellationState: true,
+        ),
+        now: now,
+      ),
+      FeastReminderAuditDecision.cleanup,
     );
   });
 
@@ -62,6 +86,28 @@ void main() {
     expect(
       policy.decide(healthy(), now: now),
       FeastReminderAuditDecision.current,
+    );
+  });
+
+  test(
+    'repairs an interrupted schedule even when freshness markers look current',
+    () {
+      expect(
+        policy.decide(healthy().copyWith(scheduleInProgress: true), now: now),
+        FeastReminderAuditDecision.repair,
+      );
+    },
+  );
+
+  test('repairs when settings differ from the scheduled configuration', () {
+    expect(
+      policy.decide(
+        healthy().copyWith(
+          currentConfigurationFingerprint: 'v1|nigeria|all|21|15|true',
+        ),
+        now: now,
+      ),
+      FeastReminderAuditDecision.repair,
     );
   });
 }
