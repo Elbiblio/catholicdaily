@@ -26,6 +26,8 @@ void main() {
     expect(workflow, isNot(contains('IPHONEOS_DEPLOYMENT_TARGET = 13.0')));
     expect(workflow, contains('ensure_ios_push_profile.py'));
     expect(workflow, contains('test_ensure_ios_push_profile.py'));
+    expect(workflow, contains('python3 -m venv'));
+    expect(workflow, isNot(contains('pip install --user')));
     expect(podfile, contains("platform :ios, '15.0'"));
     expect(podfile, contains('use_modular_headers!'));
     expect(

@@ -443,8 +443,10 @@ jobs:
               aws s3 cp "s3://${{ env.R2_BUCKET_NAME }}/${{ env.APPSTORE_API_KEY_OBJECT_KEY }}" "$KEY_PATH" \
                 --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com"
             fi
-            python3 -m pip install --user --quiet --disable-pip-version-check pyjwt cryptography
-            python3 scripts/ensure_ios_push_profile.py \
+            APPLE_API_VENV="$RUNNER_TEMP/apple-api-venv"
+            python3 -m venv "$APPLE_API_VENV"
+            "$APPLE_API_VENV/bin/pip" install --quiet --disable-pip-version-check pyjwt cryptography
+            "$APPLE_API_VENV/bin/python" scripts/ensure_ios_push_profile.py \
               --issuer-id "${{ env.APPSTORE_ISSUER_ID }}" \
               --key-id "$KEY_ID" \
               --key-path "$KEY_PATH" \
