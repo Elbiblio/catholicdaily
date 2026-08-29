@@ -387,8 +387,8 @@ void main() {
     ordo.setOnlineResolverForTesting((date) async {
       return LiturgicalDay(
         date: date,
-        title: '',
-        rank: null,
+        title: 'Saturday of the 21st week in Ordinary Time',
+        rank: 'ferial',
         color: LiturgicalColor.green,
         season: LiturgicalSeason.ordinaryTime,
         weekNumber: 21,
@@ -404,6 +404,95 @@ void main() {
     expect(resolved.title, 'The Passion of Saint John the Baptist');
     expect(resolved.rank, 'Obligatory Memorial');
   });
+
+  test(
+    'successful online Sunday keeps precedence over fixed memorial',
+    () async {
+      final ordo = OrdoResolverService.instance;
+      ordo.setPreferOffline(false);
+      ordo.setOnlineResolverForTesting(
+        (date) async => LiturgicalDay(
+          date: date,
+          title: '22nd Sunday in Ordinary Time',
+          rank: 'Sunday',
+          color: LiturgicalColor.green,
+          season: LiturgicalSeason.ordinaryTime,
+          weekNumber: 22,
+          dayOfWeek: DayOfWeek.sunday,
+        ),
+      );
+      addTearDown(() {
+        ordo.setOnlineResolverForTesting(null);
+        ordo.setPreferOffline(true);
+      });
+
+      final resolved = await ordo.resolveDay(DateTime(2027, 8, 29));
+      expect(resolved.title, '22nd Sunday in Ordinary Time');
+      expect(resolved.rank, 'Sunday');
+    },
+  );
+
+  for (final protectedDay
+      in <
+        ({
+          String description,
+          String title,
+          String rank,
+          LiturgicalSeason season,
+        })
+      >[
+        (
+          description: 'higher-rank feast',
+          title: 'A local patronal feast',
+          rank: 'Feast',
+          season: LiturgicalSeason.ordinaryTime,
+        ),
+        (
+          description: 'higher-rank solemnity',
+          title: 'A local patronal solemnity',
+          rank: 'Solemnity',
+          season: LiturgicalSeason.ordinaryTime,
+        ),
+        (
+          description: 'Lent',
+          title: 'Saturday of the third week of Lent',
+          rank: 'ferial',
+          season: LiturgicalSeason.lent,
+        ),
+        (
+          description: 'Triduum',
+          title: 'Holy Saturday',
+          rank: 'triduum',
+          season: LiturgicalSeason.ordinaryTime,
+        ),
+      ]) {
+    test(
+      'successful online ${protectedDay.description} keeps precedence over fixed memorial',
+      () async {
+        final ordo = OrdoResolverService.instance;
+        ordo.setPreferOffline(false);
+        ordo.setOnlineResolverForTesting(
+          (date) async => LiturgicalDay(
+            date: date,
+            title: protectedDay.title,
+            rank: protectedDay.rank,
+            color: LiturgicalColor.purple,
+            season: protectedDay.season,
+            weekNumber: 3,
+            dayOfWeek: DayOfWeek.saturday,
+          ),
+        );
+        addTearDown(() {
+          ordo.setOnlineResolverForTesting(null);
+          ordo.setPreferOffline(true);
+        });
+
+        final resolved = await ordo.resolveDay(DateTime(2026, 8, 29));
+        expect(resolved.title, protectedDay.title);
+        expect(resolved.rank, protectedDay.rank);
+      },
+    );
+  }
 
   test('calendar ID and title aliases resolve the same John proper', () async {
     final regionPrefs = await LiturgicalRegionPreferenceService.getInstance();

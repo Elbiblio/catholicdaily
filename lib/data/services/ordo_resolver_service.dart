@@ -92,8 +92,7 @@ class OrdoResolverService {
     DateTime date,
     LiturgicalDay resolvedDay,
   ) async {
-    if (resolvedDay.title.trim().isNotEmpty ||
-        _memorialIsReducedToCommemoration(date, resolvedDay)) {
+    if (!_mayObserveObligatoryMemorial(date, resolvedDay)) {
       return resolvedDay;
     }
 
@@ -117,6 +116,19 @@ class OrdoResolverService {
       );
     }
     return resolvedDay;
+  }
+
+  bool _mayObserveObligatoryMemorial(DateTime date, LiturgicalDay resolvedDay) {
+    if (resolvedDay.dayOfWeek == DayOfWeek.sunday ||
+        _memorialIsReducedToCommemoration(date, resolvedDay)) {
+      return false;
+    }
+
+    final rank = (resolvedDay.rank ?? '').trim().toLowerCase();
+    return !rank.contains('sunday') &&
+        !rank.contains('feast') &&
+        !rank.contains('solemnity') &&
+        !rank.contains('triduum');
   }
 
   bool _memorialIsReducedToCommemoration(
