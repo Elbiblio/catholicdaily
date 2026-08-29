@@ -122,7 +122,7 @@ class _FeastReminderSettingsSheetState
       } else {
         cancellationQueuePersisted = await service.cancelAll();
       }
-      NotificationScheduleSyncCoordinator(
+      await NotificationScheduleSyncCoordinator(
         syncInstallation:
             NotificationInstallationSyncService.instance.syncCurrentToken,
         syncOccurrences: () => NotificationOccurrenceSyncService.instance

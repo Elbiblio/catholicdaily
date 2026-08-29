@@ -12,6 +12,7 @@ import 'feast_reminder_timezone.dart';
 import 'liturgical_region_preference_service.dart';
 import 'notification_installation_sync_service.dart';
 import 'notification_occurrence_sync_service.dart';
+import 'notification_repair_outbox.dart';
 
 enum FeastReminderAuditDecision { skip, cleanup, current, repair }
 
@@ -63,28 +64,54 @@ class FeastReminderRepairRequest {
 }
 
 class NotificationStartupSyncDispatcher {
-  const NotificationStartupSyncDispatcher({
+  NotificationStartupSyncDispatcher({
     required this.auditAndRepair,
     required this.initializeMessaging,
     required this.enqueueRepair,
-  });
+    NotificationRepairOutbox? repairOutbox,
+  }) : _repairOutbox = repairOutbox ?? NotificationRepairOutbox.instance;
 
   final Future<bool> Function() auditAndRepair;
   final Future<void> Function() initializeMessaging;
   final Future<void> Function() enqueueRepair;
+  final NotificationRepairOutbox _repairOutbox;
+  Future<void>? _repairRequest;
 
-  void dispatch() {
-    unawaited(_runAudit());
+  Future<void> dispatch() async {
+    String? repairToken;
+    try {
+      repairToken = await _repairOutbox.markPending(reason: 'startup');
+    } catch (_) {
+      // Startup remains available; detached repair registration is fallback.
+    }
+    unawaited(_runAudit(repairToken));
     unawaited(_runMessaging());
   }
 
-  Future<void> _runAudit() async {
+  Future<void> _runAudit(String? repairToken) async {
     try {
-      await auditAndRepair();
+      final succeeded = await auditAndRepair();
+      if (succeeded) {
+        try {
+          if (repairToken != null) {
+            await _repairOutbox.clear(ifToken: repairToken);
+          }
+        } catch (_) {
+          // A retained marker safely asks the next startup to retry.
+        }
+        return;
+      }
     } catch (_) {
       // Startup continues while the one-off repair owns recovery.
     }
+    await _requestRepair();
+  }
+
+  Future<void> _requestRepair() => _repairRequest ??= _requestRepairOnce();
+
+  Future<void> _requestRepairOnce() async {
     try {
+      await _repairOutbox.markPending(reason: 'startup-retry');
       await enqueueRepair();
     } catch (_) {
       // Work registration is best-effort and cannot fail app startup.
@@ -95,11 +122,7 @@ class NotificationStartupSyncDispatcher {
     try {
       await initializeMessaging();
     } catch (_) {
-      try {
-        await enqueueRepair();
-      } catch (_) {
-        // Messaging initialization is also detached from app startup.
-      }
+      await _requestRepair();
     }
   }
 }
@@ -282,78 +305,20 @@ class FeastReminderBackgroundService {
   }
 
   Future<bool> auditAndRepair({bool forceReschedule = false}) async {
+    String? repairToken;
     try {
-      final prefs = await FeastReminderPreferences.getInstance();
-      await prefs.reload();
-      final now = DateTime.now();
-      final reminders = FeastReminderService.instance;
-      if (!prefs.isEnabled) {
-        if (prefs.hasCancellationState) {
-          final occurrenceQueuePersisted = await reminders.cancelAll();
-          if (!occurrenceQueuePersisted) return false;
+      repairToken = await NotificationRepairOutbox.instance.pendingToken;
+      final succeeded = await _auditAndRepair(forceReschedule: forceReschedule);
+      if (succeeded) {
+        try {
+          if (repairToken != null) {
+            await NotificationRepairOutbox.instance.clear(ifToken: repairToken);
+          }
+        } catch (_) {
+          // A retained marker safely causes a later reconciliation.
         }
-        await prefs.setLastAuditAt(now);
-        return _syncRemoteState(now, remindersEnabled: false);
       }
-
-      final timezone = await FeastReminderTimezone.configure();
-      await reminders.initialize();
-      final permissionGranted = await reminders.hasPermission();
-      final regionPreferences =
-          await LiturgicalRegionPreferenceService.getInstance();
-      final currentConfiguration = prefs.configurationFingerprint(
-        region: regionPreferences.currentRegion.name,
-      );
-      final decision = _policy.decide(
-        FeastReminderAuditSnapshot(
-          enabled: prefs.isEnabled,
-          permissionGranted: permissionGranted,
-          schemaVersion: prefs.scheduleSchemaVersion,
-          scheduleGeneration: prefs.scheduleGeneration,
-          scheduledTimezone: prefs.scheduleTimezone,
-          currentTimezone: timezone,
-          scheduledThrough: prefs.scheduledThrough,
-          scheduleInProgress: prefs.scheduleInProgress,
-          hasCancellationState: prefs.hasCancellationState,
-          scheduledConfigurationFingerprint:
-              prefs.scheduledConfigurationFingerprint,
-          currentConfigurationFingerprint: currentConfiguration,
-        ),
-        now: now,
-        forceReschedule: forceReschedule,
-      );
-      var needsLocalScheduleRepair = false;
-
-      if (decision == FeastReminderAuditDecision.cleanup) {
-        final occurrenceQueuePersisted = await reminders.cancelAll();
-        if (!occurrenceQueuePersisted) return false;
-        await prefs.setLastAuditAt(now);
-      } else if (decision == FeastReminderAuditDecision.repair) {
-        final result = await reminders.scheduleAheadMonths(
-          _scheduleMonths,
-          prefs,
-        );
-        if (!result.canSyncServerOnlyOccurrences) {
-          return false;
-        }
-        needsLocalScheduleRepair = result.needsLocalScheduleRepair;
-      } else {
-        await prefs.setLastAuditAt(now);
-      }
-
-      final pendingOccurrenceKeys = await reminders.pendingOccurrenceKeys();
-      if (pendingOccurrenceKeys != null) {
-        await NotificationOccurrenceSyncService.instance.reconcileLocalArming(
-          pendingOccurrenceKeys: pendingOccurrenceKeys,
-          reconciledAt: now,
-        );
-      }
-
-      final remoteSynchronized = await _syncRemoteState(
-        now,
-        remindersEnabled: true,
-      );
-      return remoteSynchronized && !needsLocalScheduleRepair;
+      return succeeded;
     } catch (error, stackTrace) {
       debugPrint(
         '[FeastReminder] Background coverage audit failed: '
@@ -361,6 +326,80 @@ class FeastReminderBackgroundService {
       );
       return false;
     }
+  }
+
+  Future<bool> _auditAndRepair({required bool forceReschedule}) async {
+    final prefs = await FeastReminderPreferences.getInstance();
+    await prefs.reload();
+    final now = DateTime.now();
+    final reminders = FeastReminderService.instance;
+    if (!prefs.isEnabled) {
+      if (prefs.hasCancellationState) {
+        final occurrenceQueuePersisted = await reminders.cancelAll();
+        if (!occurrenceQueuePersisted) return false;
+      }
+      await prefs.setLastAuditAt(now);
+      return _syncRemoteState(now, remindersEnabled: false);
+    }
+
+    final timezone = await FeastReminderTimezone.configure();
+    await reminders.initialize();
+    final permissionGranted = await reminders.hasPermission();
+    final regionPreferences =
+        await LiturgicalRegionPreferenceService.getInstance();
+    final currentConfiguration = prefs.configurationFingerprint(
+      region: regionPreferences.currentRegion.name,
+    );
+    final decision = _policy.decide(
+      FeastReminderAuditSnapshot(
+        enabled: prefs.isEnabled,
+        permissionGranted: permissionGranted,
+        schemaVersion: prefs.scheduleSchemaVersion,
+        scheduleGeneration: prefs.scheduleGeneration,
+        scheduledTimezone: prefs.scheduleTimezone,
+        currentTimezone: timezone,
+        scheduledThrough: prefs.scheduledThrough,
+        scheduleInProgress: prefs.scheduleInProgress,
+        hasCancellationState: prefs.hasCancellationState,
+        scheduledConfigurationFingerprint:
+            prefs.scheduledConfigurationFingerprint,
+        currentConfigurationFingerprint: currentConfiguration,
+      ),
+      now: now,
+      forceReschedule: forceReschedule,
+    );
+    var needsLocalScheduleRepair = false;
+
+    if (decision == FeastReminderAuditDecision.cleanup) {
+      final occurrenceQueuePersisted = await reminders.cancelAll();
+      if (!occurrenceQueuePersisted) return false;
+      await prefs.setLastAuditAt(now);
+    } else if (decision == FeastReminderAuditDecision.repair) {
+      final result = await reminders.scheduleAheadMonths(
+        _scheduleMonths,
+        prefs,
+      );
+      if (!result.canSyncServerOnlyOccurrences) {
+        return false;
+      }
+      needsLocalScheduleRepair = result.needsLocalScheduleRepair;
+    } else {
+      await prefs.setLastAuditAt(now);
+    }
+
+    final pendingOccurrenceKeys = await reminders.pendingOccurrenceKeys();
+    if (pendingOccurrenceKeys != null) {
+      await NotificationOccurrenceSyncService.instance.reconcileLocalArming(
+        pendingOccurrenceKeys: pendingOccurrenceKeys,
+        reconciledAt: now,
+      );
+    }
+
+    final remoteSynchronized = await _syncRemoteState(
+      now,
+      remindersEnabled: true,
+    );
+    return remoteSynchronized && !needsLocalScheduleRepair;
   }
 
   Future<bool> _syncRemoteState(

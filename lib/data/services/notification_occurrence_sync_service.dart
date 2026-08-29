@@ -4,47 +4,75 @@ import 'notification_installation_store.dart';
 import 'notification_occurrence.dart';
 import 'notification_occurrence_api.dart';
 import 'notification_occurrence_store.dart';
+import 'notification_repair_outbox.dart';
 
 enum NotificationOccurrenceSyncResult { success, reRegister, invalid, retry }
 
 class NotificationScheduleSyncCoordinator {
-  const NotificationScheduleSyncCoordinator({
+  NotificationScheduleSyncCoordinator({
     required this.syncInstallation,
     required this.syncOccurrences,
     required this.enqueueRepair,
-  });
+    NotificationRepairOutbox? repairOutbox,
+  }) : _repairOutbox = repairOutbox ?? NotificationRepairOutbox.instance;
 
   final Future<bool> Function() syncInstallation;
   final Future<NotificationOccurrenceSyncResult> Function() syncOccurrences;
   final Future<void> Function() enqueueRepair;
+  final NotificationRepairOutbox _repairOutbox;
+  Future<void>? _repairRequest;
 
-  void dispatch({bool installationFirst = true, bool forceRepair = false}) {
+  Future<void> dispatch({
+    bool installationFirst = true,
+    bool forceRepair = false,
+  }) async {
+    String? repairToken;
+    try {
+      repairToken = await _repairOutbox.markPending(reason: 'immediate-sync');
+    } catch (_) {
+      // The local schedule/settings operation remains successful. Immediate
+      // work registration below is the fallback when the marker cannot write.
+    }
     if (forceRepair) unawaited(_enqueueRepairDetached());
     unawaited(
-      _runDetached(installationFirst: installationFirst, forceRepair: false),
+      _runDetached(
+        installationFirst: installationFirst,
+        preserveRepairMarker: forceRepair,
+        repairToken: repairToken,
+      ),
     );
   }
 
   Future<void> _enqueueRepairDetached() async {
     try {
-      await enqueueRepair();
+      await _requestRepair();
     } catch (_) {
       // A later sync retry can attempt work registration again.
     }
   }
 
+  Future<void> _requestRepair() => _repairRequest ??= enqueueRepair();
+
   Future<void> _runDetached({
     required bool installationFirst,
-    required bool forceRepair,
+    required bool preserveRepairMarker,
+    required String? repairToken,
   }) async {
     try {
-      await syncNow(
+      final synchronized = await syncNow(
         installationFirst: installationFirst,
-        forceRepair: forceRepair,
+        forceRepair: false,
       );
+      if (synchronized && !preserveRepairMarker && repairToken != null) {
+        try {
+          await _repairOutbox.clear(ifToken: repairToken);
+        } catch (_) {
+          // Leaving the marker in place safely retries on the next audit.
+        }
+      }
     } catch (_) {
       try {
-        await enqueueRepair();
+        await _requestRepair();
       } catch (_) {
         // Detached synchronization must never escape into the UI zone.
       }
@@ -79,7 +107,7 @@ class NotificationScheduleSyncCoordinator {
         occurrenceResult == NotificationOccurrenceSyncResult.invalid;
     if (forceRepair || !installationSynchronized || !occurrenceSynchronized) {
       try {
-        await enqueueRepair();
+        await _requestRepair();
       } catch (_) {
         // Scheduling remains successful even when the OS cannot register work.
       }

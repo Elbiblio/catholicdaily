@@ -202,7 +202,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       }
       // Mark auto-setup done so main.dart doesn't override the user's choice.
       await prefs.markAutoSetupCompleted();
-      NotificationScheduleSyncCoordinator(
+      await NotificationScheduleSyncCoordinator(
         syncInstallation:
             NotificationInstallationSyncService.instance.syncCurrentToken,
         syncOccurrences: () => NotificationOccurrenceSyncService.instance

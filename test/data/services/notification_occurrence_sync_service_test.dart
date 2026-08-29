@@ -6,6 +6,7 @@ import 'package:catholic_daily/data/services/notification_occurrence.dart';
 import 'package:catholic_daily/data/services/notification_occurrence_api.dart';
 import 'package:catholic_daily/data/services/notification_occurrence_store.dart';
 import 'package:catholic_daily/data/services/notification_occurrence_sync_service.dart';
+import 'package:catholic_daily/data/services/notification_repair_outbox.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -27,6 +28,7 @@ void main() {
   setUp(() {
     SharedPreferences.setMockInitialValues(<String, Object>{});
     NotificationOccurrenceStore.resetWriteInterceptorForTesting();
+    NotificationRepairOutbox.resetWriteInterceptorForTesting();
   });
 
   test(
@@ -185,7 +187,7 @@ void main() {
     expect(repairs, 1);
   });
 
-  test('immediate UI sync dispatch does not await unresolved network', () {
+  test('durable UI handoff does not await unresolved network', () async {
     final installation = Completer<bool>();
     var installationStarted = false;
     final coordinator = NotificationScheduleSyncCoordinator(
@@ -197,10 +199,51 @@ void main() {
       enqueueRepair: () async {},
     );
 
-    coordinator.dispatch();
+    await coordinator.dispatch();
 
     expect(installationStarted, isTrue);
     expect(installation.isCompleted, isFalse);
+    expect(await NotificationRepairOutbox().hasPendingRepair, isTrue);
+  });
+
+  test('successful detached sync clears durable handoff', () async {
+    final installation = Completer<bool>();
+    final coordinator = NotificationScheduleSyncCoordinator(
+      syncInstallation: () => installation.future,
+      syncOccurrences: () async => NotificationOccurrenceSyncResult.success,
+      enqueueRepair: () async {},
+    );
+
+    await coordinator.dispatch();
+    expect(await NotificationRepairOutbox().hasPendingRepair, isTrue);
+
+    installation.complete(true);
+    await Future<void>.delayed(Duration.zero);
+    await Future<void>.delayed(Duration.zero);
+    expect(await NotificationRepairOutbox().hasPendingRepair, isFalse);
+  });
+
+  test('an older detached sync cannot clear a newer handoff', () async {
+    final first = Completer<bool>();
+    final second = Completer<bool>();
+    final firstCoordinator = NotificationScheduleSyncCoordinator(
+      syncInstallation: () => first.future,
+      syncOccurrences: () async => NotificationOccurrenceSyncResult.success,
+      enqueueRepair: () async {},
+    );
+    final secondCoordinator = NotificationScheduleSyncCoordinator(
+      syncInstallation: () => second.future,
+      syncOccurrences: () async => NotificationOccurrenceSyncResult.success,
+      enqueueRepair: () async {},
+    );
+
+    await firstCoordinator.dispatch();
+    await secondCoordinator.dispatch();
+    first.complete(true);
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+
+    expect(await NotificationRepairOutbox().hasPendingRepair, isTrue);
+    second.complete(false);
   });
 
   test(
@@ -214,13 +257,28 @@ void main() {
         enqueueRepair: () async => repairs++,
       );
 
-      coordinator.dispatch(forceRepair: true);
+      await coordinator.dispatch(forceRepair: true);
       await Future<void>.delayed(Duration.zero);
 
       expect(repairs, 1);
       expect(installation.isCompleted, isFalse);
+      expect(await NotificationRepairOutbox().hasPendingRepair, isTrue);
     },
   );
+
+  test('forced retry coalesces repair registration', () async {
+    var repairs = 0;
+    final coordinator = NotificationScheduleSyncCoordinator(
+      syncInstallation: () async => false,
+      syncOccurrences: () async => NotificationOccurrenceSyncResult.retry,
+      enqueueRepair: () async => repairs++,
+    );
+
+    await coordinator.dispatch(forceRepair: true);
+    await Future<void>.delayed(const Duration(milliseconds: 50));
+
+    expect(repairs, 1);
+  });
 
   test(
     'disabled settings reconcile occurrences before disabling installation',

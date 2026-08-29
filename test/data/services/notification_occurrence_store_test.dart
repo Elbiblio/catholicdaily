@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:catholic_daily/data/services/feast_reminder_schedule_lock.dart';
 import 'package:catholic_daily/data/services/notification_occurrence.dart';
 import 'package:catholic_daily/data/services/notification_occurrence_store.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -226,5 +230,110 @@ void main() {
       throwsA(isA<StateError>()),
     );
     expect(await NotificationOccurrenceStore().allOccurrences(), isEmpty);
+  });
+
+  test('two store instances merge concurrent rows without loss', () async {
+    final lockFile = File(
+      '${Directory.systemTemp.path}${Platform.pathSeparator}'
+      'occurrence-store-${DateTime.now().microsecondsSinceEpoch}.lock',
+    );
+    addTearDown(() async {
+      if (await lockFile.exists()) await lockFile.delete();
+    });
+    final first = NotificationOccurrenceStore(
+      lock: InterprocessFileLock(file: lockFile),
+    );
+    final second = NotificationOccurrenceStore(
+      lock: InterprocessFileLock(file: lockFile),
+    );
+
+    await Future.wait([
+      first.upsertAll([occurrence(key: 'first')]),
+      second.upsertAll([occurrence(key: 'second')]),
+    ]);
+
+    expect(
+      (await NotificationOccurrenceStore(
+        lock: InterprocessFileLock(file: lockFile),
+      ).allOccurrences()).map((row) => row.occurrenceKey),
+      containsAll(<String>['first', 'second']),
+    );
+  });
+
+  test('concurrent acknowledgement preserves a newer event mutation', () async {
+    final lockFile = File(
+      '${Directory.systemTemp.path}${Platform.pathSeparator}'
+      'occurrence-ack-${DateTime.now().microsecondsSinceEpoch}.lock',
+    );
+    addTearDown(() async {
+      if (await lockFile.exists()) await lockFile.delete();
+    });
+    final first = NotificationOccurrenceStore(
+      lock: InterprocessFileLock(file: lockFile),
+    );
+    final second = NotificationOccurrenceStore(
+      lock: InterprocessFileLock(file: lockFile),
+    );
+    final row = occurrence();
+    final received = NotificationOccurrenceEvent(
+      occurrenceKey: row.occurrenceKey,
+      type: NotificationOccurrenceEventType.received,
+      occurredAt: DateTime.utc(2026, 9, 1, 6, 1),
+    );
+    final opened = NotificationOccurrenceEvent(
+      occurrenceKey: row.occurrenceKey,
+      type: NotificationOccurrenceEventType.opened,
+      occurredAt: DateTime.utc(2026, 9, 1, 6, 2),
+    );
+    await first.upsertAll([row]);
+    await first.recordEvent(received);
+    final sentRow = (await first.pendingOccurrences()).single;
+
+    await Future.wait([
+      first.markSynchronized(
+        occurrences: [sentRow],
+        eventIds: [received.id],
+        synchronizedAt: DateTime.utc(2026, 9, 1, 6, 3),
+      ),
+      second.recordEvent(opened),
+    ]);
+
+    expect((await first.pendingEvents()).map((event) => event.id), [opened.id]);
+    expect(
+      (await second.pendingOccurrences()).single.openedAt,
+      opened.occurredAt,
+    );
+  });
+
+  test('malformed and unknown ledgers fail closed without overwrite', () async {
+    final corruptDocuments = <String>[
+      '{not-json',
+      jsonEncode({'version': 99, 'occurrences': [], 'events': []}),
+      jsonEncode({'version': 1, 'occurrences': {}, 'events': []}),
+      jsonEncode({
+        'version': 1,
+        'occurrences': [42],
+        'events': [],
+      }),
+    ];
+
+    for (final raw in corruptDocuments) {
+      SharedPreferences.setMockInitialValues({
+        'notification_occurrences_v1': raw,
+      });
+      final store = NotificationOccurrenceStore();
+
+      await expectLater(
+        store.pendingOccurrences(),
+        throwsA(isA<NotificationOccurrenceLedgerException>()),
+      );
+      await expectLater(
+        store.upsertAll([occurrence()]),
+        throwsA(isA<NotificationOccurrenceLedgerException>()),
+      );
+      final preferences = await SharedPreferences.getInstance();
+      await preferences.reload();
+      expect(preferences.getString('notification_occurrences_v1'), raw);
+    }
   });
 }

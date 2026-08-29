@@ -1,8 +1,8 @@
 import 'dart:io';
 
-/// Serializes feast schedule mutations across the UI and WorkManager isolates.
-class FeastReminderScheduleLock {
-  FeastReminderScheduleLock({
+/// Serializes file-backed mutations across UI and background isolates/processes.
+class InterprocessFileLock {
+  InterprocessFileLock({
     File? file,
     this.retryDelay = const Duration(milliseconds: 50),
     this.staleAfter = const Duration(minutes: 30),
@@ -64,4 +64,9 @@ class FeastReminderScheduleLock {
       return false;
     }
   }
+}
+
+/// Backwards-compatible name for the feast reminder schedule lock.
+class FeastReminderScheduleLock extends InterprocessFileLock {
+  FeastReminderScheduleLock({super.file, super.retryDelay, super.staleAfter});
 }

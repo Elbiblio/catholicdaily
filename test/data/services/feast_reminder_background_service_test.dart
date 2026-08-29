@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:catholic_daily/data/services/feast_reminder_background_service.dart';
 import 'package:catholic_daily/data/services/notification_occurrence_sync_service.dart';
+import 'package:catholic_daily/data/services/notification_repair_outbox.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  setUp(() => SharedPreferences.setMockInitialValues(<String, Object>{}));
   const policy = FeastReminderAuditPolicy(
     expectedSchemaVersion: 6,
     expectedScheduleGeneration: 'feast-reminders-v5',
@@ -124,7 +127,7 @@ void main() {
     expect(timezone.reason, FeastReminderRepairReason.timezoneChanged);
   });
 
-  test('startup audit dispatch does not gate runApp on remote sync', () {
+  test('startup durable handoff does not gate runApp on remote sync', () async {
     final audit = Completer<bool>();
     final messaging = Completer<void>();
     var auditStarted = false;
@@ -141,12 +144,13 @@ void main() {
       enqueueRepair: () async {},
     );
 
-    dispatcher.dispatch();
+    await dispatcher.dispatch();
 
     expect(auditStarted, isTrue);
     expect(messagingStarted, isTrue);
     expect(audit.isCompleted, isFalse);
     expect(messaging.isCompleted, isFalse);
+    expect(await NotificationRepairOutbox().hasPendingRepair, isTrue);
   });
 
   test('startup detached audit errors still enqueue repair', () async {
@@ -157,8 +161,22 @@ void main() {
       enqueueRepair: () async => repairs++,
     );
 
-    dispatcher.dispatch();
-    await Future<void>.delayed(Duration.zero);
+    await dispatcher.dispatch();
+    await Future<void>.delayed(const Duration(milliseconds: 50));
+
+    expect(repairs, 1);
+  });
+
+  test('startup coalesces simultaneous audit and messaging repair', () async {
+    var repairs = 0;
+    final dispatcher = NotificationStartupSyncDispatcher(
+      auditAndRepair: () async => false,
+      initializeMessaging: () async => throw StateError('offline'),
+      enqueueRepair: () async => repairs++,
+    );
+
+    await dispatcher.dispatch();
+    await Future<void>.delayed(const Duration(milliseconds: 50));
 
     expect(repairs, 1);
   });

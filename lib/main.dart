@@ -92,7 +92,7 @@ void main() async {
     // no-op. Reschedule covers year-rollover refresh on every launch.
     await FeastReminderService.instance.autoSetupOnFirstRun(reminderPrefs);
     await FeastReminderService.instance.rescheduleIfNeeded(reminderPrefs);
-    NotificationStartupSyncDispatcher(
+    await NotificationStartupSyncDispatcher(
       auditAndRepair: FeastReminderBackgroundService.instance.auditAndRepair,
       initializeMessaging: firebaseMessagingAvailable
           ? FeastReminderMessagingService.instance.initialize

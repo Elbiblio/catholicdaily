@@ -1,22 +1,42 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'notification_occurrence.dart';
+import 'feast_reminder_schedule_lock.dart';
+
+class NotificationOccurrenceLedgerException implements Exception {
+  const NotificationOccurrenceLedgerException(this.reason);
+
+  final String reason;
+
+  @override
+  String toString() => 'NotificationOccurrenceLedgerException: $reason';
+}
 
 class NotificationOccurrenceStore {
   NotificationOccurrenceStore({
     Future<SharedPreferences> Function()? preferences,
-  }) : _preferences = preferences ?? SharedPreferences.getInstance;
+    InterprocessFileLock? lock,
+  }) : _preferences = preferences ?? SharedPreferences.getInstance,
+       _lock =
+           lock ??
+           InterprocessFileLock(
+             file: File(
+               '${Directory.systemTemp.path}${Platform.pathSeparator}'
+               'catholic-daily-notification-occurrences.lock',
+             ),
+           );
 
   static const _storageKey = 'notification_occurrences_v1';
   static const _version = 1;
   static Future<bool> Function(String key, Future<bool> Function() write)?
   _writeInterceptor;
-  static Future<void> _writeQueue = Future<void>.value();
 
   final Future<SharedPreferences> Function() _preferences;
+  final InterprocessFileLock _lock;
 
   @visibleForTesting
   static void setWriteInterceptorForTesting(
@@ -252,48 +272,80 @@ class NotificationOccurrenceStore {
     );
   });
 
-  Future<_OccurrenceDocument> _read() async {
-    final raw = (await _preferences()).getString(_storageKey);
+  Future<_OccurrenceDocument> _read() => _lock.synchronized(() async {
+    final preferences = await _preferences();
+    await preferences.reload();
+    return _decode(preferences.getString(_storageKey));
+  });
+
+  _OccurrenceDocument _decode(String? raw) {
     if (raw == null || raw.isEmpty) return const _OccurrenceDocument();
     try {
       final decoded = jsonDecode(raw);
-      if (decoded is! Map || decoded['version'] != _version) {
-        return const _OccurrenceDocument();
+      if (decoded is! Map<String, dynamic>) {
+        throw const NotificationOccurrenceLedgerException(
+          'ledger root must be an object',
+        );
       }
-      final occurrences = (decoded['occurrences'] as List? ?? const [])
-          .map(NotificationOccurrence.tryFromStorageJson)
-          .whereType<NotificationOccurrence>()
-          .toList(growable: false);
-      final events = (decoded['events'] as List? ?? const [])
-          .map(NotificationOccurrenceEvent.tryFromJson)
-          .whereType<NotificationOccurrenceEvent>()
-          .toList(growable: false);
+      if (decoded['version'] != _version) {
+        throw const NotificationOccurrenceLedgerException(
+          'unsupported ledger version',
+        );
+      }
+      final occurrenceValues = decoded['occurrences'];
+      final eventValues = decoded['events'];
+      if (occurrenceValues is! List || eventValues is! List) {
+        throw const NotificationOccurrenceLedgerException(
+          'ledger rows and events must be lists',
+        );
+      }
+      final occurrences = <NotificationOccurrence>[];
+      for (final value in occurrenceValues) {
+        final occurrence = NotificationOccurrence.tryFromStorageJson(value);
+        if (occurrence == null) {
+          throw const NotificationOccurrenceLedgerException(
+            'ledger contains an invalid occurrence',
+          );
+        }
+        occurrences.add(occurrence);
+      }
+      final events = <NotificationOccurrenceEvent>[];
+      for (final value in eventValues) {
+        final event = NotificationOccurrenceEvent.tryFromJson(value);
+        if (event == null) {
+          throw const NotificationOccurrenceLedgerException(
+            'ledger contains an invalid event',
+          );
+        }
+        events.add(event);
+      }
       return _OccurrenceDocument(occurrences: occurrences, events: events);
+    } on NotificationOccurrenceLedgerException {
+      rethrow;
     } on FormatException {
-      return const _OccurrenceDocument();
+      throw const NotificationOccurrenceLedgerException('malformed ledger');
     } on TypeError {
-      return const _OccurrenceDocument();
+      throw const NotificationOccurrenceLedgerException(
+        'ledger contains invalid field types',
+      );
     }
   }
 
   Future<void> _mutate(
     _OccurrenceDocument Function(_OccurrenceDocument document) change,
-  ) {
-    final completer = _writeQueue.then((_) async {
-      final next = change(await _read());
-      final prefs = await _preferences();
-      final encoded = jsonEncode(next.toJson());
-      final succeeded =
-          await (_writeInterceptor?.call(
-                _storageKey,
-                () => prefs.setString(_storageKey, encoded),
-              ) ??
-              prefs.setString(_storageKey, encoded));
-      if (!succeeded) throw StateError('Unable to persist $_storageKey');
-    });
-    _writeQueue = completer.catchError((_) {});
-    return completer;
-  }
+  ) => _lock.synchronized(() async {
+    final prefs = await _preferences();
+    await prefs.reload();
+    final next = change(_decode(prefs.getString(_storageKey)));
+    final encoded = jsonEncode(next.toJson());
+    final succeeded =
+        await (_writeInterceptor?.call(
+              _storageKey,
+              () => prefs.setString(_storageKey, encoded),
+            ) ??
+            prefs.setString(_storageKey, encoded));
+    if (!succeeded) throw StateError('Unable to persist $_storageKey');
+  });
 }
 
 NotificationOccurrence _mergeOccurrence(

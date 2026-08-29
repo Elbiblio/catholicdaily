@@ -152,7 +152,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         reminderPrefs,
       );
     }
-    NotificationScheduleSyncCoordinator(
+    await NotificationScheduleSyncCoordinator(
       syncInstallation:
           NotificationInstallationSyncService.instance.syncCurrentToken,
       syncOccurrences: NotificationOccurrenceSyncService.instance.syncPending,
