@@ -129,6 +129,10 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
   }
 
   void _handleCancel() {
+    _acknowledgeCancellation();
+  }
+
+  void _acknowledgeCancellation() {
     final fence = _cancelFence;
     if (fence != null &&
         fence.matchesInvalidatedSession &&
@@ -138,7 +142,10 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
   }
 
   void _handleCompletion() {
-    if (_cancelFence != null) return;
+    if (_cancelFence != null) {
+      _acknowledgeCancellation();
+      return;
+    }
     final session = _activeSession;
     if (!_acceptsChunkCallback(session) || !session!.chunkStarted) return;
     session.acceptingCallbacks = false;
@@ -161,7 +168,10 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
   }
 
   void _handleError(String message) {
-    if (_cancelFence != null) return;
+    if (_cancelFence != null) {
+      _acknowledgeCancellation();
+      return;
+    }
     final session = _activeSession;
     if (!_acceptsChunkCallback(session)) return;
     session!.acceptingCallbacks = false;
@@ -382,6 +392,7 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
       _requireSuccess(await _driver.stop(), 'stop');
       if (fence != null &&
           awaitAcknowledgement &&
+          _usesTerminalCancellationCallback &&
           !fence.acknowledged.isCompleted) {
         await fence.acknowledged.future;
       }
@@ -389,6 +400,12 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
       if (identical(_cancelFence, fence)) _cancelFence = null;
     }
   }
+
+  bool get _usesTerminalCancellationCallback =>
+      _platform == SpeechPlatform.android ||
+      _platform == SpeechPlatform.ios ||
+      _platform == SpeechPlatform.macos ||
+      _platform == SpeechPlatform.windows;
 
   @override
   Future<void> dispose() {

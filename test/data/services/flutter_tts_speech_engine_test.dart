@@ -564,6 +564,48 @@ void main() {
   });
 
   test(
+    'active web stop uses the native stop result as acknowledgement',
+    () async {
+      final driver = FakeFlutterTtsDriver()..autoCancelOnStop = false;
+      final engine = FlutterTtsSpeechEngine(
+        driver: driver,
+        platform: SpeechPlatform.web,
+      );
+      await engine.speak('Web text.', utteranceId: 'web');
+      driver.emitStart();
+
+      await engine.stop().timeout(const Duration(milliseconds: 300));
+
+      expect(driver.spokenTexts, <String>['Web text.']);
+    },
+  );
+
+  test(
+    'completion racing with stop acknowledges cancellation without leaking',
+    () async {
+      final driver = FakeFlutterTtsDriver()..autoCancelOnStop = false;
+      final events = <String>[];
+      final engine = FlutterTtsSpeechEngine(
+        driver: driver,
+        platform: SpeechPlatform.android,
+      );
+      engine.setCallbacks(
+        _callbacks(onError: (id, message) => events.add('error:$id')),
+      );
+      await engine.speak('Nearly done.', utteranceId: 'old');
+      driver.emitStart();
+
+      final replacement = engine.speak('New text.', utteranceId: 'new');
+      await Future<void>.delayed(Duration.zero);
+      driver.emitCompletion();
+      await replacement.timeout(const Duration(milliseconds: 300));
+
+      expect(driver.spokenTexts, <String>['Nearly done.', 'New text.']);
+      expect(events, isEmpty);
+    },
+  );
+
+  test(
     'forwards active errors and safely ignores callbacks after dispose',
     () async {
       final driver = FakeFlutterTtsDriver();
