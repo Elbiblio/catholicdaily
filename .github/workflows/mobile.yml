@@ -518,7 +518,7 @@ jobs:
             exit 1
           fi
           EXTENSION_PROFILE_TEAM=$(security cms -D -i "$EXTENSION_PROFILE_PATH" | \
-            plutil -extract Entitlements.com.apple.developer.team-identifier raw -)
+            plutil -extract TeamIdentifier.0 raw -)
           test "$EXTENSION_PROFILE_TEAM" = "${{ env.APPLE_TEAM_ID }}"
           test -n "$APP_ID_PREFIX"
           echo "IOS_APP_IDENTIFIER_PREFIX=$APP_ID_PREFIX" >> "$GITHUB_ENV"
@@ -650,7 +650,7 @@ jobs:
             EXTENSION_SIGNED_TEAM=$(plutil -extract com.apple.developer.team-identifier raw "$RUNNER_TEMP/extension-entitlements.plist")
             test "$EXTENSION_SIGNED_TEAM" = "${{ env.APPLE_TEAM_ID }}"
             EXTENSION_PROFILE_TEAM=$(security cms -D -i "$APPEX_PATH/embedded.mobileprovision" | \
-              plutil -extract Entitlements.com.apple.developer.team-identifier raw -)
+              plutil -extract TeamIdentifier.0 raw -)
             test "$EXTENSION_PROFILE_TEAM" = "${{ env.APPLE_TEAM_ID }}"
           fi
 

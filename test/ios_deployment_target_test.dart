@@ -60,5 +60,14 @@ void main() {
       workflow,
       contains('--bundle-name "Catholic Daily Feast Reminder"'),
     );
+    expect(
+      RegExp(r'plutil -extract TeamIdentifier\.0 raw -')
+          .allMatches(workflow)
+          .length,
+      greaterThanOrEqualTo(2),
+      reason:
+          'App Store Connect profiles can omit the team identifier from their '
+          'entitlements while still providing the canonical TeamIdentifier array.',
+    );
   });
 }
