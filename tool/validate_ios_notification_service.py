@@ -115,10 +115,16 @@ class CancellationGateModel:
             self.actions.append("cancel")
         elif name == "complete_cancellation" and self.state == "cancellation_started":
             self.state = "finished"
-            self.actions.append("handler")
-        elif name in {"timeout", "complete_without_cancellation"} and self.state == "awaiting_cancellation_decision":
+            self.actions.append("handler_valid")
+        elif name == "timeout" and self.state in {
+            "awaiting_cancellation_decision",
+            "cancellation_started",
+        }:
             self.state = "finished"
-            self.actions.append("handler")
+            self.actions.append("handler_original")
+        elif name == "complete_without_cancellation" and self.state == "awaiting_cancellation_decision":
+            self.state = "finished"
+            self.actions.append("handler_original")
 
 
 class IosNotificationServiceValidation(unittest.TestCase):
@@ -164,6 +170,7 @@ class IosNotificationServiceValidation(unittest.TestCase):
             "beginCancellation",
             "completeAfterCancellation",
             "completeWithoutCancellation",
+            "completeForTimeout",
         ):
             self.assertIn(token, source)
         self.assertEqual(1, source.count("handler(content)"))
@@ -180,6 +187,11 @@ class IosNotificationServiceValidation(unittest.TestCase):
         complete_index = source.index("completeAfterCancellation", remove_index)
         self.assertLess(begin_index, remove_index)
         self.assertLess(remove_index, complete_index)
+        timeout_start = source.index("private func completeForTimeout")
+        timeout_end = source.index("private func finish", timeout_start)
+        timeout_source = source[timeout_start:timeout_end]
+        self.assertIn(".awaitingCancellationDecision", timeout_source)
+        self.assertIn(".cancellationStarted", timeout_source)
 
     def test_extension_plist_declares_notification_service(self) -> None:
         with PLIST.open("rb") as stream:

@@ -301,7 +301,7 @@ jobs:
     if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
     env:
       HAS_R2_ACCESS: ${{ github.event_name != 'pull_request' && secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '' }}
-      HAS_IOS_SIGNING: ${{ github.event_name != 'pull_request' && ((secrets.IOS_BUILD_CERTIFICATE_BASE64 != '' && secrets.IOS_PROVISION_PROFILE_BASE64 != '' && secrets.IOS_EXTENSION_PROVISION_PROFILE_BASE64 != '') || (secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '')) }}
+      HAS_IOS_SIGNING: ${{ github.event_name != 'pull_request' && secrets.IOS_P12_PASSWORD != '' && ((secrets.IOS_BUILD_CERTIFICATE_BASE64 != '' && secrets.IOS_PROVISION_PROFILE_BASE64 != '' && secrets.IOS_EXTENSION_PROVISION_PROFILE_BASE64 != '') || (secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '')) }}
       HAS_TESTFLIGHT_UPLOAD: ${{ github.event_name != 'pull_request' && (secrets.APPSTORE_PRIVATE_KEY != '' || (secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '')) }}
       VERSION_NAME: ${{ needs.version_info.outputs.version_name }}
       VERSION_CODE: ${{ needs.version_info.outputs.version_code }}
@@ -337,6 +337,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          IOS_P12_PASSWORD: ${{ secrets.IOS_P12_PASSWORD }}
         shell: bash
         run: |
           set -euo pipefail
@@ -348,16 +349,10 @@ jobs:
           if [ -z "$KEYCHAIN_PASSWORD" ]; then
             KEYCHAIN_PASSWORD="${{ secrets.ANDROID_KEYSTORE_PASSWORD }}"
           fi
-
-          # Build an ordered list of P12 password candidates.
-          # The GitHub secret is tried first; known fallback passwords follow.
-          P12_PASSWORD_CANDIDATES=()
-          _SECRET_P12="${{ secrets.IOS_P12_PASSWORD }}"
-          if [ -n "$_SECRET_P12" ]; then
-            P12_PASSWORD_CANDIDATES+=("$_SECRET_P12")
+          if [ -z "$IOS_P12_PASSWORD" ]; then
+            echo "::error::A P12 signing password secret is required for signed iOS builds." >&2
+            exit 1
           fi
-          P12_PASSWORD_CANDIDATES+=('venmail' '080King$' '080Test$')
-          P12_PASSWORD=""
 
           CERT_PATH="$RUNNER_TEMP/raw_certificate.p12"
           if [ -n "${{ secrets.IOS_BUILD_CERTIFICATE_BASE64 }}" ]; then
@@ -397,28 +392,16 @@ jobs:
           # Repackage legacy PKCS#12 payload using OpenSSL so macOS security import can consume it.
           LEGACY_PEM="$RUNNER_TEMP/legacy_certificate.pem"
           MODERN_P12="$RUNNER_TEMP/modern_certificate.p12"
-          P12_PASSWORD=""
-          for _CANDIDATE in "${P12_PASSWORD_CANDIDATES[@]}"; do
-            # Try without -legacy first: required for LibreSSL (macOS) and modern p12 files.
-            if openssl pkcs12 -in "$CERT_PATH" -nodes -passin "pass:$_CANDIDATE" -out "$LEGACY_PEM" 2>/dev/null; then
-              P12_PASSWORD="$_CANDIDATE"
-              echo "P12 certificate decoded (standard format)."
-              break
+          # Try without -legacy first for modern payloads, then support legacy PKCS#12 encoding.
+          if ! openssl pkcs12 -in "$CERT_PATH" -nodes -passin env:IOS_P12_PASSWORD -out "$LEGACY_PEM" 2>/dev/null; then
+            if ! openssl pkcs12 -legacy -in "$CERT_PATH" -nodes -passin env:IOS_P12_PASSWORD -out "$LEGACY_PEM" 2>/dev/null; then
+              echo "::error::Unable to decode the iOS signing certificate with the configured secret." >&2
+              exit 1
             fi
-            # Fallback: try with -legacy for older p12 files on Linux/OpenSSL 3.x.
-            if openssl pkcs12 -legacy -in "$CERT_PATH" -nodes -passin "pass:$_CANDIDATE" -out "$LEGACY_PEM" 2>/dev/null; then
-              P12_PASSWORD="$_CANDIDATE"
-              echo "P12 certificate decoded (legacy format)."
-              break
-            fi
-          done
-          if [ -z "$P12_PASSWORD" ]; then
-            echo "::error::Unable to decode iOS .p12 – none of the candidate passwords worked (tried standard and legacy formats)." >&2
-            exit 1
           fi
           CERT_SERIAL=$(openssl x509 -in "$LEGACY_PEM" -noout -serial | cut -d= -f2)
           test -n "$CERT_SERIAL"
-          openssl pkcs12 -export -in "$LEGACY_PEM" -out "$MODERN_P12" -passout pass:"$P12_PASSWORD" >/dev/null
+          openssl pkcs12 -export -in "$LEGACY_PEM" -out "$MODERN_P12" -passout env:IOS_P12_PASSWORD >/dev/null
           rm -f "$LEGACY_PEM"
           CERT_PATH="$MODERN_P12"
 
@@ -515,7 +498,7 @@ jobs:
           security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
           security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
-          security import "$CERT_PATH" -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+          security import "$CERT_PATH" -P "$IOS_P12_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
           # Allow codesign to access the key without a passphrase prompt (required on macOS 10.12+)
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
           # Add new keychain to search list while PRESERVING existing keychains (system + login)

@@ -1,4 +1,5 @@
 import re
+import subprocess
 import unittest
 from pathlib import Path
 
@@ -8,6 +9,53 @@ WORKFLOW = ROOT / ".github" / "workflows" / "mobile.yml"
 
 
 class MobileCiWorkflowTest(unittest.TestCase):
+    def test_ios_signing_uses_only_the_password_secret(self):
+        workflow = WORKFLOW.read_text(encoding="utf-8")
+        ios_job = re.search(r"(?ms)^  ios:\s+.*?(?=^  windows:)", workflow)
+        self.assertIsNotNone(ios_job)
+        job = ios_job.group(0)
+        self.assertIsNotNone(
+            re.search(
+                r"HAS_IOS_SIGNING: \$\{\{ github\.event_name != 'pull_request' && secrets\.IOS_P12_PASSWORD != '' &&",
+                job,
+            ),
+            "signed iOS flows must require the P12 password secret",
+        )
+        self.assertTrue(
+            "IOS_P12_PASSWORD: ${{ secrets.IOS_P12_PASSWORD }}" in job,
+            "the signing step must receive only the P12 password secret",
+        )
+        candidate_marker = "P12_PASSWORD_" + "CANDIDATES"
+        self.assertFalse(candidate_marker in job, "password candidate fallback remains")
+        self.assertIsNone(re.search(r"(?m)^\s*P12_PASSWORD\s*=", job))
+        self.assertIsNone(re.search(r"(?m)(?:echo|printf)[^\n]*IOS_P12_PASSWORD", job))
+        self.assertTrue('if [ -z "$IOS_P12_PASSWORD" ]; then' in job)
+        self.assertTrue("-passin env:IOS_P12_PASSWORD" in job)
+        self.assertTrue("-passout env:IOS_P12_PASSWORD" in job)
+        self.assertTrue('security import "$CERT_PATH" -P "$IOS_P12_PASSWORD"' in job)
+
+    def test_repository_has_no_p12_password_fallback_literals(self):
+        tracked = subprocess.check_output(
+            ["git", "ls-files", "-z"], cwd=ROOT
+        ).decode("utf-8").split("\0")
+        offenders = []
+        forbidden = (
+            re.compile("P12_PASSWORD_" + "CANDIDATES"),
+            re.compile(
+                r"(?im)^\s*(?:P12|PKCS12)[A-Z0-9_-]*(?:PASSWORD|PASSPHRASE)\s*[:=]\s*['\"](?!\s*$|\$)"
+            ),
+            re.compile(r"(?i)-(?:passin|passout)\s+pass:(?!\$)"),
+        )
+        for relative in filter(None, tracked):
+            path = ROOT / relative
+            try:
+                source = path.read_text(encoding="utf-8")
+            except (OSError, UnicodeDecodeError):
+                continue
+            if any(pattern.search(source) for pattern in forbidden):
+                offenders.append(relative)
+        self.assertEqual([], offenders, "P12 credential fallback patterns found")
+
     def test_windows_release_uses_flutter_compatible_runner(self):
         workflow = WORKFLOW.read_text(encoding="utf-8")
         match = re.search(

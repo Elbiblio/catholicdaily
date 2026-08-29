@@ -3,19 +3,25 @@
     {
       "name": "timeout wins before cancellation starts",
       "events": ["timeout", "begin_cancellation", "complete_cancellation"],
-      "expected_actions": ["handler"],
+      "expected_actions": ["handler_original"],
       "expected_state": "finished"
     },
     {
-      "name": "cancellation start wins before timeout",
+      "name": "timeout wins after cancellation starts",
       "events": ["begin_cancellation", "timeout", "complete_cancellation", "timeout"],
-      "expected_actions": ["cancel", "handler"],
+      "expected_actions": ["cancel", "handler_original"],
+      "expected_state": "finished"
+    },
+    {
+      "name": "cancellation callback wins before timeout",
+      "events": ["begin_cancellation", "complete_cancellation", "timeout"],
+      "expected_actions": ["cancel", "handler_valid"],
       "expected_state": "finished"
     },
     {
       "name": "malformed completion wins exactly once",
       "events": ["complete_without_cancellation", "timeout", "begin_cancellation"],
-      "expected_actions": ["handler"],
+      "expected_actions": ["handler_original"],
       "expected_state": "finished"
     }
   ],

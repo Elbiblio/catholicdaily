@@ -40,7 +40,7 @@ final class NotificationService: UNNotificationServiceExtension {
   }
 
   override func serviceExtensionTimeWillExpire() {
-    completeWithoutCancellation()
+    completeForTimeout()
   }
 
   private func beginCancellation() -> Bool {
@@ -55,20 +55,27 @@ final class NotificationService: UNNotificationServiceExtension {
   }
 
   private func completeAfterCancellation(with content: UNNotificationContent) {
-    finish(ifStateIs: .cancellationStarted, with: content)
+    finish(ifStateIsOneOf: [.cancellationStarted], with: content)
   }
 
   private func completeWithoutCancellation(with content: UNNotificationContent? = nil) {
-    finish(ifStateIs: .awaitingCancellationDecision, with: content)
+    finish(ifStateIsOneOf: [.awaitingCancellationDecision], with: content)
+  }
+
+  private func completeForTimeout() {
+    finish(
+      ifStateIsOneOf: [.awaitingCancellationDecision, .cancellationStarted],
+      with: nil
+    )
   }
 
   private func finish(
-    ifStateIs expectedState: DeliveryState,
+    ifStateIsOneOf expectedStates: [DeliveryState],
     with candidateContent: UNNotificationContent?
   ) {
     completionLock.lock()
     guard
-      state == expectedState,
+      expectedStates.contains(state),
       let handler = contentHandler,
       let content = candidateContent ?? originalContent
     else {
