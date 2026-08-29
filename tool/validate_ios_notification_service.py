@@ -273,8 +273,8 @@ class IosNotificationServiceValidation(unittest.TestCase):
             "RUNNER_ENTITLEMENTS",
             "RUNNER_SIGNED_APP_ID",
             "RUNNER_PROFILE_APP_ID",
-            "RUNNER_SIGNED_TEAM",
             "RUNNER_PROFILE_TEAM",
+            "TeamIdentifier.0",
             "IOS_APP_IDENTIFIER_PREFIX",
             "IOS_BUNDLE_ID",
             "aps-environment",
@@ -303,11 +303,9 @@ class IosNotificationServiceValidation(unittest.TestCase):
             'test "$RUNNER_BUNDLE_ID" = "${{ env.IOS_BUNDLE_ID }}"',
             'test "$RUNNER_SIGNED_APP_ID" = "$EXPECTED_RUNNER_APP_ID"',
             'test "$RUNNER_PROFILE_APP_ID" = "$EXPECTED_RUNNER_APP_ID"',
-            'test "$RUNNER_SIGNED_TEAM" = "${{ env.APPLE_TEAM_ID }}"',
             'test "$RUNNER_PROFILE_TEAM" = "${{ env.APPLE_TEAM_ID }}"',
             'test "$EXTENSION_SIGNED_APP_ID" = "$EXPECTED_EXTENSION_APP_ID"',
             'test "$EXTENSION_PROFILE_APP_ID" = "$EXPECTED_EXTENSION_APP_ID"',
-            'test "$EXTENSION_SIGNED_TEAM" = "${{ env.APPLE_TEAM_ID }}"',
             'test "$EXTENSION_PROFILE_TEAM" = "${{ env.APPLE_TEAM_ID }}"',
         ):
             self.assertIn(assertion, ios_job.group(0))
