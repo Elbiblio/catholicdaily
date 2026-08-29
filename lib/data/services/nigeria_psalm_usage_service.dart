@@ -171,12 +171,6 @@ class NigeriaPsalmUsageService {
     LiturgicalPsalmUsageContext context,
   ) {
     if (entry.kind != context.kind) return false;
-    if (entry.kind == LiturgicalPsalmUsageKind.temporal &&
-        entry.sourceDate.trim().isNotEmpty &&
-        context.date.trim().isNotEmpty &&
-        entry.sourceDate.trim() != context.date.trim()) {
-      return false;
-    }
     if (_normalized(entry.territory) != _normalized(context.territory)) {
       return false;
     }

@@ -105,7 +105,7 @@ class AlternateReadingsService {
           label:
               '${resolvedDay.title} — Weekday first reading${_sourceEditionSuffix(weekdayFirstReading)}',
         );
-        if (_hasDatedNigeriaMissalSource(weekdayFirstReading)) {
+        if (_hasDatedNigeriaMissalSource(weekdayFirstReading, date)) {
           sets.insert(0, hybrid);
         } else {
           sets.insert(1, hybrid);
@@ -345,14 +345,22 @@ class AlternateReadingsService {
     return '';
   }
 
-  bool _hasDatedNigeriaMissalSource(List<DailyReading> readings) =>
-      readings.any((reading) {
-        final source = reading.source ?? '';
-        final parts = source.split('|');
-        return parts.length > 3 &&
-            parts[1] == 'Catholic Missal for Nigeria' &&
-            parts[3].isNotEmpty;
-      });
+  bool _hasDatedNigeriaMissalSource(
+    List<DailyReading> readings,
+    DateTime date,
+  ) {
+    final dateKey =
+        '${date.year.toString().padLeft(4, '0')}-'
+        '${date.month.toString().padLeft(2, '0')}-'
+        '${date.day.toString().padLeft(2, '0')}';
+    return readings.any((reading) {
+      final source = reading.source ?? '';
+      final parts = source.split('|');
+      return parts.length > 3 &&
+          parts[1] == 'Catholic Missal for Nigeria' &&
+          parts[3] == dateKey;
+    });
+  }
 
   String _normalizeTitle(String value) =>
       value.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]+'), ' ').trim();

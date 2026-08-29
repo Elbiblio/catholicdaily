@@ -78,7 +78,7 @@ void main() {
       weekdayCycle: 'II',
     );
 
-    final choices = service.resolve(context);
+    final choices = service.resolve(context.onDate(DateTime(2028, 8, 15)));
 
     expect(choices, hasLength(1));
     expect(
