@@ -69,5 +69,7 @@ void main() {
           'App Store Connect profiles can omit the team identifier from their '
           'entitlements while still providing the canonical TeamIdentifier array.',
     );
+    expect(workflow, isNot(contains('RUNNER_SIGNED_TEAM')));
+    expect(workflow, isNot(contains('EXTENSION_SIGNED_TEAM')));
   });
 }

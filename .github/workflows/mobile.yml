@@ -624,8 +624,6 @@ jobs:
             EXPECTED_RUNNER_APP_ID="${IOS_APP_IDENTIFIER_PREFIX}.${{ env.IOS_BUNDLE_ID }}"
             RUNNER_SIGNED_APP_ID=$(plutil -extract application-identifier raw "$RUNNER_ENTITLEMENTS")
             test "$RUNNER_SIGNED_APP_ID" = "$EXPECTED_RUNNER_APP_ID"
-            RUNNER_SIGNED_TEAM=$(plutil -extract com.apple.developer.team-identifier raw "$RUNNER_ENTITLEMENTS")
-            test "$RUNNER_SIGNED_TEAM" = "${{ env.APPLE_TEAM_ID }}"
             RUNNER_PROFILE_APP_ID=$(security cms -D -i "$APP_PATH/embedded.mobileprovision" | \
               plutil -extract Entitlements.application-identifier raw -)
             test "$RUNNER_PROFILE_APP_ID" = "$EXPECTED_RUNNER_APP_ID"
@@ -647,8 +645,6 @@ jobs:
             EXTENSION_PROFILE_APP_ID=$(security cms -D -i "$APPEX_PATH/embedded.mobileprovision" | \
               plutil -extract Entitlements.application-identifier raw -)
             test "$EXTENSION_PROFILE_APP_ID" = "$EXPECTED_EXTENSION_APP_ID"
-            EXTENSION_SIGNED_TEAM=$(plutil -extract com.apple.developer.team-identifier raw "$RUNNER_TEMP/extension-entitlements.plist")
-            test "$EXTENSION_SIGNED_TEAM" = "${{ env.APPLE_TEAM_ID }}"
             EXTENSION_PROFILE_TEAM=$(security cms -D -i "$APPEX_PATH/embedded.mobileprovision" | \
               plutil -extract TeamIdentifier.0 raw -)
             test "$EXTENSION_PROFILE_TEAM" = "${{ env.APPLE_TEAM_ID }}"
