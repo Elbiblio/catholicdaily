@@ -19,12 +19,18 @@ class NotificationScheduleSyncCoordinator {
   final Future<void> Function() enqueueRepair;
 
   void dispatch({bool installationFirst = true, bool forceRepair = false}) {
+    if (forceRepair) unawaited(_enqueueRepairDetached());
     unawaited(
-      _runDetached(
-        installationFirst: installationFirst,
-        forceRepair: forceRepair,
-      ),
+      _runDetached(installationFirst: installationFirst, forceRepair: false),
     );
+  }
+
+  Future<void> _enqueueRepairDetached() async {
+    try {
+      await enqueueRepair();
+    } catch (_) {
+      // A later sync retry can attempt work registration again.
+    }
   }
 
   Future<void> _runDetached({

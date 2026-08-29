@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:catholic_daily/data/services/feast_reminder_schedule_policy.dart';
 import 'package:catholic_daily/data/services/feast_reminder_preferences.dart';
 import 'package:catholic_daily/data/services/feast_reminder_payload.dart';
@@ -134,6 +136,7 @@ void main() {
         expect(result.canKeepRemindersEnabled, isTrue);
         expect(result.canSyncServerOnlyOccurrences, isTrue);
         expect(result.needsLocalScheduleRepair, isTrue);
+        expect(result.needsImmediateRepair, isTrue);
       },
     );
 
@@ -149,6 +152,8 @@ void main() {
 
       expect(result.shouldPersistHorizon, isTrue);
       expect(result.occurrenceQueuePersisted, isFalse);
+      expect(result.canKeepRemindersEnabled, isTrue);
+      expect(result.needsImmediateRepair, isTrue);
     });
 
     test('preserves successful reminders across a partial failure', () {
@@ -177,6 +182,28 @@ void main() {
 
       expect(result.shouldPersistHorizon, isTrue);
     });
+  });
+
+  test('UI call sites retain schedule results for immediate repair policy', () {
+    for (final path in <String>[
+      'lib/ui/screens/onboarding_screen.dart',
+      'lib/ui/screens/feast_reminder_settings_sheet.dart',
+      'lib/ui/screens/settings_screen.dart',
+    ]) {
+      final source = File(path).readAsStringSync();
+      expect(source, contains('FeastReminderScheduleResult? scheduleResult'));
+      expect(source, contains('scheduleResult?.needsImmediateRepair'));
+    }
+
+    final settingsSource = File(
+      'lib/ui/screens/feast_reminder_settings_sheet.dart',
+    ).readAsStringSync();
+    final enabledSchedulePath = settingsSource.substring(
+      settingsSource.indexOf('scheduleResult = await service.scheduleForYear'),
+      settingsSource.indexOf('NotificationScheduleSyncCoordinator('),
+    );
+    expect(enabledSchedulePath, isNot(contains('setEnabled(false)')));
+    expect(enabledSchedulePath, isNot(contains('throw StateError')));
   });
 
   test('failure reconciliation retains only complete dates before failure', () {

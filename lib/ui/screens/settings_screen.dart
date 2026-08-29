@@ -6,6 +6,7 @@ import '../../data/services/bible_version_preference.dart';
 import '../../data/services/offline_bible_service.dart';
 import '../../data/services/feast_reminder_preferences.dart';
 import '../../data/services/feast_reminder_service.dart';
+import '../../data/services/feast_reminder_schedule_policy.dart';
 import '../../data/services/incipit_preference_service.dart';
 import '../../data/services/liturgical_region_preference_service.dart';
 import '../../data/services/notification_installation_sync_service.dart';
@@ -144,20 +145,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() => _liturgicalRegion = region);
 
     final reminderPrefs = _reminderPrefs;
-    var occurrenceQueuePersisted = true;
+    FeastReminderScheduleResult? scheduleResult;
     if (reminderPrefs != null && reminderPrefs.isEnabled) {
-      final result = await FeastReminderService.instance.scheduleAheadMonths(
+      scheduleResult = await FeastReminderService.instance.scheduleAheadMonths(
         15,
         reminderPrefs,
       );
-      occurrenceQueuePersisted = result.occurrenceQueuePersisted;
     }
     NotificationScheduleSyncCoordinator(
       syncInstallation:
           NotificationInstallationSyncService.instance.syncCurrentToken,
       syncOccurrences: NotificationOccurrenceSyncService.instance.syncPending,
       enqueueRepair: FeastReminderBackgroundService.instance.enqueueRepair,
-    ).dispatch(forceRepair: !occurrenceQueuePersisted);
+    ).dispatch(forceRepair: scheduleResult?.needsImmediateRepair ?? false);
   }
 
   String _reminderSubtitle() {

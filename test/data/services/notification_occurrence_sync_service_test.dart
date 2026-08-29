@@ -204,6 +204,25 @@ void main() {
   });
 
   test(
+    'forced local repair is enqueued before detached network completes',
+    () async {
+      final installation = Completer<bool>();
+      var repairs = 0;
+      final coordinator = NotificationScheduleSyncCoordinator(
+        syncInstallation: () => installation.future,
+        syncOccurrences: () async => NotificationOccurrenceSyncResult.success,
+        enqueueRepair: () async => repairs++,
+      );
+
+      coordinator.dispatch(forceRepair: true);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(repairs, 1);
+      expect(installation.isCompleted, isFalse);
+    },
+  );
+
+  test(
     'disabled settings reconcile occurrences before disabling installation',
     () async {
       final calls = <String>[];

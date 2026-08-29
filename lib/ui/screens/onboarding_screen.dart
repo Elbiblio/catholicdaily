@@ -5,6 +5,7 @@ import '../../data/models/liturgical_region.dart';
 import '../../data/services/feast_reminder_preferences.dart';
 import '../../data/services/feast_reminder_background_service.dart';
 import '../../data/services/feast_reminder_service.dart';
+import '../../data/services/feast_reminder_schedule_policy.dart';
 import '../../data/services/incipit_preference_service.dart';
 import '../../data/services/liturgical_region_preference_service.dart';
 import '../../data/services/notification_installation_sync_service.dart';
@@ -184,7 +185,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       final prefs = await FeastReminderPreferences.getInstance();
       final svc = FeastReminderService.instance;
       await svc.initialize();
-      var occurrenceQueuePersisted = true;
+      FeastReminderScheduleResult? scheduleResult;
       if (_selectedSlot != null) {
         final slot = _selectedSlot!;
         await prefs.setEnabled(true);
@@ -194,8 +195,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         try {
           await svc.requestPermission();
         } catch (_) {}
-        final result = await svc.scheduleAheadMonths(15, prefs);
-        occurrenceQueuePersisted = result.occurrenceQueuePersisted;
+        scheduleResult = await svc.scheduleAheadMonths(15, prefs);
       } else {
         // User explicitly chose not to enable notifications.
         await prefs.setEnabled(false);
@@ -210,7 +210,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         enqueueRepair: FeastReminderBackgroundService.instance.enqueueRepair,
       ).dispatch(
         installationFirst: _selectedSlot != null,
-        forceRepair: !occurrenceQueuePersisted,
+        forceRepair: scheduleResult?.needsImmediateRepair ?? false,
       );
     } catch (e) {
       // Non-fatal — onboarding completes regardless of notification setup.

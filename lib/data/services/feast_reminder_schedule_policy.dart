@@ -115,12 +115,14 @@ class FeastReminderScheduleResult {
   List<NotificationOccurrence> get occurrencesToPersist => occurrences;
 
   bool get canKeepRemindersEnabled =>
-      occurrenceQueuePersisted &&
-      (shouldPersistHorizon || occurrencesToPersist.isNotEmpty);
+      shouldPersistHorizon || occurrencesToPersist.isNotEmpty;
 
   bool get canSyncServerOnlyOccurrences => occurrenceQueuePersisted;
 
   bool get needsLocalScheduleRepair => !shouldPersistHorizon;
+
+  bool get needsImmediateRepair =>
+      !occurrenceQueuePersisted || needsLocalScheduleRepair;
 
   FeastReminderScheduleResult withOccurrenceQueuePersisted(bool persisted) =>
       FeastReminderScheduleResult(

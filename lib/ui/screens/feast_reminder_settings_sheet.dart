@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../data/models/liturgical_region.dart';
 import '../../data/services/feast_reminder_preferences.dart';
 import '../../data/services/feast_reminder_service.dart';
+import '../../data/services/feast_reminder_schedule_policy.dart';
 import '../../data/services/feast_reminder_background_service.dart';
 import '../../data/services/liturgical_region_preference_service.dart';
 import '../../data/services/notification_installation_sync_service.dart';
@@ -111,20 +112,15 @@ class _FeastReminderSettingsSheetState
       await prefs.setRank(_rank);
 
       final service = FeastReminderService.instance;
-      var occurrenceQueuePersisted = true;
+      FeastReminderScheduleResult? scheduleResult;
+      var cancellationQueuePersisted = true;
       if (_enabled) {
-        final result = await service.scheduleForYear(
+        scheduleResult = await service.scheduleForYear(
           DateTime.now().year,
           prefs,
         );
-        if (!result.canKeepRemindersEnabled) {
-          await prefs.setEnabled(false);
-          if (mounted) setState(() => _enabled = false);
-          throw StateError('No reminders could be scheduled.');
-        }
-        occurrenceQueuePersisted = result.occurrenceQueuePersisted;
       } else {
-        occurrenceQueuePersisted = await service.cancelAll();
+        cancellationQueuePersisted = await service.cancelAll();
       }
       NotificationScheduleSyncCoordinator(
         syncInstallation:
@@ -134,7 +130,8 @@ class _FeastReminderSettingsSheetState
         enqueueRepair: FeastReminderBackgroundService.instance.enqueueRepair,
       ).dispatch(
         installationFirst: _enabled,
-        forceRepair: !occurrenceQueuePersisted,
+        forceRepair:
+            scheduleResult?.needsImmediateRepair ?? !cancellationQueuePersisted,
       );
     } catch (e) {
       debugPrint('[FeastReminder] _save error: $e');
