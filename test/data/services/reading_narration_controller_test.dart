@@ -192,6 +192,7 @@ void main() {
     await controller.stop();
     expect(controller.state.status, NarrationStatus.stopped);
     expect(controller.state.progress, 0);
+    expect(controller.state.queue, hasLength(2));
   });
 
   test('backgrounding pauses and detaching stops', () async {
@@ -363,6 +364,61 @@ void main() {
 
       expect(controller.state.status, NarrationStatus.stopped);
       expect(controller.state.queue, isEmpty);
+    },
+  );
+
+  test(
+    'context invalidation clears stale queue even when engine stop fails',
+    () async {
+      const firstContext = NarrationContext(
+        dateKey: '2026-08-29',
+        regionCode: 'NG',
+        bibleEditionId: 'rsvce',
+        psalmEditionId: 'territory',
+        alternativeKey: 'primary',
+      );
+      await controller.play(
+        queue,
+        mode: NarrationPlaybackMode.readAll,
+        context: firstContext,
+      );
+      final staleId = engine.lastUtteranceId!;
+      final spokenCount = engine.spokenTexts.length;
+      engine.emitProgress(staleId, start: 6, end: 13, word: 'reading');
+      engine.stopError = StateError('context stop failed');
+
+      await expectLater(
+        controller.invalidateForContext(
+          const NarrationContext(
+            dateKey: '2026-08-30',
+            regionCode: 'NG',
+            bibleEditionId: 'nabre',
+            psalmEditionId: 'grail',
+            alternativeKey: 'alternate',
+          ),
+        ),
+        completes,
+      );
+
+      expect(controller.state.status, NarrationStatus.error);
+      expect(controller.state.errorMessage, contains('context stop failed'));
+      expect(controller.state.queue, isEmpty);
+      expect(controller.state.currentItem, isNull);
+      expect(controller.state.currentIndex, 0);
+      expect(controller.state.progress, 0);
+      expect(controller.state.progressStart, 0);
+      expect(controller.state.progressEnd, 0);
+      expect(controller.state.currentWord, isNull);
+
+      engine.emitProgress(staleId, start: 0, end: 5, word: 'stale');
+      engine.emitCompletion(staleId);
+      engine.emitError(staleId, 'stale error');
+      await controller.next();
+      await controller.previous();
+
+      expect(controller.state.status, NarrationStatus.error);
+      expect(controller.state.queue, isEmpty);
+      expect(engine.spokenTexts, hasLength(spokenCount));
     },
   );
 

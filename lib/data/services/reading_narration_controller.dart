@@ -269,6 +269,20 @@ class ReadingNarrationController extends ChangeNotifier {
     if (_disposed) return;
     ++_generation;
     _activeUtteranceId = null;
+    if (clearQueue) {
+      _emit(
+        _state.copyWith(
+          status: NarrationStatus.stopped,
+          queue: const <ReadingNarrationQueueItem>[],
+          currentIndex: 0,
+          progress: 0,
+          progressStart: 0,
+          progressEnd: 0,
+          clearCurrentWord: true,
+          clearError: true,
+        ),
+      );
+    }
     try {
       await _engine.stop();
     } catch (error) {
@@ -276,11 +290,12 @@ class ReadingNarrationController extends ChangeNotifier {
       return;
     }
     if (_disposed) return;
+    if (clearQueue) return;
     _emit(
       _state.copyWith(
         status: NarrationStatus.stopped,
-        queue: clearQueue ? const <ReadingNarrationQueueItem>[] : _state.queue,
-        currentIndex: clearQueue ? 0 : _state.currentIndex,
+        queue: _state.queue,
+        currentIndex: _state.currentIndex,
         progress: 0,
         progressStart: 0,
         progressEnd: 0,
