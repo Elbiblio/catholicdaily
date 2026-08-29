@@ -141,10 +141,10 @@ void main() {
     expect(find.byKey(NarrationMiniPlayer.playerKey), findsOneWidget);
   });
 
-  testWidgets('unknown engine speed is shown as unavailable and disabled', (
+  testWidgets('unknown engine speed offers recovery using the safe fallback', (
     tester,
   ) async {
-    var changes = 0;
+    final changes = <double>[];
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
@@ -152,7 +152,8 @@ void main() {
             visible: true,
             state: const ReadingNarrationState(status: NarrationStatus.stopped),
             rate: null,
-            onRateChanged: (_) => changes++,
+            fallbackRate: 0.75,
+            onRateChanged: changes.add,
           ),
         ),
       ),
@@ -161,6 +162,6 @@ void main() {
     expect(find.byTooltip('Speech speed unavailable'), findsOneWidget);
     expect(find.text('—×'), findsOneWidget);
     await tester.tap(find.text('—×'));
-    expect(changes, 0);
+    expect(changes, <double>[0.75]);
   });
 }

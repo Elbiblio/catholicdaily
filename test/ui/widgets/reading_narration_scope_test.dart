@@ -477,6 +477,31 @@ void main() {
           ),
         ),
       );
+      final queue = narration.queueBuilder.buildCurrent(
+        ReadingSession(
+          readings: <DailyReading>[
+            DailyReading(
+              reading: 'Jn 1:1',
+              position: 'Gospel',
+              date: DateTime(2026, 8, 29),
+            ),
+          ],
+          readingTexts: const <String, String>{'Jn 1:1': 'The Word.'},
+          currentIndex: 0,
+        ),
+      );
+      await narration.toggle(
+        queue,
+        mode: NarrationPlaybackMode.currentOnly,
+        context: const NarrationContext(
+          dateKey: '2026-08-29',
+          regionCode: 'NG',
+          bibleEditionId: 'rsvce',
+          psalmEditionId: 'territory_lectionary',
+          alternativeKey: 'primary',
+        ),
+      );
+      await tester.pumpAndSettle();
       engine.configureOutcomes.addAll(<Object?>[
         null,
         const _PartialRateFailure('rollback rejected'),
@@ -493,10 +518,12 @@ void main() {
         findsOneWidget,
       );
 
-      await narration.setRate(1.0);
+      expect(find.byTooltip('Speech speed unavailable'), findsOneWidget);
+      await tester.tap(find.byTooltip('Speech speed unavailable'));
       await tester.pumpAndSettle();
-      expect(narration.effectiveRate, 1.0);
-      expect(engine.currentRate, 1.0);
+      expect(narration.effectiveRate, 0.5);
+      expect(engine.currentRate, 0.5);
+      expect(find.text('0.5×'), findsOneWidget);
       expect(narration.uiErrorMessage, isNull);
 
       await tester.pumpWidget(const SizedBox.shrink());

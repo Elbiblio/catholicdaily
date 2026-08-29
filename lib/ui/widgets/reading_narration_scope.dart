@@ -373,6 +373,7 @@ class _ReadingNarrationHostState extends State<ReadingNarrationHost>
                         state.queue.isNotEmpty &&
                         state.currentIndex < state.queue.length - 1,
                     rate: session.effectiveRate,
+                    fallbackRate: session.rate,
                     onPrevious: controllerCallback(session.controller.previous),
                     onPlayPause: state.status == NarrationStatus.loading
                         ? null

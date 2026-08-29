@@ -11,6 +11,7 @@ class NarrationMiniPlayer extends StatelessWidget {
   final bool canGoPrevious;
   final bool canGoNext;
   final double? rate;
+  final double fallbackRate;
   final VoidCallback? onPrevious;
   final VoidCallback? onPlayPause;
   final VoidCallback? onNext;
@@ -25,6 +26,7 @@ class NarrationMiniPlayer extends StatelessWidget {
     this.canGoPrevious = false,
     this.canGoNext = false,
     this.rate = 0.5,
+    this.fallbackRate = 0.5,
     this.onPrevious,
     this.onPlayPause,
     this.onNext,
@@ -116,9 +118,11 @@ class NarrationMiniPlayer extends StatelessWidget {
                         ? 'Speech speed unavailable'
                         : 'Speech speed',
                     child: InkWell(
-                      onTap: onRateChanged == null || rate == null
+                      onTap: onRateChanged == null
                           ? null
-                          : () => onRateChanged!(_nextRate(rate!)),
+                          : () => onRateChanged!(
+                              rate == null ? fallbackRate : _nextRate(rate!),
+                            ),
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(
                           minWidth: 48,
