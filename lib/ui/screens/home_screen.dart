@@ -284,6 +284,7 @@ class _HomeScreenState extends State<HomeScreen> {
         content: content,
         liturgicalDay: liturgicalDay,
         readingData: readingData,
+        narrationSession: _readingSession,
         sessionReadings: _readingSession.readings,
         currentReadingIndex: _readingSession.currentIndex,
         hasNext: _readingSession.hasNavigableItems

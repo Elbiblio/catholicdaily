@@ -9,6 +9,8 @@ import 'web_speech_cancellation.dart';
 
 enum SpeechPlatform { android, ios, macos, windows, linux, web }
 
+SpeechEngine createPlatformSpeechEngine() => FlutterTtsSpeechEngine();
+
 abstract class FlutterTtsDriver {
   Future<Object?> awaitSpeakCompletion(bool enabled);
 

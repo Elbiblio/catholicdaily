@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -13,11 +15,16 @@ import 'data/services/feast_reminder_destination_resolver.dart';
 import 'data/services/incipit_preference_service.dart';
 import 'data/services/liturgical_region_preference_service.dart';
 import 'data/services/bible_version_preference.dart';
+import 'data/services/flutter_tts_speech_engine.dart';
+import 'data/services/reading_narration_composer.dart';
+import 'data/services/reading_narration_controller.dart';
+import 'data/services/reading_narration_queue_builder.dart';
 import 'demo_launch_config.dart';
 import 'ui/screens/home_screen.dart';
 import 'ui/screens/mass_flow_screen.dart';
 import 'ui/screens/onboarding_screen.dart';
 import 'ui/screens/saint_detail_screen.dart';
+import 'ui/widgets/reading_narration_scope.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 
@@ -140,10 +147,20 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
   FeastReminderPayload? _pendingReminderTap;
   bool _reminderTapDrainScheduled = false;
   bool _resolvingReminderTap = false;
+  late final ReadingNarrationSession _narrationSession;
 
   @override
   void initState() {
     super.initState();
+    _narrationSession = ReadingNarrationSession(
+      controller: ReadingNarrationController(
+        engine: createPlatformSpeechEngine(),
+      ),
+      queueBuilder: const ReadingNarrationQueueBuilder(
+        composer: ReadingNarrationComposer(),
+      ),
+    );
+    unawaited(_narrationSession.initialize());
     _themeMode = widget.themePreferences.getThemeMode();
     _themeStyle = widget.themePreferences.getThemeStyle();
     FeastReminderService.instance.setNotificationTapHandler(_handleReminderTap);
@@ -153,6 +170,7 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
   @override
   void dispose() {
     FeastReminderService.instance.clearNotificationTapHandler();
+    _narrationSession.dispose();
     super.dispose();
   }
 
@@ -261,14 +279,19 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: _navigatorKey,
-      title: 'Catholic Daily',
-      debugShowCheckedModeBanner: false,
-      theme: _buildPremiumTheme(Brightness.light, _themeStyle),
-      darkTheme: _buildPremiumTheme(Brightness.dark, _themeStyle),
-      themeMode: _themeMode,
-      home: _initialScreen ?? _buildHomeScreen(),
+    return ReadingNarrationScope(
+      session: _narrationSession,
+      child: MaterialApp(
+        navigatorKey: _navigatorKey,
+        title: 'Catholic Daily',
+        debugShowCheckedModeBanner: false,
+        theme: _buildPremiumTheme(Brightness.light, _themeStyle),
+        darkTheme: _buildPremiumTheme(Brightness.dark, _themeStyle),
+        themeMode: _themeMode,
+        builder: (context, child) =>
+            ReadingNarrationHost(child: child ?? const SizedBox.shrink()),
+        home: _initialScreen ?? _buildHomeScreen(),
+      ),
     );
   }
 

@@ -4,11 +4,17 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('Flutter TTS is imported only by its speech engine adapter', () {
+    final flutterTtsPackageImport = RegExp(
+      r'''^\s*import\s+['"]package:flutter_tts/''',
+      multiLine: true,
+    );
     final imports = Directory('lib')
         .listSync(recursive: true)
         .whereType<File>()
         .where((file) => file.path.endsWith('.dart'))
-        .where((file) => file.readAsStringSync().contains('flutter_tts'))
+        .where(
+          (file) => flutterTtsPackageImport.hasMatch(file.readAsStringSync()),
+        )
         .map((file) => file.path.replaceAll('\\', '/'))
         .toList();
 

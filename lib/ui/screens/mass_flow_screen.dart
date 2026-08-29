@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../core/latest_request_guard.dart';
 import '../../data/models/daily_reading.dart';
 import '../../data/models/mass_flow_request_state.dart';
+import '../../data/models/reading_session.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
 import '../../data/services/order_of_mass_service.dart';
 import '../../data/services/order_of_mass_preference_service.dart';
@@ -11,7 +14,10 @@ import '../../data/services/ordo_resolver_service.dart';
 import '../../data/services/readings_service.dart';
 import '../../data/services/readings_backend_io.dart';
 import '../../data/services/reading_flow_service.dart';
+import '../../data/services/reading_narration_controller.dart';
 import '../widgets/parchment_background.dart';
+import '../widgets/read_aloud_icon.dart';
+import '../widgets/reading_narration_scope.dart';
 import '../utils/contrast_helper.dart';
 
 class MassFlowScreen extends StatefulWidget {
@@ -40,12 +46,19 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
   List<DailyReading>? _readings;
   LiturgicalDay? _liturgicalDay;
   bool _isLoading = true;
+  ReadingNarrationSession? _narration;
 
   @override
   void initState() {
     super.initState();
     _dateState = MassFlowRequestState(widget.date ?? DateTime.now());
     _initialize();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _narration = ReadingNarrationScope.maybeOf(context);
   }
 
   Future<void> _initialize() async {
@@ -105,8 +118,67 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
     );
 
     if (picked != null) {
+      await _invalidateNarrationForDate(picked);
       await _loadMassForDate(picked);
     }
+  }
+
+  Future<void> _invalidateNarrationForDate(DateTime date) async {
+    final narration = _narration;
+    if (narration == null) return;
+    final context = await narration.contextFor(
+      date: date,
+      alternativeKey: 'mass-flow',
+    );
+    await narration.controller.invalidateForContext(context);
+  }
+
+  Future<void> _toggleReadingNarration(
+    DailyReading reading,
+    String displayedText,
+  ) async {
+    final narration = _narration;
+    if (narration == null) return;
+    final session = ReadingSession(
+      readings: <DailyReading>[reading],
+      readingTexts: <String, String>{reading.reading: displayedText},
+      currentIndex: 0,
+      liturgicalDay: _liturgicalDay,
+    );
+    final queue = narration.queueBuilder.buildCurrent(session);
+    final context = await narration.contextFor(
+      date: reading.date,
+      alternativeKey: '${reading.position ?? 'Reading'}|${reading.reading}',
+    );
+    if (!mounted) return;
+    await narration.toggle(
+      queue,
+      mode: NarrationPlaybackMode.currentOnly,
+      context: context,
+    );
+  }
+
+  NarrationStatus _narrationStatusFor(DailyReading reading) {
+    final state = _narration?.state;
+    final current = state?.currentItem?.reading;
+    if (current?.reading != reading.reading ||
+        current?.position != reading.position) {
+      return NarrationStatus.idle;
+    }
+    return state!.status;
+  }
+
+  @override
+  void dispose() {
+    final narration = _narration;
+    if (narration != null) {
+      unawaited(
+        narration.controller.onReadingExperienceExit(
+          deliberateNavigation: false,
+        ),
+      );
+    }
+    super.dispose();
   }
 
   Future<void> _onPrimaryLanguageChanged(String language) async {
@@ -356,6 +428,8 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
         child: _ReadingsSectionWidget(
           readings: _readings!,
           liturgicalColor: sectionColor,
+          narrationStatusFor: _narrationStatusFor,
+          onReadAloud: _toggleReadingNarration,
         ),
       ),
     );
@@ -711,10 +785,15 @@ class _MassFlowItemCard extends StatelessWidget {
 class _ReadingsSectionWidget extends StatefulWidget {
   final List<DailyReading> readings;
   final Color liturgicalColor;
+  final NarrationStatus Function(DailyReading reading) narrationStatusFor;
+  final Future<void> Function(DailyReading reading, String displayedText)
+  onReadAloud;
 
   const _ReadingsSectionWidget({
     required this.readings,
     required this.liturgicalColor,
+    required this.narrationStatusFor,
+    required this.onReadAloud,
   });
 
   @override
@@ -806,7 +885,7 @@ class _ReadingsSectionWidgetState extends State<_ReadingsSectionWidget> {
                 children: widget.readings.asMap().entries.map((entry) {
                   final index = entry.key;
                   final reading = entry.value;
-                  return _ReadingCard(
+                  return MassFlowReadingCard(
                     reading: reading,
                     index: index,
                     isExpanded: _expandedReadings.contains(index),
@@ -818,6 +897,8 @@ class _ReadingsSectionWidgetState extends State<_ReadingsSectionWidget> {
                       }
                     }),
                     sectionColor: sectionColor,
+                    narrationStatus: widget.narrationStatusFor(reading),
+                    onReadAloud: (text) => widget.onReadAloud(reading, text),
                   );
                 }).toList(),
               ),
@@ -833,29 +914,37 @@ class _ReadingsSectionWidgetState extends State<_ReadingsSectionWidget> {
   }
 }
 
-class _ReadingCard extends StatefulWidget {
+class MassFlowReadingCard extends StatefulWidget {
   final DailyReading reading;
   final int index;
   final bool isExpanded;
   final VoidCallback onToggle;
   final Color sectionColor;
+  final NarrationStatus narrationStatus;
+  final Future<void> Function(String displayedText)? onReadAloud;
+  final Future<String> Function(DailyReading reading)? readingTextLoader;
 
-  const _ReadingCard({
+  const MassFlowReadingCard({
+    super.key,
     required this.reading,
     required this.index,
     required this.isExpanded,
     required this.onToggle,
     required this.sectionColor,
+    this.narrationStatus = NarrationStatus.idle,
+    this.onReadAloud,
+    this.readingTextLoader,
   });
 
   @override
-  State<_ReadingCard> createState() => _ReadingCardState();
+  State<MassFlowReadingCard> createState() => _ReadingCardState();
 }
 
-class _ReadingCardState extends State<_ReadingCard> {
+class _ReadingCardState extends State<MassFlowReadingCard> {
   final ReadingFlowService _readingFlow = ReadingFlowService.instance;
   String? _fullReadingText;
   bool _isLoadingText = false;
+  int _textLoadGeneration = 0;
 
   String get _readingLabel {
     final position = widget.reading.position?.toLowerCase() ?? '';
@@ -879,8 +968,19 @@ class _ReadingCardState extends State<_ReadingCard> {
   }
 
   @override
-  void didUpdateWidget(_ReadingCard oldWidget) {
+  void didUpdateWidget(MassFlowReadingCard oldWidget) {
     super.didUpdateWidget(oldWidget);
+    final readingChanged =
+        oldWidget.reading.reading != widget.reading.reading ||
+        oldWidget.reading.position != widget.reading.position ||
+        oldWidget.reading.date != widget.reading.date;
+    if (readingChanged) {
+      _textLoadGeneration++;
+      _fullReadingText = null;
+      _isLoadingText = false;
+      if (widget.isExpanded) unawaited(_fetchReadingText());
+      return;
+    }
     // Fetch reading text when expanded and not already loaded
     if (widget.isExpanded &&
         !oldWidget.isExpanded &&
@@ -891,12 +991,14 @@ class _ReadingCardState extends State<_ReadingCard> {
 
   Future<void> _fetchReadingText() async {
     if (_fullReadingText != null) return;
-
+    final generation = ++_textLoadGeneration;
     setState(() => _isLoadingText = true);
 
     try {
-      final text = await _readingFlow.getReadingText(widget.reading);
-      if (mounted) {
+      final text =
+          await (widget.readingTextLoader?.call(widget.reading) ??
+              _readingFlow.getReadingText(widget.reading));
+      if (mounted && generation == _textLoadGeneration) {
         setState(() {
           _fullReadingText = text;
           _isLoadingText = false;
@@ -904,10 +1006,17 @@ class _ReadingCardState extends State<_ReadingCard> {
       }
     } catch (e) {
       debugPrint('Error fetching reading text: $e');
-      if (mounted) {
+      if (mounted && generation == _textLoadGeneration) {
         setState(() => _isLoadingText = false);
       }
     }
+  }
+
+  Future<void> _readAloud() async {
+    if (_fullReadingText == null) await _fetchReadingText();
+    final text = _fullReadingText;
+    if (!mounted || text == null || text.trim().isEmpty) return;
+    await widget.onReadAloud?.call(text);
   }
 
   @override
@@ -924,51 +1033,71 @@ class _ReadingCardState extends State<_ReadingCard> {
       ),
       child: Column(
         children: [
-          // Reading header
-          InkWell(
-            onTap: widget.onToggle,
-            borderRadius: BorderRadius.circular(12),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _readingLabel,
-                          style: theme.textTheme.titleSmall?.copyWith(
-                            fontWeight: FontWeight.w700,
-                            color: ContrastHelper.getContrastColor(
-                              theme.colorScheme.surface,
-                              theme,
+          Row(
+            children: [
+              Expanded(
+                child: Semantics(
+                  button: true,
+                  label: widget.isExpanded
+                      ? 'Collapse $_readingLabel'
+                      : 'Expand $_readingLabel',
+                  excludeSemantics: true,
+                  child: InkWell(
+                    onTap: widget.onToggle,
+                    borderRadius: BorderRadius.circular(12),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _readingLabel,
+                            style: theme.textTheme.titleSmall?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: ContrastHelper.getContrastColor(
+                                theme.colorScheme.surface,
+                                theme,
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          widget.reading.reading,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: ContrastHelper.getSecondaryContrastColor(
-                              widget.sectionColor.withValues(alpha: 0.3),
-                              theme,
+                          const SizedBox(height: 4),
+                          Text(
+                            widget.reading.reading,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: ContrastHelper.getSecondaryContrastColor(
+                                widget.sectionColor.withValues(alpha: 0.3),
+                                theme,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                  Icon(
-                    widget.isExpanded ? Icons.expand_less : Icons.expand_more,
-                    color: ContrastHelper.getContrastColor(
-                      theme.colorScheme.surface,
-                      theme,
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
+              if (widget.isExpanded)
+                ReadAloudIcon(
+                  status: widget.narrationStatus,
+                  onPressed: widget.onReadAloud == null || _isLoadingText
+                      ? null
+                      : () => unawaited(_readAloud()),
+                ),
+              IconButton(
+                tooltip: widget.isExpanded
+                    ? 'Collapse reading'
+                    : 'Expand reading',
+                onPressed: widget.onToggle,
+                icon: Icon(
+                  widget.isExpanded ? Icons.expand_less : Icons.expand_more,
+                  color: ContrastHelper.getContrastColor(
+                    theme.colorScheme.surface,
+                    theme,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 4),
+            ],
           ),
           if (widget.isExpanded) ...[
             if (_isLoadingText)

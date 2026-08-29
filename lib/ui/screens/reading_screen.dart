@@ -4,6 +4,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/models/daily_reading.dart';
 import '../../data/models/navigable_item.dart';
+import '../../data/models/reading_session.dart';
 import '../../data/models/resolved_responsorial_psalm.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
 import '../../data/services/readings_service.dart';
@@ -11,6 +12,9 @@ import '../../data/services/liturgical_region_preference_service.dart';
 import '../../data/services/bible_version_preference.dart';
 import '../../data/services/incipit_preference_service.dart';
 import '../../data/services/scroll_position_service.dart';
+import '../../data/services/reading_flow_service.dart';
+import '../../data/services/reading_narration_controller.dart';
+import '../../data/services/reading_narration_queue_builder.dart';
 import '../widgets/parchment_background.dart';
 import '../widgets/psalm_response_widget.dart';
 import '../widgets/gospel_acclamation_widget.dart';
@@ -18,6 +22,8 @@ import '../widgets/bible_version_switcher.dart';
 import '../widgets/responsorial_psalm_edition_selector.dart';
 import '../widgets/responsorial_psalm_source_label.dart';
 import '../widgets/ai_insights_sheet.dart';
+import '../widgets/read_aloud_icon.dart';
+import '../widgets/reading_narration_scope.dart';
 import '../utils/reading_title_formatter.dart';
 import '../utils/bible_reference_helper.dart';
 import '../../data/services/bible_cache_service.dart';
@@ -29,6 +35,7 @@ class ReadingScreen extends StatefulWidget {
   final String content;
   final LiturgicalDay? liturgicalDay;
   final DailyReading? readingData;
+  final ReadingSession? narrationSession;
   final List<DailyReading> sessionReadings;
   final int currentReadingIndex;
   final VoidCallback? onNextReading;
@@ -48,6 +55,7 @@ class ReadingScreen extends StatefulWidget {
     required this.content,
     this.liturgicalDay,
     this.readingData,
+    this.narrationSession,
     this.sessionReadings = const [],
     this.currentReadingIndex = -1,
     this.onNextReading,
@@ -105,6 +113,8 @@ class _ReadingScreenState extends State<ReadingScreen> {
   bool _showVerseNumbers = true;
   bool _showIncipit = true;
   ResolvedResponsorialPsalm? _currentPsalmSource;
+  ReadingNarrationSession? _narration;
+  bool _deliberateNarrationNavigation = false;
 
   final ScrollPositionService _scrollPositionService = ScrollPositionService();
   Timer? _scrollDebounceTimer;
@@ -183,6 +193,12 @@ class _ReadingScreenState extends State<ReadingScreen> {
     }
 
     _scrollController.addListener(_onScrollChanged);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _narration = ReadingNarrationScope.maybeOf(context);
   }
 
   Future<void> _loadVerseNumberPref() async {
@@ -409,6 +425,8 @@ class _ReadingScreenState extends State<ReadingScreen> {
     });
 
     try {
+      _deliberateNarrationNavigation = true;
+      await _invalidateNarrationFor(reading);
       await Future.delayed(const Duration(milliseconds: 100));
       widget.onSelectReadingIndex?.call(index);
     } finally {
@@ -417,6 +435,152 @@ class _ReadingScreenState extends State<ReadingScreen> {
           _isNavigating = false;
         });
       }
+    }
+  }
+
+  void _navigateToPreviousReading() {
+    _deliberateNarrationNavigation = true;
+    widget.onPrevReading?.call();
+  }
+
+  void _navigateToNextReading() {
+    _deliberateNarrationNavigation = true;
+    widget.onNextReading?.call();
+  }
+
+  DailyReading get _displayedReading =>
+      widget.readingData ??
+      DailyReading(
+        reading: widget.reference,
+        position: widget.isBibleSearch ? 'Bible Chapter' : _readingLabel,
+        date: widget.liturgicalDay?.date ?? DateTime.now(),
+      );
+
+  ReadingSession _displayedNarrationSession() {
+    final displayed = _displayedReading;
+    final base = widget.narrationSession;
+    final readings = base?.readings.isNotEmpty == true
+        ? base!.readings
+        : widget.sessionReadings.isNotEmpty
+        ? widget.sessionReadings
+        : <DailyReading>[displayed];
+    var currentIndex = readings.indexWhere(
+      (reading) =>
+          reading.reading == displayed.reading &&
+          reading.position == displayed.position,
+    );
+    if (currentIndex < 0) {
+      currentIndex = readings.indexWhere(
+        (reading) => reading.reading == displayed.reading,
+      );
+    }
+    if (currentIndex < 0) currentIndex = 0;
+    final texts = <String, String>{...?base?.readingTexts};
+    texts[widget.reference] = _currentContent;
+    final psalmSources = <String, ResolvedResponsorialPsalm>{
+      ...?base?.psalmSources,
+    };
+    if (_currentPsalmSource != null) {
+      psalmSources[widget.reference] = _currentPsalmSource!;
+    }
+    return ReadingSession(
+      readings: readings,
+      readingTexts: texts,
+      psalmSources: psalmSources,
+      currentIndex: currentIndex,
+      navigableItems: base?.navigableItems ?? widget.navigableItems,
+      navigableIndex: base?.navigableIndex ?? widget.currentNavigableIndex,
+      liturgicalDay: widget.liturgicalDay ?? base?.liturgicalDay,
+    );
+  }
+
+  List<ReadingNarrationQueueItem> _currentNarrationQueue() {
+    final narration = _narration;
+    if (narration == null) return const <ReadingNarrationQueueItem>[];
+    if (widget.isBibleSearch) {
+      return narration.queueBuilder.buildCurrentBibleChapter(
+        reference: widget.reference,
+        displayedText: _currentContent,
+      );
+    }
+    return narration.queueBuilder.buildCurrent(
+      _displayedNarrationSession(),
+      showIncipit: _showIncipit,
+    );
+  }
+
+  ReadingNarrationQueueItem? get _currentNarrationItem {
+    final queue = _currentNarrationQueue();
+    return queue.isEmpty ? null : queue.first;
+  }
+
+  Future<NarrationContext?> _narrationContextFor(DailyReading reading) async {
+    final narration = _narration;
+    if (narration == null) return null;
+    return narration.contextFor(
+      date: reading.date,
+      alternativeKey: '${reading.position ?? 'Reading'}|${reading.reading}',
+    );
+  }
+
+  Future<void> _toggleCurrentNarration() async {
+    final narration = _narration;
+    if (narration == null) return;
+    final queue = _currentNarrationQueue();
+    final context = await _narrationContextFor(_displayedReading);
+    if (!mounted || context == null) return;
+    await narration.toggle(
+      queue,
+      mode: NarrationPlaybackMode.currentOnly,
+      context: context,
+    );
+  }
+
+  Future<void> _readAllAppointedReadings() async {
+    final narration = _narration;
+    final base = _displayedNarrationSession();
+    if (narration == null || base.readings.isEmpty) return;
+    final date = base.currentReading?.date ?? _displayedReading.date;
+    final hydrated = await ReadingFlowService.instance.hydrateReadingSet(
+      date: date,
+      readings: base.readings,
+    );
+    if (!mounted) return;
+    var currentIndex = hydrated.readings.indexWhere(
+      (reading) =>
+          reading.reading == _displayedReading.reading &&
+          reading.position == _displayedReading.position,
+    );
+    if (currentIndex < 0) currentIndex = 0;
+    final texts = <String, String>{...hydrated.readingTexts};
+    texts[widget.reference] = _currentContent;
+    final psalmSources = <String, ResolvedResponsorialPsalm>{
+      ...hydrated.psalmSources,
+    };
+    if (_currentPsalmSource != null) {
+      psalmSources[widget.reference] = _currentPsalmSource!;
+    }
+    final session = ReadingSession(
+      readings: hydrated.readings,
+      readingTexts: texts,
+      psalmSources: psalmSources,
+      currentIndex: currentIndex,
+      liturgicalDay: widget.liturgicalDay,
+    );
+    final queue = narration.queueBuilder.buildReadAll(
+      session,
+      selectedReadings: <DailyReading>[?session.currentReading],
+      showIncipit: _showIncipit,
+    );
+    final context = await _narrationContextFor(session.currentReading!);
+    if (!mounted || context == null) return;
+    await narration.playReadAll(queue, context: context);
+  }
+
+  Future<void> _invalidateNarrationFor(DailyReading reading) async {
+    final context = await _narrationContextFor(reading);
+    if (context != null) {
+      await _narration?.controller.invalidateForContext(context);
     }
   }
 
@@ -508,6 +672,14 @@ class _ReadingScreenState extends State<ReadingScreen> {
                     )
                   : null,
               actions: [
+                ReadAloudIcon(
+                  status:
+                      _narration?.statusFor(_currentNarrationItem) ??
+                      NarrationStatus.idle,
+                  onPressed: _narration == null
+                      ? null
+                      : () => unawaited(_toggleCurrentNarration()),
+                ),
                 Semantics(
                   label: _isBookmarked ? 'Remove bookmark' : 'Add bookmark',
                   button: true,
@@ -537,9 +709,26 @@ class _ReadingScreenState extends State<ReadingScreen> {
                       case 'verse_numbers':
                         _toggleVerseNumbers();
                         break;
+                      case 'read_all':
+                        unawaited(_readAllAppointedReadings());
+                        break;
                     }
                   },
                   itemBuilder: (context) => [
+                    if (!widget.isBibleSearch &&
+                        _displayedNarrationSession().readings.isNotEmpty)
+                      const PopupMenuItem(
+                        value: 'read_all',
+                        child: Row(
+                          children: [
+                            Icon(Icons.playlist_play_rounded),
+                            SizedBox(width: 12),
+                            Expanded(
+                              child: Text('Read all appointed readings'),
+                            ),
+                          ],
+                        ),
+                      ),
                     const PopupMenuItem(
                       value: 'insights',
                       child: Row(
@@ -560,10 +749,12 @@ class _ReadingScreenState extends State<ReadingScreen> {
                                 : Icons.format_list_numbered_rtl,
                           ),
                           const SizedBox(width: 12),
-                          Text(
-                            _showVerseNumbers
-                                ? 'Hide verse numbers'
-                                : 'Show verse numbers',
+                          Expanded(
+                            child: Text(
+                              _showVerseNumbers
+                                  ? 'Hide verse numbers'
+                                  : 'Show verse numbers',
+                            ),
                           ),
                         ],
                       ),
@@ -780,7 +971,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
                                 await Future.delayed(
                                   const Duration(milliseconds: 100),
                                 );
-                                widget.onPrevReading?.call();
+                                _navigateToPreviousReading();
                               } finally {
                                 if (mounted) {
                                   setState(() => _isNavigating = false);
@@ -835,7 +1026,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
                                 await Future.delayed(
                                   const Duration(milliseconds: 100),
                                 );
-                                widget.onNextReading?.call();
+                                _navigateToNextReading();
                               } finally {
                                 if (mounted) {
                                   setState(() => _isNavigating = false);
@@ -924,7 +1115,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
                               await Future.delayed(
                                 const Duration(milliseconds: 100),
                               );
-                              widget.onPrevReading?.call();
+                              _navigateToPreviousReading();
                             } finally {
                               if (mounted) {
                                 setState(() => _isNavigating = false);
@@ -966,7 +1157,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
                               await Future.delayed(
                                 const Duration(milliseconds: 100),
                               );
-                              widget.onNextReading?.call();
+                              _navigateToNextReading();
                             } finally {
                               if (mounted) {
                                 setState(() => _isNavigating = false);
@@ -1442,6 +1633,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
         _currentPsalmSource = resolved;
         _isReloading = false;
       });
+      await _invalidateNarrationFor(_displayedReading);
     } catch (_) {
       if (mounted) setState(() => _isReloading = false);
     }
@@ -1525,6 +1717,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
           _currentContent = newContent;
           _isReloading = false;
         });
+        await _invalidateNarrationFor(_displayedReading);
       }
     } catch (e) {
       if (mounted) {
@@ -1599,6 +1792,14 @@ class _ReadingScreenState extends State<ReadingScreen> {
   @override
   void dispose() {
     widget.onRouteDisposed?.call();
+    final narration = _narration;
+    if (narration != null) {
+      unawaited(
+        narration.controller.onReadingExperienceExit(
+          deliberateNavigation: _deliberateNarrationNavigation,
+        ),
+      );
+    }
     SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.manual,
       overlays: SystemUiOverlay.values,

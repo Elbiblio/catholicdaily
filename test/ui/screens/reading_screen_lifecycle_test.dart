@@ -1,5 +1,14 @@
 import 'package:catholic_daily/core/latest_request_guard.dart';
+import 'package:catholic_daily/data/models/daily_reading.dart';
+import 'package:catholic_daily/data/models/reading_session.dart';
+import 'package:catholic_daily/data/services/narration_preferences.dart';
+import 'package:catholic_daily/data/services/reading_narration_composer.dart';
+import 'package:catholic_daily/data/services/reading_narration_controller.dart';
+import 'package:catholic_daily/data/services/reading_narration_queue_builder.dart';
+import 'package:catholic_daily/data/services/speech_engine.dart';
 import 'package:catholic_daily/ui/screens/reading_screen.dart';
+import 'package:catholic_daily/ui/widgets/read_aloud_icon.dart';
+import 'package:catholic_daily/ui/widgets/reading_narration_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -44,4 +53,236 @@ void main() {
 
     expect(guard.isCurrent(generation), isFalse);
   });
+
+  testWidgets(
+    'reading app bar exposes one exact-text speaker and read-all menu',
+    (tester) async {
+      SharedPreferences.setMockInitialValues(<String, Object>{});
+      final reading = DailyReading(
+        reading: 'Jn 1:1-5',
+        position: 'Gospel',
+        date: DateTime(2026, 8, 29),
+        incipit: 'In the beginning',
+      );
+      final readingSession = ReadingSession(
+        readings: <DailyReading>[reading],
+        readingTexts: const <String, String>{
+          'Jn 1:1-5': '1 In the beginning was the Word.',
+        },
+        currentIndex: 0,
+      );
+      final engine = _FakeSpeechEngine();
+      final narration = _narrationSession(engine);
+
+      await tester.pumpWidget(
+        ReadingNarrationScope(
+          session: narration,
+          child: MaterialApp(
+            home: ReadingScreen(
+              reference: reading.reading,
+              content: '1 In the beginning was the Word.',
+              readingData: reading,
+              narrationSession: readingSession,
+              sessionReadings: readingSession.readings,
+              currentReadingIndex: 0,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ReadAloudIcon), findsOneWidget);
+      expect(find.bySemanticsLabel('Read aloud'), findsOneWidget);
+      await tester.tap(find.byType(ReadAloudIcon));
+      await tester.pumpAndSettle();
+      expect(engine.spokenTexts, hasLength(1));
+      expect(
+        engine.spokenTexts.single,
+        contains('In the beginning was the Word.'),
+      );
+
+      await tester.tap(find.byType(PopupMenuButton<String>));
+      await tester.pumpAndSettle();
+      expect(find.text('Read all appointed readings'), findsOneWidget);
+
+      narration.dispose();
+    },
+  );
+
+  testWidgets('popping current-only narration stops the app-scoped session', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues(<String, Object>{});
+    final engine = _FakeSpeechEngine();
+    final narration = _narrationSession(engine);
+
+    await tester.pumpWidget(
+      ReadingNarrationScope(
+        session: narration,
+        child: MaterialApp(
+          home: Builder(
+            builder: (context) => TextButton(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const ReadingScreen(
+                    reference: 'Jn 1:1',
+                    content: '1 In the beginning was the Word.',
+                  ),
+                ),
+              ),
+              child: const Text('Open narrated reading'),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Open narrated reading'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(ReadAloudIcon));
+    await tester.pumpAndSettle();
+    expect(narration.state.status, NarrationStatus.playing);
+
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(narration.state.status, NarrationStatus.stopped);
+    expect(engine.stopCalls, 1);
+
+    narration.dispose();
+  });
+
+  testWidgets('deliberate next navigation preserves read-all playback', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues(<String, Object>{});
+    final readings = <DailyReading>[
+      DailyReading(
+        reading: 'Gen 1:1-3',
+        position: 'First Reading',
+        date: DateTime(2026, 8, 29),
+      ),
+      DailyReading(
+        reading: 'Jn 1:1-5',
+        position: 'Gospel',
+        date: DateTime(2026, 8, 29),
+      ),
+    ];
+    final readingSession = ReadingSession(
+      readings: readings,
+      readingTexts: const <String, String>{
+        'Gen 1:1-3': '1 In the beginning God created.',
+        'Jn 1:1-5': '1 In the beginning was the Word.',
+      },
+      currentIndex: 0,
+    );
+    final engine = _FakeSpeechEngine();
+    final narration = _narrationSession(engine);
+    final queue = narration.queueBuilder.buildReadAll(readingSession);
+    await narration.playReadAll(
+      queue,
+      context: const NarrationContext(
+        dateKey: '2026-08-29',
+        regionCode: 'NG',
+        bibleEditionId: 'rsvce',
+        psalmEditionId: 'territory_lectionary',
+        alternativeKey: 'primary',
+      ),
+    );
+    var nextCalls = 0;
+
+    await tester.pumpWidget(
+      ReadingNarrationScope(
+        session: narration,
+        child: MaterialApp(
+          home: Builder(
+            builder: (context) => TextButton(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => ReadingScreen(
+                    reference: readings.first.reading,
+                    content: '1 In the beginning God created.',
+                    readingData: readings.first,
+                    narrationSession: readingSession,
+                    sessionReadings: readings,
+                    currentReadingIndex: 0,
+                    hasNext: true,
+                    onNextReading: () => nextCalls++,
+                  ),
+                ),
+              ),
+              child: const Text('Open read-all'),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('Open read-all'));
+    await tester.pumpAndSettle();
+    final next = find.text('Next').last;
+    await tester.ensureVisible(next);
+    await tester.tap(next);
+    await tester.pump(const Duration(milliseconds: 150));
+    expect(nextCalls, 1);
+
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(narration.state.status, NarrationStatus.playing);
+    expect(engine.stopCalls, 0);
+
+    narration.dispose();
+  });
+}
+
+ReadingNarrationSession _narrationSession(_FakeSpeechEngine engine) {
+  return ReadingNarrationSession(
+    controller: ReadingNarrationController(engine: engine),
+    queueBuilder: const ReadingNarrationQueueBuilder(
+      composer: ReadingNarrationComposer(),
+    ),
+    preferences: NarrationPreferences(),
+  );
+}
+
+class _FakeSpeechEngine implements SpeechEngine {
+  SpeechEngineCallbacks? callbacks;
+  final List<String> spokenTexts = <String>[];
+  int stopCalls = 0;
+
+  @override
+  bool get supportsNativePause => false;
+
+  @override
+  void setCallbacks(SpeechEngineCallbacks callbacks) {
+    this.callbacks = callbacks;
+  }
+
+  @override
+  Future<void> initialize() async {}
+
+  @override
+  Future<List<SpeechVoice>> getVoices() async => const <SpeechVoice>[
+    SpeechVoice(name: 'Offline English', locale: 'en-US'),
+  ];
+
+  @override
+  Future<void> configure(SpeechEngineSettings settings) async {}
+
+  @override
+  Future<void> speak(String text, {required String utteranceId}) async {
+    spokenTexts.add(text);
+    callbacks?.onStart(utteranceId);
+  }
+
+  @override
+  Future<void> pause() async {}
+
+  @override
+  Future<void> stop() async {
+    stopCalls++;
+  }
+
+  @override
+  Future<void> dispose() async {
+    callbacks = null;
+  }
 }
