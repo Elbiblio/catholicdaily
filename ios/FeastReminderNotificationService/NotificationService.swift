@@ -2,10 +2,17 @@ import Foundation
 import UserNotifications
 
 final class NotificationService: UNNotificationServiceExtension {
+  private enum DeliveryState {
+    case idle
+    case awaitingCancellationDecision
+    case cancellationStarted
+    case finished
+  }
+
   private let completionLock = NSLock()
   private var contentHandler: ((UNNotificationContent) -> Void)?
   private var originalContent: UNNotificationContent?
-  private var hasFinished = false
+  private var state = DeliveryState.idle
 
   override func didReceive(
     _ request: UNNotificationRequest,
@@ -14,36 +21,63 @@ final class NotificationService: UNNotificationServiceExtension {
     completionLock.lock()
     self.contentHandler = contentHandler
     originalContent = request.content
-    hasFinished = false
+    state = .awaitingCancellationDecision
     completionLock.unlock()
 
     guard let identifier = FeastReminderRemoteContract.localRequestIdentifier(
       from: request.content.userInfo,
       now: Date()
     ) else {
-      finish(with: request.content)
+      completeWithoutCancellation(with: request.content)
       return
     }
 
+    guard beginCancellation() else { return }
     // flutter_local_notifications uses the decimal String form of the integer
     // passed to zonedSchedule as the iOS UNNotificationRequest identifier.
     UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
-    finish(with: request.content)
+    completeAfterCancellation(with: request.content)
   }
 
   override func serviceExtensionTimeWillExpire() {
-    guard let originalContent else { return }
-    finish(with: originalContent)
+    completeWithoutCancellation()
   }
 
-  private func finish(with content: UNNotificationContent) {
+  private func beginCancellation() -> Bool {
     completionLock.lock()
-    guard !hasFinished, let handler = contentHandler else {
+    guard state == .awaitingCancellationDecision else {
+      completionLock.unlock()
+      return false
+    }
+    state = .cancellationStarted
+    completionLock.unlock()
+    return true
+  }
+
+  private func completeAfterCancellation(with content: UNNotificationContent) {
+    finish(ifStateIs: .cancellationStarted, with: content)
+  }
+
+  private func completeWithoutCancellation(with content: UNNotificationContent? = nil) {
+    finish(ifStateIs: .awaitingCancellationDecision, with: content)
+  }
+
+  private func finish(
+    ifStateIs expectedState: DeliveryState,
+    with candidateContent: UNNotificationContent?
+  ) {
+    completionLock.lock()
+    guard
+      state == expectedState,
+      let handler = contentHandler,
+      let content = candidateContent ?? originalContent
+    else {
       completionLock.unlock()
       return
     }
-    hasFinished = true
+    state = .finished
     contentHandler = nil
+    originalContent = nil
     completionLock.unlock()
     handler(content)
   }

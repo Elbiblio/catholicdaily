@@ -33,6 +33,7 @@ env:
   APPSTORE_API_KEY_OBJECT_KEY: 'AuthKey_4WKTZ9VTBH_ConnectKey.p8'
   PLAY_SERVICE_ACCOUNT_OBJECT_KEY: 'pc-api-8544579711642974481-790-f1fa1d5f9f3c.json'
   PLAY_PACKAGE_NAME: 'com.elbiblio.catholicdaily'
+  IOS_BUNDLE_ID: 'com.elbiblio.catholicdaily'
   PLAY_TRACK: ${{ github.event.inputs.play_track || 'production' }}
   APPLE_TEAM_ID: '24QSYQPJLT'
   APPSTORE_ISSUER_ID: 'e9c47880-5d59-4555-ad9b-e0908960e3da'
@@ -100,7 +101,9 @@ jobs:
         run: python3 -m unittest discover -s scripts/tests -p 'test_ensure_ios_push_profile.py'
 
       - name: Validate iOS notification service extension
-        run: python3 tool/validate_ios_notification_service.py
+        run: |
+          python3 tool/validate_ios_notification_service.py
+          python3 -m unittest discover -s test/scripts -p 'mobile_ci_workflow_test.py'
 
       - name: Run tests
         shell: bash
@@ -297,9 +300,9 @@ jobs:
       - version_info
     if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
     env:
-      HAS_R2_ACCESS: ${{ secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '' }}
-      HAS_IOS_SIGNING: ${{ (secrets.IOS_BUILD_CERTIFICATE_BASE64 != '' && secrets.IOS_PROVISION_PROFILE_BASE64 != '' && secrets.IOS_EXTENSION_PROVISION_PROFILE_BASE64 != '') || (secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '') }}
-      HAS_TESTFLIGHT_UPLOAD: ${{ secrets.APPSTORE_PRIVATE_KEY != '' || (secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '') }}
+      HAS_R2_ACCESS: ${{ github.event_name != 'pull_request' && secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '' }}
+      HAS_IOS_SIGNING: ${{ github.event_name != 'pull_request' && ((secrets.IOS_BUILD_CERTIFICATE_BASE64 != '' && secrets.IOS_PROVISION_PROFILE_BASE64 != '' && secrets.IOS_EXTENSION_PROVISION_PROFILE_BASE64 != '') || (secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '')) }}
+      HAS_TESTFLIGHT_UPLOAD: ${{ github.event_name != 'pull_request' && (secrets.APPSTORE_PRIVATE_KEY != '' || (secrets.R2_ACCESS_KEY_ID != '' && secrets.R2_SECRET_ACCESS_KEY != '' && secrets.R2_ACCOUNT_ID != '')) }}
       VERSION_NAME: ${{ needs.version_info.outputs.version_name }}
       VERSION_CODE: ${{ needs.version_info.outputs.version_code }}
 
@@ -330,7 +333,7 @@ jobs:
         working-directory: ios
 
       - name: Prepare signing assets
-        if: env.HAS_IOS_SIGNING == 'true'
+        if: github.event_name != 'pull_request' && env.HAS_IOS_SIGNING == 'true'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
@@ -456,7 +459,7 @@ jobs:
               --issuer-id "${{ env.APPSTORE_ISSUER_ID }}" \
               --key-id "$KEY_ID" \
               --key-path "$KEY_PATH" \
-              --bundle-identifier "${{ env.PLAY_PACKAGE_NAME }}" \
+              --bundle-identifier "${{ env.IOS_BUNDLE_ID }}" \
               --certificate-serial "$CERT_SERIAL" \
               --profile-name "Catholic Daily Push ${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" \
               --output "$PROFILE_PATH"
@@ -487,12 +490,15 @@ jobs:
 
           APP_PROFILE_APP_ID=$(security cms -D -i "$PROFILE_PATH" | \
             plutil -extract Entitlements.application-identifier raw -)
-          APP_ID_SUFFIX=".${{ env.PLAY_PACKAGE_NAME }}"
+          APP_ID_SUFFIX=".${{ env.IOS_BUNDLE_ID }}"
           APP_ID_PREFIX="${APP_PROFILE_APP_ID%$APP_ID_SUFFIX}"
           if [ "$APP_ID_PREFIX" = "$APP_PROFILE_APP_ID" ]; then
-            echo "::error::Runner profile application-identifier '$APP_PROFILE_APP_ID' does not match ${{ env.PLAY_PACKAGE_NAME }}." >&2
+            echo "::error::Runner profile application-identifier does not match configured IOS_BUNDLE_ID." >&2
             exit 1
           fi
+          APP_PROFILE_TEAM=$(security cms -D -i "$PROFILE_PATH" | \
+            plutil -extract Entitlements.com.apple.developer.team-identifier raw -)
+          test "$APP_PROFILE_TEAM" = "${{ env.APPLE_TEAM_ID }}"
           EXTENSION_PROFILE_APP_ID=$(security cms -D -i "$EXTENSION_PROFILE_PATH" | \
             plutil -extract Entitlements.application-identifier raw -)
           EXPECTED_EXTENSION_APP_ID="${APP_ID_PREFIX}.${{ env.IOS_EXTENSION_BUNDLE_IDENTIFIER }}"
@@ -503,6 +509,8 @@ jobs:
           EXTENSION_PROFILE_TEAM=$(security cms -D -i "$EXTENSION_PROFILE_PATH" | \
             plutil -extract Entitlements.com.apple.developer.team-identifier raw -)
           test "$EXTENSION_PROFILE_TEAM" = "${{ env.APPLE_TEAM_ID }}"
+          test -n "$APP_ID_PREFIX"
+          echo "IOS_APP_IDENTIFIER_PREFIX=$APP_ID_PREFIX" >> "$GITHUB_ENV"
 
           security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
           security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
@@ -527,11 +535,11 @@ jobs:
           echo "Extension provisioning profile UUID: $EXTENSION_PROFILE_UUID"
 
       - name: Build iOS without codesign
-        if: env.HAS_IOS_SIGNING != 'true'
+        if: github.event_name == 'pull_request' || env.HAS_IOS_SIGNING != 'true'
         run: flutter build ios --release --no-codesign --build-name="${VERSION_NAME}" --build-number="${VERSION_CODE}"
 
       - name: Generate export options
-        if: env.HAS_IOS_SIGNING == 'true'
+        if: github.event_name != 'pull_request' && env.HAS_IOS_SIGNING == 'true'
         shell: bash
         run: |
           # Manual signing is required on CI — automatic signing needs an interactive Apple ID session
@@ -550,7 +558,7 @@ jobs:
             <string>Apple Distribution</string>
             <key>provisioningProfiles</key>
             <dict>
-              <key>com.elbiblio.catholicdaily</key>
+              <key>${{ env.IOS_BUNDLE_ID }}</key>
               <string>${IOS_PROFILE_UUID}</string>
               <key>${{ env.IOS_EXTENSION_BUNDLE_IDENTIFIER }}</key>
               <string>${IOS_EXTENSION_PROVISION_PROFILE}</string>
@@ -568,21 +576,21 @@ jobs:
           EOF
 
       - name: Inject build settings into Release xcconfig
-        if: env.HAS_IOS_SIGNING == 'true'
+        if: github.event_name != 'pull_request' && env.HAS_IOS_SIGNING == 'true'
         shell: bash
         run: |
           echo "PROVISIONING_PROFILE_SPECIFIER=${IOS_PROFILE_UUID}" >> ios/Flutter/Release.xcconfig
           echo "IPHONEOS_DEPLOYMENT_TARGET = 15.0" >> ios/Flutter/Release.xcconfig
 
       - name: Build signed iOS IPA
-        if: env.HAS_IOS_SIGNING == 'true'
+        if: github.event_name != 'pull_request' && env.HAS_IOS_SIGNING == 'true'
         run: flutter build ipa --release --export-options-plist="$RUNNER_TEMP/ExportOptions.plist" --build-name="${VERSION_NAME}" --build-number="${VERSION_CODE}"
 
       - name: Validate embedded notification service extension
         shell: bash
         run: |
           set -euo pipefail
-          if [ "${HAS_IOS_SIGNING}" = "true" ]; then
+          if [ "${{ github.event_name }}" != "pull_request" ] && [ "${HAS_IOS_SIGNING}" = "true" ]; then
             APP_PATH="build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app"
           else
             APP_PATH="build/ios/iphoneos/Runner.app"
@@ -590,16 +598,29 @@ jobs:
           APPEX_PATH="$APP_PATH/PlugIns/FeastReminderNotificationService.appex"
           test -d "$APPEX_PATH"
 
-          BUNDLE_ID=$(plutil -extract CFBundleIdentifier raw "$APPEX_PATH/Info.plist")
-          test "$BUNDLE_ID" = "${{ env.IOS_EXTENSION_BUNDLE_IDENTIFIER }}"
+          RUNNER_BUNDLE_ID=$(plutil -extract CFBundleIdentifier raw "$APP_PATH/Info.plist")
+          test "$RUNNER_BUNDLE_ID" = "${{ env.IOS_BUNDLE_ID }}"
+          EXTENSION_BUNDLE_ID=$(plutil -extract CFBundleIdentifier raw "$APPEX_PATH/Info.plist")
+          test "$EXTENSION_BUNDLE_ID" = "${{ env.IOS_EXTENSION_BUNDLE_IDENTIFIER }}"
           EXTENSION_POINT=$(plutil -extract NSExtension.NSExtensionPointIdentifier raw "$APPEX_PATH/Info.plist")
           test "$EXTENSION_POINT" = "com.apple.usernotifications.service"
 
-          if [ "${HAS_IOS_SIGNING}" = "true" ]; then
+          if [ "${{ github.event_name }}" != "pull_request" ] && [ "${HAS_IOS_SIGNING}" = "true" ]; then
             test -f "$APP_PATH/embedded.mobileprovision"
             codesign --verify --strict --verbose=2 "$APP_PATH"
             codesign -d --entitlements :- "$APP_PATH" > "$RUNNER_TEMP/runner-entitlements.plist"
             RUNNER_ENTITLEMENTS="$RUNNER_TEMP/runner-entitlements.plist"
+            EXPECTED_RUNNER_APP_ID="${IOS_APP_IDENTIFIER_PREFIX}.${{ env.IOS_BUNDLE_ID }}"
+            RUNNER_SIGNED_APP_ID=$(plutil -extract application-identifier raw "$RUNNER_ENTITLEMENTS")
+            test "$RUNNER_SIGNED_APP_ID" = "$EXPECTED_RUNNER_APP_ID"
+            RUNNER_SIGNED_TEAM=$(plutil -extract com.apple.developer.team-identifier raw "$RUNNER_ENTITLEMENTS")
+            test "$RUNNER_SIGNED_TEAM" = "${{ env.APPLE_TEAM_ID }}"
+            RUNNER_PROFILE_APP_ID=$(security cms -D -i "$APP_PATH/embedded.mobileprovision" | \
+              plutil -extract Entitlements.application-identifier raw -)
+            test "$RUNNER_PROFILE_APP_ID" = "$EXPECTED_RUNNER_APP_ID"
+            RUNNER_PROFILE_TEAM=$(security cms -D -i "$APP_PATH/embedded.mobileprovision" | \
+              plutil -extract Entitlements.com.apple.developer.team-identifier raw -)
+            test "$RUNNER_PROFILE_TEAM" = "${{ env.APPLE_TEAM_ID }}"
             RUNNER_PUSH_ENV=$(plutil -extract aps-environment raw "$RUNNER_ENTITLEMENTS")
             test "$RUNNER_PUSH_ENV" = "production"
             RUNNER_PROFILE_PUSH_ENV=$(security cms -D -i "$APP_PATH/embedded.mobileprovision" | \
@@ -609,30 +630,35 @@ jobs:
             test -f "$APPEX_PATH/embedded.mobileprovision"
             codesign --verify --strict --verbose=2 "$APPEX_PATH"
             codesign -d --entitlements :- "$APPEX_PATH" > "$RUNNER_TEMP/extension-entitlements.plist"
-            SIGNED_APP_ID=$(plutil -extract application-identifier raw "$RUNNER_TEMP/extension-entitlements.plist")
-            PROFILE_APP_ID=$(security cms -D -i "$APPEX_PATH/embedded.mobileprovision" | \
+            EXPECTED_EXTENSION_APP_ID="${IOS_APP_IDENTIFIER_PREFIX}.${{ env.IOS_EXTENSION_BUNDLE_IDENTIFIER }}"
+            EXTENSION_SIGNED_APP_ID=$(plutil -extract application-identifier raw "$RUNNER_TEMP/extension-entitlements.plist")
+            test "$EXTENSION_SIGNED_APP_ID" = "$EXPECTED_EXTENSION_APP_ID"
+            EXTENSION_PROFILE_APP_ID=$(security cms -D -i "$APPEX_PATH/embedded.mobileprovision" | \
               plutil -extract Entitlements.application-identifier raw -)
-            test "$PROFILE_APP_ID" = "$SIGNED_APP_ID"
-            SIGNED_TEAM=$(plutil -extract com.apple.developer.team-identifier raw "$RUNNER_TEMP/extension-entitlements.plist")
-            test "$SIGNED_TEAM" = "${{ env.APPLE_TEAM_ID }}"
+            test "$EXTENSION_PROFILE_APP_ID" = "$EXPECTED_EXTENSION_APP_ID"
+            EXTENSION_SIGNED_TEAM=$(plutil -extract com.apple.developer.team-identifier raw "$RUNNER_TEMP/extension-entitlements.plist")
+            test "$EXTENSION_SIGNED_TEAM" = "${{ env.APPLE_TEAM_ID }}"
+            EXTENSION_PROFILE_TEAM=$(security cms -D -i "$APPEX_PATH/embedded.mobileprovision" | \
+              plutil -extract Entitlements.com.apple.developer.team-identifier raw -)
+            test "$EXTENSION_PROFILE_TEAM" = "${{ env.APPLE_TEAM_ID }}"
           fi
 
       - name: Package iOS build artifacts
-        if: env.HAS_IOS_SIGNING != 'true'
+        if: github.event_name == 'pull_request' || env.HAS_IOS_SIGNING != 'true'
         run: |
           mkdir -p build/ios-artifacts
           cp -R build/ios/iphoneos/Runner.app build/ios-artifacts/
         shell: bash
 
       - name: Package signed iOS artifacts
-        if: env.HAS_IOS_SIGNING == 'true'
+        if: github.event_name != 'pull_request' && env.HAS_IOS_SIGNING == 'true'
         run: |
           mkdir -p build/ios-artifacts
           cp -R build/ios/ipa build/ios-artifacts/ipa
         shell: bash
 
       - name: Prepare App Store Connect API key
-        if: env.HAS_IOS_SIGNING == 'true' && env.HAS_TESTFLIGHT_UPLOAD == 'true'
+        if: github.event_name != 'pull_request' && env.HAS_IOS_SIGNING == 'true' && env.HAS_TESTFLIGHT_UPLOAD == 'true'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
@@ -684,7 +710,7 @@ jobs:
           echo "API key validated (PEM header present, $(wc -c < "$KEY_FILE") bytes)"
 
       - name: Upload to TestFlight
-        if: env.HAS_IOS_SIGNING == 'true' && env.HAS_TESTFLIGHT_UPLOAD == 'true'
+        if: github.event_name != 'pull_request' && env.HAS_IOS_SIGNING == 'true' && env.HAS_TESTFLIGHT_UPLOAD == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -701,11 +727,11 @@ jobs:
             --verbose
 
       - name: Skip TestFlight upload when App Store secrets are missing
-        if: env.HAS_IOS_SIGNING == 'true' && env.HAS_TESTFLIGHT_UPLOAD != 'true'
+        if: github.event_name != 'pull_request' && env.HAS_IOS_SIGNING == 'true' && env.HAS_TESTFLIGHT_UPLOAD != 'true'
         run: echo "iOS signing is configured, but App Store Connect secrets are missing; skipping TestFlight upload."
 
       - name: Skip signed iOS build when signing secrets are missing
-        if: env.HAS_IOS_SIGNING != 'true'
+        if: github.event_name != 'pull_request' && env.HAS_IOS_SIGNING != 'true'
         run: echo "iOS signing secrets not configured; built unsigned iOS artifacts only."
 
       - name: Upload iOS artifacts

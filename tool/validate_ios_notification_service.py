@@ -17,6 +17,8 @@ SWIFT = ROOT / "ios" / "FeastReminderNotificationService" / "NotificationService
 PLIST = ROOT / "ios" / "FeastReminderNotificationService" / "Info.plist"
 PBXPROJ = ROOT / "ios" / "Runner.xcodeproj" / "project.pbxproj"
 WORKFLOW = ROOT / ".github" / "workflows" / "mobile.yml"
+EXTENSION_DEBUG_XCCONFIG = ROOT / "ios" / "Flutter" / "FeastReminderNotificationServiceDebug.xcconfig"
+EXTENSION_RELEASE_XCCONFIG = ROOT / "ios" / "Flutter" / "FeastReminderNotificationServiceRelease.xcconfig"
 
 
 def _integer(value: object) -> int | None:
@@ -102,6 +104,23 @@ def _slug(value: str) -> str:
     return re.sub(r"^-+|-+$", "", re.sub(r"[^a-z0-9]+", "-", value.strip().lower())) or "celebration"
 
 
+class CancellationGateModel:
+    def __init__(self) -> None:
+        self.state = "awaiting_cancellation_decision"
+        self.actions: list[str] = []
+
+    def event(self, name: str) -> None:
+        if name == "begin_cancellation" and self.state == "awaiting_cancellation_decision":
+            self.state = "cancellation_started"
+            self.actions.append("cancel")
+        elif name == "complete_cancellation" and self.state == "cancellation_started":
+            self.state = "finished"
+            self.actions.append("handler")
+        elif name in {"timeout", "complete_without_cancellation"} and self.state == "awaiting_cancellation_decision":
+            self.state = "finished"
+            self.actions.append("handler")
+
+
 class IosNotificationServiceValidation(unittest.TestCase):
     def test_payload_fixtures(self) -> None:
         document = json.loads(FIXTURES.read_text(encoding="utf-8"))
@@ -115,7 +134,17 @@ class IosNotificationServiceValidation(unittest.TestCase):
                     request_identifier(case["payload"], now),
                 )
 
-    def test_swift_implements_contract_and_single_completion_gate(self) -> None:
+    def test_cancellation_gate_race_fixtures(self) -> None:
+        document = json.loads(FIXTURES.read_text(encoding="utf-8"))
+        for case in document["race_cases"]:
+            with self.subTest(case=case["name"]):
+                gate = CancellationGateModel()
+                for event in case["events"]:
+                    gate.event(event)
+                self.assertEqual(case["expected_actions"], gate.actions)
+                self.assertEqual(case["expected_state"], gate.state)
+
+    def test_swift_implements_contract_and_atomic_cancellation_gate(self) -> None:
         source = SWIFT.read_text(encoding="utf-8")
         for token in (
             '"schema"',
@@ -130,9 +159,15 @@ class IosNotificationServiceValidation(unittest.TestCase):
             "removePendingNotificationRequests(withIdentifiers:",
             "serviceExtensionTimeWillExpire",
             "NSLock",
+            "awaitingCancellationDecision",
+            "cancellationStarted",
+            "beginCancellation",
+            "completeAfterCancellation",
+            "completeWithoutCancellation",
         ):
             self.assertIn(token, source)
         self.assertEqual(1, source.count("handler(content)"))
+        self.assertEqual(1, source.count("removePendingNotificationRequests(withIdentifiers:"))
         identity_start = source.index("private static func validIdentity")
         identity_guard = source.index("guard\n", identity_start)
         identity_else = source.index("else {", identity_guard)
@@ -141,8 +176,10 @@ class IosNotificationServiceValidation(unittest.TestCase):
             source[identity_guard:identity_else],
         )
         remove_index = source.index("removePendingNotificationRequests(withIdentifiers:")
-        finish_index = source.index("finish(with:", remove_index)
-        self.assertLess(remove_index, finish_index)
+        begin_index = source.rindex("beginCancellation", 0, remove_index)
+        complete_index = source.index("completeAfterCancellation", remove_index)
+        self.assertLess(begin_index, remove_index)
+        self.assertLess(remove_index, complete_index)
 
     def test_extension_plist_declares_notification_service(self) -> None:
         with PLIST.open("rb") as stream:
@@ -153,6 +190,44 @@ class IosNotificationServiceValidation(unittest.TestCase):
             extension["NSExtensionPointIdentifier"],
         )
         self.assertEqual("$(PRODUCT_MODULE_NAME).NotificationService", extension["NSExtensionPrincipalClass"])
+        self.assertEqual("$(MARKETING_VERSION)", document["CFBundleShortVersionString"])
+        self.assertEqual("$(CURRENT_PROJECT_VERSION)", document["CFBundleVersion"])
+
+    def test_extension_build_configs_resolve_flutter_versions(self) -> None:
+        project = PBXPROJ.read_text(encoding="utf-8")
+        self.assertRegex(
+            project,
+            r"(?s)FE45A0000000000000000016 /\* Debug \*/ = \{.*?baseConfigurationReference = [A-F0-9]{24} /\* FeastReminderNotificationServiceDebug\.xcconfig \*/;",
+        )
+        for config_id in (
+            "FE45A0000000000000000016",
+            "FE45A0000000000000000017",
+            "FE45A0000000000000000018",
+        ):
+            block = re.search(rf"(?s){config_id} /\* .*? \*/ = \{{(.*?)\n\t\t\}};", project)
+            self.assertIsNotNone(block)
+            self.assertIn('CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";', block.group(1))
+            self.assertIn('MARKETING_VERSION = "$(FLUTTER_BUILD_NAME)";', block.group(1))
+        for config_id, name in (
+            ("FE45A0000000000000000017", "Release"),
+            ("FE45A0000000000000000018", "Profile"),
+        ):
+            self.assertRegex(
+                project,
+                rf"(?s){config_id} /\* {name} \*/ = \{{.*?baseConfigurationReference = [A-F0-9]{{24}} /\* FeastReminderNotificationServiceRelease\.xcconfig \*/;",
+            )
+        for path in (EXTENSION_DEBUG_XCCONFIG, EXTENSION_RELEASE_XCCONFIG):
+            source = path.read_text(encoding="utf-8")
+            self.assertIn('#include "Generated.xcconfig"', source)
+            self.assertNotIn("Pods-Runner", source)
+        generated = (ROOT / "ios" / "Flutter" / "Generated.xcconfig").read_text(encoding="utf-8")
+        values = dict(
+            line.split("=", 1)
+            for line in generated.splitlines()
+            if "=" in line and not line.lstrip().startswith("//")
+        )
+        self.assertTrue(values.get("FLUTTER_BUILD_NAME", "").strip())
+        self.assertTrue(values.get("FLUTTER_BUILD_NUMBER", "").strip())
 
     def test_xcode_project_builds_and_embeds_ios15_extension(self) -> None:
         project = PBXPROJ.read_text(encoding="utf-8")
@@ -184,14 +259,46 @@ class IosNotificationServiceValidation(unittest.TestCase):
             "embedded.mobileprovision",
             "codesign -d --entitlements",
             "RUNNER_ENTITLEMENTS",
+            "RUNNER_SIGNED_APP_ID",
+            "RUNNER_PROFILE_APP_ID",
+            "RUNNER_SIGNED_TEAM",
+            "RUNNER_PROFILE_TEAM",
+            "IOS_APP_IDENTIFIER_PREFIX",
+            "IOS_BUNDLE_ID",
             "aps-environment",
             "CFBundleIdentifier",
             "NSExtensionPointIdentifier",
+            "python3 -m unittest discover -s test/scripts -p 'mobile_ci_workflow_test.py'",
         ):
             self.assertIn(token, workflow)
         ios_job = re.search(r"(?ms)^  ios:\s+.*?(?=^  windows:)", workflow)
         self.assertIsNotNone(ios_job)
         self.assertIn("github.event_name == 'pull_request'", ios_job.group(0))
+        self.assertRegex(
+            ios_job.group(0),
+            r"HAS_IOS_SIGNING: \$\{\{ github\.event_name != 'pull_request' &&",
+        )
+        self.assertRegex(
+            ios_job.group(0),
+            r"HAS_TESTFLIGHT_UPLOAD: \$\{\{ github\.event_name != 'pull_request' &&",
+        )
+        self.assertIn(
+            "if: github.event_name == 'pull_request' || env.HAS_IOS_SIGNING != 'true'",
+            ios_job.group(0),
+        )
+        for assertion in (
+            'EXPECTED_RUNNER_APP_ID="${IOS_APP_IDENTIFIER_PREFIX}.${{ env.IOS_BUNDLE_ID }}"',
+            'test "$RUNNER_BUNDLE_ID" = "${{ env.IOS_BUNDLE_ID }}"',
+            'test "$RUNNER_SIGNED_APP_ID" = "$EXPECTED_RUNNER_APP_ID"',
+            'test "$RUNNER_PROFILE_APP_ID" = "$EXPECTED_RUNNER_APP_ID"',
+            'test "$RUNNER_SIGNED_TEAM" = "${{ env.APPLE_TEAM_ID }}"',
+            'test "$RUNNER_PROFILE_TEAM" = "${{ env.APPLE_TEAM_ID }}"',
+            'test "$EXTENSION_SIGNED_APP_ID" = "$EXPECTED_EXTENSION_APP_ID"',
+            'test "$EXTENSION_PROFILE_APP_ID" = "$EXPECTED_EXTENSION_APP_ID"',
+            'test "$EXTENSION_SIGNED_TEAM" = "${{ env.APPLE_TEAM_ID }}"',
+            'test "$EXTENSION_PROFILE_TEAM" = "${{ env.APPLE_TEAM_ID }}"',
+        ):
+            self.assertIn(assertion, ios_job.group(0))
 
 
 if __name__ == "__main__":

@@ -85,6 +85,8 @@
 		FE45A0000000000000000004 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		FE45A0000000000000000005 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FE45A0000000000000000006 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		FE45A0000000000000000020 /* FeastReminderNotificationServiceDebug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = FeastReminderNotificationServiceDebug.xcconfig; path = Flutter/FeastReminderNotificationServiceDebug.xcconfig; sourceTree = "<group>"; };
+		FE45A0000000000000000021 /* FeastReminderNotificationServiceRelease.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = FeastReminderNotificationServiceRelease.xcconfig; path = Flutter/FeastReminderNotificationServiceRelease.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +123,8 @@
 				9740EEB21CF90195004384FC /* Debug.xcconfig */,
 				7AFA3C8E1D35360C0083082E /* Release.xcconfig */,
 				9740EEB31CF90195004384FC /* Generated.xcconfig */,
+				FE45A0000000000000000020 /* FeastReminderNotificationServiceDebug.xcconfig */,
+				FE45A0000000000000000021 /* FeastReminderNotificationServiceRelease.xcconfig */,
 			);
 			name = Flutter;
 			sourceTree = "<group>";
@@ -695,6 +699,7 @@
 		};
 		FE45A0000000000000000016 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FE45A0000000000000000020 /* FeastReminderNotificationServiceDebug.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -720,6 +725,7 @@
 		};
 		FE45A0000000000000000017 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FE45A0000000000000000021 /* FeastReminderNotificationServiceRelease.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_IDENTITY = "Apple Distribution";
@@ -746,6 +752,7 @@
 		};
 		FE45A0000000000000000018 /* Profile */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FE45A0000000000000000021 /* FeastReminderNotificationServiceRelease.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_IDENTITY = "Apple Distribution";
