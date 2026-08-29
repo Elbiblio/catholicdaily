@@ -192,5 +192,154 @@ void main() {
         'This reading is not available to narrate.',
       );
     });
+
+    test('recognizes every backend unavailable placeholder prefix', () {
+      for (final placeholder in <String>[
+        'Reading text unavailable for Jn 99:1.',
+        'Psalm text unavailable for Ps 999:1.',
+        'Chapter text unavailable for John 99.',
+      ]) {
+        final result = composer.compose(
+          reading: reading(reference: 'John 99'),
+          displayedText: placeholder,
+          isBibleChapter: true,
+        );
+        expect(result.isAvailable, isFalse, reason: placeholder);
+      }
+    });
+
+    test(
+      'does not hide legitimate Scripture that mentions unavailable text',
+      () {
+        final result = composer.compose(
+          reading: reading(reference: 'Wis 2:1'),
+          displayedText:
+              'They reasoned unsoundly, speaking of things unavailable to them.',
+        );
+
+        expect(result.isAvailable, isTrue);
+        expect(result.text, contains('things unavailable to them'));
+      },
+    );
+
+    test(
+      'naturalizes every canonical and deuterocanonical app abbreviation',
+      () {
+        const books = <String, String>{
+          'Gen': 'Genesis',
+          'Exod': 'Exodus',
+          'Lev': 'Leviticus',
+          'Num': 'Numbers',
+          'Deut': 'Deuteronomy',
+          'Josh': 'Joshua',
+          'Judg': 'Judges',
+          'Ruth': 'Ruth',
+          '1 Sam': 'First Samuel',
+          '2 Sam': 'Second Samuel',
+          '1 Kgs': 'First Kings',
+          '2 Kgs': 'Second Kings',
+          '1 Chr': 'First Chronicles',
+          '2 Chr': 'Second Chronicles',
+          'Ezra': 'Ezra',
+          'Neh': 'Nehemiah',
+          'Tob': 'Tobit',
+          'Jud': 'Judith',
+          'Esth': 'Esther',
+          '1 Macc': 'First Maccabees',
+          '2 Macc': 'Second Maccabees',
+          'Job': 'Job',
+          'Ps': 'Psalms',
+          'Prov': 'Proverbs',
+          'Eccles': 'Ecclesiastes',
+          'Song': 'Song of Songs',
+          'Wis': 'Wisdom',
+          'Sir': 'Sirach',
+          'Isa': 'Isaiah',
+          'Jer': 'Jeremiah',
+          'Lam': 'Lamentations',
+          'Bar': 'Baruch',
+          'Ezek': 'Ezekiel',
+          'Dan': 'Daniel',
+          'Hos': 'Hosea',
+          'Joel': 'Joel',
+          'Amos': 'Amos',
+          'Obad': 'Obadiah',
+          'Jonah': 'Jonah',
+          'Mic': 'Micah',
+          'Nah': 'Nahum',
+          'Hab': 'Habakkuk',
+          'Zeph': 'Zephaniah',
+          'Hagg': 'Haggai',
+          'Zech': 'Zechariah',
+          'Mal': 'Malachi',
+          'Matt': 'Matthew',
+          'Mark': 'Mark',
+          'Luke': 'Luke',
+          'John': 'John',
+          'Acts': 'Acts of the Apostles',
+          'Rom': 'Romans',
+          '1 Cor': 'First Corinthians',
+          '2 Cor': 'Second Corinthians',
+          'Gal': 'Galatians',
+          'Eph': 'Ephesians',
+          'Phil': 'Philippians',
+          'Col': 'Colossians',
+          '1 Thess': 'First Thessalonians',
+          '2 Thess': 'Second Thessalonians',
+          '1 Tim': 'First Timothy',
+          '2 Tim': 'Second Timothy',
+          'Titus': 'Titus',
+          'Phlm': 'Philemon',
+          'Heb': 'Hebrews',
+          'James': 'James',
+          '1 Pet': 'First Peter',
+          '2 Pet': 'Second Peter',
+          '1 John': 'First John',
+          '2 John': 'Second John',
+          '3 John': 'Third John',
+          'Jude': 'Jude',
+          'Rev': 'Revelation',
+        };
+
+        for (final entry in books.entries) {
+          final result = composer.compose(
+            reading: reading(reference: '${entry.key} 1:1'),
+            displayedText: 'Appointed text.',
+          );
+          expect(
+            result.segments[1].text,
+            '${entry.value}, chapter 1, verse 1.',
+            reason: entry.key,
+          );
+        }
+      },
+    );
+
+    test('naturalizes multi-chapter lists without embedded colons', () {
+      final result = composer.compose(
+        reading: reading(reference: '2 Sam 15:13-30, 16:5-13'),
+        displayedText: 'Appointed text.',
+      );
+
+      expect(
+        result.segments[1].text,
+        'Second Samuel, chapter 15, verses 13 to 30; '
+        'chapter 16, verses 5 to 13.',
+      );
+      expect(result.segments[1].text, isNot(contains(':')));
+    });
+
+    test('preserves verse suffixes across chapter lists', () {
+      final result = composer.compose(
+        reading: reading(reference: 'Isa 52:13a-15b, 53:1c-2'),
+        displayedText: 'Appointed text.',
+      );
+
+      expect(
+        result.segments[1].text,
+        'Isaiah, chapter 52, verses 13a to 15b; '
+        'chapter 53, verses 1c to 2.',
+      );
+    });
   });
 }

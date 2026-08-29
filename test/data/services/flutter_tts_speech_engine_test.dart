@@ -20,6 +20,7 @@ void main() {
 
       expect(driver.awaitCompletionCalls, 1);
       expect(driver.startHandlerRegistrations, 1);
+      expect(driver.continueHandlerRegistrations, 1);
       expect(driver.completionHandlerRegistrations, 1);
       expect(driver.errorHandlerRegistrations, 1);
       expect(driver.progressHandlerRegistrations, 1);
@@ -57,6 +58,56 @@ void main() {
       expect(voices.last.isNetworkRequired, isTrue);
     },
   );
+
+  test('parses real Android network-required voice shapes fail-safe', () async {
+    final driver = FakeFlutterTtsDriver()
+      ..rawVoices = <Object?>[
+        for (final entry in <(String, Object?)>[
+          ('bool true', true),
+          ('bool false', false),
+          ('int one', 1),
+          ('int zero', 0),
+          ('string one', '1'),
+          ('string zero', '0'),
+          ('string true', 'true'),
+          ('string false', 'false'),
+          ('unknown', 'sometimes'),
+        ])
+          <String, Object?>{
+            'name': entry.$1,
+            'locale': 'en-US',
+            'network_required': entry.$2,
+          },
+        <String, Object?>{'name': 'absent', 'locale': 'en-US'},
+      ];
+    final engine = FlutterTtsSpeechEngine(
+      driver: driver,
+      platform: SpeechPlatform.android,
+    );
+
+    final voices = <String, SpeechVoice>{
+      for (final voice in await engine.getVoices()) voice.name: voice,
+    };
+
+    for (final name in <String>[
+      'bool true',
+      'int one',
+      'string one',
+      'string true',
+      'unknown',
+      'absent',
+    ]) {
+      expect(voices[name]?.isNetworkRequired, isTrue, reason: name);
+    }
+    for (final name in <String>[
+      'bool false',
+      'int zero',
+      'string zero',
+      'string false',
+    ]) {
+      expect(voices[name]?.isNetworkRequired, isFalse, reason: name);
+    }
+  });
 
   test('applies installed language, rate, and selected voice', () async {
     final driver = FakeFlutterTtsDriver();
@@ -125,6 +176,7 @@ void main() {
       engine.setCallbacks(
         SpeechEngineCallbacks(
           onStart: (id) => events.add('start:$id'),
+          onContinue: (id) => events.add('continue:$id'),
           onCompletion: (id) => events.add('complete:$id'),
           onError: (id, message) => events.add('error:$id:$message'),
           onProgress: (id, start, end, word) =>
@@ -145,6 +197,27 @@ void main() {
       expect(events.last, 'complete:u1');
     },
   );
+
+  test('forwards native continue with the resumed utterance id', () async {
+    final driver = FakeFlutterTtsDriver();
+    final events = <String>[];
+    final engine = FlutterTtsSpeechEngine(
+      driver: driver,
+      platform: SpeechPlatform.ios,
+    );
+    engine.setCallbacks(
+      _callbacks(onContinue: (id) => events.add('continue:$id')),
+    );
+    await engine.initialize();
+
+    unawaited(engine.speak('Original text.', utteranceId: 'original'));
+    await engine.pause();
+    unawaited(engine.speak('Original text.', utteranceId: 'resumed'));
+    driver.emitContinue();
+
+    expect(events, <String>['continue:resumed']);
+    await engine.dispose();
+  });
 
   test(
     'forwards active errors and safely ignores callbacks after dispose',
@@ -208,10 +281,12 @@ void main() {
 }
 
 SpeechEngineCallbacks _callbacks({
+  void Function(String id)? onContinue,
   void Function(String id, String message)? onError,
 }) {
   return SpeechEngineCallbacks(
     onStart: (_) {},
+    onContinue: onContinue ?? (_) {},
     onCompletion: (_) {},
     onError: onError ?? (_, __) {},
     onProgress: (_, __, ___, ____) {},
@@ -221,6 +296,7 @@ SpeechEngineCallbacks _callbacks({
 class FakeFlutterTtsDriver implements FlutterTtsDriver {
   int awaitCompletionCalls = 0;
   int startHandlerRegistrations = 0;
+  int continueHandlerRegistrations = 0;
   int completionHandlerRegistrations = 0;
   int errorHandlerRegistrations = 0;
   int progressHandlerRegistrations = 0;
@@ -232,6 +308,7 @@ class FakeFlutterTtsDriver implements FlutterTtsDriver {
   final List<Map<String, String>> voices = <Map<String, String>>[];
   Completer<void>? speechCompleter;
   void Function()? startHandler;
+  void Function()? continueHandler;
   void Function()? completionHandler;
   void Function(String message)? errorHandler;
   void Function(String text, int start, int end, String word)? progressHandler;
@@ -245,6 +322,12 @@ class FakeFlutterTtsDriver implements FlutterTtsDriver {
   void setStartHandler(void Function() handler) {
     startHandlerRegistrations++;
     startHandler = handler;
+  }
+
+  @override
+  void setContinueHandler(void Function() handler) {
+    continueHandlerRegistrations++;
+    continueHandler = handler;
   }
 
   @override
@@ -310,6 +393,7 @@ class FakeFlutterTtsDriver implements FlutterTtsDriver {
   }
 
   void emitStart() => startHandler?.call();
+  void emitContinue() => continueHandler?.call();
   void emitCompletion() => completionHandler?.call();
   void emitError(String message) => errorHandler?.call(message);
   void emitProgress(String text, int start, int end, String word) =>

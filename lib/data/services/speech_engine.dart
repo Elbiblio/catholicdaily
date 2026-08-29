@@ -49,6 +49,7 @@ class SpeechEngineSettings {
 
 class SpeechEngineCallbacks {
   final void Function(String utteranceId) onStart;
+  final void Function(String utteranceId) onContinue;
   final void Function(String utteranceId) onCompletion;
   final void Function(String utteranceId, String message) onError;
   final void Function(String utteranceId, int start, int end, String word)
@@ -56,6 +57,7 @@ class SpeechEngineCallbacks {
 
   const SpeechEngineCallbacks({
     required this.onStart,
+    required this.onContinue,
     required this.onCompletion,
     required this.onError,
     required this.onProgress,

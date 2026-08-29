@@ -10,6 +10,8 @@ abstract class FlutterTtsDriver {
 
   void setStartHandler(void Function() handler);
 
+  void setContinueHandler(void Function() handler);
+
   void setCompletionHandler(void Function() handler);
 
   void setErrorHandler(void Function(String message) handler);
@@ -78,6 +80,10 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
       final id = _activeUtteranceId;
       if (!_disposed && id != null) _callbacks?.onStart(id);
     });
+    _driver.setContinueHandler(() {
+      final id = _activeUtteranceId;
+      if (!_disposed && id != null) _callbacks?.onContinue(id);
+    });
     _driver.setCompletionHandler(() {
       final id = _activeUtteranceId;
       if (!_disposed && id != null) _callbacks?.onCompletion(id);
@@ -110,7 +116,7 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
         SpeechVoice(
           name: name,
           locale: locale,
-          isNetworkRequired: _networkRequired(item),
+          isNetworkRequired: _networkRequired(item, _platform),
         ),
       );
     }
@@ -182,21 +188,34 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
     await _driver.stop();
   }
 
-  static bool _networkRequired(Map<dynamic, dynamic> value) {
+  static bool _networkRequired(
+    Map<dynamic, dynamic> value,
+    SpeechPlatform platform,
+  ) {
     final raw =
         value['network_required'] ??
         value['networkRequired'] ??
         value['isNetworkConnectionRequired'];
     if (raw is bool) return raw;
     if (raw is num) return raw != 0;
-    if (raw != null) return raw.toString().toLowerCase() == 'true';
+    if (raw != null) {
+      switch (raw.toString().trim().toLowerCase()) {
+        case '1':
+        case 'true':
+          return true;
+        case '0':
+        case 'false':
+          return false;
+      }
+    }
     final features = value['features'];
     if (features is Iterable) {
-      return features.any(
+      final requiresNetwork = features.any(
         (feature) => feature.toString().toLowerCase().contains('network'),
       );
+      if (requiresNetwork) return true;
     }
-    return false;
+    return platform == SpeechPlatform.android;
   }
 
   static SpeechPlatform _currentPlatform() {
@@ -225,6 +244,11 @@ class _PluginFlutterTtsDriver implements FlutterTtsDriver {
   @override
   void setStartHandler(void Function() handler) {
     _tts.setStartHandler(handler);
+  }
+
+  @override
+  void setContinueHandler(void Function() handler) {
+    _tts.setContinueHandler(handler);
   }
 
   @override

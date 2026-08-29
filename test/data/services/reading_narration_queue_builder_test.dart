@@ -162,5 +162,14 @@ void main() {
       expect(queue.single.narration.text, contains('chapter 6'));
       expect(queue.single.narration.text, contains('After this Jesus'));
     });
+
+    test('unavailable current Bible chapter does not enter the queue', () {
+      final queue = builder.buildCurrentBibleChapter(
+        reference: 'John 99',
+        displayedText: 'Chapter text unavailable for John 99.',
+      );
+
+      expect(queue, isEmpty);
+    });
   });
 }

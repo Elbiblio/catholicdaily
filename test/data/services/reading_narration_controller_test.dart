@@ -139,6 +139,14 @@ void main() {
       expect(controller.state.status, NarrationStatus.playing);
       expect(engine.spokenTexts.last, 'reading text.');
       expect(engine.lastUtteranceId, isNot(firstId));
+      engine.emitProgress(
+        engine.lastUtteranceId!,
+        start: 0,
+        end: 7,
+        word: 'reading',
+      );
+      expect(controller.state.progressStart, 6);
+      expect(controller.state.progressEnd, 13);
     },
   );
 
@@ -147,6 +155,8 @@ void main() {
     () async {
       engine.nativePauseSupported = true;
       await controller.play(queue);
+      final firstId = engine.lastUtteranceId!;
+      engine.emitProgress(firstId, start: 6, end: 13, word: 'reading');
 
       await controller.pause();
       expect(engine.pauseCalls, 1);
@@ -154,7 +164,18 @@ void main() {
 
       await controller.resume();
       expect(engine.spokenTexts, hasLength(2));
+      expect(engine.spokenTexts.last, 'First reading text.');
       expect(controller.state.status, NarrationStatus.playing);
+      expect(engine.lastUtteranceId, isNot(firstId));
+
+      engine.emitProgress(
+        engine.lastUtteranceId!,
+        start: 14,
+        end: 18,
+        word: 'text',
+      );
+      expect(controller.state.progressStart, 14);
+      expect(controller.state.progressEnd, 18);
     },
   );
 
@@ -191,6 +212,90 @@ void main() {
     expect(controller.state.status, NarrationStatus.error);
     expect(controller.state.errorMessage, 'voice failed');
   });
+
+  test(
+    'pre-play stop failure becomes error and rejects old callbacks',
+    () async {
+      await controller.play(queue);
+      final staleId = engine.lastUtteranceId!;
+      engine.stopError = StateError('pre-play stop failed');
+
+      await expectLater(
+        controller.play(<ReadingNarrationQueueItem>[queue.last]),
+        completes,
+      );
+
+      expect(controller.state.status, NarrationStatus.error);
+      expect(controller.state.errorMessage, contains('pre-play stop failed'));
+      engine.emitCompletion(staleId);
+      expect(controller.state.status, NarrationStatus.error);
+    },
+  );
+
+  test('pause and lifecycle pause failures do not escape callers', () async {
+    await controller.play(queue);
+    engine.pauseError = StateError('pause failed');
+    engine.nativePauseSupported = true;
+
+    await expectLater(controller.onAppPaused(), completes);
+
+    expect(controller.state.status, NarrationStatus.error);
+    expect(controller.state.errorMessage, contains('pause failed'));
+  });
+
+  test(
+    'stop and lifecycle detach failures become deterministic errors',
+    () async {
+      await controller.play(queue);
+      engine.stopError = StateError('stop failed');
+
+      await expectLater(controller.onAppDetached(), completes);
+
+      expect(controller.state.status, NarrationStatus.error);
+      expect(controller.state.errorMessage, contains('stop failed'));
+    },
+  );
+
+  test('next and previous stop failures do not move the queue', () async {
+    await controller.play(queue, mode: NarrationPlaybackMode.readAll);
+    engine.stopError = StateError('navigation stop failed');
+
+    await expectLater(controller.next(), completes);
+    expect(controller.state.currentIndex, 0);
+    expect(controller.state.status, NarrationStatus.error);
+
+    engine.stopError = null;
+    await controller.play(queue, mode: NarrationPlaybackMode.readAll);
+    await controller.next();
+    engine.stopError = StateError('previous stop failed');
+
+    await expectLater(controller.previous(), completes);
+    expect(controller.state.currentIndex, 1);
+    expect(controller.state.status, NarrationStatus.error);
+  });
+
+  test(
+    'resume speak and settings failures become errors without throwing',
+    () async {
+      await controller.play(queue);
+      await controller.pause();
+      engine.speakError = StateError('resume failed');
+
+      await expectLater(controller.resume(), completes);
+      await Future<void>.delayed(Duration.zero);
+      expect(controller.state.status, NarrationStatus.error);
+      expect(controller.state.errorMessage, contains('resume failed'));
+
+      engine.speakError = null;
+      engine.configureError = StateError('settings failed');
+      await expectLater(
+        controller.updateSettings(const SpeechEngineSettings(rate: 0.7)),
+        completes,
+      );
+      expect(controller.state.status, NarrationStatus.error);
+      expect(controller.state.errorMessage, contains('settings failed'));
+    },
+  );
 
   test(
     'no installed voices produces an actionable unavailable state',
@@ -301,6 +406,15 @@ void main() {
     expect(engine.disposeCalls, 1);
     engine.emitCompletion(engine.lastUtteranceId!);
   });
+
+  test('dispose absorbs asynchronous engine disposal failures', () async {
+    final failingEngine = FakeSpeechEngine()
+      ..disposeError = StateError('dispose failed');
+    final disposable = ReadingNarrationController(engine: failingEngine);
+
+    disposable.dispose();
+    await Future<void>.delayed(Duration.zero);
+  });
 }
 
 class FakeSpeechEngine implements SpeechEngine {
@@ -317,6 +431,12 @@ class FakeSpeechEngine implements SpeechEngine {
   int utteranceCounter = 0;
   final List<String> spokenTexts = <String>[];
   String? lastUtteranceId;
+  Object? stopError;
+  Object? pauseError;
+  Object? speakError;
+  Object? configureError;
+  Object? disposeError;
+  bool nativePaused = false;
 
   @override
   bool get supportsNativePause => nativePauseSupported;
@@ -334,29 +454,42 @@ class FakeSpeechEngine implements SpeechEngine {
   Future<List<SpeechVoice>> getVoices() async => voices;
 
   @override
-  Future<void> configure(SpeechEngineSettings settings) async {}
+  Future<void> configure(SpeechEngineSettings settings) async {
+    if (configureError != null) throw configureError!;
+  }
 
   @override
   Future<void> speak(String text, {required String utteranceId}) async {
+    if (speakError != null) throw speakError!;
     spokenTexts.add(text);
     lastUtteranceId = utteranceId;
-    callbacks?.onStart(utteranceId);
+    if (nativePaused) {
+      nativePaused = false;
+      callbacks?.onContinue(utteranceId);
+    } else {
+      callbacks?.onStart(utteranceId);
+    }
   }
 
   @override
   Future<void> pause() async {
     pauseCalls++;
+    if (pauseError != null) throw pauseError!;
+    nativePaused = true;
   }
 
   @override
   Future<void> stop() async {
     stopCalls++;
+    if (stopError != null) throw stopError!;
+    nativePaused = false;
   }
 
   @override
   Future<void> dispose() async {
     disposeCalls++;
     callbacks = null;
+    if (disposeError != null) throw disposeError!;
   }
 
   void emitProgress(

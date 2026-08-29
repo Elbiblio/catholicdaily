@@ -1,4 +1,6 @@
 import '../models/daily_reading.dart';
+import 'reading_reference_parser.dart';
+import 'scripture_book_names.dart';
 
 enum NarrationSegmentKind {
   position,
@@ -169,7 +171,7 @@ class ReadingNarrationComposer {
   static bool _isUnavailable(String text) {
     if (text.trim().isEmpty) return true;
     return RegExp(
-      r'^(?:reading|psalm) text unavailable\b',
+      r'^(?:reading|psalm|chapter) text unavailable\b',
       caseSensitive: false,
     ).hasMatch(text.trim());
   }
@@ -200,91 +202,84 @@ class ReadingNarrationComposer {
   }
 
   static String _naturalReference(String rawReference) {
-    final cleaned = _cleanDisplayedText(rawReference);
-    final match = RegExp(
-      r'^(.+?)\s+(\d+)(?:[:.]\s*(.+))?$',
-    ).firstMatch(cleaned);
-    if (match == null) return _sentence(cleaned);
-
-    final book =
-        _bookNames[match.group(1)!.trim().toLowerCase()] ??
-        match.group(1)!.trim();
-    final chapter = match.group(2)!;
-    var verses = match.group(3)?.trim();
-    if (verses == null || verses.isEmpty) {
-      return '$book, chapter $chapter.';
-    }
-
-    verses = verses
+    var cleaned = _cleanDisplayedText(rawReference)
         .replaceFirst(
           RegExp(r'\s*\(R\.\s*[^)]*\)\s*$', caseSensitive: false),
           '',
         )
         .trim();
-    final crossChapter = RegExp(
-      r'^(\d+[a-z]?)[-–—](\d+):(\d+[a-z]?)$',
-      caseSensitive: false,
-    ).firstMatch(verses);
-    if (crossChapter != null) {
-      return '$book, chapter $chapter, verse ${crossChapter.group(1)} '
-          'to chapter ${crossChapter.group(2)}, verse ${crossChapter.group(3)}.';
+    cleaned = cleaned.replaceFirstMapped(
+      RegExp(r'^(.+?\s+\d+)\.(?=\d)'),
+      (match) => '${match.group(1)}:',
+    );
+    final joinedVerseReplacements = <String, String>{
+      for (final match in RegExp(
+        r'\d+[a-z]?(?:\+\d+[a-z]?)+',
+        caseSensitive: false,
+      ).allMatches(cleaned))
+        match.group(0)!.replaceAll('+', ', '): match
+            .group(0)!
+            .replaceAll('+', ' and '),
+    };
+    cleaned = cleaned.replaceAll('+', ',');
+
+    final ranges = ReadingReferenceParser.parse(cleaned);
+    if (ranges.isNotEmpty) {
+      final book = ScriptureBookNames.spokenName(ranges.first.book);
+      final clauses = <String>[];
+      var index = 0;
+      while (index < ranges.length) {
+        final range = ranges[index];
+        if (range.startChapter != range.endChapter) {
+          clauses.add(
+            'chapter ${range.startChapter}, verse ${_startToken(range)} '
+            'to chapter ${range.endChapter}, verse ${_endToken(range)}',
+          );
+          index++;
+          continue;
+        }
+
+        final chapter = range.startChapter;
+        final chapterRanges = <ScriptureRange>[];
+        while (index < ranges.length &&
+            ranges[index].startChapter == chapter &&
+            ranges[index].endChapter == chapter) {
+          chapterRanges.add(ranges[index]);
+          index++;
+        }
+        final tokens = chapterRanges.map(_rangeToken).toList();
+        final plural =
+            chapterRanges.length > 1 ||
+            chapterRanges.any((item) => item.startVerse != item.endVerse);
+        clauses.add(
+          'chapter $chapter, ${plural ? 'verses' : 'verse'} '
+          '${tokens.join(', ')}',
+        );
+      }
+      var spoken = '$book, ${clauses.join('; ')}.';
+      for (final replacement in joinedVerseReplacements.entries) {
+        spoken = spoken.replaceAll(replacement.key, replacement.value);
+      }
+      return spoken;
     }
 
-    final spokenVerses = verses
-        .replaceAll('+', ' and ')
-        .replaceAll(RegExp(r'\s*[-–—]\s*'), ' to ')
-        .replaceAllMapped(
-          RegExp(r'(\d)\.(?=\d)'),
-          (match) => '${match.group(1)}, ',
-        )
-        .replaceAll(RegExp(r'\s*[;,]\s*'), ', ')
-        .replaceAll(RegExp(r'\s+'), ' ');
-    final verseLabel =
-        RegExp(r'[,;+\-–—]').hasMatch(verses) ||
-            RegExp(r'\d\s*[a-z]', caseSensitive: false).hasMatch(verses)
-        ? 'verses'
-        : 'verse';
-    return '$book, chapter $chapter, $verseLabel $spokenVerses.';
+    final match = RegExp(r'^(.+?)\s+(\d+)$').firstMatch(cleaned);
+    if (match == null) return _sentence(cleaned);
+
+    final book = ScriptureBookNames.spokenName(match.group(1)!);
+    final chapter = match.group(2)!;
+    return '$book, chapter $chapter.';
   }
 
-  static const Map<String, String> _bookNames = <String, String>{
-    'gen': 'Genesis',
-    'exod': 'Exodus',
-    'lev': 'Leviticus',
-    'num': 'Numbers',
-    'deut': 'Deuteronomy',
-    'ps': 'Psalms',
-    'psalm': 'Psalms',
-    'isa': 'Isaiah',
-    'jer': 'Jeremiah',
-    'ezek': 'Ezekiel',
-    'matt': 'Matthew',
-    'mt': 'Matthew',
-    'mark': 'Mark',
-    'mk': 'Mark',
-    'luke': 'Luke',
-    'lk': 'Luke',
-    'john': 'John',
-    'jn': 'John',
-    'acts': 'Acts',
-    'rom': 'Romans',
-    '1 cor': 'First Corinthians',
-    '2 cor': 'Second Corinthians',
-    'gal': 'Galatians',
-    'eph': 'Ephesians',
-    'phil': 'Philippians',
-    'col': 'Colossians',
-    '1 thess': 'First Thessalonians',
-    '2 thess': 'Second Thessalonians',
-    '1 tim': 'First Timothy',
-    '2 tim': 'Second Timothy',
-    'heb': 'Hebrews',
-    'jas': 'James',
-    '1 pet': 'First Peter',
-    '2 pet': 'Second Peter',
-    '1 jn': 'First John',
-    '2 jn': 'Second John',
-    '3 jn': 'Third John',
-    'rev': 'Revelation',
-  };
+  static String _rangeToken(ScriptureRange range) {
+    final start = _startToken(range);
+    final end = _endToken(range);
+    return start == end ? start : '$start to $end';
+  }
+
+  static String _startToken(ScriptureRange range) =>
+      '${range.startVerse}${range.startVerseParts ?? ''}';
+
+  static String _endToken(ScriptureRange range) =>
+      '${range.endVerse}${range.endVerseParts ?? ''}';
 }

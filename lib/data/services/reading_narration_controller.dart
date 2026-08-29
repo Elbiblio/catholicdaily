@@ -138,6 +138,7 @@ class ReadingNarrationController extends ChangeNotifier {
     _engine.setCallbacks(
       SpeechEngineCallbacks(
         onStart: _onStart,
+        onContinue: _onStart,
         onCompletion: _onCompletion,
         onError: _onError,
         onProgress: _onProgress,
@@ -158,7 +159,12 @@ class ReadingNarrationController extends ChangeNotifier {
     _spokenOffset = 0;
     _resumeOffset = 0;
     if (_isActive(_state.status)) {
-      await _engine.stop();
+      try {
+        await _engine.stop();
+      } catch (error) {
+        _failOperation(error);
+        return;
+      }
     }
     if (queue.isEmpty) {
       _emit(
@@ -212,19 +218,20 @@ class ReadingNarrationController extends ChangeNotifier {
       _speakCurrent();
     } catch (error) {
       if (_isCurrentGeneration(generation)) {
-        _emit(
-          _state.copyWith(
-            status: NarrationStatus.error,
-            errorMessage: _messageFor(error),
-          ),
-        );
+        _failOperation(error);
       }
     }
   }
 
   Future<void> updateSettings(SpeechEngineSettings settings) async {
-    _settings = settings;
-    await _engine.configure(settings);
+    if (_disposed) return;
+    try {
+      await _engine.configure(settings);
+      if (_disposed) return;
+      _settings = settings;
+    } catch (error) {
+      _failOperation(error);
+    }
   }
 
   Future<void> pause() async {
@@ -232,10 +239,22 @@ class ReadingNarrationController extends ChangeNotifier {
     _resumeOffset = _state.progressStart.clamp(0, _currentText.length);
     final pausedId = _activeUtteranceId;
     _activeUtteranceId = null;
-    if (_engine.supportsNativePause) {
-      await _engine.pause();
-    } else {
-      await _engine.stop();
+    try {
+      if (_engine.supportsNativePause) {
+        await _engine.pause();
+      } else {
+        await _engine.stop();
+      }
+    } catch (error) {
+      if (_engine.supportsNativePause) {
+        try {
+          await _engine.stop();
+        } catch (_) {
+          // The original pause error is the actionable failure.
+        }
+      }
+      _failOperation(error);
+      return;
     }
     if (_disposed || pausedId == null) return;
     _emit(_state.copyWith(status: NarrationStatus.paused, clearError: true));
@@ -243,14 +262,19 @@ class ReadingNarrationController extends ChangeNotifier {
 
   Future<void> resume() async {
     if (_disposed || _state.status != NarrationStatus.paused) return;
-    _speakCurrent(offset: _resumeOffset);
+    _speakCurrent(offset: _engine.supportsNativePause ? 0 : _resumeOffset);
   }
 
   Future<void> stop({bool clearQueue = false}) async {
     if (_disposed) return;
     ++_generation;
     _activeUtteranceId = null;
-    await _engine.stop();
+    try {
+      await _engine.stop();
+    } catch (error) {
+      _failOperation(error);
+      return;
+    }
     if (_disposed) return;
     _emit(
       _state.copyWith(
@@ -308,7 +332,12 @@ class ReadingNarrationController extends ChangeNotifier {
   Future<void> _moveTo(int target) async {
     ++_generation;
     _activeUtteranceId = null;
-    await _engine.stop();
+    try {
+      await _engine.stop();
+    } catch (error) {
+      _failOperation(error);
+      return;
+    }
     if (_disposed) return;
     _spokenOffset = 0;
     _resumeOffset = 0;
@@ -334,11 +363,15 @@ class ReadingNarrationController extends ChangeNotifier {
     final text = _currentText.substring(_spokenOffset);
     final id = 'narration-${_generation}-${++_utteranceSequence}';
     _activeUtteranceId = id;
-    unawaited(
-      _engine.speak(text, utteranceId: id).catchError((Object error) {
-        _onError(id, _messageFor(error));
-      }),
-    );
+    try {
+      unawaited(
+        _engine.speak(text, utteranceId: id).catchError((Object error) {
+          _onError(id, _messageFor(error));
+        }),
+      );
+    } catch (error) {
+      _onError(id, _messageFor(error));
+    }
   }
 
   void _onStart(String utteranceId) {
@@ -403,6 +436,7 @@ class ReadingNarrationController extends ChangeNotifier {
 
   void _onError(String utteranceId, String message) {
     if (!_accepts(utteranceId)) return;
+    ++_generation;
     _activeUtteranceId = null;
     _emit(
       _state.copyWith(
@@ -418,6 +452,19 @@ class ReadingNarrationController extends ChangeNotifier {
 
   bool _isCurrentGeneration(int generation) =>
       !_disposed && generation == _generation;
+
+  void _failOperation(Object error) {
+    if (_disposed) return;
+    ++_generation;
+    _activeUtteranceId = null;
+    _emit(
+      _state.copyWith(
+        status: NarrationStatus.error,
+        errorMessage: _messageFor(error),
+        clearCurrentWord: true,
+      ),
+    );
+  }
 
   void _emit(ReadingNarrationState next) {
     if (_disposed) return;
@@ -462,7 +509,11 @@ class ReadingNarrationController extends ChangeNotifier {
     _disposed = true;
     ++_generation;
     _activeUtteranceId = null;
-    unawaited(_engine.dispose());
+    try {
+      unawaited(_engine.dispose().catchError((Object _) {}));
+    } catch (_) {
+      // Disposal is best-effort and must never escape the widget lifecycle.
+    }
     super.dispose();
   }
 }
