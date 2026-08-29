@@ -92,11 +92,14 @@ void main() async {
     // no-op. Reschedule covers year-rollover refresh on every launch.
     await FeastReminderService.instance.autoSetupOnFirstRun(reminderPrefs);
     await FeastReminderService.instance.rescheduleIfNeeded(reminderPrefs);
-    await FeastReminderBackgroundService.instance.auditAndRepair();
-    await FeastReminderBackgroundService.instance.enqueueRepair();
-    if (firebaseMessagingAvailable) {
-      await FeastReminderMessagingService.instance.initialize();
-    }
+    NotificationStartupSyncDispatcher(
+      auditAndRepair: FeastReminderBackgroundService.instance.auditAndRepair,
+      initializeMessaging: firebaseMessagingAvailable
+          ? FeastReminderMessagingService.instance.initialize
+          : () async {},
+      enqueueRepair: () => FeastReminderBackgroundService.instance
+          .enqueueRepair(reason: FeastReminderRepairReason.startup),
+    ).dispatch();
   } catch (e, st) {
     debugPrint('[FeastReminder] Startup init failed: $e\n$st');
   }

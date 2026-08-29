@@ -152,12 +152,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
       );
       occurrenceQueuePersisted = result.occurrenceQueuePersisted;
     }
-    await NotificationScheduleSyncCoordinator(
+    NotificationScheduleSyncCoordinator(
       syncInstallation:
           NotificationInstallationSyncService.instance.syncCurrentToken,
       syncOccurrences: NotificationOccurrenceSyncService.instance.syncPending,
       enqueueRepair: FeastReminderBackgroundService.instance.enqueueRepair,
-    ).syncNow(forceRepair: !occurrenceQueuePersisted);
+    ).dispatch(forceRepair: !occurrenceQueuePersisted);
   }
 
   String _reminderSubtitle() {

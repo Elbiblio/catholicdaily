@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:catholic_daily/data/services/feast_reminder_background_service.dart';
 import 'package:catholic_daily/data/services/notification_occurrence_sync_service.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -88,6 +90,77 @@ void main() {
       policy.decide(healthy(), now: now),
       FeastReminderAuditDecision.current,
     );
+  });
+
+  test('forced exact-alarm repair overrides a healthy schedule', () {
+    expect(
+      policy.decide(healthy(), now: now, forceReschedule: true),
+      FeastReminderAuditDecision.repair,
+    );
+  });
+
+  test('dispatcher input carries exact-alarm and timezone repair reasons', () {
+    final exactAlarm = FeastReminderRepairRequest.fromWorkmanager(
+      FeastReminderBackgroundService.taskName,
+      const FeastReminderRepairRequest(
+        reason: FeastReminderRepairReason.exactAlarmCapabilityChanged,
+        forceReschedule: true,
+      ).toInputData(),
+    );
+    final timezone = FeastReminderRepairRequest.fromWorkmanager(
+      FeastReminderBackgroundService.taskName,
+      const FeastReminderRepairRequest(
+        reason: FeastReminderRepairReason.timezoneChanged,
+        forceReschedule: true,
+      ).toInputData(),
+    );
+
+    expect(exactAlarm.forceReschedule, isTrue);
+    expect(
+      exactAlarm.reason,
+      FeastReminderRepairReason.exactAlarmCapabilityChanged,
+    );
+    expect(timezone.forceReschedule, isTrue);
+    expect(timezone.reason, FeastReminderRepairReason.timezoneChanged);
+  });
+
+  test('startup audit dispatch does not gate runApp on remote sync', () {
+    final audit = Completer<bool>();
+    final messaging = Completer<void>();
+    var auditStarted = false;
+    var messagingStarted = false;
+    final dispatcher = NotificationStartupSyncDispatcher(
+      auditAndRepair: () {
+        auditStarted = true;
+        return audit.future;
+      },
+      initializeMessaging: () {
+        messagingStarted = true;
+        return messaging.future;
+      },
+      enqueueRepair: () async {},
+    );
+
+    dispatcher.dispatch();
+
+    expect(auditStarted, isTrue);
+    expect(messagingStarted, isTrue);
+    expect(audit.isCompleted, isFalse);
+    expect(messaging.isCompleted, isFalse);
+  });
+
+  test('startup detached audit errors still enqueue repair', () async {
+    var repairs = 0;
+    final dispatcher = NotificationStartupSyncDispatcher(
+      auditAndRepair: () async => throw StateError('offline'),
+      initializeMessaging: () async {},
+      enqueueRepair: () async => repairs++,
+    );
+
+    dispatcher.dispatch();
+    await Future<void>.delayed(Duration.zero);
+
+    expect(repairs, 1);
   });
 
   test(

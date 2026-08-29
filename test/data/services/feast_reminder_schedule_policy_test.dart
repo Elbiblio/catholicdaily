@@ -105,6 +105,38 @@ void main() {
       expect(result.shouldPersistHorizon, isFalse);
     });
 
+    test(
+      'zero-success scheduling persists server-only rows and settings keeps enabled',
+      () {
+        final occurrence = NotificationOccurrence(
+          occurrenceKey: 'feast:nigeria:2026-09-01:on_day:saint',
+          localNotificationId: 123,
+          scheduledFor: DateTime.utc(2026, 9, 1, 6),
+          remoteExpiresAt: DateTime.utc(2026, 9, 1, 6, 2),
+          localSafetyAt: DateTime.utc(2026, 9, 1, 6, 3),
+          platform: 'android',
+          scheduleGeneration: 'feast-reminders-v5',
+          timezone: 'Africa/Lagos',
+          configurationFingerprint: 'config',
+          localArmed: false,
+          payload: '{"schema":3}',
+        );
+        final result = FeastReminderScheduleResult(
+          eligibleCount: 1,
+          scheduledCount: 0,
+          failureCount: 1,
+          scheduledThrough: null,
+          usedExactDelivery: false,
+          occurrences: [occurrence],
+        );
+
+        expect(result.occurrencesToPersist, [occurrence]);
+        expect(result.canKeepRemindersEnabled, isTrue);
+        expect(result.canSyncServerOnlyOccurrences, isTrue);
+        expect(result.needsLocalScheduleRepair, isTrue);
+      },
+    );
+
     test('reports occurrence queue persistence independently', () {
       final result = FeastReminderScheduleResult(
         eligibleCount: 1,

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:catholic_daily/data/services/notification_installation.dart';
 import 'package:catholic_daily/data/services/notification_installation_store.dart';
 import 'package:catholic_daily/data/services/notification_occurrence.dart';
@@ -181,6 +183,24 @@ void main() {
 
     expect(await coordinator.syncNow(forceRepair: true), isTrue);
     expect(repairs, 1);
+  });
+
+  test('immediate UI sync dispatch does not await unresolved network', () {
+    final installation = Completer<bool>();
+    var installationStarted = false;
+    final coordinator = NotificationScheduleSyncCoordinator(
+      syncInstallation: () {
+        installationStarted = true;
+        return installation.future;
+      },
+      syncOccurrences: () async => NotificationOccurrenceSyncResult.success,
+      enqueueRepair: () async {},
+    );
+
+    coordinator.dispatch();
+
+    expect(installationStarted, isTrue);
+    expect(installation.isCompleted, isFalse);
   });
 
   test(

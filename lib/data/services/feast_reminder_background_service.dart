@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io' show Platform;
 import 'dart:ui' show DartPluginRegistrant;
 
@@ -13,6 +14,95 @@ import 'notification_installation_sync_service.dart';
 import 'notification_occurrence_sync_service.dart';
 
 enum FeastReminderAuditDecision { skip, cleanup, current, repair }
+
+enum FeastReminderRepairReason {
+  occurrenceSync,
+  exactAlarmCapabilityChanged,
+  timezoneChanged,
+  startup,
+  periodicAudit,
+}
+
+class FeastReminderRepairRequest {
+  const FeastReminderRepairRequest({
+    required this.reason,
+    required this.forceReschedule,
+  });
+
+  static const reasonInputKey = 'repairReason';
+  static const forceRescheduleInputKey = 'forceReschedule';
+
+  final FeastReminderRepairReason reason;
+  final bool forceReschedule;
+
+  factory FeastReminderRepairRequest.fromWorkmanager(
+    String task,
+    Map<String, dynamic>? inputData,
+  ) {
+    final rawReason = inputData?[reasonInputKey];
+    final reason = FeastReminderRepairReason.values.firstWhere(
+      (candidate) => candidate.name == rawReason,
+      orElse: () => task == FeastReminderBackgroundService.taskName
+          ? FeastReminderRepairReason.periodicAudit
+          : FeastReminderRepairReason.occurrenceSync,
+    );
+    final reasonForcesReschedule =
+        reason == FeastReminderRepairReason.exactAlarmCapabilityChanged ||
+        reason == FeastReminderRepairReason.timezoneChanged;
+    return FeastReminderRepairRequest(
+      reason: reason,
+      forceReschedule:
+          inputData?[forceRescheduleInputKey] == true || reasonForcesReschedule,
+    );
+  }
+
+  Map<String, dynamic> toInputData() => <String, dynamic>{
+    reasonInputKey: reason.name,
+    forceRescheduleInputKey: forceReschedule,
+  };
+}
+
+class NotificationStartupSyncDispatcher {
+  const NotificationStartupSyncDispatcher({
+    required this.auditAndRepair,
+    required this.initializeMessaging,
+    required this.enqueueRepair,
+  });
+
+  final Future<bool> Function() auditAndRepair;
+  final Future<void> Function() initializeMessaging;
+  final Future<void> Function() enqueueRepair;
+
+  void dispatch() {
+    unawaited(_runAudit());
+    unawaited(_runMessaging());
+  }
+
+  Future<void> _runAudit() async {
+    try {
+      await auditAndRepair();
+    } catch (_) {
+      // Startup continues while the one-off repair owns recovery.
+    }
+    try {
+      await enqueueRepair();
+    } catch (_) {
+      // Work registration is best-effort and cannot fail app startup.
+    }
+  }
+
+  Future<void> _runMessaging() async {
+    try {
+      await initializeMessaging();
+    } catch (_) {
+      try {
+        await enqueueRepair();
+      } catch (_) {
+        // Messaging initialization is also detached from app startup.
+      }
+    }
+  }
+}
 
 class NotificationBackgroundSyncPolicy {
   const NotificationBackgroundSyncPolicy();
@@ -97,6 +187,7 @@ class FeastReminderAuditPolicy {
   FeastReminderAuditDecision decide(
     FeastReminderAuditSnapshot snapshot, {
     required DateTime now,
+    bool forceReschedule = false,
   }) {
     if (!snapshot.enabled || !snapshot.permissionGranted) {
       return snapshot.scheduleInProgress || snapshot.hasCancellationState
@@ -108,7 +199,8 @@ class FeastReminderAuditPolicy {
       now.month,
       now.day,
     ).add(minimumCoverage);
-    if (snapshot.scheduleInProgress ||
+    if (forceReschedule ||
+        snapshot.scheduleInProgress ||
         snapshot.schemaVersion != expectedSchemaVersion ||
         snapshot.scheduleGeneration != expectedScheduleGeneration ||
         snapshot.scheduledTimezone != snapshot.currentTimezone ||
@@ -127,7 +219,10 @@ void feastReminderWorkmanagerDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     WidgetsFlutterBinding.ensureInitialized();
     DartPluginRegistrant.ensureInitialized();
-    return FeastReminderBackgroundService.instance.auditAndRepair();
+    final request = FeastReminderRepairRequest.fromWorkmanager(task, inputData);
+    return FeastReminderBackgroundService.instance.auditAndRepair(
+      forceReschedule: request.forceReschedule,
+    );
   });
 }
 
@@ -165,12 +260,20 @@ class FeastReminderBackgroundService {
     _initialized = true;
   }
 
-  Future<void> enqueueRepair() async {
+  Future<void> enqueueRepair({
+    FeastReminderRepairReason reason = FeastReminderRepairReason.occurrenceSync,
+  }) async {
     if (!Platform.isAndroid) return;
     await initialize();
     await Workmanager().registerOneOffTask(
       repairWorkName,
       taskName,
+      inputData: FeastReminderRepairRequest(
+        reason: reason,
+        forceReschedule:
+            reason == FeastReminderRepairReason.exactAlarmCapabilityChanged ||
+            reason == FeastReminderRepairReason.timezoneChanged,
+      ).toInputData(),
       constraints: Constraints(networkType: NetworkType.notRequired),
       existingWorkPolicy: ExistingWorkPolicy.replace,
       backoffPolicy: BackoffPolicy.exponential,
@@ -178,7 +281,7 @@ class FeastReminderBackgroundService {
     );
   }
 
-  Future<bool> auditAndRepair() async {
+  Future<bool> auditAndRepair({bool forceReschedule = false}) async {
     try {
       final prefs = await FeastReminderPreferences.getInstance();
       await prefs.reload();
@@ -217,7 +320,9 @@ class FeastReminderBackgroundService {
           currentConfigurationFingerprint: currentConfiguration,
         ),
         now: now,
+        forceReschedule: forceReschedule,
       );
+      var needsLocalScheduleRepair = false;
 
       if (decision == FeastReminderAuditDecision.cleanup) {
         final occurrenceQueuePersisted = await reminders.cancelAll();
@@ -228,9 +333,10 @@ class FeastReminderBackgroundService {
           _scheduleMonths,
           prefs,
         );
-        if (!result.shouldPersistHorizon || !result.occurrenceQueuePersisted) {
+        if (!result.canSyncServerOnlyOccurrences) {
           return false;
         }
+        needsLocalScheduleRepair = result.needsLocalScheduleRepair;
       } else {
         await prefs.setLastAuditAt(now);
       }
@@ -243,7 +349,11 @@ class FeastReminderBackgroundService {
         );
       }
 
-      return _syncRemoteState(now, remindersEnabled: true);
+      final remoteSynchronized = await _syncRemoteState(
+        now,
+        remindersEnabled: true,
+      );
+      return remoteSynchronized && !needsLocalScheduleRepair;
     } catch (error, stackTrace) {
       debugPrint(
         '[FeastReminder] Background coverage audit failed: '

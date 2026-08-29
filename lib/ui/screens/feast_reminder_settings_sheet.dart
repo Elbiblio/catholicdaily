@@ -117,7 +117,7 @@ class _FeastReminderSettingsSheetState
           DateTime.now().year,
           prefs,
         );
-        if (!result.shouldPersistHorizon) {
+        if (!result.canKeepRemindersEnabled) {
           await prefs.setEnabled(false);
           if (mounted) setState(() => _enabled = false);
           throw StateError('No reminders could be scheduled.');
@@ -126,13 +126,13 @@ class _FeastReminderSettingsSheetState
       } else {
         occurrenceQueuePersisted = await service.cancelAll();
       }
-      await NotificationScheduleSyncCoordinator(
+      NotificationScheduleSyncCoordinator(
         syncInstallation:
             NotificationInstallationSyncService.instance.syncCurrentToken,
         syncOccurrences: () => NotificationOccurrenceSyncService.instance
             .syncPending(installationAbsenceIsSuccess: !_enabled),
         enqueueRepair: FeastReminderBackgroundService.instance.enqueueRepair,
-      ).syncNow(
+      ).dispatch(
         installationFirst: _enabled,
         forceRepair: !occurrenceQueuePersisted,
       );

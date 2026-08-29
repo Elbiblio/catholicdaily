@@ -111,4 +111,25 @@ class FeastReminderScheduleResult {
   bool get shouldPersistHorizon =>
       (eligibleCount == 0 && failureCount == 0 && scheduledThrough != null) ||
       (scheduledCount > 0 && scheduledThrough != null);
+
+  List<NotificationOccurrence> get occurrencesToPersist => occurrences;
+
+  bool get canKeepRemindersEnabled =>
+      occurrenceQueuePersisted &&
+      (shouldPersistHorizon || occurrencesToPersist.isNotEmpty);
+
+  bool get canSyncServerOnlyOccurrences => occurrenceQueuePersisted;
+
+  bool get needsLocalScheduleRepair => !shouldPersistHorizon;
+
+  FeastReminderScheduleResult withOccurrenceQueuePersisted(bool persisted) =>
+      FeastReminderScheduleResult(
+        eligibleCount: eligibleCount,
+        scheduledCount: scheduledCount,
+        failureCount: failureCount,
+        scheduledThrough: scheduledThrough,
+        usedExactDelivery: usedExactDelivery,
+        occurrences: occurrences,
+        occurrenceQueuePersisted: persisted,
+      );
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'notification_installation_store.dart';
 import 'notification_occurrence.dart';
 import 'notification_occurrence_api.dart';
@@ -15,6 +17,33 @@ class NotificationScheduleSyncCoordinator {
   final Future<bool> Function() syncInstallation;
   final Future<NotificationOccurrenceSyncResult> Function() syncOccurrences;
   final Future<void> Function() enqueueRepair;
+
+  void dispatch({bool installationFirst = true, bool forceRepair = false}) {
+    unawaited(
+      _runDetached(
+        installationFirst: installationFirst,
+        forceRepair: forceRepair,
+      ),
+    );
+  }
+
+  Future<void> _runDetached({
+    required bool installationFirst,
+    required bool forceRepair,
+  }) async {
+    try {
+      await syncNow(
+        installationFirst: installationFirst,
+        forceRepair: forceRepair,
+      );
+    } catch (_) {
+      try {
+        await enqueueRepair();
+      } catch (_) {
+        // Detached synchronization must never escape into the UI zone.
+      }
+    }
+  }
 
   Future<bool> syncNow({
     bool installationFirst = true,

@@ -202,13 +202,13 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       }
       // Mark auto-setup done so main.dart doesn't override the user's choice.
       await prefs.markAutoSetupCompleted();
-      await NotificationScheduleSyncCoordinator(
+      NotificationScheduleSyncCoordinator(
         syncInstallation:
             NotificationInstallationSyncService.instance.syncCurrentToken,
         syncOccurrences: () => NotificationOccurrenceSyncService.instance
             .syncPending(installationAbsenceIsSuccess: _selectedSlot == null),
         enqueueRepair: FeastReminderBackgroundService.instance.enqueueRepair,
-      ).syncNow(
+      ).dispatch(
         installationFirst: _selectedSlot != null,
         forceRepair: !occurrenceQueuePersisted,
       );

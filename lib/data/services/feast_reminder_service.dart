@@ -1148,19 +1148,27 @@ class FeastReminderService {
       platform: Platform.operatingSystem,
       configurationFingerprint: configurationFingerprint,
     );
+    var result = FeastReminderScheduleResult(
+      eligibleCount: baseResult.eligibleCount,
+      scheduledCount: baseResult.scheduledCount,
+      failureCount: baseResult.failureCount,
+      scheduledThrough: baseResult.scheduledThrough,
+      usedExactDelivery: baseResult.usedExactDelivery,
+      occurrences: occurrenceRows,
+    );
     late final bool occurrenceQueuePersisted;
     if (!baseResult.shouldPersistHorizon) {
       for (final reference in scheduledReferences) {
         await _plugin.cancel(reference.id, tag: reference.tag);
       }
       occurrenceQueuePersisted = await _replaceOccurrenceSchedule(
-        const [],
+        result.occurrencesToPersist,
         reconciledAt: now,
       );
       if (occurrenceQueuePersisted) await prefs.invalidateSchedule();
     } else {
       occurrenceQueuePersisted = await _replaceOccurrenceSchedule(
-        occurrenceRows,
+        result.occurrencesToPersist,
         reconciledAt: now,
       );
       if (occurrenceQueuePersisted) {
@@ -1182,15 +1190,7 @@ class FeastReminderService {
         );
       }
     }
-    final result = FeastReminderScheduleResult(
-      eligibleCount: baseResult.eligibleCount,
-      scheduledCount: baseResult.scheduledCount,
-      failureCount: baseResult.failureCount,
-      scheduledThrough: baseResult.scheduledThrough,
-      usedExactDelivery: baseResult.usedExactDelivery,
-      occurrences: occurrenceRows,
-      occurrenceQueuePersisted: occurrenceQueuePersisted,
-    );
+    result = result.withOccurrenceQueuePersisted(occurrenceQueuePersisted);
     debugPrint(
       '[FeastReminder] Scheduled ${scheduledReferences.length} reminders across '
       '${now.year}-${endDate.year} '
