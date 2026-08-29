@@ -508,7 +508,7 @@ jobs:
             exit 1
           fi
           APP_PROFILE_TEAM=$(security cms -D -i "$PROFILE_PATH" | \
-            plutil -extract Entitlements.com.apple.developer.team-identifier raw -)
+            plutil -extract TeamIdentifier.0 raw -)
           test "$APP_PROFILE_TEAM" = "${{ env.APPLE_TEAM_ID }}"
           EXTENSION_PROFILE_APP_ID=$(security cms -D -i "$EXTENSION_PROFILE_PATH" | \
             plutil -extract Entitlements.application-identifier raw -)
@@ -630,7 +630,7 @@ jobs:
               plutil -extract Entitlements.application-identifier raw -)
             test "$RUNNER_PROFILE_APP_ID" = "$EXPECTED_RUNNER_APP_ID"
             RUNNER_PROFILE_TEAM=$(security cms -D -i "$APP_PATH/embedded.mobileprovision" | \
-              plutil -extract Entitlements.com.apple.developer.team-identifier raw -)
+              plutil -extract TeamIdentifier.0 raw -)
             test "$RUNNER_PROFILE_TEAM" = "${{ env.APPLE_TEAM_ID }}"
             RUNNER_PUSH_ENV=$(plutil -extract aps-environment raw "$RUNNER_ENTITLEMENTS")
             test "$RUNNER_PUSH_ENV" = "production"

@@ -64,7 +64,7 @@ void main() {
       RegExp(r'plutil -extract TeamIdentifier\.0 raw -')
           .allMatches(workflow)
           .length,
-      greaterThanOrEqualTo(2),
+      greaterThanOrEqualTo(4),
       reason:
           'App Store Connect profiles can omit the team identifier from their '
           'entitlements while still providing the canonical TeamIdentifier array.',
