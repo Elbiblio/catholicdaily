@@ -125,6 +125,9 @@ class RemoteFeastMessageProcessor {
     if (!await _claimOccurrence(payload)) {
       return RemoteFeastMessageOutcome.duplicate;
     }
+    // Close the scheduler race: a forced repair can create the same local
+    // alarm after the first cancellation but before the durable claim.
+    await _cancelOccurrence(payload);
     await _removeDeliveredOccurrence(payload);
     await _showReminder(payload);
     await _recordReceived(occurrenceKey, occurredAt);

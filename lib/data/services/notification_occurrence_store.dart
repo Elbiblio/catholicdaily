@@ -83,7 +83,7 @@ class NotificationOccurrenceStore {
     for (final existing in document.occurrences) {
       final replacement = incoming.remove(existing.occurrenceKey);
       if (replacement != null) {
-        if (existing.reconciledAt != null) {
+        if (existing.reconciledAt != null && existing.receivedAt == null) {
           events.removeWhere(
             (_, event) => event.occurrenceKey == existing.occurrenceKey,
           );
@@ -113,7 +113,12 @@ class NotificationOccurrenceStore {
       }
     }
     for (final row in incoming.values) {
-      updated[row.occurrenceKey] = row.copyWith(clearLastSyncedAt: true);
+      final receivedEvent = _receivedEventFor(row.occurrenceKey, events.values);
+      updated[row.occurrenceKey] = row.copyWith(
+        localArmed: receivedEvent == null ? row.localArmed : false,
+        receivedAt: receivedEvent?.occurredAt,
+        clearLastSyncedAt: true,
+      );
     }
     return document.copyWith(
       occurrences: updated.values.toList(growable: false),
@@ -132,6 +137,7 @@ class NotificationOccurrenceStore {
               if (row.occurrenceKey != event.occurrenceKey) return row;
               return switch (event.type) {
                 NotificationOccurrenceEventType.received => row.copyWith(
+                  localArmed: false,
                   receivedAt: event.occurredAt,
                   clearLastSyncedAt: true,
                 ),
@@ -359,6 +365,7 @@ NotificationOccurrence _mergeOccurrence(
   NotificationOccurrence incoming,
 ) {
   if (existing == null) return incoming.copyWith(clearLastSyncedAt: true);
+  final receivedAt = incoming.receivedAt ?? existing.receivedAt;
   final merged = NotificationOccurrence(
     occurrenceKey: incoming.occurrenceKey,
     localNotificationId: incoming.localNotificationId,
@@ -369,9 +376,9 @@ NotificationOccurrence _mergeOccurrence(
     scheduleGeneration: incoming.scheduleGeneration,
     timezone: incoming.timezone,
     configurationFingerprint: incoming.configurationFingerprint,
-    localArmed: incoming.localArmed,
+    localArmed: receivedAt == null ? incoming.localArmed : false,
     payload: incoming.payload,
-    receivedAt: incoming.receivedAt ?? existing.receivedAt,
+    receivedAt: receivedAt,
     openedAt: incoming.openedAt ?? existing.openedAt,
     expiredAt: incoming.expiredAt ?? existing.expiredAt,
     reconciledAt: incoming.reconciledAt ?? existing.reconciledAt,
@@ -380,6 +387,19 @@ NotificationOccurrence _mergeOccurrence(
   return merged.hasSameServerState(existing)
       ? merged
       : merged.copyWith(clearLastSyncedAt: true);
+}
+
+NotificationOccurrenceEvent? _receivedEventFor(
+  String occurrenceKey,
+  Iterable<NotificationOccurrenceEvent> events,
+) {
+  for (final event in events) {
+    if (event.occurrenceKey == occurrenceKey &&
+        event.type == NotificationOccurrenceEventType.received) {
+      return event;
+    }
+  }
+  return null;
 }
 
 class _OccurrenceDocument {

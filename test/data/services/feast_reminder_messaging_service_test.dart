@@ -153,6 +153,7 @@ void main() {
         expect(operations, <String>[
           'cancel:feast:nigeria:2026-08-15:on_day:assumption',
           'claim:feast:nigeria:2026-08-15:on_day:assumption',
+          'cancel:feast:nigeria:2026-08-15:on_day:assumption',
           'remove:feast:nigeria:2026-08-15:on_day:assumption',
           'show:2026-08-15T00:00:00.000',
           'received:feast:nigeria:2026-08-15:on_day:assumption',

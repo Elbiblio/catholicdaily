@@ -82,8 +82,54 @@ void main() {
     final rows = await store.allOccurrences();
     expect(events, hasLength(1));
     expect(rows.single.receivedAt, event.occurredAt);
+    expect(rows.single.localArmed, isFalse);
     expect(rows.single.needsSync, isTrue);
   });
+
+  test(
+    'a schedule write cannot re-arm a remotely received occurrence',
+    () async {
+      final store = NotificationOccurrenceStore();
+      final row = occurrence();
+      await store.upsertAll([row]);
+      await store.recordEvent(
+        NotificationOccurrenceEvent(
+          occurrenceKey: row.occurrenceKey,
+          type: NotificationOccurrenceEventType.received,
+          occurredAt: DateTime.utc(2026, 9, 1, 6, 1),
+        ),
+      );
+
+      await store.replaceSchedule([
+        occurrence(localArmed: true),
+      ], reconciledAt: DateTime.utc(2026, 9, 1, 6, 2));
+
+      expect((await store.allOccurrences()).single.localArmed, isFalse);
+    },
+  );
+
+  test(
+    'receipt recorded before its schedule row keeps the row de-armed',
+    () async {
+      final store = NotificationOccurrenceStore();
+      final row = occurrence();
+      await store.recordEvent(
+        NotificationOccurrenceEvent(
+          occurrenceKey: row.occurrenceKey,
+          type: NotificationOccurrenceEventType.received,
+          occurredAt: DateTime.utc(2026, 9, 1, 6, 1),
+        ),
+      );
+
+      await store.replaceSchedule([
+        row,
+      ], reconciledAt: DateTime.utc(2026, 9, 1, 6, 2));
+
+      final stored = (await store.allOccurrences()).single;
+      expect(stored.receivedAt, DateTime.utc(2026, 9, 1, 6, 1));
+      expect(stored.localArmed, isFalse);
+    },
+  );
 
   test('does not acknowledge a newer mutation that was not sent', () async {
     final store = NotificationOccurrenceStore();

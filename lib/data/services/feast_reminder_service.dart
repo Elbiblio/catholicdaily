@@ -321,12 +321,6 @@ class FeastReminderService {
     return 'remote:$key';
   }
 
-  @visibleForTesting
-  static bool shouldScheduleLocalOccurrenceForTesting(
-    String occurrenceKey,
-    Set<String> remotelyPresentedKeys,
-  ) => !remotelyPresentedKeys.contains(occurrenceKey);
-
   /// Cancel all scheduled feast reminders.
   Future<bool> cancelAll() async {
     await initialize();
@@ -1036,17 +1030,13 @@ class FeastReminderService {
       for (final occurrence in occurrences)
         occurrence: _occurrencePayload(occurrence, region),
     };
-    final remotelyPresentedKeys = await AndroidFeastReminderOccurrenceStore
-        .instance
-        .claimedOccurrenceKeys();
-    final localOccurrences = occurrences
-        .where(
-          (occurrence) => shouldScheduleLocalOccurrenceForTesting(
-            payloadByOccurrence[occurrence]!.occurrenceKey!,
-            remotelyPresentedKeys,
-          ),
-        )
-        .toList(growable: false);
+    final claimGuard = FeastReminderScheduleClaimGuard<_ReminderOccurrence>(
+      readClaimedOccurrenceKeys:
+          AndroidFeastReminderOccurrenceStore.instance.claimedOccurrenceKeys,
+      occurrenceKey: (occurrence) =>
+          payloadByOccurrence[occurrence]!.occurrenceKey!,
+    );
+    final localOccurrences = await claimGuard.unclaimed(occurrences);
     final capacity = Platform.isIOS
         ? FeastReminderScheduleCapacity.forIos()
         : FeastReminderScheduleCapacity.forAndroid();
@@ -1180,7 +1170,45 @@ class FeastReminderService {
       }
     }
 
-    final scheduledThrough = localOccurrences.isEmpty
+    final scheduledClaimGuard =
+        FeastReminderScheduleClaimGuard<
+          ({int id, String tag, DateTime celebrationDate, String payload})
+        >(
+          readClaimedOccurrenceKeys: AndroidFeastReminderOccurrenceStore
+              .instance
+              .claimedOccurrenceKeys,
+          occurrenceKey: (reference) => reference.tag,
+        );
+    final postcheck = await scheduledClaimGuard.cancelClaimed(
+      scheduledReferences,
+      cancelOccurrence: (occurrenceKey) => _plugin.cancel(
+        FeastReminderNotificationContract.stableNotificationId(occurrenceKey),
+        tag: occurrenceKey,
+      ),
+    );
+    final claimedAfterScheduling = postcheck.claimedOccurrenceKeys;
+    if (postcheck.retainedOccurrences.length != scheduledReferences.length) {
+      scheduledReferences
+        ..clear()
+        ..addAll(postcheck.retainedOccurrences);
+      await prefs.setScheduleJournalReferences(
+        scheduledReferences
+            .map((item) => '${item.id}|${item.tag}')
+            .toList(growable: false),
+      );
+      await prefs.setScheduleJournalPayloads(
+        scheduledReferences.map((item) => item.payload).toList(growable: false),
+      );
+    }
+    final finalLocalOccurrences = localOccurrences
+        .where(
+          (occurrence) => !claimedAfterScheduling.contains(
+            payloadByOccurrence[occurrence]!.occurrenceKey,
+          ),
+        )
+        .toList(growable: false);
+
+    final scheduledThrough = finalLocalOccurrences.isEmpty
         ? endDate
         : (failures == 0
               ? selection.coverageThrough
@@ -1189,10 +1217,12 @@ class FeastReminderService {
                     : scheduledReferences.last.celebrationDate));
 
     final baseResult = FeastReminderScheduleResult(
-      eligibleCount: localOccurrences.length,
+      eligibleCount: finalLocalOccurrences.length,
       scheduledCount: scheduledReferences.length,
       failureCount: failures,
-      scheduledThrough: localOccurrences.isEmpty ? endDate : scheduledThrough,
+      scheduledThrough: finalLocalOccurrences.isEmpty
+          ? endDate
+          : scheduledThrough,
       usedExactDelivery: exactAllowed,
     );
     final configurationFingerprint = prefs.configurationFingerprint(

@@ -155,23 +155,4 @@ void main() {
       );
     });
   });
-
-  test('schedule repair excludes remotely presented occurrences', () {
-    const claimedKey = 'feast:nigeria:2026-08-15:on_day:assumption';
-
-    expect(
-      FeastReminderService.shouldScheduleLocalOccurrenceForTesting(
-        claimedKey,
-        const <String>{claimedKey},
-      ),
-      isFalse,
-    );
-    expect(
-      FeastReminderService.shouldScheduleLocalOccurrenceForTesting(
-        'feast:nigeria:2026-08-16:on_day:saint',
-        const <String>{claimedKey},
-      ),
-      isTrue,
-    );
-  });
 }

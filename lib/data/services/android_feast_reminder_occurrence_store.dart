@@ -49,3 +49,51 @@ class AndroidFeastReminderOccurrenceStore {
       '${value.month.toString().padLeft(2, '0')}-'
       '${value.day.toString().padLeft(2, '0')}';
 }
+
+class FeastReminderScheduleClaimGuard<T> {
+  const FeastReminderScheduleClaimGuard({
+    required Future<Set<String>> Function() readClaimedOccurrenceKeys,
+    required String Function(T occurrence) occurrenceKey,
+  }) : _readClaimedOccurrenceKeys = readClaimedOccurrenceKeys,
+       _occurrenceKey = occurrenceKey;
+
+  final Future<Set<String>> Function() _readClaimedOccurrenceKeys;
+  final String Function(T occurrence) _occurrenceKey;
+
+  Future<List<T>> unclaimed(Iterable<T> occurrences) async {
+    final claimed = await _readClaimedOccurrenceKeys();
+    return occurrences
+        .where((occurrence) => !claimed.contains(_occurrenceKey(occurrence)))
+        .toList(growable: false);
+  }
+
+  Future<FeastReminderScheduleClaimResult<T>> cancelClaimed(
+    Iterable<T> scheduledOccurrences, {
+    required Future<void> Function(String occurrenceKey) cancelOccurrence,
+  }) async {
+    final claimed = await _readClaimedOccurrenceKeys();
+    final retained = <T>[];
+    for (final occurrence in scheduledOccurrences) {
+      final key = _occurrenceKey(occurrence);
+      if (claimed.contains(key)) {
+        await cancelOccurrence(key);
+      } else {
+        retained.add(occurrence);
+      }
+    }
+    return FeastReminderScheduleClaimResult(
+      claimedOccurrenceKeys: claimed,
+      retainedOccurrences: retained,
+    );
+  }
+}
+
+class FeastReminderScheduleClaimResult<T> {
+  const FeastReminderScheduleClaimResult({
+    required this.claimedOccurrenceKeys,
+    required this.retainedOccurrences,
+  });
+
+  final Set<String> claimedOccurrenceKeys;
+  final List<T> retainedOccurrences;
+}
