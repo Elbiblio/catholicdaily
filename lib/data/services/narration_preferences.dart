@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -17,6 +18,7 @@ class NarrationPreferences {
 
   static Future<bool> Function(String key, Future<bool> Function() write)?
   _writeInterceptor;
+  static Future<void> _operationQueue = Future<void>.value();
 
   final Future<SharedPreferences> Function() _preferences;
 
@@ -33,12 +35,18 @@ class NarrationPreferences {
   @visibleForTesting
   static void resetWriteInterceptorForTesting() {
     _writeInterceptor = null;
+    _operationQueue = Future<void>.value();
   }
 
-  Future<SpeechEngineSettings> load() async {
+  Future<SpeechEngineSettings> load() => _serialized(() async {
     final preferences = await _preferences();
     await preferences.reload();
-    final current = _decode(preferences.getString(storageKey));
+    return _loadFrom(preferences);
+  });
+
+  Future<SpeechEngineSettings> _loadFrom(SharedPreferences preferences) async {
+    final rawCurrent = preferences.get(storageKey);
+    final current = _decode(rawCurrent is String ? rawCurrent : null);
     if (current != null) return current;
 
     final migrated = _legacySettings(preferences);
@@ -48,29 +56,35 @@ class NarrationPreferences {
     return migrated;
   }
 
-  Future<void> save(SpeechEngineSettings settings) async {
-    _validate(settings);
-    final preferences = await _preferences();
-    await _write(preferences, settings);
+  Future<void> save(SpeechEngineSettings settings) {
+    return _serialized(() async {
+      _validate(settings);
+      final preferences = await _preferences();
+      await _write(preferences, settings);
+    });
   }
 
-  Future<void> setRate(double rate) async {
-    final current = await load();
-    await save(current.copyWith(rate: rate));
-  }
+  Future<void> setRate(double rate) =>
+      _update((current) => current.copyWith(rate: rate));
 
-  Future<void> setLanguage(String language) async {
-    final current = await load();
-    await save(current.copyWith(language: language.trim()));
-  }
+  Future<void> setLanguage(String language) =>
+      _update((current) => current.copyWith(language: language.trim()));
 
-  Future<void> setVoice(SpeechVoice? voice) async {
-    final current = await load();
-    await save(
-      voice == null
-          ? current.copyWith(clearVoice: true)
-          : current.copyWith(voice: voice),
-    );
+  Future<void> setVoice(SpeechVoice? voice) => _update(
+    (current) => voice == null
+        ? current.copyWith(clearVoice: true)
+        : current.copyWith(voice: voice),
+  );
+
+  Future<void> _update(
+    SpeechEngineSettings Function(SpeechEngineSettings current) update,
+  ) {
+    return _serialized(() async {
+      final preferences = await _preferences();
+      await preferences.reload();
+      final current = await _loadFrom(preferences);
+      await _write(preferences, update(current));
+    });
   }
 
   Future<void> _write(
@@ -156,13 +170,17 @@ class NarrationPreferences {
     final rate = rawRate is num && rawRate >= 0 && rawRate <= 1
         ? rawRate.toDouble()
         : defaultRate;
-    final rawLanguage = preferences.getString(legacyLanguageKey)?.trim();
+    final storedLanguage = preferences.get(legacyLanguageKey);
+    final rawLanguage = storedLanguage is String ? storedLanguage.trim() : null;
     final language = rawLanguage == null || rawLanguage.isEmpty
         ? defaultLanguage
         : rawLanguage;
-    final voiceName = preferences.getString(legacyVoiceNameKey)?.trim() ?? '';
-    final voiceLocale =
-        preferences.getString(legacyVoiceLocaleKey)?.trim() ?? '';
+    final storedVoiceName = preferences.get(legacyVoiceNameKey);
+    final storedVoiceLocale = preferences.get(legacyVoiceLocaleKey);
+    final voiceName = storedVoiceName is String ? storedVoiceName.trim() : '';
+    final voiceLocale = storedVoiceLocale is String
+        ? storedVoiceLocale.trim()
+        : '';
     final voice = voiceName.isNotEmpty && voiceLocale.isNotEmpty
         ? SpeechVoice(name: voiceName, locale: voiceLocale)
         : null;
@@ -206,5 +224,17 @@ class NarrationPreferences {
         'Voice name and locale cannot be empty.',
       );
     }
+  }
+
+  static Future<T> _serialized<T>(Future<T> Function() operation) {
+    final result = Completer<T>();
+    _operationQueue = _operationQueue.then((_) async {
+      try {
+        result.complete(await operation());
+      } catch (error, stack) {
+        result.completeError(error, stack);
+      }
+    });
+    return result.future;
   }
 }

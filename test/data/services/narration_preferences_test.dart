@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:catholic_daily/data/services/narration_preferences.dart';
@@ -134,4 +135,61 @@ void main() {
     expect(future.rate, NarrationPreferences.defaultRate);
     expect(future.language, NarrationPreferences.defaultLanguage);
   });
+
+  test('wrongly typed current and legacy values migrate safely', () async {
+    SharedPreferences.setMockInitialValues(<String, Object>{
+      NarrationPreferences.storageKey: 7,
+      NarrationPreferences.legacyRateKey: 'fast',
+      NarrationPreferences.legacyLanguageKey: 42,
+      NarrationPreferences.legacyVoiceNameKey: true,
+      NarrationPreferences.legacyVoiceLocaleKey: <String>['en-US'],
+    });
+
+    final settings = await NarrationPreferences().load();
+
+    expect(settings.rate, NarrationPreferences.defaultRate);
+    expect(settings.language, NarrationPreferences.defaultLanguage);
+    expect(settings.voice, isNull);
+    final raw = await SharedPreferences.getInstance();
+    expect(raw.get(NarrationPreferences.storageKey), isA<String>());
+    expect(raw.containsKey(NarrationPreferences.legacyRateKey), isFalse);
+    expect(raw.containsKey(NarrationPreferences.legacyLanguageKey), isFalse);
+    expect(raw.containsKey(NarrationPreferences.legacyVoiceNameKey), isFalse);
+    expect(raw.containsKey(NarrationPreferences.legacyVoiceLocaleKey), isFalse);
+  });
+
+  test(
+    'concurrent instances do not lose rate language or voice updates',
+    () async {
+      final first = NarrationPreferences();
+      final second = NarrationPreferences();
+      final third = NarrationPreferences();
+      await first.save(const SpeechEngineSettings());
+      final firstWriteEntered = Completer<void>();
+      final releaseFirstWrite = Completer<void>();
+      var interceptedWrites = 0;
+      NarrationPreferences.setWriteInterceptorForTesting((_, write) async {
+        interceptedWrites++;
+        if (interceptedWrites == 1) {
+          firstWriteEntered.complete();
+          await releaseFirstWrite.future;
+        }
+        return write();
+      });
+
+      final rate = first.setRate(0.72);
+      await firstWriteEntered.future;
+      final language = second.setLanguage('en-NG');
+      final voice = third.setVoice(
+        const SpeechVoice(name: 'English Nigeria', locale: 'en-NG'),
+      );
+      releaseFirstWrite.complete();
+      await Future.wait<void>(<Future<void>>[rate, language, voice]);
+
+      final restored = await NarrationPreferences().load();
+      expect(restored.rate, 0.72);
+      expect(restored.language, 'en-NG');
+      expect(restored.voice?.name, 'English Nigeria');
+    },
+  );
 }

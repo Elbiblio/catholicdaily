@@ -125,7 +125,7 @@ class ReadingNarrationQueueBuilder {
   }
 
   static bool _isAlternative(DailyReading reading) => RegExp(
-    r'\(alternative(?:\s+\d+|\s+shorter form)?\)',
+    r'(?:\(alternative(?:\s+\d+|\s+shorter form)?\)|\(?shorter form\)?)\s*$',
     caseSensitive: false,
   ).hasMatch(reading.position ?? '');
 
@@ -133,7 +133,7 @@ class ReadingNarrationQueueBuilder {
     return (reading.position ?? 'Reading')
         .replaceFirst(
           RegExp(
-            r'\s*\(alternative(?:\s+\d+|\s+shorter form)?\)\s*$',
+            r'\s*(?:\(alternative(?:\s+\d+|\s+shorter form)?\)|\(?shorter form\)?)\s*$',
             caseSensitive: false,
           ),
           '',

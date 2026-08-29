@@ -333,6 +333,93 @@ void main() {
     expect(engine.spokenTexts, isEmpty);
   });
 
+  test('does not fall back to an unrelated offline language', () async {
+    engine.voices = const <SpeechVoice>[
+      SpeechVoice(name: 'Français local', locale: 'fr-FR'),
+    ];
+
+    await controller.play(queue);
+
+    expect(controller.state.status, NarrationStatus.unavailable);
+    expect(engine.spokenTexts, isEmpty);
+  });
+
+  test(
+    'prefers exact locale then permits a base-language offline voice',
+    () async {
+      engine.voices = const <SpeechVoice>[
+        SpeechVoice(name: 'English UK', locale: 'en-GB'),
+        SpeechVoice(name: 'English Nigeria', locale: 'en-NG'),
+      ];
+      controller.dispose();
+      controller = ReadingNarrationController(
+        engine: engine,
+        settings: const SpeechEngineSettings(language: 'en-NG'),
+      );
+
+      await controller.play(queue);
+      expect(engine.configuredSettings.last.voice?.name, 'English Nigeria');
+
+      engine.voices = const <SpeechVoice>[
+        SpeechVoice(name: 'English UK', locale: 'en-GB'),
+      ];
+      await controller.play(queue);
+      expect(engine.configuredSettings.last.voice?.name, 'English UK');
+    },
+  );
+
+  test('a stop supersedes a play waiting for its pre-play stop', () async {
+    await controller.play(queue);
+    final spokenCount = engine.spokenTexts.length;
+    final gate = Completer<void>();
+    engine.stopGate = gate;
+    final observedItems = <String?>[];
+    controller.addListener(
+      () => observedItems.add(controller.state.currentItem?.reading.reading),
+    );
+
+    final replacement = controller.play(<ReadingNarrationQueueItem>[
+      queue.last,
+    ]);
+    final stop = controller.stop();
+    gate.complete();
+    await Future.wait<void>(<Future<void>>[replacement, stop]);
+
+    expect(controller.state.status, NarrationStatus.stopped);
+    expect(engine.spokenTexts, hasLength(spokenCount));
+    expect(observedItems, isNot(contains('second')));
+  });
+
+  test('a stop supersedes next while its native stop is pending', () async {
+    await controller.play(queue, mode: NarrationPlaybackMode.readAll);
+    final spokenCount = engine.spokenTexts.length;
+    final gate = Completer<void>();
+    engine.stopGate = gate;
+
+    final next = controller.next();
+    final stop = controller.stop();
+    gate.complete();
+    await Future.wait<void>(<Future<void>>[next, stop]);
+
+    expect(controller.state.status, NarrationStatus.stopped);
+    expect(controller.state.currentIndex, 0);
+    expect(engine.spokenTexts, hasLength(spokenCount));
+  });
+
+  test('a stop supersedes a delayed resume callback', () async {
+    await controller.play(queue);
+    await controller.pause();
+    final gate = Completer<void>();
+    engine.speakGate = gate;
+
+    final resume = controller.resume();
+    final stop = controller.stop();
+    gate.complete();
+    await Future.wait<void>(<Future<void>>[resume, stop]);
+
+    expect(controller.state.status, NarrationStatus.stopped);
+  });
+
   test('empty queues are unavailable rather than sent to the engine', () async {
     await controller.play(const <ReadingNarrationQueueItem>[]);
 
@@ -493,6 +580,10 @@ class FakeSpeechEngine implements SpeechEngine {
   Object? configureError;
   Object? disposeError;
   bool nativePaused = false;
+  Completer<void>? stopGate;
+  Completer<void>? speakGate;
+  final List<SpeechEngineSettings> configuredSettings =
+      <SpeechEngineSettings>[];
 
   @override
   bool get supportsNativePause => nativePauseSupported;
@@ -512,11 +603,14 @@ class FakeSpeechEngine implements SpeechEngine {
   @override
   Future<void> configure(SpeechEngineSettings settings) async {
     if (configureError != null) throw configureError!;
+    configuredSettings.add(settings);
   }
 
   @override
   Future<void> speak(String text, {required String utteranceId}) async {
     if (speakError != null) throw speakError!;
+    final pendingSpeak = speakGate;
+    if (pendingSpeak != null) await pendingSpeak.future;
     spokenTexts.add(text);
     lastUtteranceId = utteranceId;
     if (nativePaused) {
@@ -538,6 +632,8 @@ class FakeSpeechEngine implements SpeechEngine {
   Future<void> stop() async {
     stopCalls++;
     if (stopError != null) throw stopError!;
+    final pendingStop = stopGate;
+    if (pendingStop != null) await pendingStop.future;
     nativePaused = false;
   }
 

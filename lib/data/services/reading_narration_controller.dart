@@ -121,6 +121,8 @@ class ReadingNarrationController extends ChangeNotifier {
   ReadingNarrationState _state;
   NarrationContext? _context;
   int _generation = 0;
+  int _playbackCommandToken = 0;
+  int _settingsCommandToken = 0;
   int _utteranceSequence = 0;
   int _spokenOffset = 0;
   int _resumeOffset = 0;
@@ -154,6 +156,7 @@ class ReadingNarrationController extends ChangeNotifier {
     NarrationContext? context,
   }) async {
     if (_disposed) return;
+    final command = ++_playbackCommandToken;
     final generation = ++_generation;
     _activeUtteranceId = null;
     _spokenOffset = 0;
@@ -161,8 +164,9 @@ class ReadingNarrationController extends ChangeNotifier {
     if (_isActive(_state.status)) {
       try {
         await _engine.stop();
+        if (!_isCurrentCommand(command, generation)) return;
       } catch (error) {
-        _failOperation(error);
+        if (_isCurrentCommand(command, generation)) _failOperation(error);
         return;
       }
     }
@@ -190,9 +194,9 @@ class ReadingNarrationController extends ChangeNotifier {
 
     try {
       await _engine.initialize();
-      if (!_isCurrentGeneration(generation)) return;
+      if (!_isCurrentCommand(command, generation)) return;
       final voices = await _engine.getVoices();
-      if (!_isCurrentGeneration(generation)) return;
+      if (!_isCurrentCommand(command, generation)) return;
       if (voices.isEmpty) {
         _emit(
           _state.copyWith(
@@ -214,10 +218,10 @@ class ReadingNarrationController extends ChangeNotifier {
         return;
       }
       await _engine.configure(_settings.copyWith(voice: selectedVoice));
-      if (!_isCurrentGeneration(generation)) return;
-      _speakCurrent();
+      if (!_isCurrentCommand(command, generation)) return;
+      await _speakCurrent(command: command, generation: generation);
     } catch (error) {
-      if (_isCurrentGeneration(generation)) {
+      if (_isCurrentCommand(command, generation)) {
         _failOperation(error);
       }
     }
@@ -225,17 +229,22 @@ class ReadingNarrationController extends ChangeNotifier {
 
   Future<void> updateSettings(SpeechEngineSettings settings) async {
     if (_disposed) return;
+    final command = ++_settingsCommandToken;
     try {
       await _engine.configure(settings);
-      if (_disposed) return;
+      if (_disposed || command != _settingsCommandToken) return;
       _settings = settings;
     } catch (error) {
-      _failOperation(error);
+      if (!_disposed && command == _settingsCommandToken) {
+        _failOperation(error);
+      }
     }
   }
 
   Future<void> pause() async {
     if (_disposed || _state.status != NarrationStatus.playing) return;
+    final command = ++_playbackCommandToken;
+    final generation = _generation;
     _resumeOffset = _state.progressStart.clamp(0, _currentText.length);
     final pausedId = _activeUtteranceId;
     _activeUtteranceId = null;
@@ -245,6 +254,7 @@ class ReadingNarrationController extends ChangeNotifier {
       } else {
         await _engine.stop();
       }
+      if (!_isCurrentCommand(command, generation)) return;
     } catch (error) {
       if (_engine.supportsNativePause) {
         try {
@@ -253,7 +263,7 @@ class ReadingNarrationController extends ChangeNotifier {
           // The original pause error is the actionable failure.
         }
       }
-      _failOperation(error);
+      if (_isCurrentCommand(command, generation)) _failOperation(error);
       return;
     }
     if (_disposed || pausedId == null) return;
@@ -262,12 +272,19 @@ class ReadingNarrationController extends ChangeNotifier {
 
   Future<void> resume() async {
     if (_disposed || _state.status != NarrationStatus.paused) return;
-    _speakCurrent(offset: _engine.supportsNativePause ? 0 : _resumeOffset);
+    final command = ++_playbackCommandToken;
+    final generation = _generation;
+    await _speakCurrent(
+      offset: _engine.supportsNativePause ? 0 : _resumeOffset,
+      command: command,
+      generation: generation,
+    );
   }
 
   Future<void> stop({bool clearQueue = false}) async {
     if (_disposed) return;
-    ++_generation;
+    final command = ++_playbackCommandToken;
+    final generation = ++_generation;
     _activeUtteranceId = null;
     if (clearQueue) {
       _emit(
@@ -286,10 +303,10 @@ class ReadingNarrationController extends ChangeNotifier {
     try {
       await _engine.stop();
     } catch (error) {
-      _failOperation(error);
+      if (_isCurrentCommand(command, generation)) _failOperation(error);
       return;
     }
-    if (_disposed) return;
+    if (!_isCurrentCommand(command, generation)) return;
     if (clearQueue) return;
     _emit(
       _state.copyWith(
@@ -307,18 +324,20 @@ class ReadingNarrationController extends ChangeNotifier {
 
   Future<void> next() async {
     if (_disposed || _state.queue.isEmpty) return;
+    final command = ++_playbackCommandToken;
     final target = _state.currentIndex + 1;
     if (target >= _state.queue.length) {
       await stop();
       return;
     }
-    await _moveTo(target);
+    await _moveTo(target, command: command);
   }
 
   Future<void> previous() async {
     if (_disposed || _state.queue.isEmpty) return;
+    final command = ++_playbackCommandToken;
     final target = (_state.currentIndex - 1).clamp(0, _state.queue.length - 1);
-    await _moveTo(target);
+    await _moveTo(target, command: command);
   }
 
   Future<void> onAppPaused() async {
@@ -344,16 +363,16 @@ class ReadingNarrationController extends ChangeNotifier {
     if (!preserve) await stop();
   }
 
-  Future<void> _moveTo(int target) async {
-    ++_generation;
+  Future<void> _moveTo(int target, {required int command}) async {
+    final generation = ++_generation;
     _activeUtteranceId = null;
     try {
       await _engine.stop();
     } catch (error) {
-      _failOperation(error);
+      if (_isCurrentCommand(command, generation)) _failOperation(error);
       return;
     }
-    if (_disposed) return;
+    if (!_isCurrentCommand(command, generation)) return;
     _spokenOffset = 0;
     _resumeOffset = 0;
     _emit(
@@ -367,25 +386,27 @@ class ReadingNarrationController extends ChangeNotifier {
         clearError: true,
       ),
     );
-    _speakCurrent();
+    await _speakCurrent(command: command, generation: generation);
   }
 
   String get _currentText => _state.currentItem?.narration.text ?? '';
 
-  void _speakCurrent({int offset = 0}) {
+  Future<void> _speakCurrent({
+    int offset = 0,
+    required int command,
+    required int generation,
+  }) async {
     if (_disposed || _currentText.isEmpty) return;
     _spokenOffset = offset.clamp(0, _currentText.length);
     final text = _currentText.substring(_spokenOffset);
     final id = 'narration-${_generation}-${++_utteranceSequence}';
     _activeUtteranceId = id;
     try {
-      unawaited(
-        _engine.speak(text, utteranceId: id).catchError((Object error) {
-          _onError(id, _messageFor(error));
-        }),
-      );
+      await _engine.speak(text, utteranceId: id);
     } catch (error) {
-      _onError(id, _messageFor(error));
+      if (_isCurrentCommand(command, generation) && _accepts(id)) {
+        _onError(id, _messageFor(error));
+      }
     }
   }
 
@@ -434,7 +455,8 @@ class ReadingNarrationController extends ChangeNotifier {
           clearError: true,
         ),
       );
-      _speakCurrent();
+      final command = ++_playbackCommandToken;
+      await _speakCurrent(command: command, generation: _generation);
       return;
     }
     _emit(
@@ -451,6 +473,7 @@ class ReadingNarrationController extends ChangeNotifier {
 
   void _onError(String utteranceId, String message) {
     if (!_accepts(utteranceId)) return;
+    ++_playbackCommandToken;
     ++_generation;
     _activeUtteranceId = null;
     _emit(
@@ -468,8 +491,14 @@ class ReadingNarrationController extends ChangeNotifier {
   bool _isCurrentGeneration(int generation) =>
       !_disposed && generation == _generation;
 
+  bool _isCurrentCommand(int command, int generation) =>
+      !_disposed &&
+      command == _playbackCommandToken &&
+      _isCurrentGeneration(generation);
+
   void _failOperation(Object error) {
     if (_disposed) return;
+    ++_playbackCommandToken;
     ++_generation;
     _activeUtteranceId = null;
     _emit(
@@ -496,19 +525,28 @@ class ReadingNarrationController extends ChangeNotifier {
     List<SpeechVoice> voices,
     SpeechEngineSettings settings,
   ) {
-    if (settings.voice?.isNetworkRequired == false &&
-        voices.contains(settings.voice)) {
-      return settings.voice!;
+    final language = settings.language.trim().toLowerCase();
+    final baseLanguage = language.split(RegExp('[-_]')).first;
+    bool matchesLanguage(SpeechVoice voice) {
+      final locale = voice.locale.trim().toLowerCase();
+      return locale == language ||
+          locale.split(RegExp('[-_]')).first == baseLanguage;
     }
-    final language = settings.language.toLowerCase();
-    final offlineForLanguage = voices.where(
-      (voice) =>
-          !voice.isNetworkRequired &&
-          voice.locale.toLowerCase().startsWith(language.split('-').first),
+
+    final selected = settings.voice;
+    if (selected != null &&
+        !selected.isNetworkRequired &&
+        voices.contains(selected) &&
+        matchesLanguage(selected)) {
+      return selected;
+    }
+    final offline = voices.where(
+      (voice) => !voice.isNetworkRequired && matchesLanguage(voice),
     );
-    if (offlineForLanguage.isNotEmpty) return offlineForLanguage.first;
-    final offline = voices.where((voice) => !voice.isNetworkRequired);
-    return offline.isNotEmpty ? offline.first : null;
+    for (final voice in offline) {
+      if (voice.locale.trim().toLowerCase() == language) return voice;
+    }
+    return offline.isEmpty ? null : offline.first;
   }
 
   static String _messageFor(Object error) {
@@ -522,6 +560,8 @@ class ReadingNarrationController extends ChangeNotifier {
   void dispose() {
     if (_disposed) return;
     _disposed = true;
+    ++_playbackCommandToken;
+    ++_settingsCommandToken;
     ++_generation;
     _activeUtteranceId = null;
     try {

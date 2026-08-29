@@ -66,6 +66,30 @@ void main() {
       ]);
     });
 
+    test('selected shorter form replaces the primary Gospel slot', () {
+      final primary = reading('Mark 16:15-20', 'Gospel');
+      final shorter = reading('Mark 16:15-18', 'Gospel (shorter form)');
+      final psalm = reading('Ps 117:1-2', 'Responsorial Psalm');
+      final readings = <DailyReading>[primary, shorter, psalm];
+
+      expect(
+        builder
+            .buildReadAll(session(readings))
+            .map((item) => item.reading.reading),
+        <String>['Mark 16:15-20', 'Ps 117:1-2'],
+      );
+
+      expect(
+        builder
+            .buildReadAll(
+              session(readings),
+              selectedReadings: <DailyReading>[shorter],
+            )
+            .map((item) => item.reading.reading),
+        <String>['Mark 16:15-18', 'Ps 117:1-2'],
+      );
+    });
+
     test('uses the response from the exact displayed psalm edition', () {
       final psalm = DailyReading(
         reading: 'Ps 23:1-3',

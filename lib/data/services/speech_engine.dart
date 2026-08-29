@@ -47,6 +47,18 @@ class SpeechEngineSettings {
   }
 }
 
+class SpeechEngineException implements Exception {
+  final String operation;
+  final Object? result;
+
+  const SpeechEngineException(this.operation, [this.result]);
+
+  @override
+  String toString() => result == null
+      ? 'Speech engine operation failed: $operation.'
+      : 'Speech engine operation failed: $operation ($result).';
+}
+
 class SpeechEngineCallbacks {
   final void Function(String utteranceId) onStart;
   final void Function(String utteranceId) onContinue;

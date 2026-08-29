@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:math' as math;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
@@ -6,11 +9,13 @@ import 'speech_engine.dart';
 enum SpeechPlatform { android, ios, macos, windows, linux, web }
 
 abstract class FlutterTtsDriver {
-  Future<void> awaitSpeakCompletion(bool enabled);
+  Future<Object?> awaitSpeakCompletion(bool enabled);
 
   void setStartHandler(void Function() handler);
 
   void setContinueHandler(void Function() handler);
+
+  void setCancelHandler(void Function() handler);
 
   void setCompletionHandler(void Function() handler);
 
@@ -24,27 +29,35 @@ abstract class FlutterTtsDriver {
 
   Future<bool> isLanguageInstalled(String language);
 
-  Future<void> setLanguage(String language);
+  Future<Object?> setLanguage(String language);
 
-  Future<void> setSpeechRate(double rate);
+  Future<Object?> setSpeechRate(double rate);
 
-  Future<void> setVoice(Map<String, String> voice);
+  Future<Object?> setPitch(double pitch);
 
-  Future<void> speak(String text);
+  Future<Object?> setVoice(Map<String, String> voice);
 
-  Future<void> pause();
+  Future<Object?> speak(String text);
 
-  Future<void> stop();
+  Future<Object?> pause();
+
+  Future<Object?> stop();
 }
 
 class FlutterTtsSpeechEngine implements SpeechEngine {
+  static const int maxChunkCodeUnits = 3500;
+  static const Duration _cancelFenceTimeout = Duration(milliseconds: 100);
+
   final FlutterTtsDriver _driver;
   final SpeechPlatform _platform;
   SpeechEngineCallbacks? _callbacks;
   Future<void>? _initialization;
+  Future<void> _nativeQueue = Future<void>.value();
   bool _handlersInstalled = false;
   bool _disposed = false;
-  String? _activeUtteranceId;
+  int _intent = 0;
+  _LogicalSession? _activeSession;
+  Completer<void>? _cancelFence;
 
   FlutterTtsSpeechEngine({FlutterTtsDriver? driver, SpeechPlatform? platform})
     : _driver = driver ?? _PluginFlutterTtsDriver(FlutterTts()),
@@ -65,42 +78,116 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
   @override
   Future<void> initialize() {
     if (_disposed) return Future<void>.value();
-    return _initialization ??= _initializeOnce();
+    final existing = _initialization;
+    if (existing != null) return existing;
+    late final Future<void> attempt;
+    attempt = _initializeOnce().catchError((Object error, StackTrace stack) {
+      if (identical(_initialization, attempt)) _initialization = null;
+      Error.throwWithStackTrace(error, stack);
+    });
+    _initialization = attempt;
+    return attempt;
   }
 
   Future<void> _initializeOnce() async {
     _installHandlersOnce();
-    await _driver.awaitSpeakCompletion(true);
+    _requireSuccess(
+      await _driver.awaitSpeakCompletion(false),
+      'awaitSpeakCompletion',
+    );
   }
 
   void _installHandlersOnce() {
     if (_handlersInstalled) return;
     _handlersInstalled = true;
-    _driver.setStartHandler(() {
-      final id = _activeUtteranceId;
-      if (!_disposed && id != null) _callbacks?.onStart(id);
-    });
-    _driver.setContinueHandler(() {
-      final id = _activeUtteranceId;
-      if (!_disposed && id != null) _callbacks?.onContinue(id);
-    });
-    _driver.setCompletionHandler(() {
-      final id = _activeUtteranceId;
-      if (!_disposed && id != null) _callbacks?.onCompletion(id);
-      if (_activeUtteranceId == id) _activeUtteranceId = null;
-    });
-    _driver.setErrorHandler((message) {
-      final id = _activeUtteranceId;
-      if (!_disposed && id != null) _callbacks?.onError(id, message);
-      if (_activeUtteranceId == id) _activeUtteranceId = null;
-    });
-    _driver.setProgressHandler((text, start, end, word) {
-      final id = _activeUtteranceId;
-      if (!_disposed && id != null) {
-        _callbacks?.onProgress(id, start, end, word);
-      }
-    });
+    _driver.setStartHandler(_handleStart);
+    _driver.setContinueHandler(_handleContinue);
+    _driver.setCancelHandler(_handleCancel);
+    _driver.setCompletionHandler(_handleCompletion);
+    _driver.setErrorHandler(_handleError);
+    _driver.setProgressHandler(_handleProgress);
   }
+
+  void _handleStart() {
+    final session = _activeSession;
+    if (!_acceptsChunkCallback(session) || session!.chunkStarted) return;
+    session.chunkStarted = true;
+    if (!session.logicalStarted) {
+      session.logicalStarted = true;
+      _callbacks?.onStart(session.utteranceId);
+    }
+  }
+
+  void _handleContinue() {
+    final session = _activeSession;
+    if (!_acceptsChunkCallback(session) || !session!.resuming) return;
+    session.resuming = false;
+    session.paused = false;
+    session.chunkStarted = true;
+    _callbacks?.onContinue(session.utteranceId);
+  }
+
+  void _handleCancel() {
+    final fence = _cancelFence;
+    if (fence != null && !fence.isCompleted) fence.complete();
+  }
+
+  void _handleCompletion() {
+    final session = _activeSession;
+    if (!_acceptsChunkCallback(session) || !session!.chunkStarted) return;
+    session.acceptingCallbacks = false;
+    session.chunkStarted = false;
+    if (session.chunkIndex >= session.chunks.length - 1) {
+      session.terminal = true;
+      _activeSession = null;
+      _callbacks?.onCompletion(session.utteranceId);
+      return;
+    }
+    session.chunkIndex++;
+    unawaited(
+      _enqueueNative(() async {
+        if (!_isActive(session)) return;
+        await _speakCurrentChunk(session);
+      }),
+    );
+  }
+
+  void _handleError(String message) {
+    final session = _activeSession;
+    if (!_acceptsChunkCallback(session)) return;
+    session!.acceptingCallbacks = false;
+    session.terminal = true;
+    _activeSession = null;
+    _callbacks?.onError(session.utteranceId, message);
+  }
+
+  void _handleProgress(String text, int start, int end, String word) {
+    final session = _activeSession;
+    if (!_acceptsChunkCallback(session) || !session!.chunkStarted) return;
+    final chunk = session.currentChunk;
+    final chunkLength = chunk.text.length;
+    final safeStart = start.clamp(0, chunkLength);
+    final safeEnd = end.clamp(safeStart, chunkLength);
+    _callbacks?.onProgress(
+      session.utteranceId,
+      chunk.offset + safeStart,
+      chunk.offset + safeEnd,
+      word,
+    );
+  }
+
+  bool _acceptsChunkCallback(_LogicalSession? session) =>
+      !_disposed &&
+      session != null &&
+      identical(_activeSession, session) &&
+      !session.terminal &&
+      session.acceptingCallbacks;
+
+  bool _isActive(_LogicalSession session) =>
+      !_disposed &&
+      identical(_activeSession, session) &&
+      !session.terminal &&
+      session.intent == _intent;
 
   @override
   Future<List<SpeechVoice>> getVoices() async {
@@ -142,51 +229,211 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
           throw StateError('No installed text-to-speech voice for $language.');
         }
       }
-      await _driver.setLanguage(language);
+      _requireSuccess(await _driver.setLanguage(language), 'setLanguage');
     }
-    await _driver.setSpeechRate(settings.rate.clamp(0.0, 1.0));
+    _requireSuccess(
+      await _driver.setSpeechRate(settings.rate.clamp(0.0, 1.0)),
+      'setSpeechRate',
+    );
+    _requireSuccess(await _driver.setPitch(1), 'setPitch');
     final voice = settings.voice;
     if (voice != null) {
-      await _driver.setVoice(<String, String>{
-        'name': voice.name,
-        'locale': voice.locale,
-      });
+      _requireSuccess(
+        await _driver.setVoice(<String, String>{
+          'name': voice.name,
+          'locale': voice.locale,
+        }),
+        'setVoice',
+      );
     }
   }
 
   @override
-  Future<void> speak(String text, {required String utteranceId}) async {
-    if (_disposed || text.trim().isEmpty) return;
-    _activeUtteranceId = utteranceId;
-    await initialize();
-    if (_disposed || _activeUtteranceId != utteranceId) return;
-    await _driver.speak(text);
+  Future<void> speak(String text, {required String utteranceId}) {
+    if (_disposed || text.trim().isEmpty) return Future<void>.value();
+    final intent = ++_intent;
+    final resumable = supportsNativePause && _activeSession?.paused == true;
+    final oldSession = resumable ? null : _invalidateActiveSession();
+    return _enqueueNative(() async {
+      if (_disposed || intent != _intent) return;
+      await initialize();
+      if (_disposed || intent != _intent) return;
+      if (resumable) {
+        final session = _activeSession;
+        if (session == null || session.terminal || !session.paused) return;
+        session.intent = intent;
+        session.utteranceId = utteranceId;
+        session.resuming = true;
+        session.acceptingCallbacks = true;
+        _requireSuccess(
+          await _driver.speak(session.currentChunk.text),
+          'speak',
+          allowNull: _platform == SpeechPlatform.web,
+        );
+        return;
+      }
+      if (oldSession != null) await _cancelNativeSession();
+      if (_disposed || intent != _intent) return;
+      final session = _LogicalSession(
+        intent: intent,
+        utteranceId: utteranceId,
+        chunks: _chunkText(text),
+      );
+      _activeSession = session;
+      try {
+        await _speakCurrentChunk(session);
+      } catch (_) {
+        if (identical(_activeSession, session)) _activeSession = null;
+        session.terminal = true;
+        rethrow;
+      }
+    });
+  }
+
+  Future<void> _speakCurrentChunk(_LogicalSession session) async {
+    if (!_isActive(session)) return;
+    session.acceptingCallbacks = true;
+    session.chunkStarted = false;
+    _requireSuccess(
+      await _driver.speak(session.currentChunk.text),
+      'speak',
+      allowNull: _platform == SpeechPlatform.web,
+    );
   }
 
   @override
-  Future<void> pause() async {
-    if (_disposed) return;
+  Future<void> pause() {
+    if (_disposed) return Future<void>.value();
     if (!supportsNativePause) {
-      throw StateError('Native pause is not reliable on this platform.');
+      return Future<void>.error(
+        StateError('Native pause is not reliable on this platform.'),
+      );
     }
-    await _driver.pause();
+    final session = _activeSession;
+    return _enqueueNative(() async {
+      if (!_isActiveOrPaused(session)) return;
+      _requireSuccess(await _driver.pause(), 'pause');
+      if (_isActiveOrPaused(session)) session!.paused = true;
+    });
+  }
+
+  bool _isActiveOrPaused(_LogicalSession? session) =>
+      !_disposed &&
+      session != null &&
+      identical(_activeSession, session) &&
+      !session.terminal;
+
+  @override
+  Future<void> stop() {
+    if (_disposed) return Future<void>.value();
+    ++_intent;
+    _invalidateActiveSession();
+    return _enqueueNative(_cancelNativeSession);
+  }
+
+  _LogicalSession? _invalidateActiveSession() {
+    final session = _activeSession;
+    _activeSession = null;
+    if (session != null) {
+      session.acceptingCallbacks = false;
+      session.terminal = true;
+    }
+    return session;
+  }
+
+  Future<void> _cancelNativeSession() async {
+    final fence = Completer<void>();
+    _cancelFence = fence;
+    try {
+      _requireSuccess(await _driver.stop(), 'stop');
+      if (!fence.isCompleted) {
+        await Future.any<void>(<Future<void>>[
+          fence.future,
+          Future<void>.delayed(_cancelFenceTimeout),
+        ]);
+      }
+    } finally {
+      if (identical(_cancelFence, fence)) _cancelFence = null;
+    }
   }
 
   @override
-  Future<void> stop() async {
-    if (_disposed) return;
-    _activeUtteranceId = null;
-    await _driver.stop();
-  }
-
-  @override
-  Future<void> dispose() async {
-    if (_disposed) return;
+  Future<void> dispose() {
+    if (_disposed) return Future<void>.value();
     _disposed = true;
-    _activeUtteranceId = null;
+    ++_intent;
+    _invalidateActiveSession();
     _callbacks = null;
-    await _driver.stop();
+    return _enqueueNative(_cancelNativeSession);
   }
+
+  Future<T> _enqueueNative<T>(Future<T> Function() operation) {
+    final result = Completer<T>();
+    _nativeQueue = _nativeQueue.then((_) async {
+      try {
+        result.complete(await operation());
+      } catch (error, stack) {
+        result.completeError(error, stack);
+      }
+    });
+    return result.future;
+  }
+
+  static void _requireSuccess(
+    Object? result,
+    String operation, {
+    bool allowNull = false,
+  }) {
+    final successful = switch (result) {
+      null => allowNull,
+      true => true,
+      final num value => value > 0,
+      final String value =>
+        value.trim().toLowerCase() == 'true' || value.trim() == '1',
+      _ => false,
+    };
+    if (!successful) throw SpeechEngineException(operation, result);
+  }
+
+  static List<_SpeechChunk> _chunkText(String text) {
+    final chunks = <_SpeechChunk>[];
+    var offset = 0;
+    while (offset < text.length) {
+      final hardEnd = math.min(offset + maxChunkCodeUnits, text.length);
+      var end = hardEnd;
+      if (hardEnd < text.length) {
+        final candidate = text.substring(offset, hardEnd);
+        final minimum = candidate.length ~/ 2;
+        var boundary = candidate.lastIndexOf('\n\n');
+        if (boundary >= minimum) boundary += 2;
+        if (boundary < minimum) {
+          final matches = RegExp(
+            r'''[.!?][\)\]\}"'’”]*\s+''',
+          ).allMatches(candidate);
+          boundary = matches.isEmpty ? -1 : matches.last.end;
+        }
+        if (boundary < minimum) {
+          boundary = candidate.lastIndexOf('\n');
+          if (boundary >= minimum) boundary++;
+        }
+        if (boundary < minimum) {
+          final whitespace = RegExp(r'\s+').allMatches(candidate);
+          boundary = whitespace.isEmpty ? -1 : whitespace.last.end;
+        }
+        if (boundary > 0) end = offset + boundary;
+      }
+      if (end < text.length && _isHighSurrogate(text.codeUnitAt(end - 1))) {
+        end--;
+      }
+      if (end <= offset) end = hardEnd;
+      chunks.add(_SpeechChunk(text.substring(offset, end), offset));
+      offset = end;
+    }
+    return chunks;
+  }
+
+  static bool _isHighSurrogate(int codeUnit) =>
+      codeUnit >= 0xD800 && codeUnit <= 0xDBFF;
 
   static bool _networkRequired(
     Map<dynamic, dynamic> value,
@@ -231,30 +478,58 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
   }
 }
 
+class _LogicalSession {
+  int intent;
+  String utteranceId;
+  final List<_SpeechChunk> chunks;
+  int chunkIndex = 0;
+  bool logicalStarted = false;
+  bool chunkStarted = false;
+  bool acceptingCallbacks = false;
+  bool paused = false;
+  bool resuming = false;
+  bool terminal = false;
+
+  _LogicalSession({
+    required this.intent,
+    required this.utteranceId,
+    required this.chunks,
+  });
+
+  _SpeechChunk get currentChunk => chunks[chunkIndex];
+}
+
+class _SpeechChunk {
+  final String text;
+  final int offset;
+
+  const _SpeechChunk(this.text, this.offset);
+}
+
 class _PluginFlutterTtsDriver implements FlutterTtsDriver {
   final FlutterTts _tts;
 
   _PluginFlutterTtsDriver(this._tts);
 
   @override
-  Future<void> awaitSpeakCompletion(bool enabled) async {
-    await _tts.awaitSpeakCompletion(enabled);
-  }
+  Future<Object?> awaitSpeakCompletion(bool enabled) =>
+      _tts.awaitSpeakCompletion(enabled);
 
   @override
-  void setStartHandler(void Function() handler) {
-    _tts.setStartHandler(handler);
-  }
+  void setStartHandler(void Function() handler) =>
+      _tts.setStartHandler(handler);
 
   @override
-  void setContinueHandler(void Function() handler) {
-    _tts.setContinueHandler(handler);
-  }
+  void setContinueHandler(void Function() handler) =>
+      _tts.setContinueHandler(handler);
 
   @override
-  void setCompletionHandler(void Function() handler) {
-    _tts.setCompletionHandler(handler);
-  }
+  void setCancelHandler(void Function() handler) =>
+      _tts.setCancelHandler(handler);
+
+  @override
+  void setCompletionHandler(void Function() handler) =>
+      _tts.setCompletionHandler(handler);
 
   @override
   void setErrorHandler(void Function(String message) handler) {
@@ -264,9 +539,7 @@ class _PluginFlutterTtsDriver implements FlutterTtsDriver {
   @override
   void setProgressHandler(
     void Function(String text, int start, int end, String word) handler,
-  ) {
-    _tts.setProgressHandler(handler);
-  }
+  ) => _tts.setProgressHandler(handler);
 
   @override
   Future<Object?> getVoices() async => await _tts.getVoices;
@@ -276,36 +549,28 @@ class _PluginFlutterTtsDriver implements FlutterTtsDriver {
     final result = await _tts.isLanguageInstalled(language);
     if (result is bool) return result;
     if (result is num) return result != 0;
-    return result?.toString().toLowerCase() == 'true';
+    final normalized = result?.toString().trim().toLowerCase();
+    return normalized == 'true' || normalized == '1';
   }
 
   @override
-  Future<void> setLanguage(String language) async {
-    await _tts.setLanguage(language);
-  }
+  Future<Object?> setLanguage(String language) => _tts.setLanguage(language);
 
   @override
-  Future<void> setSpeechRate(double rate) async {
-    await _tts.setSpeechRate(rate);
-  }
+  Future<Object?> setSpeechRate(double rate) => _tts.setSpeechRate(rate);
 
   @override
-  Future<void> setVoice(Map<String, String> voice) async {
-    await _tts.setVoice(voice);
-  }
+  Future<Object?> setPitch(double pitch) => _tts.setPitch(pitch);
 
   @override
-  Future<void> speak(String text) async {
-    await _tts.speak(text);
-  }
+  Future<Object?> setVoice(Map<String, String> voice) => _tts.setVoice(voice);
 
   @override
-  Future<void> pause() async {
-    await _tts.pause();
-  }
+  Future<Object?> speak(String text) => _tts.speak(text);
 
   @override
-  Future<void> stop() async {
-    await _tts.stop();
-  }
+  Future<Object?> pause() => _tts.pause();
+
+  @override
+  Future<Object?> stop() => _tts.stop();
 }
