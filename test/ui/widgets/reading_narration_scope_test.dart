@@ -413,6 +413,90 @@ void main() {
     },
   );
 
+  testWidgets(
+    'rollback failure keeps UI aligned with the engine session rate',
+    (tester) async {
+      final engine = _FakeSpeechEngine();
+      final preferences = _ThrowingNarrationPreferences();
+      final narration = ReadingNarrationSession(
+        controller: ReadingNarrationController(engine: engine),
+        queueBuilder: const ReadingNarrationQueueBuilder(
+          composer: ReadingNarrationComposer(),
+        ),
+        preferences: preferences,
+      );
+      await tester.pumpWidget(
+        ReadingNarrationScope(
+          session: narration,
+          child: MaterialApp(
+            builder: (context, child) => ReadingNarrationHost(child: child!),
+            home: const Scaffold(body: SizedBox.shrink()),
+          ),
+        ),
+      );
+      engine.configureOutcomes.addAll(<Object?>[
+        null,
+        StateError('rollback rejected'),
+      ]);
+
+      await narration.setRate(0.75);
+      await tester.pumpAndSettle();
+
+      expect(engine.currentRate, 0.75);
+      expect(narration.rate, 0.75);
+      expect(
+        find.text('Speech speed changed for this session but was not saved.'),
+        findsOneWidget,
+      );
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      narration.dispose();
+    },
+  );
+
+  testWidgets('overlapping rate changes serialize rollback before newer work', (
+    tester,
+  ) async {
+    final engine = _FakeSpeechEngine();
+    final firstWrite = Completer<void>();
+    final preferences = _ControlledNarrationPreferences(firstWrite.future);
+    final narration = ReadingNarrationSession(
+      controller: ReadingNarrationController(engine: engine),
+      queueBuilder: const ReadingNarrationQueueBuilder(
+        composer: ReadingNarrationComposer(),
+      ),
+      preferences: preferences,
+    );
+    await tester.pumpWidget(
+      ReadingNarrationScope(
+        session: narration,
+        child: MaterialApp(
+          builder: (context, child) => ReadingNarrationHost(child: child!),
+          home: const Scaffold(body: SizedBox.shrink()),
+        ),
+      ),
+    );
+
+    final older = narration.setRate(0.75);
+    await tester.pump();
+    final newer = narration.setRate(1.0);
+    await tester.pump();
+    expect(engine.configuredRates, <double>[0.75]);
+
+    firstWrite.completeError(StateError('disk unavailable'));
+    await older;
+    await newer;
+    await tester.pumpAndSettle();
+
+    expect(engine.configuredRates, <double>[0.75, 0.5, 1.0]);
+    expect(engine.currentRate, 1.0);
+    expect(narration.rate, 1.0);
+    expect(preferences.savedRates, <double>[0.75, 1.0]);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    narration.dispose();
+  });
+
   testWidgets('announcements repeat after reset and suppress stale callbacks', (
     tester,
   ) async {
@@ -508,6 +592,9 @@ class _FakeSpeechEngine implements SpeechEngine {
   final List<String> spokenTexts = <String>[];
   String? currentUtteranceId;
   Object? configureError;
+  final List<Object?> configureOutcomes = <Object?>[];
+  final List<double> configuredRates = <double>[];
+  double currentRate = 0.5;
 
   _FakeSpeechEngine({
     this.voices = const <SpeechVoice>[
@@ -531,7 +618,13 @@ class _FakeSpeechEngine implements SpeechEngine {
 
   @override
   Future<void> configure(SpeechEngineSettings settings) async {
+    configuredRates.add(settings.rate);
+    if (configureOutcomes.isNotEmpty) {
+      final outcome = configureOutcomes.removeAt(0);
+      if (outcome case final error?) throw error;
+    }
     if (configureError case final error?) throw error;
+    currentRate = settings.rate;
   }
 
   @override
@@ -569,5 +662,18 @@ class _ThrowingNarrationPreferences extends NarrationPreferences {
   @override
   Future<void> setRate(double rate) async {
     throw StateError('disk full');
+  }
+}
+
+class _ControlledNarrationPreferences extends NarrationPreferences {
+  final Future<void> firstWrite;
+  final List<double> savedRates = <double>[];
+
+  _ControlledNarrationPreferences(this.firstWrite);
+
+  @override
+  Future<void> setRate(double rate) async {
+    savedRates.add(rate);
+    if (savedRates.length == 1) await firstWrite;
   }
 }

@@ -24,6 +24,7 @@ class ReadingNarrationSession extends ChangeNotifier {
   NarrationContext? _activeContext;
   String? _uiErrorMessage;
   int _uiErrorRevision = 0;
+  Future<void> _rateTransaction = Future<void>.value();
 
   ReadingNarrationSession({
     required this.controller,
@@ -104,20 +105,37 @@ class ReadingNarrationSession extends ChangeNotifier {
     );
   }
 
-  Future<void> setRate(double rate) async {
+  Future<void> setRate(double rate) {
+    final operation = _rateTransaction.then((_) => _applyRate(rate));
+    _rateTransaction = operation.then<void>((_) {}, onError: (_) {});
+    return operation;
+  }
+
+  Future<void> _applyRate(double rate) async {
+    if (_disposed) return;
+    final previous = _settings;
     final next = _settings.copyWith(rate: rate);
     try {
       final accepted = await controller.updateSettings(next);
       if (_disposed) return;
       if (!accepted) {
-        _showRateError();
+        _showRateError('Unable to change speech speed.');
         return;
       }
       try {
         await preferences.setRate(rate);
       } catch (_) {
-        await controller.updateSettings(_settings);
-        rethrow;
+        final rolledBack = await controller.updateSettings(previous);
+        if (_disposed) return;
+        if (!rolledBack) {
+          _settings = next;
+          _showRateError(
+            'Speech speed changed for this session but was not saved.',
+          );
+          return;
+        }
+        _showRateError('Unable to change speech speed.');
+        return;
       }
       if (_disposed) return;
       _settings = next;
@@ -125,12 +143,12 @@ class ReadingNarrationSession extends ChangeNotifier {
       if (!_disposed) notifyListeners();
     } catch (_) {
       if (_disposed) return;
-      _showRateError();
+      _showRateError('Unable to change speech speed.');
     }
   }
 
-  void _showRateError() {
-    _uiErrorMessage = 'Unable to change speech speed.';
+  void _showRateError(String message) {
+    _uiErrorMessage = message;
     _uiErrorRevision++;
     notifyListeners();
   }
