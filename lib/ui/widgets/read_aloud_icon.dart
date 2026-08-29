@@ -6,25 +6,31 @@ class ReadAloudIcon extends StatelessWidget {
   static const double targetSize = 48;
 
   final NarrationStatus status;
+  final bool supportsNativePause;
   final VoidCallback? onPressed;
   final Color? color;
 
   const ReadAloudIcon({
     super.key,
     required this.status,
+    this.supportsNativePause = true,
     this.onPressed,
     this.color,
   });
 
   IconData get _icon => switch (status) {
-    NarrationStatus.playing => Icons.pause_rounded,
-    NarrationStatus.paused => Icons.play_arrow_rounded,
+    NarrationStatus.playing =>
+      supportsNativePause ? Icons.pause_rounded : Icons.stop_rounded,
+    NarrationStatus.paused =>
+      supportsNativePause ? Icons.play_arrow_rounded : Icons.replay_rounded,
     _ => Icons.volume_up_outlined,
   };
 
   String get _label => switch (status) {
-    NarrationStatus.playing => 'Pause reading',
-    NarrationStatus.paused => 'Resume reading',
+    NarrationStatus.playing =>
+      supportsNativePause ? 'Pause reading' : 'Stop reading',
+    NarrationStatus.paused =>
+      supportsNativePause ? 'Resume reading' : 'Restart reading',
     _ => 'Read aloud',
   };
 

@@ -6,6 +6,7 @@ import '../../core/latest_request_guard.dart';
 import '../../data/models/daily_reading.dart';
 import '../../data/models/mass_flow_request_state.dart';
 import '../../data/models/reading_session.dart';
+import '../../data/models/resolved_responsorial_psalm.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
 import '../../data/services/order_of_mass_service.dart';
 import '../../data/services/order_of_mass_preference_service.dart';
@@ -15,6 +16,7 @@ import '../../data/services/readings_service.dart';
 import '../../data/services/readings_backend_io.dart';
 import '../../data/services/reading_flow_service.dart';
 import '../../data/services/reading_narration_controller.dart';
+import '../../data/services/liturgical_region_preference_service.dart';
 import '../widgets/parchment_background.dart';
 import '../widgets/read_aloud_icon.dart';
 import '../widgets/reading_narration_scope.dart';
@@ -135,13 +137,18 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
 
   Future<void> _toggleReadingNarration(
     DailyReading reading,
-    String displayedText,
+    MassFlowReadingContent displayed,
   ) async {
     final narration = _narration;
     if (narration == null) return;
     final session = ReadingSession(
       readings: <DailyReading>[reading],
-      readingTexts: <String, String>{reading.reading: displayedText},
+      readingTexts: <String, String>{reading.reading: displayed.text},
+      psalmSources: displayed.psalmSource == null
+          ? const <String, ResolvedResponsorialPsalm>{}
+          : <String, ResolvedResponsorialPsalm>{
+              reading.reading: displayed.psalmSource!,
+            },
       currentIndex: 0,
       liturgicalDay: _liturgicalDay,
     );
@@ -786,7 +793,10 @@ class _ReadingsSectionWidget extends StatefulWidget {
   final List<DailyReading> readings;
   final Color liturgicalColor;
   final NarrationStatus Function(DailyReading reading) narrationStatusFor;
-  final Future<void> Function(DailyReading reading, String displayedText)
+  final Future<void> Function(
+    DailyReading reading,
+    MassFlowReadingContent displayed,
+  )
   onReadAloud;
 
   const _ReadingsSectionWidget({
@@ -898,7 +908,13 @@ class _ReadingsSectionWidgetState extends State<_ReadingsSectionWidget> {
                     }),
                     sectionColor: sectionColor,
                     narrationStatus: widget.narrationStatusFor(reading),
-                    onReadAloud: (text) => widget.onReadAloud(reading, text),
+                    supportsNativePause:
+                        ReadingNarrationScope.maybeOf(
+                          context,
+                        )?.state.supportsNativePause ??
+                        false,
+                    onReadAloud: (content) =>
+                        widget.onReadAloud(reading, content),
                   );
                 }).toList(),
               ),
@@ -914,6 +930,32 @@ class _ReadingsSectionWidgetState extends State<_ReadingsSectionWidget> {
   }
 }
 
+class MassFlowReadingContent {
+  final String text;
+  final ResolvedResponsorialPsalm? psalmSource;
+
+  const MassFlowReadingContent({required this.text, this.psalmSource});
+}
+
+String _massFlowCelebrationId(DailyReading reading) {
+  final source = reading.source ?? '';
+  final explicit = RegExp(
+    r'(?:celebration|proper):([^|;]+)',
+  ).firstMatch(source)?.group(1)?.trim();
+  if (explicit != null && explicit.isNotEmpty) return explicit;
+  return (reading.feast ?? '')
+      .toLowerCase()
+      .replaceAll(RegExp(r'[^a-z0-9]+'), '_')
+      .replaceAll(RegExp(r'^_+|_+$'), '');
+}
+
+String _massFlowReadingSetKind(DailyReading reading) {
+  final position = (reading.position ?? '').toLowerCase();
+  if (position.contains('vigil')) return 'vigil';
+  if ((reading.source ?? '').contains('weekday')) return 'weekday';
+  return 'celebration';
+}
+
 class MassFlowReadingCard extends StatefulWidget {
   final DailyReading reading;
   final int index;
@@ -921,8 +963,10 @@ class MassFlowReadingCard extends StatefulWidget {
   final VoidCallback onToggle;
   final Color sectionColor;
   final NarrationStatus narrationStatus;
-  final Future<void> Function(String displayedText)? onReadAloud;
-  final Future<String> Function(DailyReading reading)? readingTextLoader;
+  final bool supportsNativePause;
+  final Future<void> Function(MassFlowReadingContent displayed)? onReadAloud;
+  final Future<MassFlowReadingContent> Function(DailyReading reading)?
+  readingContentLoader;
 
   const MassFlowReadingCard({
     super.key,
@@ -932,8 +976,9 @@ class MassFlowReadingCard extends StatefulWidget {
     required this.onToggle,
     required this.sectionColor,
     this.narrationStatus = NarrationStatus.idle,
+    this.supportsNativePause = true,
     this.onReadAloud,
-    this.readingTextLoader,
+    this.readingContentLoader,
   });
 
   @override
@@ -942,7 +987,7 @@ class MassFlowReadingCard extends StatefulWidget {
 
 class _ReadingCardState extends State<MassFlowReadingCard> {
   final ReadingFlowService _readingFlow = ReadingFlowService.instance;
-  String? _fullReadingText;
+  MassFlowReadingContent? _displayedContent;
   bool _isLoadingText = false;
   int _textLoadGeneration = 0;
 
@@ -976,7 +1021,7 @@ class _ReadingCardState extends State<MassFlowReadingCard> {
         oldWidget.reading.date != widget.reading.date;
     if (readingChanged) {
       _textLoadGeneration++;
-      _fullReadingText = null;
+      _displayedContent = null;
       _isLoadingText = false;
       if (widget.isExpanded) unawaited(_fetchReadingText());
       return;
@@ -984,23 +1029,23 @@ class _ReadingCardState extends State<MassFlowReadingCard> {
     // Fetch reading text when expanded and not already loaded
     if (widget.isExpanded &&
         !oldWidget.isExpanded &&
-        _fullReadingText == null) {
+        _displayedContent == null) {
       _fetchReadingText();
     }
   }
 
   Future<void> _fetchReadingText() async {
-    if (_fullReadingText != null) return;
+    if (_displayedContent != null) return;
     final generation = ++_textLoadGeneration;
     setState(() => _isLoadingText = true);
 
     try {
-      final text =
-          await (widget.readingTextLoader?.call(widget.reading) ??
-              _readingFlow.getReadingText(widget.reading));
+      final content =
+          await (widget.readingContentLoader?.call(widget.reading) ??
+              _loadDisplayedContent(widget.reading));
       if (mounted && generation == _textLoadGeneration) {
         setState(() {
-          _fullReadingText = text;
+          _displayedContent = content;
           _isLoadingText = false;
         });
       }
@@ -1012,11 +1057,34 @@ class _ReadingCardState extends State<MassFlowReadingCard> {
     }
   }
 
+  Future<MassFlowReadingContent> _loadDisplayedContent(
+    DailyReading reading,
+  ) async {
+    final isPsalm = (reading.position ?? '').toLowerCase().contains(
+      'responsorial psalm',
+    );
+    if (!isPsalm) {
+      return MassFlowReadingContent(
+        text: await _readingFlow.getReadingText(reading),
+      );
+    }
+    final region = await LiturgicalRegionPreferenceService.getInstance();
+    final source = await ReadingsService.instance.resolveResponsorialPsalm(
+      reading.reading,
+      psalmResponse: reading.psalmResponse ?? '',
+      date: reading.date,
+      territory: region.currentRegion.code,
+      celebrationId: _massFlowCelebrationId(reading),
+      readingSetKind: _massFlowReadingSetKind(reading),
+    );
+    return MassFlowReadingContent(text: source.text, psalmSource: source);
+  }
+
   Future<void> _readAloud() async {
-    if (_fullReadingText == null) await _fetchReadingText();
-    final text = _fullReadingText;
-    if (!mounted || text == null || text.trim().isEmpty) return;
-    await widget.onReadAloud?.call(text);
+    if (_displayedContent == null) await _fetchReadingText();
+    final content = _displayedContent;
+    if (!mounted || content == null || content.text.trim().isEmpty) return;
+    await widget.onReadAloud?.call(content);
   }
 
   @override
@@ -1079,20 +1147,23 @@ class _ReadingCardState extends State<MassFlowReadingCard> {
               if (widget.isExpanded)
                 ReadAloudIcon(
                   status: widget.narrationStatus,
+                  supportsNativePause: widget.supportsNativePause,
                   onPressed: widget.onReadAloud == null || _isLoadingText
                       ? null
                       : () => unawaited(_readAloud()),
                 ),
-              IconButton(
-                tooltip: widget.isExpanded
-                    ? 'Collapse reading'
-                    : 'Expand reading',
-                onPressed: widget.onToggle,
-                icon: Icon(
-                  widget.isExpanded ? Icons.expand_less : Icons.expand_more,
-                  color: ContrastHelper.getContrastColor(
-                    theme.colorScheme.surface,
-                    theme,
+              ExcludeSemantics(
+                child: IconButton(
+                  tooltip: widget.isExpanded
+                      ? 'Collapse reading'
+                      : 'Expand reading',
+                  onPressed: widget.onToggle,
+                  icon: Icon(
+                    widget.isExpanded ? Icons.expand_less : Icons.expand_more,
+                    color: ContrastHelper.getContrastColor(
+                      theme.colorScheme.surface,
+                      theme,
+                    ),
                   ),
                 ),
               ),
@@ -1128,11 +1199,11 @@ class _ReadingCardState extends State<MassFlowReadingCard> {
                   ],
                 ),
               )
-            else if (_fullReadingText != null)
+            else if (_displayedContent != null)
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                 child: Text(
-                  _fullReadingText!,
+                  _displayedContent!.text,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: ContrastHelper.getSecondaryContrastColor(
                       widget.sectionColor.withValues(alpha: 0.3),

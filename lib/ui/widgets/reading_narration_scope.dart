@@ -22,6 +22,8 @@ class ReadingNarrationSession extends ChangeNotifier {
   bool _playerDismissed = false;
   bool _disposed = false;
   NarrationContext? _activeContext;
+  String? _uiErrorMessage;
+  int _uiErrorRevision = 0;
 
   ReadingNarrationSession({
     required this.controller,
@@ -36,6 +38,8 @@ class ReadingNarrationSession extends ChangeNotifier {
   ReadingNarrationState get state => controller.state;
   double get rate => _settings.rate;
   bool get playerVisible => _playerStarted && !_playerDismissed;
+  String? get uiErrorMessage => _uiErrorMessage;
+  int get uiErrorRevision => _uiErrorRevision;
 
   Future<void> initialize() async {
     try {
@@ -102,11 +106,19 @@ class ReadingNarrationSession extends ChangeNotifier {
 
   Future<void> setRate(double rate) async {
     final next = _settings.copyWith(rate: rate);
-    await preferences.setRate(rate);
-    if (_disposed) return;
-    _settings = next;
-    await controller.updateSettings(next);
-    if (!_disposed) notifyListeners();
+    try {
+      await preferences.setRate(rate);
+      if (_disposed) return;
+      _settings = next;
+      _uiErrorMessage = null;
+      await controller.updateSettings(next);
+      if (!_disposed) notifyListeners();
+    } catch (_) {
+      if (_disposed) return;
+      _uiErrorMessage = 'Unable to change speech speed.';
+      _uiErrorRevision++;
+      notifyListeners();
+    }
   }
 
   void dismissPlayer() {
@@ -198,6 +210,7 @@ class _ReadingNarrationHostState extends State<ReadingNarrationHost>
     with WidgetsBindingObserver {
   ReadingNarrationSession? _session;
   String? _lastAnnouncementKey;
+  int _announcementGeneration = 0;
 
   @override
   void initState() {
@@ -215,18 +228,34 @@ class _ReadingNarrationHostState extends State<ReadingNarrationHost>
   }
 
   void _onSessionChanged() {
-    final state = _session?.state;
-    if (state == null) return;
-    final message = _accessibilityMessage(state);
-    if (message == null) return;
-    final announcementKey = '${state.status.name}:$message';
+    final session = _session;
+    if (session == null) return;
+    final state = session.state;
+    final message = _accessibilityMessage(session, state);
+    if (message == null) {
+      _lastAnnouncementKey = null;
+      _announcementGeneration++;
+      return;
+    }
+    final announcementKey =
+        '${state.status.name}:${session.uiErrorRevision}:$message';
     if (_lastAnnouncementKey == announcementKey) return;
     _lastAnnouncementKey = announcementKey;
+    final generation = ++_announcementGeneration;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted || _lastAnnouncementKey != announcementKey) return;
+      final currentSession = _session;
+      if (!mounted ||
+          currentSession == null ||
+          generation != _announcementGeneration ||
+          _lastAnnouncementKey != announcementKey ||
+          _accessibilityMessage(currentSession, currentSession.state) !=
+              message) {
+        return;
+      }
       SemanticsService.announce(message, Directionality.of(context));
       if (state.status == NarrationStatus.error ||
-          state.status == NarrationStatus.unavailable) {
+          state.status == NarrationStatus.unavailable ||
+          currentSession.uiErrorMessage != null) {
         final messenger = ScaffoldMessenger.maybeOf(context);
         messenger
           ?..hideCurrentSnackBar()
@@ -256,38 +285,44 @@ class _ReadingNarrationHostState extends State<ReadingNarrationHost>
   @override
   Widget build(BuildContext context) {
     final session = ReadingNarrationScope.of(context);
-    final state = session.state;
     return Overlay(
       initialEntries: <OverlayEntry>[
         OverlayEntry(
-          builder: (context) => Column(
-            children: <Widget>[
-              Expanded(child: widget.child),
-              if (_accessibilityMessage(state) case final message?)
-                Semantics(
-                  container: true,
-                  liveRegion: true,
-                  label: message,
-                  child: const SizedBox.shrink(),
-                ),
-              NarrationMiniPlayer(
-                visible: session.playerVisible,
-                state: state,
-                canGoPrevious: state.currentIndex > 0,
-                canGoNext:
-                    state.queue.isNotEmpty &&
-                    state.currentIndex < state.queue.length - 1,
-                rate: session.rate,
-                onPrevious: controllerCallback(session.controller.previous),
-                onPlayPause: state.status == NarrationStatus.loading
-                    ? null
-                    : controllerCallback(session.togglePlayerPlayback),
-                onNext: controllerCallback(session.controller.next),
-                onStop: controllerCallback(session.controller.stop),
-                onDismiss: session.dismissPlayer,
-                onRateChanged: (value) => unawaited(session.setRate(value)),
-              ),
-            ],
+          builder: (context) => AnimatedBuilder(
+            animation: session,
+            child: widget.child,
+            builder: (context, child) {
+              final state = session.state;
+              return Column(
+                children: <Widget>[
+                  Expanded(child: child!),
+                  if (_accessibilityMessage(session, state) case final message?)
+                    Semantics(
+                      container: true,
+                      liveRegion: true,
+                      label: message,
+                      child: const SizedBox.shrink(),
+                    ),
+                  NarrationMiniPlayer(
+                    visible: session.playerVisible,
+                    state: state,
+                    canGoPrevious: state.currentIndex > 0,
+                    canGoNext:
+                        state.queue.isNotEmpty &&
+                        state.currentIndex < state.queue.length - 1,
+                    rate: session.rate,
+                    onPrevious: controllerCallback(session.controller.previous),
+                    onPlayPause: state.status == NarrationStatus.loading
+                        ? null
+                        : controllerCallback(session.togglePlayerPlayback),
+                    onNext: controllerCallback(session.controller.next),
+                    onStop: controllerCallback(session.controller.stop),
+                    onDismiss: session.dismissPlayer,
+                    onRateChanged: (value) => unawaited(session.setRate(value)),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ],
@@ -297,7 +332,11 @@ class _ReadingNarrationHostState extends State<ReadingNarrationHost>
   VoidCallback controllerCallback(Future<void> Function() action) =>
       () => unawaited(action());
 
-  String? _accessibilityMessage(ReadingNarrationState state) =>
+  String? _accessibilityMessage(
+    ReadingNarrationSession session,
+    ReadingNarrationState state,
+  ) =>
+      session.uiErrorMessage ??
       switch (state.status) {
         NarrationStatus.loading => 'Loading reading aloud',
         NarrationStatus.paused => 'Reading paused',

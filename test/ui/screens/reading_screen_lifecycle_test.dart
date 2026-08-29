@@ -1,14 +1,20 @@
+import 'dart:async';
+
 import 'package:catholic_daily/core/latest_request_guard.dart';
 import 'package:catholic_daily/data/models/daily_reading.dart';
 import 'package:catholic_daily/data/models/reading_session.dart';
 import 'package:catholic_daily/data/services/narration_preferences.dart';
+import 'package:catholic_daily/data/services/bible_version_preference.dart';
+import 'package:catholic_daily/data/services/responsorial_psalm_preference.dart';
 import 'package:catholic_daily/data/services/reading_narration_composer.dart';
 import 'package:catholic_daily/data/services/reading_narration_controller.dart';
 import 'package:catholic_daily/data/services/reading_narration_queue_builder.dart';
 import 'package:catholic_daily/data/services/speech_engine.dart';
 import 'package:catholic_daily/ui/screens/reading_screen.dart';
 import 'package:catholic_daily/ui/widgets/read_aloud_icon.dart';
+import 'package:catholic_daily/ui/widgets/gospel_acclamation_widget.dart';
 import 'package:catholic_daily/ui/widgets/reading_narration_scope.dart';
+import 'package:catholic_daily/ui/widgets/responsorial_psalm_edition_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -229,6 +235,162 @@ void main() {
     expect(narration.state.status, NarrationStatus.playing);
     expect(engine.stopCalls, 0);
 
+    narration.dispose();
+  });
+
+  testWidgets('covering a reading route stops current-only narration', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues(<String, Object>{});
+    final engine = _FakeSpeechEngine();
+    final narration = _narrationSession(engine);
+    await tester.pumpWidget(
+      ReadingNarrationScope(
+        session: narration,
+        child: MaterialApp(
+          navigatorObservers: <NavigatorObserver>[
+            readingNarrationRouteObserver,
+          ],
+          home: const ReadingScreen(
+            reference: 'Jn 1:1',
+            content: '1 In the beginning was the Word.',
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(ReadAloudIcon));
+    await tester.pumpAndSettle();
+    expect(narration.state.status, NarrationStatus.playing);
+
+    Navigator.of(tester.element(find.byType(ReadingScreen))).push(
+      MaterialPageRoute<void>(
+        builder: (_) => const Scaffold(body: Text('Covering route')),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(narration.state.status, NarrationStatus.stopped);
+    expect(engine.stopCalls, 1);
+    await tester.pumpWidget(const SizedBox.shrink());
+    narration.dispose();
+  });
+
+  testWidgets('Bible edition change invalidates before refresh awaits', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues(<String, Object>{});
+    final preference = await BibleVersionPreference.getInstance();
+    await preference.setVersion(BibleVersionType.rsvce);
+    final engine = _FakeSpeechEngine();
+    final narration = _narrationSession(engine);
+    await tester.pumpWidget(
+      ReadingNarrationScope(
+        session: narration,
+        child: const MaterialApp(
+          home: ReadingScreen(
+            reference: 'Jn 1:1',
+            content: '1 In the beginning was the Word.',
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(ReadAloudIcon));
+    await tester.pumpAndSettle();
+
+    await preference.setVersion(BibleVersionType.nabre);
+    await tester.pump();
+
+    expect(narration.state.queue, isEmpty);
+    expect(engine.stopCalls, 1);
+    await tester.pumpWidget(const SizedBox.shrink());
+    narration.dispose();
+    await preference.setVersion(BibleVersionType.rsvce);
+  });
+
+  testWidgets('psalm edition change invalidates before resolution awaits', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues(<String, Object>{});
+    ResponsorialPsalmPreference.resetForTest();
+    final reading = DailyReading(
+      reading: 'Ps 23:1-3',
+      position: 'Responsorial Psalm',
+      date: DateTime(2026, 8, 29),
+      psalmResponse: 'The Lord is my shepherd.',
+    );
+    final engine = _FakeSpeechEngine();
+    final narration = _narrationSession(engine);
+    await tester.pumpWidget(
+      ReadingNarrationScope(
+        session: narration,
+        child: MaterialApp(
+          home: ReadingScreen(
+            reference: reading.reading,
+            content: '1 The Lord is my shepherd.',
+            readingData: reading,
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(ReadAloudIcon));
+    await tester.pumpAndSettle();
+    final preference = await ResponsorialPsalmPreference.getInstance();
+    await preference.setEditionId('test-selected-edition');
+
+    final selector = tester.widget<ResponsorialPsalmEditionSelector>(
+      find.byType(ResponsorialPsalmEditionSelector),
+    );
+    unawaited(selector.onEditionChanged!());
+    await tester.pump();
+
+    expect(narration.state.queue, isEmpty);
+    expect(engine.stopCalls, 1);
+    await tester.pumpWidget(const SizedBox.shrink());
+    narration.dispose();
+    ResponsorialPsalmPreference.resetForTest();
+  });
+
+  testWidgets('narration uses the acclamation verse resolved for display', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues(<String, Object>{});
+    final reading = DailyReading(
+      reading: 'Jn 8:12',
+      position: 'Gospel',
+      date: DateTime(2026, 8, 29),
+      gospelAcclamation: 'cf. Jn 8:12',
+    );
+    final engine = _FakeSpeechEngine();
+    final narration = _narrationSession(engine);
+    await tester.pumpWidget(
+      ReadingNarrationScope(
+        session: narration,
+        child: MaterialApp(
+          home: ReadingScreen(
+            reference: reading.reading,
+            content: '1 Jesus spoke to them, saying, I am the light.',
+            readingData: reading,
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    const displayedVerse =
+        'I am the light of the world, says the Lord; whoever follows me will have the light of life.';
+    tester
+        .widget<GospelAcclamationWidget>(find.byType(GospelAcclamationWidget))
+        .onDisplayedAcclamationChanged!
+        .call(displayedVerse);
+    await tester.pump();
+    await tester.tap(find.byType(ReadAloudIcon));
+    await tester.pump(const Duration(milliseconds: 100));
+
+    expect(engine.spokenTexts.single, contains(displayedVerse));
+    expect(engine.spokenTexts.single, isNot(contains('cf. Jn 8:12')));
+    await tester.pumpWidget(const SizedBox.shrink());
     narration.dispose();
   });
 }

@@ -31,7 +31,11 @@ void main() {
           home: Scaffold(
             appBar: AppBar(
               actions: <Widget>[
-                ReadAloudIcon(status: testCase.status, onPressed: () => taps++),
+                ReadAloudIcon(
+                  status: testCase.status,
+                  supportsNativePause: true,
+                  onPressed: () => taps++,
+                ),
               ],
             ),
           ),
@@ -55,4 +59,30 @@ void main() {
       expect(taps, 1);
     });
   }
+
+  testWidgets('fallback playback exposes stop and restart semantics', (
+    tester,
+  ) async {
+    Future<void> pump(NarrationStatus status) => tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: ReadAloudIcon(
+            status: status,
+            supportsNativePause: false,
+            onPressed: () {},
+          ),
+        ),
+      ),
+    );
+
+    await pump(NarrationStatus.playing);
+    expect(find.byTooltip('Stop reading'), findsOneWidget);
+    expect(find.byIcon(Icons.stop_rounded), findsOneWidget);
+    expect(find.byTooltip('Pause reading'), findsNothing);
+
+    await pump(NarrationStatus.paused);
+    expect(find.byTooltip('Restart reading'), findsOneWidget);
+    expect(find.byIcon(Icons.replay_rounded), findsOneWidget);
+    expect(find.byTooltip('Resume reading'), findsNothing);
+  });
 }

@@ -126,6 +126,29 @@ void main() {
     });
 
     test(
+      'uses the resolved acclamation verse actually displayed by the UI',
+      () {
+        final gospel = DailyReading(
+          reading: 'Jn 8:12',
+          position: 'Gospel',
+          date: date,
+          gospelAcclamation: 'cf. Jn 8:12',
+        );
+        final queue = builder.buildCurrent(
+          session(<DailyReading>[gospel]),
+          displayedGospelAcclamation:
+              'I am the light of the world, says the Lord.',
+        );
+
+        expect(
+          queue.single.narration.text,
+          contains('I am the light of the world, says the Lord.'),
+        );
+        expect(queue.single.narration.text, isNot(contains('cf. Jn 8:12')));
+      },
+    );
+
+    test(
       'keeps Easter Vigil after-reading psalm and prayer slots distinct',
       () {
         final readings = <DailyReading>[

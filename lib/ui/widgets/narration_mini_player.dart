@@ -37,6 +37,28 @@ class NarrationMiniPlayer extends StatelessWidget {
       state.status == NarrationStatus.playing ||
       state.status == NarrationStatus.loading;
 
+  String get _playbackTooltip {
+    if (_isPlaying) {
+      return state.supportsNativePause
+          ? 'Pause reading'
+          : 'Stop and keep position';
+    }
+    return state.supportsNativePause
+        ? 'Resume reading'
+        : 'Restart from position';
+  }
+
+  IconData get _playbackIcon {
+    if (_isPlaying) {
+      return state.supportsNativePause
+          ? Icons.pause_rounded
+          : Icons.stop_rounded;
+    }
+    return state.supportsNativePause
+        ? Icons.play_arrow_rounded
+        : Icons.replay_rounded;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!visible) return const SizedBox.shrink();
@@ -75,13 +97,9 @@ class NarrationMiniPlayer extends StatelessWidget {
                     icon: const Icon(Icons.skip_previous_rounded),
                   ),
                   IconButton(
-                    tooltip: _isPlaying ? 'Pause reading' : 'Resume reading',
+                    tooltip: _playbackTooltip,
                     onPressed: onPlayPause,
-                    icon: Icon(
-                      _isPlaying
-                          ? Icons.pause_rounded
-                          : Icons.play_arrow_rounded,
-                    ),
+                    icon: Icon(_playbackIcon),
                   ),
                   IconButton(
                     tooltip: 'Next reading',

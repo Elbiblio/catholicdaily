@@ -39,6 +39,7 @@ void main() {
               currentIndex: 1,
               queue: [],
               progress: 0.4,
+              supportsNativePause: true,
             ),
             canGoPrevious: true,
             canGoNext: true,
@@ -80,13 +81,42 @@ void main() {
         home: Scaffold(
           body: NarrationMiniPlayer(
             visible: true,
-            state: ReadingNarrationState(status: NarrationStatus.paused),
+            state: ReadingNarrationState(
+              status: NarrationStatus.paused,
+              supportsNativePause: true,
+            ),
           ),
         ),
       ),
     );
 
     expect(find.byTooltip('Resume reading'), findsOneWidget);
+  });
+
+  testWidgets('fallback playback labels its primary action stop and restart', (
+    tester,
+  ) async {
+    Future<void> pump(NarrationStatus status) => tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: NarrationMiniPlayer(
+            visible: true,
+            state: ReadingNarrationState(
+              status: status,
+              supportsNativePause: false,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await pump(NarrationStatus.playing);
+    expect(find.byTooltip('Stop and keep position'), findsOneWidget);
+    expect(find.byTooltip('Pause reading'), findsNothing);
+
+    await pump(NarrationStatus.paused);
+    expect(find.byTooltip('Restart from position'), findsOneWidget);
+    expect(find.byTooltip('Resume reading'), findsNothing);
   });
 
   testWidgets('compact controls fit a narrow phone without overflow', (

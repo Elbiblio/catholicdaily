@@ -7,29 +7,58 @@ import '../../data/services/psalm_resolver_service.dart';
 class GospelAcclamationWidget extends StatefulWidget {
   final DailyReading reading;
   final DateTime date;
+  final ValueChanged<String?>? onDisplayedAcclamationChanged;
 
   const GospelAcclamationWidget({
     super.key,
     required this.reading,
     required this.date,
+    this.onDisplayedAcclamationChanged,
   });
 
   @override
-  State<GospelAcclamationWidget> createState() => _GospelAcclamationWidgetState();
+  State<GospelAcclamationWidget> createState() =>
+      _GospelAcclamationWidgetState();
 }
 
 class _GospelAcclamationWidgetState extends State<GospelAcclamationWidget> {
   final PsalmResolverService _resolver = PsalmResolverService.instance;
-  final GospelAcclamationService _acclamationService = GospelAcclamationService();
+  final GospelAcclamationService _acclamationService =
+      GospelAcclamationService();
   String? _fetchedAcclamation;
   bool _isGenerating = false;
   bool _fetchFailed = false;
+  String? _lastNotifiedAcclamation;
+  int _fetchGeneration = 0;
 
   @override
   void initState() {
     super.initState();
     if (_needsFetch) {
       _fetchAcclamation();
+    } else {
+      _notifyDisplayed(widget.reading.gospelAcclamation?.trim());
+    }
+  }
+
+  @override
+  void didUpdateWidget(GospelAcclamationWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.reading.reading == widget.reading.reading &&
+        oldWidget.reading.gospelAcclamation ==
+            widget.reading.gospelAcclamation &&
+        oldWidget.date == widget.date) {
+      return;
+    }
+    _fetchedAcclamation = null;
+    _fetchFailed = false;
+    _isGenerating = false;
+    _lastNotifiedAcclamation = null;
+    _fetchGeneration++;
+    if (_needsFetch) {
+      _fetchAcclamation();
+    } else {
+      _notifyDisplayed(widget.reading.gospelAcclamation?.trim());
     }
   }
 
@@ -42,6 +71,7 @@ class _GospelAcclamationWidgetState extends State<GospelAcclamationWidget> {
 
   Future<void> _fetchAcclamation() async {
     if (_isGenerating) return;
+    final generation = ++_fetchGeneration;
 
     setState(() {
       _isGenerating = true;
@@ -58,7 +88,9 @@ class _GospelAcclamationWidgetState extends State<GospelAcclamationWidget> {
           existing.isNotEmpty &&
           _acclamationService.shouldResolveReference(existing)) {
         if (hasProperCelebrationAcclamation) {
-          final decoded = await _acclamationService.getAcclamationText(existing);
+          final decoded = await _acclamationService.getAcclamationText(
+            existing,
+          );
           if (decoded.trim().isNotEmpty &&
               !decoded.startsWith('Reading text unavailable')) {
             acclamation = decoded;
@@ -73,7 +105,9 @@ class _GospelAcclamationWidgetState extends State<GospelAcclamationWidget> {
         if (acclamation == null ||
             acclamation.trim().isEmpty ||
             acclamation.startsWith('Reading text unavailable')) {
-          final decoded = await _acclamationService.getAcclamationText(existing);
+          final decoded = await _acclamationService.getAcclamationText(
+            existing,
+          );
           if (decoded.trim().isNotEmpty &&
               !decoded.startsWith('Reading text unavailable')) {
             acclamation = decoded;
@@ -86,15 +120,16 @@ class _GospelAcclamationWidgetState extends State<GospelAcclamationWidget> {
         gospelReference: widget.reading.reading,
       );
 
-      if (mounted) {
+      if (mounted && generation == _fetchGeneration) {
         setState(() {
           _fetchedAcclamation = acclamation;
           _isGenerating = false;
           _fetchFailed = acclamation == null;
         });
+        _notifyDisplayed(acclamation);
       }
     } catch (e) {
-      if (mounted) {
+      if (mounted && generation == _fetchGeneration) {
         setState(() {
           _isGenerating = false;
           _fetchFailed = true;
@@ -103,10 +138,26 @@ class _GospelAcclamationWidgetState extends State<GospelAcclamationWidget> {
     }
   }
 
+  void _notifyDisplayed(String? acclamation) {
+    final normalized = acclamation?.trim();
+    if (normalized == null ||
+        normalized.isEmpty ||
+        normalized == _lastNotifiedAcclamation) {
+      return;
+    }
+    _lastNotifiedAcclamation = normalized;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && _lastNotifiedAcclamation == normalized) {
+        widget.onDisplayedAcclamationChanged?.call(normalized);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final existing = widget.reading.gospelAcclamation?.trim();
-    final safeExisting = (existing == null ||
+    final safeExisting =
+        (existing == null ||
             existing.isEmpty ||
             existing.startsWith('Reading text unavailable') ||
             _acclamationService.shouldResolveReference(existing))
@@ -134,7 +185,7 @@ class _GospelAcclamationWidgetState extends State<GospelAcclamationWidget> {
     final isDark = theme.brightness == Brightness.dark;
     final isLent = _isDuringLent(widget.date);
     final acclamationResponse = _buildAcclamationResponse(widget.date);
-    
+
     // Check if this is just the intro or a complete acclamation
     final isCompleteAcclamation = _isCompleteAcclamation(acclamation);
     final isFromVerseReference = _isFromVerseReference(acclamation);
@@ -144,13 +195,21 @@ class _GospelAcclamationWidgetState extends State<GospelAcclamationWidget> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: isDark
-            ? (isLent ? const Color(0xFF8D6E63).withValues(alpha: 0.1) : const Color(0xFFE57373).withValues(alpha: 0.1))
-            : (isLent ? const Color(0xFF795548).withValues(alpha: 0.05) : const Color(0xFFE53935).withValues(alpha: 0.05)),
+            ? (isLent
+                  ? const Color(0xFF8D6E63).withValues(alpha: 0.1)
+                  : const Color(0xFFE57373).withValues(alpha: 0.1))
+            : (isLent
+                  ? const Color(0xFF795548).withValues(alpha: 0.05)
+                  : const Color(0xFFE53935).withValues(alpha: 0.05)),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isDark
-              ? (isLent ? const Color(0xFF8D6E63).withValues(alpha: 0.3) : const Color(0xFFE57373).withValues(alpha: 0.3))
-              : (isLent ? const Color(0xFF795548).withValues(alpha: 0.2) : const Color(0xFFE53935).withValues(alpha: 0.2)),
+              ? (isLent
+                    ? const Color(0xFF8D6E63).withValues(alpha: 0.3)
+                    : const Color(0xFFE57373).withValues(alpha: 0.3))
+              : (isLent
+                    ? const Color(0xFF795548).withValues(alpha: 0.2)
+                    : const Color(0xFFE53935).withValues(alpha: 0.2)),
         ),
       ),
       child: Column(
@@ -162,16 +221,24 @@ class _GospelAcclamationWidgetState extends State<GospelAcclamationWidget> {
                 isLent ? Icons.church_rounded : Icons.celebration_rounded,
                 size: 16,
                 color: isDark
-                    ? (isLent ? const Color(0xFF8D6E63) : const Color(0xFFE57373))
-                    : (isLent ? const Color(0xFF795548) : const Color(0xFFE53935)),
+                    ? (isLent
+                          ? const Color(0xFF8D6E63)
+                          : const Color(0xFFE57373))
+                    : (isLent
+                          ? const Color(0xFF795548)
+                          : const Color(0xFFE53935)),
               ),
               const SizedBox(width: 8),
               Text(
                 isLent ? 'Verse before the Gospel' : 'Gospel Acclamation',
                 style: theme.textTheme.labelMedium?.copyWith(
                   color: isDark
-                      ? (isLent ? const Color(0xFF8D6E63) : const Color(0xFFE57373))
-                      : (isLent ? const Color(0xFF795548) : const Color(0xFFE53935)),
+                      ? (isLent
+                            ? const Color(0xFF8D6E63)
+                            : const Color(0xFFE57373))
+                      : (isLent
+                            ? const Color(0xFF795548)
+                            : const Color(0xFFE53935)),
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0.5,
                 ),
@@ -179,7 +246,10 @@ class _GospelAcclamationWidgetState extends State<GospelAcclamationWidget> {
               if (isLent) ...[
                 const Spacer(),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: isDark
                         ? const Color(0xFF8D6E63).withValues(alpha: 0.2)
@@ -189,7 +259,9 @@ class _GospelAcclamationWidgetState extends State<GospelAcclamationWidget> {
                   child: Text(
                     'Lent',
                     style: theme.textTheme.labelSmall?.copyWith(
-                      color: isDark ? const Color(0xFF8D6E63) : const Color(0xFF795548),
+                      color: isDark
+                          ? const Color(0xFF8D6E63)
+                          : const Color(0xFF795548),
                       fontSize: 10,
                       fontWeight: FontWeight.w600,
                     ),
@@ -199,7 +271,10 @@ class _GospelAcclamationWidgetState extends State<GospelAcclamationWidget> {
               if (!isCompleteAcclamation) ...[
                 const Spacer(),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.orange.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(4),
@@ -217,7 +292,10 @@ class _GospelAcclamationWidgetState extends State<GospelAcclamationWidget> {
               if (isFromVerseReference && isCompleteAcclamation) ...[
                 const Spacer(),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.blue.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(4),
@@ -282,7 +360,7 @@ class _GospelAcclamationWidgetState extends State<GospelAcclamationWidget> {
     // Complete acclamations typically have more than just the intro
     // Intro-only: "Alleluia." or "Glory and praise to you, Lord Jesus Christ."
     // Complete: "Alleluia. God was in himself reconciling himself to man."
-    
+
     if (acclamation.length > 50) return true; // Likely complete
 
     final normalized = acclamation.trim().toLowerCase();
@@ -290,7 +368,7 @@ class _GospelAcclamationWidgetState extends State<GospelAcclamationWidget> {
         normalized == 'glory and praise to you, lord jesus christ.') {
       return false;
     }
-    
+
     return true; // Assume complete if it doesn't match intro-only patterns
   }
 
@@ -315,9 +393,7 @@ class _GospelAcclamationWidgetState extends State<GospelAcclamationWidget> {
             ? Colors.grey.withValues(alpha: 0.1)
             : Colors.grey.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: Colors.grey.withValues(alpha: 0.2),
-        ),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.2)),
       ),
       child: Row(
         children: [
@@ -358,9 +434,7 @@ class _GospelAcclamationWidgetState extends State<GospelAcclamationWidget> {
             ? Colors.orange.withValues(alpha: 0.1)
             : Colors.orange.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: Colors.orange.withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: Colors.orange.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
@@ -378,10 +452,7 @@ class _GospelAcclamationWidgetState extends State<GospelAcclamationWidget> {
               ),
             ),
           ),
-          TextButton(
-            onPressed: _fetchAcclamation,
-            child: const Text('Retry'),
-          ),
+          TextButton(onPressed: _fetchAcclamation, child: const Text('Retry')),
         ],
       ),
     );
@@ -390,19 +461,20 @@ class _GospelAcclamationWidgetState extends State<GospelAcclamationWidget> {
   /// Check if date is during Lent (Ash Wednesday to Holy Saturday)
   bool _isDuringLent(DateTime date) {
     final year = date.year;
-    
+
     // Calculate Easter Sunday for the given year
     final easter = _calculateEaster(year);
-    
+
     // Ash Wednesday is 46 days before Easter Sunday
     final ashWednesday = easter.subtract(const Duration(days: 46));
-    
+
     // Holy Saturday is the day before Easter Sunday
     final holySaturday = easter.subtract(const Duration(days: 1));
-    
+
     // Check if date is within Lent period
-    return (date.isAtSameMomentAs(ashWednesday) || date.isAfter(ashWednesday)) &&
-           (date.isAtSameMomentAs(holySaturday) || date.isBefore(holySaturday));
+    return (date.isAtSameMomentAs(ashWednesday) ||
+            date.isAfter(ashWednesday)) &&
+        (date.isAtSameMomentAs(holySaturday) || date.isBefore(holySaturday));
   }
 
   /// Calculate Easter Sunday using computus algorithm
@@ -422,7 +494,7 @@ class _GospelAcclamationWidgetState extends State<GospelAcclamationWidget> {
     final m = (a + 11 * h + 22 * l) ~/ 451;
     final month = (h + l - 7 * m + 114) ~/ 31;
     final day = ((h + l - 7 * m + 114) % 31) + 1;
-    
+
     return DateTime(year, month, day);
   }
 }

@@ -30,6 +30,9 @@ import '../../data/services/bible_cache_service.dart';
 import 'church_locator_screen.dart';
 import 'dart:async';
 
+final RouteObserver<PageRoute<dynamic>> readingNarrationRouteObserver =
+    RouteObserver<PageRoute<dynamic>>();
+
 class ReadingScreen extends StatefulWidget {
   final String reference;
   final String content;
@@ -98,7 +101,7 @@ Color _contrastColor(Color background, {double alpha = 1.0}) {
       : Colors.black.withValues(alpha: alpha);
 }
 
-class _ReadingScreenState extends State<ReadingScreen> {
+class _ReadingScreenState extends State<ReadingScreen> with RouteAware {
   static const _verseNumbersKey = 'show_verse_numbers';
 
   double _textScale = 1.0;
@@ -113,8 +116,11 @@ class _ReadingScreenState extends State<ReadingScreen> {
   bool _showVerseNumbers = true;
   bool _showIncipit = true;
   ResolvedResponsorialPsalm? _currentPsalmSource;
+  String? _currentGospelAcclamation;
   ReadingNarrationSession? _narration;
   bool _deliberateNarrationNavigation = false;
+  bool _preserveReadAllOnNextCover = false;
+  PageRoute<dynamic>? _subscribedRoute;
 
   final ScrollPositionService _scrollPositionService = ScrollPositionService();
   Timer? _scrollDebounceTimer;
@@ -199,6 +205,28 @@ class _ReadingScreenState extends State<ReadingScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _narration = ReadingNarrationScope.maybeOf(context);
+    final route = ModalRoute.of(context);
+    if (route is PageRoute<dynamic> && !identical(route, _subscribedRoute)) {
+      if (_subscribedRoute != null) {
+        readingNarrationRouteObserver.unsubscribe(this);
+      }
+      _subscribedRoute = route;
+      readingNarrationRouteObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void didPushNext() {
+    final deliberate = _preserveReadAllOnNextCover;
+    _preserveReadAllOnNextCover = false;
+    final narration = _narration;
+    if (narration != null) {
+      unawaited(
+        narration.controller.onReadingExperienceExit(
+          deliberateNavigation: deliberate,
+        ),
+      );
+    }
   }
 
   Future<void> _loadVerseNumberPref() async {
@@ -299,6 +327,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
   }
 
   void _openChurchLocator() {
+    _preserveReadAllOnNextCover = false;
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => const ChurchLocatorScreen()),
     );
@@ -347,6 +376,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
       );
       if (prevChapter != null) {
         if (mounted) {
+          _preserveReadAllOnNextCover = true;
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => ReadingScreen(
@@ -385,6 +415,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
       );
       if (nextChapter != null) {
         if (mounted) {
+          _preserveReadAllOnNextCover = true;
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => ReadingScreen(
@@ -506,7 +537,13 @@ class _ReadingScreenState extends State<ReadingScreen> {
     return narration.queueBuilder.buildCurrent(
       _displayedNarrationSession(),
       showIncipit: _showIncipit,
+      displayedGospelAcclamation: _displayedAcclamationForNarration,
     );
+  }
+
+  String? get _displayedAcclamationForNarration {
+    if (widget.readingData?.gospelAcclamation == null) return null;
+    return _currentGospelAcclamation ?? '';
   }
 
   ReadingNarrationQueueItem? get _currentNarrationItem {
@@ -571,6 +608,11 @@ class _ReadingScreenState extends State<ReadingScreen> {
       session,
       selectedReadings: <DailyReading>[?session.currentReading],
       showIncipit: _showIncipit,
+      displayedGospelAcclamations: _displayedAcclamationForNarration == null
+          ? const <String, String>{}
+          : <String, String>{
+              _displayedReading.reading: _displayedAcclamationForNarration!,
+            },
     );
     final context = await _narrationContextFor(session.currentReading!);
     if (!mounted || context == null) return;
@@ -676,6 +718,8 @@ class _ReadingScreenState extends State<ReadingScreen> {
                   status:
                       _narration?.statusFor(_currentNarrationItem) ??
                       NarrationStatus.idle,
+                  supportsNativePause:
+                      _narration?.state.supportsNativePause ?? false,
                   onPressed: _narration == null
                       ? null
                       : () => unawaited(_toggleCurrentNarration()),
@@ -825,6 +869,13 @@ class _ReadingScreenState extends State<ReadingScreen> {
                 child: GospelAcclamationWidget(
                   reading: widget.readingData!,
                   date: widget.liturgicalDay?.date ?? DateTime.now(),
+                  onDisplayedAcclamationChanged: (acclamation) {
+                    if (mounted && acclamation != _currentGospelAcclamation) {
+                      setState(() {
+                        _currentGospelAcclamation = acclamation;
+                      });
+                    }
+                  },
                 ),
               ),
             SliverToBoxAdapter(child: _buildContent(theme)),
@@ -1613,6 +1664,8 @@ class _ReadingScreenState extends State<ReadingScreen> {
 
   Future<void> _reloadPsalmForNewEdition() async {
     if (!mounted || !_isResponsorialPsalm) return;
+    await _invalidateNarrationFor(_displayedReading);
+    if (!mounted) return;
     setState(() => _isReloading = true);
     try {
       final region = await LiturgicalRegionPreferenceService.getInstance();
@@ -1633,7 +1686,6 @@ class _ReadingScreenState extends State<ReadingScreen> {
         _currentPsalmSource = resolved;
         _isReloading = false;
       });
-      await _invalidateNarrationFor(_displayedReading);
     } catch (_) {
       if (mounted) setState(() => _isReloading = false);
     }
@@ -1658,6 +1710,8 @@ class _ReadingScreenState extends State<ReadingScreen> {
   }
 
   Future<void> _reloadContentForNewVersion() async {
+    if (!mounted) return;
+    await _invalidateNarrationFor(_displayedReading);
     if (!mounted) return;
     setState(() => _isReloading = true);
 
@@ -1717,7 +1771,6 @@ class _ReadingScreenState extends State<ReadingScreen> {
           _currentContent = newContent;
           _isReloading = false;
         });
-        await _invalidateNarrationFor(_displayedReading);
       }
     } catch (e) {
       if (mounted) {
@@ -1791,6 +1844,7 @@ class _ReadingScreenState extends State<ReadingScreen> {
 
   @override
   void dispose() {
+    readingNarrationRouteObserver.unsubscribe(this);
     widget.onRouteDisposed?.call();
     final narration = _narration;
     if (narration != null) {

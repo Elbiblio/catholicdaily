@@ -22,6 +22,7 @@ import 'data/services/reading_narration_queue_builder.dart';
 import 'demo_launch_config.dart';
 import 'ui/screens/home_screen.dart';
 import 'ui/screens/mass_flow_screen.dart';
+import 'ui/screens/reading_screen.dart';
 import 'ui/screens/onboarding_screen.dart';
 import 'ui/screens/saint_detail_screen.dart';
 import 'ui/widgets/reading_narration_scope.dart';
@@ -288,6 +289,7 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
         theme: _buildPremiumTheme(Brightness.light, _themeStyle),
         darkTheme: _buildPremiumTheme(Brightness.dark, _themeStyle),
         themeMode: _themeMode,
+        navigatorObservers: <NavigatorObserver>[readingNarrationRouteObserver],
         builder: (context, child) =>
             ReadingNarrationHost(child: child ?? const SizedBox.shrink()),
         home: _initialScreen ?? _buildHomeScreen(),

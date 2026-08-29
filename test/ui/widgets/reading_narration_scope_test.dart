@@ -5,10 +5,12 @@ import 'package:catholic_daily/data/models/reading_session.dart';
 import 'package:catholic_daily/data/services/reading_narration_composer.dart';
 import 'package:catholic_daily/data/services/reading_narration_controller.dart';
 import 'package:catholic_daily/data/services/reading_narration_queue_builder.dart';
+import 'package:catholic_daily/data/services/narration_preferences.dart';
 import 'package:catholic_daily/data/services/speech_engine.dart';
 import 'package:catholic_daily/ui/widgets/narration_mini_player.dart';
 import 'package:catholic_daily/ui/widgets/reading_narration_scope.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -74,7 +76,7 @@ void main() {
       await tester.tap(find.byTooltip('Stop reading'));
       await tester.pumpAndSettle();
       expect(narration.state.status, NarrationStatus.stopped);
-      await tester.tap(find.byTooltip('Resume reading'));
+      await tester.tap(find.byTooltip('Restart from position'));
       await tester.pumpAndSettle();
       expect(narration.state.status, NarrationStatus.playing);
       expect(engine.spokenTexts, hasLength(2));
@@ -154,12 +156,236 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
     narration.dispose();
   });
+
+  testWidgets('hosted player follows live title progress and queue controls', (
+    tester,
+  ) async {
+    final engine = _FakeSpeechEngine();
+    final narration = ReadingNarrationSession(
+      controller: ReadingNarrationController(engine: engine),
+      queueBuilder: const ReadingNarrationQueueBuilder(
+        composer: ReadingNarrationComposer(),
+      ),
+    );
+    final readings = <DailyReading>[
+      DailyReading(
+        reading: 'Gen 1:1',
+        position: 'First Reading',
+        date: DateTime(2026, 8, 29),
+      ),
+      DailyReading(
+        reading: 'Jn 1:1',
+        position: 'Gospel',
+        date: DateTime(2026, 8, 29),
+      ),
+    ];
+    final queue = narration.queueBuilder.buildReadAll(
+      ReadingSession(
+        readings: readings,
+        readingTexts: const <String, String>{
+          'Gen 1:1': 'In the beginning God created heaven and earth.',
+          'Jn 1:1': 'In the beginning was the Word.',
+        },
+        currentIndex: 0,
+      ),
+    );
+
+    await tester.pumpWidget(
+      ReadingNarrationScope(
+        session: narration,
+        child: MaterialApp(
+          builder: (context, child) => ReadingNarrationHost(child: child!),
+          home: const Scaffold(body: SizedBox.shrink()),
+        ),
+      ),
+    );
+    await narration.playReadAll(
+      queue,
+      context: const NarrationContext(
+        dateKey: '2026-08-29',
+        regionCode: 'NG',
+        bibleEditionId: 'rsvce',
+        psalmEditionId: 'territory_lectionary',
+        alternativeKey: 'primary',
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text('First Reading'), findsOneWidget);
+    var previous = tester.widget<IconButton>(
+      find.widgetWithIcon(IconButton, Icons.skip_previous_rounded),
+    );
+    expect(previous.onPressed, isNull);
+    expect(find.byTooltip('Next reading'), findsOneWidget);
+
+    engine.emitProgress(4, 18, 'beginning');
+    await tester.pump();
+    final progress = tester.widget<LinearProgressIndicator>(
+      find.byType(LinearProgressIndicator),
+    );
+    expect(progress.value, greaterThan(0));
+
+    engine.completeCurrent();
+    await tester.pumpAndSettle();
+    expect(find.text('Gospel'), findsOneWidget);
+    previous = tester.widget<IconButton>(
+      find.widgetWithIcon(IconButton, Icons.skip_previous_rounded),
+    );
+    expect(previous.onPressed, isNotNull);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    narration.dispose();
+  });
+
+  testWidgets('failed speed persistence is caught and explained', (
+    tester,
+  ) async {
+    final engine = _FakeSpeechEngine();
+    final narration = ReadingNarrationSession(
+      controller: ReadingNarrationController(engine: engine),
+      queueBuilder: const ReadingNarrationQueueBuilder(
+        composer: ReadingNarrationComposer(),
+      ),
+      preferences: _ThrowingNarrationPreferences(),
+    );
+    final reading = DailyReading(
+      reading: 'Jn 1:1',
+      position: 'Gospel',
+      date: DateTime(2026, 8, 29),
+    );
+    final queue = narration.queueBuilder.buildCurrent(
+      ReadingSession(
+        readings: <DailyReading>[reading],
+        readingTexts: const <String, String>{'Jn 1:1': 'The Word.'},
+        currentIndex: 0,
+      ),
+    );
+    await tester.pumpWidget(
+      ReadingNarrationScope(
+        session: narration,
+        child: MaterialApp(
+          builder: (context, child) => ReadingNarrationHost(child: child!),
+          home: const Scaffold(body: SizedBox.shrink()),
+        ),
+      ),
+    );
+    await narration.toggle(
+      queue,
+      mode: NarrationPlaybackMode.currentOnly,
+      context: const NarrationContext(
+        dateKey: '2026-08-29',
+        regionCode: 'NG',
+        bibleEditionId: 'rsvce',
+        psalmEditionId: 'territory_lectionary',
+        alternativeKey: 'primary',
+      ),
+    );
+    await tester.pump();
+
+    await tester.tap(find.text('0.5×'));
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    expect(find.text('Unable to change speech speed.'), findsOneWidget);
+    expect(narration.rate, 0.5);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    narration.dispose();
+  });
+
+  testWidgets('announcements repeat after reset and suppress stale callbacks', (
+    tester,
+  ) async {
+    final announcements = <String>[];
+    tester.binding.defaultBinaryMessenger.setMockDecodedMessageHandler<Object?>(
+      SystemChannels.accessibility,
+      (message) async {
+        if (message case <Object?, Object?>{
+          'type': 'announce',
+          'data': <Object?, Object?>{'message': final String value},
+        }) {
+          announcements.add(value);
+        }
+        return null;
+      },
+    );
+    addTearDown(
+      () => tester.binding.defaultBinaryMessenger
+          .setMockDecodedMessageHandler<Object?>(
+            SystemChannels.accessibility,
+            null,
+          ),
+    );
+    final engine = _FakeSpeechEngine();
+    final narration = ReadingNarrationSession(
+      controller: ReadingNarrationController(engine: engine),
+      queueBuilder: const ReadingNarrationQueueBuilder(
+        composer: ReadingNarrationComposer(),
+      ),
+    );
+    final reading = DailyReading(
+      reading: 'Jn 1:1',
+      position: 'Gospel',
+      date: DateTime(2026, 8, 29),
+    );
+    final queue = narration.queueBuilder.buildCurrent(
+      ReadingSession(
+        readings: <DailyReading>[reading],
+        readingTexts: const <String, String>{'Jn 1:1': 'The Word.'},
+        currentIndex: 0,
+      ),
+    );
+    const context = NarrationContext(
+      dateKey: '2026-08-29',
+      regionCode: 'NG',
+      bibleEditionId: 'rsvce',
+      psalmEditionId: 'territory_lectionary',
+      alternativeKey: 'primary',
+    );
+    await tester.pumpWidget(
+      ReadingNarrationScope(
+        session: narration,
+        child: MaterialApp(
+          builder: (context, child) => ReadingNarrationHost(child: child!),
+          home: const Scaffold(body: SizedBox.shrink()),
+        ),
+      ),
+    );
+    await narration.toggle(
+      queue,
+      mode: NarrationPlaybackMode.currentOnly,
+      context: context,
+    );
+
+    engine.failCurrent('same failure');
+    await narration.controller.stop();
+    await tester.pump();
+    expect(announcements, isNot(contains('same failure')));
+
+    for (var cycle = 0; cycle < 2; cycle++) {
+      await narration.toggle(
+        queue,
+        mode: NarrationPlaybackMode.currentOnly,
+        context: context,
+      );
+      engine.failCurrent('same failure');
+      await tester.pump();
+      await tester.pump();
+      expect(
+        announcements.where((message) => message == 'same failure'),
+        hasLength(cycle + 1),
+      );
+    }
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    narration.dispose();
+  });
 }
 
 class _FakeSpeechEngine implements SpeechEngine {
   final List<SpeechVoice> voices;
   SpeechEngineCallbacks? callbacks;
   final List<String> spokenTexts = <String>[];
+  String? currentUtteranceId;
 
   _FakeSpeechEngine({
     this.voices = const <SpeechVoice>[
@@ -187,7 +413,20 @@ class _FakeSpeechEngine implements SpeechEngine {
   @override
   Future<void> speak(String text, {required String utteranceId}) async {
     spokenTexts.add(text);
+    currentUtteranceId = utteranceId;
     callbacks?.onStart(utteranceId);
+  }
+
+  void emitProgress(int start, int end, String word) {
+    callbacks?.onProgress(currentUtteranceId!, start, end, word);
+  }
+
+  void completeCurrent() {
+    callbacks?.onCompletion(currentUtteranceId!);
+  }
+
+  void failCurrent(String message) {
+    callbacks?.onError(currentUtteranceId!, message);
   }
 
   @override
@@ -199,5 +438,12 @@ class _FakeSpeechEngine implements SpeechEngine {
   @override
   Future<void> dispose() async {
     callbacks = null;
+  }
+}
+
+class _ThrowingNarrationPreferences extends NarrationPreferences {
+  @override
+  Future<void> setRate(double rate) async {
+    throw StateError('disk full');
   }
 }

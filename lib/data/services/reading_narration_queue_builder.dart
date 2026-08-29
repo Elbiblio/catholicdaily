@@ -24,6 +24,7 @@ class ReadingNarrationQueueBuilder {
   List<ReadingNarrationQueueItem> buildCurrent(
     ReadingSession session, {
     bool showIncipit = true,
+    String? displayedGospelAcclamation,
   }) {
     final current = session.currentReading;
     if (current == null) return const <ReadingNarrationQueueItem>[];
@@ -33,6 +34,7 @@ class ReadingNarrationQueueBuilder {
       showIncipit: showIncipit,
       displayedPsalmResponse:
           session.psalmSources[current.reading]?.responseText,
+      displayedGospelAcclamation: displayedGospelAcclamation,
     );
     return item == null
         ? const <ReadingNarrationQueueItem>[]
@@ -43,6 +45,7 @@ class ReadingNarrationQueueBuilder {
     ReadingSession session, {
     Iterable<DailyReading> selectedReadings = const <DailyReading>[],
     bool showIncipit = true,
+    Map<String, String> displayedGospelAcclamations = const <String, String>{},
   }) {
     final selectedBySlot = <String, DailyReading>{
       for (final reading in selectedReadings) _slotKey(reading): reading,
@@ -70,6 +73,8 @@ class ReadingNarrationQueueBuilder {
         showIncipit: showIncipit,
         displayedPsalmResponse:
             session.psalmSources[reading.reading]?.responseText,
+        displayedGospelAcclamation:
+            displayedGospelAcclamations[reading.reading],
       );
       if (item != null) result.add(item);
     }
@@ -107,12 +112,14 @@ class ReadingNarrationQueueBuilder {
     String displayedText, {
     required bool showIncipit,
     String? displayedPsalmResponse,
+    String? displayedGospelAcclamation,
   }) {
     final narration = composer.compose(
       reading: reading,
       displayedText: displayedText,
       showIncipit: showIncipit,
       displayedPsalmResponse: displayedPsalmResponse,
+      displayedGospelAcclamation: displayedGospelAcclamation,
     );
     if (!narration.isAvailable) return null;
     final slot = _slotKey(reading);
