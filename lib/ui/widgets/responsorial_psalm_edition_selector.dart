@@ -5,11 +5,13 @@ import '../../data/services/responsorial_psalm_preference.dart';
 
 class ResponsorialPsalmEditionSelector extends StatefulWidget {
   final Future<void> Function()? onEditionChanged;
+  final Future<void> Function(String editionId)? onEditionChangeStarted;
   final bool compact;
 
   const ResponsorialPsalmEditionSelector({
     super.key,
     this.onEditionChanged,
+    this.onEditionChangeStarted,
     this.compact = false,
   });
 
@@ -92,8 +94,18 @@ class _ResponsorialPsalmEditionSelectorState
       ),
     );
     if (selected == null || selected == _selectedId) return;
-    await _preference?.setEditionId(selected);
-    await widget.onEditionChanged?.call();
+    await widget.onEditionChangeStarted?.call(selected);
+    try {
+      await _preference?.setEditionId(selected);
+      await widget.onEditionChanged?.call();
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+        const SnackBar(
+          content: Text('Unable to save responsorial psalm edition.'),
+        ),
+      );
+    }
   }
 
   @override

@@ -65,8 +65,11 @@ class BibleVersionPreference extends ChangeNotifier {
 
   Future<void> setVersion(BibleVersionType version) async {
     if (_currentVersion != version) {
+      final saved = await _prefs.setString(_key, version.dbName);
+      if (!saved) {
+        throw StateError('Unable to save the Bible version preference.');
+      }
       _currentVersion = version;
-      await _prefs.setString(_key, version.dbName);
       notifyListeners();
     }
   }

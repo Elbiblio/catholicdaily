@@ -227,13 +227,14 @@ class ReadingNarrationController extends ChangeNotifier {
     }
   }
 
-  Future<void> updateSettings(SpeechEngineSettings settings) async {
-    if (_disposed) return;
+  Future<bool> updateSettings(SpeechEngineSettings settings) async {
+    if (_disposed) return false;
     final command = ++_settingsCommandToken;
     try {
       await _engine.configure(settings);
-      if (_disposed || command != _settingsCommandToken) return;
+      if (_disposed || command != _settingsCommandToken) return false;
       _settings = settings;
+      return true;
     } catch (error) {
       if (!_disposed && command == _settingsCommandToken) {
         if (_isActive(_state.status)) {
@@ -242,6 +243,7 @@ class ReadingNarrationController extends ChangeNotifier {
           _failOperation(error);
         }
       }
+      return false;
     }
   }
 

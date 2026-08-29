@@ -9,10 +9,12 @@ import 'package:catholic_daily/data/services/responsorial_psalm_preference.dart'
 import 'package:catholic_daily/data/services/reading_narration_composer.dart';
 import 'package:catholic_daily/data/services/reading_narration_controller.dart';
 import 'package:catholic_daily/data/services/reading_narration_queue_builder.dart';
+import 'package:catholic_daily/data/services/reading_flow_service.dart';
 import 'package:catholic_daily/data/services/speech_engine.dart';
 import 'package:catholic_daily/ui/screens/reading_screen.dart';
 import 'package:catholic_daily/ui/widgets/read_aloud_icon.dart';
 import 'package:catholic_daily/ui/widgets/gospel_acclamation_widget.dart';
+import 'package:catholic_daily/ui/widgets/bible_version_switcher.dart';
 import 'package:catholic_daily/ui/widgets/reading_narration_scope.dart';
 import 'package:catholic_daily/ui/widgets/responsorial_psalm_edition_selector.dart';
 import 'package:flutter/material.dart';
@@ -299,6 +301,11 @@ void main() {
     await tester.tap(find.byType(ReadAloudIcon));
     await tester.pumpAndSettle();
 
+    final switcher = tester.widget<BibleVersionSwitcher>(
+      find.byType(BibleVersionSwitcher),
+    );
+    unawaited(switcher.onVersionChangeStarted!(BibleVersionType.nabre));
+    await tester.pump();
     await preference.setVersion(BibleVersionType.nabre);
     await tester.pump();
 
@@ -308,6 +315,45 @@ void main() {
     narration.dispose();
     await preference.setVersion(BibleVersionType.rsvce);
   });
+
+  testWidgets(
+    'Bible selection attempt invalidates narration before persistence',
+    (tester) async {
+      SharedPreferences.setMockInitialValues(<String, Object>{});
+      final engine = _FakeSpeechEngine();
+      final narration = _narrationSession(engine);
+      await tester.pumpWidget(
+        ReadingNarrationScope(
+          session: narration,
+          child: MaterialApp(
+            home: ReadingScreen(
+              reference: 'Jn 1:1',
+              content: '1 In the beginning was the Word.',
+              readingData: DailyReading(
+                reading: 'Jn 1:1',
+                position: 'Gospel',
+                date: DateTime(2026, 8, 29),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(ReadAloudIcon));
+      await tester.pumpAndSettle();
+      final switcher = tester.widget<BibleVersionSwitcher>(
+        find.byType(BibleVersionSwitcher),
+      );
+      unawaited(switcher.onVersionChangeStarted!(BibleVersionType.nabre));
+      await tester.pump();
+
+      expect(narration.state.queue, isEmpty);
+      expect(engine.stopCalls, 1);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      narration.dispose();
+    },
+  );
 
   testWidgets('psalm edition change invalidates before resolution awaits', (
     tester,
@@ -338,11 +384,13 @@ void main() {
     await tester.tap(find.byType(ReadAloudIcon));
     await tester.pumpAndSettle();
     final preference = await ResponsorialPsalmPreference.getInstance();
-    await preference.setEditionId('test-selected-edition');
-
     final selector = tester.widget<ResponsorialPsalmEditionSelector>(
       find.byType(ResponsorialPsalmEditionSelector),
     );
+    unawaited(selector.onEditionChangeStarted!('test-selected-edition'));
+    await tester.pump();
+    await preference.setEditionId('test-selected-edition');
+
     unawaited(selector.onEditionChanged!());
     await tester.pump();
 
@@ -352,6 +400,49 @@ void main() {
     narration.dispose();
     ResponsorialPsalmPreference.resetForTest();
   });
+
+  testWidgets(
+    'psalm selection attempt invalidates narration before persistence',
+    (tester) async {
+      SharedPreferences.setMockInitialValues(<String, Object>{});
+      ResponsorialPsalmPreference.resetForTest();
+      final reading = DailyReading(
+        reading: 'Ps 23:1-3',
+        position: 'Responsorial Psalm',
+        date: DateTime(2026, 8, 29),
+        psalmResponse: 'The Lord is my shepherd.',
+      );
+      final engine = _FakeSpeechEngine();
+      final narration = _narrationSession(engine);
+      await tester.pumpWidget(
+        ReadingNarrationScope(
+          session: narration,
+          child: MaterialApp(
+            home: ReadingScreen(
+              reference: reading.reading,
+              content: '1 The Lord is my shepherd.',
+              readingData: reading,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(ReadAloudIcon));
+      await tester.pumpAndSettle();
+      final selector = tester.widget<ResponsorialPsalmEditionSelector>(
+        find.byType(ResponsorialPsalmEditionSelector),
+      );
+      unawaited(selector.onEditionChangeStarted!('local_rsvce'));
+      await tester.pump();
+
+      expect(narration.state.queue, isEmpty);
+      expect(engine.stopCalls, 1);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      narration.dispose();
+      ResponsorialPsalmPreference.resetForTest();
+    },
+  );
 
   testWidgets('narration uses the acclamation verse resolved for display', (
     tester,
@@ -393,6 +484,202 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
     narration.dispose();
   });
+
+  testWidgets(
+    'read all started on first reading pre-resolves the later Gospel acclamation',
+    (tester) async {
+      SharedPreferences.setMockInitialValues(<String, Object>{});
+      final date = DateTime(2026, 8, 29);
+      final readings = <DailyReading>[
+        DailyReading(
+          reading: 'Gen 1:1-3',
+          position: 'First Reading',
+          date: date,
+        ),
+        DailyReading(
+          reading: 'Jn 8:12',
+          position: 'Gospel',
+          date: date,
+          gospelAcclamation: 'cf. Jn 8:12',
+        ),
+      ];
+      final hydrated = HydratedReadingSet(
+        readings: readings,
+        readingTitles: const <String, String>{},
+        readingPreviews: const <String, String>{},
+        readingTexts: const <String, String>{
+          'Gen 1:1-3': 'In the beginning God created.',
+          'Jn 8:12': 'Jesus said, I am the light of the world.',
+        },
+      );
+      const displayed =
+          'I am the light of the world, says the Lord; whoever follows me will have the light of life.';
+      final engine = _FakeSpeechEngine();
+      final narration = _narrationSession(engine);
+      await tester.pumpWidget(
+        ReadingNarrationScope(
+          session: narration,
+          child: MaterialApp(
+            home: ReadingScreen(
+              reference: readings.first.reading,
+              content: 'In the beginning God created.',
+              readingData: readings.first,
+              narrationSession: ReadingSession(
+                readings: readings,
+                readingTexts: hydrated.readingTexts,
+                currentIndex: 0,
+              ),
+              sessionReadings: readings,
+              currentReadingIndex: 0,
+              narrationHydrator: (_) async => hydrated,
+              gospelAcclamationResolver: (_, _) async => displayed,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await _chooseReadAll(tester);
+      expect(engine.spokenTexts.single, contains('God created'));
+      engine.completeCurrent();
+      await tester.pumpAndSettle();
+
+      expect(engine.spokenTexts, hasLength(2));
+      expect(engine.spokenTexts.last, contains(displayed));
+      expect(engine.spokenTexts.last, isNot(contains('cf. Jn 8:12')));
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      narration.dispose();
+    },
+  );
+
+  testWidgets('edition change fences a pending read-all hydration', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues(<String, Object>{});
+    final hydration = Completer<HydratedReadingSet>();
+    final reading = DailyReading(
+      reading: 'Jn 1:1',
+      position: 'Gospel',
+      date: DateTime(2026, 8, 29),
+    );
+    final engine = _FakeSpeechEngine();
+    final narration = _narrationSession(engine);
+    await tester.pumpWidget(
+      ReadingNarrationScope(
+        session: narration,
+        child: MaterialApp(
+          home: ReadingScreen(
+            reference: reading.reading,
+            content: 'The original Word.',
+            readingData: reading,
+            narrationSession: ReadingSession(
+              readings: <DailyReading>[reading],
+              readingTexts: const <String, String>{
+                'Jn 1:1': 'The original Word.',
+              },
+              currentIndex: 0,
+            ),
+            narrationHydrator: (_) => hydration.future,
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await _chooseReadAll(tester, settle: false);
+    final switcher = tester.widget<BibleVersionSwitcher>(
+      find.byType(BibleVersionSwitcher),
+    );
+    unawaited(switcher.onVersionChangeStarted!(BibleVersionType.nabre));
+    await tester.pump();
+
+    hydration.complete(
+      HydratedReadingSet(
+        readings: <DailyReading>[reading],
+        readingTitles: const <String, String>{},
+        readingPreviews: const <String, String>{},
+        readingTexts: const <String, String>{'Jn 1:1': 'Stale hydrated Word.'},
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(engine.spokenTexts, isEmpty);
+    await tester.pumpWidget(const SizedBox.shrink());
+    narration.dispose();
+  });
+
+  testWidgets('a newer read-all request supersedes older hydration', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues(<String, Object>{});
+    final first = Completer<HydratedReadingSet>();
+    final second = Completer<HydratedReadingSet>();
+    var calls = 0;
+    final reading = DailyReading(
+      reading: 'Jn 1:1',
+      position: 'Gospel',
+      date: DateTime(2026, 8, 29),
+    );
+    final engine = _FakeSpeechEngine();
+    final narration = _narrationSession(engine);
+    await tester.pumpWidget(
+      ReadingNarrationScope(
+        session: narration,
+        child: MaterialApp(
+          home: ReadingScreen(
+            reference: reading.reading,
+            content: 'The Word.',
+            readingData: reading,
+            narrationSession: ReadingSession(
+              readings: <DailyReading>[reading],
+              readingTexts: const <String, String>{'Jn 1:1': 'The Word.'},
+              currentIndex: 0,
+            ),
+            narrationHydrator: (_) =>
+                calls++ == 0 ? first.future : second.future,
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await _chooseReadAll(tester, settle: false);
+    await _chooseReadAll(tester, settle: false);
+    second.complete(
+      HydratedReadingSet(
+        readings: <DailyReading>[reading],
+        readingTitles: const <String, String>{},
+        readingPreviews: const <String, String>{},
+        readingTexts: const <String, String>{'Jn 1:1': 'Newest Word.'},
+      ),
+    );
+    await tester.pumpAndSettle();
+    first.complete(
+      HydratedReadingSet(
+        readings: <DailyReading>[reading],
+        readingTitles: const <String, String>{},
+        readingPreviews: const <String, String>{},
+        readingTexts: const <String, String>{'Jn 1:1': 'Stale Word.'},
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(engine.spokenTexts, hasLength(1));
+    expect(engine.spokenTexts.single, contains('The Word.'));
+    expect(engine.spokenTexts.single, isNot(contains('Stale Word.')));
+    await tester.pumpWidget(const SizedBox.shrink());
+    narration.dispose();
+  });
+}
+
+Future<void> _chooseReadAll(WidgetTester tester, {bool settle = true}) async {
+  await tester.tap(find.byType(PopupMenuButton<String>));
+  await tester.pumpAndSettle();
+  await tester.tap(find.text('Read all appointed readings'));
+  if (settle) {
+    await tester.pumpAndSettle();
+  } else {
+    await tester.pump();
+  }
 }
 
 ReadingNarrationSession _narrationSession(_FakeSpeechEngine engine) {
@@ -409,6 +696,7 @@ class _FakeSpeechEngine implements SpeechEngine {
   SpeechEngineCallbacks? callbacks;
   final List<String> spokenTexts = <String>[];
   int stopCalls = 0;
+  String? currentUtteranceId;
 
   @override
   bool get supportsNativePause => false;
@@ -432,7 +720,12 @@ class _FakeSpeechEngine implements SpeechEngine {
   @override
   Future<void> speak(String text, {required String utteranceId}) async {
     spokenTexts.add(text);
+    currentUtteranceId = utteranceId;
     callbacks?.onStart(utteranceId);
+  }
+
+  void completeCurrent() {
+    callbacks?.onCompletion(currentUtteranceId!);
   }
 
   @override

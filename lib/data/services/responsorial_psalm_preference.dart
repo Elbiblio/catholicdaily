@@ -26,8 +26,11 @@ class ResponsorialPsalmPreference extends ChangeNotifier {
 
   Future<void> setEditionId(String editionId) async {
     if (editionId == _currentEditionId) return;
+    final saved = await _preferences.setString(key, editionId);
+    if (!saved) {
+      throw StateError('Unable to save the responsorial psalm edition.');
+    }
     _currentEditionId = editionId;
-    await _preferences.setString(key, editionId);
     notifyListeners();
   }
 }

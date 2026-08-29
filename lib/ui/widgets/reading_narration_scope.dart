@@ -107,18 +107,32 @@ class ReadingNarrationSession extends ChangeNotifier {
   Future<void> setRate(double rate) async {
     final next = _settings.copyWith(rate: rate);
     try {
-      await preferences.setRate(rate);
+      final accepted = await controller.updateSettings(next);
+      if (_disposed) return;
+      if (!accepted) {
+        _showRateError();
+        return;
+      }
+      try {
+        await preferences.setRate(rate);
+      } catch (_) {
+        await controller.updateSettings(_settings);
+        rethrow;
+      }
       if (_disposed) return;
       _settings = next;
       _uiErrorMessage = null;
-      await controller.updateSettings(next);
       if (!_disposed) notifyListeners();
     } catch (_) {
       if (_disposed) return;
-      _uiErrorMessage = 'Unable to change speech speed.';
-      _uiErrorRevision++;
-      notifyListeners();
+      _showRateError();
     }
+  }
+
+  void _showRateError() {
+    _uiErrorMessage = 'Unable to change speech speed.';
+    _uiErrorRevision++;
+    notifyListeners();
   }
 
   void dismissPlayer() {
@@ -156,6 +170,15 @@ class ReadingNarrationSession extends ChangeNotifier {
 
   void _onControllerChanged() {
     if (_disposed) return;
+    if (_uiErrorMessage != null &&
+        (state.status == NarrationStatus.loading ||
+            state.status == NarrationStatus.playing ||
+            state.status == NarrationStatus.paused ||
+            state.status == NarrationStatus.completed ||
+            state.status == NarrationStatus.error ||
+            state.status == NarrationStatus.unavailable)) {
+      _uiErrorMessage = null;
+    }
     if (state.status == NarrationStatus.playing) _playerStarted = true;
     notifyListeners();
   }
@@ -235,6 +258,7 @@ class _ReadingNarrationHostState extends State<ReadingNarrationHost>
     if (message == null) {
       _lastAnnouncementKey = null;
       _announcementGeneration++;
+      ScaffoldMessenger.maybeOf(context)?.hideCurrentSnackBar();
       return;
     }
     final announcementKey =
@@ -339,7 +363,10 @@ class _ReadingNarrationHostState extends State<ReadingNarrationHost>
       session.uiErrorMessage ??
       switch (state.status) {
         NarrationStatus.loading => 'Loading reading aloud',
-        NarrationStatus.paused => 'Reading paused',
+        NarrationStatus.paused =>
+          state.supportsNativePause
+              ? 'Reading paused'
+              : 'Reading stopped. Restart from position.',
         NarrationStatus.completed => 'Reading complete',
         NarrationStatus.error || NarrationStatus.unavailable =>
           state.errorMessage ?? 'Reading aloud is unavailable',

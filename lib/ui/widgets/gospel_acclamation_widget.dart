@@ -3,6 +3,62 @@ import '../../data/models/daily_reading.dart';
 import '../../data/services/gospel_acclamation_service.dart';
 import '../../data/services/psalm_resolver_service.dart';
 
+typedef DisplayedGospelAcclamationResolver =
+    Future<String?> Function(DailyReading reading, DateTime date);
+
+Future<String?> resolveDisplayedGospelAcclamation(
+  DailyReading reading,
+  DateTime date, {
+  PsalmResolverService? psalmResolver,
+  GospelAcclamationService? acclamationService,
+}) async {
+  final resolver = psalmResolver ?? PsalmResolverService.instance;
+  final service = acclamationService ?? GospelAcclamationService();
+  final existing = reading.gospelAcclamation?.trim();
+  if (existing != null &&
+      existing.isNotEmpty &&
+      !existing.startsWith('Reading text unavailable') &&
+      !service.shouldResolveReference(existing)) {
+    return existing;
+  }
+  String? acclamation;
+  final hasProperCelebrationAcclamation =
+      reading.feast?.trim().isNotEmpty == true;
+
+  if (existing != null &&
+      existing.isNotEmpty &&
+      service.shouldResolveReference(existing)) {
+    if (hasProperCelebrationAcclamation) {
+      final decoded = await service.getAcclamationText(existing);
+      if (decoded.trim().isNotEmpty &&
+          !decoded.startsWith('Reading text unavailable')) {
+        acclamation = decoded;
+      }
+    }
+
+    acclamation ??= await resolver.resolveGospelAcclamation(
+      date: date,
+      gospelReference: reading.reading,
+    );
+
+    if (acclamation == null ||
+        acclamation.trim().isEmpty ||
+        acclamation.startsWith('Reading text unavailable')) {
+      final decoded = await service.getAcclamationText(existing);
+      if (decoded.trim().isNotEmpty &&
+          !decoded.startsWith('Reading text unavailable')) {
+        acclamation = decoded;
+      }
+    }
+  }
+
+  acclamation ??= await resolver.resolveGospelAcclamation(
+    date: date,
+    gospelReference: reading.reading,
+  );
+  return acclamation;
+}
+
 /// Widget that displays gospel acclamation with on-demand fetching for missing acclamations
 class GospelAcclamationWidget extends StatefulWidget {
   final DailyReading reading;
@@ -79,45 +135,11 @@ class _GospelAcclamationWidgetState extends State<GospelAcclamationWidget> {
     });
 
     try {
-      final existing = widget.reading.gospelAcclamation?.trim();
-      String? acclamation;
-      final hasProperCelebrationAcclamation =
-          widget.reading.feast?.trim().isNotEmpty == true;
-
-      if (existing != null &&
-          existing.isNotEmpty &&
-          _acclamationService.shouldResolveReference(existing)) {
-        if (hasProperCelebrationAcclamation) {
-          final decoded = await _acclamationService.getAcclamationText(
-            existing,
-          );
-          if (decoded.trim().isNotEmpty &&
-              !decoded.startsWith('Reading text unavailable')) {
-            acclamation = decoded;
-          }
-        }
-
-        acclamation ??= await _resolver.resolveGospelAcclamation(
-          date: widget.date,
-          gospelReference: widget.reading.reading,
-        );
-
-        if (acclamation == null ||
-            acclamation.trim().isEmpty ||
-            acclamation.startsWith('Reading text unavailable')) {
-          final decoded = await _acclamationService.getAcclamationText(
-            existing,
-          );
-          if (decoded.trim().isNotEmpty &&
-              !decoded.startsWith('Reading text unavailable')) {
-            acclamation = decoded;
-          }
-        }
-      }
-
-      acclamation ??= await _resolver.resolveGospelAcclamation(
-        date: widget.date,
-        gospelReference: widget.reading.reading,
+      final acclamation = await resolveDisplayedGospelAcclamation(
+        widget.reading,
+        widget.date,
+        psalmResolver: _resolver,
+        acclamationService: _acclamationService,
       );
 
       if (mounted && generation == _fetchGeneration) {

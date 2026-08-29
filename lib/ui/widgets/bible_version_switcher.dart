@@ -4,8 +4,15 @@ import '../../data/services/bible_version_preference.dart';
 
 class BibleVersionSwitcher extends StatefulWidget {
   final VoidCallback? onVersionChanged;
+  final Future<void> Function(BibleVersionType version)? onVersionChangeStarted;
+  final Future<Set<String>> Function()? installedSourceIdsLoader;
 
-  const BibleVersionSwitcher({super.key, this.onVersionChanged});
+  const BibleVersionSwitcher({
+    super.key,
+    this.onVersionChanged,
+    this.onVersionChangeStarted,
+    this.installedSourceIdsLoader,
+  });
 
   @override
   State<BibleVersionSwitcher> createState() => _BibleVersionSwitcherState();
@@ -42,7 +49,9 @@ class _BibleVersionSwitcherState extends State<BibleVersionSwitcher> {
 
   Future<void> _showVersionPicker() async {
     final theme = Theme.of(context);
-    final installedIds = await OfflineBibleService().installedSourceIds();
+    final installedIds =
+        await (widget.installedSourceIdsLoader?.call() ??
+            OfflineBibleService().installedSourceIds());
     if (!mounted) return;
     final availableVersions = BibleVersionType.values
         .where((version) => installedIds.contains(version.dbName))
@@ -84,7 +93,15 @@ class _BibleVersionSwitcherState extends State<BibleVersionSwitcher> {
     );
 
     if (selected != null && selected != _currentVersion) {
-      await _preference?.setVersion(selected);
+      await widget.onVersionChangeStarted?.call(selected);
+      try {
+        await _preference?.setVersion(selected);
+      } catch (_) {
+        if (!mounted) return;
+        ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+          const SnackBar(content: Text('Unable to save Bible version.')),
+        );
+      }
     }
   }
 

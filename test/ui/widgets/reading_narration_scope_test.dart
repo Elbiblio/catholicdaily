@@ -292,6 +292,127 @@ void main() {
     narration.dispose();
   });
 
+  testWidgets(
+    'fallback stop state announces restart instead of a native pause',
+    (tester) async {
+      final engine = _FakeSpeechEngine();
+      final narration = ReadingNarrationSession(
+        controller: ReadingNarrationController(engine: engine),
+        queueBuilder: const ReadingNarrationQueueBuilder(
+          composer: ReadingNarrationComposer(),
+        ),
+      );
+      final queue = narration.queueBuilder.buildCurrent(
+        ReadingSession(
+          readings: <DailyReading>[
+            DailyReading(
+              reading: 'Jn 1:1',
+              position: 'Gospel',
+              date: DateTime(2026, 8, 29),
+            ),
+          ],
+          readingTexts: const <String, String>{'Jn 1:1': 'The Word.'},
+          currentIndex: 0,
+        ),
+      );
+      await tester.pumpWidget(
+        ReadingNarrationScope(
+          session: narration,
+          child: MaterialApp(
+            builder: (context, child) => ReadingNarrationHost(child: child!),
+            home: const Scaffold(body: SizedBox.shrink()),
+          ),
+        ),
+      );
+      await narration.toggle(
+        queue,
+        mode: NarrationPlaybackMode.currentOnly,
+        context: const NarrationContext(
+          dateKey: '2026-08-29',
+          regionCode: 'NG',
+          bibleEditionId: 'rsvce',
+          psalmEditionId: 'territory_lectionary',
+          alternativeKey: 'primary',
+        ),
+      );
+      await tester.pump();
+
+      await tester.tap(find.byTooltip('Stop and keep position'));
+      await tester.pump();
+
+      expect(find.bySemanticsLabel('Reading paused'), findsNothing);
+      expect(
+        find.bySemanticsLabel('Reading stopped. Restart from position.'),
+        findsOneWidget,
+      );
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      narration.dispose();
+    },
+  );
+
+  testWidgets(
+    'engine rate rejection keeps the old rate and is cleared by playback',
+    (tester) async {
+      final engine = _FakeSpeechEngine();
+      final narration = ReadingNarrationSession(
+        controller: ReadingNarrationController(engine: engine),
+        queueBuilder: const ReadingNarrationQueueBuilder(
+          composer: ReadingNarrationComposer(),
+        ),
+      );
+      final queue = narration.queueBuilder.buildCurrent(
+        ReadingSession(
+          readings: <DailyReading>[
+            DailyReading(
+              reading: 'Jn 1:1',
+              position: 'Gospel',
+              date: DateTime(2026, 8, 29),
+            ),
+          ],
+          readingTexts: const <String, String>{'Jn 1:1': 'The Word.'},
+          currentIndex: 0,
+        ),
+      );
+      await tester.pumpWidget(
+        ReadingNarrationScope(
+          session: narration,
+          child: MaterialApp(
+            builder: (context, child) => ReadingNarrationHost(child: child!),
+            home: const Scaffold(body: SizedBox.shrink()),
+          ),
+        ),
+      );
+      await narration.toggle(
+        queue,
+        mode: NarrationPlaybackMode.currentOnly,
+        context: const NarrationContext(
+          dateKey: '2026-08-29',
+          regionCode: 'NG',
+          bibleEditionId: 'rsvce',
+          psalmEditionId: 'territory_lectionary',
+          alternativeKey: 'primary',
+        ),
+      );
+      await tester.pump();
+
+      engine.configureError = StateError('bad rate');
+      await tester.tap(find.text('0.5×'));
+      await tester.pumpAndSettle();
+      expect(narration.rate, 0.5);
+      expect(find.text('Unable to change speech speed.'), findsOneWidget);
+
+      engine.configureError = null;
+      await narration.controller.stop(clearQueue: false);
+      await narration.togglePlayerPlayback();
+      await tester.pumpAndSettle();
+      expect(find.text('Unable to change speech speed.'), findsNothing);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      narration.dispose();
+    },
+  );
+
   testWidgets('announcements repeat after reset and suppress stale callbacks', (
     tester,
   ) async {
@@ -386,6 +507,7 @@ class _FakeSpeechEngine implements SpeechEngine {
   SpeechEngineCallbacks? callbacks;
   final List<String> spokenTexts = <String>[];
   String? currentUtteranceId;
+  Object? configureError;
 
   _FakeSpeechEngine({
     this.voices = const <SpeechVoice>[
@@ -408,7 +530,9 @@ class _FakeSpeechEngine implements SpeechEngine {
   Future<List<SpeechVoice>> getVoices() async => voices;
 
   @override
-  Future<void> configure(SpeechEngineSettings settings) async {}
+  Future<void> configure(SpeechEngineSettings settings) async {
+    if (configureError case final error?) throw error;
+  }
 
   @override
   Future<void> speak(String text, {required String utteranceId}) async {
