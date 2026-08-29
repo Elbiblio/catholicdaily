@@ -462,13 +462,39 @@ jobs:
           if [ -n "${{ secrets.IOS_EXTENSION_PROVISION_PROFILE_BASE64 }}" ]; then
             echo "${{ secrets.IOS_EXTENSION_PROVISION_PROFILE_BASE64 }}" | base64 --decode > "$EXTENSION_PROFILE_PATH"
           else
-            if ! aws s3 ls "s3://${{ env.R2_BUCKET_NAME }}/${{ env.IOS_EXTENSION_PROVISION_PROFILE_OBJECT_KEY }}" \
+            if aws s3 ls "s3://${{ env.R2_BUCKET_NAME }}/${{ env.IOS_EXTENSION_PROVISION_PROFILE_OBJECT_KEY }}" \
               --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com" >/dev/null 2>&1; then
-              echo "::error::The Notification Service Extension requires its own App Store provisioning profile for ${{ env.IOS_EXTENSION_BUNDLE_IDENTIFIER }}. Upload it as IOS_EXTENSION_PROVISION_PROFILE_BASE64 or to R2 key ${{ env.IOS_EXTENSION_PROVISION_PROFILE_OBJECT_KEY }}." >&2
-              exit 1
+              aws s3 cp "s3://${{ env.R2_BUCKET_NAME }}/${{ env.IOS_EXTENSION_PROVISION_PROFILE_OBJECT_KEY }}" "$EXTENSION_PROFILE_PATH" \
+                --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com"
+            else
+              echo "Stored notification extension profile is missing; creating it through Apple's API."
+              EXTENSION_KEY_ID="${{ secrets.APPSTORE_KEY_ID }}"
+              if [ -z "$EXTENSION_KEY_ID" ]; then
+                EXTENSION_KEY_ID="${{ env.APPSTORE_KEY_ID }}"
+              fi
+              EXTENSION_KEY_PATH="$RUNNER_TEMP/AuthKey_${EXTENSION_KEY_ID}.p8"
+              if [ -n "${{ secrets.APPSTORE_PRIVATE_KEY }}" ]; then
+                printf '%s\n' "${{ secrets.APPSTORE_PRIVATE_KEY }}" > "$EXTENSION_KEY_PATH"
+              else
+                aws s3 cp "s3://${{ env.R2_BUCKET_NAME }}/${{ env.APPSTORE_API_KEY_OBJECT_KEY }}" "$EXTENSION_KEY_PATH" \
+                  --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com"
+              fi
+              EXTENSION_API_VENV="$RUNNER_TEMP/apple-extension-api-venv"
+              python3 -m venv "$EXTENSION_API_VENV"
+              "$EXTENSION_API_VENV/bin/pip" install --quiet --disable-pip-version-check pyjwt cryptography
+              "$EXTENSION_API_VENV/bin/python" scripts/ensure_ios_push_profile.py \
+                --issuer-id "${{ env.APPSTORE_ISSUER_ID }}" \
+                --key-id "$EXTENSION_KEY_ID" \
+                --key-path "$EXTENSION_KEY_PATH" \
+                --bundle-identifier "${{ env.IOS_EXTENSION_BUNDLE_IDENTIFIER }}" \
+                --certificate-serial "$CERT_SERIAL" \
+                --profile-name "Catholic Daily Feast Reminder ${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" \
+                --output "$EXTENSION_PROFILE_PATH"
+              rm -f "$EXTENSION_KEY_PATH"
+              aws s3 cp "$EXTENSION_PROFILE_PATH" "s3://${{ env.R2_BUCKET_NAME }}/${{ env.IOS_EXTENSION_PROVISION_PROFILE_OBJECT_KEY }}" \
+                --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com"
+              echo "Created the notification extension provisioning profile."
             fi
-            aws s3 cp "s3://${{ env.R2_BUCKET_NAME }}/${{ env.IOS_EXTENSION_PROVISION_PROFILE_OBJECT_KEY }}" "$EXTENSION_PROFILE_PATH" \
-              --endpoint-url "https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com"
           fi
 
           APP_PROFILE_APP_ID=$(security cms -D -i "$PROFILE_PATH" | \

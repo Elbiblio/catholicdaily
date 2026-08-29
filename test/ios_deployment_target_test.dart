@@ -35,4 +35,25 @@ void main() {
       contains("config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'"),
     );
   });
+
+  test('CI creates and stores a missing notification extension profile', () {
+    final workflow = File('.github/workflows/mobile.yml').readAsStringSync();
+
+    expect(
+      workflow,
+      contains(
+        '--bundle-identifier "\${{ env.IOS_EXTENSION_BUNDLE_IDENTIFIER }}"',
+      ),
+    );
+    expect(
+      workflow,
+      contains(
+        '"s3://\${{ env.R2_BUCKET_NAME }}/\${{ env.IOS_EXTENSION_PROVISION_PROFILE_OBJECT_KEY }}"',
+      ),
+    );
+    expect(
+      workflow,
+      contains('Created the notification extension provisioning profile.'),
+    );
+  });
 }
