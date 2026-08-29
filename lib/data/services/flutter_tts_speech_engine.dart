@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
 import 'speech_engine.dart';
+import 'web_speech_cancellation.dart';
 
 enum SpeechPlatform { android, ios, macos, windows, linux, web }
 
@@ -49,6 +50,7 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
 
   final FlutterTtsDriver _driver;
   final SpeechPlatform _platform;
+  final void Function() _cancelWebSpeech;
   SpeechEngineCallbacks? _callbacks;
   Future<void>? _initialization;
   Future<void> _nativeQueue = Future<void>.value();
@@ -58,9 +60,13 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
   _LogicalSession? _activeSession;
   _CancellationFence? _cancelFence;
 
-  FlutterTtsSpeechEngine({FlutterTtsDriver? driver, SpeechPlatform? platform})
-    : _driver = driver ?? _PluginFlutterTtsDriver(FlutterTts()),
-      _platform = platform ?? _currentPlatform();
+  FlutterTtsSpeechEngine({
+    FlutterTtsDriver? driver,
+    SpeechPlatform? platform,
+    void Function()? cancelWebSpeech,
+  }) : _driver = driver ?? _PluginFlutterTtsDriver(FlutterTts()),
+       _platform = platform ?? _currentPlatform(),
+       _cancelWebSpeech = cancelWebSpeech ?? cancelActiveWebSpeech;
 
   @override
   bool get supportsNativePause =>
@@ -389,6 +395,9 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
           );
     _cancelFence = fence;
     try {
+      if (cancelledSession != null && _platform == SpeechPlatform.web) {
+        _cancelWebSpeech();
+      }
       _requireSuccess(await _driver.stop(), 'stop');
       if (fence != null &&
           awaitAcknowledgement &&

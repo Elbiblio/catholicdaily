@@ -587,6 +587,30 @@ void main() {
     },
   );
 
+  test('web replacement cancels globally before the old onStart', () async {
+    final driver = FakeFlutterTtsDriver()..autoCancelOnStop = false;
+    var globalCancels = 0;
+    final engine = FlutterTtsSpeechEngine(
+      driver: driver,
+      platform: SpeechPlatform.web,
+      cancelWebSpeech: () => globalCancels++,
+    );
+    await engine.speak('Queued old text.', utteranceId: 'old');
+
+    final replacement = engine.speak('Replacement text.', utteranceId: 'new');
+    await Future<void>.delayed(Duration.zero);
+    expect(globalCancels, 1);
+    expect(driver.spokenTexts, <String>['Queued old text.']);
+
+    driver.emitStart();
+    driver.emitError('canceled');
+    await replacement.timeout(const Duration(milliseconds: 300));
+    expect(driver.spokenTexts, <String>[
+      'Queued old text.',
+      'Replacement text.',
+    ]);
+  });
+
   test(
     'completion racing with stop acknowledges cancellation without leaking',
     () async {
