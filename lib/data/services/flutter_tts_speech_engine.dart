@@ -174,6 +174,10 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
     }
     final session = _activeSession;
     if (!_acceptsChunkCallback(session)) return;
+    // Web cancellation errors are dispatched asynchronously after stop() has
+    // already returned. A replacement cannot own an error until its own
+    // SpeechSynthesisUtterance has emitted onStart.
+    if (_platform == SpeechPlatform.web && !session!.chunkStarted) return;
     session!.acceptingCallbacks = false;
     session.terminal = true;
     _activeSession = null;

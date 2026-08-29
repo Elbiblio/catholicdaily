@@ -606,6 +606,31 @@ void main() {
   );
 
   test(
+    'delayed web cancellation error cannot target its replacement',
+    () async {
+      final driver = FakeFlutterTtsDriver()..autoCancelOnStop = false;
+      final errors = <String>[];
+      final engine = FlutterTtsSpeechEngine(
+        driver: driver,
+        platform: SpeechPlatform.web,
+      );
+      engine.setCallbacks(
+        _callbacks(onError: (id, message) => errors.add('$id:$message')),
+      );
+      await engine.speak('Old web text.', utteranceId: 'old');
+      driver.emitStart();
+
+      await engine.speak('New web text.', utteranceId: 'new');
+      driver.emitError('canceled old utterance');
+      expect(errors, isEmpty);
+
+      driver.emitStart();
+      driver.emitError('new utterance failed');
+      expect(errors, <String>['new:new utterance failed']);
+    },
+  );
+
+  test(
     'forwards active errors and safely ignores callbacks after dispose',
     () async {
       final driver = FakeFlutterTtsDriver();
