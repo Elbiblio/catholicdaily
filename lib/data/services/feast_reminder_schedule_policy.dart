@@ -124,6 +124,12 @@ class FeastReminderScheduleResult {
   bool get needsImmediateRepair =>
       !occurrenceQueuePersisted || needsLocalScheduleRepair;
 
+  /// Requires a bounded foreground server attempt if durable work registration
+  /// is unavailable: no alarm can cover the user, or the occurrence ledger did
+  /// not accept the generated server-only rows.
+  bool get needsCriticalRemoteHandoff =>
+      !occurrenceQueuePersisted || (eligibleCount > 0 && scheduledCount == 0);
+
   FeastReminderScheduleResult withOccurrenceQueuePersisted(bool persisted) =>
       FeastReminderScheduleResult(
         eligibleCount: eligibleCount,

@@ -281,6 +281,68 @@ void main() {
   });
 
   test(
+    'platform executor is registered before detached network starts',
+    () async {
+      final executor = Completer<void>();
+      var networkStarted = false;
+      final coordinator = NotificationScheduleSyncCoordinator(
+        syncInstallation: () async {
+          networkStarted = true;
+          return true;
+        },
+        syncOccurrences: () async => NotificationOccurrenceSyncResult.success,
+        enqueueRepair: () => executor.future,
+      );
+
+      final dispatch = coordinator.dispatch();
+      await Future<void>.delayed(Duration.zero);
+      expect(networkStarted, isFalse);
+
+      executor.complete();
+      await dispatch;
+      expect(networkStarted, isTrue);
+    },
+  );
+
+  test(
+    'normal armed flow does not detach when executor registration fails',
+    () async {
+      var networkStarted = false;
+      final coordinator = NotificationScheduleSyncCoordinator(
+        syncInstallation: () async {
+          networkStarted = true;
+          return true;
+        },
+        syncOccurrences: () async => NotificationOccurrenceSyncResult.success,
+        enqueueRepair: () async => throw StateError('executor unavailable'),
+      );
+
+      await coordinator.dispatch();
+
+      expect(networkStarted, isFalse);
+      expect(await NotificationRepairOutbox().hasPendingRepair, isTrue);
+    },
+  );
+
+  test(
+    'critical flow bounds foreground fallback when executor fails',
+    () async {
+      final installation = Completer<bool>();
+      final coordinator = NotificationScheduleSyncCoordinator(
+        syncInstallation: () => installation.future,
+        syncOccurrences: () async => NotificationOccurrenceSyncResult.success,
+        enqueueRepair: () async => throw StateError('executor unavailable'),
+        criticalHandoffTimeout: const Duration(milliseconds: 10),
+      );
+
+      await coordinator.dispatch(criticalHandoff: true);
+
+      expect(installation.isCompleted, isFalse);
+      expect(await NotificationRepairOutbox().hasPendingRepair, isTrue);
+    },
+  );
+
+  test(
     'disabled settings reconcile occurrences before disabling installation',
     () async {
       final calls = <String>[];

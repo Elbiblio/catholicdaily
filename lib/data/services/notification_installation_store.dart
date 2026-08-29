@@ -13,6 +13,15 @@ typedef SecureValueRead = Future<String?> Function(String key);
 typedef SecureValueWrite = Future<void> Function(String key, String value);
 typedef SecureValueDelete = Future<void> Function(String key);
 
+class NotificationInstallationCredentialsException implements Exception {
+  const NotificationInstallationCredentialsException(this.reason);
+
+  final String reason;
+
+  @override
+  String toString() => 'NotificationInstallationCredentialsException: $reason';
+}
+
 class NotificationInstallationStore {
   NotificationInstallationStore({
     FlutterSecureStorage secureStorage = const FlutterSecureStorage(),
@@ -54,10 +63,8 @@ class NotificationInstallationStore {
 
   Future<NotificationInstallationCredentials> credentials() =>
       _credentialLock.synchronized(() async {
-        final envelope = _decodeCredentials(
-          await _secureRead(_credentialEnvelopeKey),
-        );
-        if (envelope != null) return envelope;
+        final rawEnvelope = await _secureRead(_credentialEnvelopeKey);
+        if (rawEnvelope != null) return _decodeCredentials(rawEnvelope);
 
         var installationId = await _secureRead(_installationIdKey);
         var registrationSecret = await _secureRead(_registrationSecretKey);
@@ -82,13 +89,18 @@ class NotificationInstallationStore {
         return credentials;
       });
 
-  static NotificationInstallationCredentials? _decodeCredentials(String? raw) {
-    if (raw == null || raw.isEmpty) return null;
+  static NotificationInstallationCredentials _decodeCredentials(String raw) {
     try {
       final decoded = jsonDecode(raw);
-      if (decoded is! Map<String, dynamic> ||
-          decoded['version'] != _credentialEnvelopeVersion) {
-        return null;
+      if (decoded is! Map<String, dynamic>) {
+        throw const NotificationInstallationCredentialsException(
+          'credential envelope root must be an object',
+        );
+      }
+      if (decoded['version'] != _credentialEnvelopeVersion) {
+        throw const NotificationInstallationCredentialsException(
+          'unsupported credential envelope version',
+        );
       }
       final installationId = decoded['installation_id'];
       final registrationSecret = decoded['registration_secret'];
@@ -96,14 +108,20 @@ class NotificationInstallationStore {
           installationId.isEmpty ||
           registrationSecret is! String ||
           registrationSecret.isEmpty) {
-        return null;
+        throw const NotificationInstallationCredentialsException(
+          'credential envelope contains invalid fields',
+        );
       }
       return NotificationInstallationCredentials(
         installationId: installationId,
         registrationSecret: registrationSecret,
       );
+    } on NotificationInstallationCredentialsException {
+      rethrow;
     } on FormatException {
-      return null;
+      throw const NotificationInstallationCredentialsException(
+        'malformed credential envelope',
+      );
     }
   }
 

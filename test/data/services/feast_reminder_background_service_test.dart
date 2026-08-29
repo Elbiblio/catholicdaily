@@ -153,6 +153,53 @@ void main() {
     expect(await NotificationRepairOutbox().hasPendingRepair, isTrue);
   });
 
+  test('startup registers executor before detached work begins', () async {
+    final executor = Completer<void>();
+    var auditStarted = false;
+    var messagingStarted = false;
+    final dispatcher = NotificationStartupSyncDispatcher(
+      auditAndRepair: () async {
+        auditStarted = true;
+        return true;
+      },
+      initializeMessaging: () async => messagingStarted = true,
+      enqueueRepair: () => executor.future,
+    );
+
+    final dispatch = dispatcher.dispatch();
+    await Future<void>.delayed(Duration.zero);
+    expect(auditStarted, isFalse);
+    expect(messagingStarted, isFalse);
+
+    executor.complete();
+    await dispatch;
+    expect(auditStarted, isTrue);
+    expect(messagingStarted, isTrue);
+  });
+
+  test(
+    'startup keeps the outbox without detaching when executor fails',
+    () async {
+      var auditStarted = false;
+      var messagingStarted = false;
+      final dispatcher = NotificationStartupSyncDispatcher(
+        auditAndRepair: () async {
+          auditStarted = true;
+          return true;
+        },
+        initializeMessaging: () async => messagingStarted = true,
+        enqueueRepair: () async => throw UnsupportedError('no executor'),
+      );
+
+      await dispatcher.dispatch();
+      await Future<void>.delayed(Duration.zero);
+
+      expect(auditStarted, isFalse);
+      expect(messagingStarted, isFalse);
+      expect(await NotificationRepairOutbox().hasPendingRepair, isTrue);
+    },
+  );
+
   test('startup detached audit errors still enqueue repair', () async {
     var repairs = 0;
     final dispatcher = NotificationStartupSyncDispatcher(

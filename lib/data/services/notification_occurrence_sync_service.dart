@@ -14,17 +14,20 @@ class NotificationScheduleSyncCoordinator {
     required this.syncOccurrences,
     required this.enqueueRepair,
     NotificationRepairOutbox? repairOutbox,
+    this.criticalHandoffTimeout = const Duration(seconds: 20),
   }) : _repairOutbox = repairOutbox ?? NotificationRepairOutbox.instance;
 
   final Future<bool> Function() syncInstallation;
   final Future<NotificationOccurrenceSyncResult> Function() syncOccurrences;
   final Future<void> Function() enqueueRepair;
   final NotificationRepairOutbox _repairOutbox;
+  final Duration criticalHandoffTimeout;
   Future<void>? _repairRequest;
 
   Future<void> dispatch({
     bool installationFirst = true,
     bool forceRepair = false,
+    bool criticalHandoff = false,
   }) async {
     String? repairToken;
     try {
@@ -33,7 +36,28 @@ class NotificationScheduleSyncCoordinator {
       // The local schedule/settings operation remains successful. Immediate
       // work registration below is the fallback when the marker cannot write.
     }
-    if (forceRepair) unawaited(_enqueueRepairDetached());
+    var executorRegistered = false;
+    try {
+      await _requestRepair();
+      executorRegistered = true;
+    } catch (_) {
+      // The outbox remains pending. Critical mutations use a bounded foreground
+      // handoff below; normal armed schedules wait for startup repair.
+    }
+    if (!executorRegistered) {
+      // Exceptional states have no confirmed local alarm or contain a server
+      // tombstone/ledger gap. They get one bounded foreground attempt. Normal
+      // armed schedules remain responsive and rely on the retained outbox at
+      // the next startup instead of launching an undurable network Future.
+      if (criticalHandoff) {
+        await _runCriticalFallback(
+          installationFirst: installationFirst,
+          preserveRepairMarker: forceRepair,
+          repairToken: repairToken,
+        );
+      }
+      return;
+    }
     unawaited(
       _runDetached(
         installationFirst: installationFirst,
@@ -43,15 +67,27 @@ class NotificationScheduleSyncCoordinator {
     );
   }
 
-  Future<void> _enqueueRepairDetached() async {
+  Future<void> _requestRepair() => _repairRequest ??= enqueueRepair();
+
+  Future<void> _runCriticalFallback({
+    required bool installationFirst,
+    required bool preserveRepairMarker,
+    required String? repairToken,
+  }) async {
     try {
-      await _requestRepair();
+      final synchronized = await syncNow(
+        installationFirst: installationFirst,
+        forceRepair: false,
+      ).timeout(criticalHandoffTimeout);
+      if (synchronized && !preserveRepairMarker && repairToken != null) {
+        await _repairOutbox.clear(ifToken: repairToken);
+      }
+    } on TimeoutException {
+      // The durable marker remains for the next startup audit.
     } catch (_) {
-      // A later sync retry can attempt work registration again.
+      // Critical local state remains successful; the marker records recovery.
     }
   }
-
-  Future<void> _requestRepair() => _repairRequest ??= enqueueRepair();
 
   Future<void> _runDetached({
     required bool installationFirst,

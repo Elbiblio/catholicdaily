@@ -137,6 +137,7 @@ void main() {
         expect(result.canSyncServerOnlyOccurrences, isTrue);
         expect(result.needsLocalScheduleRepair, isTrue);
         expect(result.needsImmediateRepair, isTrue);
+        expect(result.needsCriticalRemoteHandoff, isTrue);
       },
     );
 
@@ -154,6 +155,7 @@ void main() {
       expect(result.occurrenceQueuePersisted, isFalse);
       expect(result.canKeepRemindersEnabled, isTrue);
       expect(result.needsImmediateRepair, isTrue);
+      expect(result.needsCriticalRemoteHandoff, isTrue);
     });
 
     test('preserves successful reminders across a partial failure', () {
@@ -193,6 +195,7 @@ void main() {
       final source = File(path).readAsStringSync();
       expect(source, contains('FeastReminderScheduleResult? scheduleResult'));
       expect(source, contains('scheduleResult?.needsImmediateRepair'));
+      expect(source, contains('needsCriticalRemoteHandoff'));
     }
 
     final settingsSource = File(

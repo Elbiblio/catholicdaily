@@ -132,6 +132,10 @@ class _FeastReminderSettingsSheetState
         installationFirst: _enabled,
         forceRepair:
             scheduleResult?.needsImmediateRepair ?? !cancellationQueuePersisted,
+        criticalHandoff:
+            !_enabled ||
+            !cancellationQueuePersisted ||
+            (scheduleResult?.needsCriticalRemoteHandoff ?? false),
       );
     } catch (e) {
       debugPrint('[FeastReminder] _save error: $e');

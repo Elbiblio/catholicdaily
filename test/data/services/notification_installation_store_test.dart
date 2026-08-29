@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:catholic_daily/data/services/feast_reminder_schedule_lock.dart';
 import 'package:catholic_daily/data/services/notification_installation_store.dart';
@@ -70,5 +71,50 @@ void main() {
       values.keys,
       isNot(contains('notification_installation_registration_secret')),
     );
+  });
+
+  test('present malformed credential envelopes fail closed', () async {
+    final corruptEnvelopes = <String>[
+      '{not-json',
+      jsonEncode(<String, dynamic>{
+        'version': 99,
+        'installation_id': 'existing-id',
+        'registration_secret': 'existing-secret',
+      }),
+      jsonEncode(<dynamic>['wrong-root']),
+      jsonEncode(<String, dynamic>{
+        'version': 1,
+        'installation_id': 42,
+        'registration_secret': 'existing-secret',
+      }),
+    ];
+
+    for (final raw in corruptEnvelopes) {
+      final values = <String, String>{
+        'notification_installation_credentials_v1': raw,
+      };
+      var writes = 0;
+      final store = NotificationInstallationStore(
+        secureRead: (key) async => values[key],
+        secureWrite: (key, value) async {
+          writes++;
+          values[key] = value;
+        },
+        secureDelete: (key) async => values.remove(key),
+        credentialLock: InterprocessFileLock(
+          file: File(
+            '${Directory.systemTemp.path}${Platform.pathSeparator}'
+            'notification-installation-corrupt-${DateTime.now().microsecondsSinceEpoch}-$writes.lock',
+          ),
+        ),
+      );
+
+      await expectLater(
+        store.credentials(),
+        throwsA(isA<NotificationInstallationCredentialsException>()),
+      );
+      expect(values['notification_installation_credentials_v1'], raw);
+      expect(writes, 0);
+    }
   });
 }

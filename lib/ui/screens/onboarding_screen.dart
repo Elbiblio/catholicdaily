@@ -211,6 +211,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       ).dispatch(
         installationFirst: _selectedSlot != null,
         forceRepair: scheduleResult?.needsImmediateRepair ?? false,
+        criticalHandoff:
+            _selectedSlot == null ||
+            (scheduleResult?.needsCriticalRemoteHandoff ?? false),
       );
     } catch (e) {
       // Non-fatal — onboarding completes regardless of notification setup.

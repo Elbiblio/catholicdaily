@@ -157,7 +157,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
           NotificationInstallationSyncService.instance.syncCurrentToken,
       syncOccurrences: NotificationOccurrenceSyncService.instance.syncPending,
       enqueueRepair: FeastReminderBackgroundService.instance.enqueueRepair,
-    ).dispatch(forceRepair: scheduleResult?.needsImmediateRepair ?? false);
+    ).dispatch(
+      forceRepair: scheduleResult?.needsImmediateRepair ?? false,
+      criticalHandoff: scheduleResult?.needsCriticalRemoteHandoff ?? false,
+    );
   }
 
   String _reminderSubtitle() {

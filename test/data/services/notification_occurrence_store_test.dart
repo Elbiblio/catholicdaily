@@ -191,7 +191,7 @@ void main() {
   test('prunes only reconciled rows after the retention window', () async {
     final store = NotificationOccurrenceStore();
     final oldExpiry = DateTime.utc(2026, 7, 1);
-    await store.upsertAll([
+    final rows = [
       occurrence(
         key: 'old-reconciled',
         remoteExpiresAt: oldExpiry,
@@ -203,7 +203,13 @@ void main() {
         remoteExpiresAt: DateTime.utc(2026, 8, 27),
         reconciledAt: DateTime.utc(2026, 8, 27),
       ),
-    ]);
+    ];
+    await store.upsertAll(rows);
+    await store.markSynchronized(
+      occurrences: rows,
+      eventIds: const [],
+      synchronizedAt: DateTime.utc(2026, 8, 27),
+    );
 
     await store.prune(
       now: DateTime.utc(2026, 8, 28),
@@ -218,6 +224,39 @@ void main() {
       (await store.allOccurrences()).map((row) => row.occurrenceKey),
       isNot(contains('old-reconciled')),
     );
+  });
+
+  test('mutation between acknowledgement and prune is retained', () async {
+    final store = NotificationOccurrenceStore();
+    final expiredAt = DateTime.utc(2026, 7, 1);
+    final row = occurrence(
+      key: 'mutated-after-ack',
+      remoteExpiresAt: expiredAt,
+      reconciledAt: expiredAt,
+    );
+    await store.upsertAll([row]);
+    await store.markSynchronized(
+      occurrences: [row],
+      eventIds: const [],
+      synchronizedAt: DateTime.utc(2026, 8, 1),
+    );
+    final opened = NotificationOccurrenceEvent(
+      occurrenceKey: row.occurrenceKey,
+      type: NotificationOccurrenceEventType.opened,
+      occurredAt: DateTime.utc(2026, 8, 2),
+    );
+    await NotificationOccurrenceStore().recordEvent(opened);
+
+    await store.prune(
+      now: DateTime.utc(2026, 8, 28),
+      retention: const Duration(days: 7),
+    );
+
+    expect(
+      (await store.allOccurrences()).single.occurrenceKey,
+      row.occurrenceKey,
+    );
+    expect((await store.pendingEvents()).single.id, opened.id);
   });
 
   test('throws when SharedPreferences rejects the checked write', () async {

@@ -50,10 +50,14 @@ class FeastReminderRepairRequest {
     final reasonForcesReschedule =
         reason == FeastReminderRepairReason.exactAlarmCapabilityChanged ||
         reason == FeastReminderRepairReason.timezoneChanged;
+    final taskForcesReschedule =
+        task == FeastReminderBackgroundService.iosForcedRepairTaskIdentifier;
     return FeastReminderRepairRequest(
       reason: reason,
       forceReschedule:
-          inputData?[forceRescheduleInputKey] == true || reasonForcesReschedule,
+          inputData?[forceRescheduleInputKey] == true ||
+          reasonForcesReschedule ||
+          taskForcesReschedule,
     );
   }
 
@@ -84,6 +88,13 @@ class NotificationStartupSyncDispatcher {
     } catch (_) {
       // Startup remains available; detached repair registration is fallback.
     }
+    try {
+      await _requestRepair();
+    } catch (_) {
+      // Never detach work that has no durable executor. The outbox remains for
+      // a later startup, and already-armed local alarms remain unaffected.
+      return;
+    }
     unawaited(_runAudit(repairToken));
     unawaited(_runMessaging());
   }
@@ -107,16 +118,7 @@ class NotificationStartupSyncDispatcher {
     await _requestRepair();
   }
 
-  Future<void> _requestRepair() => _repairRequest ??= _requestRepairOnce();
-
-  Future<void> _requestRepairOnce() async {
-    try {
-      await _repairOutbox.markPending(reason: 'startup-retry');
-      await enqueueRepair();
-    } catch (_) {
-      // Work registration is best-effort and cannot fail app startup.
-    }
-  }
+  Future<void> _requestRepair() => _repairRequest ??= enqueueRepair();
 
   Future<void> _runMessaging() async {
     try {
@@ -258,6 +260,10 @@ class FeastReminderBackgroundService {
   static const periodicWorkName = 'feast-reminder-coverage-audit';
   static const repairWorkName = 'feast-reminder-coverage-repair';
   static const taskName = 'audit-feast-reminder-coverage';
+  static const iosRepairTaskIdentifier =
+      'com.elbiblio.catholicdaily.notification-repair';
+  static const iosForcedRepairTaskIdentifier =
+      'com.elbiblio.catholicdaily.notification-repair-forced';
   static const _scheduleMonths = 15;
   static const _policy = FeastReminderAuditPolicy(
     expectedSchemaVersion: FeastReminderService.scheduleSchemaVersion,
@@ -269,33 +275,57 @@ class FeastReminderBackgroundService {
   bool _initialized = false;
 
   Future<void> initialize() async {
-    if (!Platform.isAndroid || _initialized) return;
+    if ((!Platform.isAndroid && !Platform.isIOS) || _initialized) return;
     await Workmanager().initialize(feastReminderWorkmanagerDispatcher);
-    await Workmanager().registerPeriodicTask(
-      periodicWorkName,
-      taskName,
-      frequency: const Duration(hours: 24),
-      constraints: Constraints(networkType: NetworkType.notRequired),
-      existingWorkPolicy: ExistingPeriodicWorkPolicy.update,
-      backoffPolicy: BackoffPolicy.exponential,
-      backoffPolicyDelay: const Duration(minutes: 15),
-    );
+    if (Platform.isAndroid) {
+      await Workmanager().registerPeriodicTask(
+        periodicWorkName,
+        taskName,
+        frequency: const Duration(hours: 24),
+        constraints: Constraints(networkType: NetworkType.notRequired),
+        existingWorkPolicy: ExistingPeriodicWorkPolicy.update,
+        backoffPolicy: BackoffPolicy.exponential,
+        backoffPolicyDelay: const Duration(minutes: 15),
+      );
+    }
     _initialized = true;
   }
 
   Future<void> enqueueRepair({
     FeastReminderRepairReason reason = FeastReminderRepairReason.occurrenceSync,
   }) async {
-    if (!Platform.isAndroid) return;
+    if (!Platform.isAndroid && !Platform.isIOS) {
+      throw UnsupportedError(
+        'Durable notification repair is unavailable on '
+        '${Platform.operatingSystem}',
+      );
+    }
     await initialize();
+    final forceReschedule =
+        reason == FeastReminderRepairReason.exactAlarmCapabilityChanged ||
+        reason == FeastReminderRepairReason.timezoneChanged;
+    if (Platform.isIOS) {
+      // Workmanager's iOS registerOneOffTask uses UIApplication background
+      // time and cannot survive process death. BGProcessingTaskRequest is the
+      // durable request type; native identifiers/handlers are declared in
+      // Info.plist and AppDelegate.swift.
+      final identifier = forceReschedule
+          ? iosForcedRepairTaskIdentifier
+          : iosRepairTaskIdentifier;
+      await Workmanager().cancelByUniqueName(identifier);
+      await Workmanager().registerProcessingTask(
+        identifier,
+        identifier,
+        constraints: Constraints(networkType: NetworkType.notRequired),
+      );
+      return;
+    }
     await Workmanager().registerOneOffTask(
       repairWorkName,
       taskName,
       inputData: FeastReminderRepairRequest(
         reason: reason,
-        forceReschedule:
-            reason == FeastReminderRepairReason.exactAlarmCapabilityChanged ||
-            reason == FeastReminderRepairReason.timezoneChanged,
+        forceReschedule: forceReschedule,
       ).toInputData(),
       constraints: Constraints(networkType: NetworkType.notRequired),
       existingWorkPolicy: ExistingWorkPolicy.replace,

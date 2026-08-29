@@ -9,6 +9,7 @@ import 'feast_reminder_payload.dart';
 import 'feast_reminder_background_service.dart';
 import 'feast_reminder_service.dart';
 import 'notification_installation_sync_service.dart';
+import 'notification_occurrence_sync_service.dart';
 
 class RemoteFeastMessage {
   const RemoteFeastMessage({required this.payload, required this.expiresAt});
@@ -105,13 +106,12 @@ class FeastReminderMessagingService {
     _initialized = true;
   }
 
-  Future<void> _syncToken(String token) async {
-    final synchronized = await NotificationInstallationSyncService.instance
-        .syncToken(token);
-    if (!synchronized) {
-      await FeastReminderBackgroundService.instance.enqueueRepair();
-    }
-  }
+  Future<void> _syncToken(String token) => NotificationScheduleSyncCoordinator(
+    syncInstallation: () =>
+        NotificationInstallationSyncService.instance.syncToken(token),
+    syncOccurrences: () async => NotificationOccurrenceSyncResult.success,
+    enqueueRepair: FeastReminderBackgroundService.instance.enqueueRepair,
+  ).dispatch();
 
   Future<void> _handleForegroundMessage(RemoteMessage message) async {
     final remote = RemoteFeastMessage.tryParse(message.data);
