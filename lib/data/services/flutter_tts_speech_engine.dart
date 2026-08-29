@@ -46,7 +46,6 @@ abstract class FlutterTtsDriver {
 
 class FlutterTtsSpeechEngine implements SpeechEngine {
   static const int maxChunkCodeUnits = 3500;
-  static const Duration _cancelFenceTimeout = Duration(milliseconds: 100);
 
   final FlutterTtsDriver _driver;
   final SpeechPlatform _platform;
@@ -57,7 +56,7 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
   bool _disposed = false;
   int _intent = 0;
   _LogicalSession? _activeSession;
-  Completer<void>? _cancelFence;
+  _CancellationFence? _cancelFence;
 
   FlutterTtsSpeechEngine({FlutterTtsDriver? driver, SpeechPlatform? platform})
     : _driver = driver ?? _PluginFlutterTtsDriver(FlutterTts()),
@@ -109,6 +108,7 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
   }
 
   void _handleStart() {
+    if (_cancelFence != null) return;
     final session = _activeSession;
     if (!_acceptsChunkCallback(session) || session!.chunkStarted) return;
     session.chunkStarted = true;
@@ -119,6 +119,7 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
   }
 
   void _handleContinue() {
+    if (_cancelFence != null) return;
     final session = _activeSession;
     if (!_acceptsChunkCallback(session) || !session!.resuming) return;
     session.resuming = false;
@@ -129,10 +130,15 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
 
   void _handleCancel() {
     final fence = _cancelFence;
-    if (fence != null && !fence.isCompleted) fence.complete();
+    if (fence != null &&
+        fence.matchesInvalidatedSession &&
+        !fence.acknowledged.isCompleted) {
+      fence.acknowledged.complete();
+    }
   }
 
   void _handleCompletion() {
+    if (_cancelFence != null) return;
     final session = _activeSession;
     if (!_acceptsChunkCallback(session) || !session!.chunkStarted) return;
     session.acceptingCallbacks = false;
@@ -148,11 +154,14 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
       _enqueueNative(() async {
         if (!_isActive(session)) return;
         await _speakCurrentChunk(session);
+      }).catchError((Object error, StackTrace stack) {
+        _terminateSessionWithError(session, error);
       }),
     );
   }
 
   void _handleError(String message) {
+    if (_cancelFence != null) return;
     final session = _activeSession;
     if (!_acceptsChunkCallback(session)) return;
     session!.acceptingCallbacks = false;
@@ -162,6 +171,7 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
   }
 
   void _handleProgress(String text, int start, int end, String word) {
+    if (_cancelFence != null) return;
     final session = _activeSession;
     if (!_acceptsChunkCallback(session) || !session!.chunkStarted) return;
     final chunk = session.currentChunk;
@@ -188,6 +198,21 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
       identical(_activeSession, session) &&
       !session.terminal &&
       session.intent == _intent;
+
+  void _terminateSessionWithError(_LogicalSession session, Object error) {
+    if (!_isActive(session)) return;
+    session.acceptingCallbacks = false;
+    session.terminal = true;
+    _activeSession = null;
+    _callbacks?.onError(session.utteranceId, _errorMessage(error));
+  }
+
+  static String _errorMessage(Object error) {
+    final message = error.toString();
+    return message.startsWith('Exception: ')
+        ? message.substring('Exception: '.length)
+        : message;
+  }
 
   @override
   Future<List<SpeechVoice>> getVoices() async {
@@ -244,6 +269,7 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
           'locale': voice.locale,
         }),
         'setVoice',
+        allowNull: _platform == SpeechPlatform.web,
       );
     }
   }
@@ -272,7 +298,7 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
         );
         return;
       }
-      if (oldSession != null) await _cancelNativeSession();
+      if (oldSession != null) await _cancelNativeSession(oldSession);
       if (_disposed || intent != _intent) return;
       final session = _LogicalSession(
         intent: intent,
@@ -327,8 +353,8 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
   Future<void> stop() {
     if (_disposed) return Future<void>.value();
     ++_intent;
-    _invalidateActiveSession();
-    return _enqueueNative(_cancelNativeSession);
+    final cancelledSession = _invalidateActiveSession();
+    return _enqueueNative(() => _cancelNativeSession(cancelledSession));
   }
 
   _LogicalSession? _invalidateActiveSession() {
@@ -341,16 +367,23 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
     return session;
   }
 
-  Future<void> _cancelNativeSession() async {
-    final fence = Completer<void>();
+  Future<void> _cancelNativeSession(
+    _LogicalSession? cancelledSession, {
+    bool awaitAcknowledgement = true,
+  }) async {
+    final fence = cancelledSession == null
+        ? null
+        : _CancellationFence(
+            intent: cancelledSession.intent,
+            session: cancelledSession,
+          );
     _cancelFence = fence;
     try {
       _requireSuccess(await _driver.stop(), 'stop');
-      if (!fence.isCompleted) {
-        await Future.any<void>(<Future<void>>[
-          fence.future,
-          Future<void>.delayed(_cancelFenceTimeout),
-        ]);
+      if (fence != null &&
+          awaitAcknowledgement &&
+          !fence.acknowledged.isCompleted) {
+        await fence.acknowledged.future;
       }
     } finally {
       if (identical(_cancelFence, fence)) _cancelFence = null;
@@ -364,7 +397,9 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
     ++_intent;
     _invalidateActiveSession();
     _callbacks = null;
-    return _enqueueNative(_cancelNativeSession);
+    return _enqueueNative(
+      () => _cancelNativeSession(null, awaitAcknowledgement: false),
+    );
   }
 
   Future<T> _enqueueNative<T>(Future<T> Function() operation) {
@@ -476,6 +511,17 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
       TargetPlatform.fuchsia => SpeechPlatform.linux,
     };
   }
+}
+
+class _CancellationFence {
+  final int intent;
+  final _LogicalSession session;
+  final Completer<void> acknowledged = Completer<void>();
+
+  _CancellationFence({required this.intent, required this.session});
+
+  bool get matchesInvalidatedSession =>
+      session.terminal && session.intent == intent;
 }
 
 class _LogicalSession {

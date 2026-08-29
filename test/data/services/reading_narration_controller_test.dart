@@ -299,6 +299,29 @@ void main() {
   );
 
   test(
+    'rejected settings preserve active playback and callback tracking',
+    () async {
+      await controller.play(queue);
+      final utterance = engine.lastUtteranceId!;
+      engine.configureError = StateError('settings failed');
+
+      await expectLater(
+        controller.updateSettings(const SpeechEngineSettings(rate: 0.7)),
+        completes,
+      );
+
+      expect(controller.state.status, NarrationStatus.playing);
+      expect(controller.state.errorMessage, contains('settings failed'));
+      engine.emitProgress(utterance, start: 3, end: 7, word: 'word');
+      expect(controller.state.progressStart, 3);
+      engine.emitCompletion(utterance);
+      await Future<void>.delayed(Duration.zero);
+      expect(controller.state.status, NarrationStatus.playing);
+      expect(controller.state.currentIndex, 1);
+    },
+  );
+
+  test(
     'no installed voices produces an actionable unavailable state',
     () async {
       engine.voices = const <SpeechVoice>[];

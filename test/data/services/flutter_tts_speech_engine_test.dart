@@ -255,6 +255,40 @@ void main() {
     );
   });
 
+  for (final throws in <bool>[false, true]) {
+    test(
+      'reports a later chunk ${throws ? 'throw' : 'non-success result'} once',
+      () async {
+        final driver = FakeFlutterTtsDriver()
+          ..speakResults.addAll(<Object?>[true, throws ? _throwSpeak : 0]);
+        final errors = <String>[];
+        final engine = FlutterTtsSpeechEngine(
+          driver: driver,
+          platform: SpeechPlatform.android,
+        );
+        engine.setCallbacks(
+          _callbacks(onError: (id, message) => errors.add('$id:$message')),
+        );
+        final text = List<String>.filled(
+          180,
+          'And God saw that it was good. ',
+        ).join();
+
+        await engine.speak(text, utteranceId: 'long');
+        driver.emitStart();
+        driver.emitCompletion();
+        await Future<void>.delayed(Duration.zero);
+        await Future<void>.delayed(Duration.zero);
+
+        expect(errors, hasLength(1));
+        expect(errors.single, startsWith('long:'));
+        driver.emitStart();
+        driver.emitCompletion();
+        expect(errors, hasLength(1));
+      },
+    );
+  }
+
   test(
     'rejects non-success dynamic plugin results deterministically',
     () async {
@@ -388,6 +422,22 @@ void main() {
     expect(driver.spokenTexts, <String>['Web text.']);
   });
 
+  test('accepts the web plugin null setVoice success shape', () async {
+    final driver = FakeFlutterTtsDriver()..setVoiceResult = null;
+    final engine = FlutterTtsSpeechEngine(
+      driver: driver,
+      platform: SpeechPlatform.web,
+    );
+
+    await engine.configure(
+      const SpeechEngineSettings(
+        voice: SpeechVoice(name: 'Web English', locale: 'en-US'),
+      ),
+    );
+
+    expect(driver.voices, hasLength(1));
+  });
+
   test('failed initialization can be retried', () async {
     final driver = FakeFlutterTtsDriver()
       ..awaitCompletionResults.addAll(<Object?>[false, true]);
@@ -450,6 +500,46 @@ void main() {
       'complete:new',
     ]);
   });
+
+  test(
+    'new speak remains fenced beyond 100ms until cancel acknowledgement',
+    () async {
+      final driver = FakeFlutterTtsDriver()..autoCancelOnStop = false;
+      final events = <String>[];
+      final engine = FlutterTtsSpeechEngine(
+        driver: driver,
+        platform: SpeechPlatform.android,
+      );
+      engine.setCallbacks(
+        SpeechEngineCallbacks(
+          onStart: (id) => events.add('start:$id'),
+          onContinue: (id) => events.add('continue:$id'),
+          onCompletion: (id) => events.add('complete:$id'),
+          onError: (id, message) => events.add('error:$id:$message'),
+          onProgress: (id, start, end, word) =>
+              events.add('progress:$id:$word'),
+        ),
+      );
+      await engine.speak('Old text.', utteranceId: 'old');
+      driver.emitStart();
+
+      final replacement = engine.speak('New text.', utteranceId: 'new');
+      await Future<void>.delayed(const Duration(milliseconds: 150));
+      driver.emitCompletion();
+      driver.emitStart();
+      driver.emitProgress('Old text.', 0, 3, 'Old');
+
+      expect(driver.spokenTexts, <String>['Old text.']);
+      expect(events, <String>['start:old']);
+
+      driver.emitCancel();
+      await replacement;
+      expect(driver.spokenTexts, <String>['Old text.', 'New text.']);
+      driver.emitStart();
+      driver.emitCompletion();
+      expect(events, <String>['start:old', 'start:new', 'complete:new']);
+    },
+  );
 
   test('forwards native continue with the resumed utterance id', () async {
     final driver = FakeFlutterTtsDriver();
@@ -571,6 +661,7 @@ class FakeFlutterTtsDriver implements FlutterTtsDriver {
   Object? setPitchResult = true;
   Object? setVoiceResult = true;
   Object? speakResult = true;
+  final List<Object?> speakResults = <Object?>[];
   Object? pauseResult = true;
   Object? stopResult = true;
   bool autoCancelOnStop = true;
@@ -665,6 +756,12 @@ class FakeFlutterTtsDriver implements FlutterTtsDriver {
   @override
   Future<Object?> speak(String text) async {
     spokenTexts.add(text);
+    if (speakResults.isNotEmpty) {
+      final result = speakResults.removeAt(0);
+      if (identical(result, _throwSpeak))
+        throw StateError('later chunk failed');
+      return result;
+    }
     return speakResult;
   }
 
@@ -685,3 +782,5 @@ class FakeFlutterTtsDriver implements FlutterTtsDriver {
   void emitProgress(String text, int start, int end, String word) =>
       progressHandler?.call(text, start, end, word);
 }
+
+const Object _throwSpeak = Object();

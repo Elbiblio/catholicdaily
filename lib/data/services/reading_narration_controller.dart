@@ -236,7 +236,11 @@ class ReadingNarrationController extends ChangeNotifier {
       _settings = settings;
     } catch (error) {
       if (!_disposed && command == _settingsCommandToken) {
-        _failOperation(error);
+        if (_isActive(_state.status)) {
+          _emit(_state.copyWith(errorMessage: _messageFor(error)));
+        } else {
+          _failOperation(error);
+        }
       }
     }
   }
