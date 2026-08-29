@@ -564,7 +564,7 @@ void main() {
   });
 
   test(
-    'active web stop uses the native stop result as acknowledgement',
+    'active web stop waits for its asynchronous terminal acknowledgement',
     () async {
       final driver = FakeFlutterTtsDriver()..autoCancelOnStop = false;
       final engine = FlutterTtsSpeechEngine(
@@ -574,7 +574,14 @@ void main() {
       await engine.speak('Web text.', utteranceId: 'web');
       driver.emitStart();
 
-      await engine.stop().timeout(const Duration(milliseconds: 300));
+      final stop = engine.stop();
+      var stopped = false;
+      unawaited(stop.then((_) => stopped = true));
+      await Future<void>.delayed(Duration.zero);
+      expect(stopped, isFalse);
+
+      driver.emitError('canceled');
+      await stop.timeout(const Duration(milliseconds: 300));
 
       expect(driver.spokenTexts, <String>['Web text.']);
     },
@@ -620,15 +627,35 @@ void main() {
       await engine.speak('Old web text.', utteranceId: 'old');
       driver.emitStart();
 
-      await engine.speak('New web text.', utteranceId: 'new');
+      final replacement = engine.speak('New web text.', utteranceId: 'new');
+      await Future<void>.delayed(Duration.zero);
+      driver.emitStart();
       driver.emitError('canceled old utterance');
       expect(errors, isEmpty);
+      await replacement.timeout(const Duration(milliseconds: 300));
 
       driver.emitStart();
       driver.emitError('new utterance failed');
       expect(errors, <String>['new:new utterance failed']);
     },
   );
+
+  test('genuine web error before start reaches the active utterance', () async {
+    final driver = FakeFlutterTtsDriver();
+    final errors = <String>[];
+    final engine = FlutterTtsSpeechEngine(
+      driver: driver,
+      platform: SpeechPlatform.web,
+    );
+    engine.setCallbacks(
+      _callbacks(onError: (id, message) => errors.add('$id:$message')),
+    );
+    await engine.speak('Unsupported text.', utteranceId: 'current');
+
+    driver.emitError('synthesis failed');
+
+    expect(errors, <String>['current:synthesis failed']);
+  });
 
   test(
     'forwards active errors and safely ignores callbacks after dispose',
