@@ -510,7 +510,7 @@ class CsvReadingsResolverService
     }
     final catalog = await (_nigeriaPsalmUsages ??=
         NigeriaPsalmUsageService.load());
-    final choices = catalog.resolve(context);
+    final choices = catalog.resolve(context.onDate(date));
     if (choices.isEmpty) return readings;
     if (context.kind == LiturgicalPsalmUsageKind.specialPeriod &&
         context.specialDay == 'easter-vigil') {
@@ -660,7 +660,8 @@ class CsvReadingsResolverService
       date: date,
       feast: base.feast,
       psalmResponse: entry.responseText,
-      source: 'nigeria_usage:${entry.usageId}',
+      source:
+          'nigeria_usage:${entry.usageId}|${entry.sourceEdition}|${entry.reviewStatus}|${entry.sourceDate}',
     );
   }
 
@@ -813,6 +814,55 @@ class CsvReadingsResolverService
     final celebrationTitle = canonical(celebration);
     if (sourceTitle == celebrationTitle) return true;
     return sourceTitle.startsWith('$celebrationTitle ');
+  }
+
+  /// Returns reviewed Common selections that are present in the bundled
+  /// lectionary source. A Common is exposed only when the celebration's
+  /// catalog classification explicitly sanctions it.
+  Future<List<NamedReadingChoice>> resolveCommonChoices({
+    required DateTime date,
+    required String commonType,
+  }) async {
+    final normalized = commonType.trim().toLowerCase().replaceAll(
+      RegExp(r'[^a-z0-9]+'),
+      '',
+    );
+    if (normalized != 'martyrs' && normalized != 'virginmartyrs') {
+      return const <NamedReadingChoice>[];
+    }
+
+    // Bundled Canadian lectionary, Common of Martyrs, nos. 713–718.
+    const source =
+        'common_lectionary:scripts/weekday_b_full.txt#713-718|Catholic Daily RSVCE';
+    final normalizedDate = _normalizeDate(date);
+    return <NamedReadingChoice>[
+      NamedReadingChoice(
+        label: 'Common of Martyrs',
+        readings: <DailyReading>[
+          DailyReading(
+            reading: 'Wis 3:1-9',
+            position: 'First Reading',
+            date: normalizedDate,
+            source: source,
+          ),
+          DailyReading(
+            reading: 'Ps 124:2-3, 4-5, 7b-8',
+            position: 'Responsorial Psalm',
+            date: normalizedDate,
+            psalmResponse:
+                'Our soul has escaped like a bird from the hunter’s net.',
+            source: source,
+          ),
+          DailyReading(
+            reading: 'Matt 10:28-33',
+            position: 'Gospel',
+            date: normalizedDate,
+            gospelAcclamation: 'Mt 5:10',
+            source: source,
+          ),
+        ],
+      ),
+    ];
   }
 
   /// Returns a separately labelled Vigil set when the resolved celebration

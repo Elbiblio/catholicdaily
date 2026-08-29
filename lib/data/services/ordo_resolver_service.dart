@@ -22,6 +22,7 @@ class OrdoResolverService {
   final Map<int, OrdoYearVariables> _yearVarCache = {};
   final OfflineOrdoLookupService _offline = OfflineOrdoLookupService.instance;
   final ReadingCatalogService _readingCatalog = ReadingCatalogService.instance;
+  Future<LiturgicalDay> Function(DateTime)? _onlineResolverForTesting;
   LiturgicalRegion _lastKnownRegion = LiturgicalRegion.generalRoman;
   bool _regionPreferencesUnavailable = false;
 
@@ -35,6 +36,14 @@ class OrdoResolverService {
   void setPreferOffline(bool preferOffline) {
     if (_preferOffline == preferOffline) return;
     _preferOffline = preferOffline;
+    _dayCache.clear();
+  }
+
+  @visibleForTesting
+  void setOnlineResolverForTesting(
+    Future<LiturgicalDay> Function(DateTime)? resolver,
+  ) {
+    _onlineResolverForTesting = resolver;
     _dayCache.clear();
   }
 
@@ -55,9 +64,12 @@ class OrdoResolverService {
         return resolvedDay;
       }
 
-      final resolved = await _resolveViaCalendarApi(date);
-      _dayCache[key] = resolved;
-      return resolved;
+      final onlineResolver =
+          _onlineResolverForTesting ?? _resolveViaCalendarApi;
+      final resolved = await onlineResolver(date);
+      final resolvedDay = await _withFixedObligatoryMemorial(date, resolved);
+      _dayCache[key] = resolvedDay;
+      return resolvedDay;
     } catch (_) {
       try {
         final offlineDay = _offline.resolve(date, region: region);

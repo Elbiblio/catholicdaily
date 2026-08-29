@@ -11,6 +11,7 @@ class LiturgicalPsalmUsageContext {
   final String specialDay;
   final String sundayCycle;
   final String weekdayCycle;
+  final String date;
 
   const LiturgicalPsalmUsageContext._({
     required this.territory,
@@ -23,6 +24,7 @@ class LiturgicalPsalmUsageContext {
     this.specialDay = '',
     this.sundayCycle = '',
     this.weekdayCycle = '',
+    this.date = '',
   });
 
   const LiturgicalPsalmUsageContext.temporal({
@@ -32,6 +34,7 @@ class LiturgicalPsalmUsageContext {
     required int weekday,
     String sundayCycle = '',
     String weekdayCycle = '',
+    String date = '',
   }) : this._(
          territory: territory,
          kind: LiturgicalPsalmUsageKind.temporal,
@@ -40,6 +43,7 @@ class LiturgicalPsalmUsageContext {
          weekday: weekday,
          sundayCycle: sundayCycle,
          weekdayCycle: weekdayCycle,
+         date: date,
        );
 
   const LiturgicalPsalmUsageContext.celebration({
@@ -48,6 +52,7 @@ class LiturgicalPsalmUsageContext {
     String massForm = 'day',
     String sundayCycle = '',
     String weekdayCycle = '',
+    String date = '',
   }) : this._(
          territory: territory,
          kind: LiturgicalPsalmUsageKind.celebration,
@@ -55,6 +60,7 @@ class LiturgicalPsalmUsageContext {
          massForm: massForm,
          sundayCycle: sundayCycle,
          weekdayCycle: weekdayCycle,
+         date: date,
        );
 
   const LiturgicalPsalmUsageContext.specialPeriod({
@@ -63,6 +69,7 @@ class LiturgicalPsalmUsageContext {
     String massForm = '',
     String sundayCycle = '',
     String weekdayCycle = '',
+    String date = '',
   }) : this._(
          territory: territory,
          kind: LiturgicalPsalmUsageKind.specialPeriod,
@@ -70,5 +77,23 @@ class LiturgicalPsalmUsageContext {
          massForm: massForm,
          sundayCycle: sundayCycle,
          weekdayCycle: weekdayCycle,
+         date: date,
        );
+
+  LiturgicalPsalmUsageContext onDate(
+    DateTime value,
+  ) => LiturgicalPsalmUsageContext._(
+    territory: territory,
+    kind: kind,
+    celebrationId: celebrationId,
+    massForm: massForm,
+    season: season,
+    week: week,
+    weekday: weekday,
+    specialDay: specialDay,
+    sundayCycle: sundayCycle,
+    weekdayCycle: weekdayCycle,
+    date:
+        '${value.year.toString().padLeft(4, '0')}-${value.month.toString().padLeft(2, '0')}-${value.day.toString().padLeft(2, '0')}',
+  );
 }

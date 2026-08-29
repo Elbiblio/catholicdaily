@@ -25,6 +25,8 @@ void main() {
       await prefs.setRegion(LiturgicalRegion.nigeria);
       final celebrations = OptionalMemorialService.instance.allCelebrations;
       final lookup = OfflineOrdoLookupService.instance;
+      final catalog = ReadingCatalogService.instance;
+      final resolver = CsvReadingsResolverService.instance;
       final byDate = <String, List<OptionalCelebration>>{};
       for (final celebration in celebrations) {
         byDate
@@ -58,9 +60,29 @@ void main() {
         }
 
         for (final celebration in entry.value) {
-          final title = celebration.title;
-          if (!sets.any((set) => set.label.contains(title))) {
-            problems.add('$entry does not expose $title');
+          final row = await catalog.findMemorialEntry(
+            celebrationId: celebration.id,
+            celebrationTitle: celebration.title,
+          );
+          final hasProper =
+              row != null &&
+              (row.firstReading.isNotEmpty || row.gospel.isNotEmpty);
+          final commonChoices = celebration.commonType?.trim().isEmpty == false
+              ? await resolver.resolveCommonChoices(
+                  date: date,
+                  commonType: celebration.commonType!,
+                )
+              : const <NamedReadingChoice>[];
+          if (hasProper &&
+              !sets.any((set) => set.label.contains(celebration.title))) {
+            problems.add('$entry does not expose ${celebration.title} proper');
+          }
+          for (final common in commonChoices) {
+            if (!sets.any((set) => set.label.contains(common.label))) {
+              problems.add(
+                '$entry does not expose ${celebration.title} ${common.label}',
+              );
+            }
           }
         }
 
@@ -134,7 +156,7 @@ void main() {
   );
 
   test(
-    'every regional celebration identity resolves and every local source surfaces',
+    'all supported regional event paths resolve or match the gap snapshot',
     () async {
       final decoded =
           jsonDecode(
@@ -146,30 +168,43 @@ void main() {
       final events = (decoded['events'] as List<dynamic>)
           .cast<Map<String, dynamic>>();
       final identityEvents = <String, Map<String, dynamic>>{};
-      final titleEvents = <String, Map<String, dynamic>>{};
       for (final event in events) {
         final identityKey = '${event['region']}|${event['celebration_id']}';
         identityEvents.putIfAbsent(identityKey, () => event);
-        titleEvents.putIfAbsent(event['celebration_id'] as String, () => event);
       }
 
       final catalog = ReadingCatalogService.instance;
       final resolver = CsvReadingsResolverService.instance;
       final prefs = await LiturgicalRegionPreferenceService.getInstance();
       final allRows = await catalog.loadMemorialEntries();
-      final resolutionById = <String, List<String>>{};
-      final rowById = <String, MemorialFeastEntry?>{};
       final invalidReadings = <String>[];
       final unresolvedAliases = <String>[];
+      final identityTitles = <String, String>{};
+      final titleCollisions = <String>[];
+      final sourceGaps = <String>{};
+      final sourceGapIds = <String>{};
+      final surfacedLocalSources = <String>{};
+      final surfacedCommonSources = <String>{};
+      LiturgicalRegion? currentRegion;
 
-      for (final event in titleEvents.values) {
+      for (final event in events) {
         final id = event['celebration_id'] as String;
         final title = event['title'] as String;
         final region = LiturgicalRegion.values.byName(
           event['region'] as String,
         );
-        await prefs.setRegion(region);
+        if (region != currentRegion) {
+          await prefs.setRegion(region);
+          currentRegion = region;
+        }
         final date = DateTime.parse(event['date'] as String);
+        final identityKey = '${event['region']}|$id';
+        final previousTitle = identityTitles[identityKey];
+        if (previousTitle != null && previousTitle != title) {
+          titleCollisions.add('$identityKey: $previousTitle <> $title');
+        }
+        identityTitles[identityKey] = title;
+
         final row = await catalog.findMemorialEntry(
           celebrationId: id,
           celebrationTitle: title,
@@ -185,84 +220,131 @@ void main() {
           }.any(requestedIdentities.contains),
         );
         if (hasDirectCatalogIdentity && row == null) {
-          unresolvedAliases.add('$id — $title');
+          unresolvedAliases.add('$identityKey — $title');
         }
         final readings = await resolver.resolveCelebrationChoice(
           date: date,
           celebrationId: id,
           celebrationTitle: title,
         );
-        rowById[id] = row;
-        resolutionById[id] = readings
-            .map((reading) => reading.reading)
-            .toList();
+        if (readings.isNotEmpty) {
+          surfacedLocalSources.add(identityKey);
+        } else {
+          final registryMatches = OptionalMemorialService.instance
+              .getAllCelebrationsForDate(date)
+              .where(
+                (celebration) =>
+                    _auditIdentity(celebration.id) == _auditIdentity(id) ||
+                    _auditIdentity(celebration.title) == _auditIdentity(title),
+              );
+          final commonType = row?.commonType.trim().isNotEmpty == true
+              ? row!.commonType
+              : registryMatches.isEmpty
+              ? ''
+              : registryMatches.first.commonType ?? '';
+          final commonChoices = commonType.isEmpty
+              ? const <NamedReadingChoice>[]
+              : await resolver.resolveCommonChoices(
+                  date: date,
+                  commonType: commonType,
+                );
+          if (commonChoices.isNotEmpty) {
+            surfacedCommonSources.add(identityKey);
+          } else {
+            sourceGaps.add(identityKey);
+            sourceGapIds.add(id);
+          }
+        }
         for (final reading in readings) {
           if ((reading.position ?? '').contains('Sequence')) continue;
           if (ReadingReferenceParser.parse(reading.reading).isEmpty) {
-            invalidReadings.add('$id has invalid ${reading.reading}');
+            invalidReadings.add('$identityKey has invalid ${reading.reading}');
           }
         }
       }
 
-      final unsurfacedSources = <String>[];
-      final sourceGaps = <String>{};
-      for (final event in titleEvents.values) {
-        final id = event['celebration_id'] as String;
-        final row = rowById[id];
-        if (row == null) continue;
-        final hasLocalSource =
-            row.firstReading.isNotEmpty || row.gospel.isNotEmpty;
-        if (hasLocalSource && (resolutionById[id]?.isEmpty ?? true)) {
-          unsurfacedSources.add(id);
-        } else if (!hasLocalSource) {
-          sourceGaps.add(id);
-        }
-      }
-      for (final event in titleEvents.values) {
-        final id = event['celebration_id'] as String;
-        if (rowById[id] == null && (resolutionById[id]?.isEmpty ?? true)) {
-          sourceGaps.add(id);
-        }
-      }
-
-      final sourcedCatalogRows = rowById.values
-          .whereType<MemorialFeastEntry>()
-          .where((row) => row.firstReading.isNotEmpty || row.gospel.isNotEmpty)
-          .map((row) => row.id)
-          .toSet();
-
-      final canonicalIdentityTitles = <String, String>{};
-      final identityCollisions = <String>[];
-      for (final event in titleEvents.values) {
-        final id = (event['celebration_id'] as String).toLowerCase().replaceAll(
-          RegExp(r'[^a-z0-9]+'),
-          '_',
-        );
-        final title = event['title'] as String;
-        final existing = canonicalIdentityTitles[id];
-        if (existing != null && existing != title) {
-          identityCollisions.add('$id: $existing <> $title');
-        }
-        canonicalIdentityTitles[id] = title;
-      }
-
-      // Kept concise so CI reports the exhaustiveness and honest source gaps.
       // ignore: avoid_print
       print(
-        'celebration identities=${identityEvents.length} '
-        'catalog titles=${titleEvents.length} '
-        'local sources surfaced=${sourcedCatalogRows.length} '
-        'source gaps=${sourceGaps.length}',
+        'event paths=${events.length} identities=${identityEvents.length} '
+        'local=${surfacedLocalSources.length} '
+        'common=${surfacedCommonSources.length} '
+        'source gap paths=${sourceGaps.length} '
+        'source gap ids=${sourceGapIds.length}',
       );
-      expect(identityEvents.length, greaterThan(1100));
-      expect(
-        identityCollisions,
-        isEmpty,
-        reason: identityCollisions.join('\n'),
-      );
-      expect(unsurfacedSources, isEmpty, reason: unsurfacedSources.join('\n'));
+      expect(events, hasLength(11510));
+      expect(identityEvents, hasLength(1143));
+      expect(titleCollisions, isEmpty, reason: titleCollisions.join('\n'));
       expect(unresolvedAliases, isEmpty, reason: unresolvedAliases.join('\n'));
       expect(invalidReadings, isEmpty, reason: invalidReadings.join('\n'));
+      expect(
+        sourceGapIds,
+        equals(_expectedRegionalSourceGaps),
+        reason:
+            'Update the reviewed source-gap snapshot only when a local proper/common source is added or catalog scope changes:\n${(sourceGapIds.toList()..sort()).join('\n')}',
+      );
+      expect(sourceGaps, hasLength(_expectedRegionalSourceGapPathCount));
+    },
+    timeout: const Timeout(Duration(minutes: 12)),
+  );
+
+  test(
+    'all populated memorial rows surface or have an explicit temporal class',
+    () async {
+      final catalog = ReadingCatalogService.instance;
+      final rows = (await catalog.loadMemorialEntries())
+          .where((row) => row.firstReading.isNotEmpty || row.gospel.isNotEmpty)
+          .toList();
+      final resolver = CsvReadingsResolverService.instance;
+      final prefs = await LiturgicalRegionPreferenceService.getInstance();
+      await prefs.setRegion(LiturgicalRegion.nigeria);
+      final problems = <String>[];
+      final classifications = <String, int>{};
+
+      for (final row in rows) {
+        DateTime? date;
+        String classification;
+        final month = int.tryParse(row.month);
+        final day = int.tryParse(row.day);
+        if (month != null && day != null) {
+          classification = 'fixed-local';
+          for (var year = 2024; year <= 2035; year++) {
+            final candidate = DateTime(year, month, day);
+            if (candidate.weekday != DateTime.sunday) {
+              date = candidate;
+              break;
+            }
+          }
+        } else {
+          classification = _temporalClassification(row.id);
+          date = _representativeTemporalDate(row.dateRule);
+        }
+        classifications.update(
+          classification,
+          (count) => count + 1,
+          ifAbsent: () => 1,
+        );
+        if (date == null) {
+          problems.add('${row.id}: no representative date for ${row.dateRule}');
+          continue;
+        }
+
+        final readings = await resolver.resolveCelebrationChoice(
+          date: date,
+          celebrationId: row.id,
+          celebrationTitle: row.title,
+        );
+        if (readings.isEmpty) {
+          problems.add('${row.id}: $classification did not surface on $date');
+        }
+      }
+
+      // ignore: avoid_print
+      print('populated rows=${rows.length} classifications=$classifications');
+      expect(rows, hasLength(62));
+      expect(classifications['fixed-local'], 53);
+      expect(classifications['triduum'], 4);
+      expect(classifications['temporal-solemnity-or-feast'], 5);
+      expect(problems, isEmpty, reason: problems.join('\n'));
     },
     timeout: const Timeout(Duration(minutes: 4)),
   );
@@ -345,3 +427,100 @@ String _auditIdentity(String value) {
       }[normalized] ??
       normalized;
 }
+
+String _temporalClassification(String id) {
+  if (const <String>{
+    'friday_of_the_passion_of_the_lord',
+    'good_friday_of_the_lords_passion',
+    'holy_saturday',
+    'holy_thursday_evening_mass_of_the_lords_supper',
+  }.contains(id)) {
+    return 'triduum';
+  }
+  return 'temporal-solemnity-or-feast';
+}
+
+DateTime? _representativeTemporalDate(String dateRule) {
+  return switch (dateRule) {
+    'Easter Sunday' => DateTime(2026, 4, 5),
+    'Friday before Easter' || 'Good Friday' => DateTime(2026, 4, 3),
+    'Saturday before Easter' => DateTime(2026, 4, 4),
+    "Thursday before Easter" => DateTime(2026, 4, 2),
+    'Last Sunday of the liturgical year' => DateTime(2026, 11, 22),
+    'Sunday before Easter' => DateTime(2026, 3, 29),
+    'Sunday within the Octave of Christmas, or December 30 if no Sunday occurs' =>
+      DateTime(2026, 12, 27),
+    'Saturday after the Solemnity of the Most Sacred Heart of Jesus' =>
+      DateTime(2026, 6, 13),
+    _ => null,
+  };
+}
+
+const Set<String> _expectedRegionalSourceGaps = <String>{
+  'albert-the-great',
+  'angela-merici',
+  'anselm-of-canterbury',
+  'ansgar-of-hamburg',
+  'anthony-mary-claret',
+  'anthony-zaccaria',
+  'augustine-of-canterbury',
+  'bede-the-venerable',
+  'bernardine-of-siena',
+  'bridget-of-sweden',
+  'bruno-of-cologne',
+  'cajetan-of-thiene',
+  'camillus-de-lellis',
+  'casimir-of-poland',
+  'columban-of-luxeuil',
+  'cyril-of-alexandria',
+  'damasus-i-pope',
+  'dedication-of-basilicas-of-peter-and-paul',
+  'elizabeth-of-portugal',
+  'ephrem-the-syrian',
+  'eusebius-of-vercelli',
+  'gertrude-the-great',
+  'gregory-of-narek',
+  'gregory-vii-pope',
+  'hedwig-of-silesia',
+  'henry-ii-emperor',
+  'hilary-of-poitiers',
+  'isidore-of-seville',
+  'jane-frances-de-chantal',
+  'jerome-emiliani',
+  'john-damascene',
+  'john-eudes',
+  'john-leonardi',
+  'john-of-avila',
+  'john-of-capistrano',
+  'joseph-of-calasanz',
+  'josephine-bakhita',
+  'juan-diego',
+  'lawrence-of-brindisi',
+  'louis-grignion-de-montfort',
+  'louis-ix-of-france',
+  'margaret-mary-alacoque',
+  'margaret-of-scotland',
+  'mary-magdalene-de-pazzi',
+  'mary-mother-of-the-church',
+  'nicholas-of-myra',
+  'norbert-of-xanten',
+  'paul-of-the-cross',
+  'paul-vi-pope',
+  'paulinus-of-nola',
+  'peter-chrysologus',
+  'peter-claver',
+  'peter-damian',
+  'peter-julian-eymard',
+  'pius-v-pope',
+  'raymond-of-penyafort',
+  'rita-of-cascia',
+  'robert-bellarmine',
+  'romuald-of-ravenna',
+  'saint-barnabas-apostle',
+  'seven-holy-founders-of-servites',
+  'sharbel-makhluf',
+  'stephen-of-hungary',
+  'turibius-of-mogrovejo',
+  'vincent-ferrer',
+};
+const int _expectedRegionalSourceGapPathCount = 454;

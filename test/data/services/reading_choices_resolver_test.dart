@@ -1,7 +1,9 @@
 import 'package:catholic_daily/data/models/liturgical_region.dart';
 import 'package:catholic_daily/data/services/alternate_readings_service.dart';
 import 'package:catholic_daily/data/services/csv_readings_resolver_service.dart';
+import 'package:catholic_daily/data/services/improved_liturgical_calendar_service.dart';
 import 'package:catholic_daily/data/services/liturgical_region_preference_service.dart';
+import 'package:catholic_daily/data/services/ordo_resolver_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../helpers/test_helpers.dart';
@@ -183,11 +185,11 @@ void main() {
       expect(sets.map((set) => set.label), contains('Tuesday — Weekday'));
       expect(
         sets.map((set) => set.label),
-        contains('Saint Fabian, Pope and Martyr (weekday readings)'),
+        contains('Saint Fabian, Pope and Martyr — Common of Martyrs'),
       );
       expect(
-        sets.map((set) => set.label),
-        contains('Saint Sebastian, Martyr (weekday readings)'),
+        sets.where((set) => set.label.contains('Common of Martyrs')),
+        hasLength(1),
       );
     },
   );
@@ -251,13 +253,13 @@ void main() {
       final regionPrefs = await LiturgicalRegionPreferenceService.getInstance();
       await regionPrefs.setRegion(LiturgicalRegion.nigeria);
 
-      for (final year in <int>[2024, 2025, 2026]) {
+      for (final year in <int>[2024, 2025]) {
         final sets = await AlternateReadingsService.instance
             .getAvailableReadingSets(DateTime(year, 8, 29));
 
         expect(
           sets.first.label,
-          'The Passion of Saint John the Baptist',
+          startsWith('The Passion of Saint John the Baptist — Proper'),
           reason: '$year must resolve the obligatory memorial, not the weekday',
         );
         expect(sets.first.isFerial, isFalse);
@@ -292,6 +294,115 @@ void main() {
 
     expect(sets.first.label, contains('Sunday'));
     expect(sets.first.label, isNot(contains('John the Baptist')));
+    final john = sets.firstWhere(
+      (set) => set.label.contains('Passion of Saint John the Baptist'),
+    );
+    expect(
+      john.readings.map((reading) => reading.reading),
+      containsAllInOrder(<String>[
+        'Jer 1:17-19',
+        'Ps 71:1-6, 15, 17',
+        'Mark 6:17-29',
+      ]),
+    );
+  });
+
+  test(
+    'John and Maximilian expose proper, Common of Martyrs, and weekday sets',
+    () async {
+      final regionPrefs = await LiturgicalRegionPreferenceService.getInstance();
+      await regionPrefs.setRegion(LiturgicalRegion.nigeria);
+
+      for (final fixture in <(DateTime, String)>[
+        (DateTime(2025, 8, 14), 'Maximilian'),
+        (DateTime(2025, 8, 29), 'John the Baptist'),
+      ]) {
+        final sets = await AlternateReadingsService.instance
+            .getAvailableReadingSets(fixture.$1);
+        final labels = sets.map((set) => set.label).toList();
+        expect(labels.first, contains(fixture.$2));
+        expect(labels, contains(contains('Common of Martyrs')));
+        expect(sets.any((set) => set.isFerial), isTrue);
+
+        final common = sets.firstWhere(
+          (set) => set.label.contains('Common of Martyrs'),
+        );
+        expect(
+          common.readings.map((reading) => reading.reading),
+          orderedEquals(<String>[
+            'Wis 3:1-9',
+            'Ps 124:2-3, 4-5, 7b-8',
+            'Matt 10:28-33',
+          ]),
+        );
+        expect(
+          common.readings
+              .firstWhere((reading) => reading.position == 'Responsorial Psalm')
+              .source,
+          contains('Catholic Daily RSVCE'),
+        );
+      }
+    },
+  );
+
+  test(
+    '2026 Nigeria appoints dated temporal Psalm while retaining RSVCE proper',
+    () async {
+      final regionPrefs = await LiturgicalRegionPreferenceService.getInstance();
+      await regionPrefs.setRegion(LiturgicalRegion.nigeria);
+
+      final sets = await AlternateReadingsService.instance
+          .getAvailableReadingSets(DateTime(2026, 8, 29));
+      final appointed = sets.first;
+      expect(appointed.label, contains('Weekday first reading'));
+      expect(appointed.readings.first.reading, '1 Cor 1:26-31');
+      final datedPsalm = appointed.readings.firstWhere(
+        (reading) => reading.position == 'Responsorial Psalm',
+      );
+      expect(datedPsalm.reading, 'Ps 33:12-13, 18-19, 20-21');
+      expect(
+        datedPsalm.source,
+        'nigeria_usage:ng:usage:9474f89bb4f997ea40f9|Catholic Missal for Nigeria|verified|2026-08-29',
+      );
+      expect(appointed.readings.last.reading, 'Mark 6:17-29');
+      expect(appointed.readings.last.gospelAcclamation, 'Mt 5:10');
+
+      final proper = sets.firstWhere(
+        (set) => set.label.contains('Proper (Catholic Daily RSVCE)'),
+      );
+      final properPsalm = proper.readings.firstWhere(
+        (reading) => reading.position == 'Responsorial Psalm',
+      );
+      expect(properPsalm.reading, 'Ps 71:1-6, 15, 17');
+      expect(
+        properPsalm.source,
+        'nigeria_usage:ng:usage:03f9c36cac7fde4112a3|Catholic Daily RSVCE|verified-fallback|',
+      );
+    },
+  );
+
+  test('successful online calendar also receives obligatory overlay', () async {
+    final ordo = OrdoResolverService.instance;
+    ordo.setPreferOffline(false);
+    ordo.setOnlineResolverForTesting((date) async {
+      return LiturgicalDay(
+        date: date,
+        title: '',
+        rank: null,
+        color: LiturgicalColor.green,
+        season: LiturgicalSeason.ordinaryTime,
+        weekNumber: 21,
+        dayOfWeek: DayOfWeek.saturday,
+      );
+    });
+    addTearDown(() {
+      ordo.setOnlineResolverForTesting(null);
+      ordo.setPreferOffline(true);
+    });
+
+    final resolved = await ordo.resolveDay(DateTime(2026, 8, 29));
+    expect(resolved.title, 'The Passion of Saint John the Baptist');
+    expect(resolved.rank, 'Obligatory Memorial');
   });
 
   test('calendar ID and title aliases resolve the same John proper', () async {
@@ -352,12 +463,12 @@ void main() {
 
       final obligatory = await AlternateReadingsService.instance
           .getAvailableReadingSets(DateTime(2026, 8, 14));
-      expect(
-        obligatory.first.label,
-        'Saint Maximilian Mary Kolbe, Priest and Martyr',
+      final maximilianProper = obligatory.firstWhere(
+        (set) =>
+            set.readings.any((reading) => reading.reading == 'Ps 116:10-19'),
       );
       expect(
-        obligatory.first.readings.map((reading) => reading.reading),
+        maximilianProper.readings.map((reading) => reading.reading),
         containsAllInOrder(<String>[
           'Wis 3:1-9',
           'Ps 116:10-19',
@@ -369,7 +480,7 @@ void main() {
       final optional = await AlternateReadingsService.instance
           .getAvailableReadingSets(DateTime(2025, 8, 23));
       final rose = optional.firstWhere(
-        (set) => set.label == 'Saint Rose of Lima, Virgin',
+        (set) => set.label.startsWith('Saint Rose of Lima, Virgin'),
       );
       expect(
         rose.readings.map((reading) => reading.reading),

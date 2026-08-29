@@ -949,6 +949,17 @@ class OptionalMemorialService {
         commonType: 'Martyrs',
       ),
     ],
+    '8-14': [
+      const OptionalCelebration(
+        id: 'maximilian_mary_kolbe',
+        title: 'Saint Maximilian Mary Kolbe, Priest and Martyr',
+        rank: CelebrationRank.obligatoryMemorial,
+        color: LiturgicalColor.red,
+        month: 8,
+        day: 14,
+        commonType: 'Martyrs',
+      ),
+    ],
     '8-16': [
       const OptionalCelebration(
         id: 'stephen_of_hungary',
@@ -969,6 +980,17 @@ class OptionalMemorialService {
         month: 8,
         day: 19,
         commonType: 'Pastors',
+      ),
+    ],
+    '8-22': [
+      const OptionalCelebration(
+        id: 'queenship_of_blessed_virgin_mary',
+        title: 'The Queenship of the Blessed Virgin Mary',
+        rank: CelebrationRank.obligatoryMemorial,
+        color: LiturgicalColor.white,
+        month: 8,
+        day: 22,
+        commonType: 'BlessedVirginMary',
       ),
     ],
     '8-23': [
@@ -1000,6 +1022,17 @@ class OptionalMemorialService {
         month: 8,
         day: 25,
         commonType: 'Educators',
+      ),
+    ],
+    '8-29': [
+      const OptionalCelebration(
+        id: 'passion_of_john_the_baptist',
+        title: 'The Passion of Saint John the Baptist',
+        rank: CelebrationRank.obligatoryMemorial,
+        color: LiturgicalColor.red,
+        month: 8,
+        day: 29,
+        commonType: 'Martyrs',
       ),
     ],
     // SEPTEMBER
@@ -1034,6 +1067,17 @@ class OptionalMemorialService {
         month: 9,
         day: 12,
         commonType: 'None',
+      ),
+    ],
+    '9-15': [
+      const OptionalCelebration(
+        id: 'our_lady_of_sorrows',
+        title: 'Our Lady of Sorrows',
+        rank: CelebrationRank.obligatoryMemorial,
+        color: LiturgicalColor.white,
+        month: 9,
+        day: 15,
+        commonType: 'BlessedVirginMary',
       ),
     ],
     '9-17': [
@@ -1108,6 +1152,17 @@ class OptionalMemorialService {
         month: 10,
         day: 5,
         commonType: 'Virgins',
+      ),
+    ],
+    '10-7': [
+      const OptionalCelebration(
+        id: 'our_lady_of_the_rosary',
+        title: 'Our Lady of the Rosary',
+        rank: CelebrationRank.obligatoryMemorial,
+        color: LiturgicalColor.white,
+        month: 10,
+        day: 7,
+        commonType: 'BlessedVirginMary',
       ),
     ],
     '10-6': [
@@ -1290,6 +1345,17 @@ class OptionalMemorialService {
         month: 11,
         day: 18,
         commonType: 'None',
+      ),
+    ],
+    '11-21': [
+      const OptionalCelebration(
+        id: 'presentation_of_blessed_virgin_mary',
+        title: 'The Presentation of the Blessed Virgin Mary',
+        rank: CelebrationRank.obligatoryMemorial,
+        color: LiturgicalColor.white,
+        month: 11,
+        day: 21,
+        commonType: 'BlessedVirginMary',
       ),
     ],
     '11-23': [
