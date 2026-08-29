@@ -125,6 +125,113 @@ void main() {
     );
     expect(timezone.forceReschedule, isTrue);
     expect(timezone.reason, FeastReminderRepairReason.timezoneChanged);
+    final iosForced = FeastReminderRepairRequest.fromWorkmanager(
+      FeastReminderBackgroundService.iosForcedRepairTaskIdentifier,
+      null,
+    );
+    expect(iosForced.forceReschedule, isTrue);
+    expect(
+      iosForced.reason,
+      FeastReminderRepairReason.exactAlarmCapabilityChanged,
+    );
+  });
+
+  test(
+    'successful iOS background audit clears marker without resubmit',
+    () async {
+      final outbox = NotificationRepairOutbox();
+      await outbox.markPending(reason: 'test');
+      final repairs = <FeastReminderRepairRequest>[];
+      final runner = NotificationBackgroundAuditRunner(
+        audit: (_) async => true,
+        enqueueRepair: (request) async => repairs.add(request),
+        isIos: true,
+        repairOutbox: outbox,
+      );
+
+      final succeeded = await runner.run(
+        const FeastReminderRepairRequest(
+          reason: FeastReminderRepairReason.occurrenceSync,
+          forceReschedule: false,
+        ),
+      );
+
+      expect(succeeded, isTrue);
+      expect(repairs, isEmpty);
+      expect(await outbox.hasPendingRepair, isFalse);
+    },
+  );
+
+  test('failed iOS background audit resubmits the forced request', () async {
+    final outbox = NotificationRepairOutbox();
+    await outbox.markPending(reason: 'test');
+    final repairs = <FeastReminderRepairRequest>[];
+    final runner = NotificationBackgroundAuditRunner(
+      audit: (_) async => false,
+      enqueueRepair: (request) async => repairs.add(request),
+      isIos: true,
+      repairOutbox: outbox,
+    );
+
+    final succeeded = await runner.run(
+      const FeastReminderRepairRequest(
+        reason: FeastReminderRepairReason.timezoneChanged,
+        forceReschedule: true,
+      ),
+    );
+
+    expect(succeeded, isFalse);
+    expect(repairs, hasLength(1));
+    expect(repairs.single.reason, FeastReminderRepairReason.timezoneChanged);
+    expect(repairs.single.forceReschedule, isTrue);
+    expect(await outbox.hasPendingRepair, isTrue);
+  });
+
+  test('iOS resubmit failure keeps a durable pending marker', () async {
+    final outbox = NotificationRepairOutbox();
+    final runner = NotificationBackgroundAuditRunner(
+      audit: (_) async => throw StateError('offline'),
+      enqueueRepair: (_) async => throw StateError('registration failed'),
+      isIos: true,
+      repairOutbox: outbox,
+    );
+
+    final succeeded = await runner.run(
+      const FeastReminderRepairRequest(
+        reason: FeastReminderRepairReason.occurrenceSync,
+        forceReschedule: false,
+      ),
+    );
+
+    expect(succeeded, isFalse);
+    expect(await outbox.hasPendingRepair, isTrue);
+  });
+
+  test('concurrent iOS failures coalesce BGProcessing registration', () async {
+    final registration = Completer<void>();
+    final registrationStarted = Completer<void>();
+    var registrations = 0;
+    final runner = NotificationBackgroundAuditRunner(
+      audit: (_) async => false,
+      enqueueRepair: (_) {
+        registrations++;
+        if (!registrationStarted.isCompleted) registrationStarted.complete();
+        return registration.future;
+      },
+      isIos: true,
+    );
+    const request = FeastReminderRepairRequest(
+      reason: FeastReminderRepairReason.occurrenceSync,
+      forceReschedule: false,
+    );
+
+    final first = runner.run(request);
+    final second = runner.run(request);
+    await registrationStarted.future;
+
+    expect(registrations, 1);
+    registration.complete();
+    expect(await Future.wait([first, second]), everyElement(isFalse));
   });
 
   test('startup durable handoff does not gate runApp on remote sync', () async {
@@ -153,29 +260,32 @@ void main() {
     expect(await NotificationRepairOutbox().hasPendingRepair, isTrue);
   });
 
-  test('startup registers executor before detached work begins', () async {
-    final executor = Completer<void>();
-    var auditStarted = false;
-    var messagingStarted = false;
-    final dispatcher = NotificationStartupSyncDispatcher(
-      auditAndRepair: () async {
-        auditStarted = true;
-        return true;
-      },
-      initializeMessaging: () async => messagingStarted = true,
-      enqueueRepair: () => executor.future,
-    );
+  test(
+    'startup initializes messaging while audit waits for executor',
+    () async {
+      final executor = Completer<void>();
+      var auditStarted = false;
+      var messagingStarted = false;
+      final dispatcher = NotificationStartupSyncDispatcher(
+        auditAndRepair: () async {
+          auditStarted = true;
+          return true;
+        },
+        initializeMessaging: () async => messagingStarted = true,
+        enqueueRepair: () => executor.future,
+      );
 
-    final dispatch = dispatcher.dispatch();
-    await Future<void>.delayed(Duration.zero);
-    expect(auditStarted, isFalse);
-    expect(messagingStarted, isFalse);
+      final dispatch = dispatcher.dispatch();
+      await Future<void>.delayed(Duration.zero);
+      expect(auditStarted, isFalse);
+      expect(messagingStarted, isTrue);
 
-    executor.complete();
-    await dispatch;
-    expect(auditStarted, isTrue);
-    expect(messagingStarted, isTrue);
-  });
+      executor.complete();
+      await dispatch;
+      expect(auditStarted, isTrue);
+      expect(messagingStarted, isTrue);
+    },
+  );
 
   test(
     'startup keeps the outbox without detaching when executor fails',
@@ -195,10 +305,45 @@ void main() {
       await Future<void>.delayed(Duration.zero);
 
       expect(auditStarted, isFalse);
-      expect(messagingStarted, isFalse);
+      expect(messagingStarted, isTrue);
       expect(await NotificationRepairOutbox().hasPendingRepair, isTrue);
     },
   );
+
+  test(
+    'startup initializes messaging once when executor registration fails',
+    () async {
+      var auditRuns = 0;
+      var messagingInitializations = 0;
+      final dispatcher = NotificationStartupSyncDispatcher(
+        auditAndRepair: () async {
+          auditRuns++;
+          return true;
+        },
+        initializeMessaging: () async => messagingInitializations++,
+        enqueueRepair: () async => throw UnsupportedError('no executor'),
+      );
+
+      await Future.wait([dispatcher.dispatch(), dispatcher.dispatch()]);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(auditRuns, 0);
+      expect(messagingInitializations, 1);
+    },
+  );
+
+  test('startup isolates messaging and executor registration errors', () async {
+    final dispatcher = NotificationStartupSyncDispatcher(
+      auditAndRepair: () async => true,
+      initializeMessaging: () async => throw StateError('messaging failed'),
+      enqueueRepair: () async => throw StateError('executor failed'),
+    );
+
+    await dispatcher.dispatch();
+    await Future<void>.delayed(Duration.zero);
+
+    expect(await NotificationRepairOutbox().hasPendingRepair, isTrue);
+  });
 
   test('startup detached audit errors still enqueue repair', () async {
     var repairs = 0;

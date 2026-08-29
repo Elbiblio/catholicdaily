@@ -43,9 +43,15 @@ class FeastReminderRepairRequest {
     final rawReason = inputData?[reasonInputKey];
     final reason = FeastReminderRepairReason.values.firstWhere(
       (candidate) => candidate.name == rawReason,
-      orElse: () => task == FeastReminderBackgroundService.taskName
-          ? FeastReminderRepairReason.periodicAudit
-          : FeastReminderRepairReason.occurrenceSync,
+      orElse: () {
+        if (task ==
+            FeastReminderBackgroundService.iosForcedRepairTaskIdentifier) {
+          return FeastReminderRepairReason.exactAlarmCapabilityChanged;
+        }
+        return task == FeastReminderBackgroundService.taskName
+            ? FeastReminderRepairReason.periodicAudit
+            : FeastReminderRepairReason.occurrenceSync;
+      },
     );
     final reasonForcesReschedule =
         reason == FeastReminderRepairReason.exactAlarmCapabilityChanged ||
@@ -67,6 +73,124 @@ class FeastReminderRepairRequest {
   };
 }
 
+class NotificationBackgroundAuditRunner {
+  NotificationBackgroundAuditRunner({
+    required Future<bool> Function(bool forceReschedule) audit,
+    required Future<void> Function(FeastReminderRepairRequest request)
+    enqueueRepair,
+    required bool isIos,
+    NotificationRepairOutbox? repairOutbox,
+    void Function(Object error, StackTrace stackTrace)? onAuditError,
+  }) : _audit = audit,
+       _enqueueRepair = enqueueRepair,
+       _isIos = isIos,
+       _repairOutbox = repairOutbox ?? NotificationRepairOutbox.instance,
+       _onAuditError = onAuditError;
+
+  final Future<bool> Function(bool forceReschedule) _audit;
+  final Future<void> Function(FeastReminderRepairRequest request)
+  _enqueueRepair;
+  final bool _isIos;
+  final NotificationRepairOutbox _repairOutbox;
+  final void Function(Object error, StackTrace stackTrace)? _onAuditError;
+  final Map<bool, Future<void>> _repairRegistrations = <bool, Future<void>>{};
+  Future<void>? _markerWrite;
+
+  Future<bool> run(FeastReminderRepairRequest request) async {
+    String? repairToken;
+    try {
+      repairToken = await _repairOutbox.pendingToken;
+    } catch (_) {
+      // A corrupt/unreadable marker stays pending and cannot be cleared here.
+    }
+
+    var succeeded = false;
+    try {
+      succeeded = await _audit(request.forceReschedule);
+    } catch (error, stackTrace) {
+      _onAuditError?.call(error, stackTrace);
+    }
+
+    if (succeeded) {
+      if (repairToken != null) {
+        try {
+          await _repairOutbox.clear(ifToken: repairToken);
+        } catch (_) {
+          // A retained marker safely causes a later reconciliation.
+        }
+      }
+      return true;
+    }
+
+    // Android WorkManager retries a false task result. iOS BGProcessing tasks
+    // are one-shot, so failure must submit a replacement request explicitly.
+    if (!_isIos) return false;
+    await _retainPendingMarker(request);
+    try {
+      await _enqueueRepairCoalesced(_normalizedRetryRequest(request));
+    } catch (_) {
+      // Registration failure leaves the outbox marker for startup recovery.
+    }
+    return false;
+  }
+
+  FeastReminderRepairRequest _normalizedRetryRequest(
+    FeastReminderRepairRequest request,
+  ) {
+    if (!request.forceReschedule ||
+        request.reason ==
+            FeastReminderRepairReason.exactAlarmCapabilityChanged ||
+        request.reason == FeastReminderRepairReason.timezoneChanged) {
+      return request;
+    }
+    return const FeastReminderRepairRequest(
+      reason: FeastReminderRepairReason.exactAlarmCapabilityChanged,
+      forceReschedule: true,
+    );
+  }
+
+  Future<void> _retainPendingMarker(FeastReminderRepairRequest request) async {
+    final existing = _markerWrite;
+    if (existing != null) return existing;
+    final write = _writeMarkerIfMissing(request);
+    _markerWrite = write;
+    try {
+      await write;
+    } finally {
+      if (identical(_markerWrite, write)) _markerWrite = null;
+    }
+  }
+
+  Future<void> _writeMarkerIfMissing(FeastReminderRepairRequest request) async {
+    try {
+      if (!await _repairOutbox.hasPendingRepair) {
+        await _repairOutbox.markPending(
+          reason: 'ios-background-${request.reason.name}',
+        );
+      }
+    } catch (_) {
+      // The BGProcessing registration still provides a durable retry attempt.
+    }
+  }
+
+  Future<void> _enqueueRepairCoalesced(
+    FeastReminderRepairRequest request,
+  ) async {
+    final key = request.forceReschedule;
+    final existing = _repairRegistrations[key];
+    if (existing != null) return existing;
+    final registration = _enqueueRepair(request);
+    _repairRegistrations[key] = registration;
+    try {
+      await registration;
+    } finally {
+      if (identical(_repairRegistrations[key], registration)) {
+        _repairRegistrations.remove(key);
+      }
+    }
+  }
+}
+
 class NotificationStartupSyncDispatcher {
   NotificationStartupSyncDispatcher({
     required this.auditAndRepair,
@@ -80,8 +204,13 @@ class NotificationStartupSyncDispatcher {
   final Future<void> Function() enqueueRepair;
   final NotificationRepairOutbox _repairOutbox;
   Future<void>? _repairRequest;
+  Future<void>? _messagingRequest;
 
   Future<void> dispatch() async {
+    // Foreground delivery and token listeners do not depend on background-work
+    // availability. Their initialization is independently error-isolated and
+    // coalesced when startup dispatch is requested more than once.
+    unawaited(_initializeMessagingOnce());
     String? repairToken;
     try {
       repairToken = await _repairOutbox.markPending(reason: 'startup');
@@ -96,7 +225,6 @@ class NotificationStartupSyncDispatcher {
       return;
     }
     unawaited(_runAudit(repairToken));
-    unawaited(_runMessaging());
   }
 
   Future<void> _runAudit(String? repairToken) async {
@@ -120,11 +248,18 @@ class NotificationStartupSyncDispatcher {
 
   Future<void> _requestRepair() => _repairRequest ??= enqueueRepair();
 
+  Future<void> _initializeMessagingOnce() =>
+      _messagingRequest ??= _runMessaging();
+
   Future<void> _runMessaging() async {
     try {
       await initializeMessaging();
     } catch (_) {
-      await _requestRepair();
+      try {
+        await _requestRepair();
+      } catch (_) {
+        // Messaging and executor failures are isolated from app startup.
+      }
     }
   }
 }
@@ -247,12 +382,26 @@ void feastReminderWorkmanagerDispatcher() {
     final request = FeastReminderRepairRequest.fromWorkmanager(task, inputData);
     return FeastReminderBackgroundService.instance.auditAndRepair(
       forceReschedule: request.forceReschedule,
+      repairReason: request.reason,
     );
   });
 }
 
 class FeastReminderBackgroundService {
-  FeastReminderBackgroundService._();
+  FeastReminderBackgroundService._() {
+    _auditRunner = NotificationBackgroundAuditRunner(
+      audit: (forceReschedule) =>
+          _auditAndRepair(forceReschedule: forceReschedule),
+      enqueueRepair: (request) => enqueueRepair(reason: request.reason),
+      isIos: Platform.isIOS,
+      onAuditError: (error, stackTrace) {
+        debugPrint(
+          '[FeastReminder] Background coverage audit failed: '
+          '$error\n$stackTrace',
+        );
+      },
+    );
+  }
 
   static final FeastReminderBackgroundService instance =
       FeastReminderBackgroundService._();
@@ -272,6 +421,7 @@ class FeastReminderBackgroundService {
   );
   static const _notificationSyncPolicy = NotificationBackgroundSyncPolicy();
 
+  late final NotificationBackgroundAuditRunner _auditRunner;
   bool _initialized = false;
 
   Future<void> initialize() async {
@@ -334,29 +484,16 @@ class FeastReminderBackgroundService {
     );
   }
 
-  Future<bool> auditAndRepair({bool forceReschedule = false}) async {
-    String? repairToken;
-    try {
-      repairToken = await NotificationRepairOutbox.instance.pendingToken;
-      final succeeded = await _auditAndRepair(forceReschedule: forceReschedule);
-      if (succeeded) {
-        try {
-          if (repairToken != null) {
-            await NotificationRepairOutbox.instance.clear(ifToken: repairToken);
-          }
-        } catch (_) {
-          // A retained marker safely causes a later reconciliation.
-        }
-      }
-      return succeeded;
-    } catch (error, stackTrace) {
-      debugPrint(
-        '[FeastReminder] Background coverage audit failed: '
-        '$error\n$stackTrace',
-      );
-      return false;
-    }
-  }
+  Future<bool> auditAndRepair({
+    bool forceReschedule = false,
+    FeastReminderRepairReason repairReason =
+        FeastReminderRepairReason.periodicAudit,
+  }) => _auditRunner.run(
+    FeastReminderRepairRequest(
+      reason: repairReason,
+      forceReschedule: forceReschedule,
+    ),
+  );
 
   Future<bool> _auditAndRepair({required bool forceReschedule}) async {
     final prefs = await FeastReminderPreferences.getInstance();
