@@ -1,0 +1,137 @@
+{
+  "cases": [
+    {
+      "name": "valid v3 remote cancels matching local safety request",
+      "now": "2026-08-29T06:30:00Z",
+      "expected_identifier": "1624088681",
+      "payload": {
+        "aps": {
+          "alert": {
+            "title": "Saturday, 29 August — A Memorial",
+            "body": "The Passion of Saint John the Baptist"
+          },
+          "mutable-content": 1
+        },
+        "schema": 3,
+        "type": "feast_reminder",
+        "occurrence_key": "feast:nigeria:2026-08-29:on_day:passion-of-john-the-baptist",
+        "local_notification_id": 1624088681,
+        "celebration_date": "2026-08-29",
+        "scheduled_for": "2026-08-29T06:30:00Z",
+        "remote_expires_at": "2026-08-29T06:32:00Z",
+        "local_safety_at": "2026-08-29T06:33:00Z",
+        "liturgical_region": "nigeria",
+        "timing": "on_day",
+        "saint_id": "passion-of-john-the-baptist"
+      }
+    },
+    {
+      "name": "string encoded APNs custom values extract the same identifier",
+      "now": "2026-08-29T06:30:00Z",
+      "expected_identifier": "1624088681",
+      "payload": {
+        "aps": {"mutable-content": 1},
+        "schema": "3",
+        "type": "feast_reminder",
+        "occurrence_key": "feast:nigeria:2026-08-29:on_day:passion-of-john-the-baptist",
+        "local_notification_id": "1624088681",
+        "celebration_date": "2026-08-29",
+        "scheduled_for": "2026-08-29T07:30:00+01:00",
+        "remote_expires_at": "2026-08-29T07:32:00+01:00",
+        "local_safety_at": "2026-08-29T07:33:00+01:00",
+        "liturgical_region": "nigeria",
+        "timing": "on_day",
+        "saint_id": "passion-of-john-the-baptist"
+      }
+    },
+    {
+      "name": "legacy schema is preserved",
+      "now": "2026-08-29T06:30:00Z",
+      "expected_identifier": null,
+      "payload": {
+        "aps": {"mutable-content": 1},
+        "schema": 2,
+        "type": "feast_reminder",
+        "occurrence_key": "feast:nigeria:2026-08-29:on_day:passion-of-john-the-baptist",
+        "local_notification_id": 1624088681,
+        "remote_expires_at": "2026-08-29T06:32:00Z"
+      }
+    },
+    {
+      "name": "malformed identity is preserved",
+      "now": "2026-08-29T06:30:00Z",
+      "expected_identifier": null,
+      "payload": {
+        "aps": {"mutable-content": 1},
+        "schema": 3,
+        "type": "feast_reminder",
+        "occurrence_key": "not-an-occurrence",
+        "local_notification_id": 1624088681,
+        "celebration_date": "2026-08-29",
+        "scheduled_for": "2026-08-29T06:30:00Z",
+        "remote_expires_at": "2026-08-29T06:32:00Z",
+        "local_safety_at": "2026-08-29T06:33:00Z",
+        "liturgical_region": "nigeria",
+        "timing": "on_day",
+        "saint_id": "passion-of-john-the-baptist"
+      }
+    },
+    {
+      "name": "mismatched stable identifier is preserved",
+      "now": "2026-08-29T06:30:00Z",
+      "expected_identifier": null,
+      "payload": {
+        "aps": {"mutable-content": 1},
+        "schema": 3,
+        "type": "feast_reminder",
+        "occurrence_key": "feast:nigeria:2026-08-29:on_day:passion-of-john-the-baptist",
+        "local_notification_id": 42,
+        "celebration_date": "2026-08-29",
+        "scheduled_for": "2026-08-29T06:30:00Z",
+        "remote_expires_at": "2026-08-29T06:32:00Z",
+        "local_safety_at": "2026-08-29T06:33:00Z",
+        "liturgical_region": "nigeria",
+        "timing": "on_day",
+        "saint_id": "passion-of-john-the-baptist"
+      }
+    },
+    {
+      "name": "expired remote is preserved",
+      "now": "2026-08-29T06:32:00Z",
+      "expected_identifier": null,
+      "payload": {
+        "aps": {"mutable-content": 1},
+        "schema": 3,
+        "type": "feast_reminder",
+        "occurrence_key": "feast:nigeria:2026-08-29:on_day:passion-of-john-the-baptist",
+        "local_notification_id": 1624088681,
+        "celebration_date": "2026-08-29",
+        "scheduled_for": "2026-08-29T06:29:59Z",
+        "remote_expires_at": "2026-08-29T06:31:59Z",
+        "local_safety_at": "2026-08-29T06:32:59Z",
+        "liturgical_region": "nigeria",
+        "timing": "on_day",
+        "saint_id": "passion-of-john-the-baptist"
+      }
+    },
+    {
+      "name": "impossible celebration date is preserved",
+      "now": "2026-08-29T06:30:00Z",
+      "expected_identifier": null,
+      "payload": {
+        "aps": {"mutable-content": 1},
+        "schema": 3,
+        "type": "feast_reminder",
+        "occurrence_key": "feast:nigeria:2026-99-99:on_day:passion-of-john-the-baptist",
+        "local_notification_id": 554932286,
+        "celebration_date": "2026-99-99",
+        "scheduled_for": "2026-08-29T06:30:00Z",
+        "remote_expires_at": "2026-08-29T06:32:00Z",
+        "local_safety_at": "2026-08-29T06:33:00Z",
+        "liturgical_region": "nigeria",
+        "timing": "on_day",
+        "saint_id": "passion-of-john-the-baptist"
+      }
+    }
+  ]
+}
