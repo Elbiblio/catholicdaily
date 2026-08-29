@@ -465,6 +465,9 @@ class CsvReadingsResolverService
       'saint lawrence deacon and martyr': 'lawrence_of_rome_deacon',
       'saint bartholomew apostle': 'bartholomew_apostle',
       'the passion of saint john the baptist': 'passion_of_john_the_baptist',
+      'the martyrdom of saint john the baptist': 'passion_of_john_the_baptist',
+      'martyrdom of saint john the baptist': 'passion_of_john_the_baptist',
+      'the beheading of saint john the baptist': 'passion_of_john_the_baptist',
       'the nativity of the virgin mary': 'nativity_of_blessed_virgin_mary',
       'the exaltation of the holy cross': 'exaltation_of_holy_cross',
       'saint matthew apostle and evangelist': 'matthew_apostle',
@@ -722,36 +725,94 @@ class CsvReadingsResolverService
         date: normalizedDate,
         readings: override,
         context: _celebrationPsalmContext(
+          celebrationId: _celebrationPsalmId(celebrationTitle),
+          yearVariables: yearVariables,
+          cycleSpecific: _isCycleSpecificCelebration(
+            _celebrationPsalmId(celebrationTitle),
+          ),
+        ),
+      );
+    }
+
+    final match = await _catalog.findMemorialEntry(
+      celebrationId: celebrationId,
+      celebrationTitle: celebrationTitle,
+    );
+    if (match == null || !_isMemorialEntryWellFormed(match)) {
+      return _resolveAppointedCelebrationChoice(
+        date: normalizedDate,
+        celebrationTitle: celebrationTitle,
+      );
+    }
+    if (match.firstReading.isEmpty && match.gospel.isEmpty) {
+      return _resolveAppointedCelebrationChoice(
+        date: normalizedDate,
+        celebrationTitle: celebrationTitle,
+      );
+    }
+    return _applyNigeriaPsalmChoices(
+      date: normalizedDate,
+      readings: _buildCelebrationReadings(normalizedDate, match),
+      context: _celebrationPsalmContext(
+        celebrationId: match.id,
+        yearVariables: yearVariables,
+        cycleSpecific: _isCycleSpecificCelebration(match.id),
+      ),
+    );
+  }
+
+  Future<List<DailyReading>> _resolveAppointedCelebrationChoice({
+    required DateTime date,
+    required String celebrationTitle,
+  }) async {
+    final resolvedDay = await _ordoResolver.resolveDay(date);
+    if (_normalizeTitle(resolvedDay.title) !=
+        _normalizeTitle(celebrationTitle)) {
+      return const [];
+    }
+
+    final yearVariables = await _ordoResolver.resolveYearVariables(date);
+    final standardEntries = await _catalog.loadStandardEntries();
+    final sourceMatches = standardEntries.where((entry) {
+      if (!_standardSourceMatchesCelebration(
+        entry.sourceTitle,
+        celebrationTitle,
+      )) {
+        return false;
+      }
+      final sundayCycle = entry.sundayCycle.toUpperCase();
+      return sundayCycle.isEmpty ||
+          sundayCycle == 'ABC' ||
+          sundayCycle == yearVariables.sundayCycle.toUpperCase();
+    }).toList();
+    if (sourceMatches.isNotEmpty) {
+      final celebrationId = _celebrationPsalmId(celebrationTitle);
+      return _applyNigeriaPsalmChoices(
+        date: date,
+        readings: _buildStandardReadings(date, sourceMatches),
+        context: _celebrationPsalmContext(
           celebrationId: celebrationId,
           yearVariables: yearVariables,
           cycleSpecific: _isCycleSpecificCelebration(celebrationId),
         ),
       );
     }
+    return resolve(date);
+  }
 
-    final entries = await _catalog.loadMemorialEntries();
-    MemorialFeastEntry? match;
-    for (final entry in entries) {
-      if (entry.id == celebrationId) {
-        match = entry;
-        break;
-      }
-    }
-    if (match == null || !_isMemorialEntryWellFormed(match)) {
-      return const [];
-    }
-    if (match.firstReading.isEmpty && match.gospel.isEmpty) {
-      return const [];
-    }
-    return _applyNigeriaPsalmChoices(
-      date: normalizedDate,
-      readings: _buildCelebrationReadings(normalizedDate, match),
-      context: _celebrationPsalmContext(
-        celebrationId: celebrationId,
-        yearVariables: yearVariables,
-        cycleSpecific: _isCycleSpecificCelebration(celebrationId),
-      ),
-    );
+  bool _standardSourceMatchesCelebration(String source, String celebration) {
+    String canonical(String value) => _normalizeTitle(value)
+        .replaceFirst(RegExp(r'^the\s+'), '')
+        .replaceAll(RegExp(r'\babc\b'), '')
+        .replaceAll(RegExp(r'\bcycle [abc]\b'), '')
+        .replaceAll(RegExp(r'[^a-z0-9]+'), ' ')
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .trim();
+
+    final sourceTitle = canonical(source);
+    final celebrationTitle = canonical(celebration);
+    if (sourceTitle == celebrationTitle) return true;
+    return sourceTitle.startsWith('$celebrationTitle ');
   }
 
   /// Returns a separately labelled Vigil set when the resolved celebration
@@ -1254,7 +1315,7 @@ class CsvReadingsResolverService
     final pr = entry.psalmReference.trim();
     if (pr.isNotEmpty) {
       final validPsalmPrefix = RegExp(
-        r'^(Ps|Psalm|Isa|Exod|1\s+Sam|Dan|Luke\s+1)',
+        r'^(Ps|Psalm|Isa|Exod|1\s+Sam|Dan|Jdt|Luke\s+1)',
       );
       if (!validPsalmPrefix.hasMatch(pr)) return false;
     }

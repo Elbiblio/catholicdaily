@@ -7,6 +7,7 @@ import '../models/liturgical_region.dart';
 import 'improved_liturgical_calendar_service.dart';
 import 'liturgical_region_preference_service.dart';
 import 'offline_ordo_lookup_service.dart';
+import 'reading_catalog_service.dart';
 
 class OrdoResolverService {
   static final OrdoResolverService instance = OrdoResolverService._();
@@ -20,6 +21,7 @@ class OrdoResolverService {
   final Map<String, LiturgicalDay> _dayCache = {};
   final Map<int, OrdoYearVariables> _yearVarCache = {};
   final OfflineOrdoLookupService _offline = OfflineOrdoLookupService.instance;
+  final ReadingCatalogService _readingCatalog = ReadingCatalogService.instance;
   LiturgicalRegion _lastKnownRegion = LiturgicalRegion.generalRoman;
   bool _regionPreferencesUnavailable = false;
 
@@ -45,8 +47,12 @@ class OrdoResolverService {
     try {
       if (_preferOffline) {
         final offlineDay = _offline.resolve(date, region: region);
-        _dayCache[key] = offlineDay;
-        return offlineDay;
+        final resolvedDay = await _withFixedObligatoryMemorial(
+          date,
+          offlineDay,
+        );
+        _dayCache[key] = resolvedDay;
+        return resolvedDay;
       }
 
       final resolved = await _resolveViaCalendarApi(date);
@@ -55,8 +61,12 @@ class OrdoResolverService {
     } catch (_) {
       try {
         final offlineDay = _offline.resolve(date, region: region);
-        _dayCache[key] = offlineDay;
-        return offlineDay;
+        final resolvedDay = await _withFixedObligatoryMemorial(
+          date,
+          offlineDay,
+        );
+        _dayCache[key] = resolvedDay;
+        return resolvedDay;
       } catch (_) {
         final fallback = ImprovedLiturgicalCalendarService.instance
             .getLiturgicalDay(date);
@@ -65,6 +75,56 @@ class OrdoResolverService {
       }
     }
   }
+
+  Future<LiturgicalDay> _withFixedObligatoryMemorial(
+    DateTime date,
+    LiturgicalDay resolvedDay,
+  ) async {
+    if (resolvedDay.title.trim().isNotEmpty ||
+        _memorialIsReducedToCommemoration(date, resolvedDay)) {
+      return resolvedDay;
+    }
+
+    final entries = await _readingCatalog.getMemorialEntriesForMonthDay(
+      date.month,
+      date.day,
+    );
+    for (final entry in entries) {
+      if (entry.rank.trim().toLowerCase() != 'obligatory memorial' ||
+          entry.title.trim().isEmpty) {
+        continue;
+      }
+      return LiturgicalDay(
+        date: resolvedDay.date,
+        title: entry.title.trim(),
+        rank: entry.rank.trim(),
+        color: _memorialColor(entry.color, resolvedDay.color),
+        season: resolvedDay.season,
+        weekNumber: resolvedDay.weekNumber,
+        dayOfWeek: resolvedDay.dayOfWeek,
+      );
+    }
+    return resolvedDay;
+  }
+
+  bool _memorialIsReducedToCommemoration(
+    DateTime date,
+    LiturgicalDay resolvedDay,
+  ) {
+    if (resolvedDay.season == LiturgicalSeason.lent) return true;
+    if (date.month == 12 && date.day >= 17 && date.day <= 24) return true;
+    return resolvedDay.season == LiturgicalSeason.easter &&
+        resolvedDay.weekNumber == 1;
+  }
+
+  LiturgicalColor _memorialColor(String value, LiturgicalColor fallback) =>
+      switch (value.trim().toLowerCase()) {
+        'red' => LiturgicalColor.red,
+        'white' => LiturgicalColor.white,
+        'green' => LiturgicalColor.green,
+        'purple' || 'violet' => LiturgicalColor.purple,
+        _ => fallback,
+      };
 
   Future<LiturgicalRegion> _resolveRegion() async {
     if (_regionPreferencesUnavailable) return _lastKnownRegion;

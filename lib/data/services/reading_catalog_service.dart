@@ -21,6 +21,7 @@ class StandardLectionaryEntry {
   final String acclamationText;
   final String lectionaryNumber;
   final String gospelIncipit;
+  final String sourceTitle;
 
   const StandardLectionaryEntry({
     required this.season,
@@ -40,6 +41,7 @@ class StandardLectionaryEntry {
     required this.acclamationText,
     required this.lectionaryNumber,
     required this.gospelIncipit,
+    required this.sourceTitle,
   });
 }
 
@@ -151,7 +153,9 @@ class ReadingCatalogService extends BaseService<ReadingCatalogService> {
     }
 
     try {
-      final rawCsv = await rootBundle.loadString('standard_lectionary_complete.csv');
+      final rawCsv = await rootBundle.loadString(
+        'standard_lectionary_complete.csv',
+      );
       final lines = rawCsv
           .split(RegExp(r'\r?\n'))
           .where((line) => line.trim().isNotEmpty)
@@ -189,6 +193,7 @@ class ReadingCatalogService extends BaseService<ReadingCatalogService> {
               lectionaryNumber: columns[13].trim(),
               firstReadingIncipit: columns[12].trim(),
               gospelIncipit: columns[19].trim(),
+              sourceTitle: columns[20].trim(),
             ),
           );
         } catch (e) {
@@ -267,6 +272,45 @@ class ReadingCatalogService extends BaseService<ReadingCatalogService> {
     return parsed;
   }
 
+  Future<MemorialFeastEntry?> findMemorialEntry({
+    required String celebrationId,
+    required String celebrationTitle,
+  }) async {
+    final entries = await loadMemorialEntries();
+    final requestedIds = <String>{
+      _canonicalCelebrationIdentity(celebrationId),
+      _canonicalCelebrationIdentity(celebrationTitle),
+    }..remove('');
+
+    for (final entry in entries) {
+      final entryIds = <String>{
+        _canonicalCelebrationIdentity(entry.id),
+        _canonicalCelebrationIdentity(entry.title),
+      };
+      if (entryIds.any(requestedIds.contains)) return entry;
+    }
+    return null;
+  }
+
+  String _canonicalCelebrationIdentity(String value) {
+    final normalized = value
+        .trim()
+        .toLowerCase()
+        .replaceAll(RegExp(r'[^a-z0-9]+'), '_')
+        .replaceAll(RegExp(r'^_+|_+$'), '');
+    return const <String, String>{
+          'the_passion_of_saint_john_the_baptist':
+              'passion_of_john_the_baptist',
+          'the_martyrdom_of_saint_john_the_baptist':
+              'passion_of_john_the_baptist',
+          'martyrdom_of_saint_john_the_baptist': 'passion_of_john_the_baptist',
+          'the_beheading_of_saint_john_the_baptist':
+              'passion_of_john_the_baptist',
+          'beheading_of_saint_john_the_baptist': 'passion_of_john_the_baptist',
+        }[normalized] ??
+        normalized;
+  }
+
   Future<List<MemorialFeastEntry>> getMemorialEntriesForMonthDay(
     int month,
     int day,
@@ -324,7 +368,8 @@ class ReadingCatalogService extends BaseService<ReadingCatalogService> {
       if (entry.season.isEmpty || entry.day.isEmpty || entry.dayNum.isEmpty) {
         continue;
       }
-      final key = '${entry.season.toLowerCase()}-${entry.day.toLowerCase()}-${entry.dayNum}';
+      final key =
+          '${entry.season.toLowerCase()}-${entry.day.toLowerCase()}-${entry.dayNum}';
       _specialEntriesBySeasonDayNum!
           .putIfAbsent(key, () => <SpecialPeriodEntry>[])
           .add(entry);
@@ -339,7 +384,8 @@ class ReadingCatalogService extends BaseService<ReadingCatalogService> {
     String dayNum,
   ) async {
     await loadSpecialPeriodEntries();
-    return _specialEntriesBySeasonDayNum?['${season.toLowerCase()}-${day.toLowerCase()}-$dayNum'] ?? const [];
+    return _specialEntriesBySeasonDayNum?['${season.toLowerCase()}-${day.toLowerCase()}-$dayNum'] ??
+        const [];
   }
 
   Future<List<SpecialPeriodEntry>> getSpecialPeriodEntriesForSeasonDay(
@@ -347,10 +393,14 @@ class ReadingCatalogService extends BaseService<ReadingCatalogService> {
     String day,
   ) async {
     await loadSpecialPeriodEntries();
-    return _specialEntries?.where((entry) =>
-      entry.season.toLowerCase() == season.toLowerCase() &&
-      entry.day.toLowerCase() == day.toLowerCase()
-    ).toList() ?? const [];
+    return _specialEntries
+            ?.where(
+              (entry) =>
+                  entry.season.toLowerCase() == season.toLowerCase() &&
+                  entry.day.toLowerCase() == day.toLowerCase(),
+            )
+            .toList() ??
+        const [];
   }
 
   List<String> parseCsvLine(String line) {

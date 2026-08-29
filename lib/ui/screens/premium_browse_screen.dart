@@ -1314,13 +1314,6 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
             ],
           ),
           const SizedBox(height: 8),
-          Text(
-            'The celebration appointed for this day is shown first. Vigil, weekday, and memorial choices remain available here.',
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-          ),
-          const SizedBox(height: 8),
           Wrap(
             spacing: 6,
             runSpacing: 6,

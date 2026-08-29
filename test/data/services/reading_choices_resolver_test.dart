@@ -1,5 +1,6 @@
 import 'package:catholic_daily/data/models/liturgical_region.dart';
 import 'package:catholic_daily/data/services/alternate_readings_service.dart';
+import 'package:catholic_daily/data/services/csv_readings_resolver_service.dart';
 import 'package:catholic_daily/data/services/liturgical_region_preference_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -243,4 +244,142 @@ void main() {
       expect(vigil.readings.first.reading, fixture.value);
     }
   });
+
+  test(
+    'Passion of John the Baptist proper is primary across appointed cycles',
+    () async {
+      final regionPrefs = await LiturgicalRegionPreferenceService.getInstance();
+      await regionPrefs.setRegion(LiturgicalRegion.nigeria);
+
+      for (final year in <int>[2024, 2025, 2026]) {
+        final sets = await AlternateReadingsService.instance
+            .getAvailableReadingSets(DateTime(year, 8, 29));
+
+        expect(
+          sets.first.label,
+          'The Passion of Saint John the Baptist',
+          reason: '$year must resolve the obligatory memorial, not the weekday',
+        );
+        expect(sets.first.isFerial, isFalse);
+        expect(
+          sets.first.readings.map((reading) => reading.reading),
+          orderedEquals(<String>[
+            'Jer 1:17-19',
+            'Ps 71:1-6, 15, 17',
+            'Mark 6:17-29',
+          ]),
+        );
+        final psalm = sets.first.readings.firstWhere(
+          (reading) => reading.position == 'Responsorial Psalm',
+        );
+        expect(
+          psalm.psalmResponse,
+          'Since my mother\'s womb, you have been my strength.',
+        );
+        expect(psalm.source, startsWith('nigeria_usage:'));
+        expect(sets.first.readings.last.gospelAcclamation, 'Mt 5:10');
+        expect(sets.skip(1).any((set) => set.isFerial), isTrue);
+      }
+    },
+  );
+
+  test('Sunday retains priority over the Aug 29 memorial in 2027', () async {
+    final regionPrefs = await LiturgicalRegionPreferenceService.getInstance();
+    await regionPrefs.setRegion(LiturgicalRegion.nigeria);
+
+    final sets = await AlternateReadingsService.instance
+        .getAvailableReadingSets(DateTime(2027, 8, 29));
+
+    expect(sets.first.label, contains('Sunday'));
+    expect(sets.first.label, isNot(contains('John the Baptist')));
+  });
+
+  test('calendar ID and title aliases resolve the same John proper', () async {
+    final regionPrefs = await LiturgicalRegionPreferenceService.getInstance();
+    await regionPrefs.setRegion(LiturgicalRegion.nigeria);
+
+    for (final title in <String>[
+      'The Passion of Saint John the Baptist',
+      'The Martyrdom of Saint John the Baptist',
+      'The Beheading of Saint John the Baptist',
+    ]) {
+      final readings = await CsvReadingsResolverService.instance
+          .resolveCelebrationChoice(
+            date: DateTime(2026, 8, 29),
+            celebrationId: 'passion-of-john-the-baptist',
+            celebrationTitle: title,
+          );
+      expect(
+        readings.map((reading) => reading.reading),
+        orderedEquals(<String>[
+          'Jer 1:17-19',
+          'Ps 71:1-6, 15, 17',
+          'Mark 6:17-29',
+        ]),
+        reason: title,
+      );
+      expect(
+        readings
+            .firstWhere((reading) => reading.position == 'Responsorial Psalm')
+            .source,
+        startsWith('nigeria_usage:'),
+        reason: title,
+      );
+    }
+  });
+
+  test('canonical IDs surface appointed standard lectionary sources', () async {
+    final regionPrefs = await LiturgicalRegionPreferenceService.getInstance();
+    await regionPrefs.setRegion(LiturgicalRegion.nigeria);
+
+    final epiphany = await CsvReadingsResolverService.instance
+        .resolveCelebrationChoice(
+          date: DateTime(2026, 1, 4),
+          celebrationId: 'the-epiphany-of-the-lord',
+          celebrationTitle: 'The Epiphany of the Lord',
+        );
+
+    expect(epiphany, isNotEmpty);
+    expect(epiphany.first.reading, 'Isa 60:1-6');
+    expect(epiphany.last.reading, 'Matt 2:1-12');
+  });
+
+  test(
+    'obligatory and optional memorial propers coexist with weekday readings',
+    () async {
+      final regionPrefs = await LiturgicalRegionPreferenceService.getInstance();
+      await regionPrefs.setRegion(LiturgicalRegion.nigeria);
+
+      final obligatory = await AlternateReadingsService.instance
+          .getAvailableReadingSets(DateTime(2026, 8, 14));
+      expect(
+        obligatory.first.label,
+        'Saint Maximilian Mary Kolbe, Priest and Martyr',
+      );
+      expect(
+        obligatory.first.readings.map((reading) => reading.reading),
+        containsAllInOrder(<String>[
+          'Wis 3:1-9',
+          'Ps 116:10-19',
+          'John 15:12-17',
+        ]),
+      );
+      expect(obligatory.skip(1).any((set) => set.isFerial), isTrue);
+
+      final optional = await AlternateReadingsService.instance
+          .getAvailableReadingSets(DateTime(2025, 8, 23));
+      final rose = optional.firstWhere(
+        (set) => set.label == 'Saint Rose of Lima, Virgin',
+      );
+      expect(
+        rose.readings.map((reading) => reading.reading),
+        containsAllInOrder(<String>[
+          '2 Cor 10:17-11:2',
+          'Ps 31:3-4, 6, 8',
+          'Matt 13:44-46',
+        ]),
+      );
+      expect(optional.any((set) => set.isFerial), isTrue);
+    },
+  );
 }
