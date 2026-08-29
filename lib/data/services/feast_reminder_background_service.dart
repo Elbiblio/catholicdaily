@@ -20,6 +20,9 @@ enum FeastReminderRepairReason {
   occurrenceSync,
   exactAlarmCapabilityChanged,
   timezoneChanged,
+  timeSet,
+  bootCompleted,
+  packageReplaced,
   startup,
   periodicAudit,
 }
@@ -55,7 +58,10 @@ class FeastReminderRepairRequest {
     );
     final reasonForcesReschedule =
         reason == FeastReminderRepairReason.exactAlarmCapabilityChanged ||
-        reason == FeastReminderRepairReason.timezoneChanged;
+        reason == FeastReminderRepairReason.timezoneChanged ||
+        reason == FeastReminderRepairReason.timeSet ||
+        reason == FeastReminderRepairReason.bootCompleted ||
+        reason == FeastReminderRepairReason.packageReplaced;
     final taskForcesReschedule =
         task == FeastReminderBackgroundService.iosForcedRepairTaskIdentifier;
     return FeastReminderRepairRequest(
@@ -453,7 +459,10 @@ class FeastReminderBackgroundService {
     await initialize();
     final forceReschedule =
         reason == FeastReminderRepairReason.exactAlarmCapabilityChanged ||
-        reason == FeastReminderRepairReason.timezoneChanged;
+        reason == FeastReminderRepairReason.timezoneChanged ||
+        reason == FeastReminderRepairReason.timeSet ||
+        reason == FeastReminderRepairReason.bootCompleted ||
+        reason == FeastReminderRepairReason.packageReplaced;
     if (Platform.isIOS) {
       // Workmanager's iOS registerOneOffTask uses UIApplication background
       // time and cannot survive process death. BGProcessingTaskRequest is the

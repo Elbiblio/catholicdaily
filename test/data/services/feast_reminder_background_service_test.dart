@@ -136,6 +136,24 @@ void main() {
     );
   });
 
+  test('Android system broadcasts retain explicit forced repair reasons', () {
+    for (final reason in <FeastReminderRepairReason>[
+      FeastReminderRepairReason.timeSet,
+      FeastReminderRepairReason.bootCompleted,
+      FeastReminderRepairReason.packageReplaced,
+    ]) {
+      final request = FeastReminderRepairRequest.fromWorkmanager(
+        FeastReminderBackgroundService.taskName,
+        <String, dynamic>{
+          FeastReminderRepairRequest.reasonInputKey: reason.name,
+        },
+      );
+
+      expect(request.reason, reason);
+      expect(request.forceReschedule, isTrue);
+    }
+  });
+
   test(
     'successful iOS background audit clears marker without resubmit',
     () async {

@@ -26,11 +26,13 @@ void main() async {
 
   var firebaseMessagingAvailable = false;
   if (DefaultFirebaseOptions.isSupported) {
+    // Register before asynchronous startup work so a data-only message can
+    // always enter the dedicated background isolate after process death.
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
     try {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
-      FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
       firebaseMessagingAvailable = true;
     } catch (e, st) {
       debugPrint('[FeastReminder] Firebase init failed: $e\n$st');

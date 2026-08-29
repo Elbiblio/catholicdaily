@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../firebase_options.dart';
+import 'android_feast_reminder_occurrence_store.dart';
+import 'feast_reminder_notification_contract.dart';
 import 'feast_reminder_payload.dart';
 import 'feast_reminder_background_service.dart';
 import 'feast_reminder_service.dart';
@@ -17,7 +20,7 @@ class RemoteFeastMessage {
   final FeastReminderPayload payload;
   final DateTime expiresAt;
 
-  bool isDeliverableAt(DateTime now) => !now.isAfter(expiresAt);
+  bool isDeliverableAt(DateTime now) => now.isBefore(expiresAt);
 
   static RemoteFeastMessage? tryParse(Map<String, dynamic> data) {
     if (data['type'] != 'feast_reminder') return null;
@@ -52,17 +55,110 @@ class RemoteFeastMessage {
     if (expiresAt == null) return null;
     final payload = FeastReminderPayload.fromMap(normalized);
     if (payload == null) return null;
+    if (version == FeastReminderPayload.schemaVersion &&
+        payload.scheduleGeneration !=
+            FeastReminderNotificationContract.scheduleGeneration) {
+      return null;
+    }
     return RemoteFeastMessage(payload: payload, expiresAt: expiresAt);
   }
 }
 
+enum RemoteFeastMessageOutcome { ignored, expired, duplicate, shown }
+
+class RemoteFeastMessageProcessor {
+  const RemoteFeastMessageProcessor({
+    required DateTime Function() now,
+    required Future<void> Function(FeastReminderPayload payload)
+    cancelOccurrence,
+    required Future<bool> Function(FeastReminderPayload payload)
+    claimOccurrence,
+    required Future<void> Function(FeastReminderPayload payload)
+    removeDeliveredOccurrence,
+    required Future<void> Function(FeastReminderPayload payload) showReminder,
+    required Future<void> Function(String occurrenceKey, DateTime occurredAt)
+    recordReceived,
+    required Future<void> Function(String occurrenceKey, DateTime occurredAt)
+    recordExpired,
+    required Future<void> Function() enqueueReconciliation,
+  }) : _now = now,
+       _cancelOccurrence = cancelOccurrence,
+       _claimOccurrence = claimOccurrence,
+       _removeDeliveredOccurrence = removeDeliveredOccurrence,
+       _showReminder = showReminder,
+       _recordReceived = recordReceived,
+       _recordExpired = recordExpired,
+       _enqueueReconciliation = enqueueReconciliation;
+
+  final DateTime Function() _now;
+  final Future<void> Function(FeastReminderPayload payload) _cancelOccurrence;
+  final Future<bool> Function(FeastReminderPayload payload) _claimOccurrence;
+  final Future<void> Function(FeastReminderPayload payload)
+  _removeDeliveredOccurrence;
+  final Future<void> Function(FeastReminderPayload payload) _showReminder;
+  final Future<void> Function(String occurrenceKey, DateTime occurredAt)
+  _recordReceived;
+  final Future<void> Function(String occurrenceKey, DateTime occurredAt)
+  _recordExpired;
+  final Future<void> Function() _enqueueReconciliation;
+
+  Future<RemoteFeastMessageOutcome> process(Map<String, dynamic> data) async {
+    // Parsing validates schema/type/identity before any cancellation or claim.
+    final remote = RemoteFeastMessage.tryParse(data);
+    if (remote == null) return RemoteFeastMessageOutcome.ignored;
+    final occurredAt = _now();
+    final payload = remote.payload;
+    final occurrenceKey = payload.occurrenceKey!;
+
+    if (!remote.isDeliverableAt(occurredAt)) {
+      // An expired remote still owns cancellation of its pending safety copy,
+      // but can never claim or present the occurrence.
+      await _cancelOccurrence(payload);
+      await _recordExpired(occurrenceKey, occurredAt);
+      await _enqueueReconciliation();
+      return RemoteFeastMessageOutcome.expired;
+    }
+
+    // flutter_local_notifications cancellation removes both the pending alarm
+    // and a matching delivered copy on Android before any remote presentation.
+    await _cancelOccurrence(payload);
+    if (!await _claimOccurrence(payload)) {
+      return RemoteFeastMessageOutcome.duplicate;
+    }
+    await _removeDeliveredOccurrence(payload);
+    await _showReminder(payload);
+    await _recordReceived(occurrenceKey, occurredAt);
+    await _enqueueReconciliation();
+    return RemoteFeastMessageOutcome.shown;
+  }
+}
+
+RemoteFeastMessageProcessor _remoteProcessor() => RemoteFeastMessageProcessor(
+  now: DateTime.now,
+  cancelOccurrence: (payload) =>
+      FeastReminderService.instance.cancelOccurrence(payload.occurrenceKey!),
+  claimOccurrence: AndroidFeastReminderOccurrenceStore.instance.claim,
+  removeDeliveredOccurrence: (payload) => FeastReminderService.instance
+      .removeDeliveredRemoteOccurrence(payload.occurrenceKey!),
+  showReminder: FeastReminderService.instance.showRemoteReminder,
+  recordReceived: NotificationOccurrenceSyncService.instance.recordReceived,
+  recordExpired: NotificationOccurrenceSyncService.instance.recordExpired,
+  enqueueReconciliation: () => FeastReminderBackgroundService.instance
+      .enqueueRepair(reason: FeastReminderRepairReason.occurrenceSync),
+);
+
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (!DefaultFirebaseOptions.isSupported) return;
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  // Notification payloads are displayed by FCM while backgrounded or killed.
-  // Parsing here rejects unrelated data and keeps the isolate forward-safe.
-  RemoteFeastMessage.tryParse(message.data);
+  WidgetsFlutterBinding.ensureInitialized();
+  DartPluginRegistrant.ensureInitialized();
+  if (Firebase.apps.isEmpty) {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
+  await FeastReminderService.instance.initialize();
+  await _remoteProcessor().process(message.data);
 }
 
 class FeastReminderMessagingService {
@@ -114,9 +210,7 @@ class FeastReminderMessagingService {
   ).dispatch();
 
   Future<void> _handleForegroundMessage(RemoteMessage message) async {
-    final remote = RemoteFeastMessage.tryParse(message.data);
-    if (remote == null || !remote.isDeliverableAt(DateTime.now())) return;
-    await FeastReminderService.instance.showRemoteReminder(remote.payload);
+    await _remoteProcessor().process(message.data);
   }
 
   void _handleOpenedMessage(RemoteMessage message) {

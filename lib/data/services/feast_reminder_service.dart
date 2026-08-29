@@ -5,6 +5,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
 import '../models/liturgical_region.dart';
+import 'android_feast_reminder_occurrence_store.dart';
 import 'feast_reminder_preferences.dart';
 import 'feast_reminder_notification_contract.dart';
 import 'feast_reminder_payload.dart';
@@ -270,15 +271,61 @@ class FeastReminderService {
       occurrenceKey: occurrenceKey,
       celebrationDate: payload.celebrationDate,
     );
+    final remoteIdentity = FeastReminderNotificationIdentity(
+      occurrenceKey: remotePresentationTag(occurrenceKey),
+      notificationId: identity.notificationId,
+      groupKey: identity.groupKey,
+      sortKey: identity.sortKey,
+    );
 
     await _plugin.show(
       identity.notificationId,
       content.title,
       content.body,
-      _buildNotificationDetails(event, content: content, identity: identity),
+      _buildNotificationDetails(
+        event,
+        content: content,
+        identity: remoteIdentity,
+      ),
       payload: payload.encode(),
     );
   }
+
+  /// Removes a prior remote presentation without sharing the local alarm tag.
+  Future<void> removeDeliveredRemoteOccurrence(String occurrenceKey) async {
+    final key = occurrenceKey.trim();
+    if (key.isEmpty) {
+      throw ArgumentError.value(
+        occurrenceKey,
+        'occurrenceKey',
+        'must not be empty',
+      );
+    }
+    await initialize();
+    await _plugin.cancel(
+      FeastReminderNotificationContract.stableNotificationId(key),
+      tag: remotePresentationTag(key),
+    );
+  }
+
+  @visibleForTesting
+  static String remotePresentationTag(String occurrenceKey) {
+    final key = occurrenceKey.trim();
+    if (key.isEmpty) {
+      throw ArgumentError.value(
+        occurrenceKey,
+        'occurrenceKey',
+        'must not be empty',
+      );
+    }
+    return 'remote:$key';
+  }
+
+  @visibleForTesting
+  static bool shouldScheduleLocalOccurrenceForTesting(
+    String occurrenceKey,
+    Set<String> remotelyPresentedKeys,
+  ) => !remotelyPresentedKeys.contains(occurrenceKey);
 
   /// Cancel all scheduled feast reminders.
   Future<bool> cancelAll() async {
@@ -985,17 +1032,28 @@ class FeastReminderService {
       minute: prefs.minute,
       notifyDayBefore: prefs.notifyDayBefore,
     );
-    final capacity = Platform.isIOS
-        ? FeastReminderScheduleCapacity.forIos()
-        : FeastReminderScheduleCapacity.forAndroid();
-    final selection = capacity.select(
-      occurrences,
-      celebrationDate: (occurrence) => occurrence.event.date,
-    );
     final payloadByOccurrence = <_ReminderOccurrence, FeastReminderPayload>{
       for (final occurrence in occurrences)
         occurrence: _occurrencePayload(occurrence, region),
     };
+    final remotelyPresentedKeys = await AndroidFeastReminderOccurrenceStore
+        .instance
+        .claimedOccurrenceKeys();
+    final localOccurrences = occurrences
+        .where(
+          (occurrence) => shouldScheduleLocalOccurrenceForTesting(
+            payloadByOccurrence[occurrence]!.occurrenceKey!,
+            remotelyPresentedKeys,
+          ),
+        )
+        .toList(growable: false);
+    final capacity = Platform.isIOS
+        ? FeastReminderScheduleCapacity.forIos()
+        : FeastReminderScheduleCapacity.forAndroid();
+    final selection = capacity.select(
+      localOccurrences,
+      celebrationDate: (occurrence) => occurrence.event.date,
+    );
 
     int failures = 0;
     final scheduledReferences =
@@ -1122,7 +1180,7 @@ class FeastReminderService {
       }
     }
 
-    final scheduledThrough = occurrences.isEmpty
+    final scheduledThrough = localOccurrences.isEmpty
         ? endDate
         : (failures == 0
               ? selection.coverageThrough
@@ -1131,10 +1189,10 @@ class FeastReminderService {
                     : scheduledReferences.last.celebrationDate));
 
     final baseResult = FeastReminderScheduleResult(
-      eligibleCount: occurrences.length,
+      eligibleCount: localOccurrences.length,
       scheduledCount: scheduledReferences.length,
       failureCount: failures,
-      scheduledThrough: occurrences.isEmpty ? endDate : scheduledThrough,
+      scheduledThrough: localOccurrences.isEmpty ? endDate : scheduledThrough,
       usedExactDelivery: exactAllowed,
     );
     final configurationFingerprint = prefs.configurationFingerprint(
