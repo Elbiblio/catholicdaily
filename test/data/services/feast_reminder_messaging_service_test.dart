@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:catholic_daily/data/services/android_feast_reminder_occurrence_store.dart';
 import 'package:catholic_daily/data/services/feast_reminder_messaging_service.dart';
 import 'package:catholic_daily/data/services/feast_reminder_notification_contract.dart';
 import 'package:catholic_daily/data/services/feast_reminder_service.dart';
@@ -216,6 +217,32 @@ void main() {
       expect(outcome, RemoteFeastMessageOutcome.duplicate);
       expect(operations, <String>['cancel', 'claim']);
     });
+
+    test(
+      'an unavailable native claim fails closed and requests repair',
+      () async {
+        processor = RemoteFeastMessageProcessor(
+          now: () => DateTime.parse('2026-08-15T06:01:00+01:00'),
+          cancelOccurrence: (payload) async => operations.add('cancel'),
+          claimOccurrence: (payload) async {
+            operations.add('claim');
+            throw const FeastReminderOccurrenceStoreUnavailable('offline');
+          },
+          removeDeliveredOccurrence: (payload) async =>
+              operations.add('remove'),
+          showReminder: (payload) async => operations.add('show'),
+          recordReceived: (key, occurredAt) async => operations.add('received'),
+          recordExpired: (key, occurredAt) async => operations.add('expired'),
+          enqueueReconciliation: () async => operations.add('enqueue'),
+          handleClaimUnavailable: () async => operations.add('durable-repair'),
+        );
+
+        final outcome = await processor.process(_validV3Data(validData));
+
+        expect(outcome, RemoteFeastMessageOutcome.unavailable);
+        expect(operations, <String>['cancel', 'claim', 'durable-repair']);
+      },
+    );
 
     test('concurrent duplicate deliveries show exactly once', () async {
       var claimed = false;

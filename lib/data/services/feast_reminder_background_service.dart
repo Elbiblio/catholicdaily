@@ -23,6 +23,7 @@ enum FeastReminderRepairReason {
   timeSet,
   bootCompleted,
   packageReplaced,
+  nativeOccurrenceStoreUnavailable,
   startup,
   periodicAudit,
 }
@@ -61,7 +62,8 @@ class FeastReminderRepairRequest {
         reason == FeastReminderRepairReason.timezoneChanged ||
         reason == FeastReminderRepairReason.timeSet ||
         reason == FeastReminderRepairReason.bootCompleted ||
-        reason == FeastReminderRepairReason.packageReplaced;
+        reason == FeastReminderRepairReason.packageReplaced ||
+        reason == FeastReminderRepairReason.nativeOccurrenceStoreUnavailable;
     final taskForcesReschedule =
         task == FeastReminderBackgroundService.iosForcedRepairTaskIdentifier;
     return FeastReminderRepairRequest(
@@ -462,7 +464,8 @@ class FeastReminderBackgroundService {
         reason == FeastReminderRepairReason.timezoneChanged ||
         reason == FeastReminderRepairReason.timeSet ||
         reason == FeastReminderRepairReason.bootCompleted ||
-        reason == FeastReminderRepairReason.packageReplaced;
+        reason == FeastReminderRepairReason.packageReplaced ||
+        reason == FeastReminderRepairReason.nativeOccurrenceStoreUnavailable;
     if (Platform.isIOS) {
       // Workmanager's iOS registerOneOffTask uses UIApplication background
       // time and cannot survive process death. BGProcessingTaskRequest is the
@@ -554,6 +557,9 @@ class FeastReminderBackgroundService {
       final result = await reminders.scheduleAheadMonths(
         _scheduleMonths,
         prefs,
+        // This call already runs inside WorkManager. A false audit result owns
+        // exponential backoff; replacing this unique task here can loop.
+        enqueueRepairOnNativeStoreUnavailable: false,
       );
       if (!result.canSyncServerOnlyOccurrences) {
         return false;

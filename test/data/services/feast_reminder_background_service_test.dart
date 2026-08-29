@@ -141,6 +141,7 @@ void main() {
       FeastReminderRepairReason.timeSet,
       FeastReminderRepairReason.bootCompleted,
       FeastReminderRepairReason.packageReplaced,
+      FeastReminderRepairReason.nativeOccurrenceStoreUnavailable,
     ]) {
       final request = FeastReminderRepairRequest.fromWorkmanager(
         FeastReminderBackgroundService.taskName,

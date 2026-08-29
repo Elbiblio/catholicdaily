@@ -63,4 +63,15 @@ void main() {
       isTrue,
     );
   });
+
+  test('Android repair worker defers native-store retry to its backoff', () {
+    final backgroundService = File(
+      'lib/data/services/feast_reminder_background_service.dart',
+    ).readAsStringSync();
+
+    expect(
+      backgroundService,
+      contains('enqueueRepairOnNativeStoreUnavailable: false'),
+    );
+  });
 }

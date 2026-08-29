@@ -288,6 +288,34 @@ void main() {
     );
   });
 
+  test('fail-closed invalidation preserves its cancellation journal', () async {
+    SharedPreferences.setMockInitialValues({
+      'feast_reminder_schedule_in_progress': true,
+      'feast_reminder_schedule_journal_references': <String>[
+        '456|feast:general-roman:2027-06-05:on_day:pending',
+      ],
+      'feast_reminder_schedule_journal_payloads': <String>['pending-payload'],
+      'feast_reminder_scheduled_through': DateTime(
+        2027,
+        6,
+        5,
+      ).millisecondsSinceEpoch,
+    });
+    FeastReminderPreferences.resetInstanceForTesting();
+    final preferences = await FeastReminderPreferences.getInstance();
+
+    await preferences.invalidateSchedule(preserveCancellationJournal: true);
+
+    expect(preferences.scheduledThrough, isNull);
+    expect(preferences.scheduleInProgress, isTrue);
+    expect(preferences.scheduleJournalReferences, const <String>[
+      '456|feast:general-roman:2027-06-05:on_day:pending',
+    ]);
+    expect(preferences.scheduleJournalPayloads, const <String>[
+      'pending-payload',
+    ]);
+  });
+
   test(
     'schedule journal stays recoverable until completion marker is written',
     () async {

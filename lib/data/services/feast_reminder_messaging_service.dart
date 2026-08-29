@@ -13,6 +13,7 @@ import 'feast_reminder_background_service.dart';
 import 'feast_reminder_service.dart';
 import 'notification_installation_sync_service.dart';
 import 'notification_occurrence_sync_service.dart';
+import 'notification_repair_outbox.dart';
 
 class RemoteFeastMessage {
   const RemoteFeastMessage({required this.payload, required this.expiresAt});
@@ -64,7 +65,13 @@ class RemoteFeastMessage {
   }
 }
 
-enum RemoteFeastMessageOutcome { ignored, expired, duplicate, shown }
+enum RemoteFeastMessageOutcome {
+  ignored,
+  expired,
+  duplicate,
+  unavailable,
+  shown,
+}
 
 class RemoteFeastMessageProcessor {
   const RemoteFeastMessageProcessor({
@@ -81,6 +88,7 @@ class RemoteFeastMessageProcessor {
     required Future<void> Function(String occurrenceKey, DateTime occurredAt)
     recordExpired,
     required Future<void> Function() enqueueReconciliation,
+    Future<void> Function()? handleClaimUnavailable,
   }) : _now = now,
        _cancelOccurrence = cancelOccurrence,
        _claimOccurrence = claimOccurrence,
@@ -88,7 +96,8 @@ class RemoteFeastMessageProcessor {
        _showReminder = showReminder,
        _recordReceived = recordReceived,
        _recordExpired = recordExpired,
-       _enqueueReconciliation = enqueueReconciliation;
+       _enqueueReconciliation = enqueueReconciliation,
+       _handleClaimUnavailable = handleClaimUnavailable;
 
   final DateTime Function() _now;
   final Future<void> Function(FeastReminderPayload payload) _cancelOccurrence;
@@ -101,6 +110,7 @@ class RemoteFeastMessageProcessor {
   final Future<void> Function(String occurrenceKey, DateTime occurredAt)
   _recordExpired;
   final Future<void> Function() _enqueueReconciliation;
+  final Future<void> Function()? _handleClaimUnavailable;
 
   Future<RemoteFeastMessageOutcome> process(Map<String, dynamic> data) async {
     // Parsing validates schema/type/identity before any cancellation or claim.
@@ -122,7 +132,14 @@ class RemoteFeastMessageProcessor {
     // flutter_local_notifications cancellation removes both the pending alarm
     // and a matching delivered copy on Android before any remote presentation.
     await _cancelOccurrence(payload);
-    if (!await _claimOccurrence(payload)) {
+    late final bool claimed;
+    try {
+      claimed = await _claimOccurrence(payload);
+    } on FeastReminderOccurrenceStoreUnavailable {
+      await _handleClaimUnavailable?.call();
+      return RemoteFeastMessageOutcome.unavailable;
+    }
+    if (!claimed) {
       return RemoteFeastMessageOutcome.duplicate;
     }
     // Close the scheduler race: a forced repair can create the same local
@@ -148,7 +165,25 @@ RemoteFeastMessageProcessor _remoteProcessor() => RemoteFeastMessageProcessor(
   recordExpired: NotificationOccurrenceSyncService.instance.recordExpired,
   enqueueReconciliation: () => FeastReminderBackgroundService.instance
       .enqueueRepair(reason: FeastReminderRepairReason.occurrenceSync),
+  handleClaimUnavailable: _retainAndEnqueueNativeClaimRepair,
 );
+
+Future<void> _retainAndEnqueueNativeClaimRepair() async {
+  try {
+    await NotificationRepairOutbox.instance.markPending(
+      reason: 'native-occurrence-store-unavailable',
+    );
+  } catch (_) {
+    // Work registration below is the fallback when the marker cannot write.
+  }
+  try {
+    await FeastReminderBackgroundService.instance.enqueueRepair(
+      reason: FeastReminderRepairReason.nativeOccurrenceStoreUnavailable,
+    );
+  } catch (_) {
+    // A successfully written marker retains repair across process death.
+  }
+}
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {

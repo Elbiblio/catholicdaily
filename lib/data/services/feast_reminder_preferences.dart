@@ -312,7 +312,9 @@ class FeastReminderPreferences {
     );
   }
 
-  Future<void> invalidateSchedule() async {
+  Future<void> invalidateSchedule({
+    bool preserveCancellationJournal = false,
+  }) async {
     await _write(
       _lastScheduledYearKey,
       () => _prefs.setInt(_lastScheduledYearKey, 0),
@@ -346,18 +348,20 @@ class FeastReminderPreferences {
       _scheduledConfigurationKey,
       () => _prefs.remove(_scheduledConfigurationKey),
     );
-    await _write(
-      _scheduleJournalReferencesKey,
-      () => _prefs.remove(_scheduleJournalReferencesKey),
-    );
-    await _write(
-      _scheduleJournalPayloadsKey,
-      () => _prefs.remove(_scheduleJournalPayloadsKey),
-    );
-    await _write(
-      _scheduleInProgressKey,
-      () => _prefs.remove(_scheduleInProgressKey),
-    );
+    if (!preserveCancellationJournal) {
+      await _write(
+        _scheduleJournalReferencesKey,
+        () => _prefs.remove(_scheduleJournalReferencesKey),
+      );
+      await _write(
+        _scheduleJournalPayloadsKey,
+        () => _prefs.remove(_scheduleJournalPayloadsKey),
+      );
+      await _write(
+        _scheduleInProgressKey,
+        () => _prefs.remove(_scheduleInProgressKey),
+      );
+    }
   }
 
   String get timeLabel {

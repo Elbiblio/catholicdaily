@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
 import '../models/liturgical_region.dart';
 import 'android_feast_reminder_occurrence_store.dart';
+import 'feast_reminder_background_service.dart';
 import 'feast_reminder_preferences.dart';
 import 'feast_reminder_notification_contract.dart';
 import 'feast_reminder_payload.dart';
@@ -18,6 +19,7 @@ import 'liturgical_region_preference_service.dart';
 import 'offline_ordo_lookup_service.dart';
 import 'notification_occurrence.dart';
 import 'notification_occurrence_store.dart';
+import 'notification_repair_outbox.dart';
 import 'optional_memorial_service.dart';
 import 'saint_calendar_service.dart';
 import 'saint_profile_service.dart';
@@ -972,15 +974,22 @@ class FeastReminderService {
   /// the year 2 call).
   Future<FeastReminderScheduleResult> scheduleAheadMonths(
     int monthsAhead,
-    FeastReminderPreferences prefs,
-  ) => _scheduleLock.synchronized(
-    () async => _scheduleAheadMonthsLocked(monthsAhead, prefs),
+    FeastReminderPreferences prefs, {
+    bool enqueueRepairOnNativeStoreUnavailable = true,
+  }) => _scheduleLock.synchronized(
+    () async => _scheduleAheadMonthsLocked(
+      monthsAhead,
+      prefs,
+      enqueueRepairOnNativeStoreUnavailable:
+          enqueueRepairOnNativeStoreUnavailable,
+    ),
   );
 
   Future<FeastReminderScheduleResult> _scheduleAheadMonthsLocked(
     int monthsAhead,
-    FeastReminderPreferences prefs,
-  ) async {
+    FeastReminderPreferences prefs, {
+    required bool enqueueRepairOnNativeStoreUnavailable,
+  }) async {
     await initialize();
     await prefs.reload();
     await prefs.beginScheduleUpdate();
@@ -1035,8 +1044,12 @@ class FeastReminderService {
           AndroidFeastReminderOccurrenceStore.instance.claimedOccurrenceKeys,
       occurrenceKey: (occurrence) =>
           payloadByOccurrence[occurrence]!.occurrenceKey!,
+      onUnavailable: () => _retainAndEnqueueNativeClaimRepair(
+        enqueueRepair: enqueueRepairOnNativeStoreUnavailable,
+      ),
     );
-    final localOccurrences = await claimGuard.unclaimed(occurrences);
+    final precheck = await claimGuard.unclaimed(occurrences);
+    final localOccurrences = precheck.retainedOccurrences;
     final capacity = Platform.isIOS
         ? FeastReminderScheduleCapacity.forIos()
         : FeastReminderScheduleCapacity.forAndroid();
@@ -1178,26 +1191,46 @@ class FeastReminderService {
               .instance
               .claimedOccurrenceKeys,
           occurrenceKey: (reference) => reference.tag,
+          onUnavailable: () => _retainAndEnqueueNativeClaimRepair(
+            enqueueRepair: enqueueRepairOnNativeStoreUnavailable,
+          ),
         );
-    final postcheck = await scheduledClaimGuard.cancelClaimed(
-      scheduledReferences,
-      cancelOccurrence: (occurrenceKey) => _plugin.cancel(
-        FeastReminderNotificationContract.stableNotificationId(occurrenceKey),
-        tag: occurrenceKey,
-      ),
-    );
+    final postcheck = precheck.storeAvailable
+        ? await scheduledClaimGuard.cancelClaimed(
+            scheduledReferences,
+            cancelOccurrence: (occurrenceKey) => _plugin.cancel(
+              FeastReminderNotificationContract.stableNotificationId(
+                occurrenceKey,
+              ),
+              tag: occurrenceKey,
+            ),
+          )
+        : FeastReminderScheduleClaimResult<
+            ({int id, String tag, DateTime celebrationDate, String payload})
+          >(
+            storeAvailable: false,
+            claimedOccurrenceKeys: const {},
+            retainedOccurrences: const [],
+          );
     final claimedAfterScheduling = postcheck.claimedOccurrenceKeys;
+    final failedCancellationReferences =
+        postcheck.failedCancellationOccurrences;
     if (postcheck.retainedOccurrences.length != scheduledReferences.length) {
       scheduledReferences
         ..clear()
         ..addAll(postcheck.retainedOccurrences);
+      final recoveryReferences =
+          <({int id, String tag, DateTime celebrationDate, String payload})>[
+            ...scheduledReferences,
+            ...failedCancellationReferences,
+          ];
       await prefs.setScheduleJournalReferences(
-        scheduledReferences
+        recoveryReferences
             .map((item) => '${item.id}|${item.tag}')
             .toList(growable: false),
       );
       await prefs.setScheduleJournalPayloads(
-        scheduledReferences.map((item) => item.payload).toList(growable: false),
+        recoveryReferences.map((item) => item.payload).toList(growable: false),
       );
     }
     final finalLocalOccurrences = localOccurrences
@@ -1208,7 +1241,11 @@ class FeastReminderService {
         )
         .toList(growable: false);
 
-    final scheduledThrough = finalLocalOccurrences.isEmpty
+    final claimStoreAvailable =
+        precheck.storeAvailable && postcheck.storeAvailable;
+    final scheduledThrough = !claimStoreAvailable
+        ? null
+        : finalLocalOccurrences.isEmpty
         ? endDate
         : (failures == 0
               ? selection.coverageThrough
@@ -1219,8 +1256,10 @@ class FeastReminderService {
     final baseResult = FeastReminderScheduleResult(
       eligibleCount: finalLocalOccurrences.length,
       scheduledCount: scheduledReferences.length,
-      failureCount: failures,
-      scheduledThrough: finalLocalOccurrences.isEmpty
+      failureCount: failures + (claimStoreAvailable ? 0 : 1),
+      scheduledThrough: !claimStoreAvailable
+          ? null
+          : finalLocalOccurrences.isEmpty
           ? endDate
           : scheduledThrough,
       usedExactDelivery: exactAllowed,
@@ -1253,7 +1292,14 @@ class FeastReminderService {
         result.occurrencesToPersist,
         reconciledAt: now,
       );
-      if (occurrenceQueuePersisted) await prefs.invalidateSchedule();
+      if (occurrenceQueuePersisted) {
+        // Horizon and occurrence rows remain de-armed. Failed OS cancellation
+        // references stay continuously journaled across this invalidation so
+        // process death cannot orphan a possibly-live alarm.
+        await prefs.invalidateSchedule(
+          preserveCancellationJournal: failedCancellationReferences.isNotEmpty,
+        );
+      }
     } else {
       occurrenceQueuePersisted = await _replaceOccurrenceSchedule(
         result.occurrencesToPersist,
@@ -1283,8 +1329,29 @@ class FeastReminderService {
       '[FeastReminder] Scheduled ${scheduledReferences.length} reminders across '
       '${now.year}-${endDate.year} '
       '(${occurrences.length} occurrences, ${allEvents.length} candidates, '
-      '${exactAllowed ? 'exact' : 'inexact'}, $failures failures)',
+      '${exactAllowed ? 'exact' : 'inexact'}, '
+      '${baseResult.failureCount} failures)',
     );
     return result;
+  }
+
+  Future<void> _retainAndEnqueueNativeClaimRepair({
+    required bool enqueueRepair,
+  }) async {
+    try {
+      await NotificationRepairOutbox.instance.markPending(
+        reason: 'native-occurrence-store-unavailable',
+      );
+    } catch (_) {
+      // Work registration below is the fallback when the marker cannot write.
+    }
+    if (!enqueueRepair) return;
+    try {
+      await FeastReminderBackgroundService.instance.enqueueRepair(
+        reason: FeastReminderRepairReason.nativeOccurrenceStoreUnavailable,
+      );
+    } catch (_) {
+      // A successfully written marker retains repair across process death.
+    }
   }
 }

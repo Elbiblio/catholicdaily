@@ -14,7 +14,8 @@ void main() {
     'scheduler postcheck removes a local scheduled after the remote second cancel',
     () async {
       final harness = _InterleavingHarness(occurrenceKey);
-      final eligible = await harness.guard.unclaimed(<String>[occurrenceKey]);
+      final precheck = await harness.guard.unclaimed(<String>[occurrenceKey]);
+      final eligible = precheck.retainedOccurrences;
 
       expect(
         await harness.remote.process(payload),
@@ -48,7 +49,8 @@ void main() {
           return allowClaim.future;
         },
       );
-      final eligible = await harness.guard.unclaimed(<String>[occurrenceKey]);
+      final precheck = await harness.guard.unclaimed(<String>[occurrenceKey]);
+      final eligible = precheck.retainedOccurrences;
 
       final remote = harness.remote.process(payload);
       await firstCancel.future;
@@ -81,7 +83,8 @@ void main() {
           return allowClaim.future;
         },
       );
-      final eligible = await harness.guard.unclaimed(<String>[occurrenceKey]);
+      final precheck = await harness.guard.unclaimed(<String>[occurrenceKey]);
+      final eligible = precheck.retainedOccurrences;
 
       final remote = harness.remote.process(payload);
       await firstCancel.future;
@@ -103,14 +106,94 @@ void main() {
       expect(harness.remoteShown, isTrue);
     },
   );
+
+  test('precheck failure arms nothing and requests forced repair', () async {
+    var repairRequests = 0;
+    final guard = FeastReminderScheduleClaimGuard<String>(
+      readClaimedOccurrenceKeys: () async =>
+          throw const FeastReminderOccurrenceStoreUnavailable('offline'),
+      occurrenceKey: (key) => key,
+      onUnavailable: () async => repairRequests++,
+    );
+
+    final precheck = await guard.unclaimed(<String>[occurrenceKey]);
+
+    expect(precheck.storeAvailable, isFalse);
+    expect(precheck.retainedOccurrences, isEmpty);
+    expect(repairRequests, 1);
+  });
+
+  test(
+    'postcheck failure cancels every new local and retains only the remote',
+    () async {
+      final harness = _InterleavingHarness(occurrenceKey, failPostcheck: true);
+      final precheck = await harness.guard.unclaimed(<String>[occurrenceKey]);
+
+      expect(
+        await harness.remote.process(payload),
+        RemoteFeastMessageOutcome.shown,
+      );
+      await harness.schedule(precheck.retainedOccurrences.single);
+      final postcheck = await harness.guard.cancelClaimed(
+        precheck.retainedOccurrences,
+        cancelOccurrence: harness.cancelLocal,
+      );
+      harness.persistPostcheck(postcheck);
+
+      expect(postcheck.storeAvailable, isFalse);
+      expect(postcheck.retainedOccurrences, isEmpty);
+      expect(harness.localScheduled, isFalse);
+      expect(harness.localArmed, isFalse);
+      expect(harness.remoteShown, isTrue);
+      expect(harness.repairRequests, 1);
+    },
+  );
+
+  test(
+    'postcheck failure attempts every cancellation when one cancel throws',
+    () async {
+      var repairRequests = 0;
+      final attemptedCancellations = <String>[];
+      final guard = FeastReminderScheduleClaimGuard<String>(
+        readClaimedOccurrenceKeys: () async =>
+            throw const FeastReminderOccurrenceStoreUnavailable('offline'),
+        occurrenceKey: (key) => key,
+        onUnavailable: () async => repairRequests++,
+      );
+
+      final postcheck = await guard.cancelClaimed(
+        const <String>['first', 'second'],
+        cancelOccurrence: (key) async {
+          attemptedCancellations.add(key);
+          if (key == 'first') throw StateError('cancel failed');
+        },
+      );
+
+      expect(attemptedCancellations, const <String>['first', 'second']);
+      expect(postcheck.storeAvailable, isFalse);
+      expect(postcheck.retainedOccurrences, isEmpty);
+      expect(postcheck.failedCancellationOccurrences, const <String>['first']);
+      expect(repairRequests, 1);
+    },
+  );
 }
 
 class _InterleavingHarness {
-  _InterleavingHarness(this.occurrenceKey, {this.afterFirstRemoteCancel}) {
+  _InterleavingHarness(
+    this.occurrenceKey, {
+    this.afterFirstRemoteCancel,
+    this.failPostcheck = false,
+  }) {
     guard = FeastReminderScheduleClaimGuard(
-      readClaimedOccurrenceKeys: () async =>
-          claimed ? <String>{occurrenceKey} : const <String>{},
+      readClaimedOccurrenceKeys: () async {
+        claimReadCount++;
+        if (failPostcheck && claimReadCount == 2) {
+          throw const FeastReminderOccurrenceStoreUnavailable('offline');
+        }
+        return claimed ? <String>{occurrenceKey} : const <String>{};
+      },
       occurrenceKey: (key) => key,
+      onUnavailable: () async => repairRequests++,
     );
     remote = RemoteFeastMessageProcessor(
       now: () => DateTime.parse('2026-08-15T06:01:00+01:00'),
@@ -144,6 +227,7 @@ class _InterleavingHarness {
 
   final String occurrenceKey;
   final Future<void> Function()? afterFirstRemoteCancel;
+  final bool failPostcheck;
   late FeastReminderScheduleClaimGuard<String> guard;
   late RemoteFeastMessageProcessor remote;
   final Set<String> deliveredTags = <String>{};
@@ -151,6 +235,8 @@ class _InterleavingHarness {
   bool localScheduled = false;
   bool localArmed = false;
   int remoteCancelCount = 0;
+  int claimReadCount = 0;
+  int repairRequests = 0;
 
   bool get remoteShown => deliveredTags.contains(
     FeastReminderService.remotePresentationTag(occurrenceKey),

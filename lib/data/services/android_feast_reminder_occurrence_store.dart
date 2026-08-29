@@ -3,6 +3,16 @@ import 'package:flutter/services.dart';
 
 import 'feast_reminder_payload.dart';
 
+class FeastReminderOccurrenceStoreUnavailable implements Exception {
+  const FeastReminderOccurrenceStoreUnavailable(this.reason, [this.cause]);
+
+  final String reason;
+  final Object? cause;
+
+  @override
+  String toString() => 'FeastReminderOccurrenceStoreUnavailable: $reason';
+}
+
 class AndroidFeastReminderOccurrenceStore {
   const AndroidFeastReminderOccurrenceStore._();
 
@@ -16,31 +26,54 @@ class AndroidFeastReminderOccurrenceStore {
     final occurrenceKey = payload.occurrenceKey;
     if (occurrenceKey == null || occurrenceKey.trim().isEmpty) return false;
     try {
-      return await _channel.invokeMethod<bool>('claim', <String, Object>{
+      final response = await _channel
+          .invokeMethod<Object?>('claim', <String, Object>{
             'occurrenceKey': occurrenceKey,
             'celebrationDate': _dateOnly(payload.celebrationDate),
-          }) ??
-          false;
+          });
+      if (response is! bool) {
+        throw const FeastReminderOccurrenceStoreUnavailable(
+          'Malformed native claim response',
+        );
+      }
+      return response;
     } on PlatformException catch (error) {
       debugPrint('[FeastReminder] Native duplicate claim failed: $error');
-      return false;
+      throw FeastReminderOccurrenceStoreUnavailable(
+        'Native duplicate claim failed',
+        error,
+      );
     } on MissingPluginException catch (error) {
       debugPrint('[FeastReminder] Native duplicate store unavailable: $error');
-      return false;
+      throw FeastReminderOccurrenceStoreUnavailable(
+        'Native duplicate store unavailable',
+        error,
+      );
     }
   }
 
   Future<Set<String>> claimedOccurrenceKeys() async {
     if (defaultTargetPlatform != TargetPlatform.android) return const {};
     try {
-      final keys = await _channel.invokeListMethod<String>('claimedKeys');
-      return keys?.toSet() ?? const {};
+      final response = await _channel.invokeMethod<Object?>('claimedKeys');
+      if (response is! List || response.any((key) => key is! String)) {
+        throw const FeastReminderOccurrenceStoreUnavailable(
+          'Malformed native claimed-key response',
+        );
+      }
+      return response.cast<String>().toSet();
     } on PlatformException catch (error) {
       debugPrint('[FeastReminder] Native presented-key query failed: $error');
-      return const {};
+      throw FeastReminderOccurrenceStoreUnavailable(
+        'Native presented-key query failed',
+        error,
+      );
     } on MissingPluginException catch (error) {
       debugPrint('[FeastReminder] Native duplicate store unavailable: $error');
-      return const {};
+      throw FeastReminderOccurrenceStoreUnavailable(
+        'Native duplicate store unavailable',
+        error,
+      );
     }
   }
 
@@ -54,24 +87,68 @@ class FeastReminderScheduleClaimGuard<T> {
   const FeastReminderScheduleClaimGuard({
     required Future<Set<String>> Function() readClaimedOccurrenceKeys,
     required String Function(T occurrence) occurrenceKey,
+    required Future<void> Function() onUnavailable,
   }) : _readClaimedOccurrenceKeys = readClaimedOccurrenceKeys,
-       _occurrenceKey = occurrenceKey;
+       _occurrenceKey = occurrenceKey,
+       _onUnavailable = onUnavailable;
 
   final Future<Set<String>> Function() _readClaimedOccurrenceKeys;
   final String Function(T occurrence) _occurrenceKey;
+  final Future<void> Function() _onUnavailable;
 
-  Future<List<T>> unclaimed(Iterable<T> occurrences) async {
-    final claimed = await _readClaimedOccurrenceKeys();
-    return occurrences
-        .where((occurrence) => !claimed.contains(_occurrenceKey(occurrence)))
-        .toList(growable: false);
+  Future<FeastReminderScheduleClaimResult<T>> unclaimed(
+    Iterable<T> occurrences,
+  ) async {
+    try {
+      final claimed = await _readClaimedOccurrenceKeys();
+      return FeastReminderScheduleClaimResult(
+        storeAvailable: true,
+        claimedOccurrenceKeys: claimed,
+        retainedOccurrences: occurrences
+            .where(
+              (occurrence) => !claimed.contains(_occurrenceKey(occurrence)),
+            )
+            .toList(growable: false),
+      );
+    } on Object {
+      await _onUnavailable();
+      return FeastReminderScheduleClaimResult(
+        storeAvailable: false,
+        claimedOccurrenceKeys: const {},
+        retainedOccurrences: const [],
+      );
+    }
   }
 
   Future<FeastReminderScheduleClaimResult<T>> cancelClaimed(
     Iterable<T> scheduledOccurrences, {
     required Future<void> Function(String occurrenceKey) cancelOccurrence,
   }) async {
-    final claimed = await _readClaimedOccurrenceKeys();
+    late final Set<String> claimed;
+    try {
+      claimed = await _readClaimedOccurrenceKeys();
+    } on Object {
+      final failedCancellations = <T>[];
+      for (final occurrence in scheduledOccurrences) {
+        final key = _occurrenceKey(occurrence);
+        try {
+          await cancelOccurrence(key);
+        } on Object catch (error) {
+          failedCancellations.add(occurrence);
+          debugPrint(
+            '[FeastReminder] Failed to cancel $key after native claim-store '
+            'failure: $error',
+          );
+        }
+      }
+      await _onUnavailable();
+      return FeastReminderScheduleClaimResult(
+        storeAvailable: false,
+        claimedOccurrenceKeys: const {},
+        retainedOccurrences: const [],
+        failedCancellationOccurrences: failedCancellations,
+      );
+    }
     final retained = <T>[];
     for (final occurrence in scheduledOccurrences) {
       final key = _occurrenceKey(occurrence);
@@ -82,6 +159,7 @@ class FeastReminderScheduleClaimGuard<T> {
       }
     }
     return FeastReminderScheduleClaimResult(
+      storeAvailable: true,
       claimedOccurrenceKeys: claimed,
       retainedOccurrences: retained,
     );
@@ -90,10 +168,14 @@ class FeastReminderScheduleClaimGuard<T> {
 
 class FeastReminderScheduleClaimResult<T> {
   const FeastReminderScheduleClaimResult({
+    required this.storeAvailable,
     required this.claimedOccurrenceKeys,
     required this.retainedOccurrences,
+    this.failedCancellationOccurrences = const [],
   });
 
+  final bool storeAvailable;
   final Set<String> claimedOccurrenceKeys;
   final List<T> retainedOccurrences;
+  final List<T> failedCancellationOccurrences;
 }
