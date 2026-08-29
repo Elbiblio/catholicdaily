@@ -436,7 +436,8 @@ void main() {
       );
       engine.configureOutcomes.addAll(<Object?>[
         null,
-        StateError('rollback rejected'),
+        const _PartialRateFailure('rollback rejected'),
+        null,
       ]);
 
       await narration.setRate(0.75);
@@ -444,10 +445,59 @@ void main() {
 
       expect(engine.currentRate, 0.75);
       expect(narration.rate, 0.75);
+      expect(engine.configuredRates, <double>[0.75, 0.5, 0.75]);
       expect(
         find.text('Speech speed changed for this session but was not saved.'),
         findsOneWidget,
       );
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      narration.dispose();
+    },
+  );
+
+  testWidgets(
+    'unconfirmed reapply marks speed unavailable and a later update recovers',
+    (tester) async {
+      final engine = _FakeSpeechEngine();
+      final preferences = _FailOnceNarrationPreferences();
+      final narration = ReadingNarrationSession(
+        controller: ReadingNarrationController(engine: engine),
+        queueBuilder: const ReadingNarrationQueueBuilder(
+          composer: ReadingNarrationComposer(),
+        ),
+        preferences: preferences,
+      );
+      await tester.pumpWidget(
+        ReadingNarrationScope(
+          session: narration,
+          child: MaterialApp(
+            builder: (context, child) => ReadingNarrationHost(child: child!),
+            home: const Scaffold(body: SizedBox.shrink()),
+          ),
+        ),
+      );
+      engine.configureOutcomes.addAll(<Object?>[
+        null,
+        const _PartialRateFailure('rollback rejected'),
+        const _PartialRateFailure('reapply rejected'),
+      ]);
+
+      await narration.setRate(0.75);
+      await tester.pumpAndSettle();
+
+      expect(narration.effectiveRate, isNull);
+      expect(narration.state.status, NarrationStatus.stopped);
+      expect(
+        find.text('Speech speed could not be confirmed. Playback was stopped.'),
+        findsOneWidget,
+      );
+
+      await narration.setRate(1.0);
+      await tester.pumpAndSettle();
+      expect(narration.effectiveRate, 1.0);
+      expect(engine.currentRate, 1.0);
+      expect(narration.uiErrorMessage, isNull);
 
       await tester.pumpWidget(const SizedBox.shrink());
       narration.dispose();
@@ -621,11 +671,19 @@ class _FakeSpeechEngine implements SpeechEngine {
     configuredRates.add(settings.rate);
     if (configureOutcomes.isNotEmpty) {
       final outcome = configureOutcomes.removeAt(0);
+      if (outcome case _PartialRateFailure(:final message)) {
+        currentRate = settings.rate;
+        throw StateError(message);
+      }
       if (outcome case final error?) throw error;
     }
     if (configureError case final error?) throw error;
     currentRate = settings.rate;
   }
+
+  @override
+  Future<void> configureRate(SpeechEngineSettings settings) =>
+      configure(settings);
 
   @override
   Future<void> speak(String text, {required String utteranceId}) async {
@@ -676,4 +734,22 @@ class _ControlledNarrationPreferences extends NarrationPreferences {
     savedRates.add(rate);
     if (savedRates.length == 1) await firstWrite;
   }
+}
+
+class _FailOnceNarrationPreferences extends NarrationPreferences {
+  var _failed = false;
+
+  @override
+  Future<void> setRate(double rate) async {
+    if (!_failed) {
+      _failed = true;
+      throw StateError('disk unavailable');
+    }
+  }
+}
+
+class _PartialRateFailure {
+  final String message;
+
+  const _PartialRateFailure(this.message);
 }

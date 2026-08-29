@@ -381,6 +381,30 @@ void main() {
     },
   );
 
+  test(
+    'rate-only configuration does not touch language pitch or voice',
+    () async {
+      final driver = FakeFlutterTtsDriver()..setPitchResult = 0;
+      final engine = FlutterTtsSpeechEngine(
+        driver: driver,
+        platform: SpeechPlatform.android,
+      );
+
+      await engine.configureRate(
+        const SpeechEngineSettings(
+          rate: 0.75,
+          language: 'en-US',
+          voice: SpeechVoice(name: 'Offline English', locale: 'en-US'),
+        ),
+      );
+
+      expect(driver.rates, <double>[0.75]);
+      expect(driver.languages, isEmpty);
+      expect(driver.pitches, isEmpty);
+      expect(driver.voices, isEmpty);
+    },
+  );
+
   test('accepts platform success result shapes', () async {
     for (final success in <Object?>[1, true, '1', 'true']) {
       final driver = FakeFlutterTtsDriver()

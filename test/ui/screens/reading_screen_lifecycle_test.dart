@@ -718,6 +718,10 @@ class _FakeSpeechEngine implements SpeechEngine {
   Future<void> configure(SpeechEngineSettings settings) async {}
 
   @override
+  Future<void> configureRate(SpeechEngineSettings settings) =>
+      configure(settings);
+
+  @override
   Future<void> speak(String text, {required String utteranceId}) async {
     spokenTexts.add(text);
     currentUtteranceId = utteranceId;

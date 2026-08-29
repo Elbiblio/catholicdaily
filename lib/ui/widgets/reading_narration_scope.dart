@@ -24,6 +24,7 @@ class ReadingNarrationSession extends ChangeNotifier {
   NarrationContext? _activeContext;
   String? _uiErrorMessage;
   int _uiErrorRevision = 0;
+  bool _rateKnown = true;
   Future<void> _rateTransaction = Future<void>.value();
 
   ReadingNarrationSession({
@@ -38,6 +39,7 @@ class ReadingNarrationSession extends ChangeNotifier {
 
   ReadingNarrationState get state => controller.state;
   double get rate => _settings.rate;
+  double? get effectiveRate => _rateKnown ? _settings.rate : null;
   bool get playerVisible => _playerStarted && !_playerDismissed;
   String? get uiErrorMessage => _uiErrorMessage;
   int get uiErrorRevision => _uiErrorRevision;
@@ -116,7 +118,7 @@ class ReadingNarrationSession extends ChangeNotifier {
     final previous = _settings;
     final next = _settings.copyWith(rate: rate);
     try {
-      final accepted = await controller.updateSettings(next);
+      final accepted = await controller.updateRate(next.rate);
       if (_disposed) return;
       if (!accepted) {
         _showRateError('Unable to change speech speed.');
@@ -125,26 +127,44 @@ class ReadingNarrationSession extends ChangeNotifier {
       try {
         await preferences.setRate(rate);
       } catch (_) {
-        final rolledBack = await controller.updateSettings(previous);
+        final rolledBack = await controller.updateRate(previous.rate);
         if (_disposed) return;
         if (!rolledBack) {
-          _settings = next;
-          _showRateError(
-            'Speech speed changed for this session but was not saved.',
-          );
+          await _reapplyOrInvalidateRate(next);
           return;
         }
+        _rateKnown = true;
         _showRateError('Unable to change speech speed.');
         return;
       }
       if (_disposed) return;
       _settings = next;
+      _rateKnown = true;
       _uiErrorMessage = null;
       if (!_disposed) notifyListeners();
     } catch (_) {
       if (_disposed) return;
       _showRateError('Unable to change speech speed.');
     }
+  }
+
+  Future<void> _reapplyOrInvalidateRate(SpeechEngineSettings next) async {
+    final reapplied = await controller.updateRate(next.rate);
+    if (_disposed) return;
+    if (reapplied) {
+      _settings = next;
+      _rateKnown = true;
+      _showRateError(
+        'Speech speed changed for this session but was not saved.',
+      );
+      return;
+    }
+    _rateKnown = false;
+    await controller.stop(clearQueue: false);
+    if (_disposed) return;
+    _showRateError(
+      'Speech speed could not be confirmed. Playback was stopped.',
+    );
   }
 
   void _showRateError(String message) {
@@ -352,7 +372,7 @@ class _ReadingNarrationHostState extends State<ReadingNarrationHost>
                     canGoNext:
                         state.queue.isNotEmpty &&
                         state.currentIndex < state.queue.length - 1,
-                    rate: session.rate,
+                    rate: session.effectiveRate,
                     onPrevious: controllerCallback(session.controller.previous),
                     onPlayPause: state.status == NarrationStatus.loading
                         ? null

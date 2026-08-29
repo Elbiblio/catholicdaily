@@ -247,6 +247,27 @@ class ReadingNarrationController extends ChangeNotifier {
     }
   }
 
+  Future<bool> updateRate(double rate) async {
+    if (_disposed) return false;
+    final command = ++_settingsCommandToken;
+    final settings = _settings.copyWith(rate: rate);
+    try {
+      await _engine.configureRate(settings);
+      if (_disposed || command != _settingsCommandToken) return false;
+      _settings = settings;
+      return true;
+    } catch (error) {
+      if (!_disposed && command == _settingsCommandToken) {
+        if (_isActive(_state.status)) {
+          _emit(_state.copyWith(errorMessage: _messageFor(error)));
+        } else {
+          _failOperation(error);
+        }
+      }
+      return false;
+    }
+  }
+
   Future<void> pause() async {
     if (_disposed || _state.status != NarrationStatus.playing) return;
     final command = ++_playbackCommandToken;

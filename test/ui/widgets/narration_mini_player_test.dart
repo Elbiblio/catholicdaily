@@ -140,4 +140,27 @@ void main() {
     expect(tester.takeException(), isNull);
     expect(find.byKey(NarrationMiniPlayer.playerKey), findsOneWidget);
   });
+
+  testWidgets('unknown engine speed is shown as unavailable and disabled', (
+    tester,
+  ) async {
+    var changes = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: NarrationMiniPlayer(
+            visible: true,
+            state: const ReadingNarrationState(status: NarrationStatus.stopped),
+            rate: null,
+            onRateChanged: (_) => changes++,
+          ),
+        ),
+      ),
+    );
+
+    expect(find.byTooltip('Speech speed unavailable'), findsOneWidget);
+    expect(find.text('—×'), findsOneWidget);
+    await tester.tap(find.text('—×'));
+    expect(changes, 0);
+  });
 }

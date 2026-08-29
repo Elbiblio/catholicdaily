@@ -87,6 +87,9 @@ abstract class SpeechEngine {
 
   Future<void> configure(SpeechEngineSettings settings);
 
+  /// Applies only the speech rate, without reapplying unrelated settings.
+  Future<void> configureRate(SpeechEngineSettings settings);
+
   Future<void> speak(String text, {required String utteranceId});
 
   Future<void> pause();

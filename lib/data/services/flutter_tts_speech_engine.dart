@@ -293,6 +293,15 @@ class FlutterTtsSpeechEngine implements SpeechEngine {
   }
 
   @override
+  Future<void> configureRate(SpeechEngineSettings settings) async {
+    if (_disposed) return;
+    _requireSuccess(
+      await _driver.setSpeechRate(settings.rate.clamp(0.0, 1.0)),
+      'setSpeechRate',
+    );
+  }
+
+  @override
   Future<void> speak(String text, {required String utteranceId}) {
     if (_disposed || text.trim().isEmpty) return Future<void>.value();
     final intent = ++_intent;

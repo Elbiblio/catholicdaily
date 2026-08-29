@@ -10,7 +10,7 @@ class NarrationMiniPlayer extends StatelessWidget {
   final ReadingNarrationState state;
   final bool canGoPrevious;
   final bool canGoNext;
-  final double rate;
+  final double? rate;
   final VoidCallback? onPrevious;
   final VoidCallback? onPlayPause;
   final VoidCallback? onNext;
@@ -112,17 +112,21 @@ class NarrationMiniPlayer extends StatelessWidget {
                     icon: const Icon(Icons.stop_rounded),
                   ),
                   Tooltip(
-                    message: 'Speech speed',
+                    message: rate == null
+                        ? 'Speech speed unavailable'
+                        : 'Speech speed',
                     child: InkWell(
-                      onTap: onRateChanged == null
+                      onTap: onRateChanged == null || rate == null
                           ? null
-                          : () => onRateChanged!(_nextRate(rate)),
+                          : () => onRateChanged!(_nextRate(rate!)),
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(
                           minWidth: 48,
                           minHeight: 48,
                         ),
-                        child: Center(child: Text(_rateLabel(rate))),
+                        child: Center(
+                          child: Text(rate == null ? '—×' : _rateLabel(rate!)),
+                        ),
                       ),
                     ),
                   ),

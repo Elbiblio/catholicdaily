@@ -630,6 +630,10 @@ class FakeSpeechEngine implements SpeechEngine {
   }
 
   @override
+  Future<void> configureRate(SpeechEngineSettings settings) =>
+      configure(settings);
+
+  @override
   Future<void> speak(String text, {required String utteranceId}) async {
     if (speakError != null) throw speakError!;
     final pendingSpeak = speakGate;
