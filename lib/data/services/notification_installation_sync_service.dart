@@ -41,6 +41,10 @@ class NotificationInstallationSyncService {
       if (!prefs.isEnabled) {
         if (!registered) return true;
         final result = await _api.disable(credentials);
+        if (result == NotificationInstallationApiResult.success ||
+            result == NotificationInstallationApiResult.reRegister) {
+          await _store.markRegistered(false);
+        }
         return result != NotificationInstallationApiResult.retry;
       }
 

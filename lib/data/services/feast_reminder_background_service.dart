@@ -10,8 +10,21 @@ import 'feast_reminder_service.dart';
 import 'feast_reminder_timezone.dart';
 import 'liturgical_region_preference_service.dart';
 import 'notification_installation_sync_service.dart';
+import 'notification_occurrence_sync_service.dart';
 
 enum FeastReminderAuditDecision { skip, cleanup, current, repair }
+
+class NotificationBackgroundSyncPolicy {
+  const NotificationBackgroundSyncPolicy();
+
+  bool succeeded({
+    required bool installationSynchronized,
+    required NotificationOccurrenceSyncResult occurrenceResult,
+  }) =>
+      installationSynchronized &&
+      (occurrenceResult == NotificationOccurrenceSyncResult.success ||
+          occurrenceResult == NotificationOccurrenceSyncResult.invalid);
+}
 
 class FeastReminderAuditSnapshot {
   const FeastReminderAuditSnapshot({
@@ -133,6 +146,7 @@ class FeastReminderBackgroundService {
     expectedScheduleGeneration:
         FeastReminderNotificationContract.scheduleGeneration,
   );
+  static const _notificationSyncPolicy = NotificationBackgroundSyncPolicy();
 
   bool _initialized = false;
 
@@ -172,10 +186,11 @@ class FeastReminderBackgroundService {
       final reminders = FeastReminderService.instance;
       if (!prefs.isEnabled) {
         if (prefs.hasCancellationState) {
-          await reminders.cancelAll();
+          final occurrenceQueuePersisted = await reminders.cancelAll();
+          if (!occurrenceQueuePersisted) return false;
         }
         await prefs.setLastAuditAt(now);
-        return NotificationInstallationSyncService.instance.syncCurrentToken();
+        return _syncRemoteState(now, remindersEnabled: false);
       }
 
       final timezone = await FeastReminderTimezone.configure();
@@ -205,19 +220,30 @@ class FeastReminderBackgroundService {
       );
 
       if (decision == FeastReminderAuditDecision.cleanup) {
-        await reminders.cancelAll();
+        final occurrenceQueuePersisted = await reminders.cancelAll();
+        if (!occurrenceQueuePersisted) return false;
         await prefs.setLastAuditAt(now);
       } else if (decision == FeastReminderAuditDecision.repair) {
         final result = await reminders.scheduleAheadMonths(
           _scheduleMonths,
           prefs,
         );
-        if (!result.shouldPersistHorizon) return false;
+        if (!result.shouldPersistHorizon || !result.occurrenceQueuePersisted) {
+          return false;
+        }
       } else {
         await prefs.setLastAuditAt(now);
       }
 
-      return NotificationInstallationSyncService.instance.syncCurrentToken();
+      final pendingOccurrenceKeys = await reminders.pendingOccurrenceKeys();
+      if (pendingOccurrenceKeys != null) {
+        await NotificationOccurrenceSyncService.instance.reconcileLocalArming(
+          pendingOccurrenceKeys: pendingOccurrenceKeys,
+          reconciledAt: now,
+        );
+      }
+
+      return _syncRemoteState(now, remindersEnabled: true);
     } catch (error, stackTrace) {
       debugPrint(
         '[FeastReminder] Background coverage audit failed: '
@@ -225,5 +251,30 @@ class FeastReminderBackgroundService {
       );
       return false;
     }
+  }
+
+  Future<bool> _syncRemoteState(
+    DateTime now, {
+    required bool remindersEnabled,
+  }) async {
+    // Occurrence sync never enqueues work itself; returning false lets the
+    // current Workmanager run own the retry without recursion.
+    final occurrenceResult = await NotificationOccurrenceSyncService.instance
+        .reconcileAndSyncPending(
+          now: now,
+          installationAbsenceIsSuccess: !remindersEnabled,
+        );
+    if (!remindersEnabled &&
+        occurrenceResult != NotificationOccurrenceSyncResult.success &&
+        occurrenceResult != NotificationOccurrenceSyncResult.invalid) {
+      return false;
+    }
+    final installationSynchronized = await NotificationInstallationSyncService
+        .instance
+        .syncCurrentToken();
+    return _notificationSyncPolicy.succeeded(
+      installationSynchronized: installationSynchronized,
+      occurrenceResult: occurrenceResult,
+    );
   }
 }

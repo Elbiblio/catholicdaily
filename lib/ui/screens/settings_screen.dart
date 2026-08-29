@@ -9,6 +9,7 @@ import '../../data/services/feast_reminder_service.dart';
 import '../../data/services/incipit_preference_service.dart';
 import '../../data/services/liturgical_region_preference_service.dart';
 import '../../data/services/notification_installation_sync_service.dart';
+import '../../data/services/notification_occurrence_sync_service.dart';
 import '../../data/services/feast_reminder_background_service.dart';
 import '../../data/services/order_of_mass_preference_service.dart';
 import 'feast_reminder_settings_sheet.dart';
@@ -143,17 +144,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() => _liturgicalRegion = region);
 
     final reminderPrefs = _reminderPrefs;
+    var occurrenceQueuePersisted = true;
     if (reminderPrefs != null && reminderPrefs.isEnabled) {
-      await FeastReminderService.instance.scheduleAheadMonths(
+      final result = await FeastReminderService.instance.scheduleAheadMonths(
         15,
         reminderPrefs,
       );
+      occurrenceQueuePersisted = result.occurrenceQueuePersisted;
     }
-    final synchronized = await NotificationInstallationSyncService.instance
-        .syncCurrentToken();
-    if (!synchronized) {
-      await FeastReminderBackgroundService.instance.enqueueRepair();
-    }
+    await NotificationScheduleSyncCoordinator(
+      syncInstallation:
+          NotificationInstallationSyncService.instance.syncCurrentToken,
+      syncOccurrences: NotificationOccurrenceSyncService.instance.syncPending,
+      enqueueRepair: FeastReminderBackgroundService.instance.enqueueRepair,
+    ).syncNow(forceRepair: !occurrenceQueuePersisted);
   }
 
   String _reminderSubtitle() {

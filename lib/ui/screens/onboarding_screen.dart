@@ -3,9 +3,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/models/liturgical_region.dart';
 import '../../data/services/feast_reminder_preferences.dart';
+import '../../data/services/feast_reminder_background_service.dart';
 import '../../data/services/feast_reminder_service.dart';
 import '../../data/services/incipit_preference_service.dart';
 import '../../data/services/liturgical_region_preference_service.dart';
+import '../../data/services/notification_installation_sync_service.dart';
+import '../../data/services/notification_occurrence_sync_service.dart';
 
 class OnboardingScreen extends StatefulWidget {
   final VoidCallback onComplete;
@@ -181,6 +184,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       final prefs = await FeastReminderPreferences.getInstance();
       final svc = FeastReminderService.instance;
       await svc.initialize();
+      var occurrenceQueuePersisted = true;
       if (_selectedSlot != null) {
         final slot = _selectedSlot!;
         await prefs.setEnabled(true);
@@ -190,13 +194,24 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         try {
           await svc.requestPermission();
         } catch (_) {}
-        await svc.scheduleAheadMonths(15, prefs);
+        final result = await svc.scheduleAheadMonths(15, prefs);
+        occurrenceQueuePersisted = result.occurrenceQueuePersisted;
       } else {
         // User explicitly chose not to enable notifications.
         await prefs.setEnabled(false);
       }
       // Mark auto-setup done so main.dart doesn't override the user's choice.
       await prefs.markAutoSetupCompleted();
+      await NotificationScheduleSyncCoordinator(
+        syncInstallation:
+            NotificationInstallationSyncService.instance.syncCurrentToken,
+        syncOccurrences: () => NotificationOccurrenceSyncService.instance
+            .syncPending(installationAbsenceIsSuccess: _selectedSlot == null),
+        enqueueRepair: FeastReminderBackgroundService.instance.enqueueRepair,
+      ).syncNow(
+        installationFirst: _selectedSlot != null,
+        forceRepair: !occurrenceQueuePersisted,
+      );
     } catch (e) {
       // Non-fatal — onboarding completes regardless of notification setup.
       debugPrint('[Onboarding] Notification setup failed: $e');

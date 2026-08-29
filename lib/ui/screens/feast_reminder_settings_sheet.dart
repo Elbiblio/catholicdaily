@@ -6,6 +6,7 @@ import '../../data/services/feast_reminder_service.dart';
 import '../../data/services/feast_reminder_background_service.dart';
 import '../../data/services/liturgical_region_preference_service.dart';
 import '../../data/services/notification_installation_sync_service.dart';
+import '../../data/services/notification_occurrence_sync_service.dart';
 import '../../data/services/offline_ordo_lookup_service.dart';
 
 /// Beautiful bottom-sheet UI for configuring feast/solemnity reminders.
@@ -110,6 +111,7 @@ class _FeastReminderSettingsSheetState
       await prefs.setRank(_rank);
 
       final service = FeastReminderService.instance;
+      var occurrenceQueuePersisted = true;
       if (_enabled) {
         final result = await service.scheduleForYear(
           DateTime.now().year,
@@ -120,15 +122,20 @@ class _FeastReminderSettingsSheetState
           if (mounted) setState(() => _enabled = false);
           throw StateError('No reminders could be scheduled.');
         }
+        occurrenceQueuePersisted = result.occurrenceQueuePersisted;
       } else {
-        await service.cancelAll();
-        await prefs.invalidateSchedule();
+        occurrenceQueuePersisted = await service.cancelAll();
       }
-      final synchronized = await NotificationInstallationSyncService.instance
-          .syncCurrentToken();
-      if (!synchronized) {
-        await FeastReminderBackgroundService.instance.enqueueRepair();
-      }
+      await NotificationScheduleSyncCoordinator(
+        syncInstallation:
+            NotificationInstallationSyncService.instance.syncCurrentToken,
+        syncOccurrences: () => NotificationOccurrenceSyncService.instance
+            .syncPending(installationAbsenceIsSuccess: !_enabled),
+        enqueueRepair: FeastReminderBackgroundService.instance.enqueueRepair,
+      ).syncNow(
+        installationFirst: _enabled,
+        forceRepair: !occurrenceQueuePersisted,
+      );
     } catch (e) {
       debugPrint('[FeastReminder] _save error: $e');
       if (mounted) {

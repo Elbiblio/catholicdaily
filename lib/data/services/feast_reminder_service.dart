@@ -15,6 +15,8 @@ import 'feast_reminder_timezone.dart';
 import 'improved_liturgical_calendar_service.dart';
 import 'liturgical_region_preference_service.dart';
 import 'offline_ordo_lookup_service.dart';
+import 'notification_occurrence.dart';
+import 'notification_occurrence_store.dart';
 import 'optional_memorial_service.dart';
 import 'saint_calendar_service.dart';
 import 'saint_profile_service.dart';
@@ -279,14 +281,19 @@ class FeastReminderService {
   }
 
   /// Cancel all scheduled feast reminders.
-  Future<void> cancelAll() async {
+  Future<bool> cancelAll() async {
     await initialize();
     final prefs = await FeastReminderPreferences.getInstance();
-    await _scheduleLock.synchronized(() async {
+    return _scheduleLock.synchronized(() async {
       await prefs.reload();
       await prefs.beginScheduleUpdate();
       await _cancelScheduledFeastReminders(prefs);
-      await prefs.invalidateSchedule();
+      final queued = await _replaceOccurrenceSchedule(
+        const [],
+        reconciledAt: DateTime.now(),
+      );
+      if (queued) await prefs.invalidateSchedule();
+      return queued;
     });
   }
 
@@ -323,6 +330,24 @@ class FeastReminderService {
       return pendingOccurrenceStatusForTesting(pending, key);
     } catch (e) {
       debugPrint('[FeastReminder] Pending occurrence query failed: $e');
+      return null;
+    }
+  }
+
+  /// Returns `null` when the platform cannot safely report pending alarms.
+  Future<Set<String>?> pendingOccurrenceKeys() async {
+    await initialize();
+    try {
+      final pending = await _plugin.pendingNotificationRequests();
+      return pending
+          .map((request) => FeastReminderPayload.tryParse(request.payload))
+          .whereType<FeastReminderPayload>()
+          .map((payload) => payload.occurrenceKey)
+          .whereType<String>()
+          .where((key) => key.isNotEmpty)
+          .toSet();
+    } catch (error) {
+      debugPrint('[FeastReminder] Pending occurrence audit failed: $error');
       return null;
     }
   }
@@ -404,6 +429,53 @@ class FeastReminderService {
       return regionPrefs.currentRegion;
     } catch (_) {
       return LiturgicalRegion.generalRoman;
+    }
+  }
+
+  FeastReminderPayload _occurrencePayload(
+    _ReminderOccurrence occurrence,
+    LiturgicalRegion region,
+  ) {
+    final event = occurrence.event;
+    final intendedTime = tz.TZDateTime.from(occurrence.scheduledTime, tz.local);
+    final safetySchedule = FeastReminderSafetySchedule.fromIntendedTime(
+      intendedTime,
+    );
+    final identity = FeastReminderNotificationContract.identity(
+      region: region.name,
+      celebrationDate: event.date,
+      dayBefore: occurrence.dayBefore,
+      celebrationId: event.saintProfileId ?? event.title,
+    );
+    return FeastReminderPayload(
+      celebrationDate: event.date,
+      scheduledFor: safetySchedule.scheduledFor,
+      remoteExpiresAt: safetySchedule.remoteExpiresAt,
+      localSafetyAt: safetySchedule.localSafetyAt,
+      occurrenceKey: identity.occurrenceKey,
+      timeZone: tz.local.name,
+      liturgicalRegion: region.name,
+      scheduleGeneration: FeastReminderNotificationContract.scheduleGeneration,
+      title: event.title,
+      rank: event.rank,
+      saintProfileId: event.saintProfileId,
+      dayBefore: occurrence.dayBefore,
+    );
+  }
+
+  Future<bool> _replaceOccurrenceSchedule(
+    List<NotificationOccurrence> rows, {
+    required DateTime reconciledAt,
+  }) async {
+    try {
+      await NotificationOccurrenceStore().replaceSchedule(
+        rows,
+        reconciledAt: reconciledAt,
+      );
+      return true;
+    } catch (error) {
+      debugPrint('[FeastReminder] Occurrence queue write failed: $error');
+      return false;
     }
   }
 
@@ -877,13 +949,18 @@ class FeastReminderService {
     await prefs.setScheduleJournalPayloads(const []);
 
     if (!prefs.isEnabled) {
-      await prefs.invalidateSchedule();
-      return const FeastReminderScheduleResult(
+      final queued = await _replaceOccurrenceSchedule(
+        const [],
+        reconciledAt: DateTime.now(),
+      );
+      if (queued) await prefs.invalidateSchedule();
+      return FeastReminderScheduleResult(
         eligibleCount: 0,
         scheduledCount: 0,
         failureCount: 0,
         scheduledThrough: null,
         usedExactDelivery: false,
+        occurrenceQueuePersisted: queued,
       );
     }
 
@@ -915,6 +992,10 @@ class FeastReminderService {
       occurrences,
       celebrationDate: (occurrence) => occurrence.event.date,
     );
+    final payloadByOccurrence = <_ReminderOccurrence, FeastReminderPayload>{
+      for (final occurrence in occurrences)
+        occurrence: _occurrencePayload(occurrence, region),
+    };
 
     int failures = 0;
     final scheduledReferences =
@@ -945,13 +1026,6 @@ class FeastReminderService {
 
     for (final occurrence in selectedOccurrences) {
       final event = occurrence.event;
-      final tzScheduled = tz.TZDateTime.from(
-        occurrence.scheduledTime,
-        tz.local,
-      );
-      final safetySchedule = FeastReminderSafetySchedule.fromIntendedTime(
-        tzScheduled,
-      );
       final identity = FeastReminderNotificationContract.identity(
         region: region.name,
         celebrationDate: event.date,
@@ -965,21 +1039,7 @@ class FeastReminderService {
         dayBefore: occurrence.dayBefore,
         locale: 'en',
       );
-      final payload = FeastReminderPayload(
-        celebrationDate: event.date,
-        scheduledFor: safetySchedule.scheduledFor,
-        remoteExpiresAt: safetySchedule.remoteExpiresAt,
-        localSafetyAt: safetySchedule.localSafetyAt,
-        occurrenceKey: identity.occurrenceKey,
-        timeZone: tz.local.name,
-        liturgicalRegion: region.name,
-        scheduleGeneration:
-            FeastReminderNotificationContract.scheduleGeneration,
-        title: event.title,
-        rank: event.rank,
-        saintProfileId: event.saintProfileId,
-        dayBefore: occurrence.dayBefore,
-      );
+      final payload = payloadByOccurrence[occurrence]!;
       final encodedPayload = payload.encode();
       final reference = (
         id: identity.notificationId,
@@ -1070,38 +1130,67 @@ class FeastReminderService {
                     ? null
                     : scheduledReferences.last.celebrationDate));
 
-    final result = FeastReminderScheduleResult(
+    final baseResult = FeastReminderScheduleResult(
       eligibleCount: occurrences.length,
       scheduledCount: scheduledReferences.length,
       failureCount: failures,
       scheduledThrough: occurrences.isEmpty ? endDate : scheduledThrough,
       usedExactDelivery: exactAllowed,
     );
-    if (!result.shouldPersistHorizon) {
+    final configurationFingerprint = prefs.configurationFingerprint(
+      region: region.name,
+    );
+    final occurrenceRows = NotificationOccurrenceProjection.fromPayloads(
+      payloadByOccurrence.values,
+      locallyArmedKeys: baseResult.shouldPersistHorizon
+          ? scheduledReferences.map((reference) => reference.tag).toSet()
+          : const <String>{},
+      platform: Platform.operatingSystem,
+      configurationFingerprint: configurationFingerprint,
+    );
+    late final bool occurrenceQueuePersisted;
+    if (!baseResult.shouldPersistHorizon) {
       for (final reference in scheduledReferences) {
         await _plugin.cancel(reference.id, tag: reference.tag);
       }
-      await prefs.invalidateSchedule();
-    } else {
-      await prefs.completeScheduleUpdate(
-        lastScheduledYear: result.scheduledThrough?.year ?? endDate.year,
-        scheduledThrough: result.scheduledThrough!,
-        schemaVersion: scheduleSchemaVersion,
-        scheduleGeneration:
-            FeastReminderNotificationContract.scheduleGeneration,
-        scheduleTimezone: tz.local.name,
-        auditedAt: now,
-        configurationFingerprint: prefs.configurationFingerprint(
-          region: region.name,
-        ),
-        references: scheduledReferences
-            .map((item) => '${item.id}|${item.tag}')
-            .toList(growable: false),
-        payloads: scheduledReferences
-            .map((item) => item.payload)
-            .toList(growable: false),
+      occurrenceQueuePersisted = await _replaceOccurrenceSchedule(
+        const [],
+        reconciledAt: now,
       );
+      if (occurrenceQueuePersisted) await prefs.invalidateSchedule();
+    } else {
+      occurrenceQueuePersisted = await _replaceOccurrenceSchedule(
+        occurrenceRows,
+        reconciledAt: now,
+      );
+      if (occurrenceQueuePersisted) {
+        await prefs.completeScheduleUpdate(
+          lastScheduledYear: baseResult.scheduledThrough?.year ?? endDate.year,
+          scheduledThrough: baseResult.scheduledThrough!,
+          schemaVersion: scheduleSchemaVersion,
+          scheduleGeneration:
+              FeastReminderNotificationContract.scheduleGeneration,
+          scheduleTimezone: tz.local.name,
+          auditedAt: now,
+          configurationFingerprint: configurationFingerprint,
+          references: scheduledReferences
+              .map((item) => '${item.id}|${item.tag}')
+              .toList(growable: false),
+          payloads: scheduledReferences
+              .map((item) => item.payload)
+              .toList(growable: false),
+        );
+      }
     }
+    final result = FeastReminderScheduleResult(
+      eligibleCount: baseResult.eligibleCount,
+      scheduledCount: baseResult.scheduledCount,
+      failureCount: baseResult.failureCount,
+      scheduledThrough: baseResult.scheduledThrough,
+      usedExactDelivery: baseResult.usedExactDelivery,
+      occurrences: occurrenceRows,
+      occurrenceQueuePersisted: occurrenceQueuePersisted,
+    );
     debugPrint(
       '[FeastReminder] Scheduled ${scheduledReferences.length} reminders across '
       '${now.year}-${endDate.year} '

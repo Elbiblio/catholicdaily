@@ -1,4 +1,5 @@
 import 'package:catholic_daily/data/services/feast_reminder_background_service.dart';
+import 'package:catholic_daily/data/services/notification_occurrence_sync_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -88,6 +89,49 @@ void main() {
       FeastReminderAuditDecision.current,
     );
   });
+
+  test(
+    'background retry decisions include durable occurrence reconciliation',
+    () {
+      const syncPolicy = NotificationBackgroundSyncPolicy();
+
+      expect(
+        syncPolicy.succeeded(
+          installationSynchronized: true,
+          occurrenceResult: NotificationOccurrenceSyncResult.success,
+        ),
+        isTrue,
+      );
+      expect(
+        syncPolicy.succeeded(
+          installationSynchronized: true,
+          occurrenceResult: NotificationOccurrenceSyncResult.invalid,
+        ),
+        isTrue,
+      );
+      expect(
+        syncPolicy.succeeded(
+          installationSynchronized: true,
+          occurrenceResult: NotificationOccurrenceSyncResult.retry,
+        ),
+        isFalse,
+      );
+      expect(
+        syncPolicy.succeeded(
+          installationSynchronized: true,
+          occurrenceResult: NotificationOccurrenceSyncResult.reRegister,
+        ),
+        isFalse,
+      );
+      expect(
+        syncPolicy.succeeded(
+          installationSynchronized: false,
+          occurrenceResult: NotificationOccurrenceSyncResult.success,
+        ),
+        isFalse,
+      );
+    },
+  );
 
   test(
     'repairs an interrupted schedule even when freshness markers look current',

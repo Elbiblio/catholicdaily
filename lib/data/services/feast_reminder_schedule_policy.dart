@@ -2,6 +2,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'feast_reminder_notification_contract.dart';
 import 'feast_reminder_payload.dart';
+import 'notification_occurrence.dart';
 
 /// Separates the intended server delivery time from the local OS safety net.
 class FeastReminderSafetySchedule {
@@ -94,6 +95,8 @@ class FeastReminderScheduleResult {
   final int failureCount;
   final DateTime? scheduledThrough;
   final bool usedExactDelivery;
+  final List<NotificationOccurrence> occurrences;
+  final bool occurrenceQueuePersisted;
 
   const FeastReminderScheduleResult({
     required this.eligibleCount,
@@ -101,6 +104,8 @@ class FeastReminderScheduleResult {
     required this.failureCount,
     required this.scheduledThrough,
     required this.usedExactDelivery,
+    this.occurrences = const [],
+    this.occurrenceQueuePersisted = true,
   });
 
   bool get shouldPersistHorizon =>

@@ -2,6 +2,7 @@ import 'package:catholic_daily/data/services/feast_reminder_schedule_policy.dart
 import 'package:catholic_daily/data/services/feast_reminder_preferences.dart';
 import 'package:catholic_daily/data/services/feast_reminder_payload.dart';
 import 'package:catholic_daily/data/services/feast_reminder_service.dart';
+import 'package:catholic_daily/data/services/notification_occurrence.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -66,6 +67,32 @@ void main() {
   });
 
   group('FeastReminderScheduleResult', () {
+    test('exposes exact occurrence arming outcomes to sync callers', () {
+      final occurrence = NotificationOccurrence(
+        occurrenceKey: 'feast:nigeria:2026-09-01:on_day:saint',
+        localNotificationId: 123,
+        scheduledFor: DateTime.utc(2026, 9, 1, 6),
+        remoteExpiresAt: DateTime.utc(2026, 9, 1, 6, 2),
+        localSafetyAt: DateTime.utc(2026, 9, 1, 6, 3),
+        platform: 'ios',
+        scheduleGeneration: 'feast-reminders-v5',
+        timezone: 'Africa/Lagos',
+        configurationFingerprint: 'config',
+        localArmed: false,
+        payload: '{"schema":3}',
+      );
+      final result = FeastReminderScheduleResult(
+        eligibleCount: 1,
+        scheduledCount: 0,
+        failureCount: 0,
+        scheduledThrough: DateTime(2026, 9, 1),
+        usedExactDelivery: false,
+        occurrences: [occurrence],
+      );
+
+      expect(result.occurrences.single.localArmed, isFalse);
+    });
+
     test('does not persist a horizon when every eligible schedule fails', () {
       final result = FeastReminderScheduleResult(
         eligibleCount: 3,
@@ -76,6 +103,20 @@ void main() {
       );
 
       expect(result.shouldPersistHorizon, isFalse);
+    });
+
+    test('reports occurrence queue persistence independently', () {
+      final result = FeastReminderScheduleResult(
+        eligibleCount: 1,
+        scheduledCount: 1,
+        failureCount: 0,
+        scheduledThrough: DateTime(2026, 9, 1),
+        usedExactDelivery: true,
+        occurrenceQueuePersisted: false,
+      );
+
+      expect(result.shouldPersistHorizon, isTrue);
+      expect(result.occurrenceQueuePersisted, isFalse);
     });
 
     test('preserves successful reminders across a partial failure', () {
