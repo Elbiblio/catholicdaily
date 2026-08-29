@@ -46,6 +46,19 @@ def push_capability_payload(bundle_id: str) -> dict:
     }
 
 
+def bundle_id_payload(*, identifier: str, name: str) -> dict:
+    return {
+        "data": {
+            "type": "bundleIds",
+            "attributes": {
+                "identifier": identifier,
+                "name": name,
+                "platform": "IOS",
+            },
+        }
+    }
+
+
 def profile_payload(*, name: str, bundle_id: str, certificate_id: str) -> dict:
     return {
         "data": {
@@ -145,7 +158,13 @@ def list_all(token: str, path: str) -> list[dict]:
     return resources
 
 
-def find_bundle_id(token: str, identifier: str) -> dict:
+def find_bundle_id(
+    token: str,
+    identifier: str,
+    *,
+    create_if_missing: bool = False,
+    name: str | None = None,
+) -> dict:
     query = urllib.parse.urlencode({"filter[identifier]": identifier, "limit": 2})
     bundle_ids = list_all(token, f"/bundleIds?{query}")
     exact = [
@@ -153,6 +172,30 @@ def find_bundle_id(token: str, identifier: str) -> dict:
         for bundle_id in bundle_ids
         if bundle_id.get("attributes", {}).get("identifier") == identifier
     ]
+    if len(exact) == 1:
+        return exact[0]
+    if len(exact) == 0 and create_if_missing:
+        if not name:
+            raise RuntimeError("A bundle name is required when registering a bundle ID.")
+        try:
+            return api_request(
+                token,
+                "POST",
+                "/bundleIds",
+                bundle_id_payload(identifier=identifier, name=name),
+            )["data"]
+        except AppleApiError as error:
+            if error.status != 409:
+                raise
+            bundle_ids = list_all(token, f"/bundleIds?{query}")
+            exact = [
+                bundle_id
+                for bundle_id in bundle_ids
+                if bundle_id.get("attributes", {}).get("identifier") == identifier
+            ]
+            if len(exact) == 1:
+                return exact[0]
+
     if len(exact) != 1:
         raise RuntimeError(
             f"Expected exactly one Apple bundle ID for {identifier}, found {len(exact)}."
@@ -217,6 +260,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--key-id", required=True)
     parser.add_argument("--key-path", required=True, type=pathlib.Path)
     parser.add_argument("--bundle-identifier", required=True)
+    parser.add_argument("--bundle-name")
+    parser.add_argument("--create-bundle-id-if-missing", action="store_true")
     parser.add_argument("--certificate-serial", required=True)
     parser.add_argument("--profile-name", required=True)
     parser.add_argument("--output", required=True, type=pathlib.Path)
@@ -230,7 +275,12 @@ def main() -> None:
         key_id=args.key_id,
         key_path=args.key_path,
     )
-    bundle_id = find_bundle_id(token, args.bundle_identifier)
+    bundle_id = find_bundle_id(
+        token,
+        args.bundle_identifier,
+        create_if_missing=args.create_bundle_id_if_missing,
+        name=args.bundle_name,
+    )
     ensure_push_capability(token, bundle_id["id"])
 
     certificates = list_all(token, "/certificates?limit=200")

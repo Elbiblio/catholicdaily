@@ -487,6 +487,8 @@ jobs:
                 --key-id "$EXTENSION_KEY_ID" \
                 --key-path "$EXTENSION_KEY_PATH" \
                 --bundle-identifier "${{ env.IOS_EXTENSION_BUNDLE_IDENTIFIER }}" \
+                --bundle-name "Catholic Daily Feast Reminder" \
+                --create-bundle-id-if-missing \
                 --certificate-serial "$CERT_SERIAL" \
                 --profile-name "Catholic Daily Feast Reminder ${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" \
                 --output "$EXTENSION_PROFILE_PATH"

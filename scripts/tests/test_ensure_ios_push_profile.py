@@ -1,6 +1,7 @@
 import importlib.util
 import pathlib
 import unittest
+from unittest import mock
 
 
 SCRIPT_PATH = pathlib.Path(__file__).parents[1] / "ensure_ios_push_profile.py"
@@ -37,6 +38,54 @@ class EnsureIosPushProfileTest(unittest.TestCase):
                     },
                 }
             },
+        )
+
+    def test_builds_bundle_id_registration_payload(self):
+        self.assertEqual(
+            MODULE.bundle_id_payload(
+                identifier="com.elbiblio.catholicdaily.FeastReminderNotificationService",
+                name="Catholic Daily Feast Reminder",
+            ),
+            {
+                "data": {
+                    "type": "bundleIds",
+                    "attributes": {
+                        "identifier": "com.elbiblio.catholicdaily.FeastReminderNotificationService",
+                        "name": "Catholic Daily Feast Reminder",
+                        "platform": "IOS",
+                    },
+                }
+            },
+        )
+
+    def test_creates_a_missing_bundle_id_when_explicitly_enabled(self):
+        created = {
+            "id": "created-bundle-resource-id",
+            "attributes": {
+                "identifier": "com.elbiblio.catholicdaily.FeastReminderNotificationService",
+            },
+        }
+        with mock.patch.object(MODULE, "list_all", return_value=[]), mock.patch.object(
+            MODULE,
+            "api_request",
+            return_value={"data": created},
+        ) as request:
+            result = MODULE.find_bundle_id(
+                "token",
+                "com.elbiblio.catholicdaily.FeastReminderNotificationService",
+                create_if_missing=True,
+                name="Catholic Daily Feast Reminder",
+            )
+
+        self.assertEqual(result, created)
+        request.assert_called_once_with(
+            "token",
+            "POST",
+            "/bundleIds",
+            MODULE.bundle_id_payload(
+                identifier="com.elbiblio.catholicdaily.FeastReminderNotificationService",
+                name="Catholic Daily Feast Reminder",
+            ),
         )
 
     def test_capability_relationship_uses_only_supported_parameters(self):

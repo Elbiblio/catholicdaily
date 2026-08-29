@@ -55,5 +55,10 @@ void main() {
       workflow,
       contains('Created the notification extension provisioning profile.'),
     );
+    expect(workflow, contains('--create-bundle-id-if-missing'));
+    expect(
+      workflow,
+      contains('--bundle-name "Catholic Daily Feast Reminder"'),
+    );
   });
 }
