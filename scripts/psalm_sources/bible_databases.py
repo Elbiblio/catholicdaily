@@ -205,6 +205,11 @@ def _edition_verse_numbers(
     for verse in verses:
         value = verse + psalm_offset
         if edition_id == "local_rsvce" and book == "dan" and chapter == 3:
+            # 52 combines two RSVCE rows; throne/cherubim are transposed.
+            opening = {52: (29, 30), 53: (31,), 54: (33,), 55: (32,), 56: (34,)}
+            if verse in opening:
+                mapped.extend(opening[verse])
+                continue
             # The RSVCE database keys the Greek canticle at 3:35-68, while the
             # lectionary cites the continuous Daniel numbering 3:57-90.
             if verse >= 57:
@@ -218,8 +223,28 @@ def _edition_verse_numbers(
             # no separately keyed 2:12 row.
             if verse == 12:
                 value = 11
+        elif edition_id == "local_nabre" and book == "jonah" and chapter == 2:
+            # NABRE includes the prayer's introduction at 2:2; the source
+            # lectionary/RSVCE starts the prayer itself at 2:2.
+            value = verse + 1
         mapped.append(value)
     return tuple(dict.fromkeys(mapped))
+
+
+def _lookup_selection_verse(connection, book_id, chapter, verse, *, edition_id, parsed):
+    if (edition_id == 'local_rsvce' and parsed.book == 'dan' and chapter == 3
+            and verse in {29, 30} and any(52 in group.verses for group in parsed.groups)):
+        # The import repeats native Daniel 3:29-30 after the Greek addition.
+        # Keep only the blessing rows preceding the next canticle verse.
+        rows = connection.execute(
+            'SELECT text FROM verses WHERE book_id=? AND chapter_id=3 AND verse_id=? '
+            'AND _id < (SELECT MIN(_id) FROM verses WHERE book_id=? AND chapter_id=3 AND verse_id=31) '
+            'ORDER BY _id', (book_id, verse, book_id),
+        ).fetchall()
+        if not rows:
+            raise LookupError(f'Missing Greek Daniel canticle verse {verse}')
+        return ' '.join(str(row[0]).strip() for row in rows)
+    return lookup_verse(connection, book_id, chapter, verse)
 
 
 def extract_bible_selections(
@@ -241,11 +266,13 @@ def extract_bible_selections(
             try:
                 stanzas = tuple(
                     " ".join(
-                        lookup_verse(
+                        _lookup_selection_verse(
                             connection,
                             book_id,
                             group.chapter,
                             verse,
+                            edition_id=edition_id,
+                            parsed=parsed,
                         )
                         for verse in _edition_verse_numbers(
                             edition_id=edition_id,
@@ -336,11 +363,13 @@ def extract_bible_selection(
         offsets: dict[int, int] = {}
         stanzas = tuple(
             " ".join(
-                lookup_verse(
+                _lookup_selection_verse(
                     connection,
                     book_id,
                     group.chapter,
                     verse,
+                    edition_id=edition_id,
+                    parsed=parsed,
                 )
                 for verse in _edition_verse_numbers(
                     edition_id=edition_id,

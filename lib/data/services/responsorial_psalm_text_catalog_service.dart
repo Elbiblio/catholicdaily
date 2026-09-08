@@ -160,7 +160,16 @@ class ResponsorialPsalmTextCatalogService
         .replaceFirst(RegExp(r'^(?:exodus|exod|ex)\s*'), 'ex')
         .replaceFirst(RegExp(r'^(?:1\s*samuel|1\s*sam)\s*'), '1sam')
         .replaceFirst(RegExp(r'^(?:1\s*chronicles|1\s*chr)\s*'), '1chr')
+        .replaceFirst(RegExp(r'^(?:judith|jdt)\s*'), 'judith')
+        .replaceFirst(RegExp(r'^(?:luke|lk)\s*'), 'luke')
+        .replaceFirst(RegExp(r'^(?:tobit|tob)\s*'), 'tob')
         .replaceAll(' and ', ',')
+        // A semicolon can introduce the next psalm/chapter in a canticle.
+        // Preserve its chapter separator before normalizing verse-list dots.
+        .replaceAllMapped(
+          RegExp(r';\s*(\d+)\.\s*(?=\d)'),
+          (match) => ';${match.group(1)}:',
+        )
         .replaceAll(RegExp(r'\(r\.[^)]*\)', caseSensitive: false), '');
     normalized = normalized.replaceFirstMapped(
       RegExp(r'^([1-3]?[a-z]+)\s*(\d+)\s*[.:]\s*'),

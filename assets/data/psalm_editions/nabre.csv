@@ -13,13 +13,6 @@ For all in heaven and on earth is yours; yours, LORD, is kingship; you are exalt
 For all in heaven and on earth is yours; yours, LORD, is kingship; you are exalted as head over all. In your hand are power and might; it is yours to give greatness and strength to all.
 
 In your hand are power and might; it is yours to give greatness and strength to all.",repo://assets/nabre.db,,2b4237bd7ef4b6ed9db1f4a567ca9b3ef80d63355dd419c617a4ebe2ecca89b8,7c0d4b6f1fa8c1ebc3e6b7e843a136d2557e9c29326a84b72920e0cf1de9e681,100
-local_nabre,1sam2_1_4_5_6_7_8abcd,WORLD,,,generic,,,,"1sam2:1,4-5,6-7,8abcd","My heart exults in the Lord, my Saviour.","And Hannah prayed: “My heart exults in the LORD, my horn is exalted by my God. I have swallowed up my enemies; I rejoice in your victory.
-
-“The bows of the mighty are broken, while the tottering gird on strength. The barren wife bears seven sons, while the mother of many languishes.
-
-“The LORD puts to death and gives life, casts down to Sheol and brings up again. The LORD makes poor and makes rich, humbles, and also exalts.
-
-“For the pillars of the earth are the LORD’s, and he has set the world upon them.",repo://assets/nabre.db,,57e0973b8574c00dc774f5533ea44521ed7cd432382734e478d9353da0d12bb3,883e3c5e39649d1b7b61bc3ac2f01be4012306514513e0199ad648434e093b6a,100
 local_nabre,dan3_29_30_31_33_32_34,WORLD,,,generic,,,,"dan3:29-30,31,33,32,34",You are to be praised and highly exalted forever.,"For we have sinned and transgressed by departing from you, and we have done every kind of evil. Your commandments we have not heeded or observed, nor have we done as you ordered us for our good.
 
 Therefore all you have brought upon us, all you have done to us, you have done by a proper judgment.
@@ -202,13 +195,13 @@ local_nabre,jer31_10_11_12abcd_13,WORLD,,,generic,,,,"jer31:10,11-12abcd,13","Th
 The LORD shall ransom Jacob, he shall redeem him from a hand too strong for him. Shouting, they shall mount the heights of Zion, they shall come streaming to the LORD’s blessings: The grain, the wine, and the oil, flocks of sheep and cattle; They themselves shall be like watered gardens, never again neglected.
 
 I will turn their mourning into joy, I will show them compassion and have them rejoice after their sorrows.",repo://assets/nabre.db,,581e36a88bade9c9a4864a89cd72c409341111325a44e25719b0ee396c92ccad,8f8f5527bcdd80ae54d390ab4640cca43ffabb6dbd4b10f56a633aa15a34c393,100
-local_nabre,jonah2_3_4_5_8,WORLD,,,generic,,,,"jonah2:3,4,5,8","You will rescue my life from the pit, O Lord.","Out of my distress I called to the LORD, and he answered me; From the womb of Sheol I cried for help, and you heard my voice.
-
-You cast me into the deep, into the heart of the sea, and the flood enveloped me; All your breakers and your billows passed over me.
+local_nabre,jonah2_3_4_5_8,WORLD,,,generic,,,,"jonah2:3,4,5,8","You will rescue my life from the pit, O Lord.","You cast me into the deep, into the heart of the sea, and the flood enveloped me; All your breakers and your billows passed over me.
 
 Then I said, “I am banished from your sight! How will I again look upon your holy temple?”
 
-When I became faint, I remembered the LORD; My prayer came to you in your holy temple.",repo://assets/nabre.db,,be57bca73cc62655494c40fb05265653025876d5cee93548c1112c4aa7862bc9,ce8ac91a94048faa46e307fd815dc0eb5347def25fb9bbb45a7115a52ed1e84b,100
+The waters surged around me up to my neck; the deep enveloped me; seaweed wrapped around my head.
+
+Those who worship worthless idols abandon their hope for mercy.",repo://assets/nabre.db,,f9556104c7c6678b41240c8cee16faa4404bae194f3e33eb39785b21bf499faf,f8112093058ac641bd4f6719f8f0a31a6c0545a06775d848f8f71eb7d78901a5,100
 local_nabre,local_nabre:expanded:00f071eafa11d730,US,,,generic,,,,ps138:1-5,"In the sight of the angels I will sing your praises, Lord.","Psalm 138 Hymn of a Grateful Heart - Of David. I - I thank you, Lord, with all my heart; in the presence of the angels to you I sing. For you have exalted over all your name and your promise. On the day I cried out, you answered; you strengthened my spirit. All the kings of earth will praise you, LORD, when they hear the words of your mouth. They will sing of the ways of the LORD: “How great is the glory of the LORD!”",repo://C:/dev/catholicdaily-flutter/assets/nabre.db,complete liturgical usage expansion,7e7a62fe33b769da0584490355187503a3dd56cedd2384c3f2e9fb63939aa188,f4a6585f583635b5affe5c5a5275c97529cb5411262df29c14f1455a12d93548,110
 local_nabre,local_nabre:expanded:01b7dd70371d17fc,US,,,generic,,,,"ps126:1bc-2ab,2cd-3,4-5,6",Those who are sowing in tears will sing when they reap.,"Psalm 126 The Reversal of Zion’s Fortunes - A song of ascents. I - When the LORD restored the captives of Zion, we thought we were dreaming. Then it was said among the nations, “The LORD had done great things for them.”
 
@@ -5722,3 +5715,87 @@ Give thanks to him, you Israelites, in the presence of the nations, for though h
 According to your heart do what is right before him: perhaps there will be pardon for you.
 
 let all speak and give thanks in Jerusalem.",repo://assets/nabre.db,,33fbe028dc7752965db6e4ac54522e7f1c14ba5424b9b0e8c9274e28c6a211ec,15cbc4187110100884069884b687880a801d5abb53ec54b344c94cae9d6495fb,100
+local_nabre,"calendar:judith13:18bcde,19",WORLD,,,generic,,,,"judith13:18bcde,19",You are the highest honor of our race.,"Then Uzziah said to her, “Blessed are you, daughter, by the Most High God, above all the women on earth; and blessed be the Lord God, the creator of heaven and earth, who guided your blow at the head of the leader of our enemies.
+
+Your deed of hope will never be forgotten by those who recall the might of God.",repo://assets/nabre.db,NABRE,11740866af39a8c7835a63721adc31047b7b350c8deb5ba4301db4c04aad5cb6,cd9c61657875ae2916b7004c1900a5de329df5ca35438c464c58088ba31f65a2,100
+local_nabre,"calendar:ps104:1-2,5-6,10,12,13-14,24,35",WORLD,,,generic,,,,"ps104:1-2,5-6,10,12,13-14,24,35","Send forth your Spirit, O Lord, and renew the face of the earth.","Psalm 104 Praise of God the Creator I - Bless the LORD, my soul! LORD, my God, you are great indeed! You are clothed with majesty and splendor, robed in light as with a cloak. You spread out the heavens like a tent;
+
+You fixed the earth on its foundation, so it can never be shaken. The deeps covered it like a garment; above the mountains stood the waters.
+
+You made springs flow in wadies that wind among the mountains.
+
+Beside them the birds of heaven nest; among the branches they sing.
+
+You water the mountains from your chambers; from the fruit of your labor the earth abounds. You make the grass grow for the cattle and plants for people’s work to bring forth food from the earth,
+
+V - How varied are your works, LORD! In wisdom you have made them all; the earth is full of your creatures.
+
+Bless the LORD, my soul! Hallelujah!",repo://assets/nabre.db,NABRE,b069fc69cbb7619895d8c78dfb3f2e5734a30ed811a36df9acc0d23ab0957f22,6c2466ab043491a76415464335ce0027ebf1dc218547624f3475c096a5897e8c,100
+local_nabre,"calendar:ps25:4-5ab,8-9,10+14",WORLD,,,generic,,,,"ps25:4-5ab,8-9,10+14",Lift up your heads and see; your redemption is near at hand.,"Make known to me your ways, LORD; teach me your paths. Guide me by your fidelity and teach me, for you are God my savior, for you I wait all the day long.
+
+Good and upright is the LORD, therefore he shows sinners the way, He guides the humble in righteousness, and teaches the humble his way.
+
+All the paths of the LORD are mercy and truth toward those who honor his covenant and decrees. The counsel of the LORD belongs to those who fear him; and his covenant instructs them.",repo://assets/nabre.db,NABRE,ec2c2dfe941a8f4c3233085e781b706c2d5e47c1115ca189280791f4f9b1c399,a330965f6352185d71f33bf46402bece8ba919c7f4a6a84018ba040a5d90f698,100
+local_nabre,"calendar:ps42:3,5,43:3,4",WORLD,,,generic,,,,"ps42:3,5,43:3,4","Like a deer that longs for running streams, my soul longs for you, my God.","When can I enter and see the face of God?
+
+Those times I recall as I pour out my soul, When I would cross over to the shrine of the Mighty One, to the house of God, Amid loud cries of thanksgiving, with the multitude keeping festival.
+
+Send your light and your fidelity, that they may be my guide; Let them bring me to your holy mountain, to the place of your dwelling,
+
+Then I will praise you with the harp, O God, my God.",repo://assets/nabre.db,NABRE,01aedecc640a0e97fa6ed921b7986c9f25da503b14f0215746ee2fafd6a62228,da5c807cc3355416d6a6d93b24d25cfffe8dc69b56eee9de177e2ef633047d30,100
+local_nabre,"calendar:jonah2:2,3,4-5a,7+9abd",WORLD,,,generic,,,,"jonah2:2,3,4-5a,7+9abd","You will rescue my life from the pit, O Lord.","Out of my distress I called to the LORD, and he answered me; From the womb of Sheol I cried for help, and you heard my voice.
+
+You cast me into the deep, into the heart of the sea, and the flood enveloped me; All your breakers and your billows passed over me.
+
+Then I said, “I am banished from your sight! How will I again look upon your holy temple?” The waters surged around me up to my neck; the deep enveloped me; seaweed wrapped around my head.
+
+When I became faint, I remembered the LORD; My prayer came to you in your holy temple. But I, with thankful voice, will sacrifice to you; What I have vowed I will pay: deliverance is from the LORD.",repo://assets/nabre.db,NABRE,fca864dd4262ad13d58d49972b0f0db4b2ffadf4f1f047ff310b78fa947bfb37,a988c46d1e687ecf5293f8eace13c50f04b0f8b70fcc59c3a5664f4f8508d581,100
+local_nabre,"calendar:luke1:46-47,48-49,50+53,54-55",WORLD,,,generic,,,,"luke1:46-47,48-49,50+53,54-55",The Lord has remembered his mercy.,"And Mary said: “My soul proclaims the greatness of the Lord; my spirit rejoices in God my savior.
+
+For he has looked upon his handmaid’s lowliness; behold, from now on will all ages call me blessed. The Mighty One has done great things for me, and holy is his name.
+
+His mercy is from age to age to those who fear him. The hungry he has filled with good things; the rich he has sent away empty.
+
+He has helped Israel his servant, remembering his mercy, according to his promise to our fathers, to Abraham and to his descendants forever.”",repo://assets/nabre.db,NABRE,ea975866a559c9196fd0a065c98542cad718ed3558b742251f19de7381360dc8,8eacb886ae25f3b7675323e219fd797742ed0f2ee1b578ddc33ae10d7f1b6074,100
+local_nabre,"calendar:ps112:1-2,7bc-8,9(see7c)",WORLD,,,generic,,,,"ps112:1-2,7bc-8,9(see7c)","The hearts of the just are secure,","Psalm 112 The Blessings of the Just - Hallelujah! Blessed the man who fears the LORD, who greatly delights in his commands. His descendants shall be mighty in the land, a generation of the upright will be blessed.
+
+He shall not fear an ill report; his heart is steadfast, trusting the LORD. His heart is tranquil, without fear, till at last he looks down on his foes.
+
+Lavishly he gives to the poor; his righteousness shall endure forever; his horn shall be exalted in honor.",repo://assets/nabre.db,NABRE,6f06dcf8561f2bc0de91c03c47d0982b281d26162a580358e5333a6d99a4311f,deb2a0a0c1220e2008f31004b78c0bafa90a328e1694e5f3a7fc663e8e8081af,100
+local_nabre,"calendar:ps139:1-3,13-14,14-15",WORLD,,,generic,,,,"ps139:1-3,13-14,14-15","I praise you, for I am wonderfully made.","Psalm 139 The All-knowing and Ever-present God - For the leader. A psalm of David. I - LORD, you have probed me, you know me: you know when I sit and stand; you understand my thoughts from afar. You sift through my travels and my rest; with all my ways you are familiar.
+
+You formed my inmost being; you knit me in my mother’s womb. I praise you, because I am wonderfully made; wonderful are your works! My very self you know.
+
+I praise you, because I am wonderfully made; wonderful are your works! My very self you know. My bones are not hidden from you, When I was being made in secret, fashioned in the depths of the earth.",repo://assets/nabre.db,NABRE,62f0f442403c408cc20145d895c437ec29f573f6e3eb6a2d6b3f6137550a572d,a90029f48377eac5a0159a3edb9c2168164ef3fd369e6dddfdc03e70380f2e22,100
+local_nabre,"calendar:ps149:1-2,3-4,5+6a+9b",WORLD,,,generic,,,,"ps149:1-2,3-4,5+6a+9b",The Lord takes delight in his people.,"Psalm 149 Praise God with Song and Sword - Hallelujah! Sing to the LORD a new song, his praise in the assembly of the faithful. Let Israel be glad in its maker, the people of Zion rejoice in their king.
+
+Let them praise his name in dance, make music with tambourine and lyre. For the LORD takes delight in his people, honors the poor with victory.
+
+Let the faithful rejoice in their glory, cry out for joy on their couches, With the praise of God in their mouths, and a two-edged sword in their hands, To execute the judgments decreed for them— such is the glory of all God’s faithful. Hallelujah!",repo://assets/nabre.db,NABRE,7a7a741d660d3e3518dd3d49dab6f04487cc7483dfbf5c97d5023b22bc37bb56,063d2d1870461e03da25da75dfadf4a261e875d84462d6b18feaec2c349d8476,100
+local_nabre,"calendar:ps45:11-12,13-14,15-16",WORLD,,,generic,,,,"ps45:11-12,13-14,15-16","Listen to me, daughter; see and bend your ear.","Forget your people and your father’s house, that the king might desire your beauty. He is your lord;
+
+honor him, daughter of Tyre. Then the richest of the people will seek your favor with gifts. All glorious is the king’s daughter as she enters, her raiment threaded with gold;
+
+The maids of her train are presented to the king. They are led in with glad and joyous acclaim; they enter the palace of the king.",repo://assets/nabre.db,NABRE,9469e670854f496c4574b713ed77865223deca68a0af2557b7622997febc1986,fb7a9daa5e0da140181a05d4ba814d4b1b60d8d174425d89c981464a84d3a954,100
+local_nabre,"calendar:ps69:8-10,21-22,31+33-34",WORLD,,,generic,,,,"ps69:8-10,21-22,31+33-34","Lord, in your great love, answer me.","For it is on your account I bear insult, that disgrace covers my face. I have become an outcast to my kindred, a stranger to my mother’s children. Because zeal for your house has consumed me, I am scorned by those who scorn you.
+
+Insult has broken my heart, and I despair; I looked for compassion, but there was none, for comforters, but found none. Instead they gave me poison for my food; and for my thirst they gave me vinegar.
+
+That I may praise God’s name in song and glorify it with thanksgiving. “See, you lowly ones, and be glad; you who seek God, take heart! For the LORD hears the poor, and does not spurn those in bondage.",repo://assets/nabre.db,NABRE,3480687c25f3ecba02f6fbf4f512068ab9c472338bf845e342ef23cdf26b20ca,4943023f6036b744b3fbf6cf281e497322cdaeeb98f537edef8df3b42ac0d4b7,100
+local_nabre,"calendar:ps71:1-2,3-4a,5-6ab,15+17",WORLD,,,generic,,,,"ps71:1-2,3-4a,5-6ab,15+17",I will sing of your salvation.,"Psalm 71 Prayer in Time of Old Age I - In you, LORD, I take refuge; let me never be put to shame. In your justice rescue and deliver me; listen to me and save me!
+
+Be my rock of refuge, my stronghold to give me safety; for you are my rock and fortress. My God, rescue me from the hand of the wicked, from the clutches of the evil and violent.
+
+You are my hope, Lord; my trust, GOD, from my youth. On you I have depended since birth; from my mother’s womb you are my strength; my hope in you never wavers.
+
+My mouth shall proclaim your just deeds, day after day your acts of deliverance, though I cannot number them all. God, you have taught me from my youth; to this day I proclaim your wondrous deeds.",repo://assets/nabre.db,NABRE,c4a51ae60c35635e888b59f3efa0b5ba8e1519c95dd1aace2dcb4869c407cc8c,62e8532e928550c5ba15d7200464dd3b791fa5e698470027fa02af9a7fb785ad,100
+local_nabre,"calendar:ps72:1-2,14+15bc,17",WORLD,,,generic,,,,"ps72:1-2,14+15bc,17","Lord, every nation on earth will adore you.","Psalm 72 A Prayer for the King - Of Solomon. I - O God, give your judgment to the king; your justice to the king’s son; That he may govern your people with justice, your oppressed with right judgment,
+
+From extortion and violence he redeems them, for precious is their blood in his sight. Long may he live, receiving gold from Sheba, prayed for without cease, blessed day by day.
+
+May the tribes of the earth give blessings with his name; may all the nations regard him as favored.",repo://assets/nabre.db,NABRE,6a030f6c93f53746040ec12a08754da414c9169a2b8c0b7c785483f88759afd1,f2620421f8b81634fbfc5adae8160989042893529ab57b0863d24dffde49fbb1,100
+local_nabre,"calendar:ps89:2-3,4-5,27+29",WORLD,,,generic,,,,"ps89:2-3,4-5,27+29",For ever I will sing the goodness of the Lord.,"I will sing of your mercy forever, LORD proclaim your faithfulness through all ages. For I said, “My mercy is established forever; my faithfulness will stand as long as the heavens.
+
+I have made a covenant with my chosen one; I have sworn to David my servant: I will make your dynasty stand forever and establish your throne through all ages.” Selah
+
+He shall cry to me, ‘You are my father, my God, the Rock of my salvation!’ Forever I will maintain my mercy for him; my covenant with him stands firm.",repo://assets/nabre.db,NABRE,ce31360507d853d3bce55cf71339c5ca855e7a911c544cd031ae87d7a6968ced,7907b6a3e3d4086816fa2fb3a740fa48203074965e7119e944d527f696f093ae,100

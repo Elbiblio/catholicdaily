@@ -116,6 +116,7 @@ bruno_of_cologne,"Saint Bruno, Priest",Optional Memorial,white,10,6,,Monks,,,,,,
 our_lady_of_the_rosary,Our Lady of the Rosary,Obligatory Memorial,white,10,7,,BlessedVirginMary,Acts 1:12-14,,,,Luke 1:46-55,"Blessed are you, Virgin Mary, who bore the Son of the eternal Father. (R. 49)",,,Luke 1:26-38,"At that time: The Angel Gabriel was sent from God to a town in Galilee called Nazareth, to a virgin betrothed to a man named Joseph, of the house of David.",,,Lk 1:28
 denis_of_paris,"Saint Denis, Bishop, and Companions, Martyrs",Optional Memorial,red,10,9,,Martyrs,,,,,,,,,,,,,
 john_leonardi,"Saint John Leonardi, Priest",Optional Memorial,white,10,9,,Missionaries,,,,,,,,,,,,,
+john_henry_newman,"Saint John Henry Newman, Priest and Doctor of the Church",Optional Memorial,white,10,9,,DoctorsOfTheChurch,Sir 39:6-11,,,,"Ps 40:2, 4ab, 7-8a, 8b-9, 10","Here I am, Lord; I come to do your will.",,,Matt 13:47-52,,,,Mt 23:9b-10b
 john_xxiii_pope,"Saint John XXIII, Pope",Optional Memorial,white,10,11,,Popes,Ezek 34:11-16,,,,Ps 23:1-6,The Lord is my shepherd; there is nothing I shall want. (R. 1),,,John 21:15-17,,,,Jn 10:14
 callistus_i_pope,"Saint Callistus I, Pope and Martyr",Optional Memorial,red,10,14,,Martyrs,,,,,,,,,,,,,
 hedwig_of_silesia,"Saint Hedwig, Religious",Optional Memorial,white,10,16,,Religious,,,,,,,,,,,,,
@@ -153,7 +154,7 @@ holy_innocents,"The Holy Innocents, Martyrs",Feast,red,12,28,,,1 John 1:5-2:2,,,
 thomas_becket,"Saint Thomas Becket, Bishop and Martyr",Optional Memorial,red,12,29,,Martyrs,2 Tim 2:8-13; 3:10-12,,,,Ps 34:2-9,The Lord delivered me from all my fears. (R. 4),,,Matt 16:24-27,,,,Mt 5:10
 sylvester_i_pope,"Saint Sylvester I, Pope",Optional Memorial,white,12,31,,Popes,,,,,,,,,,,,,
 easter_sunday_of_the_resurrection_of_the_lord,Easter Sunday of the Resurrection of the Lord,Solemnity,white,,,Easter Sunday,,Acts 10:34-43,,,,"Ps 118:1-2, 16-17, 22-23",This is the day the Lord has made; let us rejoice and be glad. (R. 24),Col 3:1-4,,John 20:1-9,,,,
-friday_of_the_passion_of_the_lord,Friday of the Passion of the Lord,Day,red,,,Friday before Easter,,Isa 52:13-53:12,,,,Ps 31:1-25,"Father, into your hands I commend my spirit. (R. Lk 23.46)","Heb 4:14-16, 5:7-9",,John 18:1-19:42,,,,
+friday_of_the_passion_of_the_lord,Friday of the Passion of the Lord,Day,red,,,Friday before Easter,,Isa 52:13-53:12,,,,"Ps 31:2, 6, 12-13, 15-16, 17, 25","Father, into your hands I commend my spirit. (R. Lk 23.46)","Heb 4:14-16, 5:7-9",,John 18:1-19:42,,,,
 holy_saturday,Holy Saturday,Day,violet,,,Saturday before Easter,,Gen 1:1-2:2,,,,"Ps 42:3-5, 43:3-4",(R. 42:2),Gen 22:1-18,,Mark 16:1-7,,,,
 holy_thursday_evening_mass_of_the_lords_supper,Holy Thursday - Evening Mass of the Lord's Supper,Solemnity,white,,,Thursday before Easter,,Exod 12:1-14,,,,Ps 116:12-18,"To you, Lord, I will offer a sacrifice of praise. (R. 13)",1 Cor 11:23-26,,John 13:1-15,,,,
 our_lord_jesus_christ_king_of_the_universe,"Our Lord Jesus Christ, King of the Universe",Solemnity,white,,,Last Sunday of the liturgical year,,Jer 33:14-16,,,,"Ps 25:4bc-5ab, 6 and 7bc, 8-9","Remember your mercies, O Lord (R. 6)",1 Thess 3:12-4:2,,Luke 21:25-36,,,,

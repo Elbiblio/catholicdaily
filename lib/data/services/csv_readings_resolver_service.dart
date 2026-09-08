@@ -26,6 +26,8 @@ class CsvReadingsResolverService
   final OrdoResolverService _ordoResolver = OrdoResolverService.instance;
   Map<int, List<_LegacyReadingRow>>? _legacyRowsByDate;
   Future<NigeriaPsalmUsageService>? _nigeriaPsalmUsages;
+  DateTime? _standardSpecialDate;
+  String _standardSpecialDay = '';
 
   Future<List<DailyReading>> resolve(DateTime date) async {
     final normalizedDate = _normalizeDate(date);
@@ -1498,6 +1500,27 @@ class CsvReadingsResolverService
     ];
   }
 
+  String _standardSpecialDayFor(DateTime date) {
+    if (_standardSpecialDate == date) return _standardSpecialDay;
+    // Every row in the 763-entry catalog shares these date facts. Compute
+    // them once per date, rather than thousands of Easter/date calculations
+    // on the UI isolate. Only the latest date is retained.
+    _standardSpecialDay = switch (date) {
+      _ when _isHolyThursday(date) => 'holy-thursday',
+      _ when _isGoodFriday(date) => 'good-friday',
+      _ when _isPalmSunday(date) => 'palm-sunday',
+      _ when _isEasterVigil(date) => 'easter-vigil',
+      _ when _isChristmasVigil(date) => 'christmas-vigil',
+      _ when _isChristmasDay(date) => 'christmas',
+      _ when _isAshWednesday(date) => 'ash-wednesday',
+      _ when _isAfterAshWednesdayToSaturday(date) => 'after-ash-wednesday',
+      _ when _isEasterOctave(date) => 'easter-octave',
+      _ => '',
+    };
+    _standardSpecialDate = date;
+    return _standardSpecialDay;
+  }
+
   bool _matchesStandardEntry({
     required StandardLectionaryEntry entry,
     required DateTime date,
@@ -1510,38 +1533,39 @@ class CsvReadingsResolverService
     final week = entry.week.trim().toLowerCase();
     final day = entry.day.trim().toLowerCase();
     final liturgicalSeason = liturgicalDay.seasonName.toLowerCase();
+    final specialDay = _standardSpecialDayFor(date);
 
     // ── Special day checks first (before season check, since Holy Week
     //    entries use season='Holy Week' but calendar returns 'Lent') ──
-    if (_isHolyThursday(date)) {
+    if (specialDay == 'holy-thursday') {
       return season == 'holy week' && day == 'holy thursday';
     }
-    if (_isGoodFriday(date)) {
+    if (specialDay == 'good-friday') {
       return season == 'holy week' && day == 'good friday';
     }
-    if (_isPalmSunday(date)) {
+    if (specialDay == 'palm-sunday') {
       return season == 'holy week' && day == 'palm sunday';
     }
-    if (_isEasterVigil(date)) {
+    if (specialDay == 'easter-vigil') {
       return season == 'easter' && week == 'vigil';
     }
-    if (_isChristmasVigil(date)) {
+    if (specialDay == 'christmas-vigil') {
       return season == 'christmas' &&
           day.contains('christmas') &&
           day.contains('vigil');
     }
-    if (_isChristmasDay(date)) {
+    if (specialDay == 'christmas') {
       return season == 'christmas' && day.contains('christmas');
     }
-    if (_isAshWednesday(date)) {
+    if (specialDay == 'ash-wednesday') {
       return season == 'lent' && day == 'ash wednesday';
     }
-    if (_isAfterAshWednesdayToSaturday(date)) {
+    if (specialDay == 'after-ash-wednesday') {
       return season == 'lent' &&
           week == 'after ash wed' &&
           day == liturgicalDay.dayName.toLowerCase();
     }
-    if (_isEasterOctave(date)) {
+    if (specialDay == 'easter-octave') {
       if (season != 'easter' || week != 'octave') {
         return false;
       }
@@ -1572,7 +1596,7 @@ class CsvReadingsResolverService
     // Date-based matches (December 17-24, Christmas octave, etc.)
     if (_monthDayLabel(date).toLowerCase() == day) {
       if (season == 'advent' && _isDecember17To24(date)) {
-        return week == 'dec 17-24' || week.isEmpty;
+        return !isSunday && (week == 'dec 17-24' || week.isEmpty);
       }
       if (season == 'christmas' && _isChristmasOctave(date)) {
         return week == 'octave' || week.isEmpty;
@@ -3580,7 +3604,7 @@ class CsvReadingsResolverService
     // A small number of source rows use European punctuation between chapter
     // and verse ("Luke 21,28" / "Joel 2; 12-13").
     result = result.replaceFirstMapped(
-      RegExp(r'^([A-Za-z0-9. ]+\s\d+)\s*[,;]\s*(\d)'),
+      RegExp(r'^((?:[1-3]\s+)?[A-Za-z][A-Za-z. ]*?\s+\d+)\s*[,;]\s*(\d)'),
       (match) => '${match.group(1)}:${match.group(2)}',
     );
     // Convert period notation to colon for the chapter.verse separator only.

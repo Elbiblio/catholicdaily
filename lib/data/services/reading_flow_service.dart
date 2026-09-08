@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import '../models/daily_reading.dart';
 import '../models/reading_session.dart';
 import '../models/navigable_item.dart';
@@ -61,16 +63,23 @@ class ReadingFlowService extends BaseService<ReadingFlowService> {
         );
         String? rawText;
         if (isResponsorial) {
-          final resolved = await _readingsService.resolveResponsorialPsalm(
-            reading.reading,
-            psalmResponse: reading.psalmResponse ?? '',
-            date: date,
-            territory: regionPrefs.currentRegion.code,
-            celebrationId: _celebrationId(reading),
-            readingSetKind: _readingSetKind(reading),
-          );
-          rawText = resolved.text;
-          psalmSources[reading.reading] = resolved;
+          try {
+            final resolved = await _readingsService.resolveResponsorialPsalm(
+              reading.reading,
+              psalmResponse: reading.psalmResponse ?? '',
+              date: date,
+              territory: regionPrefs.currentRegion.code,
+              celebrationId: _celebrationId(reading),
+              readingSetKind: _readingSetKind(reading),
+            );
+            rawText = resolved.text;
+            psalmSources[reading.reading] = resolved;
+          } catch (error) {
+            // A missing/corrupt text must not discard the day's other readings.
+            // Leave source metadata absent rather than crediting a failed pack.
+            debugPrint('Error loading psalm ${reading.reading}: $error');
+            rawText = 'Reading text unavailable for ${reading.reading}.';
+          }
         } else {
           rawText = await _localExtractText.lookup(
             date: date,

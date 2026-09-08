@@ -17,6 +17,7 @@ import '../utils/contrast_helper.dart';
 import '../utils/reading_type_colors.dart';
 import '../widgets/premium_browse/daily_mass_at_a_glance_card.dart';
 import '../widgets/premium_browse/todays_saint_card.dart';
+import '../widgets/premium_browse/calendar_observances_card.dart';
 import '../widgets/liturgical_calendar_view.dart';
 import 'mass_flow_screen.dart';
 import 'saint_detail_screen.dart';
@@ -655,6 +656,8 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
             ),
 
             // Today's Saint card
+            CalendarObservancesCard(date: _selectedDate),
+
             if (_saintCelebrations.isNotEmpty)
               TodaysSaintCard(
                 celebrations: _saintCelebrations,

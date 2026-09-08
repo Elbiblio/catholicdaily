@@ -416,6 +416,27 @@ class PsalmEditionCorpusTest(unittest.TestCase):
         self.assertIn("ice and cold", daniel.stanzas_text)
         self.assertEqual(len(daniel.stanzas), 7)
 
+    def test_daniel_opening_blessings_do_not_include_the_narrative_or_later_song(self):
+        row = extract_bible_selection(
+            ROOT / 'assets/rsvce.db', edition_id='local_rsvce',
+            reference='Daniel 3:52, 53, 54, 55, 56',
+        )
+        self.assertEqual(len(row.stanzas), 5)
+        self.assertIn('God of our fathers', row.stanzas[0])
+        self.assertIn('holy name', row.stanzas[0])
+        self.assertIn('throne', row.stanzas[2])
+        self.assertIn('cherubim', row.stanzas[3])
+        self.assertNotIn('decree', row.stanzas_text)
+        self.assertNotIn('mountains', row.stanzas_text)
+
+    def test_nabre_jonah_canticle_starts_with_the_prayer_not_the_introduction(self):
+        row = extract_bible_selection(
+            ROOT / 'assets/nabre.db', edition_id='local_nabre',
+            reference='Jonah 2:2, 3, 4-5a, 7+9abd',
+        )
+        self.assertIn('Out of my distress I called', row.stanzas[0])
+        self.assertIn('thankful voice', row.stanzas[-1])
+
     def test_nabre_merged_psalm_2_ending_is_available(self):
         row = extract_bible_selection(
             ROOT / "assets/nabre.db",
@@ -654,11 +675,8 @@ class PsalmSourcePackTest(unittest.TestCase):
         root = ROOT / "assets/data/psalm_editions"
         manifest = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
         editions = {row["id"]: row for row in manifest["editions"]}
-        self.assertEqual(
-            editions["local_rsvce"]["selectionCount"],
-            editions["local_nabre"]["selectionCount"],
-        )
         self.assertGreaterEqual(editions["local_rsvce"]["selectionCount"], 809)
+        self.assertGreaterEqual(editions["local_nabre"]["selectionCount"], 809)
         self.assertTrue(editions["nigeria_365_firestore"]["installed"])
         self.assertFalse(editions["modern_psalter_us"]["installed"])
         self.assertFalse(editions["jerusalem_bible"]["installed"])

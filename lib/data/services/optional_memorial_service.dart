@@ -1177,6 +1177,16 @@ class OptionalMemorialService {
       ),
     ],
     '10-9': [
+      // General Roman Calendar, decree of 9 November 2025 (published 2026).
+      const OptionalCelebration(
+        id: 'john_henry_newman',
+        title: 'Saint John Henry Newman, Priest and Doctor of the Church',
+        rank: CelebrationRank.optionalMemorial,
+        color: LiturgicalColor.white,
+        month: 10,
+        day: 9,
+        commonType: 'DoctorsOfTheChurch',
+      ),
       const OptionalCelebration(
         id: 'denis_of_paris',
         title: 'Saint Denis, Bishop, and Companions, Martyrs',

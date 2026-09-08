@@ -340,8 +340,8 @@ void main() {
 
       // ignore: avoid_print
       print('populated rows=${rows.length} classifications=$classifications');
-      expect(rows, hasLength(62));
-      expect(classifications['fixed-local'], 53);
+      expect(rows, hasLength(63));
+      expect(classifications['fixed-local'], 54);
       expect(classifications['triduum'], 4);
       expect(classifications['temporal-solemnity-or-feast'], 5);
       expect(problems, isEmpty, reason: problems.join('\n'));

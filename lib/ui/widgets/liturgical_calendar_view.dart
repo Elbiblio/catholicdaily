@@ -6,6 +6,7 @@ import '../../data/services/improved_liturgical_calendar_service.dart';
 import '../../data/services/liturgical_region_preference_service.dart';
 import '../../data/services/offline_ordo_lookup_service.dart';
 import '../../data/services/reading_catalog_service.dart';
+import '../../data/services/calendar_observance_service.dart';
 
 /// A month-view liturgical calendar showing liturgical colors and feast days.
 /// Used as a date picker replacement in the PremiumBrowseScreen.
@@ -152,6 +153,13 @@ class _LiturgicalCalendarViewState extends State<LiturgicalCalendarView> {
         const SizedBox(height: 8),
         // Legend
         _buildLegend(theme, isDark),
+        for (final observance in CalendarObservanceService.forDate(
+          widget.selectedDate,
+        ))
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+            child: Text(observance.title, style: theme.textTheme.bodySmall),
+          ),
         const SizedBox(height: 8),
       ],
     );

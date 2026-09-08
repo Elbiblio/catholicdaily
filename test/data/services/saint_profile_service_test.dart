@@ -1512,14 +1512,11 @@ void main() {
     );
   });
 
-  test('Batch 14 completion publishes all 158 profiles without fallback', () async {
+  test('all 159 curated profiles have complete offline content', () async {
     final profiles = await SaintProfileService.instance.loadProfiles();
 
-    expect(profiles, hasLength(158));
-    expect(
-      profiles.where((profile) => profile.schemaVersion != 2),
-      isEmpty,
-    );
+    expect(profiles, hasLength(159));
+    expect(profiles.where((profile) => profile.schemaVersion != 2), isEmpty);
     expect(profiles.where((profile) => !profile.isPublished), isEmpty);
     expect(
       profiles.where(

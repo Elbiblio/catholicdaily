@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 2,
+  "id": "john_henry_newman",
+  "profileKind": "individual",
+  "celebrationIds": ["john_henry_newman"],
+  "name": "Saint John Henry Newman",
+  "alternateNames": ["Saint John Henry Newman, Priest and Doctor of the Church"],
+  "ecclesialTitle": "Priest, Cardinal and Doctor of the Church",
+  "lifeSpan": "1801-1890",
+  "lifeLength": "89 years",
+  "vocation": "Oratorian priest, theologian and educator",
+  "places": ["London", "Oxford", "Birmingham"],
+  "patronage": ["The Church's educational mission"],
+  "symbols": [],
+  "briefBio": "John Henry Newman was an English priest and theologian whose search for Christian truth led him from Anglican ministry into the Catholic Church. He founded the Birmingham Oratory, became a cardinal, and was proclaimed a Doctor of the Church in 2025.",
+  "feastDates": ["October 9"],
+  "historicalCertainty": "documented",
+  "sources": [
+    {"id":"holy-see-canonization","title":"Canonization booklet, 13 October 2019: John Henry Newman","authorOrInstitution":"Office for the Liturgical Celebrations of the Supreme Pontiff","publisher":"The Holy See","url":"https://www.vatican.va/news_services/liturgy/libretti/2019/20191013-libretto-canonizzazione.pdf","publicationDate":"2019-10-13","accessedDate":"2026-09-08","tier":1,"reuseBasis":"Official biography summarized in original prose","supports":["identity","chronology","oratory"]},
+    {"id":"holy-see-calendar","title":"Saint John Henry Newman proclaimed Doctor of the Church and inscribed in the General Roman Calendar","authorOrInstitution":"Dicastery for Divine Worship and the Discipline of the Sacraments","publisher":"The Holy See","url":"https://www.vatican.va/content/romancuria/en/dicasteri/dicastero-culto-divino-e-disciplina-sacramenti/documenti/20260203-commento-decreto-iscrizione-newman.html","publicationDate":"2026-02-03","accessedDate":"2026-09-08","tier":1,"reuseBasis":"Official calendar commentary summarized in original prose","supports":["doctorate","calendar","education","spirituality"]}
+  ],
+  "editorial": {"state":"published","researcher":"Codex source review","reviewer":"Codex factual review against Holy See sources","reviewedAt":"2026-09-08","revision":1,"warnings":[]},
+  "whyItMatters": "Newman's example invites thoughtful faith: bring difficult questions to study and prayer, and remain willing to follow truth when it asks something costly of you.",
+  "oneMinuteSummary": "John Henry Newman was born in London in 1801 and studied at Oxford. As an Anglican priest, he became a leading figure in the Oxford Movement, seeking to recover the Church's Catholic inheritance. His study and discernment led him into the Catholic Church in 1845. Ordained a Catholic priest in 1847, he established the Birmingham Oratory the following year. His work joined theology, education, preaching and personal prayer. Pope Leo XIII made him a cardinal in 1879, and he died in 1890. Canonized in 2019, Newman was proclaimed a Doctor of the Church in 2025. His October 9 optional memorial presents a teacher who remained a disciple, seeking God's truth with intellectual seriousness and a heart open to grace.",
+  "life": {
+    "sections": [
+      {"heading":"A search that changed his life","body":"Newman's Anglican ministry and participation in the Oxford Movement preceded his reception into the Catholic Church in 1845. His conversion was followed by Catholic ordination and the foundation of the Birmingham Oratory.","sourceIds":["holy-see-canonization"]},
+      {"heading":"A teacher who remained a disciple","body":"The Church's commentary on his memorial connects Newman's intellectual work with prayer and the continuing search for truth. His recognition as a Doctor of the Church also highlights the educational mission he shares with Saint Thomas Aquinas as co-patron.","sourceIds":["holy-see-calendar"]}
+    ],
+    "gospelTheme":"Learn from Christ with both an attentive mind and a willing heart.",
+    "struggle":"Following the conclusions of his search meant changing religious allegiance in a setting hostile to Catholicism.",
+    "response":"He continued his vocation through priestly ministry, theological writing, education and prayer."
+  },
+  "virtues": [
+    {"name":"Integrity","evidence":"He followed his discernment into the Catholic Church despite the difficulty of that change.","imitation":"Examine one conviction honestly and seek reliable guidance before acting.","sourceIds":["holy-see-canonization"]},
+    {"name":"Prayerful learning","evidence":"The Church presents his search for truth together with his personal dialogue with Christ.","imitation":"Bring a question from your study into a few quiet minutes of prayer.","sourceIds":["holy-see-calendar"]}
+  ],
+  "practice":{"spiritual":"Ask Christ for the humility to receive truth and the courage to live it.","action":"Listen carefully to someone whose question you find difficult, then take time to seek a thoughtful answer."},
+  "reflectionQuestions":["Am I willing to revise a belief when sound reasons require it?","How can my learning become service to another person?"],
+  "scripture":{"reference":"Matthew 13:52","connection":"The disciple draws on the treasure of faith to understand and teach both what is old and what is new."},
+  "prayer":"Lord Jesus, guide our minds toward truth and our hearts toward you. Through Saint John Henry Newman's example, help us learn patiently, pray honestly and serve those entrusted to us. Give us humility when we are mistaken and courage when faith asks us to change. Amen."
+}

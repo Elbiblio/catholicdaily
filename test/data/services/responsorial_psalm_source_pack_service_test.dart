@@ -6,6 +6,27 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  test('mixed-chapter dots and canticle aliases preserve the selection', () {
+    expect(
+      ResponsorialPsalmSourcePackService.normalizePackReference(
+        'Ps 42:1-2, 3; 43.3, 4',
+      ),
+      'ps42:1-2,3,43:3,4',
+    );
+    expect(
+      ResponsorialPsalmSourcePackService.normalizePackReference(
+        'Jdt 13:18bcde, 19',
+      ),
+      ResponsorialPsalmSourcePackService.normalizePackReference(
+        'Judith 13:18bcde, 19',
+      ),
+    );
+    expect(
+      ResponsorialPsalmSourcePackService.normalizePackReference('Lk 1:46-55'),
+      ResponsorialPsalmSourcePackService.normalizePackReference('Luke 1:46-55'),
+    );
+  });
+
   test(
     'pack lookup preserves the authoritative normalized selection',
     () async {

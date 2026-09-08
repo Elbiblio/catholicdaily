@@ -15,7 +15,7 @@
       "downloadable": false,
       "sourceUrl": "https://firestore.googleapis.com/v1/projects/catholic-missal/databases/(default)/documents/NigeriaReading",
       "fallbackRole": "territory_lectionary",
-      "selectionCount": 510
+      "selectionCount": 511
     },
     {
       "id": "modern_psalter_us",
@@ -48,7 +48,7 @@
       "downloadable": false,
       "sourceUrl": "repo://assets/rsvce.db",
       "fallbackRole": "default",
-      "selectionCount": 971
+      "selectionCount": 993
     },
     {
       "id": "local_nabre",
@@ -64,7 +64,7 @@
       "downloadable": false,
       "sourceUrl": "repo://assets/nabre.db",
       "fallbackRole": "selected_bible",
-      "selectionCount": 971
+      "selectionCount": 984
     },
     {
       "id": "douay_rheims",

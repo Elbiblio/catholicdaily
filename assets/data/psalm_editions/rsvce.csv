@@ -29,15 +29,15 @@ Blessed art thou upon the throne of thy kingdom and to be extolled and highly ex
 Blessed art thou, who sittest upon cherubim and lookest upon the deeps, and to be praised and highly exalted for ever.
 
 Blessed art thou in the firmament of heaven and to be sung and glorified for ever.",repo://assets/rsvce.db,,98ed5cb702148420197cccf1d8e92793186d02bdd76eb41ce3037f3f63498d58,baeca1e8b0b1e866e4fe122e8c76d28495a55210576862b85d9fbb7d1f3cbe39,100
-local_rsvce,dan3_52_53_54_55_56,WORLD,,,generic,,,,"dan3:52,53,54,55,56",(52b) Glory and praise for ever!,"Let the earth bless the Lord; let it sing praise to him and highly exalt him for ever.
+local_rsvce,dan3_52_53_54_55_56,WORLD,,,generic,,,,"dan3:52,53,54,55,56",(52b) Glory and praise for ever!,"""Blessed art thou, O Lord, God of our fathers, and to be praised and highly exalted for ever; And blessed is thy glorious, holy name and to be highly praised and highly exalted for ever;
 
-Bless the Lord, mountains and hills, sing praise to him and highly exalt him for ever.
+Blessed art thou in the temple of thy holy glory and to be extolled and highly glorified for ever.
 
-Bless the Lord, all things that grow on the earth, sing praise to him and highly exalt him for ever.
+Blessed art thou upon the throne of thy kingdom and to be extolled and highly exalted for ever.
 
-Bless the Lord, you springs, sing praise to him and highly exalt him for ever.
+Blessed art thou, who sittest upon cherubim and lookest upon the deeps, and to be praised and highly exalted for ever.
 
-Bless the Lord, seas and rivers, sing praise to him and highly exalt him for ever.",repo://assets/rsvce.db,,deebac5a58ef9e267e45914ce11a94deb7a164484e73c661ba9a6f7d62653e4c,be477b741c408ed5832e38aca263739fbd4fdb88786c968116ae2de0bb4a381a,100
+Blessed art thou in the firmament of heaven and to be sung and glorified for ever.",repo://assets/rsvce.db,,abbfe90bc1ec35c2c89a95f8aacf379e079ac6a07217b52cd5154b9fddba9b58,e38425deffac1f6cf0cb7ef826237af5a501c6886142ba6e86b5a240469cede6,100
 local_rsvce,dan3_57_58_59_60_61,WORLD,,,generic,,,,"dan3:57,58,59,60,61",Give glory and eternal praise to him.,"""Bless the Lord, all works of the Lord, sing praise to him and highly exalt him for ever.
 
 Bless the Lord, you heavens, sing praise to him and highly exalt him for ever.
@@ -354,15 +354,15 @@ local_rsvce,local_rsvce:expanded:4adf26ea26b58032,WORLD,,,generic,,,,"ps144:1b,2
 my rock and my fortress, my stronghold and my deliverer,my shield and he in whom I take refuge, who subdues the peoples under him.
 
 O LORD, what is man that thou dost regard him, or the son of man that thou dost think of him? Man is like a breath, his days are like a passing shadow.",repo://C:/dev/catholicdaily-flutter/assets/rsvce.db,complete liturgical usage expansion,04ee78e73569b5fbc9e5c56e9112ae0187f0cf14fbd0a7426ca1e96bbdaf6d21,1cbbdf4e704382e8cf583c58f7d890479a86fdf15a3077422256ec378dca902c,110
-local_rsvce,local_rsvce:expanded:4c1b321ed97fdf76,WORLD,,,generic,,,,"daniel3:52,53,54,55,56",Glory and praise for ever!,"Let the earth bless the Lord; let it sing praise to him and highly exalt him for ever.
+local_rsvce,local_rsvce:expanded:4c1b321ed97fdf76,WORLD,,,generic,,,,"daniel3:52,53,54,55,56",Glory and praise for ever!,"""Blessed art thou, O Lord, God of our fathers, and to be praised and highly exalted for ever; And blessed is thy glorious, holy name and to be highly praised and highly exalted for ever;
 
-Bless the Lord, mountains and hills, sing praise to him and highly exalt him for ever.
+Blessed art thou in the temple of thy holy glory and to be extolled and highly glorified for ever.
 
-Bless the Lord, all things that grow on the earth, sing praise to him and highly exalt him for ever.
+Blessed art thou upon the throne of thy kingdom and to be extolled and highly exalted for ever.
 
-Bless the Lord, you springs, sing praise to him and highly exalt him for ever.
+Blessed art thou, who sittest upon cherubim and lookest upon the deeps, and to be praised and highly exalted for ever.
 
-Bless the Lord, seas and rivers, sing praise to him and highly exalt him for ever.",repo://C:/dev/catholicdaily-flutter/assets/rsvce.db,complete liturgical usage expansion,332eca3d3a59af1b4201c0887d3369ed69f106377d79a8897209420a221ba040,7a739b583a85a80d67b388be90b18c83c64f4f5fef092e17a98db1bc4b37b413,110
+Blessed art thou in the firmament of heaven and to be sung and glorified for ever.",repo://C:/dev/catholicdaily-flutter/assets/rsvce.db,complete liturgical usage expansion,bb4ff29805103f0c98cbe864ec13aaadad8726114971b2bc7af77494ae517fed,1417d3800c2c9f7f9daee9c74ad241003534ba5526a6c8be614f64d9c0e6585d,110
 local_rsvce,local_rsvce:expanded:4c7aa88df529eb69,WORLD,,,generic,,,,"daniel3:57,58,59,60,61",Give glory and eternal praise to him.,"""Bless the Lord, all works of the Lord, sing praise to him and highly exalt him for ever.
 
 Bless the Lord, you heavens, sing praise to him and highly exalt him for ever.
@@ -537,15 +537,15 @@ local_rsvce,local_rsvce:expanded:9147f45b3f3d63c3,WORLD,,,generic,,,,"ps110:1-2,
 Your people will offer themselves freelyon the day you lead your host upon the holy mountains. From the womb of the morning like dew your youth will come to you.
 
 The LORD has sworn and will not change his mind, ""You are a priest for ever after the order of Melchizedek.""",repo://C:/dev/catholicdaily-flutter/assets/rsvce.db,complete liturgical usage expansion,ebc3ce5df3ae6d5ce8dd3ebb0325cd31a5e8dabd48e442029d543d1e8cd59f95,0afb06217d32a033058b97d060914c95ea9696a47e2cc291b435e48b895ccb28,110
-local_rsvce,local_rsvce:expanded:91fbd4e200c905c7,WORLD,,,generic,,,,"dn3:52,53,54,55,56",Glory and praise for ever!,"Let the earth bless the Lord; let it sing praise to him and highly exalt him for ever.
+local_rsvce,local_rsvce:expanded:91fbd4e200c905c7,WORLD,,,generic,,,,"dn3:52,53,54,55,56",Glory and praise for ever!,"""Blessed art thou, O Lord, God of our fathers, and to be praised and highly exalted for ever; And blessed is thy glorious, holy name and to be highly praised and highly exalted for ever;
 
-Bless the Lord, mountains and hills, sing praise to him and highly exalt him for ever.
+Blessed art thou in the temple of thy holy glory and to be extolled and highly glorified for ever.
 
-Bless the Lord, all things that grow on the earth, sing praise to him and highly exalt him for ever.
+Blessed art thou upon the throne of thy kingdom and to be extolled and highly exalted for ever.
 
-Bless the Lord, you springs, sing praise to him and highly exalt him for ever.
+Blessed art thou, who sittest upon cherubim and lookest upon the deeps, and to be praised and highly exalted for ever.
 
-Bless the Lord, seas and rivers, sing praise to him and highly exalt him for ever.",repo://C:/dev/catholicdaily-flutter/assets/rsvce.db,complete liturgical usage expansion,332eca3d3a59af1b4201c0887d3369ed69f106377d79a8897209420a221ba040,7a739b583a85a80d67b388be90b18c83c64f4f5fef092e17a98db1bc4b37b413,110
+Blessed art thou in the firmament of heaven and to be sung and glorified for ever.",repo://C:/dev/catholicdaily-flutter/assets/rsvce.db,complete liturgical usage expansion,bb4ff29805103f0c98cbe864ec13aaadad8726114971b2bc7af77494ae517fed,1417d3800c2c9f7f9daee9c74ad241003534ba5526a6c8be614f64d9c0e6585d,110
 local_rsvce,local_rsvce:expanded:978d0be5a3572517,WORLD,,,generic,,,,"jeremiah31:10,11-12abcd,13",The Lord will guard us as a shepherd guards his flock.,"""Hear the word of the LORD, O nations, and declare it in the coastlands afar off; say, 'He who scattered Israel will gather him, and  will keep him as a shepherd keeps his flock.'
 
 For the LORD has ransomed Jacob, and has redeemed him from hands too strong for him. They shall come and sing aloud on the height of Zion, and they shall be  radiant over the goodness of the LORD, over the grain, the wine, and the oil, and over the young of the flock and the herd; their life shall  be like a watered garden, and they shall languish no more.
@@ -5722,3 +5722,125 @@ Acknowledge him before the nations, O sons of Israel; for he has scattered us am
 If you turn to him with all your heart and with all your soul, to do what is true before him, then he will turn to you and will not hide his face from you. But see what he will do with you; give thanks to him with your full voice. Praise the Lord of righteousness, and exalt the King of the ages. I give him thanks in the land of my captivity, and I show his power and majesty to a nation of sinners. Turn back, you sinners, and do right before him; who knows if he will accept you and have mercy on you?
 
 Let all men speak, and give him thanks in Jerusalem.",repo://assets/rsvce.db,,02c7eed43c7e2dedcd1cd7bfcdc97a8d427f693adb34abf50bff80b331a346d7,aafb8a049f7b4d7ec0cc572c6fcf16f0b38a8060a4bfba8b4e8dcefda89d754e,100
+local_rsvce,"calendar:ps13:6ab,6c",WORLD,,,generic,,,,"ps13:6ab,6c",With delight I rejoice in the Lord.,"But I have trusted in thy steadfast love; my heart shall rejoice in thy salvation.
+
+I will sing to the LORD, because he has dealt bountifully with me.",repo://assets/rsvce.db,RSVCE,1c5121e2cd7097f7e284c24fbd75210f00b937c0ee7cc3e12e30aee5c3243e67,fcfa0d2e4d5af817341115be58c6cca6c12a8f1b18256565b9c09a98a19b1b41,100
+local_rsvce,"calendar:judith13:18bcde,19",WORLD,,,generic,,,,"judith13:18bcde,19",You are the highest honor of our race.,"And Uzziah said to her, ""O daughter, you are blessed by the Most High God above all women on earth; and blessed be the Lord God, who created the heavens and the earth, who has guided you to strike the head of the leader of our enemies.
+
+Your hope will never depart from the hearts of men, as they remember the power of God.",repo://assets/rsvce.db,RSVCE,05dbabd1a3bf26f81c0103d63628f36e6fbb369095b9e51e204269751d681e33,78cc7e46099633144bba5473d9a5492cea13ab8105adb81bf185fe77aa74e654,100
+local_rsvce,"calendar:ex15:1-2,3-4,5-6,17-18",WORLD,,,generic,,,,"ex15:1-2,3-4,5-6,17-18",Let us sing to the Lord; he has covered himself in glory.,"Then Moses and the people of Israel sang this song to the LORD, saying, ""I will sing to the LORD, for he has triumphed gloriously; the horse and his rider he has thrown into the sea. The LORD is my strength and my song, and he has become my salvation; this is my God, and I will praise him, my father's God, and I will exalt him.
+
+The LORD is a man of war; the LORD is his name. ""Pharaoh's chariots and his host he cast into the sea; and his picked officers are sunk in the Red Sea.
+
+The floods cover them; they went down into the depths like a stone. Thy right hand, O LORD, glorious in power, thy right hand, O LORD, shatters the enemy.
+
+Thou wilt bring them in, and plant them on thy own mountain, the place, O LORD, which thou hast made for thy abode, the sanctuary, O LORD, which thy hands have established. The LORD will reign for ever and ever.""",repo://assets/rsvce.db,RSVCE,273cf0793ce459c4aaf5b208781dee5dd542073445833b649d3de7406f145b1a,2247a1e200eb0d4e3fa45aba4d95b32953b2bad7f6ad48a9a94f434efd949e5f,100
+local_rsvce,"calendar:ps104:1-2,5-6,10,12,13-14,24,35",WORLD,,,generic,,,,"ps104:1-2,5-6,10,12,13-14,24,35","Send forth your Spirit, O Lord, and renew the face of the earth.","Bless the LORD, O my soul! O LORD my God,thou art very great! Thou art clothed with honor and majesty, who coverest thyself with light as with a garment, who hast stretched out the heavens like a tent,
+
+Thou didst set the earth on its foundations, so that it should never be shaken. Thou didst cover it with the deep as with a garment; the waters stood above the mountains.
+
+Thou makest springs gush forth in the valleys; they flow between the hills,
+
+By them the birds of the air have their habitation; they sing among the branches.
+
+From thy lofty abode thou waterest the mountains; the earth is satisfied with the fruit of thy work. Thou dost cause the grass to grow for the cattle,and plants for man to cultivate,  that he may bring forth food from the earth,
+
+O LORD, how manifold are thy works!In wisdom hast thou made them all; the earth is full of thy creatures.
+
+Let sinners be consumed from the earth,and let the wicked be no more! Bless the LORD, O my soul! Praise the LORD!",repo://assets/rsvce.db,RSVCE,f37546e8c95d309bdc32994ae591b34de3953223c6bb3257c40f3f3558ab7d76,b92e7efb1e3bd96c714784254be319ec3b2dde70052f9ca4368477cf69449fb7,100
+local_rsvce,"calendar:ps25:4-5ab,8-9,10+14",WORLD,,,generic,,,,"ps25:4-5ab,8-9,10+14",Lift up your heads and see; your redemption is near at hand.,"Make me to know thy ways, O LORD; teach me thy paths. Lead me in thy truth, and teach me,for thou art the God of my salvation; for thee I wait all the day long.
+
+Good and upright is the LORD; therefore he instructs sinners in the way. He leads the humble in what is right, and teaches the humble his way.
+
+All the paths of the LORD are steadfast love and faithfulness, for those who keep his covenant and his testimonies. The friendship of the LORD is for those who fear him, and he makes known to them his covenant.",repo://assets/rsvce.db,RSVCE,f5d053ee45ab70ec714984651d526d5efcd9c5754b29342d99496a3fc3c559aa,e00e6d7d35d487da81b74eb87ee0100ebe79af4d19a72201dc52b8dc784cdcdb,100
+local_rsvce,"calendar:ps42:3,5,43:3,4",WORLD,,,generic,,,,"ps42:3,5,43:3,4","Like a deer that longs for running streams, my soul longs for you, my God.","My soul thirsts for God, for the living God. When shall I come and behold the face of God?
+
+These things I remember, as I pour out my soul:how I went with the throng,and led them in procession to the house of God,with glad shouts and songs of thanksgiving, a multitude keeping festival.
+
+Oh send out thy light and thy truth;let them lead me, let them bring me to thy holy hill and to thy dwelling!
+
+Then I will go to the altar of God,to God my exceeding joy; and I will praise thee with the lyre, O God, my God.",repo://assets/rsvce.db,RSVCE,94362571608c5e7bbb348b910a9edaec174acdc828c9b31a8462aafaec04071f,651cca51c80c295d89b62c25d760db3898b55fdc99c347be837003b49785965d,100
+local_rsvce,"calendar:1chr29:10b,11abc,11d-12a,12bcd",WORLD,,,generic,,,,"1chr29:10b,11abc,11d-12a,12bcd","We praise your glorious name, O mighty God.","Therefore David blessed the LORD in the presence of all the assembly; and David said: ""Blessed art thou, O LORD, the God of Israel our father, for ever and ever.
+
+Thine, O LORD, is the greatness, and the power, and the glory, and the victory, and the majesty; for all that is in the heavens and in the earth is thine; thine is the kingdom, O LORD, and thou art exalted as head above all.
+
+Thine, O LORD, is the greatness, and the power, and the glory, and the victory, and the majesty; for all that is in the heavens and in the earth is thine; thine is the kingdom, O LORD, and thou art exalted as head above all. Both riches and honor come from thee, and thou rulest over all. In thy hand are power and might; and in thy hand it is to make great and to give strength to all.
+
+Both riches and honor come from thee, and thou rulest over all. In thy hand are power and might; and in thy hand it is to make great and to give strength to all.",repo://assets/rsvce.db,RSVCE,f782985503fbf696cb623e2136f446fb48f4fb26a7e45368ff1b30e93ee8d7ca,bfb2cbb67f38e102642551cc934c37994698a8598f5678cd57cfd17de399156f,100
+local_rsvce,"calendar:deut32:3-4a,7,8,9+12",WORLD,,,generic,,,,"deut32:3-4a,7,8,9+12",The portion of the Lord is his people.,"For I will proclaim the name of the LORD. Ascribe greatness to our God! ""The Rock, his work is perfect; for all his ways are justice. A God of faithfulness and without iniquity, just and right is he.
+
+Remember the days of old, consider the years of many generations; ask your father, and he will show you; your elders, and they will tell you.
+
+When the Most High gave to the nations their inheritance, when he separated the sons of men, he fixed the bounds of the peoples according to the number of the sons of God.
+
+For the LORD's portion is his people, Jacob his allotted heritage. the LORD alone did lead him, and there was no foreign god with him.",repo://assets/rsvce.db,RSVCE,131c53ccdafea6379beedaf707eb028c45d32a67e764843a971bdb9e238c2e51,b68e1a185b85a0acd63c9b61615b806f25eacaba5f287d29770adb2e0dc6b94b,100
+local_rsvce,"calendar:ex15:1-2,3-4,5-6",WORLD,,,generic,,,,"ex15:1-2,3-4,5-6",Let us sing to the Lord; he has covered himself in glory.,"Then Moses and the people of Israel sang this song to the LORD, saying, ""I will sing to the LORD, for he has triumphed gloriously; the horse and his rider he has thrown into the sea. The LORD is my strength and my song, and he has become my salvation; this is my God, and I will praise him, my father's God, and I will exalt him.
+
+The LORD is a man of war; the LORD is his name. ""Pharaoh's chariots and his host he cast into the sea; and his picked officers are sunk in the Red Sea.
+
+The floods cover them; they went down into the depths like a stone. Thy right hand, O LORD, glorious in power, thy right hand, O LORD, shatters the enemy.",repo://assets/rsvce.db,RSVCE,899f59cfc20a54cdd327f7e6ae3ac39fa8c7b0040757ab0a67a3f047a0247043,2a9e73f0801da39b948dcc3c3fd63d4fe72f5e985c9bf3f86145dd68c1595d72,100
+local_rsvce,calendar:isa12:1-6,WORLD,,,generic,,,,isa12:1-6,You will draw water joyfully from the springs of salvation.,"You will say in that day: ""I will give thanks to thee, O LORD, for though thou wast angry with me, thy anger turned away, and thou didst comfort me. ""Behold, God is my salvation; I will trust, and will not be afraid; for the LORD GOD is my strength and my song, and he has become my salvation."" With joy you will draw water from the wells of salvation. And you will say in that day: ""Give thanks to the LORD, call upon his name; make known his deeds among the nations, proclaim that his name is exalted. ""Sing praises to the LORD, for he has done gloriously; let this be known in all the earth. Shout, and sing for joy, O inhabitant of Zion, for great in your midst is the Holy One of Israel.""",repo://assets/rsvce.db,RSVCE,8cde75345f39f98d1c191ac93faa8d40ce67ec352337d9bb093dce73aa7cfe8f,be8f51ae339b093c5f16f8ce7a0747738035d6195ca992075c6210154dadfc0c,100
+local_rsvce,"calendar:jonah2:2,3,4-5a,7+9abd",WORLD,,,generic,,,,"jonah2:2,3,4-5a,7+9abd","You will rescue my life from the pit, O Lord.","saying, ""I called to the LORD, out of my distress, and he answered me; out of the belly of Sheol I cried, and thou didst hear my voice.
+
+For thou didst cast me into the deep, into the heart of the seas, and the flood was round about me; all thy waves and thy billows passed over me.
+
+Then I said, 'I am cast out from thy presence; how shall I again look upon thy holy temple?' The waters closed in over me, the deep was round about me; weeds were wrapped about my head
+
+When my soul fainted within me, I remembered the LORD; and my prayer came to thee, into thy holy temple. But I with the voice of thanksgiving will sacrifice to thee; what I have vowed I will pay. Deliverance belongs to the LORD!""",repo://assets/rsvce.db,RSVCE,10119187d726f8122aaaf7901e9538dbf9e1961ae4afefe1555f86d87ed8d673,7484f6062510a6a303c720e172e7c2a1290436e4d55cf4e46f34003a97cc72d2,100
+local_rsvce,"calendar:luke1:46-47,48-49,50+53,54-55",WORLD,,,generic,,,,"luke1:46-47,48-49,50+53,54-55",The Lord has remembered his mercy.,"And Mary said, ""My soul magnifies the Lord, and my spirit rejoices in God my Savior,
+
+for he has regarded the low estate of his handmaiden. For behold, henceforth all generations will call me blessed; for he who is mighty has done great things for me, and holy is his name.
+
+And his mercy is on those who fear him from generation to generation. he has filled the hungry with good things, and the rich he has sent empty away.
+
+He has helped his servant Israel, in remembrance of his mercy, as he spoke to our fathers, to Abraham and to his posterity for ever.""",repo://assets/rsvce.db,RSVCE,534ffa75de534f72f409c167964635cc04d76082cae9aeabde60b4e61d4a7af1,100372888e94e9fc58a48f40892361509a985d2d53c4bd624851e5806e7fad9f,100
+local_rsvce,"calendar:ps112:1-2,7bc-8,9(see7c)",WORLD,,,generic,,,,"ps112:1-2,7bc-8,9(see7c)","The hearts of the just are secure,","Praise the LORD.Blessed is the man who fears the LORD, who greatly delights in his commandments! His descendants will be mighty in the land; the generation of the upright will be blessed.
+
+He is not afraid of evil tidings; his heart is firm, trusting in the LORD. His heart is steady,he will not be afraid, until he sees his desire on his adversaries.
+
+He has distributed freely,he has given to the poor;his righteousness endures for ever; his horn is exalted in honor.",repo://assets/rsvce.db,RSVCE,4c8f75322e939a402f5c52db34ee653ddaf664a11914e434b8e5c35925839c2c,fd44215438e2bae317e5b032246da9827edc12318f8c4a1d5a1d6ee4e2a3778e,100
+local_rsvce,"calendar:ps139:1-3,13-14,14-15",WORLD,,,generic,,,,"ps139:1-3,13-14,14-15","I praise you, for I am wonderfully made.","O LORD, thou hast searched me and known me! Thou knowest when I sit down and when I rise up; thou discernest my thoughts from afar. Thou searchest out my path and my lying down, and art acquainted with all my ways.
+
+For thou didst form my inward parts, thou didst knit me together in my mother's womb. I praise thee, for thou art fearful and wonderful.  Wonderful are thy works! Thou knowest me right well;
+
+I praise thee, for thou art fearful and wonderful.  Wonderful are thy works! Thou knowest me right well; my frame was not hidden from thee,when I was being made in secret, intricately wrought in the depths of the earth.",repo://assets/rsvce.db,RSVCE,5147bafe0defc3ba7fef87b1b0034e7c861727706fea6a8cf2c9883778bb9f5e,fdcbfb12f6e3a45f306788fac25f025d2ffec01849f07dbcbcc9e70ac944b48d,100
+local_rsvce,"calendar:ps149:1-2,3-4,5+6a+9b",WORLD,,,generic,,,,"ps149:1-2,3-4,5+6a+9b",The Lord takes delight in his people.,"Praise the LORD! Sing to the LORD a new song, his praise in the assembly of the faithful! Let Israel be glad in his Maker, let the sons of Zion rejoice in their King!
+
+Let them praise his name with dancing, making melody to him with timbrel and lyre! For the LORD takes pleasure in his people; he adorns the humble with victory.
+
+Let the faithful exult in glory; let them sing for joy on their couches. Let the high praises of God be in their throats and two-edged swords in their hands, to execute on them the judgment written! This is glory for all his faithful ones. Praise the LORD!",repo://assets/rsvce.db,RSVCE,933db1c87c730e2cd6f3395c65901893f46dd5dd49b5594346fbb6c482530c1d,52f717a34ae9767313ad004a14068924e016242ab7aeeeaca99202b0f4a66535,100
+local_rsvce,"calendar:ps45:11-12,13-14,15-16",WORLD,,,generic,,,,"ps45:11-12,13-14,15-16","Listen to me, daughter; see and bend your ear.","Hear, O daughter, consider, and incline your ear; forget your people and your father's house; and the king will desire your beauty. Since he is your lord, bow to him;
+
+the people of Tyre will sue your favor with gifts, the richest of the people with all kinds of wealth. The princess is decked in her chamber with gold-woven robes;
+
+in many-colored robes she is led to the king, with her virgin companions, her escort,  in her train. With joy and gladness they are led along as they enter the palace of the king.",repo://assets/rsvce.db,RSVCE,13ef14eb1e1bdf0df92366a4d8e64972c066c8130eb9f868f207f0384606a13f,68c826b3657d1cb79621d57185e6dadf20a453d0f870b9741ea3dbe4a3dc68b0,100
+local_rsvce,"calendar:ps69:8-10,21-22,31+33-34",WORLD,,,generic,,,,"ps69:8-10,21-22,31+33-34","Lord, in your great love, answer me.","For it is for thy sake that I have borne reproach, that shame has covered my face. I have become a stranger to my brethren, an alien to my mother's sons. For zeal for thy house has consumed me, and the insults of those who insult thee have fallen on me.
+
+Insults have broken my heart,so that I am in despair.I looked for pity, but there was none; and for comforters, but I found none. They gave me poison for food, and for my thirst they gave me vinegar to drink.
+
+I will praise the name of God with a song; I will magnify him with thanksgiving. Let the oppressed see it and be glad;you who seek God, let your hearts revive. For the LORD hears the needy, and does not despise his own that are in bonds.",repo://assets/rsvce.db,RSVCE,d0be66e719870bf9b5e217ae02e787e2750fe21388cfafc867024efc7bfb46c0,eca6695f0bc272751f76b7a73026fca27d52cf89d207db7fe5a37ea48a35c5ce,100
+local_rsvce,"calendar:ps71:1-2,3-4a,5-6ab,15+17",WORLD,,,generic,,,,"ps71:1-2,3-4a,5-6ab,15+17",I will sing of your salvation.,"In thee, O LORD, do I take refuge; let me never be put to shame! In thy righteousness deliver me and rescue me; incline thy ear to me, and save me!
+
+Be thou to me a rock of refuge, a strong fortress,  to save me, for thou art my rock and my fortress. Rescue me, O my God, from the hand of the wicked, from the grasp of the unjust and cruel man.
+
+For thou, O Lord, art my hope, my trust, O LORD, from my youth. Upon thee I have leaned from my birth;thou art he who took me from my mother's womb. My praise is continually of thee.
+
+My mouth will tell of thy righteous acts,of thy deeds of salvation all the day, for their number is past my knowledge. O God, from my youth thou hast taught me, and I still proclaim thy wondrous deeds.",repo://assets/rsvce.db,RSVCE,5a683a76e072b514647caeeb838eeedf64af83f7354bc34a45316626a79bf101,c4d972bbc8ed10cafcba5f86c0f9333ab7bc1eede5536e67f2b8abe6634e344a,100
+local_rsvce,"calendar:ps72:1-2,14+15bc,17",WORLD,,,generic,,,,"ps72:1-2,14+15bc,17","Lord, every nation on earth will adore you.","Give the king thy justice, O God, and thy righteousness to the royal son! May he judge thy people with righteousness, and thy poor with justice!
+
+From oppression and violence he redeems their life; and precious is their blood in his sight. Long may he live, may gold of Sheba be given to him!May prayer be made for him continually, and blessings invoked for him all the day!
+
+May his name endure for ever,his fame continue as long as the sun!May men bless themselves by him, all nations call him blessed!",repo://assets/rsvce.db,RSVCE,7250279ae964f3f6d1e4ea7eec64a31b8d6cc4fe49536f0664af6e9e3d123b9e,407ba7d1779e3f3e6c0c0555879ba44476897acb5fa8cfe0763512aa4faa53c3,100
+local_rsvce,"calendar:ps89:2-3,4-5,27+29",WORLD,,,generic,,,,"ps89:2-3,4-5,27+29",For ever I will sing the goodness of the Lord.,"I will sing of thy steadfast love, O LORD, for ever; with my mouth I will proclaim thy faithfulness to all generations. For thy steadfast love was established for ever, thy faithfulness is firm as the heavens.
+
+Thou hast said,""I have made a covenant with my chosen one, I have sworn to David my servant: 'I will establish your descendants for ever, and build your throne for all generations.'"" [Selah]
+
+He shall cry to me, 'Thou art my Father, my God, and the Rock of my salvation.' My steadfast love I will keep for him for ever, and my covenant will stand firm for him.",repo://assets/rsvce.db,RSVCE,1e898d296c6cbda07db2ca48bd462947977feeefe5ed0994007245534e064380,7de386ba1c6b019e813f6704dfb0f6b1bcbf52f3116c005a3bf4d6ec71b57901,100
+local_rsvce,"calendar:tob13:2,3-4,6abcd,6ef",WORLD,,,generic,,,,"tob13:2,3-4,6abcd,6ef","Blessed be God, who lives for ever.","For he afflicts, and he shows mercy; he leads down to Hades, and brings up again, and there is no one who can escape his hand.
+
+Acknowledge him before the nations, O sons of Israel; for he has scattered us among them.4 Make his greatness known there, and exalt him in the presence of all the living; because he is our Lord and God, he is our Father for ever.
+
+If you turn to him with all your heart and with all your soul, to do what is true before him, then he will turn to you and will not hide his face from you. But see what he will do with you; give thanks to him with your full voice. Praise the Lord of righteousness, and exalt the King of the ages. I give him thanks in the land of my captivity, and I show his power and majesty to a nation of sinners. Turn back, you sinners, and do right before him; who knows if he will accept you and have mercy on you?",repo://assets/rsvce.db,RSVCE,06af42e796e64fe2772fcaa895f8921318a681ea62f7c8faac67d7581e5aa996,dda65dda097f634dfca4245835a8a88bbf2acf66437019d886773f3a0d4c8254,100
+local_rsvce,"calendar:tob13:2,6a,6b,6c,6d",WORLD,,,generic,,,,"tob13:2,6a,6b,6c,6d","Blessed be God, who lives for ever.","For he afflicts, and he shows mercy; he leads down to Hades, and brings up again, and there is no one who can escape his hand.
+
+If you turn to him with all your heart and with all your soul, to do what is true before him, then he will turn to you and will not hide his face from you. But see what he will do with you; give thanks to him with your full voice. Praise the Lord of righteousness, and exalt the King of the ages. I give him thanks in the land of my captivity, and I show his power and majesty to a nation of sinners. Turn back, you sinners, and do right before him; who knows if he will accept you and have mercy on you?",repo://assets/rsvce.db,RSVCE,b51ed70db88874d1cf9fbab1dd6bb976e40ee0868f6400360d4213efb35b21e8,542e6ce886d9bfab74b31efac92e8fb8afa32c0f028891808666c587a1e664ef,100
