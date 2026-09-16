@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'premium_browse_screen.dart';
 import 'reading_screen.dart';
@@ -8,9 +10,7 @@ import 'hymn_list_screen.dart';
 import '../../data/models/bible_version.dart';
 import '../../data/services/theme_preferences.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
-import '../../data/services/ordo_resolver_service.dart';
 import '../../data/models/reading_session.dart';
-import '../../data/services/readings_backend_io.dart';
 import '../../data/services/reading_flow_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/models/daily_reading.dart';
@@ -61,13 +61,9 @@ class _HomeScreenState extends State<HomeScreen> {
   final AppNavigationService _navigationService = AppNavigationService();
 
   List<BibleVersion> _versions = [];
-  bool _isLoading = true;
   ReadingSession _readingSession = ReadingSession.empty();
-  final DateTime _currentDate = DateTime.now();
 
-  final ReadingsBackendIo _readingsBackend = ReadingsBackendIo();
   final ReadingFlowService _readingFlow = ReadingFlowService.instance;
-  final OrdoResolverService _ordoResolver = OrdoResolverService.instance;
   final LatestRequestGuard _sessionLoadGuard = LatestRequestGuard();
   final LatestRequestGuard _navigationGuard = LatestRequestGuard();
 
@@ -77,13 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _initialize();
   }
 
-  Future<void> _initialize() async {
-    await _navigationService.initialize();
-    await _navigationService.trackHomeScreen();
-
-    final prefs = await SharedPreferences.getInstance();
-    _currentIndex = prefs.getInt(_keyLastTabIndex) ?? 0;
-
+  void _initialize() {
     _versions = [
       BibleVersion(
         id: 'rsvce',
@@ -101,54 +91,32 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     ];
 
-    // Load current day's readings
-    await _loadCurrentReadings();
-
-    if (!mounted) return;
-    setState(() => _isLoading = false);
-
-    // Schedule post-frame callbacks
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      if (_navigationService.shouldResumeToBibleChapter) {
-        _resumeToBibleChapter();
-      }
-      _checkAndShowReviewPrompt();
-    });
+    unawaited(_restorePersistence());
   }
 
-  Future<void> _loadCurrentReadings() async {
+  Future<void> _restorePersistence() async {
     try {
-      final results = await Future.wait([
-        _readingsBackend.getReadingsForDate(_currentDate),
-        _ordoResolver.resolveDay(_currentDate),
-      ]);
-      final rawReadings = results[0] as List<DailyReading>;
-      final liturgicalDay = results[1] as LiturgicalDay;
+      await _navigationService.initialize();
+      final prefs = await SharedPreferences.getInstance();
+      final currentIndex = prefs.getInt(_keyLastTabIndex) ?? 0;
+      if (!mounted) return;
+      if (_currentIndex != currentIndex) {
+        setState(() => _currentIndex = currentIndex);
+      }
 
-      final hydrated = await _readingFlow.hydrateReadingSet(
-        date: _currentDate,
-        readings: rawReadings,
-      );
+      final shouldResumeToBibleChapter =
+          _navigationService.shouldResumeToBibleChapter;
+      unawaited(_navigationService.trackHomeScreen());
 
-      final navigableItems = await _readingFlow.buildNavigableFlow(
-        date: _currentDate,
-        readings: hydrated.readings,
-      );
-
-      _sessionLoadGuard.begin();
-      _readingSession = _readingFlow.buildSession(
-        readings: hydrated.readings,
-        readingTexts: hydrated.readingTexts,
-        psalmSources: hydrated.psalmSources,
-        selectedIndex: 0,
-        navigableItems: navigableItems,
-        navigableIndex: 0,
-        liturgicalDay: liturgicalDay,
-      );
-    } catch (e) {
-      debugPrint('Error loading current readings: $e');
-      _readingSession = ReadingSession.empty();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        if (shouldResumeToBibleChapter) {
+          _resumeToBibleChapter();
+        }
+        _checkAndShowReviewPrompt();
+      });
+    } catch (error, stackTrace) {
+      debugPrint('Error restoring home state: $error\n$stackTrace');
     }
   }
 
@@ -490,10 +458,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
-
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;

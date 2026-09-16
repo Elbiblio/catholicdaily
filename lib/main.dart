@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'app_startup_maintenance.dart';
 import 'data/services/theme_preferences.dart';
-import 'data/services/app_navigation_service.dart';
 import 'data/services/feast_reminder_service.dart';
 import 'data/services/feast_reminder_background_service.dart';
 import 'data/services/feast_reminder_messaging_service.dart';
@@ -29,37 +29,22 @@ import 'ui/widgets/reading_narration_scope.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  var firebaseMessagingAvailable = false;
   if (DefaultFirebaseOptions.isSupported) {
     // Register before asynchronous startup work so a data-only message can
     // always enter the dedicated background isolate after process death.
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-    try {
-      await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      );
-      firebaseMessagingAvailable = true;
-    } catch (e, st) {
-      debugPrint('[FeastReminder] Firebase init failed: $e\n$st');
-    }
   }
 
-  try {
-    await FeastReminderBackgroundService.instance.initialize();
-  } catch (e, st) {
-    debugPrint('[FeastReminder] Background worker init failed: $e\n$st');
-  }
+  unawaited(
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]),
+  );
 
-  // Set preferred orientations
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-
-  // Set system UI overlay style
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -67,58 +52,8 @@ void main() async {
     ),
   );
 
-  final themePreferences = await ThemePreferences.getInstance();
-  final demoLaunchConfig = DemoLaunchConfig.fromEnvironment();
-
-  try {
-    final regionPrefs = await LiturgicalRegionPreferenceService.getInstance();
-    await regionPrefs.detectAndSetIfUnset();
-    if (demoLaunchConfig.region != null) {
-      await regionPrefs.setRegion(demoLaunchConfig.region!);
-    }
-    IncipitPreferenceService().resetCache();
-  } catch (e, st) {
-    debugPrint('[LiturgicalRegion] Startup detection failed: $e\n$st');
-  }
-
-  if (demoLaunchConfig.bibleVersion != null) {
-    final versionPrefs = await BibleVersionPreference.getInstance();
-    await versionPrefs.setVersion(demoLaunchConfig.bibleVersion!);
-  }
-
-  if (demoLaunchConfig.enabled) {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('onboarding_complete', true);
-  }
-
-  // Initialize notification service and (a) auto-schedule the next 15 months
-  // of feast reminders on first install, or (b) reschedule when crossing a
-  // year boundary on subsequent launches. Wrapped in try/catch — a
-  // notification failure must never block app launch.
-  try {
-    await FeastReminderService.instance.initialize();
-    final reminderPrefs = await FeastReminderPreferences.getInstance();
-    // First-run auto-setup is idempotent: runs once after install, then is a
-    // no-op. Reschedule covers year-rollover refresh on every launch.
-    await FeastReminderService.instance.autoSetupOnFirstRun(reminderPrefs);
-    await FeastReminderService.instance.rescheduleIfNeeded(reminderPrefs);
-    await NotificationStartupSyncDispatcher(
-      auditAndRepair: FeastReminderBackgroundService.instance.auditAndRepair,
-      initializeMessaging: firebaseMessagingAvailable
-          ? FeastReminderMessagingService.instance.initialize
-          : () async {},
-      enqueueRepair: () => FeastReminderBackgroundService.instance
-          .enqueueRepair(reason: FeastReminderRepairReason.startup),
-    ).dispatch();
-  } catch (e, st) {
-    debugPrint('[FeastReminder] Startup init failed: $e\n$st');
-  }
-
   runApp(
-    CatholicDailyApp(
-      themePreferences: themePreferences,
-      demoLaunchConfig: demoLaunchConfig,
-    ),
+    CatholicDailyApp(demoLaunchConfig: DemoLaunchConfig.fromEnvironment()),
   );
 }
 
@@ -126,21 +61,21 @@ void main() async {
 class CatholicDailyApp extends StatefulWidget {
   const CatholicDailyApp({
     super.key,
-    required this.themePreferences,
     required this.demoLaunchConfig,
+    this.maintenance,
   });
 
-  final ThemePreferences themePreferences;
   final DemoLaunchConfig demoLaunchConfig;
+  final AppStartupMaintenance? maintenance;
 
   @override
   State<CatholicDailyApp> createState() => _CatholicDailyAppState();
 }
 
 class _CatholicDailyAppState extends State<CatholicDailyApp> {
-  late ThemeMode _themeMode;
-  late AppThemeStyle _themeStyle;
-  final AppNavigationService _navigationService = AppNavigationService();
+  ThemeMode _themeMode = ThemeMode.system;
+  AppThemeStyle _themeStyle = AppThemeStyle.standard;
+  ThemePreferences? _themePreferences;
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   Widget? _initialScreen;
   bool _showOnboarding = false;
@@ -149,6 +84,8 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
   bool _reminderTapDrainScheduled = false;
   bool _resolvingReminderTap = false;
   late final ReadingNarrationSession _narrationSession;
+  late final AppStartupMaintenance _maintenance;
+  Future<void>? _maintenanceRun;
 
   @override
   void initState() {
@@ -161,11 +98,20 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
         composer: ReadingNarrationComposer(),
       ),
     );
-    unawaited(_narrationSession.initialize());
-    _themeMode = widget.themePreferences.getThemeMode();
-    _themeStyle = widget.themePreferences.getThemeStyle();
     FeastReminderService.instance.setNotificationTapHandler(_handleReminderTap);
-    _initializeNavigation();
+    _maintenance =
+        widget.maintenance ??
+        AppStartupMaintenance(
+          _runStartupMaintenance,
+          onError: (error, stackTrace) {
+            debugPrint('[Startup] Maintenance failed: $error\n$stackTrace');
+          },
+        );
+    unawaited(_initializePresentation());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      unawaited(_narrationSession.initialize());
+      _maintenanceRun ??= _maintenance.run();
+    });
   }
 
   @override
@@ -175,9 +121,15 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
     super.dispose();
   }
 
-  Future<void> _initializeNavigation() async {
-    await _navigationService.initialize();
-    _showOnboarding = await OnboardingScreen.shouldShow();
+  Future<void> _initializePresentation() async {
+    final themePreferences = await ThemePreferences.getInstance();
+    final showOnboarding = await OnboardingScreen.shouldShow();
+    if (!mounted) return;
+
+    _themePreferences = themePreferences;
+    _themeMode = themePreferences.getThemeMode();
+    _themeStyle = themePreferences.getThemeStyle();
+    _showOnboarding = showOnboarding;
 
     if (widget.demoLaunchConfig.enabled) {
       _showOnboarding = false;
@@ -198,6 +150,64 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
 
     setState(() {});
     _drainReminderTapAfterBuild();
+  }
+
+  Future<void> _runStartupMaintenance() async {
+    var firebaseMessagingAvailable = false;
+    if (DefaultFirebaseOptions.isSupported) {
+      try {
+        await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform,
+        );
+        firebaseMessagingAvailable = true;
+      } catch (e, st) {
+        debugPrint('[FeastReminder] Firebase init failed: $e\n$st');
+      }
+    }
+
+    try {
+      await FeastReminderBackgroundService.instance.initialize();
+    } catch (e, st) {
+      debugPrint('[FeastReminder] Background worker init failed: $e\n$st');
+    }
+
+    try {
+      final regionPrefs = await LiturgicalRegionPreferenceService.getInstance();
+      await regionPrefs.detectAndSetIfUnset();
+      if (widget.demoLaunchConfig.region != null) {
+        await regionPrefs.setRegion(widget.demoLaunchConfig.region!);
+      }
+      IncipitPreferenceService().resetCache();
+    } catch (e, st) {
+      debugPrint('[LiturgicalRegion] Startup detection failed: $e\n$st');
+    }
+
+    if (widget.demoLaunchConfig.bibleVersion != null) {
+      final versionPrefs = await BibleVersionPreference.getInstance();
+      await versionPrefs.setVersion(widget.demoLaunchConfig.bibleVersion!);
+    }
+
+    if (widget.demoLaunchConfig.enabled) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('onboarding_complete', true);
+    }
+
+    try {
+      await FeastReminderService.instance.initialize();
+      final reminderPrefs = await FeastReminderPreferences.getInstance();
+      await FeastReminderService.instance.autoSetupOnFirstRun(reminderPrefs);
+      await FeastReminderService.instance.rescheduleIfNeeded(reminderPrefs);
+      await NotificationStartupSyncDispatcher(
+        auditAndRepair: FeastReminderBackgroundService.instance.auditAndRepair,
+        initializeMessaging: firebaseMessagingAvailable
+            ? FeastReminderMessagingService.instance.initialize
+            : () async {},
+        enqueueRepair: () => FeastReminderBackgroundService.instance
+            .enqueueRepair(reason: FeastReminderRepairReason.startup),
+      ).dispatch();
+    } catch (e, st) {
+      debugPrint('[FeastReminder] Startup init failed: $e\n$st');
+    }
   }
 
   void _onOnboardingComplete() {
@@ -301,14 +311,14 @@ class _CatholicDailyAppState extends State<CatholicDailyApp> {
     setState(() {
       _themeMode = mode;
     });
-    await widget.themePreferences.setThemeMode(mode);
+    await _themePreferences?.setThemeMode(mode);
   }
 
   Future<void> _handleThemeStyleChanged(AppThemeStyle style) async {
     setState(() {
       _themeStyle = style;
     });
-    await widget.themePreferences.setThemeStyle(style);
+    await _themePreferences?.setThemeStyle(style);
   }
 
   ThemeData _buildPremiumTheme(

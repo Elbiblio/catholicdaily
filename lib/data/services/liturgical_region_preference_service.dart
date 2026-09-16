@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/liturgical_region.dart';
@@ -15,7 +13,10 @@ class LiturgicalRegionPreferenceService {
 
   final SharedPreferences _prefs;
 
-  LiturgicalRegionPreferenceService._(this._prefs);
+  LiturgicalRegionPreferenceService._(
+    this._prefs, {
+    LiturgicalRegion Function()? localeRegion,
+  }) : _localeRegion = localeRegion ?? _detectFromPlatformLocale;
 
   static Future<LiturgicalRegionPreferenceService> getInstance() async {
     _instance ??= LiturgicalRegionPreferenceService._(
@@ -23,6 +24,17 @@ class LiturgicalRegionPreferenceService {
     );
     return _instance!;
   }
+
+  @visibleForTesting
+  factory LiturgicalRegionPreferenceService.forTesting(
+    SharedPreferences prefs, {
+    required LiturgicalRegion Function() localeRegion,
+  }) => LiturgicalRegionPreferenceService._(prefs, localeRegion: localeRegion);
+
+  @visibleForTesting
+  static void resetInstanceForTesting() => _instance = null;
+
+  final LiturgicalRegion Function() _localeRegion;
 
   LiturgicalRegion get currentRegion =>
       LiturgicalRegion.fromCode(_prefs.getString(_regionKey));
@@ -44,31 +56,12 @@ class LiturgicalRegionPreferenceService {
   Future<LiturgicalRegion> detectAndSetIfUnset() async {
     if (hasRegion) return currentRegion;
 
-    final detected = await _detectFromIp() ?? _detectFromLocale();
+    final detected = _localeRegion();
     await setRegion(detected, autoDetected: true);
     return detected;
   }
 
-  Future<LiturgicalRegion?> _detectFromIp() async {
-    try {
-      final response = await http
-          .get(Uri.parse('https://ipapi.co/json/'))
-          .timeout(const Duration(seconds: 4));
-      if (response.statusCode < 200 || response.statusCode >= 300) {
-        return null;
-      }
-      final decoded = jsonDecode(response.body);
-      if (decoded is! Map<String, dynamic>) return null;
-      return LiturgicalRegion.fromCountryCode(
-        decoded['country_code'] as String?,
-      );
-    } catch (e) {
-      debugPrint('[LiturgicalRegion] IP country detection failed: $e');
-      return null;
-    }
-  }
-
-  LiturgicalRegion _detectFromLocale() {
+  static LiturgicalRegion _detectFromPlatformLocale() {
     final locale = PlatformDispatcher.instance.locale;
     return LiturgicalRegion.fromCountryCode(locale.countryCode);
   }
