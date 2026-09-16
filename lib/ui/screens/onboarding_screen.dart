@@ -241,8 +241,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     final colorScheme = theme.colorScheme;
     final isLastPage = _currentPage == _totalPages - 1;
     final isNotificationsStep = _isNotificationsStep(_currentPage);
-    final bottomPadding = MediaQuery.of(context).padding.bottom;
-
     return Scaffold(
       body: Stack(
         children: [
@@ -306,7 +304,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                   padding: EdgeInsets.only(
                     left: 32,
                     right: 32,
-                    bottom: 24 + bottomPadding,
+                    bottom: 24,
                     top: 16,
                   ),
                   child: Column(
@@ -372,119 +370,131 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         position: _currentPage == index
             ? _slideAnimation
             : const AlwaysStoppedAnimation(Offset.zero),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Spacer(flex: 1),
+        child: LayoutBuilder(
+          builder: (context, constraints) => SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: (constraints.maxHeight - 48).clamp(
+                  0,
+                  double.infinity,
+                ),
+              ),
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Icon with decorative ring
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        // Outer glow ring
+                        Container(
+                          width: 140,
+                          height: 140,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: colorScheme.primary.withValues(
+                                alpha: 0.12,
+                              ),
+                              width: 2,
+                            ),
+                          ),
+                        ),
+                        // Inner filled circle
+                        Container(
+                          width: 110,
+                          height: 110,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: colorScheme.primaryContainer.withValues(
+                              alpha: 0.5,
+                            ),
+                          ),
+                          child: Icon(
+                            page.icon,
+                            size: 52,
+                            color: colorScheme.primary,
+                          ),
+                        ),
+                        // Small accent icon
+                        Positioned(
+                          right: 8,
+                          top: 8,
+                          child: Container(
+                            width: 36,
+                            height: 36,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: colorScheme.secondaryContainer,
+                              border: Border.all(
+                                color: colorScheme.surface,
+                                width: 2,
+                              ),
+                            ),
+                            child: Icon(
+                              page.accentIcon,
+                              size: 18,
+                              color: colorScheme.onSecondaryContainer,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
 
-              // Icon with decorative ring
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  // Outer glow ring
-                  Container(
-                    width: 140,
-                    height: 140,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: colorScheme.primary.withValues(alpha: 0.12),
-                        width: 2,
+                    const SizedBox(height: 40),
+
+                    // Title
+                    Text(
+                      page.title,
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.w800,
+                        height: 1.2,
+                        color: colorScheme.onSurface,
                       ),
                     ),
-                  ),
-                  // Inner filled circle
-                  Container(
-                    width: 110,
-                    height: 110,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: colorScheme.primaryContainer.withValues(
-                        alpha: 0.5,
+
+                    const SizedBox(height: 12),
+
+                    // Subtitle badge
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 6,
                       ),
-                    ),
-                    child: Icon(
-                      page.icon,
-                      size: 52,
-                      color: colorScheme.primary,
-                    ),
-                  ),
-                  // Small accent icon
-                  Positioned(
-                    right: 8,
-                    top: 8,
-                    child: Container(
-                      width: 36,
-                      height: 36,
                       decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: colorScheme.secondaryContainer,
-                        border: Border.all(
-                          color: colorScheme.surface,
-                          width: 2,
+                        color: colorScheme.primaryContainer.withValues(
+                          alpha: 0.4,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        page.subtitle,
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          color: colorScheme.primary,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.2,
                         ),
                       ),
-                      child: Icon(
-                        page.accentIcon,
-                        size: 18,
-                        color: colorScheme.onSecondaryContainer,
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    // Description
+                    Text(
+                      page.description,
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                        height: 1.6,
                       ),
                     ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 40),
-
-              // Title
-              Text(
-                page.title,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.w800,
-                  height: 1.2,
-                  color: colorScheme.onSurface,
+                  ],
                 ),
               ),
-
-              const SizedBox(height: 12),
-
-              // Subtitle badge
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: colorScheme.primaryContainer.withValues(alpha: 0.4),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  page.subtitle,
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    color: colorScheme.primary,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.2,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 24),
-
-              // Description
-              Text(
-                page.description,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                  height: 1.6,
-                ),
-              ),
-
-              const Spacer(flex: 2),
-            ],
+            ),
           ),
         ),
       ),

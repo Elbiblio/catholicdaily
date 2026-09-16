@@ -8,6 +8,39 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets(
+    'Gospel keeps its collapse control when rendered as a standalone reading',
+    (tester) async {
+      final reading = DailyReading(
+        reading: 'Lk 7:31-35',
+        position: 'Gospel',
+        date: DateTime(2026, 9, 16),
+      );
+      var toggleCount = 0;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: MassFlowReadingCard(
+              reading: reading,
+              index: 0,
+              isExpanded: true,
+              onToggle: () => toggleCount++,
+              collapsible: false,
+              sectionColor: Colors.green,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byTooltip('Collapse reading'), findsOneWidget);
+      expect(find.bySemanticsLabel('Collapse Gospel'), findsOneWidget);
+
+      await tester.tap(find.byTooltip('Collapse reading'));
+      expect(toggleCount, 1);
+    },
+  );
+
+  testWidgets(
     'expanded Mass reading has a trailing exact-text speaker action',
     (tester) async {
       final reading = DailyReading(

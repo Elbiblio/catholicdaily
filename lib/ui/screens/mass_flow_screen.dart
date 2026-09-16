@@ -50,6 +50,7 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
   LiturgicalDay? _liturgicalDay;
   bool _isLoading = true;
   ReadingNarrationSession? _narration;
+  final Set<String> _collapsedStandaloneReadingKeys = <String>{};
 
   @override
   void initState() {
@@ -101,6 +102,7 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
           _liturgicalDay = liturgicalDay;
           _sections = sections;
           _readings = readings;
+          _collapsedStandaloneReadingKeys.clear();
           _isLoading = false;
         });
       }
@@ -431,15 +433,19 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
     ThemeData theme,
     Color sectionColor,
   ) {
+    final key = _standaloneReadingKey(reading);
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
         child: MassFlowReadingCard(
           reading: reading,
           index: 0,
-          isExpanded: true,
-          onToggle: () {},
-          collapsible: false,
+          isExpanded: !_collapsedStandaloneReadingKeys.contains(key),
+          onToggle: () => setState(() {
+            if (!_collapsedStandaloneReadingKeys.add(key)) {
+              _collapsedStandaloneReadingKeys.remove(key);
+            }
+          }),
           sectionColor: sectionColor,
           narrationStatus: _narrationStatusFor(reading),
           supportsNativePause:
@@ -452,6 +458,9 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
       ),
     );
   }
+
+  String _standaloneReadingKey(DailyReading reading) =>
+      '${reading.date.toIso8601String()}|${reading.position}|${reading.reading}';
 
   Widget _buildSection(ResolvedOrderOfMassSection section) {
     return SliverToBoxAdapter(
@@ -1004,6 +1013,8 @@ class _ReadingCardState extends State<MassFlowReadingCard> {
   bool _isLoadingText = false;
   int _textLoadGeneration = 0;
 
+  bool get _isCollapsible => widget.collapsible || _readingLabel == 'Gospel';
+
   String get _readingLabel {
     final position = widget.reading.position?.toLowerCase() ?? '';
 
@@ -1120,15 +1131,15 @@ class _ReadingCardState extends State<MassFlowReadingCard> {
             children: [
               Expanded(
                 child: Semantics(
-                  button: widget.collapsible,
-                  label: widget.collapsible
+                  button: _isCollapsible,
+                  label: _isCollapsible
                       ? (widget.isExpanded
                             ? 'Collapse $_readingLabel'
                             : 'Expand $_readingLabel')
                       : _readingLabel,
                   excludeSemantics: true,
                   child: InkWell(
-                    onTap: widget.collapsible ? widget.onToggle : null,
+                    onTap: _isCollapsible ? widget.onToggle : null,
                     borderRadius: BorderRadius.circular(12),
                     child: Padding(
                       padding: const EdgeInsets.all(16),
@@ -1169,7 +1180,7 @@ class _ReadingCardState extends State<MassFlowReadingCard> {
                       ? null
                       : () => unawaited(_readAloud()),
                 ),
-              if (widget.collapsible)
+              if (_isCollapsible)
                 ExcludeSemantics(
                   child: IconButton(
                     tooltip: widget.isExpanded
