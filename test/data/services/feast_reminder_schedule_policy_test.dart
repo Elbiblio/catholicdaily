@@ -10,8 +10,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  test('journaled scheduler uses schema version 7', () {
-    expect(FeastReminderService.scheduleSchemaVersion, 7);
+  test('journaled scheduler uses schema version 8', () {
+    expect(FeastReminderService.scheduleSchemaVersion, 8);
   });
 
   group('FeastReminderSchedulePolicy', () {

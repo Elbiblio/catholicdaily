@@ -1,5 +1,67 @@
 # Daily Saint Reminders and Mass-Order Sequencing Implementation Plan
 
+> **Corrective execution addendum (authoritative):** The original plan below captured the first manual attempt but omitted the daily/countdown planner and incorrectly required public boot receivers. This addendum supersedes conflicting steps below.
+
+## Corrected implementation sequence
+
+### Task A: Model deterministic daily and countdown occurrences
+
+**Files:**
+- Modify: `lib/data/services/feast_reminder_notification_contract.dart`
+- Modify: `lib/data/services/feast_reminder_payload.dart`
+- Test: `test/data/services/feast_reminder_notification_contract_test.dart`
+- Test: `test/data/services/feast_reminder_payload_test.dart`
+
+- [ ] Write failing tests for stable `advance_7d` through `advance_2d`, `eve`, and `on_day` identities, date-specific copy, serialization, and legacy payload parsing.
+- [ ] Run the focused tests and confirm failures are caused by the missing countdown model.
+- [ ] Add `daysBefore` to the identity/content/payload contract, preserve v1-v3 parsing, extend v3 compatibly, and bump the schedule generation.
+- [ ] Re-run the focused tests to green.
+
+### Task B: Schedule Saints and a complete seven-day countdown
+
+**Files:**
+- Modify: `lib/data/services/feast_reminder_service.dart`
+- Modify: `lib/data/services/feast_reminder_preferences.dart`
+- Modify: `lib/data/services/feast_reminder_schedule_capacity.dart`
+- Test: `test/data/services/feast_reminder_daily_schedule_test.dart`
+- Test: `test/data/services/feast_reminder_schedule_capacity_test.dart`
+
+- [ ] Write failing planner tests proving each known Saint is scheduled on the celebration date and every Feast/Solemnity is scheduled at offsets 7, 6, 5, 4, 3, 2, 1, and 0.
+- [ ] Add deterministic Saint selection independent of the Feast rank filter, dedupe principal celebrations, and generate the countdown slots.
+- [ ] Select iOS capacity by delivery date so the nearest notifications win.
+- [ ] Bump schedule metadata so existing installations are repaired automatically.
+- [ ] Run the focused planner/capacity tests to green.
+
+### Task C: Restore the complete Gospel sequence
+
+**Files:**
+- Modify: `lib/data/services/mass_flow_composer.dart`
+- Modify: `lib/ui/screens/mass_flow_screen.dart`
+- Test: `test/order_of_mass_service_test.dart`
+
+- [ ] Write failing tests proving Gospel Acclamation is emitted exactly once before the Gospel dialogue and reading.
+- [ ] Add an acclamation callback/group to the composer.
+- [ ] Render standalone Gospel/Acclamation cards without false collapse controls and derive pause support from the narration scope.
+- [ ] Run the Mass tests to green.
+
+### Task D: Make boot restoration private and testable
+
+**Files:**
+- Modify: `android/app/src/main/AndroidManifest.xml`
+- Create: `test/android_notification_manifest_test.dart`
+- Test: `android/app/src/test/kotlin/com/elbiblio/catholicdaily/FeastReminderRepairReceiverTest.kt`
+
+- [ ] Write a failing static manifest test requiring `RECEIVE_BOOT_COMPLETED`, both boot receivers, their system actions, and `android:exported="false"`.
+- [ ] Restore both receiver declarations to private while retaining all system intent filters.
+- [ ] Run Dart manifest and Android app unit tests to green.
+
+### Task E: Full verification
+
+- [ ] Run all notification and Mass-flow tests.
+- [ ] Run `flutter analyze` and the complete Flutter suite.
+- [ ] Run `:app:testDebugUnitTest` and build a debug APK.
+- [ ] Inspect the merged debug manifest and APK output.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Fix the "Before the Gospel" section appearing after the Gospel in the Mass flow, and ensure Android notifications survive device reboot via properly exported boot receivers and OS-level local alarms.

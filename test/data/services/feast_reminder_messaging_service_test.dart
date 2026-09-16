@@ -56,6 +56,8 @@ void main() {
       ...validData,
       'schema': '3',
       'v': '3',
+      'schedule_generation':
+          FeastReminderNotificationContract.scheduleGeneration,
       'local_notification_id':
           '${FeastReminderNotificationContract.stableNotificationId(key)}',
       'remote_expires_at': '2026-08-15T06:02:00+01:00',
@@ -310,6 +312,7 @@ Map<String, String> _validV3Data(Map<String, String> validData) {
     ...validData,
     'schema': '3',
     'v': '3',
+    'schedule_generation': FeastReminderNotificationContract.scheduleGeneration,
     'local_notification_id':
         '${FeastReminderNotificationContract.stableNotificationId(key)}',
     'remote_expires_at': '2026-08-15T06:02:00+01:00',

@@ -2,9 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum FeastReminderRank {
-  solemnities('solemnities', 'Solemnities only'),
-  feastsDays('feasts', 'Feasts & Solemnities'),
-  all('all', 'All memorials & feasts');
+  solemnities('solemnities', 'Daily saints + solemnities'),
+  feastsDays('feasts', 'Daily saints + feasts'),
+  all('all', 'All saints & celebrations');
 
   final String key;
   final String label;

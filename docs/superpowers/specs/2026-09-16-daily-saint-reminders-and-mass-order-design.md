@@ -45,18 +45,19 @@ The composer will preserve the existing cards, narration actions, selected date,
 
 Introduce a pure reminder planner that emits two independent occurrence kinds:
 
-- one Saint-of-the-Day occurrence for every calendar date; and
-- a feast/solemnity occurrence for the celebration date, plus one advance occurrence seven days earlier for important celebrations. This provides advance notice without sending seven duplicate alerts for one celebration.
+- one Saint-of-the-Day occurrence for each available saint observed on that
+  date, while preserving Sunday and higher-rank liturgical precedence; and
+- a feast/solemnity occurrence for the celebration date, plus one occurrence on each of the seven preceding days for important celebrations. The series therefore runs from seven days before through the celebration day.
 
 The planner will build a rolling schedule with a minimum eight-day immediate horizon and a durable multi-month Android horizon, with deterministic IDs, tags, payloads, and collision handling. A refresh will always re-arm the next week before removing obsolete occurrences. Existing preferences determine the selected delivery time; notification permission and exact-alarm capability are checked explicitly. When exact alarms are unavailable, reminders remain armed using Android's allow-while-idle inexact mode and the app records that reduced timing guarantee for repair/diagnostics.
 
-Local notifications remain the delivery authority when the app is terminated or offline. On Android, the `flutter_local_notifications` plugin's `ScheduledNotificationBootReceiver` restores the persisted alarm set when the device boots. **This receiver must have `android:exported="true"` in the AndroidManifest.xml** to receive `BOOT_COMPLETED` system broadcasts on Android 12+ (API 31+). Without this fix, the receiver is invisible to the system and all scheduled alarms are lost after a reboot.
+Local notifications remain the delivery authority when the app is terminated or offline. On Android, the `flutter_local_notifications` plugin's `ScheduledNotificationBootReceiver` restores the persisted alarm set when the device boots. It remains `android:exported="false"`, as required by the plugin. Android still delivers system broadcasts to a private receiver; the explicit value satisfies Android 12 while preventing other apps from invoking it.
 
-The app-owned `FeastReminderRepairReceiver` handles `BOOT_COMPLETED`, `TIMEZONE_CHANGED`, `TIME_SET`, `MY_PACKAGE_REPLACED`, and `SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED` by enqueueing idempotent WorkManager repair work. **This receiver also must have `android:exported="true"`** for the same reason. The repair work rebuilds the planner output, reconciles persisted schedule metadata with pending OS alarms, and retains an outbox marker until reconciliation is successful.
+The app-owned `FeastReminderRepairReceiver` handles `BOOT_COMPLETED`, `TIMEZONE_CHANGED`, `TIME_SET`, `MY_PACKAGE_REPLACED`, and `SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED` by enqueueing idempotent WorkManager repair work. It also remains private because every accepted action is a system broadcast. The repair work rebuilds the planner output, reconciles persisted schedule metadata with pending OS alarms, and retains an outbox marker until reconciliation is successful.
 
 The existing Firebase path remains an optional enhancement; it is not required for local daily reminder delivery.
 
-**Critical manifest fix**: Both `ScheduledNotificationBootReceiver` and `FeastReminderRepairReceiver` currently declare `android:exported="false"`. On Android 12+, system broadcasts including `BOOT_COMPLETED` can only be received by exported receivers. This is the root cause of notifications being missed after device reboot. Both receivers must be updated to `android:exported="true"`.
+**Critical manifest fix**: Both `ScheduledNotificationBootReceiver` and `FeastReminderRepairReceiver` declare an explicit `android:exported` value for Android 12 compatibility, but remain `false`. The manifest includes `RECEIVE_BOOT_COMPLETED`; boot delivery and alarm restoration are verified by manifest and receiver tests.
 
 **WorkManager is not the delivery mechanism**: WorkManager tasks are deferred and cannot guarantee exact-time notification delivery. The `ScheduledNotificationBootReceiver` from `flutter_local_notifications` restores OS-level alarms via `zonedSchedule` which creates `AlarmManager` alarms. The `FeastReminderRepairReceiver` only enqueues a repair WorkManager task to re-schedule any drifted alarms. The actual notification delivery is always via `flutter_local_notifications` plugin alarms, never via WorkManager.
 
@@ -68,9 +69,9 @@ Write tests before production changes for:
 
 - ordering every Mass insertion point around Gospel and Gospel Acclamation;
 - splitting readings into pre-Gospel and Gospel groups without duplication;
-- daily Saint, seven-day feast/solemnity advance, day-of, timezone, date rollover, and deterministic identity planning;
+- daily Saint, every day in the seven-day feast/solemnity countdown, day-of, timezone, date rollover, and deterministic identity planning;
 - boot, package replacement, time change, timezone change, and exact-alarm repair request wiring;
 - an interrupted schedule retaining the next eight days and recovering without the app UI running;
-- AndroidManifest.xml exported-receiver verification.
+- AndroidManifest.xml private boot-receiver verification.
 
 Verify the focused Flutter tests, the full Flutter suite, Android Kotlin unit tests, static manifest checks, `flutter analyze`, and a debug Android build. Manual device acceptance must include: schedule reminders, kill the app, reboot, confirm the next reminder remains armed, then test time-zone and exact-alarm-permission changes.

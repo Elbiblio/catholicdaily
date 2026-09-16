@@ -568,7 +568,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Card(
             child: _SettingsTile(
               icon: Icons.notifications_outlined,
-              title: 'Feast Day Reminders',
+              title: 'Saint & Feast Reminders',
               subtitle: _reminderSubtitle(),
               onTap: () async {
                 await FeastReminderSettingsSheet.show(context);

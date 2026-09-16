@@ -23,7 +23,9 @@ void main() {
 
       expect(sections, isNotEmpty);
       expect(
-        sections.any((section) => section.insertionPoint == 'introductory_rites'),
+        sections.any(
+          (section) => section.insertionPoint == 'introductory_rites',
+        ),
         isTrue,
       );
       expect(
@@ -44,8 +46,9 @@ void main() {
       final service = OrderOfMassService();
       final sections = await service.getSectionsForDate(DateTime(2026, 1, 12));
 
-      final afterGospel =
-          sections.where((section) => section.insertionPoint == 'after_gospel');
+      final afterGospel = sections.where(
+        (section) => section.insertionPoint == 'after_gospel',
+      );
       if (afterGospel.isEmpty) {
         expect(afterGospel, isEmpty);
         return;
@@ -59,36 +62,43 @@ void main() {
       );
     });
 
-    test('substitutes Gospel dialogue [N] when lectionary readings are provided',
-        () async {
-      final service = OrderOfMassService();
-      final readings = [
-        DailyReading(
-          reading: 'Matt 4:1-11',
-          position: 'Gospel',
-          date: DateTime(2026, 1, 12),
-        ),
-      ];
-      final sections = await service.getSectionsForDate(
-        DateTime(2026, 1, 12),
-        lectionaryReadings: readings,
-      );
-      final beforeGospel = sections.where((s) => s.insertionPoint == 'before_gospel');
-      expect(beforeGospel, isNotEmpty);
-      final gospelIntro = beforeGospel.first.items.where((i) => i.id == 'gospel');
-      expect(gospelIntro, isNotEmpty);
-      final en = gospelIntro.first.getContentForLanguage('en');
-      expect(en, isNotNull);
-      expect(
-        en!.any((line) => line.contains('Matthew') && !line.contains('[N]')),
-        isTrue,
-      );
-    });
+    test(
+      'substitutes Gospel dialogue [N] when lectionary readings are provided',
+      () async {
+        final service = OrderOfMassService();
+        final readings = [
+          DailyReading(
+            reading: 'Matt 4:1-11',
+            position: 'Gospel',
+            date: DateTime(2026, 1, 12),
+          ),
+        ];
+        final sections = await service.getSectionsForDate(
+          DateTime(2026, 1, 12),
+          lectionaryReadings: readings,
+        );
+        final beforeGospel = sections.where(
+          (s) => s.insertionPoint == 'before_gospel',
+        );
+        expect(beforeGospel, isNotEmpty);
+        final gospelIntro = beforeGospel.first.items.where(
+          (i) => i.id == 'gospel',
+        );
+        expect(gospelIntro, isNotEmpty);
+        final en = gospelIntro.first.getContentForLanguage('en');
+        expect(en, isNotNull);
+        expect(
+          en!.any((line) => line.contains('Matthew') && !line.contains('[N]')),
+          isTrue,
+        );
+      },
+    );
   });
 
   group('MassFlowComposer', () {
     Widget _sectionWidget(String name) => SizedBox(key: ValueKey(name));
-    Widget _readingsWidget(int count) => SizedBox(key: ValueKey('readings_$count'));
+    Widget _readingsWidget(int count) =>
+        SizedBox(key: ValueKey('readings_$count'));
     Widget _gospelWidget() => SizedBox(key: const ValueKey('gospel'));
 
     ResolvedOrderOfMassSection _section(String insertionPoint) {
@@ -101,7 +111,9 @@ void main() {
             title: insertionPoint,
             insertionPoint: insertionPoint,
             order: 1,
-            contentByLanguage: {'en': ['text']},
+            contentByLanguage: {
+              'en': ['text'],
+            },
             availableLanguages: ['en'],
             isOptional: false,
           ),
@@ -187,36 +199,45 @@ void main() {
       expect(afterGospelIndex, greaterThan(gospelIndex));
     });
 
-    test('between_readings section appears between pre-Gospel readings and before_gospel', () {
-      final sections = [_section('between_readings'), _section('before_gospel')];
-      final readings = [
-        DailyReading(
-          reading: 'Gen 1:1-5',
-          position: 'First Reading',
-          date: DateTime(2026, 1, 12),
-        ),
-        DailyReading(
-          reading: 'Matt 5:1-12',
-          position: 'Gospel',
-          date: DateTime(2026, 1, 12),
-        ),
-      ];
+    test(
+      'between_readings section appears between pre-Gospel readings and before_gospel',
+      () {
+        final sections = [
+          _section('between_readings'),
+          _section('before_gospel'),
+        ];
+        final readings = [
+          DailyReading(
+            reading: 'Gen 1:1-5',
+            position: 'First Reading',
+            date: DateTime(2026, 1, 12),
+          ),
+          DailyReading(
+            reading: 'Matt 5:1-12',
+            position: 'Gospel',
+            date: DateTime(2026, 1, 12),
+          ),
+        ];
 
-      final composer = MassFlowComposer(sections: sections, readings: readings);
-      final widgets = composer.compose(
-        buildSection: (section) => _sectionWidget(section.insertionPoint),
-        buildReadings: (preGospel) => _readingsWidget(preGospel.length),
-        buildGospelReading: (_) => _gospelWidget(),
-      );
+        final composer = MassFlowComposer(
+          sections: sections,
+          readings: readings,
+        );
+        final widgets = composer.compose(
+          buildSection: (section) => _sectionWidget(section.insertionPoint),
+          buildReadings: (preGospel) => _readingsWidget(preGospel.length),
+          buildGospelReading: (_) => _gospelWidget(),
+        );
 
-      final keys = widgets.map((w) => (w as SizedBox).key).toList();
-      final readingsIndex = keys.indexOf(const ValueKey('readings_1'));
-      final betweenIndex = keys.indexOf(const ValueKey('between_readings'));
-      final gospelIndex = keys.indexOf(const ValueKey('gospel'));
+        final keys = widgets.map((w) => (w as SizedBox).key).toList();
+        final readingsIndex = keys.indexOf(const ValueKey('readings_1'));
+        final betweenIndex = keys.indexOf(const ValueKey('between_readings'));
+        final gospelIndex = keys.indexOf(const ValueKey('gospel'));
 
-      expect(readingsIndex, lessThan(betweenIndex));
-      expect(betweenIndex, lessThan(gospelIndex));
-    });
+        expect(readingsIndex, lessThan(betweenIndex));
+        expect(betweenIndex, lessThan(gospelIndex));
+      },
+    );
 
     test('handles empty readings gracefully', () {
       final sections = [_section('introductory_rites')];
@@ -229,7 +250,12 @@ void main() {
       );
 
       expect(widgets.isNotEmpty, isTrue);
-      expect(widgets.whereType<SizedBox>().any((w) => (w.key as ValueKey).value.toString().startsWith('readings_')), isFalse);
+      expect(
+        widgets.whereType<SizedBox>().any(
+          (w) => (w.key as ValueKey).value.toString().startsWith('readings_'),
+        ),
+        isFalse,
+      );
     });
 
     test('handles no before_gospel section', () {
@@ -275,9 +301,43 @@ void main() {
         buildGospelReading: (_) => _gospelWidget(),
       );
 
-      final readingsWidgets = widgets.whereType<SizedBox>().where((w) => (w.key as ValueKey).value.toString().startsWith('readings_'));
+      final readingsWidgets = widgets.whereType<SizedBox>().where(
+        (w) => (w.key as ValueKey).value.toString().startsWith('readings_'),
+      );
       expect(readingsWidgets.length, 1);
       expect((readingsWidgets.first.key as ValueKey).value, 'readings_1');
+    });
+
+    test('emits Gospel Acclamation once before dialogue and Gospel', () {
+      final sections = [_section('before_gospel')];
+      final readings = [
+        DailyReading(
+          reading: '2 Cor 5:19',
+          position: 'Gospel Acclamation',
+          date: DateTime(2026, 1, 12),
+        ),
+        DailyReading(
+          reading: 'Matt 5:1-12',
+          position: 'Gospel',
+          date: DateTime(2026, 1, 12),
+        ),
+      ];
+      final composer = MassFlowComposer(sections: sections, readings: readings);
+
+      final widgets = composer.compose(
+        buildSection: (section) => _sectionWidget(section.insertionPoint),
+        buildReadings: (preGospel) => _readingsWidget(preGospel.length),
+        buildAcclamationReading: (_) =>
+            const SizedBox(key: ValueKey('acclamation')),
+        buildGospelReading: (_) => _gospelWidget(),
+      );
+
+      final keys = widgets.map((widget) => (widget as SizedBox).key).toList();
+      expect(keys, <Key?>[
+        const ValueKey('acclamation'),
+        const ValueKey('before_gospel'),
+        const ValueKey('gospel'),
+      ]);
     });
   });
 }

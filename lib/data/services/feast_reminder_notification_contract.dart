@@ -31,7 +31,7 @@ class FeastReminderNotificationIdentity {
 }
 
 class FeastReminderNotificationContract {
-  static const scheduleGeneration = 'feast-reminders-v5';
+  static const scheduleGeneration = 'feast-reminders-v6';
 
   const FeastReminderNotificationContract._();
 
@@ -46,6 +46,7 @@ class FeastReminderNotificationContract {
     required String title,
     required String rank,
     required bool dayBefore,
+    int? daysBefore,
     String locale = 'en',
   }) {
     final date = DateTime(
@@ -55,9 +56,15 @@ class FeastReminderNotificationContract {
     );
     final dateLabel = _dateLabel(date, locale);
     final rankLabel = _rankLabel(rank);
-    final expandedLead = dayBefore
-        ? 'The Church celebrates tomorrow, $dateLabel:'
-        : 'On $dateLabel, the Church celebrates:';
+    final offset = daysBefore ?? (dayBefore ? 1 : 0);
+    if (offset < 0 || offset > 7) {
+      throw RangeError.range(offset, 0, 7, 'daysBefore');
+    }
+    final expandedLead = switch (offset) {
+      0 => 'On $dateLabel, the Church celebrates:',
+      1 => 'The Church celebrates tomorrow, $dateLabel:',
+      _ => 'In $offset days, on $dateLabel, the Church celebrates:',
+    };
 
     return FeastReminderNotificationContent(
       title: rankLabel == null
@@ -65,9 +72,11 @@ class FeastReminderNotificationContract {
           : '$dateLabel — A $rankLabel',
       body: title,
       expandedBody: '$expandedLead\n$title.',
-      subtitle: dayBefore
-          ? 'Tomorrow\'s celebration · $dateLabel'
-          : '$dateLabel in the Sacred Liturgy',
+      subtitle: switch (offset) {
+        0 => '$dateLabel in the Sacred Liturgy',
+        1 => 'Tomorrow\'s celebration · $dateLabel',
+        _ => 'In $offset days · $dateLabel',
+      },
       dateLabel: dateLabel,
     );
   }
@@ -76,10 +85,19 @@ class FeastReminderNotificationContract {
     required String region,
     required DateTime celebrationDate,
     required bool dayBefore,
+    int? daysBefore,
     required String celebrationId,
   }) {
     final date = _dateOnly(celebrationDate);
-    final timing = dayBefore ? 'eve' : 'on_day';
+    final offset = daysBefore ?? (dayBefore ? 1 : 0);
+    if (offset < 0 || offset > 7) {
+      throw RangeError.range(offset, 0, 7, 'daysBefore');
+    }
+    final timing = switch (offset) {
+      0 => 'on_day',
+      1 => 'eve',
+      _ => 'advance_${offset}d',
+    };
     final normalizedRegion = _slug(region);
     final normalizedCelebration = _slug(celebrationId);
     final occurrenceKey =

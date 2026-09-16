@@ -11,8 +11,11 @@ class FeastReminderCapacitySelection<T> {
 class FeastReminderScheduleCapacity {
   const FeastReminderScheduleCapacity._({required this.maximumPending});
 
+  /// Android's platform default is 500 alarms per UID. Keep headroom for
+  /// prayer alarms and plugin bookkeeping, then let the daily repair worker
+  /// replenish this rolling window before it expires.
   factory FeastReminderScheduleCapacity.forAndroid() =>
-      const FeastReminderScheduleCapacity._(maximumPending: null);
+      const FeastReminderScheduleCapacity._(maximumPending: 400);
 
   factory FeastReminderScheduleCapacity.forIos() =>
       const FeastReminderScheduleCapacity._(maximumPending: 60);

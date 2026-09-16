@@ -62,6 +62,31 @@ void main() {
       expect(celebration.day, 1);
     });
 
+    test('round-trips a seven-day countdown occurrence', () {
+      final payload = FeastReminderPayload(
+        celebrationDate: DateTime(2026, 11, 1),
+        scheduledFor: DateTime.parse('2026-10-25T06:00:00+01:00'),
+        occurrenceKey: 'feast:generalroman:2026-11-01:advance_7d:all-saints',
+        timeZone: 'Africa/Lagos',
+        liturgicalRegion: 'generalRoman',
+        scheduleGeneration: 'feast-reminders-v6',
+        title: 'All Saints',
+        rank: 'Solemnity',
+        saintProfileId: 'all_saints',
+        dayBefore: true,
+        reminderDaysBefore: 7,
+      );
+
+      final decoded = FeastReminderPayload.tryParse(payload.encode());
+
+      expect(decoded, isNotNull);
+      expect(decoded!.daysBefore, 7);
+      expect(decoded.dayBefore, isTrue);
+      expect(decoded.toMap()['timing'], 'advance_7d');
+      expect(decoded.toMap()['days_before'], 7);
+      expect(decoded.occurrenceKey, contains(':advance_7d:'));
+    });
+
     test('accepts schema-v1 JSON while keeping its celebration date', () {
       final decoded = FeastReminderPayload.tryParse(
         '{"type":"feast","v":1,"date":"2026-08-15",'

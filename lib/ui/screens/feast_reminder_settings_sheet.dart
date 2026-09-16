@@ -10,7 +10,7 @@ import '../../data/services/notification_installation_sync_service.dart';
 import '../../data/services/notification_occurrence_sync_service.dart';
 import '../../data/services/offline_ordo_lookup_service.dart';
 
-/// Beautiful bottom-sheet UI for configuring feast/solemnity reminders.
+/// Configures saint and major-celebration reminders.
 class FeastReminderSettingsSheet extends StatefulWidget {
   const FeastReminderSettingsSheet({super.key});
 
@@ -189,11 +189,11 @@ class _FeastReminderSettingsSheetState
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Feast Day Reminders',
+                        'Saint & Feast Reminders',
                         style: theme.textTheme.titleMedium,
                       ),
                       Text(
-                        'Be notified on feasts & solemnities',
+                        'Daily saints and seven-day feast countdowns',
                         style: theme.textTheme.bodySmall,
                       ),
                     ],
@@ -252,11 +252,12 @@ class _FeastReminderSettingsSheetState
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         value: _enabled,
         onChanged: _saving ? null : _toggleEnabled,
-        title: Text('Enable Reminders', style: theme.textTheme.titleSmall),
+        title: Text(
+          'Saint & Feast Reminders',
+          style: theme.textTheme.titleSmall,
+        ),
         subtitle: Text(
-          _enabled
-              ? 'You\'ll receive notifications on feast days'
-              : 'Off — tap to enable',
+          _enabled ? 'Daily saints and feast countdowns' : 'Off',
           style: theme.textTheme.bodySmall,
         ),
         secondary: _saving
@@ -372,7 +373,7 @@ class _FeastReminderSettingsSheetState
               children: [
                 Icon(Icons.filter_list, color: colorScheme.primary, size: 20),
                 const SizedBox(width: 10),
-                Text('Which days to remind', style: theme.textTheme.titleSmall),
+                Text('Major celebrations', style: theme.textTheme.titleSmall),
               ],
             ),
             const SizedBox(height: 12),
@@ -416,7 +417,10 @@ class _FeastReminderSettingsSheetState
                   size: 18,
                 ),
                 const SizedBox(width: 10),
-                Text('Upcoming Reminders', style: theme.textTheme.titleSmall),
+                Text(
+                  'Upcoming major celebrations',
+                  style: theme.textTheme.titleSmall,
+                ),
               ],
             ),
             const SizedBox(height: 10),
@@ -554,11 +558,11 @@ class _RankOption extends StatelessWidget {
   String _rankDescription(FeastReminderRank rank) {
     switch (rank) {
       case FeastReminderRank.solemnities:
-        return 'Christmas, Easter, Assumption, and other highest-rank days';
+        return 'Daily saints; seven-day countdowns for solemnities';
       case FeastReminderRank.feastsDays:
-        return 'Solemnities plus saints\' feast days';
+        return 'Daily saints; seven-day countdowns for feasts and solemnities';
       case FeastReminderRank.all:
-        return 'All liturgical celebrations including optional memorials';
+        return 'Every available saint, memorial, feast, and solemnity';
     }
   }
 }

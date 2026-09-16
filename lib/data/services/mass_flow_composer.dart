@@ -4,17 +4,16 @@ import '../models/daily_reading.dart';
 import 'order_of_mass_service.dart';
 
 class MassFlowComposer {
-  MassFlowComposer({
-    required this.sections,
-    required this.readings,
-  });
+  MassFlowComposer({required this.sections, required this.readings});
 
   final List<ResolvedOrderOfMassSection> sections;
   final List<DailyReading>? readings;
 
   List<Widget> compose({
     required Widget Function(ResolvedOrderOfMassSection section) buildSection,
-    required Widget Function(List<DailyReading> preGospelReadings) buildReadings,
+    required Widget Function(List<DailyReading> preGospelReadings)
+    buildReadings,
+    Widget Function(DailyReading acclamationReading)? buildAcclamationReading,
     required Widget Function(DailyReading gospelReading) buildGospelReading,
   }) {
     final widgets = <Widget>[];
@@ -46,6 +45,12 @@ class MassFlowComposer {
         .toList();
     for (final section in betweenReadings) {
       widgets.add(buildSection(section));
+    }
+
+    if (buildAcclamationReading != null) {
+      for (final reading in _filterAcclamationReadings()) {
+        widgets.add(buildAcclamationReading(reading));
+      }
     }
 
     final beforeGospel = sections
@@ -107,6 +112,14 @@ class MassFlowComposer {
     return readings!.where((r) {
       final pos = r.position?.toLowerCase() ?? '';
       return pos.contains('gospel') && !pos.contains('acclamation');
+    }).toList();
+  }
+
+  List<DailyReading> _filterAcclamationReadings() {
+    if (readings == null) return [];
+    return readings!.where((reading) {
+      final position = reading.position?.toLowerCase() ?? '';
+      return position.contains('acclamation');
     }).toList();
   }
 }

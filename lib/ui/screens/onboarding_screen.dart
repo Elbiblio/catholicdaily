@@ -540,7 +540,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
               ),
               const SizedBox(height: 8),
               Text(
-                'Choose the calendar used for holy days and feast reminders.',
+                'Holy days and feast reminders follow this calendar.',
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: colorScheme.onSurfaceVariant,
@@ -625,7 +625,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
               const SizedBox(height: 18),
 
               Text(
-                'Feast Day Reminders',
+                'Saint & Feast Reminders',
                 textAlign: TextAlign.center,
                 style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.w800,
@@ -636,7 +636,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
               const SizedBox(height: 6),
 
               Text(
-                'When should we let you know?',
+                'Choose the Saint of the Day time',
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: colorScheme.onSurfaceVariant,
@@ -654,7 +654,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       _buildSlotGroup(
                         theme,
                         title: 'Evening before',
-                        subtitle: 'A quiet preview, the night prior',
+                        subtitle: 'Before the saint\'s celebration',
                         slots: _kNotificationSlots
                             .where((s) => s.dayBefore)
                             .toList(),
@@ -663,7 +663,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       _buildSlotGroup(
                         theme,
                         title: 'On the day',
-                        subtitle: 'A reminder during the celebration itself',
+                        subtitle: 'On the saint\'s celebration',
                         slots: _kNotificationSlots
                             .where((s) => !s.dayBefore)
                             .toList(),
@@ -711,7 +711,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                                           ),
                                     ),
                                     Text(
-                                      'You can enable them later in Settings',
+                                      'Notifications remain off',
                                       style: theme.textTheme.bodySmall
                                           ?.copyWith(
                                             color: colorScheme.onSurfaceVariant,

@@ -271,8 +271,8 @@ void main() {
         'source gap paths=${sourceGaps.length} '
         'source gap ids=${sourceGapIds.length}',
       );
-      expect(events, hasLength(11510));
-      expect(identityEvents, hasLength(1143));
+      expect(events, hasLength(11587));
+      expect(identityEvents, hasLength(1150));
       expect(titleCollisions, isEmpty, reason: titleCollisions.join('\n'));
       expect(unresolvedAliases, isEmpty, reason: unresolvedAliases.join('\n'));
       expect(invalidReadings, isEmpty, reason: invalidReadings.join('\n'));

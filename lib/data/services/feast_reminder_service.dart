@@ -31,6 +31,7 @@ class _FeastEvent {
   final String rank;
   final String? saintProfileId;
   final Color? liturgicalColor;
+  final bool countdownEligible;
 
   const _FeastEvent({
     required this.date,
@@ -38,35 +39,40 @@ class _FeastEvent {
     required this.rank,
     required this.saintProfileId,
     this.liturgicalColor,
+    this.countdownEligible = false,
   });
 }
 
 class _ReminderSlot {
-  final bool dayBefore;
+  final int daysBefore;
   final int hour;
   final int minute;
   final bool isAdditionalReminder;
 
   const _ReminderSlot({
-    required this.dayBefore,
+    required this.daysBefore,
     required this.hour,
     required this.minute,
     this.isAdditionalReminder = false,
   });
+
+  bool get dayBefore => daysBefore > 0;
 }
 
 class _ReminderOccurrence {
   final _FeastEvent event;
   final DateTime scheduledTime;
-  final bool dayBefore;
+  final int daysBefore;
   final bool isAdditionalReminder;
 
   const _ReminderOccurrence({
     required this.event,
     required this.scheduledTime,
-    required this.dayBefore,
+    required this.daysBefore,
     required this.isAdditionalReminder,
   });
+
+  bool get dayBefore => daysBefore > 0;
 }
 
 class FeastReminderPreviewEvent {
@@ -90,6 +96,7 @@ class FeastReminderScheduledPreviewEvent {
   final String title;
   final String rank;
   final bool dayBefore;
+  final int daysBefore;
   final bool isAdditionalReminder;
 
   const FeastReminderScheduledPreviewEvent({
@@ -98,6 +105,7 @@ class FeastReminderScheduledPreviewEvent {
     required this.title,
     required this.rank,
     required this.dayBefore,
+    required this.daysBefore,
     required this.isAdditionalReminder,
   });
 }
@@ -117,19 +125,10 @@ class FeastReminderService {
   FeastReminderPayload? _pendingTap;
 
   static const _channelId = 'feast_reminders';
-  static const _channelName = 'Feast & Solemnity Reminders';
-  static const _channelDesc =
-      'Daily reminders for Catholic feasts and solemnities';
-  static const scheduleSchemaVersion = 7;
+  static const _channelName = 'Saints & Feast Reminders';
+  static const _channelDesc = 'Daily saints and seven-day feast countdowns';
+  static const scheduleSchemaVersion = 8;
   static const _schedulePolicy = FeastReminderSchedulePolicy();
-  static const _majorFeastTitleTokens = <String>[
-    'lord',
-    'holy family',
-    'holy cross',
-    'blessed virgin mary',
-    'our lady',
-    'lateran basilica',
-  ];
 
   Future<void> initialize() async {
     if (_initialized) return;
@@ -268,6 +267,7 @@ class FeastReminderService {
       title: payload.title,
       rank: payload.rank,
       dayBefore: payload.dayBefore,
+      daysBefore: payload.daysBefore,
     );
     final identity = FeastReminderNotificationContract.identityForOccurrenceKey(
       occurrenceKey: occurrenceKey,
@@ -488,6 +488,7 @@ class FeastReminderService {
       region: region.name,
       celebrationDate: event.date,
       dayBefore: occurrence.dayBefore,
+      daysBefore: occurrence.daysBefore,
       celebrationId: event.saintProfileId ?? event.title,
     );
     return FeastReminderPayload(
@@ -503,6 +504,7 @@ class FeastReminderService {
       rank: event.rank,
       saintProfileId: event.saintProfileId,
       dayBefore: occurrence.dayBefore,
+      reminderDaysBefore: occurrence.daysBefore,
     );
   }
 
@@ -614,14 +616,19 @@ class FeastReminderService {
       try {
         final day = lookup.resolve(d, region: region);
         final dedupeKeys = <String>{};
-        if (_shouldInclude(day.rank, rank)) {
+        final principalIncluded = _shouldInclude(day.rank, rank);
+        final principalIsSaint = SaintProfileService.isSaintLikeTitle(
+          day.title,
+        );
+        if (principalIncluded || principalIsSaint) {
           String? saintProfileId;
-          if (SaintProfileService.isSaintLikeTitle(day.title)) {
+          if (principalIsSaint) {
             try {
               saintProfileId =
                   (await SaintProfileService.instance.findCuratedByTitle(
                     day.title,
-                  ))?.id;
+                  ))?.id ??
+                  SaintProfileService.idFromTitle(day.title);
             } catch (e) {
               debugPrint(
                 '[FeastReminder] Unable to resolve saint profile for '
@@ -636,22 +643,38 @@ class FeastReminderService {
               rank: day.rank ?? '',
               saintProfileId: saintProfileId,
               liturgicalColor: day.colorValue,
+              countdownEligible:
+                  principalIncluded &&
+                  (day.rank == 'Solemnity' || day.rank == 'Feast'),
             ),
           );
           dedupeKeys.add(SaintProfileService.normalizeTitle(day.title));
           if (saintProfileId != null) dedupeKeys.add(saintProfileId);
         }
 
-        if (rank != FeastReminderRank.all ||
-            !_canObserveMemorialsOn(d, day.rank, memorials)) {
-          continue;
-        }
-
         final celebrations = await saintCalendar.getSaintCelebrationsForDate(
           date: d,
-          optionalCelebrations: memorials.getOptionalCelebrations(d),
+          liturgicalDay: day,
+          optionalCelebrations: memorials.getAllCelebrationsForDate(d),
         );
-        for (final celebration in celebrations) {
+        celebrations.sort((left, right) {
+          final byRank = _celebrationRankPriority(
+            right.rank,
+          ).compareTo(_celebrationRankPriority(left.rank));
+          return byRank != 0 ? byRank : left.title.compareTo(right.title);
+        });
+        final choicesAreSuppressed =
+            d.weekday == DateTime.sunday ||
+            day.rank == 'Solemnity' ||
+            day.rank == 'Feast' ||
+            memorials.isSuppressedDate(d);
+        final availableDailySaints = choicesAreSuppressed
+            ? const <OptionalCelebration>[]
+            : celebrations;
+        final dailySaints = rank == FeastReminderRank.all
+            ? availableDailySaints
+            : availableDailySaints.take(1);
+        for (final celebration in dailySaints) {
           final profile =
               await SaintProfileService.instance.findByCelebrationId(
                 celebration.id,
@@ -675,7 +698,7 @@ class FeastReminderService {
               date: d,
               title: celebration.title,
               rank: _rankLabel(celebration.rank),
-              saintProfileId: profile?.id,
+              saintProfileId: profile?.id ?? celebration.id,
               liturgicalColor: _colorValue(celebration.color),
             ),
           );
@@ -688,16 +711,12 @@ class FeastReminderService {
     return events;
   }
 
-  bool _canObserveMemorialsOn(
-    DateTime date,
-    String? principalRank,
-    OptionalMemorialService memorials,
-  ) {
-    if (date.weekday == DateTime.sunday || memorials.isSuppressedDate(date)) {
-      return false;
-    }
-    return principalRank != 'Solemnity' && principalRank != 'Feast';
-  }
+  int _celebrationRankPriority(CelebrationRank rank) => switch (rank) {
+    CelebrationRank.solemnity => 4,
+    CelebrationRank.feast => 3,
+    CelebrationRank.obligatoryMemorial => 2,
+    CelebrationRank.optionalMemorial => 1,
+  };
 
   String _rankLabel(CelebrationRank rank) => switch (rank) {
     CelebrationRank.solemnity => 'Solemnity',
@@ -776,6 +795,7 @@ class FeastReminderService {
             title: occurrence.event.title,
             rank: occurrence.event.rank,
             dayBefore: occurrence.dayBefore,
+            daysBefore: occurrence.daysBefore,
             isAdditionalReminder: occurrence.isAdditionalReminder,
           ),
         )
@@ -797,43 +817,28 @@ class FeastReminderService {
     }
   }
 
-  bool _shouldAddSecondReminder(_FeastEvent event) {
-    if (event.rank == 'Solemnity') return true;
-    if (event.rank != 'Feast') return false;
-
-    final title = event.title.toLowerCase();
-    return _majorFeastTitleTokens.any(title.contains);
-  }
-
   List<_ReminderSlot> _reminderSlotsForEvent(
     _FeastEvent event, {
     required int hour,
     required int minute,
     required bool notifyDayBefore,
   }) {
-    final slots = <_ReminderSlot>[
-      _ReminderSlot(dayBefore: notifyDayBefore, hour: hour, minute: minute),
-    ];
-
-    if (_shouldAddSecondReminder(event)) {
-      slots.add(
-        notifyDayBefore
-            ? const _ReminderSlot(
-                dayBefore: false,
-                hour: 6,
-                minute: 0,
-                isAdditionalReminder: true,
-              )
-            : const _ReminderSlot(
-                dayBefore: true,
-                hour: 20,
-                minute: 0,
-                isAdditionalReminder: true,
-              ),
-      );
+    final selectedOffset = notifyDayBefore ? 1 : 0;
+    if (!event.countdownEligible) {
+      return <_ReminderSlot>[
+        _ReminderSlot(daysBefore: selectedOffset, hour: hour, minute: minute),
+      ];
     }
 
-    return slots;
+    return <_ReminderSlot>[
+      for (var offset = 7; offset >= 0; offset--)
+        _ReminderSlot(
+          daysBefore: offset,
+          hour: hour,
+          minute: minute,
+          isAdditionalReminder: offset != selectedOffset,
+        ),
+    ];
   }
 
   List<_ReminderOccurrence> _buildReminderOccurrences(
@@ -859,9 +864,9 @@ class FeastReminderService {
       );
 
       for (final slot in slots) {
-        final deliveryDate = slot.dayBefore
-            ? event.date.subtract(const Duration(days: 1))
-            : event.date;
+        final deliveryDate = event.date.subtract(
+          Duration(days: slot.daysBefore),
+        );
         final scheduledTime = DateTime(
           deliveryDate.year,
           deliveryDate.month,
@@ -880,7 +885,7 @@ class FeastReminderService {
           _ReminderOccurrence(
             event: event,
             scheduledTime: scheduledTime,
-            dayBefore: slot.dayBefore,
+            daysBefore: slot.daysBefore,
             isAdditionalReminder: slot.isAdditionalReminder,
           ),
         );
@@ -919,9 +924,8 @@ class FeastReminderService {
     }
   }
 
-  /// First-launch auto-setup: enables feast reminders by default and
-  /// schedules the upcoming 15 months of feasts/solemnities so the user
-  /// gets midnight notifications without needing to open the app.
+  /// First-launch auto-setup: enables reminders by default and schedules the
+  /// upcoming 15 months of daily saints and major-celebration countdowns.
   ///
   /// Idempotent — runs only the first time after install. If the user later
   /// disables reminders, this method is a no-op.
@@ -943,7 +947,7 @@ class FeastReminderService {
 
     await initialize();
 
-    // Defaults: every Feast & Solemnity, midnight (00:00) of the day itself.
+    // Defaults: daily saints plus Feast/Solemnity countdowns at midnight.
     await prefs.setEnabled(true);
     await prefs.setRank(FeastReminderRank.feastsDays);
     await prefs.setTime(0, 0);
@@ -1055,7 +1059,7 @@ class FeastReminderService {
         : FeastReminderScheduleCapacity.forAndroid();
     final selection = capacity.select(
       localOccurrences,
-      celebrationDate: (occurrence) => occurrence.event.date,
+      celebrationDate: (occurrence) => occurrence.scheduledTime,
     );
 
     int failures = 0;
@@ -1091,6 +1095,7 @@ class FeastReminderService {
         region: region.name,
         celebrationDate: event.date,
         dayBefore: occurrence.dayBefore,
+        daysBefore: occurrence.daysBefore,
         celebrationId: event.saintProfileId ?? event.title,
       );
       final content = FeastReminderNotificationContract.content(
@@ -1098,6 +1103,7 @@ class FeastReminderService {
         title: event.title,
         rank: event.rank,
         dayBefore: occurrence.dayBefore,
+        daysBefore: occurrence.daysBefore,
         locale: 'en',
       );
       final payload = payloadByOccurrence[occurrence]!;

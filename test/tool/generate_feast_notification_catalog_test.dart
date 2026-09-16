@@ -17,7 +17,7 @@ void main() {
     final catalog = FeastNotificationCatalog.fromJson(decoded);
 
     expect(catalog.schema, 1);
-    expect(catalog.scheduleGeneration, 'feast-reminders-v5');
+    expect(catalog.scheduleGeneration, 'feast-reminders-v6');
     expect(catalog.startDate, DateTime(2024, 1, 1));
     expect(catalog.endDate, DateTime(2035, 12, 31));
     expect(catalog.hasValidDigest, isTrue);

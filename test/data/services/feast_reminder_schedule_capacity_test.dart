@@ -7,8 +7,8 @@ void main() {
       expect(FeastReminderScheduleCapacity.forIos().maximumPending, 60);
     });
 
-    test('android does not inherit the ios cap', () {
-      expect(FeastReminderScheduleCapacity.forAndroid().maximumPending, isNull);
+    test('android keeps headroom below the platform alarm cap', () {
+      expect(FeastReminderScheduleCapacity.forAndroid().maximumPending, 400);
     });
 
     test('ios coverage ends at the last completely selected date', () {
@@ -59,7 +59,7 @@ void main() {
       expect(result.coverageThrough, dates[58]);
     });
 
-    test('unbounded selection includes the complete horizon', () {
+    test('android selection includes a complete small horizon', () {
       final dates = <DateTime>[DateTime(2026, 8, 15), DateTime(2027, 1, 1)];
 
       final result = FeastReminderScheduleCapacity.forAndroid().select(
@@ -69,6 +69,24 @@ void main() {
 
       expect(result.selected, dates);
       expect(result.coverageThrough, DateTime(2027, 1, 1));
+    });
+
+    test('android rolling window never splits a delivery date', () {
+      final dates = <DateTime>[
+        ...List.generate(399, (index) => DateTime(2026, 1, 1 + index)),
+        DateTime(2027, 2, 4),
+        DateTime(2027, 2, 4),
+        DateTime(2027, 2, 5),
+      ];
+
+      final result = FeastReminderScheduleCapacity.forAndroid().select(
+        dates,
+        celebrationDate: (date) => date,
+      );
+
+      expect(result.selected, hasLength(399));
+      expect(result.selected, isNot(contains(DateTime(2027, 2, 4))));
+      expect(result.coverageThrough, dates[398]);
     });
   });
 }

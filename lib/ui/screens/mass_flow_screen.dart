@@ -345,13 +345,14 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
       slivers: [
         if (_liturgicalDay != null)
           _buildLiturgicalHeader(theme, readableColor),
-        ...MassFlowComposer(
-          sections: _sections!,
-          readings: _readings,
-        ).compose(
+        ...MassFlowComposer(sections: _sections!, readings: _readings).compose(
           buildSection: (section) => _buildSection(section),
-          buildReadings: (preGospel) => _buildReadingsForPosition(preGospel, theme, readableColor),
-          buildGospelReading: (gospel) => _buildGospelReading(gospel, theme, readableColor),
+          buildReadings: (preGospel) =>
+              _buildReadingsForPosition(preGospel, theme, readableColor),
+          buildAcclamationReading: (acclamation) =>
+              _buildStandaloneReading(acclamation, theme, readableColor),
+          buildGospelReading: (gospel) =>
+              _buildStandaloneReading(gospel, theme, readableColor),
         ),
         const SliverToBoxAdapter(child: SizedBox(height: 32)),
       ],
@@ -406,7 +407,11 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
     );
   }
 
-  Widget _buildReadingsForPosition(List<DailyReading> readings, ThemeData theme, Color sectionColor) {
+  Widget _buildReadingsForPosition(
+    List<DailyReading> readings,
+    ThemeData theme,
+    Color sectionColor,
+  ) {
     if (readings.isEmpty) return const SliverToBoxAdapter();
     return SliverToBoxAdapter(
       child: Padding(
@@ -421,19 +426,28 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
     );
   }
 
-  Widget _buildGospelReading(DailyReading gospel, ThemeData theme, Color sectionColor) {
+  Widget _buildStandaloneReading(
+    DailyReading reading,
+    ThemeData theme,
+    Color sectionColor,
+  ) {
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
         child: MassFlowReadingCard(
-          reading: gospel,
+          reading: reading,
           index: 0,
           isExpanded: true,
           onToggle: () {},
+          collapsible: false,
           sectionColor: sectionColor,
-          narrationStatus: _narrationStatusFor(gospel),
-          supportsNativePause: true,
-          onReadAloud: (content) => _toggleReadingNarration(gospel, content),
+          narrationStatus: _narrationStatusFor(reading),
+          supportsNativePause:
+              ReadingNarrationScope.maybeOf(
+                context,
+              )?.state.supportsNativePause ??
+              false,
+          onReadAloud: (content) => _toggleReadingNarration(reading, content),
         ),
       ),
     );
@@ -958,6 +972,7 @@ class MassFlowReadingCard extends StatefulWidget {
   final int index;
   final bool isExpanded;
   final VoidCallback onToggle;
+  final bool collapsible;
   final Color sectionColor;
   final NarrationStatus narrationStatus;
   final bool supportsNativePause;
@@ -971,6 +986,7 @@ class MassFlowReadingCard extends StatefulWidget {
     required this.index,
     required this.isExpanded,
     required this.onToggle,
+    this.collapsible = true,
     required this.sectionColor,
     this.narrationStatus = NarrationStatus.idle,
     this.supportsNativePause = true,
@@ -990,6 +1006,8 @@ class _ReadingCardState extends State<MassFlowReadingCard> {
 
   String get _readingLabel {
     final position = widget.reading.position?.toLowerCase() ?? '';
+
+    if (position.contains('acclamation')) return 'Gospel Acclamation';
 
     // Handle Gospel Acclamation - this appears before the Gospel
     if (widget.reading.gospelAcclamation != null &&
@@ -1102,13 +1120,15 @@ class _ReadingCardState extends State<MassFlowReadingCard> {
             children: [
               Expanded(
                 child: Semantics(
-                  button: true,
-                  label: widget.isExpanded
-                      ? 'Collapse $_readingLabel'
-                      : 'Expand $_readingLabel',
+                  button: widget.collapsible,
+                  label: widget.collapsible
+                      ? (widget.isExpanded
+                            ? 'Collapse $_readingLabel'
+                            : 'Expand $_readingLabel')
+                      : _readingLabel,
                   excludeSemantics: true,
                   child: InkWell(
-                    onTap: widget.onToggle,
+                    onTap: widget.collapsible ? widget.onToggle : null,
                     borderRadius: BorderRadius.circular(12),
                     child: Padding(
                       padding: const EdgeInsets.all(16),
@@ -1149,21 +1169,22 @@ class _ReadingCardState extends State<MassFlowReadingCard> {
                       ? null
                       : () => unawaited(_readAloud()),
                 ),
-              ExcludeSemantics(
-                child: IconButton(
-                  tooltip: widget.isExpanded
-                      ? 'Collapse reading'
-                      : 'Expand reading',
-                  onPressed: widget.onToggle,
-                  icon: Icon(
-                    widget.isExpanded ? Icons.expand_less : Icons.expand_more,
-                    color: ContrastHelper.getContrastColor(
-                      theme.colorScheme.surface,
-                      theme,
+              if (widget.collapsible)
+                ExcludeSemantics(
+                  child: IconButton(
+                    tooltip: widget.isExpanded
+                        ? 'Collapse reading'
+                        : 'Expand reading',
+                    onPressed: widget.onToggle,
+                    icon: Icon(
+                      widget.isExpanded ? Icons.expand_less : Icons.expand_more,
+                      color: ContrastHelper.getContrastColor(
+                        theme.colorScheme.surface,
+                        theme,
+                      ),
                     ),
                   ),
                 ),
-              ),
               const SizedBox(width: 4),
             ],
           ),

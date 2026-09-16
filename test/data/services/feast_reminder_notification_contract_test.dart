@@ -34,6 +34,23 @@ void main() {
       expect(content.expandedBody, contains('Saturday, 15 August'));
     });
 
+    test('countdown copy names the remaining days and absolute date', () {
+      final content = FeastReminderNotificationContract.content(
+        celebrationDate: DateTime(2026, 8, 15),
+        title: 'The Assumption of the Blessed Virgin Mary',
+        rank: 'Solemnity',
+        dayBefore: true,
+        daysBefore: 7,
+        locale: 'en',
+      );
+
+      expect(content.subtitle, 'In 7 days · Saturday, 15 August');
+      expect(
+        content.expandedBody,
+        contains('In 7 days, on Saturday, 15 August'),
+      );
+    });
+
     test('identity is stable, regional, and date scoped', () {
       final value = FeastReminderNotificationContract.identity(
         region: 'nigeria',
@@ -75,6 +92,24 @@ void main() {
       );
 
       expect(value.occurrenceKey, 'feast:ng:2026-11-01:eve:all-saints');
+    });
+
+    test('countdown identities are stable and distinct for every day', () {
+      final keys = <String>{
+        for (var days = 0; days <= 7; days++)
+          FeastReminderNotificationContract.identity(
+            region: 'NG',
+            celebrationDate: DateTime(2026, 11, 1),
+            dayBefore: days > 0,
+            daysBefore: days,
+            celebrationId: 'All Saints',
+          ).occurrenceKey,
+      };
+
+      expect(keys, hasLength(8));
+      expect(keys, contains('feast:ng:2026-11-01:advance_7d:all-saints'));
+      expect(keys, contains('feast:ng:2026-11-01:eve:all-saints'));
+      expect(keys, contains('feast:ng:2026-11-01:on_day:all-saints'));
     });
 
     test('derives the remote expiry exactly two minutes after scheduling', () {

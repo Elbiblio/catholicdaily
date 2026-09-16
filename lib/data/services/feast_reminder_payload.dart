@@ -20,6 +20,7 @@ class FeastReminderPayload {
     required this.rank,
     required this.saintProfileId,
     required this.dayBefore,
+    this.reminderDaysBefore,
   });
 
   static const int schemaVersion = 3;
@@ -38,6 +39,9 @@ class FeastReminderPayload {
   final String rank;
   final String? saintProfileId;
   final bool dayBefore;
+  final int? reminderDaysBefore;
+
+  int get daysBefore => reminderDaysBefore ?? (dayBefore ? 1 : 0);
 
   OptionalCelebration? toSaintCelebration() {
     final profileId = saintProfileId;
@@ -91,7 +95,8 @@ class FeastReminderPayload {
         'title': title,
         'rank': rank,
         if (saintProfileId != null) 'saint_id': saintProfileId,
-        'timing': dayBefore ? 'eve' : 'on_day',
+        'timing': _timingForDaysBefore(daysBefore),
+        'days_before': daysBefore,
       };
     }
 
@@ -119,7 +124,8 @@ class FeastReminderPayload {
       'title': title,
       'rank': rank,
       if (saintProfileId != null) 'saint_id': saintProfileId,
-      'timing': dayBefore ? 'eve' : 'on_day',
+      'timing': _timingForDaysBefore(daysBefore),
+      'days_before': daysBefore,
     };
   }
 
@@ -233,6 +239,13 @@ class FeastReminderPayload {
         return null;
       }
 
+      final timing = decoded['timing'] as String?;
+      final parsedDaysBefore = _daysBeforeFrom(
+        timing: timing,
+        rawDaysBefore: decoded['days_before'],
+      );
+      if (parsedDaysBefore == null) return null;
+
       return FeastReminderPayload(
         celebrationDate: DateTime(date.year, date.month, date.day),
         scheduledFor: scheduledFor,
@@ -248,7 +261,8 @@ class FeastReminderPayload {
         saintProfileId: rawSaintId == null || rawSaintId.trim().isEmpty
             ? null
             : rawSaintId,
-        dayBefore: decoded['timing'] == 'eve',
+        dayBefore: parsedDaysBefore > 0,
+        reminderDaysBefore: parsedDaysBefore,
         sourceSchemaVersion: version,
       );
     } on FormatException {
@@ -296,7 +310,11 @@ class FeastReminderPayload {
       return false;
     }
     final timing = decoded['timing'] as String?;
-    if (timing != 'eve' && timing != 'on_day') return false;
+    final daysBefore = _daysBeforeFrom(
+      timing: timing,
+      rawDaysBefore: decoded['days_before'],
+    );
+    if (daysBefore == null) return false;
     if (keyParts[3] != timing) return false;
 
     final region = decoded['liturgical_region'] as String?;
@@ -304,7 +322,8 @@ class FeastReminderPayload {
     final expectedIdentity = FeastReminderNotificationContract.identity(
       region: region == null || region.trim().isEmpty ? keyParts[1] : region,
       celebrationDate: celebrationDate,
-      dayBefore: timing == 'eve',
+      dayBefore: daysBefore > 0,
+      daysBefore: daysBefore,
       celebrationId: saintId == null || saintId.trim().isEmpty
           ? keyParts.last
           : saintId,
@@ -330,6 +349,7 @@ class FeastReminderPayload {
       region: region == null || region.trim().isEmpty ? parts[1] : region,
       celebrationDate: celebrationDate,
       dayBefore: dayBefore,
+      daysBefore: daysBefore,
       celebrationId: celebrationId == null || celebrationId.trim().isEmpty
           ? parts[4]
           : celebrationId,
@@ -340,6 +360,37 @@ class FeastReminderPayload {
     if (value == null) return null;
     if (value is int) return value;
     return int.tryParse(value.toString());
+  }
+
+  static int? _daysBeforeFrom({
+    required String? timing,
+    required dynamic rawDaysBefore,
+  }) {
+    final explicit = rawDaysBefore is int
+        ? rawDaysBefore
+        : int.tryParse(rawDaysBefore?.toString() ?? '');
+    final inferred = switch (timing) {
+      'on_day' || 'day' => 0,
+      'eve' => 1,
+      final value
+          when value != null && RegExp(r'^advance_[2-7]d$').hasMatch(value) =>
+        int.parse(value.substring(8, 9)),
+      _ => null,
+    };
+    if (inferred == null || inferred < 0 || inferred > 7) return null;
+    if (explicit != null && explicit != inferred) return null;
+    return inferred;
+  }
+
+  static String _timingForDaysBefore(int value) {
+    if (value < 0 || value > 7) {
+      throw RangeError.range(value, 0, 7, 'daysBefore');
+    }
+    return switch (value) {
+      0 => 'on_day',
+      1 => 'eve',
+      _ => 'advance_${value}d',
+    };
   }
 
   static String _dateOnly(DateTime value) =>
