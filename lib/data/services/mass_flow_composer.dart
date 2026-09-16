@@ -19,12 +19,18 @@ class MassFlowComposer {
   }) {
     final widgets = <Widget>[];
 
-    final introRites = sections.where((s) => s.insertionPoint == 'introductory_rites').toList();
+    final introRites = sections
+        .where((s) => s.insertionPoint == 'introductory_rites')
+        .where((s) => s.items.isNotEmpty)
+        .toList();
     for (final section in introRites) {
       widgets.add(buildSection(section));
     }
 
-    final beforeFirstReading = sections.where((s) => s.insertionPoint == 'before_first_reading').toList();
+    final beforeFirstReading = sections
+        .where((s) => s.insertionPoint == 'before_first_reading')
+        .where((s) => s.items.isNotEmpty)
+        .toList();
     for (final section in beforeFirstReading) {
       widgets.add(buildSection(section));
     }
@@ -34,12 +40,18 @@ class MassFlowComposer {
       widgets.add(buildReadings(preGospelReadings));
     }
 
-    final betweenReadings = sections.where((s) => s.insertionPoint == 'between_readings').toList();
+    final betweenReadings = sections
+        .where((s) => s.insertionPoint == 'between_readings')
+        .where((s) => s.items.isNotEmpty)
+        .toList();
     for (final section in betweenReadings) {
       widgets.add(buildSection(section));
     }
 
-    final beforeGospel = sections.where((s) => s.insertionPoint == 'before_gospel').toList();
+    final beforeGospel = sections
+        .where((s) => s.insertionPoint == 'before_gospel')
+        .where((s) => s.items.isNotEmpty)
+        .toList();
     for (final section in beforeGospel) {
       widgets.add(buildSection(section));
     }
@@ -49,7 +61,10 @@ class MassFlowComposer {
       widgets.add(buildGospelReading(reading));
     }
 
-    final afterGospel = sections.where((s) => s.insertionPoint == 'after_gospel').toList();
+    final afterGospel = sections
+        .where((s) => s.insertionPoint == 'after_gospel')
+        .where((s) => s.items.isNotEmpty)
+        .toList();
     for (final section in afterGospel) {
       widgets.add(buildSection(section));
     }
@@ -67,7 +82,10 @@ class MassFlowComposer {
       'concluding_rites',
     ];
     for (final insertionPoint in eucharisticInsertionPoints) {
-      final eucharisticSections = sections.where((s) => s.insertionPoint == insertionPoint).toList();
+      final eucharisticSections = sections
+          .where((s) => s.insertionPoint == insertionPoint)
+          .where((s) => s.items.isNotEmpty)
+          .toList();
       for (final section in eucharisticSections) {
         widgets.add(buildSection(section));
       }
@@ -80,7 +98,7 @@ class MassFlowComposer {
     if (readings == null) return [];
     return readings!.where((r) {
       final pos = r.position?.toLowerCase() ?? '';
-      return !pos.contains('gospel');
+      return !pos.contains('gospel') && !pos.contains('acclamation');
     }).toList();
   }
 
@@ -88,7 +106,7 @@ class MassFlowComposer {
     if (readings == null) return [];
     return readings!.where((r) {
       final pos = r.position?.toLowerCase() ?? '';
-      return pos.contains('gospel');
+      return pos.contains('gospel') && !pos.contains('acclamation');
     }).toList();
   }
 }

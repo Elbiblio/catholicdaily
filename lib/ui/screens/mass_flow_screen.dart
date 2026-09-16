@@ -432,8 +432,8 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
           onToggle: () {},
           sectionColor: sectionColor,
           narrationStatus: _narrationStatusFor(gospel),
-          supportsNativePause: false,
-          onReadAloud: null,
+          supportsNativePause: true,
+          onReadAloud: _toggleReadingNarration,
         ),
       ),
     );
