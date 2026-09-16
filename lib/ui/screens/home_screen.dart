@@ -22,6 +22,7 @@ import 'dart:io' show Platform;
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/latest_request_guard.dart';
+import '../widgets/lazy_indexed_stack.dart';
 
 typedef ReadingSelectionHandler =
     void Function(
@@ -506,51 +507,52 @@ class _HomeScreenState extends State<HomeScreen> {
           );
     });
 
-    final screens = [
-      PremiumBrowseScreen(
-        onReadingSelected:
-            (
-              reading,
-              content,
-              liturgicalDay, [
-              readingData,
-              readingSet,
-              selectedIndex,
-            ]) {
-              _onReadingSelected(
-                reading,
-                content,
-                liturgicalDay,
-                readingData: readingData,
-                readingSet: readingSet,
-                selectedIndex: selectedIndex,
-              );
-            },
-      ),
-      BibleScreen(
-        onReadingSelected:
-            (reference, content, liturgicalDay, {isBibleSearch = false}) {
-              _onReadingSelected(
-                reference,
-                content,
-                liturgicalDay,
-                isBibleSearch: isBibleSearch,
-              );
-            },
-      ),
-      const HymnListScreen(),
-      const PrayersScreen(),
-      SettingsScreen(
-        versions: _versions,
-        themeMode: widget.themeMode,
-        themeStyle: widget.themeStyle,
-        onThemeModeChanged: widget.onThemeModeChanged,
-        onThemeStyleChanged: widget.onThemeStyleChanged,
-      ),
-    ];
-
     return Scaffold(
-      body: IndexedStack(index: _currentIndex, children: screens),
+      body: LazyIndexedStack(
+        index: _currentIndex,
+        builders: [
+          () => PremiumBrowseScreen(
+            onReadingSelected:
+                (
+                  reading,
+                  content,
+                  liturgicalDay, [
+                  readingData,
+                  readingSet,
+                  selectedIndex,
+                ]) {
+                  _onReadingSelected(
+                    reading,
+                    content,
+                    liturgicalDay,
+                    readingData: readingData,
+                    readingSet: readingSet,
+                    selectedIndex: selectedIndex,
+                  );
+                },
+          ),
+          () => BibleScreen(
+            onReadingSelected:
+                (reference, content, liturgicalDay, {isBibleSearch = false}) {
+                  _onReadingSelected(
+                    reference,
+                    content,
+                    liturgicalDay,
+                    isBibleSearch: isBibleSearch,
+                  );
+                },
+          ),
+          () => const HymnListScreen(),
+          () => const PrayersScreen(),
+          () => SettingsScreen(
+            versions: _versions,
+            themeMode: widget.themeMode,
+            themeStyle: widget.themeStyle,
+            onThemeModeChanged: widget.onThemeModeChanged,
+            onThemeStyleChanged: widget.onThemeStyleChanged,
+          ),
+        ],
+      ),
       bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarThemeData(
           backgroundColor: navBackgroundColor,
