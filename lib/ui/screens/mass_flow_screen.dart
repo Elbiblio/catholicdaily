@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../core/latest_request_guard.dart';
 import '../../data/models/daily_reading.dart';
 import '../../data/models/mass_flow_request_state.dart';
+import '../../data/services/mass_flow_composer.dart';
 import '../../data/models/reading_session.dart';
 import '../../data/models/resolved_responsorial_psalm.dart';
 import '../../data/services/improved_liturgical_calendar_service.dart';
@@ -344,37 +345,17 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
       slivers: [
         if (_liturgicalDay != null)
           _buildLiturgicalHeader(theme, readableColor),
-        // Introductory Rites
-        ..._getSectionsForInsertionPoint('introductory_rites'),
-        // Liturgy of the Word
-        ..._getSectionsForInsertionPoint('before_first_reading'),
-        if (_readings != null && _readings!.isNotEmpty)
-          _buildReadingsSection(theme, readableColor),
-        ..._getSectionsForInsertionPoint('between_readings'),
-        ..._getSectionsForInsertionPoint('before_gospel'),
-        ..._getSectionsForInsertionPoint('after_gospel'),
-        // Liturgy of the Eucharist
-        ..._getSectionsForInsertionPoint('offertory'),
-        ..._getSectionsForInsertionPoint('preface'),
-        ..._getSectionsForInsertionPoint('sanctus'),
-        ..._getSectionsForInsertionPoint('acclamation'),
-        ..._getSectionsForInsertionPoint('lords_prayer'),
-        ..._getSectionsForInsertionPoint('sign_of_peace'),
-        ..._getSectionsForInsertionPoint('fraction'),
-        ..._getSectionsForInsertionPoint('communion'),
-        ..._getSectionsForInsertionPoint('after_communion'),
-        ..._getSectionsForInsertionPoint('concluding_rites'),
+        ...MassFlowComposer(
+          sections: _sections!,
+          readings: _readings,
+        ).compose(
+          buildSection: (section) => _buildSection(section),
+          buildReadings: (preGospel) => _buildReadingsForPosition(preGospel, theme, readableColor),
+          buildGospelReading: (gospel) => _buildGospelReading(gospel, theme, readableColor),
+        ),
         const SliverToBoxAdapter(child: SizedBox(height: 32)),
       ],
     );
-  }
-
-  List<Widget> _getSectionsForInsertionPoint(String insertionPoint) {
-    if (_sections == null) return [];
-    return _sections!
-        .where((s) => s.insertionPoint == insertionPoint)
-        .map((section) => _buildSection(section))
-        .toList();
   }
 
   Widget _buildLiturgicalHeader(ThemeData theme, Color readableColor) {
@@ -425,18 +406,34 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
     );
   }
 
-  Widget _buildReadingsSection(ThemeData theme, Color sectionColor) {
-    if (_readings == null || _readings!.isEmpty)
-      return const SliverToBoxAdapter();
-
+  Widget _buildReadingsForPosition(List<DailyReading> readings, ThemeData theme, Color sectionColor) {
+    if (readings.isEmpty) return const SliverToBoxAdapter();
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
         child: _ReadingsSectionWidget(
-          readings: _readings!,
+          readings: readings,
           liturgicalColor: sectionColor,
           narrationStatusFor: _narrationStatusFor,
           onReadAloud: _toggleReadingNarration,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGospelReading(DailyReading gospel, ThemeData theme, Color sectionColor) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+        child: MassFlowReadingCard(
+          reading: gospel,
+          index: 0,
+          isExpanded: true,
+          onToggle: () {},
+          sectionColor: sectionColor,
+          narrationStatus: _narrationStatusFor(gospel),
+          supportsNativePause: false,
+          onReadAloud: null,
         ),
       ),
     );

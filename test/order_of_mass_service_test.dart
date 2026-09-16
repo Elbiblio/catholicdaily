@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:catholic_daily/data/models/daily_reading.dart';
+import 'package:catholic_daily/data/services/mass_flow_composer.dart';
 import 'package:catholic_daily/data/services/order_of_mass_service.dart';
 import 'package:catholic_daily/data/services/prayer_service.dart';
 
@@ -81,6 +83,162 @@ void main() {
         en!.any((line) => line.contains('Matthew') && !line.contains('[N]')),
         isTrue,
       );
+    });
+  });
+
+  group('MassFlowComposer', () {
+    Widget _sectionWidget(String name) => SizedBox(key: ValueKey(name));
+    Widget _readingsWidget(int count) => SizedBox(key: ValueKey('readings_$count'));
+    Widget _gospelWidget() => SizedBox(key: const ValueKey('gospel'));
+
+    test('orders pre-Gospel readings before before_gospel section', () {
+      final sections = [
+        ResolvedOrderOfMassSection(
+          insertionPoint: 'introductory_rites',
+          title: 'Introductory Rites',
+          items: [],
+        ),
+        ResolvedOrderOfMassSection(
+          insertionPoint: 'before_gospel',
+          title: 'Before the Gospel',
+          items: [],
+        ),
+      ];
+      final readings = [
+        DailyReading(
+          reading: 'Gen 1:1-5',
+          position: 'First Reading',
+          date: DateTime(2026, 1, 12),
+        ),
+        DailyReading(
+          reading: 'Matt 5:1-12',
+          position: 'Gospel',
+          date: DateTime(2026, 1, 12),
+        ),
+      ];
+
+      final composer = MassFlowComposer(sections: sections, readings: readings);
+      final widgets = composer.compose(
+        buildSection: (_) => _sectionWidget('section'),
+        buildReadings: (preGospel) => _readingsWidget(preGospel.length),
+        buildGospelReading: (_) => _gospelWidget(),
+      );
+
+      final keys = widgets.map((w) => (w as SizedBox).key).toList();
+      final readingsIndex = keys.indexOf(const ValueKey('readings_1'));
+      final gospelIndex = keys.indexOf(const ValueKey('gospel'));
+
+      expect(readingsIndex, lessThan(gospelIndex));
+    });
+
+    test('Gospel reading appears after before_gospel section', () {
+      final sections = [
+        ResolvedOrderOfMassSection(
+          insertionPoint: 'before_gospel',
+          title: 'Before the Gospel',
+          items: [],
+        ),
+      ];
+      final readings = [
+        DailyReading(
+          reading: 'Matt 5:1-12',
+          position: 'Gospel',
+          date: DateTime(2026, 1, 12),
+        ),
+      ];
+
+      final composer = MassFlowComposer(sections: sections, readings: readings);
+      final widgets = composer.compose(
+        buildSection: (_) => _sectionWidget('section'),
+        buildReadings: (preGospel) => _readingsWidget(preGospel.length),
+        buildGospelReading: (_) => _gospelWidget(),
+      );
+
+      final keys = widgets.map((w) => (w as SizedBox).key).toList();
+      final sectionIndex = keys.indexOf(const ValueKey('section'));
+      final gospelIndex = keys.indexOf(const ValueKey('gospel'));
+      expect(sectionIndex, lessThan(gospelIndex));
+    });
+
+    test('after_gospel section appears after the Gospel reading', () {
+      final sections = [
+        ResolvedOrderOfMassSection(
+          insertionPoint: 'before_gospel',
+          title: 'Before the Gospel',
+          items: [],
+        ),
+        ResolvedOrderOfMassSection(
+          insertionPoint: 'after_gospel',
+          title: 'After the Gospel',
+          items: [],
+        ),
+      ];
+      final readings = [
+        DailyReading(
+          reading: 'Matt 5:1-12',
+          position: 'Gospel',
+          date: DateTime(2026, 1, 12),
+        ),
+      ];
+
+      final composer = MassFlowComposer(sections: sections, readings: readings);
+      final widgets = composer.compose(
+        buildSection: (_) => _sectionWidget('section'),
+        buildReadings: (preGospel) => _readingsWidget(preGospel.length),
+        buildGospelReading: (_) => _gospelWidget(),
+      );
+
+      final keys = widgets.map((w) => (w as SizedBox).key).toList();
+      final gospelIndex = keys.indexOf(const ValueKey('gospel'));
+      expect(gospelIndex, lessThan(keys.length - 1));
+    });
+
+    test('handles empty readings gracefully', () {
+      final sections = [
+        ResolvedOrderOfMassSection(
+          insertionPoint: 'introductory_rites',
+          title: 'Introductory Rites',
+          items: [],
+        ),
+      ];
+
+      final composer = MassFlowComposer(sections: sections, readings: null);
+      final widgets = composer.compose(
+        buildSection: (_) => _sectionWidget('section'),
+        buildReadings: (preGospel) => _readingsWidget(preGospel.length),
+        buildGospelReading: (_) => _gospelWidget(),
+      );
+
+      expect(widgets.isNotEmpty, isTrue);
+      expect(widgets.whereType<SizedBox>().any((w) => (w.key as ValueKey).value == 'readings_0'), isFalse);
+    });
+
+    test('handles no before_gospel section', () {
+      final sections = [
+        ResolvedOrderOfMassSection(
+          insertionPoint: 'introductory_rites',
+          title: 'Introductory Rites',
+          items: [],
+        ),
+      ];
+      final readings = [
+        DailyReading(
+          reading: 'Matt 5:1-12',
+          position: 'Gospel',
+          date: DateTime(2026, 1, 12),
+        ),
+      ];
+
+      final composer = MassFlowComposer(sections: sections, readings: readings);
+      final widgets = composer.compose(
+        buildSection: (_) => _sectionWidget('section'),
+        buildReadings: (preGospel) => _readingsWidget(preGospel.length),
+        buildGospelReading: (_) => _gospelWidget(),
+      );
+
+      final keys = widgets.map((w) => (w as SizedBox).key).toList();
+      expect(keys.contains(const ValueKey('gospel')), isTrue);
+      expect(keys.where((k) => k == const ValueKey('gospel')).length, 1);
     });
   });
 }
