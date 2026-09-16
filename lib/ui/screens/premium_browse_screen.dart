@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -9,6 +11,10 @@ import '../../data/services/optional_memorial_service.dart';
 import '../../data/services/alternate_readings_service.dart';
 import '../../data/services/reading_flow_service.dart';
 import '../../data/services/saint_calendar_service.dart';
+import '../../data/services/bible_version_preference.dart';
+import '../../data/services/daily_browse_snapshot_store.dart';
+import '../../data/services/feast_reminder_notification_contract.dart';
+import '../../data/services/liturgical_region_preference_service.dart';
 import '../widgets/premium_browse/date_navigation.dart';
 import '../widgets/premium_browse/liturgical_summary_row.dart';
 import '../widgets/premium_browse/main_reading.dart';
@@ -67,6 +73,7 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
   final OrdoResolverService _ordoResolver = OrdoResolverService.instance;
   final ReadingFlowService _readingFlow = ReadingFlowService.instance;
   final SaintCalendarService _saintCalendar = SaintCalendarService.instance;
+  final DailyBrowseSnapshotStore _snapshotStore = DailyBrowseSnapshotStore();
   final LatestRequestGuard _loadGuard = LatestRequestGuard();
 
   @override
@@ -123,11 +130,31 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
     setState(() => _isLoading = true);
 
     try {
-      final results = await Future.wait([
+      final snapshotKeyFuture = _snapshotKey(date);
+      final cachedSnapshotFuture = snapshotKeyFuture.then(
+        (key) => key == null ? null : _snapshotStore.read(key),
+      );
+      final resultsFuture = Future.wait([
         _ordoResolver.resolveDay(date),
         _ordoResolver.resolveYearVariables(date),
         AlternateReadingsService.instance.getAvailableReadingSets(date),
       ]);
+      final cachedSnapshot = await cachedSnapshotFuture;
+      final cachedPayload = cachedSnapshot == null
+          ? null
+          : DailyBrowseSnapshotPayload.tryFromJson(cachedSnapshot.payload);
+      if (cachedSnapshot != null && cachedPayload == null) {
+        unawaited(_snapshotStore.remove(cachedSnapshot.key));
+      }
+      if (cachedPayload != null && mounted && _loadGuard.isCurrent(request)) {
+        setState(() {
+          _applySnapshot(cachedPayload);
+          _isLoading = false;
+        });
+        _restartAnimations();
+      }
+
+      final results = await resultsFuture;
       final liturgicalDay = results[0] as LiturgicalDay;
       final ordoYearVariables = results[1] as OrdoYearVariables;
       final readingSets = results[2] as List<CelebrationReadingSet>;
@@ -179,6 +206,10 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
         _applyHydratedReadings(hydrated);
         _isLoading = false;
       });
+      final snapshotKey = await snapshotKeyFuture;
+      if (snapshotKey != null && mounted && _loadGuard.isCurrent(request)) {
+        unawaited(_saveSnapshot(snapshotKey));
+      }
 
       // Restart animations when data loads
       _restartAnimations();
@@ -1190,6 +1221,73 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
     _readingPreviews = hydrated.readingPreviews;
   }
 
+  void _applySnapshot(DailyBrowseSnapshotPayload snapshot) {
+    _liturgicalDay = snapshot.liturgicalDay;
+    _ordoYearVariables = snapshot.ordoYearVariables;
+    _celebrationsSuppressed = snapshot.celebrationsSuppressed;
+    _saintCelebrations = snapshot.saintCelebrations;
+    _availableReadingSets = snapshot.readingSets;
+    _selectedReadingSetIndex = snapshot.selectedReadingSetIndex;
+    _readings = snapshot.readings;
+    _readingTexts = snapshot.readingTexts;
+    _readingPreviews = snapshot.readingPreviews;
+  }
+
+  Future<DailyBrowseSnapshotKey?> _snapshotKey(DateTime date) async {
+    try {
+      final results = await Future.wait([
+        LiturgicalRegionPreferenceService.getInstance(),
+        BibleVersionPreference.getInstance(),
+      ]);
+      final region = results[0] as LiturgicalRegionPreferenceService;
+      final bibleVersion = results[1] as BibleVersionPreference;
+      return DailyBrowseSnapshotKey(
+        date: date,
+        region: region.currentRegion.code,
+        bibleVersion: bibleVersion.currentDbName,
+        generation: FeastReminderNotificationContract.scheduleGeneration,
+      );
+    } catch (error) {
+      debugPrint('Unable to resolve daily browse snapshot key: $error');
+      return null;
+    }
+  }
+
+  Future<void> _saveSnapshot(DailyBrowseSnapshotKey key) async {
+    final liturgicalDay = _liturgicalDay;
+    final ordoYearVariables = _ordoYearVariables;
+    if (liturgicalDay == null ||
+        ordoYearVariables == null ||
+        _availableReadingSets.isEmpty ||
+        _selectedReadingSetIndex < 0 ||
+        _selectedReadingSetIndex >= _availableReadingSets.length ||
+        _readings.any(
+          (reading) => !_readingTexts.containsKey(reading.reading),
+        )) {
+      return;
+    }
+    try {
+      await _snapshotStore.save(
+        DailyBrowseSnapshot(
+          key: key,
+          payload: DailyBrowseSnapshotPayload(
+            liturgicalDay: liturgicalDay,
+            ordoYearVariables: ordoYearVariables,
+            celebrationsSuppressed: _celebrationsSuppressed,
+            saintCelebrations: _saintCelebrations,
+            readingSets: _availableReadingSets,
+            selectedReadingSetIndex: _selectedReadingSetIndex,
+            readings: _readings,
+            readingTexts: _readingTexts,
+            readingPreviews: _readingPreviews,
+          ).toJson(),
+        ),
+      );
+    } catch (error) {
+      debugPrint('Unable to save daily browse snapshot: $error');
+    }
+  }
+
   List<ReadingGroup> get _groupedReadings {
     final groups = <String, ReadingGroup>{};
     final insertionOrder = <String>[];
@@ -1408,6 +1506,10 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
         _applyHydratedReadings(hydrated);
         _isLoading = false;
       });
+      final snapshotKey = await _snapshotKey(date);
+      if (snapshotKey != null && mounted && _loadGuard.isCurrent(request)) {
+        unawaited(_saveSnapshot(snapshotKey));
+      }
       _restartAnimations();
       return;
     } catch (e) {
