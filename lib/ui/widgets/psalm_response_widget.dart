@@ -8,11 +8,13 @@ import '../../data/services/bible_version_preference.dart';
 class PsalmResponseWidget extends StatefulWidget {
   final DailyReading reading;
   final DateTime date;
+  final double textScale;
 
   const PsalmResponseWidget({
     super.key,
     required this.reading,
     required this.date,
+    this.textScale = 1.0,
   });
 
   @override
@@ -178,6 +180,9 @@ class _PsalmResponseWidgetState extends State<PsalmResponseWidget> {
               fontWeight: FontWeight.w500,
               height: 1.4,
               fontStyle: FontStyle.italic,
+              fontSize:
+                  (theme.textTheme.bodyLarge?.fontSize ?? 16) *
+                  widget.textScale,
             ),
           ),
         ],

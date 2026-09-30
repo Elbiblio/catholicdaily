@@ -13,6 +13,7 @@ import '../../data/services/notification_installation_sync_service.dart';
 import '../../data/services/notification_occurrence_sync_service.dart';
 import '../../data/services/feast_reminder_background_service.dart';
 import '../../data/services/order_of_mass_preference_service.dart';
+import '../../data/services/reading_text_size_preference.dart';
 import 'feast_reminder_settings_sheet.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -21,6 +22,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
 import '../widgets/responsorial_psalm_edition_selector.dart';
+import '../widgets/reading_text_size_sheet.dart';
 
 class SettingsScreen extends StatefulWidget {
   final List<BibleVersion> versions;
@@ -50,6 +52,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   String _appVersion = '1.0.0';
   BibleVersionType? _currentBibleVersion;
   BibleVersionPreference? _bibleVersionPreference;
+  ReadingTextSizePreference? _readingTextSizePreference;
+  ReadingTextSize _readingTextSize = ReadingTextSize.standard;
   FeastReminderPreferences? _reminderPrefs;
   LiturgicalRegion _liturgicalRegion = LiturgicalRegion.generalRoman;
   bool _showIncipit = true;
@@ -68,6 +72,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _selectedThemeStyle = _themeStyleToValue(widget.themeStyle);
     _loadAppInfo();
     _loadCurrentBibleVersion();
+    _loadReadingTextSizePreference();
     _loadReminderPrefs();
     _loadLiturgicalRegion();
     _loadIncipitPreference();
@@ -123,6 +128,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(
       () => _currentBibleVersion = _bibleVersionPreference!.currentVersion,
     );
+  }
+
+  Future<void> _loadReadingTextSizePreference() async {
+    final preference = await ReadingTextSizePreference.getInstance();
+    if (!mounted) return;
+    _readingTextSizePreference?.removeListener(_onReadingTextSizeChanged);
+    _readingTextSizePreference = preference;
+    preference.addListener(_onReadingTextSizeChanged);
+    setState(() => _readingTextSize = preference.currentSize);
+  }
+
+  void _onReadingTextSizeChanged() {
+    final preference = _readingTextSizePreference;
+    if (!mounted || preference == null) return;
+    setState(() => _readingTextSize = preference.currentSize);
+  }
+
+  Future<void> _showReadingTextSize() async {
+    final preference =
+        _readingTextSizePreference ??
+        await ReadingTextSizePreference.getInstance();
+    if (!mounted) return;
+    await ReadingTextSizeSheet.show(context, preference: preference);
   }
 
   Future<void> _loadReminderPrefs() async {
@@ -543,8 +571,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 _SettingsTile(
                   icon: Icons.text_fields,
                   title: 'Reading Text Size',
-                  subtitle: 'Adjust in reading view',
-                  onTap: null,
+                  subtitle:
+                      '${_readingTextSize.label} · ${_readingTextSize.percentageLabel}',
+                  onTap: _showReadingTextSize,
                 ),
                 const Divider(height: 1),
                 _SettingsTile(
@@ -914,6 +943,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   void dispose() {
     _bibleVersionPreference?.removeListener(_onBibleVersionChanged);
+    _readingTextSizePreference?.removeListener(_onReadingTextSizeChanged);
     super.dispose();
   }
 }

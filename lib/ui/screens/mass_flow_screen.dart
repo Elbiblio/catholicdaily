@@ -18,9 +18,11 @@ import '../../data/services/readings_backend_io.dart';
 import '../../data/services/reading_flow_service.dart';
 import '../../data/services/reading_narration_controller.dart';
 import '../../data/services/liturgical_region_preference_service.dart';
+import '../../data/services/reading_text_size_preference.dart';
 import '../widgets/parchment_background.dart';
 import '../widgets/read_aloud_icon.dart';
 import '../widgets/reading_narration_scope.dart';
+import '../widgets/reading_text_size_sheet.dart';
 import '../utils/contrast_helper.dart';
 
 class MassFlowScreen extends StatefulWidget {
@@ -50,13 +52,39 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
   LiturgicalDay? _liturgicalDay;
   bool _isLoading = true;
   ReadingNarrationSession? _narration;
+  ReadingTextSizePreference? _readingTextSizePreference;
+  double _readingTextScale = 1.0;
   final Set<String> _collapsedStandaloneReadingKeys = <String>{};
 
   @override
   void initState() {
     super.initState();
     _dateState = MassFlowRequestState(widget.date ?? DateTime.now());
+    _loadReadingTextSizePreference();
     _initialize();
+  }
+
+  Future<void> _loadReadingTextSizePreference() async {
+    final preference = await ReadingTextSizePreference.getInstance();
+    if (!mounted) return;
+    _readingTextSizePreference?.removeListener(_onReadingTextSizeChanged);
+    _readingTextSizePreference = preference;
+    preference.addListener(_onReadingTextSizeChanged);
+    setState(() => _readingTextScale = preference.scale);
+  }
+
+  void _onReadingTextSizeChanged() {
+    final preference = _readingTextSizePreference;
+    if (!mounted || preference == null) return;
+    setState(() => _readingTextScale = preference.scale);
+  }
+
+  Future<void> _showReadingTextSize() async {
+    final preference =
+        _readingTextSizePreference ??
+        await ReadingTextSizePreference.getInstance();
+    if (!mounted) return;
+    await ReadingTextSizeSheet.show(context, preference: preference);
   }
 
   @override
@@ -180,6 +208,7 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
 
   @override
   void dispose() {
+    _readingTextSizePreference?.removeListener(_onReadingTextSizeChanged);
     final narration = _narration;
     if (narration != null) {
       unawaited(
@@ -282,6 +311,11 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
                 );
               }),
             ],
+          ),
+          IconButton(
+            icon: const Icon(Icons.text_fields),
+            onPressed: () => unawaited(_showReadingTextSize()),
+            tooltip: 'Text size',
           ),
           IconButton(
             icon: const Icon(Icons.calendar_today),
@@ -421,6 +455,7 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
         child: _ReadingsSectionWidget(
           readings: readings,
           liturgicalColor: sectionColor,
+          textScale: _readingTextScale,
           narrationStatusFor: _narrationStatusFor,
           onReadAloud: _toggleReadingNarration,
         ),
@@ -447,6 +482,7 @@ class _MassFlowScreenState extends State<MassFlowScreen> {
             }
           }),
           sectionColor: sectionColor,
+          textScale: _readingTextScale,
           narrationStatus: _narrationStatusFor(reading),
           supportsNativePause:
               ReadingNarrationScope.maybeOf(
@@ -812,6 +848,7 @@ class _MassFlowItemCard extends StatelessWidget {
 class _ReadingsSectionWidget extends StatefulWidget {
   final List<DailyReading> readings;
   final Color liturgicalColor;
+  final double textScale;
   final NarrationStatus Function(DailyReading reading) narrationStatusFor;
   final Future<void> Function(
     DailyReading reading,
@@ -822,6 +859,7 @@ class _ReadingsSectionWidget extends StatefulWidget {
   const _ReadingsSectionWidget({
     required this.readings,
     required this.liturgicalColor,
+    required this.textScale,
     required this.narrationStatusFor,
     required this.onReadAloud,
   });
@@ -927,6 +965,7 @@ class _ReadingsSectionWidgetState extends State<_ReadingsSectionWidget> {
                       }
                     }),
                     sectionColor: sectionColor,
+                    textScale: widget.textScale,
                     narrationStatus: widget.narrationStatusFor(reading),
                     supportsNativePause:
                         ReadingNarrationScope.maybeOf(
@@ -985,6 +1024,7 @@ class MassFlowReadingCard extends StatefulWidget {
   final Color sectionColor;
   final NarrationStatus narrationStatus;
   final bool supportsNativePause;
+  final double textScale;
   final Future<void> Function(MassFlowReadingContent displayed)? onReadAloud;
   final Future<MassFlowReadingContent> Function(DailyReading reading)?
   readingContentLoader;
@@ -999,6 +1039,7 @@ class MassFlowReadingCard extends StatefulWidget {
     required this.sectionColor,
     this.narrationStatus = NarrationStatus.idle,
     this.supportsNativePause = true,
+    this.textScale = 1.0,
     this.onReadAloud,
     this.readingContentLoader,
   });
@@ -1012,6 +1053,18 @@ class _ReadingCardState extends State<MassFlowReadingCard> {
   MassFlowReadingContent? _displayedContent;
   bool _isLoadingText = false;
   int _textLoadGeneration = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isExpanded) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && widget.isExpanded && _displayedContent == null) {
+          unawaited(_fetchReadingText());
+        }
+      });
+    }
+  }
 
   bool get _isCollapsible => widget.collapsible || _readingLabel == 'Gospel';
 
@@ -1233,12 +1286,16 @@ class _ReadingCardState extends State<MassFlowReadingCard> {
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                 child: Text(
                   _displayedContent!.text,
+                  key: const ValueKey<String>('mass-reading-body-text'),
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: ContrastHelper.getSecondaryContrastColor(
                       widget.sectionColor.withValues(alpha: 0.3),
                       theme,
                     ),
                     height: 1.5,
+                    fontSize:
+                        (theme.textTheme.bodyMedium?.fontSize ?? 14) *
+                        widget.textScale,
                   ),
                 ),
               )
@@ -1249,6 +1306,9 @@ class _ReadingCardState extends State<MassFlowReadingCard> {
                   widget.reading.incipit!,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     fontStyle: FontStyle.italic,
+                    fontSize:
+                        (theme.textTheme.bodyMedium?.fontSize ?? 14) *
+                        widget.textScale,
                     color: ContrastHelper.getSecondaryContrastColor(
                       widget.sectionColor.withValues(alpha: 0.3),
                       theme,

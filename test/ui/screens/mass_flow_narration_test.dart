@@ -7,6 +7,72 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  testWidgets('an initially expanded Mass reading loads its full text', (
+    tester,
+  ) async {
+    final reading = DailyReading(
+      reading: 'Jn 1:1-5',
+      position: 'Gospel',
+      date: DateTime(2026, 8, 29),
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: MassFlowReadingCard(
+            reading: reading,
+            index: 0,
+            isExpanded: true,
+            onToggle: () {},
+            sectionColor: Colors.green,
+            readingContentLoader: (_) async => const MassFlowReadingContent(
+              text: 'In the beginning was the Word.',
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('In the beginning was the Word.'), findsOneWidget);
+  });
+
+  testWidgets('expanded Mass reading honors the reading text scale', (
+    tester,
+  ) async {
+    final reading = DailyReading(
+      reading: 'Jn 1:1-5',
+      position: 'Gospel',
+      date: DateTime(2026, 8, 29),
+    );
+
+    Widget card({required bool expanded}) => MaterialApp(
+      home: Scaffold(
+        body: MassFlowReadingCard(
+          key: const ValueKey<String>('scaled-mass-reading'),
+          reading: reading,
+          index: 0,
+          isExpanded: expanded,
+          onToggle: () {},
+          sectionColor: Colors.green,
+          textScale: 1.5,
+          readingContentLoader: (_) async => const MassFlowReadingContent(
+            text: 'In the beginning was the Word.',
+          ),
+        ),
+      ),
+    );
+
+    await tester.pumpWidget(card(expanded: false));
+    await tester.pumpWidget(card(expanded: true));
+    await tester.pumpAndSettle();
+
+    final text = tester.widget<Text>(
+      find.byKey(const ValueKey<String>('mass-reading-body-text')),
+    );
+    expect(text.style?.fontSize, 14 * 1.5);
+  });
+
   testWidgets(
     'Gospel keeps its collapse control when rendered as a standalone reading',
     (tester) async {

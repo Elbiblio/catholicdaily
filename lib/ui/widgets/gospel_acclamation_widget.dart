@@ -63,12 +63,14 @@ Future<String?> resolveDisplayedGospelAcclamation(
 class GospelAcclamationWidget extends StatefulWidget {
   final DailyReading reading;
   final DateTime date;
+  final double textScale;
   final ValueChanged<String?>? onDisplayedAcclamationChanged;
 
   const GospelAcclamationWidget({
     super.key,
     required this.reading,
     required this.date,
+    this.textScale = 1.0,
     this.onDisplayedAcclamationChanged,
   });
 
@@ -341,6 +343,9 @@ class _GospelAcclamationWidgetState extends State<GospelAcclamationWidget> {
               fontWeight: FontWeight.w500,
               height: 1.4,
               fontStyle: FontStyle.italic,
+              fontSize:
+                  (theme.textTheme.bodyLarge?.fontSize ?? 16) *
+                  widget.textScale,
             ),
           ),
           if (!isCompleteAcclamation) ...[

@@ -15,6 +15,7 @@ import '../../data/services/scroll_position_service.dart';
 import '../../data/services/reading_flow_service.dart';
 import '../../data/services/reading_narration_controller.dart';
 import '../../data/services/reading_narration_queue_builder.dart';
+import '../../data/services/reading_text_size_preference.dart';
 import '../widgets/parchment_background.dart';
 import '../widgets/psalm_response_widget.dart';
 import '../widgets/gospel_acclamation_widget.dart';
@@ -24,6 +25,7 @@ import '../widgets/responsorial_psalm_source_label.dart';
 import '../widgets/ai_insights_sheet.dart';
 import '../widgets/read_aloud_icon.dart';
 import '../widgets/reading_narration_scope.dart';
+import '../widgets/reading_text_size_sheet.dart';
 import '../utils/reading_title_formatter.dart';
 import '../utils/bible_reference_helper.dart';
 import '../../data/services/bible_cache_service.dart';
@@ -112,6 +114,7 @@ class _ReadingScreenState extends State<ReadingScreen> with RouteAware {
   static const _verseNumbersKey = 'show_verse_numbers';
 
   double _textScale = 1.0;
+  ReadingTextSizePreference? _readingTextSizePreference;
   final ScrollController _scrollController = ScrollController();
   String _currentContent = '';
   bool _isReloading = false;
@@ -200,6 +203,7 @@ class _ReadingScreenState extends State<ReadingScreen> with RouteAware {
     _loadBookmarkStatus();
     _loadVerseNumberPref();
     _loadIncipitPref();
+    _loadReadingTextSizePreference();
     _scrollPositionService.initialize();
     _restoreScrollPosition();
     if (widget.isBibleSearch) {
@@ -254,6 +258,29 @@ class _ReadingScreenState extends State<ReadingScreen> with RouteAware {
         _showIncipit = show;
       });
     }
+  }
+
+  Future<void> _loadReadingTextSizePreference() async {
+    final preference = await ReadingTextSizePreference.getInstance();
+    if (!mounted) return;
+    _readingTextSizePreference?.removeListener(_onReadingTextSizeChanged);
+    _readingTextSizePreference = preference;
+    preference.addListener(_onReadingTextSizeChanged);
+    setState(() => _textScale = preference.scale);
+  }
+
+  void _onReadingTextSizeChanged() {
+    final preference = _readingTextSizePreference;
+    if (!mounted || preference == null) return;
+    setState(() => _textScale = preference.scale);
+  }
+
+  Future<void> _showReadingTextSize() async {
+    final preference =
+        _readingTextSizePreference ??
+        await ReadingTextSizePreference.getInstance();
+    if (!mounted) return;
+    await ReadingTextSizeSheet.show(context, preference: preference);
   }
 
   Future<void> _toggleVerseNumbers() async {
@@ -820,6 +847,9 @@ class _ReadingScreenState extends State<ReadingScreen> with RouteAware {
                       case 'read_all':
                         unawaited(_readAllAppointedReadings());
                         break;
+                      case 'text_size':
+                        unawaited(_showReadingTextSize());
+                        break;
                     }
                   },
                   itemBuilder: (context) => [
@@ -864,6 +894,16 @@ class _ReadingScreenState extends State<ReadingScreen> with RouteAware {
                                   : 'Show verse numbers',
                             ),
                           ),
+                        ],
+                      ),
+                    ),
+                    const PopupMenuItem(
+                      value: 'text_size',
+                      child: Row(
+                        children: [
+                          Icon(Icons.text_fields),
+                          SizedBox(width: 12),
+                          Text('Text size'),
                         ],
                       ),
                     ),
@@ -926,6 +966,7 @@ class _ReadingScreenState extends State<ReadingScreen> with RouteAware {
                 child: PsalmResponseWidget(
                   reading: widget.readingData!,
                   date: widget.liturgicalDay?.date ?? DateTime.now(),
+                  textScale: _textScale,
                 ),
               ),
             if (widget.readingData?.gospelAcclamation != null)
@@ -933,6 +974,7 @@ class _ReadingScreenState extends State<ReadingScreen> with RouteAware {
                 child: GospelAcclamationWidget(
                   reading: widget.readingData!,
                   date: widget.liturgicalDay?.date ?? DateTime.now(),
+                  textScale: _textScale,
                   onDisplayedAcclamationChanged: (acclamation) {
                     if (mounted && acclamation != _currentGospelAcclamation) {
                       setState(() {
@@ -1401,6 +1443,8 @@ class _ReadingScreenState extends State<ReadingScreen> with RouteAware {
               incipit,
               style: theme.textTheme.bodyLarge?.copyWith(
                 height: 1.35,
+                fontSize:
+                    (theme.textTheme.bodyLarge?.fontSize ?? 16) * _textScale,
                 fontStyle: FontStyle.italic,
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.88),
               ),
@@ -1682,7 +1726,8 @@ class _ReadingScreenState extends State<ReadingScreen> with RouteAware {
               verse.text,
               style: theme.textTheme.bodyLarge?.copyWith(
                 height: 1.6,
-                fontSize: theme.textTheme.bodyLarge!.fontSize! * _textScale,
+                fontSize:
+                    (theme.textTheme.bodyLarge?.fontSize ?? 16) * _textScale,
               ),
             ),
           ),
@@ -1926,6 +1971,7 @@ class _ReadingScreenState extends State<ReadingScreen> with RouteAware {
       overlays: SystemUiOverlay.values,
     );
     _scrollDebounceTimer?.cancel();
+    _readingTextSizePreference?.removeListener(_onReadingTextSizeChanged);
     _scrollController.removeListener(_onScrollChanged);
 
     // Save final scroll position
