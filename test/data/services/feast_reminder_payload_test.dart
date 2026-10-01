@@ -203,6 +203,29 @@ void main() {
       expect(FeastReminderPayload.fromMap(encoded), isNotNull);
     });
 
+    test('serializes local reminder instants as offset-bearing UTC', () {
+      final scheduled = DateTime(2026, 10, 1, 6, 30);
+      final payload = FeastReminderPayload(
+        celebrationDate: DateTime(2026, 10, 1),
+        scheduledFor: scheduled,
+        occurrenceKey: 'feast:nigeria:2026-10-01:on_day:queen-of-nigeria',
+        liturgicalRegion: 'nigeria',
+        title: 'Our Lady, Queen of Nigeria',
+        rank: 'Solemnity',
+        saintProfileId: 'queen-of-nigeria',
+        dayBefore: false,
+      ).toMap();
+      expect(payload['scheduled_for'], scheduled.toUtc().toIso8601String());
+      expect(
+        payload['remote_expires_at'],
+        scheduled.add(const Duration(minutes: 2)).toUtc().toIso8601String(),
+      );
+      expect(
+        payload['local_safety_at'],
+        scheduled.add(const Duration(minutes: 3)).toUtc().toIso8601String(),
+      );
+    });
+
     test('rejects v3 payloads with unsafe timing relationships', () {
       final base = <String, dynamic>{
         'type': 'feast_reminder',

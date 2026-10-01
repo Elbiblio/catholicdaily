@@ -272,6 +272,32 @@ void main() {
     );
   });
 
+  test(
+    'retired unsent history cannot block schedules after ninety days',
+    () async {
+      final store = NotificationOccurrenceStore();
+      final now = DateTime.utc(2026, 10, 1);
+      final retired = now.subtract(const Duration(days: 100));
+      await store.upsertAll([
+        occurrence(
+          key: 'retired',
+          remoteExpiresAt: retired,
+          reconciledAt: retired,
+        ),
+        occurrence(
+          key: 'recent',
+          remoteExpiresAt: now.subtract(const Duration(days: 30)),
+          reconciledAt: now.subtract(const Duration(days: 30)),
+        ),
+      ]);
+      await store.prune(now: now);
+      expect(
+        (await store.pendingOccurrences()).map((row) => row.occurrenceKey),
+        ['recent'],
+      );
+    },
+  );
+
   test('mutation between acknowledgement and prune is retained', () async {
     final store = NotificationOccurrenceStore();
     final expiredAt = DateTime.utc(2026, 7, 1);

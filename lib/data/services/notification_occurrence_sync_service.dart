@@ -129,8 +129,7 @@ class NotificationScheduleSyncCoordinator {
         }
       } else {
         occurrenceResult = await syncOccurrences();
-        if (occurrenceResult == NotificationOccurrenceSyncResult.success ||
-            occurrenceResult == NotificationOccurrenceSyncResult.invalid) {
+        if (occurrenceResult == NotificationOccurrenceSyncResult.success) {
           installationSynchronized = await syncInstallation();
         }
       }
@@ -139,8 +138,7 @@ class NotificationScheduleSyncCoordinator {
       occurrenceResult = NotificationOccurrenceSyncResult.retry;
     }
     final occurrenceSynchronized =
-        occurrenceResult == NotificationOccurrenceSyncResult.success ||
-        occurrenceResult == NotificationOccurrenceSyncResult.invalid;
+        occurrenceResult == NotificationOccurrenceSyncResult.success;
     if (forceRepair || !installationSynchronized || !occurrenceSynchronized) {
       try {
         await _requestRepair();
@@ -185,8 +183,7 @@ class NotificationOccurrenceSyncService {
         occurrences,
         events: events,
         onBatchResult: (batchOccurrences, batchEvents, result) async {
-          if (result == NotificationOccurrenceApiResult.success ||
-              result == NotificationOccurrenceApiResult.invalid) {
+          if (result == NotificationOccurrenceApiResult.success) {
             await _markSent(batchOccurrences, batchEvents, synchronizedAt);
           }
         },
@@ -195,10 +192,9 @@ class NotificationOccurrenceSyncService {
         case NotificationOccurrenceApiResult.success:
           return NotificationOccurrenceSyncResult.success;
         case NotificationOccurrenceApiResult.invalid:
-          return (await _store.pendingOccurrences()).isEmpty &&
-                  (await _store.pendingEvents()).isEmpty
-              ? NotificationOccurrenceSyncResult.invalid
-              : NotificationOccurrenceSyncResult.retry;
+          // A rejected batch was never persisted remotely. Keep its durable
+          // rows pending so a repaired server/client contract can retry it.
+          return NotificationOccurrenceSyncResult.retry;
         case NotificationOccurrenceApiResult.reRegister:
           await _installationStore.markRegistered(false);
           if (installationAbsenceIsSuccess) {
@@ -221,12 +217,14 @@ class NotificationOccurrenceSyncService {
     final auditTime = now ?? DateTime.now();
     try {
       await _store.reconcileExpired(now: auditTime);
+      // Compact retired history outside the server's supported late-open
+      // window before uploading; it cannot suppress a live remote occurrence.
+      await _store.prune(now: auditTime);
       final result = await syncPending(
         synchronizedAt: auditTime,
         installationAbsenceIsSuccess: installationAbsenceIsSuccess,
       );
-      if (result == NotificationOccurrenceSyncResult.success ||
-          result == NotificationOccurrenceSyncResult.invalid) {
+      if (result == NotificationOccurrenceSyncResult.success) {
         await _store.prune(now: auditTime);
       }
       return result;

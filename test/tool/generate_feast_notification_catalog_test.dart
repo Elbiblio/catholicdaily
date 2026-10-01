@@ -8,6 +8,33 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  test(
+    'catalog exports exact reminder eligibility for server recovery',
+    () async {
+      final catalog = await FeastNotificationCatalogBuilder().build(
+        startYear: 2026,
+        endYear: 2026,
+      );
+      final nigeria = catalog.events.where(
+        (event) => event.region == 'nigeria',
+      );
+      final queen = nigeria.firstWhere(
+        (event) => event.date == DateTime(2026, 10, 1),
+      );
+      expect(queen.toJson()['reminder_ranks'], [
+        'solemnities',
+        'feasts',
+        'all',
+      ]);
+      final wenceslaus = nigeria.firstWhere(
+        (event) =>
+            event.date == DateTime(2026, 9, 28) &&
+            event.title.contains('Wenceslaus'),
+      );
+      expect(wenceslaus.toJson()['reminder_ranks'], ['all']);
+    },
+  );
+
   test('committed feast catalog is canonical and complete', () async {
     final file = File('assets/data/feast_notification_catalog.json');
     expect(file.existsSync(), isTrue, reason: 'Generate the shared catalog.');

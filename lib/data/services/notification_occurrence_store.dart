@@ -263,16 +263,19 @@ class NotificationOccurrenceStore {
     Duration retention = const Duration(days: 7),
   }) => _mutate((document) {
     final cutoff = now.subtract(retention);
+    final remoteCutoff = now.subtract(const Duration(days: 90));
     final keysWithPendingEvents = document.events
         .map((event) => event.occurrenceKey)
         .toSet();
     final retained = document.occurrences
         .where(
           (row) =>
-              row.reconciledAt == null ||
-              row.needsSync ||
-              keysWithPendingEvents.contains(row.occurrenceKey) ||
-              !row.remoteExpiresAt.isBefore(cutoff),
+              (row.reconciledAt == null ||
+                  !row.remoteExpiresAt.isBefore(remoteCutoff)) &&
+              (row.reconciledAt == null ||
+                  row.needsSync ||
+                  keysWithPendingEvents.contains(row.occurrenceKey) ||
+                  !row.remoteExpiresAt.isBefore(cutoff)),
         )
         .toList(growable: false);
     final retainedKeys = retained.map((row) => row.occurrenceKey).toSet();

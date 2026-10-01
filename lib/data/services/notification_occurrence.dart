@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'feast_reminder_notification_contract.dart';
 import 'feast_reminder_payload.dart';
 
@@ -140,7 +142,7 @@ class NotificationOccurrence {
     'configuration_fingerprint': configurationFingerprint,
     'local_armed': localArmed,
     'status': status.name,
-    'payload': payload,
+    'payload': _payloadForApi(),
     if (receivedAt != null)
       'received_at': receivedAt!.toUtc().toIso8601String(),
     if (openedAt != null) 'opened_at': openedAt!.toUtc().toIso8601String(),
@@ -154,6 +156,26 @@ class NotificationOccurrence {
     if (lastSyncedAt != null)
       'last_synced_at': lastSyncedAt!.toUtc().toIso8601String(),
   };
+
+  String _payloadForApi() {
+    try {
+      final value = jsonDecode(payload);
+      if (value is! Map<String, dynamic> ||
+          value['schema'] != 3 ||
+          !value.containsKey('scheduled_for') ||
+          !value.containsKey('remote_expires_at') ||
+          !value.containsKey('local_safety_at'))
+        return payload;
+      // Pre-fix schedules stored local wall times without an offset. The
+      // ledger already records authoritative UTC instants for these fields.
+      value['scheduled_for'] = scheduledFor.toUtc().toIso8601String();
+      value['remote_expires_at'] = remoteExpiresAt.toUtc().toIso8601String();
+      value['local_safety_at'] = localSafetyAt.toUtc().toIso8601String();
+      return jsonEncode(value);
+    } catch (_) {
+      return payload;
+    }
+  }
 
   static NotificationOccurrence? tryFromStorageJson(dynamic value) {
     if (value is! Map) return null;

@@ -102,7 +102,7 @@ void main() {
     },
   );
 
-  test('invalid rows are nonretryable and do not enqueue repair', () async {
+  test('rejected batches retain pending rows and enqueue repair', () async {
     final store = NotificationOccurrenceStore();
     await store.upsertAll([occurrence()]);
     var repairs = 0;
@@ -116,9 +116,9 @@ void main() {
       enqueueRepair: () async => repairs++,
     );
 
-    expect(result, NotificationOccurrenceSyncResult.invalid);
-    expect(repairs, 0);
-    expect(await store.pendingOccurrences(), isEmpty);
+    expect(result, NotificationOccurrenceSyncResult.retry);
+    expect(repairs, 1);
+    expect(await store.pendingOccurrences(), hasLength(1));
   });
 
   test('retryable failure enqueues once without recursively syncing', () async {

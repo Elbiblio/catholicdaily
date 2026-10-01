@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/liturgical_region.dart';
@@ -10,6 +11,7 @@ class LiturgicalRegionPreferenceService {
   static const _autoDetectedKey = 'liturgical_region_auto_detected';
 
   static LiturgicalRegionPreferenceService? _instance;
+  static Future<LiturgicalRegionPreferenceService>? _initialization;
 
   final SharedPreferences _prefs;
 
@@ -18,11 +20,15 @@ class LiturgicalRegionPreferenceService {
     LiturgicalRegion Function()? localeRegion,
   }) : _localeRegion = localeRegion ?? _detectFromPlatformLocale;
 
-  static Future<LiturgicalRegionPreferenceService> getInstance() async {
-    _instance ??= LiturgicalRegionPreferenceService._(
+  static Future<LiturgicalRegionPreferenceService> getInstance() =>
+      _initialization ??= _initialize();
+
+  static Future<LiturgicalRegionPreferenceService> _initialize() async {
+    final service = _instance ??= LiturgicalRegionPreferenceService._(
       await SharedPreferences.getInstance(),
     );
-    return _instance!;
+    await service.detectAndSetIfUnset();
+    return service;
   }
 
   @visibleForTesting
@@ -32,7 +38,10 @@ class LiturgicalRegionPreferenceService {
   }) => LiturgicalRegionPreferenceService._(prefs, localeRegion: localeRegion);
 
   @visibleForTesting
-  static void resetInstanceForTesting() => _instance = null;
+  static void resetInstanceForTesting() {
+    _instance = null;
+    _initialization = null;
+  }
 
   final LiturgicalRegion Function() _localeRegion;
 
@@ -54,9 +63,19 @@ class LiturgicalRegionPreferenceService {
   }
 
   Future<LiturgicalRegion> detectAndSetIfUnset() async {
-    if (hasRegion) return currentRegion;
+    if (hasUserSelection) return currentRegion;
 
-    final detected = _localeRegion();
+    var detected = _localeRegion();
+    try {
+      // Many Nigerian phones use en_US. The device zone disambiguates the
+      // automatic default without changing an explicitly selected calendar.
+      if ((await FlutterTimezone.getLocalTimezone()).identifier ==
+          'Africa/Lagos') {
+        detected = LiturgicalRegion.nigeria;
+      }
+    } catch (_) {
+      // Locale remains the fallback when the platform zone is unavailable.
+    }
     await setRegion(detected, autoDetected: true);
     return detected;
   }

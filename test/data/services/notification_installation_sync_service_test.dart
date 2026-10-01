@@ -12,6 +12,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   setUp(() => SharedPreferences.setMockInitialValues(<String, Object>{}));
 
+  test('rejected registration is not reported as synchronized', () async {
+    final store = _FakeStore();
+    final service = NotificationInstallationSyncService(
+      api: _RejectedApi(),
+      store: store,
+      buildState: _state,
+    );
+    expect(await service.syncToken('test-token'), isFalse);
+    expect(store.registered, isFalse);
+  });
+
   test('concurrent token syncs serialize registration creation', () async {
     final api = _BlockingApi();
     final lockFile = File(
@@ -37,6 +48,14 @@ void main() {
     expect(api.createCalls, 1);
     expect(api.updateCalls, 1);
   });
+}
+
+class _RejectedApi extends NotificationInstallationApi {
+  @override
+  Future<NotificationInstallationApiResult> create(
+    NotificationInstallationCredentials credentials,
+    NotificationInstallationState state,
+  ) async => NotificationInstallationApiResult.invalid;
 }
 
 Future<NotificationInstallationState> _state(String token) async =>

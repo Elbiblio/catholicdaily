@@ -280,8 +280,7 @@ class NotificationBackgroundSyncPolicy {
     required NotificationOccurrenceSyncResult occurrenceResult,
   }) =>
       installationSynchronized &&
-      (occurrenceResult == NotificationOccurrenceSyncResult.success ||
-          occurrenceResult == NotificationOccurrenceSyncResult.invalid);
+      occurrenceResult == NotificationOccurrenceSyncResult.success;
 }
 
 class FeastReminderAuditSnapshot {
@@ -588,6 +587,14 @@ class FeastReminderBackgroundService {
     DateTime now, {
     required bool remindersEnabled,
   }) async {
+    // Register enabled schedules first; submit disabled tombstones first.
+    var installationSynchronized = false;
+    if (remindersEnabled) {
+      installationSynchronized = await NotificationInstallationSyncService
+          .instance
+          .syncCurrentToken();
+      if (!installationSynchronized) return false;
+    }
     // Occurrence sync never enqueues work itself; returning false lets the
     // current Workmanager run own the retry without recursion.
     final occurrenceResult = await NotificationOccurrenceSyncService.instance
@@ -596,13 +603,14 @@ class FeastReminderBackgroundService {
           installationAbsenceIsSuccess: !remindersEnabled,
         );
     if (!remindersEnabled &&
-        occurrenceResult != NotificationOccurrenceSyncResult.success &&
-        occurrenceResult != NotificationOccurrenceSyncResult.invalid) {
+        occurrenceResult != NotificationOccurrenceSyncResult.success) {
       return false;
     }
-    final installationSynchronized = await NotificationInstallationSyncService
-        .instance
-        .syncCurrentToken();
+    if (!remindersEnabled) {
+      installationSynchronized = await NotificationInstallationSyncService
+          .instance
+          .syncCurrentToken();
+    }
     return _notificationSyncPolicy.succeeded(
       installationSynchronized: installationSynchronized,
       occurrenceResult: occurrenceResult,

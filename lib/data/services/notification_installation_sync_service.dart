@@ -69,7 +69,8 @@ class NotificationInstallationSyncService {
           result == NotificationInstallationApiResult.reRegister) {
         await _store.markRegistered(false);
       }
-      return result != NotificationInstallationApiResult.retry;
+      return result == NotificationInstallationApiResult.success ||
+          result == NotificationInstallationApiResult.reRegister;
     }
 
     final token = await FirebaseMessaging.instance.getToken();
@@ -105,9 +106,6 @@ class NotificationInstallationSyncService {
     if (result == NotificationInstallationApiResult.success) {
       await _store.markRegistered(true);
       await _store.markSynchronized(state);
-      return true;
-    }
-    if (result == NotificationInstallationApiResult.invalid) {
       return true;
     }
     if (!registered) await _store.markRegistered(false);

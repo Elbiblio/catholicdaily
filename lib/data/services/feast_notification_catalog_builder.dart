@@ -38,6 +38,7 @@ class FeastNotificationCatalogEvent {
     required this.celebrationId,
     required this.onDay,
     required this.eve,
+    required this.reminderRanks,
   });
 
   final String region;
@@ -47,6 +48,7 @@ class FeastNotificationCatalogEvent {
   final String celebrationId;
   final FeastNotificationCatalogOccurrence onDay;
   final FeastNotificationCatalogOccurrence eve;
+  final List<String> reminderRanks;
 
   Map<String, Object> toJson() => <String, Object>{
     'region': region,
@@ -56,6 +58,7 @@ class FeastNotificationCatalogEvent {
     'celebration_id': celebrationId,
     'on_day': onDay.toJson(),
     'eve': eve.toJson(),
+    'reminder_ranks': reminderRanks,
   };
 
   factory FeastNotificationCatalogEvent.fromJson(Map<String, dynamic> json) =>
@@ -71,6 +74,9 @@ class FeastNotificationCatalogEvent {
         eve: FeastNotificationCatalogOccurrence.fromJson(
           json['eve'] as Map<String, dynamic>,
         ),
+        reminderRanks:
+            (json['reminder_ranks'] as List<dynamic>?)?.cast<String>() ??
+            const [],
       );
 }
 
@@ -159,6 +165,19 @@ class FeastNotificationCatalogBuilder {
           FeastReminderRank.all,
           region: region,
         );
+        final identitiesByRank = <FeastReminderRank, Set<String>>{};
+        String previewIdentity(FeastReminderPreviewEvent preview) =>
+            '${_formatDate(preview.date)}|${preview.saintProfileId ?? preview.title}';
+        for (final rank in FeastReminderRank.values) {
+          final ranked = rank == FeastReminderRank.all
+              ? previews
+              : await _reminderService.buildCatalogEventsForYear(
+                  year,
+                  rank,
+                  region: region,
+                );
+          identitiesByRank[rank] = ranked.map(previewIdentity).toSet();
+        }
         for (final preview in previews) {
           final celebrationSource = preview.saintProfileId ?? preview.title;
           final onDayIdentity = FeastReminderNotificationContract.identity(
@@ -192,6 +211,13 @@ class FeastNotificationCatalogBuilder {
                 occurrenceKey: eveIdentity.occurrenceKey,
                 notificationId: eveIdentity.notificationId,
               ),
+              reminderRanks: [
+                for (final rank in FeastReminderRank.values)
+                  if (identitiesByRank[rank]!.contains(
+                    previewIdentity(preview),
+                  ))
+                    rank.key,
+              ],
             ),
           );
         }

@@ -103,6 +103,31 @@ void main() {
     },
   );
 
+  test(
+    'repairs stored offsetless payloads from authoritative ledger instants',
+    () {
+      final scheduled = DateTime.utc(2026, 9, 1, 6);
+      final row = NotificationOccurrence(
+        occurrenceKey: 'feast:nigeria:2026-09-01:on_day:a',
+        localNotificationId: 123,
+        scheduledFor: scheduled,
+        remoteExpiresAt: scheduled.add(const Duration(minutes: 2)),
+        localSafetyAt: scheduled.add(const Duration(minutes: 3)),
+        platform: 'android',
+        scheduleGeneration: 'feast-reminders-v6',
+        timezone: 'Africa/Lagos',
+        configurationFingerprint: 'config',
+        localArmed: false,
+        payload:
+            '{"schema":3,"scheduled_for":"2026-09-01T07:00:00.000",'
+            '"remote_expires_at":"2026-09-01T07:02:00.000",'
+            '"local_safety_at":"2026-09-01T07:03:00.000"}',
+      );
+      expect(row.toApiJson()['payload'], contains('2026-09-01T06:00:00.000Z'));
+      expect(row.toApiJson()['payload'], contains('2026-09-01T06:03:00.000Z'));
+    },
+  );
+
   test('rejects legacy payloads without exact occurrence timing', () {
     final legacy = FeastReminderPayload(
       celebrationDate: DateTime(2026, 9, 1),

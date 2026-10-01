@@ -127,7 +127,7 @@ class FeastReminderService {
   static const _channelId = 'feast_reminders';
   static const _channelName = 'Saints & Feast Reminders';
   static const _channelDesc = 'Daily saints and seven-day feast countdowns';
-  static const scheduleSchemaVersion = 8;
+  static const scheduleSchemaVersion = 9;
   static const _schedulePolicy = FeastReminderSchedulePolicy();
 
   Future<void> initialize() async {

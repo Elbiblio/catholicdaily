@@ -409,7 +409,7 @@ void main() {
           installationSynchronized: true,
           occurrenceResult: NotificationOccurrenceSyncResult.invalid,
         ),
-        isTrue,
+        isFalse,
       );
       expect(
         syncPolicy.succeeded(
