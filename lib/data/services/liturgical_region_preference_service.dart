@@ -20,14 +20,17 @@ class LiturgicalRegionPreferenceService {
     LiturgicalRegion Function()? localeRegion,
   }) : _localeRegion = localeRegion ?? _detectFromPlatformLocale;
 
-  static Future<LiturgicalRegionPreferenceService> getInstance() =>
-      _initialization ??= _initialize();
+  static Future<LiturgicalRegionPreferenceService> getInstance() async {
+    if (_instance case final service?) return service;
+    return _initialization ??= _initialize();
+  }
 
   static Future<LiturgicalRegionPreferenceService> _initialize() async {
-    final service = _instance ??= LiturgicalRegionPreferenceService._(
+    final service = LiturgicalRegionPreferenceService._(
       await SharedPreferences.getInstance(),
     );
     await service.detectAndSetIfUnset();
+    _instance = service;
     return service;
   }
 

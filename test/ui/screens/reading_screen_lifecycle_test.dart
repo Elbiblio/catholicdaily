@@ -10,6 +10,7 @@ import 'package:catholic_daily/data/services/reading_narration_composer.dart';
 import 'package:catholic_daily/data/services/reading_narration_controller.dart';
 import 'package:catholic_daily/data/services/reading_narration_queue_builder.dart';
 import 'package:catholic_daily/data/services/reading_flow_service.dart';
+import 'package:catholic_daily/data/services/liturgical_region_preference_service.dart';
 import 'package:catholic_daily/data/services/speech_engine.dart';
 import 'package:catholic_daily/ui/screens/reading_screen.dart';
 import 'package:catholic_daily/ui/widgets/read_aloud_icon.dart';
@@ -18,10 +19,22 @@ import 'package:catholic_daily/ui/widgets/bible_version_switcher.dart';
 import 'package:catholic_daily/ui/widgets/reading_narration_scope.dart';
 import 'package:catholic_daily/ui/widgets/responsorial_psalm_edition_selector.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+      .setMockMethodCallHandler(
+        const MethodChannel('flutter_timezone'),
+        (_) async => <String, Object>{'identifier': 'Etc/UTC'},
+      );
+  setUp(() async {
+    SharedPreferences.setMockInitialValues(<String, Object>{});
+    LiturgicalRegionPreferenceService.resetInstanceForTesting();
+    await LiturgicalRegionPreferenceService.getInstance();
+  });
   testWidgets('popping a reading invalidates work started by that route', (
     tester,
   ) async {

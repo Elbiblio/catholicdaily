@@ -7,6 +7,8 @@
 import 'package:catholic_daily/data/services/csv_readings_resolver_service.dart';
 import 'package:catholic_daily/data/services/incipit_preference_service.dart';
 import 'package:catholic_daily/data/services/readings_service.dart';
+import 'package:catholic_daily/data/models/liturgical_region.dart';
+import 'package:catholic_daily/data/services/liturgical_region_preference_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../helpers/test_helpers.dart';
@@ -196,6 +198,8 @@ void main() {
     timeout: const Timeout(Duration(seconds: 30)),
     () async {
       final svc = IncipitPreferenceService();
+      final region = await LiturgicalRegionPreferenceService.getInstance();
+      await region.setRegion(LiturgicalRegion.generalRoman);
       expect(await svc.getLocale(), 'en');
       await svc.setLocale('en-GB');
       svc.resetCache();

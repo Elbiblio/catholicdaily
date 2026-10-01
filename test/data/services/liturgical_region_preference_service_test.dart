@@ -80,4 +80,17 @@ void main() {
     final service = await LiturgicalRegionPreferenceService.getInstance();
     expect(service.currentRegion, LiturgicalRegion.nigeria);
   });
+
+  testWidgets(
+    'cached calendar completes in the caller execution context',
+    (tester) async {
+      final initialized = await tester.runAsync(
+        LiturgicalRegionPreferenceService.getInstance,
+      );
+      final cached = await LiturgicalRegionPreferenceService.getInstance();
+      expect(identical(cached, initialized), isTrue);
+      expect(cached.currentRegion, LiturgicalRegion.nigeria);
+    },
+    timeout: const Timeout(Duration(seconds: 10)),
+  );
 }

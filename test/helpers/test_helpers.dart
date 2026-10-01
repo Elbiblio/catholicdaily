@@ -14,8 +14,16 @@ void setupFlutterTestEnvironment() {
 /// Returns cleanup function to remove mocks
 void Function() mockMethodChannels({String? tempDocsPath}) {
   const pathProviderChannel = MethodChannel('plugins.flutter.io/path_provider');
-  const sharedPreferencesChannel = MethodChannel('plugins.flutter.io/shared_preferences');
-  
+  const sharedPreferencesChannel = MethodChannel(
+    'plugins.flutter.io/shared_preferences',
+  );
+  const timezoneChannel = MethodChannel('flutter_timezone');
+  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+      .setMockMethodCallHandler(
+        timezoneChannel,
+        (_) async => <String, Object>{'identifier': 'Etc/UTC'},
+      );
+
   // Set up mocks
   TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
       .setMockMethodCallHandler(pathProviderChannel, (call) async {
@@ -24,7 +32,7 @@ void Function() mockMethodChannels({String? tempDocsPath}) {
         }
         return null;
       });
-      
+
   TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
       .setMockMethodCallHandler(sharedPreferencesChannel, (call) async {
         if (call.method == 'getAll') {
@@ -32,13 +40,15 @@ void Function() mockMethodChannels({String? tempDocsPath}) {
         }
         return true;
       });
-  
+
   // Return cleanup function
   return () {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(pathProviderChannel, null);
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(sharedPreferencesChannel, null);
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(timezoneChannel, null);
   };
 }
 
@@ -46,7 +56,7 @@ void Function() mockMethodChannels({String? tempDocsPath}) {
 /// Returns cleanup function to remove directory
 Future<Directory> createTempTestDir(String prefix) async {
   final tempDir = Directory.systemTemp.createTempSync(prefix);
-  
+
   return tempDir;
 }
 
