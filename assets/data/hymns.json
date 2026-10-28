@@ -44060,7 +44060,7 @@
     "first_line": "What Star is This That Beams So Bright",
     "old_number": null,
     "hymn_number": null,
-    "category": "advent",
+    "category": "christmas",
     "lyrics": [
       "1. What star is this, with beams so bright,",
       "",
@@ -44128,7 +44128,8 @@
     "author": "Traditional",
     "composer": null,
     "tags": [
-      "advent"
+      "christmas",
+      "epiphany"
     ],
     "is_favorite": false,
     "last_accessed": null,

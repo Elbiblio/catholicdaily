@@ -4,9 +4,23 @@ import '../../data/models/hymn_category.dart';
 import '../../data/models/daily_reading.dart';
 import '../../data/services/hymn_service.dart';
 import '../../data/services/robust_hymn_recommendation_service.dart';
-import '../../data/services/readings_backend_io.dart';
+import '../../data/services/alternate_readings_service.dart';
+import '../../data/services/improved_liturgical_calendar_service.dart';
+import '../../data/services/ordo_resolver_service.dart';
 import '../widgets/hymn_card.dart';
 import 'hymn_detail_screen.dart';
+
+/// Resolve the same primary celebration and readings used by the daily page.
+Future<({LiturgicalDay liturgicalDay, List<DailyReading> readings})>
+resolveDailyHymnContext(DateTime date) async {
+  final day = DateTime(date.year, date.month, date.day);
+  final liturgicalDay = await OrdoResolverService.instance.resolveDay(day);
+  final sets = await AlternateReadingsService.instance.getAvailableReadingSets(day);
+  return (
+    liturgicalDay: liturgicalDay,
+    readings: sets.isEmpty ? <DailyReading>[] : sets.first.readings,
+  );
+}
 
 class HymnListScreen extends StatefulWidget {
   final String? initialCategory;
@@ -25,7 +39,6 @@ class HymnListScreen extends StatefulWidget {
 class _HymnListScreenState extends State<HymnListScreen> with SingleTickerProviderStateMixin {
   final HymnService _hymnService = HymnService.instance;
   final RobustHymnRecommendationService _recommendationService = RobustHymnRecommendationService.instance;
-  final ReadingsBackendIo _readingsBackend = ReadingsBackendIo();
   final TextEditingController _searchController = TextEditingController();
   late TabController _tabController;
   int _currentTabIndex = 0;
@@ -80,14 +93,16 @@ class _HymnListScreenState extends State<HymnListScreen> with SingleTickerProvid
   Future<void> _loadDailyRecommendations() async {
     try {
       final today = DateTime.now();
-      final List<DailyReading> readings = await _readingsBackend.getReadingsForDate(today);
+      final dayContext = await resolveDailyHymnContext(today);
 
       // Get mass part recommendations (ensures only entrance, offertory, communion, dismissal)
       final massPartRecommendations = await _recommendationService.getMassPartRecommendations(
         today,
-        readings,
+        dayContext.readings,
+        liturgicalDay: dayContext.liturgicalDay,
       );
 
+      if (!mounted) return;
       setState(() {
         _massPartRecommendations = massPartRecommendations;
       });

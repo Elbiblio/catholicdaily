@@ -152,7 +152,6 @@ class OfflineOrdoLookupService {
       adventStart: adventStart,
       previousAdventStart: previousAdventStart,
       christmas: christmas,
-      epiphany: epiphany,
       baptism: baptism,
     );
 
@@ -352,7 +351,6 @@ class OfflineOrdoLookupService {
     required DateTime adventStart,
     required DateTime previousAdventStart,
     required DateTime christmas,
-    required DateTime epiphany,
     required DateTime baptism,
   }) {
     if (!day.isBefore(adventStart) && day.isBefore(christmas)) {
@@ -360,8 +358,10 @@ class OfflineOrdoLookupService {
       return _SeasonData(LiturgicalSeason.advent, week.clamp(1, 4));
     }
 
-    if (!day.isBefore(christmas) &&
-        day.isBefore(epiphany.add(const Duration(days: 1)))) {
+    // Christmas begins in December and ends with the Baptism in January.
+    // Both dates are calculated in the current calendar year, so this is a
+    // union of the end and beginning of that year, not a single interval.
+    if (!day.isBefore(christmas) || !day.isAfter(baptism)) {
       return const _SeasonData(LiturgicalSeason.christmas, 1);
     }
 

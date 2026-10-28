@@ -418,8 +418,17 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
 
   Widget _buildLiturgicalHeader(ThemeData theme) {
     final headerColor = _resolveHeaderColor(theme);
-    final headerForeground = _resolveHeaderForeground(theme, headerColor);
     final isLight = theme.brightness == Brightness.light;
+    // Choose text against the actual gradient, not its unblended base color.
+    // The darker end is the limiting contrast for dark text in light mode;
+    // in dark mode the more heavily blended end is the limiting one.
+    final headerForeground = _resolveHeaderForeground(
+      theme,
+      Color.alphaBlend(
+        theme.colorScheme.surface.withValues(alpha: isLight ? 0.28 : 0.46),
+        headerColor,
+      ),
+    );
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -553,13 +562,6 @@ class _PremiumBrowseScreenState extends State<PremiumBrowseScreen>
                 style: theme.textTheme.headlineSmall?.copyWith(
                   color: theme.colorScheme.onPrimary,
                   fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Offline-first daily Mass readings with clear liturgical context.',
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onPrimary.withValues(alpha: 0.84),
                 ),
               ),
             ],

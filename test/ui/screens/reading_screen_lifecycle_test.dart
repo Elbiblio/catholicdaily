@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:catholic_daily/core/latest_request_guard.dart';
 import 'package:catholic_daily/data/models/daily_reading.dart';
@@ -13,6 +14,7 @@ import 'package:catholic_daily/data/services/reading_flow_service.dart';
 import 'package:catholic_daily/data/services/liturgical_region_preference_service.dart';
 import 'package:catholic_daily/data/services/speech_engine.dart';
 import 'package:catholic_daily/ui/screens/reading_screen.dart';
+import 'package:catholic_daily/ui/utils/bible_reference_helper.dart';
 import 'package:catholic_daily/ui/widgets/read_aloud_icon.dart';
 import 'package:catholic_daily/ui/widgets/gospel_acclamation_widget.dart';
 import 'package:catholic_daily/ui/widgets/bible_version_switcher.dart';
@@ -34,6 +36,99 @@ void main() {
     SharedPreferences.setMockInitialValues(<String, Object>{});
     LiturgicalRegionPreferenceService.resetInstanceForTesting();
     await LiturgicalRegionPreferenceService.getInstance();
+  });
+  testWidgets('Bible chapters expose available chapter navigation', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: ReadingScreen(
+          reference: 'John 2',
+          content: '1 On the third day there was a marriage.',
+          isBibleSearch: true,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.drag(find.byType(CustomScrollView), const Offset(0, -1200));
+    await tester.pumpAndSettle();
+    expect(find.text('Previous Chapter'), findsOneWidget);
+  });
+  testWidgets('reading navigation fits a narrow screen with large text', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(320, 800);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: MediaQuery(
+          data: MediaQueryData(textScaler: TextScaler.linear(2)),
+          child: ReadingScreen(
+            reference: 'John 2',
+            content: '1 On the third day there was a marriage.',
+            hasPrev: true,
+            hasNext: true,
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.drag(find.byType(CustomScrollView), const Offset(0, -1200));
+    await tester.pumpAndSettle();
+    expect(find.text('Previous'), findsWidgets);
+    expect(find.text('Next'), findsWidgets);
+    expect(tester.takeException(), isNull);
+  });
+  testWidgets('Bible chapter navigation fits with large text', (tester) async {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+          const MethodChannel('plugins.flutter.io/path_provider'),
+          (call) async => '${Directory.current.path}/assets',
+        );
+    addTearDown(
+      () => TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(
+            const MethodChannel('plugins.flutter.io/path_provider'),
+            null,
+          ),
+    );
+    final available = await tester.runAsync(
+      () => BibleReferenceHelper.hasNextChapter('John 2'),
+    );
+    expect(available, isTrue);
+    tester.view.physicalSize = const Size(320, 800);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: MediaQuery(
+          data: MediaQueryData(textScaler: TextScaler.linear(2)),
+          child: ReadingScreen(
+            reference: 'John 2',
+            content: '1 On the third day there was a marriage.',
+            isBibleSearch: true,
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.drag(find.byType(CustomScrollView), const Offset(0, -1200));
+    await tester.pumpAndSettle();
+    expect(find.text('Previous Chapter'), findsOneWidget);
+    expect(find.text('Next Chapter'), findsOneWidget);
+    Finder buttonFor(String label) => find.ancestor(
+      of: find.text(label),
+      matching: find.byWidgetPredicate((widget) => widget is FilledButton),
+    );
+    final previous = tester.getRect(buttonFor('Previous Chapter'));
+    final next = tester.getRect(buttonFor('Next Chapter'));
+    expect(previous.width, greaterThan(250));
+    expect(next.width, previous.width);
+    expect(next.top, greaterThan(previous.bottom));
+    expect(tester.takeException(), isNull);
   });
   testWidgets('popping a reading invalidates work started by that route', (
     tester,

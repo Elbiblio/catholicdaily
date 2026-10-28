@@ -300,11 +300,13 @@ class _ReadingScreenState extends State<ReadingScreen> with RouteAware {
     final hasPrevious = await BibleReferenceHelper.hasPreviousChapter(
       widget.reference,
     );
+    if (mounted) {
+      setState(() => _hasPreviousChapter = hasPrevious);
+    }
     final hasNext = await BibleReferenceHelper.hasNextChapter(widget.reference);
 
     if (mounted) {
       setState(() {
-        _hasPreviousChapter = hasPrevious;
         _hasNextChapter = hasNext;
       });
     }
@@ -986,7 +988,9 @@ class _ReadingScreenState extends State<ReadingScreen> with RouteAware {
               ),
             SliverToBoxAdapter(child: _buildContent(theme)),
             SliverToBoxAdapter(child: _buildVersionFooter(theme)),
-            if (widget.hasNext || widget.hasPrev)
+            if (widget.isBibleSearch
+                ? _hasPreviousChapter || _hasNextChapter
+                : widget.hasNext || widget.hasPrev)
               SliverToBoxAdapter(child: _buildNavigation(theme)),
           ],
         ),
@@ -1027,57 +1031,64 @@ class _ReadingScreenState extends State<ReadingScreen> with RouteAware {
       final ordoColor = theme.colorScheme.primary;
       final buttonForeground = _contrastColor(ordoColor);
 
+      Widget chapterButton({required bool previous}) => FilledButton.icon(
+        onPressed: _isNavigating
+            ? null
+            : previous
+            ? _goToPreviousChapter
+            : _goToNextChapter,
+        icon: _isNavigating
+            ? SizedBox(
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: buttonForeground,
+                ),
+              )
+            : Icon(previous ? Icons.arrow_back : Icons.arrow_forward),
+        label: Text(
+          _isNavigating
+              ? 'Loading...'
+              : previous
+              ? 'Previous Chapter'
+              : 'Next Chapter',
+        ),
+        style: FilledButton.styleFrom(
+          backgroundColor: ordoColor,
+          foregroundColor: buttonForeground,
+        ),
+      );
+
       return Container(
         margin: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            if (_hasPreviousChapter)
-              Expanded(
-                child: FilledButton.icon(
-                  onPressed: _isNavigating ? null : _goToPreviousChapter,
-                  icon: _isNavigating
-                      ? const SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
-                          ),
-                        )
-                      : const Icon(Icons.arrow_back),
-                  label: Text(
-                    _isNavigating ? 'Loading...' : 'Previous Chapter',
-                  ),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: ordoColor,
-                    foregroundColor: buttonForeground,
-                  ),
-                ),
-              ),
-            if (_hasPreviousChapter && _hasNextChapter)
-              const SizedBox(width: 12),
-            if (_hasNextChapter)
-              Expanded(
-                child: FilledButton.icon(
-                  onPressed: _isNavigating ? null : _goToNextChapter,
-                  icon: _isNavigating
-                      ? const SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
-                          ),
-                        )
-                      : const Icon(Icons.arrow_forward),
-                  label: Text(_isNavigating ? 'Loading...' : 'Next Chapter'),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: ordoColor,
-                    foregroundColor: buttonForeground,
-                  ),
-                ),
-              ),
-          ],
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final stack =
+                MediaQuery.textScalerOf(context).scale(1) > 1.3 &&
+                constraints.maxWidth < 500;
+            if (stack) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (_hasPreviousChapter) chapterButton(previous: true),
+                  if (_hasPreviousChapter && _hasNextChapter)
+                    const SizedBox(height: 12),
+                  if (_hasNextChapter) chapterButton(previous: false),
+                ],
+              );
+            }
+            return Row(
+              children: [
+                if (_hasPreviousChapter)
+                  Expanded(child: chapterButton(previous: true)),
+                if (_hasPreviousChapter && _hasNextChapter)
+                  const SizedBox(width: 12),
+                if (_hasNextChapter)
+                  Expanded(child: chapterButton(previous: false)),
+              ],
+            );
+          },
         ),
       );
     }

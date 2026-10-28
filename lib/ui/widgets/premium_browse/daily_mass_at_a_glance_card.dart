@@ -86,10 +86,6 @@ class DailyMassAtAGlanceCard extends StatelessWidget {
     Color liturgicalColor,
   ) {
     final isDark = theme.brightness == Brightness.dark;
-    final subtitle = liturgicalDay?.title.isNotEmpty == true
-        ? liturgicalDay!.title
-        : liturgicalDay?.seasonName ?? '';
-
     // Header sits on the top-left of the gradient (lower alpha end)
     final headerBg = Color.alphaBlend(
       liturgicalColor.withValues(alpha: isDark ? 0.18 : 0.10),
@@ -101,76 +97,43 @@ class DailyMassAtAGlanceCard extends StatelessWidget {
       minRatio: 3.0,
     );
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      child: Row(
-        children: [
-          Icon(
-            Icons.church_rounded,
-            color: iconColor,
-            size: 20,
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Mass at a Glance',
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: theme.colorScheme.onSurface,
-                  ),
-                ),
-                if (subtitle.isNotEmpty) ...[
-                  const SizedBox(height: 1),
-                  Text(
-                    subtitle,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ],
+    final heading = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.church_rounded, color: iconColor, size: 20),
+        const SizedBox(width: 10),
+        Flexible(
+          child: Text(
+            'Daily Mass',
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w700,
+              color: theme.colorScheme.onSurface,
             ),
           ),
-          const SizedBox(width: 8),
-          Builder(builder: (context) {
-            // Resolve the actual opaque button background so foreground
-            // contrast can be calculated accurately.
-            final btnBg = Color.alphaBlend(
-              liturgicalColor.withValues(alpha: 0.18),
-              theme.colorScheme.surface,
-            );
-            // Use the liturgical color as foreground only if it passes 4.5:1;
-            // otherwise fall back to black/white.
-            final btnFg = ReadingTypeColors.ensureContrast(
-              liturgicalColor,
-              btnBg,
-              minRatio: 4.5,
-            );
-            return FilledButton.tonal(
-              onPressed: onBeginMass,
-              style: FilledButton.styleFrom(
-                backgroundColor: btnBg,
-                foregroundColor: btnFg,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                textStyle: theme.textTheme.labelMedium?.copyWith(
-                  fontWeight: FontWeight.w700,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                minimumSize: Size.zero,
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-              child: const Text('Begin Mass'),
-            );
-          }),
-        ],
+        ),
+      ],
+    );
+    final button = FilledButton(
+      onPressed: onBeginMass,
+      style: FilledButton.styleFrom(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        minimumSize: const Size(0, 48),
+        textStyle: theme.textTheme.labelLarge?.copyWith(
+          fontWeight: FontWeight.w700,
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+      child: const Text('Begin Mass'),
+    );
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      child: Wrap(
+        alignment: WrapAlignment.spaceBetween,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        spacing: 8,
+        runSpacing: 8,
+        children: [heading, button],
       ),
     );
   }
