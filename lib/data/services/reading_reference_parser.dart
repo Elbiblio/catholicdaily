@@ -41,6 +41,25 @@ class ReadingReferenceParser {
           .where((segment) => segment.isNotEmpty);
 
       for (final segment in segments) {
+        final singleChapterMatch = RegExp(
+          r'^(.+?)\s+(\d+[a-z]*(?:-\d+[a-z]*)?)$',
+          caseSensitive: false,
+        ).firstMatch(segment);
+        if (singleChapterMatch != null &&
+            _singleChapterBooks.contains(
+              normalizeBookKey(singleChapterMatch.group(1)!),
+            )) {
+          currentBook = singleChapterMatch.group(1)!.trim();
+          currentChapter = 1;
+          final range = _parseVerseExpression(
+            book: currentBook,
+            chapter: 1,
+            expression: singleChapterMatch.group(2)!,
+          );
+          if (range != null) ranges.add(range);
+          continue;
+        }
+
         final fullRefMatch = RegExp(
           r'^(.+?)\s+(\d+):(.*)$',
         ).firstMatch(segment);
@@ -129,6 +148,17 @@ class ReadingReferenceParser {
 
     return ranges;
   }
+
+  static const _singleChapterBooks = <String>{
+    'phlm',
+    'philemon',
+    'obad',
+    'obadiah',
+    '2 john',
+    '3 john',
+    'jude',
+    'jd',
+  };
 
   static String normalizeBookKey(String value) {
     var normalized = value
@@ -220,9 +250,13 @@ class ReadingReferenceParser {
       'psalms': 'Ps',
       'ps': 'Ps',
       'ecclesiastes': 'Eccles',
+      'eccl': 'Eccles',
+      'eccles': 'Eccles',
       'hag': 'Hagg',
+      'hagg': 'Hagg',
       'jon': 'Jonah',
       'jdt': 'Jud',
+      'jud': 'Jud',
       'zep': 'Zeph',
       'zephaniah': 'Zeph',
       'mi': 'Mic',
@@ -261,8 +295,19 @@ class ReadingReferenceParser {
       'rev': 'Rev',
     };
 
+    // The same book can have different short names in each Bible database.
+    // Resolve aliases to the selected database's key, not an RSVCE key.
+    const bookNamesForVariantKeys = <String, String>{
+      'Eccles': 'Ecclesiastes',
+      'Jud': 'Judith',
+      'Hagg': 'Haggai',
+      'James': 'James',
+    };
+    final databaseAliases = Map<String, String>.from(aliases);
     manualAliases.forEach((alias, shortName) {
-      aliases[alias] = shortName;
+      final bookName = bookNamesForVariantKeys[shortName] ?? shortName;
+      aliases[normalizeBookKey(alias)] =
+          databaseAliases[normalizeBookKey(bookName)] ?? shortName;
     });
 
     return aliases;
@@ -386,7 +431,10 @@ class ReadingReferenceParser {
   }
 
   static String? _parseParts(String token) {
-    final match = RegExp(r'\d+([a-z]+)$', caseSensitive: false).firstMatch(token);
+    final match = RegExp(
+      r'\d+([a-z]+)$',
+      caseSensitive: false,
+    ).firstMatch(token);
     if (match == null) return null;
     final parts = match.group(1)?.toLowerCase();
     return (parts == null || parts.isEmpty) ? null : parts;

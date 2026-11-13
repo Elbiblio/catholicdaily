@@ -5,6 +5,29 @@ import 'package:catholic_daily/data/services/reading_reference_parser.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test('parses chapterless Philemon references with multiple ranges', () {
+    final ranges = ReadingReferenceParser.parse('Phlm 9-10, 12-17');
+    expect(ranges, hasLength(2));
+    expect(ranges.map((range) => range.book), everyElement('Phlm'));
+    expect(ranges.map((range) => range.startChapter), everyElement(1));
+    expect(ranges.map((range) => range.startVerse), [9, 12]);
+    expect(ranges.map((range) => range.endVerse), [10, 17]);
+  });
+
+  test('parses chapterless references only for single-chapter books', () {
+    for (final reference in [
+      '2 John 4-9',
+      '3 John 5-8',
+      'Jude 17, 20b-25',
+      'Obad 1-4',
+    ]) {
+      final ranges = ReadingReferenceParser.parse(reference);
+      expect(ranges, isNotEmpty, reason: reference);
+      expect(ranges.map((range) => range.startChapter), everyElement(1));
+    }
+    expect(ReadingReferenceParser.parse('John 3'), isEmpty);
+  });
+
   test('parses simple single-range reference', () {
     final ranges = ReadingReferenceParser.parse('Exod 17:3-7');
 
